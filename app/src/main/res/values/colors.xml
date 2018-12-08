@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="deepSeaBlue">#232533</color>
+    <color name="seaBlue">#313340</color>
+    <color name="seaBlueGradient">#353745</color>
+    <color name="lightningOrange">#FD9800</color>
+    <color name="lightningOrangeGradient">#FFBD59</color>
+    <color name="superGreen">#3EE673</color>
+    <color name="superRed">#E63939</color>
+    <color name="gray">#959595</color>
+    <color name="invisibleGray">#555555</color>
+    <color name="purple">#7600FC</color>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Zap</string>
+
+    <string name="navigation_wallet">Wallet</string>
+    <string name="navigation_history">History</string>
+    <string name="navigation_settings">Settings</string>
+
+</resources>

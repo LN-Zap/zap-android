@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/seaBlue</item>
+        <item name="colorPrimaryDark">@color/deepSeaBlue</item>
+        <item name="colorAccent">@color/lightningOrange</item>
+        <item name="android:colorBackground">@color/deepSeaBlue</item>
+        <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+    </style>
+
+</resources>
