@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="currency">
+        <item>"USD"</item>
+        <item>"EUR"</item>
+    </string-array>
+
+    <string-array name="btcUnit">
+        <item>"Btc"</item>
+        <item>"Satoshi"</item>
+    </string-array>
+
+    <string-array name="addressType">
+        <item>"p2pkh"</item>
+        <item>"p2psh"</item>
+        <item>"bech32"</item>
+    </string-array>
+
+    <string-array name="blockExplorer">
+        <item>"Smartbit"</item>
+        <item>"blockchain.info"</item>
+    </string-array>
+
+    <string-array name="language">
+        <item>"English"</item>
+        <item>"Deutsch"</item>
+    </string-array>
+
+</resources>

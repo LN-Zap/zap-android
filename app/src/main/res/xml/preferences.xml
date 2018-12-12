@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:icon="@null"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="MyPrefs"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="Preferences"
+        app:iconSpaceReserved="false"
+        >
+
+        <ListPreference
+            android:key="currency"
+            android:title="Currency"
+            android:entries="@array/currency"
+            android:entryValues="@array/currency"
+            android:dialogTitle="Select Currency"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="btcUnit"
+            android:title="Bitcoin Unit"
+            android:entries="@array/btcUnit"
+            android:entryValues="@array/btcUnit"
+            android:dialogTitle="Select"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="btcAddressType"
+            android:title="Bitcoin Address Type"
+            android:entries="@array/addressType"
+            android:entryValues="@array/addressType"
+            android:dialogTitle="Select"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="blockExplorer"
+            android:title="Block Explorer"
+            android:entries="@array/blockExplorer"
+            android:entryValues="@array/blockExplorer"
+            android:dialogTitle="Select"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="language"
+            android:title="Language"
+            android:entries="@array/language"
+            android:entryValues="@array/language"
+            android:dialogTitle="Select"
+            app:iconSpaceReserved="false"/>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Wallet"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="resetConfig"
+            android:title="Reset Remote Node Configuration"
+            app:iconSpaceReserved="false"/>
+
+        <SwitchPreference
+            android:key="scrumblePin"
+            android:title="Scramble PIN screen"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:key="changePIN"
+            android:title="Change PIN"
+            app:iconSpaceReserved="false"/>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Help"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="help"
+            android:title="Need Help?"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:key="reportIssue"
+            android:title="Report an Issue"
+            app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

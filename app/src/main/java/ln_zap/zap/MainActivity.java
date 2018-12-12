@@ -1,15 +1,21 @@
 package ln_zap.zap;
 
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
+
+import androidx.fragment.app.FragmentTransaction;
+import ln_zap.zap.Fragments.History;
+import ln_zap.zap.Fragments.Settings;
+import ln_zap.zap.Fragments.Wallet;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    private Fragment currentFragment = null;
+    private FragmentTransaction ft;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -18,13 +24,25 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_wallet:
-                    mTextMessage.setText(R.string.navigation_wallet);
+                    // Display the fragment as the main content.
+                    ft = getSupportFragmentManager().beginTransaction();
+                    currentFragment = new Wallet();
+                    ft.replace(R.id.content, currentFragment);
+                    ft.commit();
                     return true;
                 case R.id.navigation_history:
-                    mTextMessage.setText(R.string.navigation_history);
+                    // Display the fragment as the main content.
+                    ft = getSupportFragmentManager().beginTransaction();
+                    currentFragment = new History();
+                    ft.replace(R.id.content, currentFragment);
+                    ft.commit();
                     return true;
                 case R.id.navigation_settings:
-                    mTextMessage.setText(R.string.navigation_settings);
+                    // Display the fragment as the main content.
+                    ft = getSupportFragmentManager().beginTransaction();
+                    currentFragment = new Settings();
+                    ft.replace(R.id.content, currentFragment);
+                    ft.commit();
                     return true;
             }
             return false;
@@ -36,7 +54,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+        ft = getSupportFragmentManager().beginTransaction();
+        currentFragment = new Wallet();
+        ft.replace(R.id.content, currentFragment);
+        ft.commit();
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
