@@ -59,15 +59,21 @@
             android:title="Reset Remote Node Configuration"
             app:iconSpaceReserved="false"/>
 
+        <Preference
+            android:key="changePIN"
+            android:title="Change PIN"
+            app:iconSpaceReserved="false"/>
+
         <SwitchPreference
-            android:key="scrumblePin"
+            android:key="scramblePin"
             android:title="Scramble PIN screen"
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
 
-        <Preference
-            android:key="changePIN"
-            android:title="Change PIN"
+        <SwitchPreference
+            android:key="hapticPin"
+            android:title="Haptic PIN feedback"
+            android:defaultValue="true"
             app:iconSpaceReserved="false"/>
 
 
