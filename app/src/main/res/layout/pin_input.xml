@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/deepSeaBlue"
+    android:gravity="center"
+    >
+
+    <LinearLayout
+        android:id="@+id/pinPromptLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        >
+        <TextView
+            android:id="@+id/pinPrompt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textColor="@color/white"
+            android:gravity="center_horizontal"
+            android:textAlignment="gravity"
+            android:text="Enter PIN code"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pinInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/pinPromptLayout"
+        >
+        <TextView
+            android:id="@+id/pinUserInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:textColor="@color/white"
+            android:background="@color/seaBlue"
+            android:gravity="center_horizontal"
+            android:textAlignment="gravity"
+            android:paddingTop="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/pinInputLayout"
+        >
+
+        <Button
+            android:id="@+id/pinNumpad1"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:onClick="OnNumberPadClick"
+            android:layout_row="0"
+            android:layout_column="0"/>
+        <Button
+            android:id="@+id/pinNumpad2"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:onClick="OnNumberPadClick"
+            android:layout_row="0"
+            android:layout_column="1" />
+        <Button
+            android:id="@+id/pinNumpad3"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:onClick="OnNumberPadClick"
+            android:layout_row="0"
+            android:layout_column="2" />
+        <Button
+            android:id="@+id/pinNumpad4"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:layout_row="1"
+            android:onClick="OnNumberPadClick"
+            android:layout_column="0" />
+        <Button
+            android:id="@+id/pinNumpad5"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:layout_row="1"
+            android:onClick="OnNumberPadClick"
+            android:layout_column="1" />
+        <Button
+            android:id="@+id/pinNumpad6"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:layout_row="1"
+            android:onClick="OnNumberPadClick"
+            android:layout_column="2" />
+        <Button
+            android:id="@+id/pinNumpad7"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:onClick="OnNumberPadClick"
+            android:layout_row="2"
+            android:layout_column="0" />
+        <Button
+            android:id="@+id/pinNumpad8"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:layout_row="2"
+            android:onClick="OnNumberPadClick"
+            android:layout_column="1" />
+        <Button
+            android:id="@+id/pinNumpad9"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:onClick="OnNumberPadClick"
+            android:layout_row="2"
+            android:layout_column="2" />
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="70dp"
+            android:id="@+id/pinBack"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_backspace_white_36dp"
+            android:background="@color/deepSeaBlue" />
+
+        <Button
+            android:id="@+id/pinNumpad0"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rectangle_seablue"
+            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:typeface="sans"
+            android:onClick="OnNumberPadClick"
+            android:layout_row="3"
+            android:layout_column="1" />
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="70dp"
+            android:id="@+id/pinConfirm"
+            android:layout_row="3"
+            android:layout_column="2"
+            android:background="@drawable/rounded_rectangle_green"
+            android:src="@drawable/ic_done_white_36dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp" />
+
+    </GridLayout>
+
+</RelativeLayout>
