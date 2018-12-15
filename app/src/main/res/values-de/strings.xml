@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Zap</string>
+    <string name="navigation_wallet">Wallet</string>
+    <string name="navigation_history">Verlauf</string>
+    <string name="navigation_settings">Einstellungen</string>
+    <string name="pin_confirm">PIN bestätigen</string>
+    <string name="pin_enter">PIN eingeben</string>
+    <string name="pin_create">PIN erstellen (5-8 Zeichen)</string>
+</resources>

@@ -1,12 +1,37 @@
 <resources>
     <string name="app_name">Zap</string>
 
+    <!-- //////////////// General //////////////////// -->
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+
+    <!-- //////////////// Bottom Navigation //////////////////// -->
+
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">History</string>
     <string name="navigation_settings">Settings</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- //////////////// PIN dialog //////////////////// -->
+
+    <string name="pin_create">Create a PIN (5-8 digits)</string>
+    <string name="pin_confirm">Confirm PIN</string>
+    <string name="pin_enter">Enter PIN</string>
+
+
+    <!-- //////////////// Settings ////////////////////// -->
+
+    <string name="settings_language">Language</string>
+
+    <string-array name="settings_language_list">
+        <item>System Language</item>
+        <item>English</item>
+    </string-array>
+
+    <string name="settings_restartRequired">Zap will be restarted to make this change. Do you want to continue?</string>
+
+
 
 </resources>

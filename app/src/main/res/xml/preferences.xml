@@ -42,11 +42,13 @@
 
         <ListPreference
             android:key="language"
-            android:title="Language"
-            android:entries="@array/language"
-            android:entryValues="@array/language"
+            android:title="@string/settings_language"
+            android:entries="@array/settings_language_list"
+            android:entryValues="@array/languageValues"
+            android:defaultValue="system"
             android:dialogTitle="Select"
             app:iconSpaceReserved="false"/>
+
 
 
     </PreferenceCategory>
