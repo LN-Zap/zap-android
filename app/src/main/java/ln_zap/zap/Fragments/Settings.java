@@ -14,8 +14,8 @@ import ln_zap.zap.util.AppUtil;
 public class Settings extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        // Load the preferences from an XML resource
-        setPreferencesFromResource(R.xml.preferences, rootKey);
+        // Load the settings from an XML resource
+        setPreferencesFromResource(R.xml.settings, rootKey);
 
 
         // Show warning on language change as a restart is required.
