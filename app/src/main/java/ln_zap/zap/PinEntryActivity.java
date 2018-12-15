@@ -1,6 +1,5 @@
 package ln_zap.zap;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -12,10 +11,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import ln_zap.zap.BaseClasses.BaseActivity;
 import ln_zap.zap.util.ScrambledNumpad;
 
 
-public class PinEntryActivity extends Activity {
+public class PinEntryActivity extends BaseActivity {
 
     private static final int MIN_PIN_LENGTH = 5;
     private static final int MAX_PIN_LENGTH = 8;
@@ -55,11 +55,12 @@ public class PinEntryActivity extends Activity {
         tvUserInput = findViewById(R.id.pinUserInput);
         tvUserInput.setText("");
         tvPrompt = findViewById(R.id.pinPrompt);
+        tvPrompt.setText(R.string.pin_enter);
 
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
 
-        boolean scramble = PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("scramblePin",false);
+        boolean scramble = PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("scramblePin",true);
 
 
         // Define buttons
@@ -97,7 +98,7 @@ public class PinEntryActivity extends Activity {
             public void onClick(View view) {
                 // Placeholder. Replace this function later when the PIN functionality is really done.
                 Intent intent = new Intent(PinEntryActivity.this, MainActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -108,7 +109,7 @@ public class PinEntryActivity extends Activity {
 
                 if (userInput.toString().length() > 0) {
                     userInput.deleteCharAt(userInput.length() - 1);
-                    if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",false) == true)    {
+                    if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",true))    {
                         vibrator.vibrate(55);
                     }
                 }
@@ -122,7 +123,7 @@ public class PinEntryActivity extends Activity {
             public boolean onLongClick(View view) {
                 if (userInput.toString().length() > 0) {
                     userInput.setLength(0);
-                    if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",false) == true)    {
+                    if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",true))    {
                         vibrator.vibrate(55);
                     }
                 }
@@ -134,7 +135,7 @@ public class PinEntryActivity extends Activity {
     }
 
     public void OnNumberPadClick(View view) {
-        if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",false) == true)    {
+        if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",true))    {
             vibrator.vibrate(55);
         }
         userInput.append(((Button) view).getText().toString());

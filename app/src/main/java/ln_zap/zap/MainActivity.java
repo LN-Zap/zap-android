@@ -4,15 +4,15 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import androidx.fragment.app.FragmentTransaction;
+import ln_zap.zap.BaseClasses.BaseAppCompatActivity;
 import ln_zap.zap.Fragments.History;
 import ln_zap.zap.Fragments.Settings;
 import ln_zap.zap.Fragments.Wallet;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseAppCompatActivity {
 
     private Fragment currentFragment = null;
     private FragmentTransaction ft;

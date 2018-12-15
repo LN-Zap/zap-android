@@ -1,78 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen android:icon="@null"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="MyPrefs"
+    android:title="@string/navigation_settings"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="Preferences"
+    <PreferenceCategory android:title="@string/settings_category_prefs"
         app:iconSpaceReserved="false"
         >
 
         <ListPreference
             android:key="currency"
-            android:title="Currency"
+            android:title="@string/settings_currency"
             android:entries="@array/currency"
             android:entryValues="@array/currency"
-            android:dialogTitle="Select Currency"
+            android:dialogTitle="@string/settings_currency"
             app:iconSpaceReserved="false"/>
 
         <ListPreference
             android:key="btcUnit"
-            android:title="Bitcoin Unit"
+            android:title="@string/settings_btcUnit"
             android:entries="@array/btcUnit"
             android:entryValues="@array/btcUnit"
-            android:dialogTitle="Select"
+            android:dialogTitle="@string/settings_btcUnit"
             app:iconSpaceReserved="false"/>
 
         <ListPreference
             android:key="btcAddressType"
-            android:title="Bitcoin Address Type"
+            android:title="@string/settings_addressType"
             android:entries="@array/addressType"
             android:entryValues="@array/addressType"
-            android:dialogTitle="Select"
+            android:dialogTitle="@string/settings_addressType"
             app:iconSpaceReserved="false"/>
 
         <ListPreference
             android:key="blockExplorer"
-            android:title="Block Explorer"
+            android:title="@string/settings_blockExplorer"
             android:entries="@array/blockExplorer"
             android:entryValues="@array/blockExplorer"
-            android:dialogTitle="Select"
+            android:dialogTitle="@string/settings_blockExplorer"
             app:iconSpaceReserved="false"/>
 
         <ListPreference
             android:key="language"
-            android:title="Language"
-            android:entries="@array/language"
-            android:entryValues="@array/language"
-            android:dialogTitle="Select"
+            android:title="@string/settings_language"
+            android:entries="@array/settings_language_list"
+            android:entryValues="@array/languageValues"
+            android:defaultValue="system"
+            android:dialogTitle="@string/settings_language"
             app:iconSpaceReserved="false"/>
+
 
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Wallet"
+    <PreferenceCategory android:title="@string/navigation_wallet"
         app:iconSpaceReserved="false">
 
         <Preference
             android:key="resetConfig"
-            android:title="Reset Remote Node Configuration"
+            android:title="@string/settings_resetConnection"
             app:iconSpaceReserved="false"/>
 
         <Preference
             android:key="changePIN"
-            android:title="Change PIN"
+            android:title="@string/settings_resetPin"
             app:iconSpaceReserved="false"/>
 
         <SwitchPreference
             android:key="scramblePin"
-            android:title="Scramble PIN screen"
+            android:title="@string/settings_scramblePin"
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
 
         <SwitchPreference
             android:key="hapticPin"
-            android:title="Haptic PIN feedback"
+            android:title="@string/settings_hapticPin"
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
 
@@ -80,17 +82,17 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Help"
+        android:title="@string/settings_category_help"
         app:iconSpaceReserved="false">
 
         <Preference
             android:key="help"
-            android:title="Need Help?"
+            android:title="@string/settings_help"
             app:iconSpaceReserved="false"/>
 
         <Preference
             android:key="reportIssue"
-            android:title="Report an Issue"
+            android:title="@string/settings_reportIssue"
             app:iconSpaceReserved="false"/>
 
     </PreferenceCategory>
