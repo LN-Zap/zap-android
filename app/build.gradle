@@ -20,6 +20,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Barcode scanner: To Do: check if this is secure
+    implementation 'me.dm7.barcodescanner:zbar:1.9.8'
+
+    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'com.google.android.material:material:1.1.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'

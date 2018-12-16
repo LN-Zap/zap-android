@@ -2,12 +2,34 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/seaBlue</item>
         <item name="colorPrimaryDark">@color/deepSeaBlue</item>
         <item name="colorAccent">@color/lightningOrange</item>
         <item name="android:colorBackground">@color/deepSeaBlue</item>
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+    </style>
+
+
+    <!-- Theme for the QR-Code scanner activity. -->
+    <style name="AppOverlayTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="colorPrimary">@color/seaBlue</item>
+        <item name="colorPrimaryDark">@color/deepSeaBlue</item>
+        <item name="colorAccent">@color/lightningOrange</item>
+        <item name="android:colorBackground">@color/deepSeaBlue</item>
+        <item name="android:textColorPrimary">#212121</item>
+        <item name="android:textColorSecondary">#727272</item>
+    </style>
+
+
+    <!-- Style for the toolbar at the top of QR-Code scanner activity. -->
+    <style name="TransparentToolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <!-- Support Library compability -->
+        <item name="windowActionBarOverlay">true</item>
     </style>
 
 </resources>

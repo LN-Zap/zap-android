@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 import java.util.Locale;
 
 
-public class LocaleManager {
+public class LocaleUtil {
 
 
     public static Context setLocale(Context ctx) {
