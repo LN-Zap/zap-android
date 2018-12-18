@@ -6,7 +6,13 @@
     </string-array>
 
     <string-array name="btcUnit">
-        <item>Btc</item>
+        <item>BTC</item>
+
+        <!-- Uncomment this to support mBTC and bits
+        <item>mBTC</item>
+        <item>bit</item>
+        -->
+
         <item>Satoshi</item>
     </string-array>
 

@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import ln_zap.zap.QRCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.R;
+import ln_zap.zap.util.BtcDisplayUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +30,14 @@ public class Wallet extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
+
+        TextView tvBalance = view.findViewById(R.id.Balance);
+        TextView tvBalanceUnit = view.findViewById(R.id.BalanceUnit);
+
+        long myBalance = 120871010L;
+
+        tvBalance.setText(BtcDisplayUtil.getDisplayAmount(myBalance, getActivity()));
+        tvBalanceUnit.setText(BtcDisplayUtil.getDisplayUnit(getActivity()));
 
         Button btnScan = view.findViewById(R.id.scanButton);
         btnScan.setOnClickListener(new View.OnClickListener() {

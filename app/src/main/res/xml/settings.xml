@@ -21,6 +21,7 @@
             android:title="@string/settings_btcUnit"
             android:entries="@array/btcUnit"
             android:entryValues="@array/btcUnit"
+            android:defaultValue="BTC"
             android:dialogTitle="@string/settings_btcUnit"
             app:iconSpaceReserved="false"/>
 
