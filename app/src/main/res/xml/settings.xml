@@ -68,19 +68,31 @@
             app:iconSpaceReserved="false"/>
 
         <SwitchPreference
+            android:key="hapticPin"
+            android:title="@string/settings_hapticPin"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_category_security"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
             android:key="scramblePin"
             android:title="@string/settings_scramblePin"
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
 
         <SwitchPreference
-            android:key="hapticPin"
-            android:title="@string/settings_hapticPin"
+            android:key="preventScreenRecording"
+            android:title="@string/settings_preventScreenRecording"
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
 
-
     </PreferenceCategory>
+
 
     <PreferenceCategory
         android:title="@string/settings_category_help"

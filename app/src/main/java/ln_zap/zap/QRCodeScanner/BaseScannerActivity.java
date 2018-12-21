@@ -1,13 +1,13 @@
 package ln_zap.zap.QRCodeScanner;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
+import ln_zap.zap.BaseClasses.BaseAppCompatActivity;
 import ln_zap.zap.R;
 
-public class BaseScannerActivity extends AppCompatActivity {
+public class BaseScannerActivity extends BaseAppCompatActivity {
     public void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

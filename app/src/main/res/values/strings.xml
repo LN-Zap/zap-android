@@ -25,6 +25,7 @@
     <!-- //////////////// Settings ////////////////////// -->
 
     <string name="settings_category_prefs">Preferences</string>
+    <string name="settings_category_security">Security</string>
     <string name="settings_category_help">Help</string>
 
     <string name="settings_currency">Currency</string>
@@ -40,8 +41,10 @@
 
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
     <string name="settings_resetPin">Reset PIN</string>
-    <string name="settings_scramblePin">Scramble PIN screen</string>
     <string name="settings_hapticPin">Haptic PIN feedback</string>
+
+    <string name="settings_scramblePin">Scramble PIN screen</string>
+    <string name="settings_preventScreenRecording">Prevent Screen recording</string>
 
     <string name="settings_help">Need Help?</string>
     <string name="settings_reportIssue">Report an Issue</string>

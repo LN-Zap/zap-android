@@ -25,6 +25,7 @@
     <!-- //////////////// Settings ////////////////////// -->
 
     <string name="settings_category_prefs">Voreinstellungen</string>
+    <string name="settings_category_security">Sicherheit</string>
     <string name="settings_category_help">Hilfe</string>
 
     <string name="settings_currency">Währung</string>
@@ -40,11 +41,14 @@
 
     <string name="settings_resetConnection">Verbindungseinstellungen zurücksetzen</string>
     <string name="settings_resetPin">PIN zurücksetzen</string>
-    <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
+
+    <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
+    <string name="settings_preventScreenRecording">Bilschirmaufnahmen blockieren</string>
 
     <string name="settings_help">Hilfe nötig?</string>
     <string name="settings_reportIssue">Bug melden</string>
 
     <string name="settings_restartRequired">Zap wird neugestartet, um diese Änderung vorzunehmen. Fortfahren?</string>
+
 </resources>

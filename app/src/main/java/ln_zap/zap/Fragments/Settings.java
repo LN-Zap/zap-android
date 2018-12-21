@@ -3,10 +3,12 @@ package ln_zap.zap.Fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import androidx.preference.Preference;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
 import ln_zap.zap.R;
 import ln_zap.zap.util.AppUtil;
 
@@ -48,5 +50,19 @@ public class Settings extends PreferenceFragmentCompat {
             }
         });
 
+        // change screen recording option on the fly
+        final SwitchPreference swRecording = (SwitchPreference) findPreference("preventScreenRecording");
+        swRecording.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (swRecording.isChecked()){
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+                else{
+                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+                return true;
+            }
+        });
     }
 }
