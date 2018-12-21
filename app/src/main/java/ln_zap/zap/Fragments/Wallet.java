@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import ln_zap.zap.QRCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.R;
+import ln_zap.zap.ReceiveActivity;
 import ln_zap.zap.util.BtcDisplayUtil;
 
 /**
@@ -39,14 +40,26 @@ public class Wallet extends Fragment {
         tvBalance.setText(BtcDisplayUtil.getDisplayAmount(myBalance, getActivity()));
         tvBalanceUnit.setText(BtcDisplayUtil.getDisplayUnit(getActivity()));
 
-        Button btnScan = view.findViewById(R.id.scanButton);
-        btnScan.setOnClickListener(new View.OnClickListener() {
+        Button btnSend = view.findViewById(R.id.sendButton);
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                     Intent intent = new Intent(getActivity(), QRCodeScannerActivity.class);
                     //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+
+            }
+        });
+
+        Button btnReceive = view.findViewById(R.id.receiveButton);
+        btnReceive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getActivity(), ReceiveActivity.class);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
             }
         });

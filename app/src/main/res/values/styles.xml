@@ -9,6 +9,15 @@
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
     </style>
 
+    <!-- Base application theme with action bar. -->
+    <style name="AppThemeWithActionBar" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/seaBlue</item>
+        <item name="colorPrimaryDark">@color/deepSeaBlue</item>
+        <item name="colorAccent">@color/lightningOrange</item>
+        <item name="android:colorBackground">@color/deepSeaBlue</item>
+        <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+    </style>
+
 
     <!-- Theme for the QR-Code scanner activity. -->
     <style name="AppOverlayTheme" parent="@style/Theme.AppCompat.Light">

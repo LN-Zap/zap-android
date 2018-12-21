@@ -21,8 +21,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Barcode scanner: To Do: check if this is secure
+    // QR-Code scanner: To Do: check if this is secure
     implementation 'me.dm7.barcodescanner:zbar:1.9.8'
+
+    // QR-Code generator: To Do: check if this is secure
+    implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
     implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
