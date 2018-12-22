@@ -28,6 +28,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new Wallet();
                     ft.replace(R.id.content, currentFragment);
+                    //ft.addToBackStack(null);
                     ft.commit();
                     return true;
                 case R.id.navigation_history:
@@ -35,6 +36,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new History();
                     ft.replace(R.id.content, currentFragment);
+                    //ft.addToBackStack(null);
                     ft.commit();
                     return true;
                 case R.id.navigation_settings:
@@ -42,6 +44,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new Settings();
                     ft.replace(R.id.content, currentFragment);
+                    //ft.addToBackStack(null);
                     ft.commit();
                     return true;
             }
@@ -59,7 +62,7 @@ public class MainActivity extends BaseAppCompatActivity {
         ft.replace(R.id.content, currentFragment);
         ft.commit();
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
