@@ -32,6 +32,7 @@ public class Wallet extends Fragment {
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
 
+        // Placeholder Balance
         TextView tvBalance = view.findViewById(R.id.Balance);
         TextView tvBalanceUnit = view.findViewById(R.id.BalanceUnit);
 
@@ -40,27 +41,26 @@ public class Wallet extends Fragment {
         tvBalance.setText(BtcDisplayUtil.getDisplayAmount(myBalance, getActivity()));
         tvBalanceUnit.setText(BtcDisplayUtil.getDisplayUnit(getActivity()));
 
+
+        // Action when clicked on "send"
         Button btnSend = view.findViewById(R.id.sendButton);
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                     Intent intent = new Intent(getActivity(), QRCodeScannerActivity.class);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
-
             }
         });
 
+
+        // Action when clicked on "receive"
         Button btnReceive = view.findViewById(R.id.receiveButton);
         btnReceive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getActivity(), ReceiveActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-
             }
         });
 

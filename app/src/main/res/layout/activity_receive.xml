@@ -6,16 +6,103 @@
     android:layout_height="match_parent"
     tools:context=".ReceiveActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+    <Button
+        android:id="@+id/receiveGenerateRequest"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="@drawable/orange_gradient"
+        android:text="@string/receive_generateRequest"
+        android:textAllCaps="false"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/receiveLightningButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/receiveOnChainButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/receiveLightningIcon"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
+            android:tint="@color/white"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/receiveLightningText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:text="@string/lightning"
+            android:textAlignment="center"/>
+
+        <ImageView
+            android:id="@+id/receiveLightningLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="3dp"
+            app:srcCompat="@color/seaBlueGradient" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/receiveOnChainButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/receiveLightningButton"
+        app:layout_constraintTop_toTopOf="parent"
+        android:alpha="0.2">
+
+        <ImageView
+            android:id="@+id/receiveOnChainIcon"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/ic_onchain_black_24dp"
+            android:tint="@color/white"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/receiveOnChainText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:text="@string/onChain"
+            android:textAlignment="center"/>
+
+        <ImageView
+            android:id="@+id/receiveOnChainLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="3dp"
+            app:srcCompat="@color/seaBlueGradient" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/receiveAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/seaBlueGradient"
+        android:ems="10"
+        android:hint="@string/amount"
+        android:inputType="numberDecimal"
+        android:textSize="24sp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/receiveLightningButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

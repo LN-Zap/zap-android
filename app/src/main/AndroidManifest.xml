@@ -26,16 +26,27 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QRCodeScanner.QRCodeScannerActivity"
-            android:label="@string/app_name"
+            android:label="@string/activity_send"
             android:screenOrientation="portrait"
-            android:theme="@style/AppOverlayTheme"></activity>
-        <activity android:name=".ReceiveActivity"
-            android:label="@string/app_name"
+            android:theme="@style/AppOverlayTheme" />
+        <activity
+            android:name=".GenerateRequestActivity"
+            android:label="@string/activity_receive"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeWithActionBar"></activity>
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".ReceiveActivity"
+            android:label="@string/activity_receive"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".SendActivity"
+            android:label="@string/activity_send"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" ></activity>
     </application>
 
 </manifest>

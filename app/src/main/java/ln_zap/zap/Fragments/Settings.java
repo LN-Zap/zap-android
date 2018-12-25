@@ -97,7 +97,7 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 UserGuardian.reenableAllSecurityWarnings(getActivity());
-                Toast.makeText(getActivity(),"Copied to clipboard",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),R.string.guardian_reset,Toast.LENGTH_LONG).show();
                 return true;
             }
         });

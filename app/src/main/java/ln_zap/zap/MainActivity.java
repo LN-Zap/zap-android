@@ -27,7 +27,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     // Display the fragment as the main content.
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new Wallet();
-                    ft.replace(R.id.content, currentFragment);
+                    ft.replace(R.id.mainContent, currentFragment);
                     //ft.addToBackStack(null);
                     ft.commit();
                     return true;
@@ -35,7 +35,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     // Display the fragment as the main content.
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new History();
-                    ft.replace(R.id.content, currentFragment);
+                    ft.replace(R.id.mainContent, currentFragment);
                     //ft.addToBackStack(null);
                     ft.commit();
                     return true;
@@ -43,7 +43,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     // Display the fragment as the main content.
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new Settings();
-                    ft.replace(R.id.content, currentFragment);
+                    ft.replace(R.id.mainContent, currentFragment);
                     //ft.addToBackStack(null);
                     ft.commit();
                     return true;
@@ -59,10 +59,10 @@ public class MainActivity extends BaseAppCompatActivity {
 
         ft = getSupportFragmentManager().beginTransaction();
         currentFragment = new Wallet();
-        ft.replace(R.id.content, currentFragment);
+        ft.replace(R.id.mainContent, currentFragment);
         ft.commit();
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.mainNavigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 

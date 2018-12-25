@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/deepSeaBlue"
@@ -201,7 +202,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_backspace_white_36dp"
+            android:src="@drawable/ic_backspace_black_36dp"
+            android:tint="@color/white"
             android:background="@color/deepSeaBlue" />
 
         <Button
@@ -227,7 +229,8 @@
             android:layout_row="3"
             android:layout_column="2"
             android:background="@drawable/rounded_rectangle_green"
-            android:src="@drawable/ic_done_white_36dp"
+            android:src="@drawable/ic_done_black_36dp"
+            android:tint="@color/white"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"

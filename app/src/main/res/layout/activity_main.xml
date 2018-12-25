@@ -9,18 +9,18 @@
     tools:context=".MainActivity">
 
     <FrameLayout
-        android:id="@+id/content"
+        android:id="@+id/mainContent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintBottom_toTopOf="@+id/mainNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation"
+        android:id="@+id/mainNavigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/seaBlue"

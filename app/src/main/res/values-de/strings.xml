@@ -6,6 +6,20 @@
     <string name="app_name">Zap</string>
     <string name="ok">Ok</string>
     <string name="cancel">Abbrechen</string>
+    <string name="lightning">Lightning</string>
+    <string name="onChain">On Chain</string>
+    <string name="share">Teilen</string>
+    <string name="copy">Kopieren</string>
+    <string name="paste">Einfügen</string>
+    <string name="details">Details</string>
+    <string name="amount">Betrag</string>
+    <string name="scanQRCode">QR-Code scannen</string>
+
+
+    <!-- //////////////// Activity names //////////////////// -->
+
+    <string name="activity_receive">Empfangen</string>
+    <string name="activity_send">Senden</string>
 
 
     <!-- //////////////// Bottom Navigation //////////////////// -->
@@ -22,13 +36,19 @@
     <string name="pin_create">PIN erstellen (5-8 Zeichen)</string>
 
 
+    <!-- //////////////// Receive //////////////////// -->
+
+    <string name="receive_generateRequest">Anfrage generieren</string>
+
+
     <!-- //////////////// User Guardian //////////////////// -->
 
     <string name="guardian_doNotShowAgain">Nicht mehr anzeigen.</string>
     <string name="guardian_Title">Achtung</string>
+    <string name="guardian_reset">Alle Sicherheitswarnungen sind wieder aktiv.</string>
     <string name="guardian_copyToClipboard">Andere Apps (auch bösartige) können auf diese Daten zugreifen, wenn sie in die Zwischenablage kopiert werden. Fortfahren?</string>
     <string name="guardian_pasteFromClipboard">Überprüfe vorsichtshalber immer die letzten 3 bis 5 Stellen wenn du etwas von der Zwischenablage einfügst. Eine bösartige App könnte die Daten geändert haben, ohne dass du es bemerkt hast.</string>
-    <string name="guardian_disableScrambledPin">Anhand deiner Fingerbewegungen ist es einfach deine PIN zu wenn die Ziffern immer an derselben Position sind. Trotzdem deaktivieren?</string>
+    <string name="guardian_disableScrambledPin">Anhand deiner Fingerbewegungen ist es einfach deine PIN zu erraten, wenn die Ziffern immer an derselben Position sind. Trotzdem deaktivieren?</string>
     <string name="guardian_disableScreenProtection">Bösartige Software könnte unbemerkt Videos oder Screenshots aufnehmen, während du Zap nutzt. Wir empfehlen diese Funktion nur dann zu deaktivieren, wenn du selbst genau das machen möchtest.</string>
 
 
@@ -61,5 +81,11 @@
     <string name="settings_reportIssue">Bug melden</string>
 
     <string name="settings_restartRequired">Zap wird neugestartet, um diese Änderung vorzunehmen. Fortfahren?</string>
+
+    <!-- //////////////// Other //////////////////// -->
+
+    <string name="copied_to_clipboard">In Zwischenablage kopiert</string>
+    <string name="send">Senden</string>
+    <string name="receive">Empfangen</string>
 
 </resources>
