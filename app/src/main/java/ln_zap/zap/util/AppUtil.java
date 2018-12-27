@@ -1,9 +1,9 @@
 package ln_zap.zap.util;
 
 import android.content.Context;
-import android.content.Intent;
 
-import ln_zap.zap.PinEntryActivity;
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
 
 
 public class AppUtil {
@@ -28,9 +28,7 @@ public class AppUtil {
 
 
 	public void restartApp() {
-		Intent intent = new Intent(context, PinEntryActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		context.startActivity(intent);
+		ProcessPhoenix.triggerRebirth(context);
 	}
 
 }

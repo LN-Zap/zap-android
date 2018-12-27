@@ -27,6 +27,7 @@ dependencies {
     // QR-Code generator: To Do: check if this is secure
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
+    implementation 'com.jakewharton:process-phoenix:2.0.0'
     implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'com.google.android.material:material:1.1.0-alpha01'
