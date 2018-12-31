@@ -1,22 +1,34 @@
-package ln_zap.zap.Fragments;
+package ln_zap.zap.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import androidx.preference.Preference;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
-import ln_zap.zap.Interfaces.UserGuardianInterface;
+import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.R;
 import ln_zap.zap.util.AppUtil;
+
+import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.UserGuardian;
+import ln_zap.zap.util.ZapLog;
 
 
 public class Settings extends PreferenceFragmentCompat implements UserGuardianInterface {
+
+    private static final String LOG_TAG = "Settings";
+
 
     private UserGuardian UG;
     private SwitchPreference swScreenProtection;
@@ -28,6 +40,52 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
         setPreferencesFromResource(R.xml.settings, rootKey);
 
         UG = new UserGuardian(getActivity(),this);
+
+        // Action when clicked on "currency". The list has to be generated based on the exchange rate
+        // data we received from our provider. Therefore when the provider adds new coins,
+        // we can use them without changing our code.
+        final ListPreference listCurrency = findPreference("currency");
+        listCurrency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+                CharSequence[] entries = null;
+
+                try {
+                    JSONObject jsonAvailableCurrencies = new JSONObject(prefs.getString("fiat_available", "[]"));
+
+                    JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
+                    entries = new CharSequence[currencies.length()];
+
+                    for (int i = 0, count = currencies.length(); i < count; i++) {
+                        try {
+                            entries[i] = currencies.getString(i);
+                        } catch (JSONException e) {
+                            ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+                }
+
+                listCurrency.setEntries(entries);
+                listCurrency.setEntryValues(entries);
+
+                return true;
+            }
+        });
+
+        // Update our current selected currency in the MonetaryUtil
+        listCurrency.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                MonetaryUtil.getInstance(getActivity()).loadCurrency(String.valueOf(newValue));
+                return true;
+            }
+        });
+
 
         // Show warning on language change as a restart is required.
         final ListPreference listLanguage = (ListPreference) findPreference("language");
@@ -59,7 +117,7 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
             }
         });
 
-        // change screen recording option
+        // On change screen recording option
         swScreenProtection = (SwitchPreference) findPreference("preventScreenRecording");
         swScreenProtection.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -76,7 +134,7 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
             }
         });
 
-        // change screen recording option
+        // On change scramble pin option
         swScrambledPin = (SwitchPreference) findPreference("scramblePin");
         swScrambledPin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -92,6 +150,7 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
             }
         });
 
+        // Action when clicked on "reset security warnings"
         final Preference prefResetGuardian = findPreference("resetGuardian");
         prefResetGuardian.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -115,5 +174,10 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 break;
         }
+    }
+
+    // populate currency selection with available currencies
+    public void createCurrencyList() {
+
     }
 }

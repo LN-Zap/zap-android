@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Wallet">
+    tools:context=".fragments.Wallet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/BalanceLayout"
@@ -18,34 +18,76 @@
         app:layout_constraintBottom_toTopOf="@+id/sendButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.31">
 
-        <TextView
-            android:id="@+id/BalanceUnit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Wallet"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@id/Balance"
+        <LinearLayout
+            android:id="@+id/BalancePrimaryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.48"
-            app:layout_constraintStart_toEndOf="@id/Balance"
-            app:layout_constraintTop_toTopOf="@id/Balance"
-            app:layout_constraintVertical_bias="0.77" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/Balance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wallet"
-            android:textAlignment="center"
-            android:textSize="40sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            <TextView
+                android:id="@+id/BalancePrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Primary"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/BalancePrimaryUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Unit"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold|italic" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/BalanceSecondaryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/BalancePrimaryLayout">
+
+            <TextView
+                android:id="@+id/BalanceSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Secondary"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textSize="15sp"
+                app:layout_constraintTop_toBottomOf="@id/BalancePrimary" />
+
+            <TextView
+                android:id="@+id/BalanceSecondaryUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Unit"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button

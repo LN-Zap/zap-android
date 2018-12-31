@@ -1,10 +1,10 @@
-package ln_zap.zap.QRCodeScanner;
+package ln_zap.zap.qrCodeScanner;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
-import ln_zap.zap.BaseClasses.BaseAppCompatActivity;
+import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.R;
 
 public class BaseScannerActivity extends BaseAppCompatActivity {

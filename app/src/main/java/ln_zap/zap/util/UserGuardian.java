@@ -3,12 +3,12 @@ package ln_zap.zap.util;
 import android.content.DialogInterface;
 import android.content.Context;
 
-import ln_zap.zap.Interfaces.UserGuardianInterface;
+import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.R;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;

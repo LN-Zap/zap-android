@@ -17,14 +17,16 @@
     </string-array>
 
     <string-array name="addressType">
-        <item>p2pkh</item>
         <item>p2psh</item>
         <item>bech32</item>
     </string-array>
 
     <string-array name="blockExplorer">
+        <item>BlockCypher</item>
+        <item>Blockstream</item>
         <item>Smartbit</item>
-        <item>blockchain.info</item>
+        <item>Blockchain Reader (Yogh)</item>
+        <item>OXT</item>
     </string-array>
 
     <string-array name="languageValues">

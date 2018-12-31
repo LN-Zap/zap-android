@@ -11,9 +11,13 @@
     <string name="share">Teilen</string>
     <string name="copy">Kopieren</string>
     <string name="paste">Einfügen</string>
+    <string name="showDetails">Details anzeigen</string>
     <string name="details">Details</string>
     <string name="amount">Betrag</string>
     <string name="scanQRCode">QR-Code scannen</string>
+    <string name="shareDialogTitle">App auswählen</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->
@@ -74,7 +78,7 @@
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
 
     <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
-    <string name="settings_preventScreenRecording">Bilschirmaufnahmen blockieren</string>
+    <string name="settings_preventScreenRecording">Bildschirmaufnahmen blockieren</string>
     <string name="settings_resetSecurityWarnings">Sicherheitswarnungen zurücksetzen</string>
 
     <string name="settings_help">Hilfe nötig?</string>

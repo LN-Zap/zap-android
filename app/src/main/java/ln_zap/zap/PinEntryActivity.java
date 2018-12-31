@@ -3,7 +3,7 @@ package ln_zap.zap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import ln_zap.zap.BaseClasses.BaseActivity;
+import ln_zap.zap.baseClasses.BaseActivity;
 import ln_zap.zap.util.ScrambledNumpad;
 
 

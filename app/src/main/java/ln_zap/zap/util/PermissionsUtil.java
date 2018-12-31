@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,7 +24,7 @@ public class PermissionsUtil {
             // Do not request permission if user already denied it.
             // If forceRequest is true, the user will still be asked unless he ticked "don't ask me again".
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity)context, permissions[i]) & !forceRequest) {
-                Log.d("PermissionsUtil", "User denied this request before, no permission requested");
+                ZapLog.debug("PermissionsUtil", "User denied this request before, no permission requested");
             }
             else    {
                 ActivityCompat.requestPermissions((Activity)context, permissions, code);

@@ -11,9 +11,13 @@
     <string name="share">Share</string>
     <string name="copy">Copy</string>
     <string name="paste">Paste</string>
-    <string name="details">Show details</string>
+    <string name="showDetails">Show details</string>
+    <string name="details">Details</string>
     <string name="amount">Amount</string>
     <string name="scanQRCode">Scan QR-Code</string>
+    <string name="shareDialogTitle">Choose App</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!-- //////////////// Activity names //////////////////// -->
 

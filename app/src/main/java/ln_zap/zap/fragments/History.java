@@ -1,4 +1,4 @@
-package ln_zap.zap.Fragments;
+package ln_zap.zap.fragments;
 
 
 import android.os.Bundle;

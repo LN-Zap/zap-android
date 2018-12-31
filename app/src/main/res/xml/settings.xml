@@ -14,6 +14,7 @@
             android:entries="@array/currency"
             android:entryValues="@array/currency"
             android:dialogTitle="@string/settings_currency"
+            android:defaultValue="USD"
             app:iconSpaceReserved="false"/>
 
         <ListPreference
@@ -23,14 +24,6 @@
             android:entryValues="@array/btcUnit"
             android:defaultValue="BTC"
             android:dialogTitle="@string/settings_btcUnit"
-            app:iconSpaceReserved="false"/>
-
-        <ListPreference
-            android:key="btcAddressType"
-            android:title="@string/settings_addressType"
-            android:entries="@array/addressType"
-            android:entryValues="@array/addressType"
-            android:dialogTitle="@string/settings_addressType"
             app:iconSpaceReserved="false"/>
 
         <ListPreference
@@ -50,7 +43,11 @@
             android:dialogTitle="@string/settings_language"
             app:iconSpaceReserved="false"/>
 
-
+        <SwitchPreference
+            android:key="hapticPin"
+            android:title="@string/settings_hapticPin"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"/>
 
     </PreferenceCategory>
 
@@ -67,10 +64,12 @@
             android:title="@string/settings_resetPin"
             app:iconSpaceReserved="false"/>
 
-        <SwitchPreference
-            android:key="hapticPin"
-            android:title="@string/settings_hapticPin"
-            android:defaultValue="true"
+        <ListPreference
+            android:key="btcAddressType"
+            android:title="@string/settings_addressType"
+            android:entries="@array/addressType"
+            android:entryValues="@array/addressType"
+            android:dialogTitle="@string/settings_addressType"
             app:iconSpaceReserved="false"/>
 
     </PreferenceCategory>

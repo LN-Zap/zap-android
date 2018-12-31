@@ -1,4 +1,4 @@
-package ln_zap.zap.QRCodeScanner;
+package ln_zap.zap.qrCodeScanner;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -137,13 +137,9 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
                 } else {
                     // Permission denied, go to send activity immediately.
                     Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                    //super.onBackPressed();
                 }
-                return;
             }
-
         }
     }
 

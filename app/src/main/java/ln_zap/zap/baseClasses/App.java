@@ -1,4 +1,4 @@
-package ln_zap.zap.BaseClasses;
+package ln_zap.zap.baseClasses;
 
 import android.app.Application;
 import android.content.Context;

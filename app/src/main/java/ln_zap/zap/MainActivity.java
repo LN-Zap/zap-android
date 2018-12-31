@@ -7,10 +7,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.MenuItem;
 
 import androidx.fragment.app.FragmentTransaction;
-import ln_zap.zap.BaseClasses.BaseAppCompatActivity;
-import ln_zap.zap.Fragments.History;
-import ln_zap.zap.Fragments.Settings;
-import ln_zap.zap.Fragments.Wallet;
+import ln_zap.zap.baseClasses.BaseAppCompatActivity;
+import ln_zap.zap.fragments.History;
+import ln_zap.zap.fragments.Settings;
+import ln_zap.zap.fragments.Wallet;
 
 public class MainActivity extends BaseAppCompatActivity {
 

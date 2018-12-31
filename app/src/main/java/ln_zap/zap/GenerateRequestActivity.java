@@ -1,7 +1,7 @@
 package ln_zap.zap;
 
-import ln_zap.zap.BaseClasses.BaseAppCompatActivity;
-import ln_zap.zap.Interfaces.UserGuardianInterface;
+import ln_zap.zap.baseClasses.BaseAppCompatActivity;
+import ln_zap.zap.interfaces.UserGuardianInterface;
 
 import ln_zap.zap.util.UserGuardian;
 import android.app.AlertDialog;
@@ -86,7 +86,8 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, DataToEncode);
                 shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent,"Choose"));
+                String title = getResources().getString(R.string.shareDialogTitle);
+                startActivity(Intent.createChooser(shareIntent, title));
             }
         });
 
@@ -96,7 +97,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(GenerateRequestActivity.this)
-                        .setTitle("Details")
+                        .setTitle(R.string.details)
                         .setMessage(DataToEncode)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

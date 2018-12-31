@@ -1,6 +1,6 @@
 package ln_zap.zap;
 
-import ln_zap.zap.BaseClasses.BaseAppCompatActivity;
+import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 
 import android.os.Bundle;
 

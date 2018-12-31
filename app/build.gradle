@@ -27,14 +27,21 @@ dependencies {
     // QR-Code generator: To Do: check if this is secure
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
+    // Library to restart app
     implementation 'com.jakewharton:process-phoenix:2.0.0'
-    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
+
+    // HTTP library to perform API interaction
+    implementation 'com.android.volley:volley:1.1.1'
+
+    // Bitcoin implementation
+    // implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
+
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-    implementation 'com.google.android.material:material:1.1.0-alpha01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0-alpha01'
+    implementation 'androidx.preference:preference:1.1.0-alpha02'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1-beta01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-beta01'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
