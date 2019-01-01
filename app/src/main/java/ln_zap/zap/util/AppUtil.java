@@ -8,8 +8,8 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 
 public class AppUtil {
 
-	private static AppUtil instance = null;
-	private static Context context = null;
+	private static AppUtil mInstance = null;
+	private static Context mContext = null;
 
 
 
@@ -17,18 +17,18 @@ public class AppUtil {
 
 	public static AppUtil getInstance(Context ctx) {
 		
-		context = ctx;
+		mContext = ctx;
 		
-		if(instance == null) {
-			instance = new AppUtil();
+		if(mInstance == null) {
+			mInstance = new AppUtil();
 		}
 		
-		return instance;
+		return mInstance;
 	}
 
 
 	public void restartApp() {
-		ProcessPhoenix.triggerRebirth(context);
+		ProcessPhoenix.triggerRebirth(mContext);
 	}
 
 }

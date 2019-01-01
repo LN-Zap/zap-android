@@ -5,48 +5,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.AbstractMap.SimpleImmutableEntry;
 
+/**
+ * This class helps to defend against some attack vectors.
+ * It securely randomizes the positions at which the digits of the numpad will be shown.
+ */
 public class ScrambledNumpad {
 
-    private List<SimpleImmutableEntry<Integer,Integer>> numpad;
-    private List<Integer> positions;
+    private List<SimpleImmutableEntry<Integer,Integer>> mNumpad;
+    private List<Integer> mPositions;
 
     public ScrambledNumpad() {
 
-        positions = new ArrayList<>();
-        positions.add(0);
-        positions.add(1);
-        positions.add(2);
-        positions.add(3);
-        positions.add(4);
-        positions.add(5);
-        positions.add(6);
-        positions.add(7);
-        positions.add(8);
-        positions.add(9);
+        mPositions = new ArrayList<>();
+        mPositions.add(0);
+        mPositions.add(1);
+        mPositions.add(2);
+        mPositions.add(3);
+        mPositions.add(4);
+        mPositions.add(5);
+        mPositions.add(6);
+        mPositions.add(7);
+        mPositions.add(8);
+        mPositions.add(9);
 
-        numpad = new ArrayList<>();
-
-        init();
-
-    }
-
-    private void init()  {
+        mNumpad = new ArrayList<>();
 
         SecureRandom random = new SecureRandom();
 
         for(int i = 0; i < 10; i++)  {
 
-            int randomPos = random.nextInt(positions.size());
-            SimpleImmutableEntry<Integer,Integer> pair = new SimpleImmutableEntry<>(i, positions.get(randomPos));
-            positions.remove(randomPos);
-            numpad.add(pair);
+            int randomPos = random.nextInt(mPositions.size());
+            SimpleImmutableEntry<Integer,Integer> pair = new SimpleImmutableEntry<>(i, mPositions.get(randomPos));
+            mPositions.remove(randomPos);
+            mNumpad.add(pair);
 
         }
 
     }
 
+
     public List<SimpleImmutableEntry<Integer,Integer>> getNumpad()  {
-        return numpad;
+        return mNumpad;
     }
 
 }

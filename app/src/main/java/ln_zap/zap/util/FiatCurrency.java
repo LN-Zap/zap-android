@@ -1,12 +1,31 @@
 package ln_zap.zap.util;
 
-
+/**
+ * This class is used to create fiat currency objects,
+ * which hold all information relevant for Zap about that fiat currency.
+ */
 public class FiatCurrency {
+
+    /**
+     * The currency Code. Used as display symbol if Symbol is empty.
+     * Example: "USD", "EUR"
+     */
     private String mCode;
-    // Rate to BTC not Satoshi
+
+    /**
+     * The exchange rate to BTC.
+     * ALWAYS use the rate to BTC here, not to Satoshis for example.
+     */
     private double mRate;
+
+    /**
+     * The symbol commonly used.
+     * Example for USD: $
+     */
     private String mSymbol;
-    // ToDo: Timestamp    (To prevent the User to initiates a request with old exchange data.)
+
+
+    // ToDo: Timestamp    (To prevent the User to initiate a request with old exchange data.)
 
     public FiatCurrency(String code, double rate){
         mCode = code;

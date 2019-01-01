@@ -25,43 +25,43 @@ import net.glxn.qrgen.android.QRCode;
 
 public class GenerateRequestActivity extends BaseAppCompatActivity implements UserGuardianInterface {
 
-    private UserGuardian UG;
-    private String DataToEncode;
-    private boolean onChain;
+    private UserGuardian mUG;
+    private String mDataToEncode;
+    private boolean mOnChain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Receive Data from last activity
+        // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if(extras != null)
-            onChain = extras.getBoolean("onChain");
+            mOnChain = extras.getBoolean("onChain");
 
         setContentView(R.layout.activity_generate_request);
-        UG = new UserGuardian(this,this);
+        mUG = new UserGuardian(this,this);
 
 
-        if(onChain){
+        if(mOnChain){
             // Show "On Chain" at top
             ImageView ivTypeIcon = findViewById(R.id.requestTypeIcon);
             ivTypeIcon.setImageResource(R.drawable.ic_onchain_black_24dp);
             TextView tvTypeText = findViewById(R.id.requestTypeText);
             tvTypeText.setText(R.string.onChain);
 
-            // generate Data to encode (placeholder for now)
-            DataToEncode = "2N3GLxzXzkg8aH2wFgsRuEdsEcARfN3DbQg";
+            // Generate data to encode (placeholder for now)
+            mDataToEncode = "2N3GLxzXzkg8aH2wFgsRuEdsEcARfN3DbQg";
         }
         else {
-            // generate Data to encode (placeholder for now)
-            DataToEncode = "lntb1u1pwq4jtvpp5r8j6shz7z7grpt6j9l3ep30means72nutpqsd9230pcehsqvqd5sdq8w3jhxaqcqzysxqzjc30qekk28rddvpkzc5uwata53rgsvxc7k4cfy3fmrjuwun70m79lq9e3s4aqflxn024v8wsz5cavgarm7qq6tjmdztjuv3jeurgvfayqqgajfl0";
+            // Generate data to encode (placeholder for now)
+            mDataToEncode = "lntb1u1pwq4jtvpp5r8j6shz7z7grpt6j9l3ep30means72nutpqsd9230pcehsqvqd5sdq8w3jhxaqcqzysxqzjc30qekk28rddvpkzc5uwata53rgsvxc7k4cfy3fmrjuwun70m79lq9e3s4aqflxn024v8wsz5cavgarm7qq6tjmdztjuv3jeurgvfayqqgajfl0";
         }
 
 
 
         // Generate "QR-Code"
         Bitmap bmpQRCode = QRCode
-                .from(DataToEncode)
+                .from(mDataToEncode)
                 .withSize(750,750)
                 .withErrorCorrection(ErrorCorrectionLevel.L)
                 .bitmap();
@@ -72,7 +72,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
         ivQRCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UG.securityCopyToClipboard();
+                mUG.securityCopyToClipboard();
             }
         });
 
@@ -84,7 +84,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
             public void onClick(View v) {
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, DataToEncode);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mDataToEncode);
                 shareIntent.setType("text/plain");
                 String title = getResources().getString(R.string.shareDialogTitle);
                 startActivity(Intent.createChooser(shareIntent, title));
@@ -98,7 +98,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
             public void onClick(View v) {
                 new AlertDialog.Builder(GenerateRequestActivity.this)
                         .setTitle(R.string.details)
-                        .setMessage(DataToEncode)
+                        .setMessage(mDataToEncode)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) { }
@@ -111,7 +111,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
         btnCopyLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UG.securityCopyToClipboard();
+                mUG.securityCopyToClipboard();
             }
         });
 
@@ -128,7 +128,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
 
     private void copyToClipboard(){
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Address", DataToEncode);
+        ClipData clip = ClipData.newPlainText("Address", mDataToEncode);
         clipboard.setPrimaryClip(clip);
         Toast.makeText(this,R.string.copied_to_clipboard,Toast.LENGTH_SHORT).show();
     }

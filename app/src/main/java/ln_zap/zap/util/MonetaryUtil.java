@@ -20,14 +20,10 @@ import java.util.Iterator;
 import java.util.Locale;
 
 
-
+/**
+ * This Singleton helps to display any value in the desired format.
+ */
 public class MonetaryUtil {
-
-    private static MonetaryUtil instance;
-    private Context context;
-    private SharedPreferences prefs;
-
-    private FiatCurrency currentCurrency;
 
     private static final String BTC_UNIT = "BTC";
     private static final String MBTC_UNIT = "mBTC";
@@ -36,24 +32,30 @@ public class MonetaryUtil {
 
     private static final String LOG_TAG = "MonetaryUtil";
 
+    private static MonetaryUtil mInstance;
+    private Context mContext;
+    private SharedPreferences mPrefs;
+    private FiatCurrency mCurrentCurrency;
+
+
 
     private MonetaryUtil(Context ctx){
-        context = ctx.getApplicationContext();
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        currentCurrency = new FiatCurrency(prefs.getString("currency","USD"),0);
+        mContext = ctx.getApplicationContext();
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mCurrentCurrency = new FiatCurrency(mPrefs.getString("currency","USD"),0);
     }
 
     public static MonetaryUtil getInstance(Context ctx){
-        if(instance == null) {
-            instance = new MonetaryUtil(ctx);
+        if(mInstance == null) {
+            mInstance = new MonetaryUtil(ctx);
         }
 
-        return instance;
+        return mInstance;
     }
 
 
     public String getPrimaryDisplayAmountAndUnit(long value){
-        if(prefs.getBoolean("isBitcoinPrimary", true)){
+        if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getBitcoinDisplayAmountAndUnit(value);
         }
         else{
@@ -62,7 +64,7 @@ public class MonetaryUtil {
     }
 
     public String getPrimaryDisplayAmount(long value){
-        if(prefs.getBoolean("isBitcoinPrimary", true)){
+        if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getBitcoinDisplayAmount(value);
         }
         else{
@@ -71,7 +73,7 @@ public class MonetaryUtil {
     }
 
     public String getPrimaryDisplayUnit(){
-        if(prefs.getBoolean("isBitcoinPrimary", true)){
+        if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getBitcoinDisplayUnit();
         }
         else{
@@ -81,7 +83,7 @@ public class MonetaryUtil {
 
 
     public String getSecondaryDisplayAmountAndUnit(long value){
-        if(prefs.getBoolean("isBitcoinPrimary", true)){
+        if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return "";
         }
         else{
@@ -90,7 +92,7 @@ public class MonetaryUtil {
     }
 
     public String getSecondaryDisplayAmount(long value){
-        if(prefs.getBoolean("isBitcoinPrimary", true)){
+        if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getFiatDisplayAmount(value);
         }
         else{
@@ -99,7 +101,7 @@ public class MonetaryUtil {
     }
 
     public String getSecondaryDisplayUnit(){
-        if(prefs.getBoolean("isBitcoinPrimary", true)){
+        if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getFiatDisplayUnit();
         }
         else{
@@ -109,9 +111,9 @@ public class MonetaryUtil {
 
     public void loadCurrency(String currencyCode){
         try {
-            JSONObject selectedCurrency = new JSONObject(prefs.getString("fiat_" + currencyCode, "{}"));
+            JSONObject selectedCurrency = new JSONObject(mPrefs.getString("fiat_" + currencyCode, "{}"));
             FiatCurrency currency = new FiatCurrency(currencyCode, selectedCurrency.getDouble("rate"));
-            currentCurrency = currency;
+            mCurrentCurrency = currency;
         }
         catch(JSONException e){
             e.printStackTrace();
@@ -124,7 +126,7 @@ public class MonetaryUtil {
 
     private String getBitcoinDisplayAmountAndUnit(long value){
 
-        String selectedBTCUnit = prefs.getString("btcUnit","BTC");
+        String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
         switch (selectedBTCUnit) {
             case "BTC":
                 return formatAsBtcDisplayAmount(value) + " " + BTC_UNIT;
@@ -142,7 +144,7 @@ public class MonetaryUtil {
 
     private String getBitcoinDisplayAmount(long value){
 
-        String selectedBTCUnit = prefs.getString("btcUnit","BTC");
+        String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
         switch (selectedBTCUnit) {
             case "BTC":
                 return formatAsBtcDisplayAmount(value);
@@ -158,15 +160,9 @@ public class MonetaryUtil {
 
     }
 
-
-    /**
-     * This method returns the bitcoin unit chosen in the preferences.
-     *
-     * @return bitcoin unit as string
-     */
     private String getBitcoinDisplayUnit(){
 
-        String selectedBTCUnit = prefs.getString("btcUnit","BTC");
+        String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
         switch (selectedBTCUnit) {
             case "BTC":
                 return BTC_UNIT;
@@ -183,7 +179,7 @@ public class MonetaryUtil {
     }
 
     private String formatAsBtcDisplayAmount(long value) {
-        Locale loc = context.getResources().getConfiguration().locale;
+        Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
         DecimalFormat df = (DecimalFormat)nf;
         df.setMaximumFractionDigits(8);
@@ -192,9 +188,8 @@ public class MonetaryUtil {
         return df.format(value /1e8);
     }
 
-
     private String formatAsMbtcDisplayAmount(long value) {
-        Locale loc = context.getResources().getConfiguration().locale;
+        Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
         DecimalFormat df = (DecimalFormat)nf;
         df.setMaximumFractionDigits(5);
@@ -204,7 +199,7 @@ public class MonetaryUtil {
     }
 
     private String formatAsBitsDisplayAmount(long value) {
-        Locale loc = context.getResources().getConfiguration().locale;
+        Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
         DecimalFormat df = (DecimalFormat)nf;
         df.setMaximumFractionDigits(2);
@@ -239,16 +234,16 @@ public class MonetaryUtil {
     ////////// Fiat functions /////////////
 
     private String getFiatDisplayAmount(long value){
-        double fiatValue = (currentCurrency.getRate() / 1e8)*value;
+        double fiatValue = (mCurrentCurrency.getRate() / 1e8)*value;
         return formatAsFiatDisplayAmount(fiatValue);
     }
 
     private String getFiatDisplayUnit(){
-        return currentCurrency.getCode();
+        return mCurrentCurrency.getCode();
     }
 
     private String formatAsFiatDisplayAmount(double value) {
-        Locale loc = context.getResources().getConfiguration().locale;
+        Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
         DecimalFormat df = (DecimalFormat)nf;
         df.setMaximumFractionDigits(2);
@@ -277,7 +272,7 @@ public class MonetaryUtil {
             @Override
             public void onResponse(JSONObject response) {
 
-                final SharedPreferences.Editor editor = prefs.edit();
+                final SharedPreferences.Editor editor = mPrefs.edit();
 
                 // JSON Object that will hold all available currencies to later populate selection list.
                 JSONObject availableCurrencies = new JSONObject();
@@ -309,7 +304,7 @@ public class MonetaryUtil {
 
                 // ToDo: We now have the new data. Make sure everything gets updated.
                 // this only loads the currency, but does not update text fields
-                loadCurrency(prefs.getString("currency","USD"));
+                loadCurrency(mPrefs.getString("currency","USD"));
             }
         }, new Response.ErrorListener() {
                 @Override
@@ -319,7 +314,7 @@ public class MonetaryUtil {
         });
 
         // Adding request to request queue
-        HttpClient.getInstance(context).addToRequestQueue(rateRequest, "rateRequest");
+        HttpClient.getInstance(mContext).addToRequestQueue(rateRequest, "rateRequest");
     }
 
 }

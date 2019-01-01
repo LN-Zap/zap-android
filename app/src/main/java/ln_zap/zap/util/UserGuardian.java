@@ -14,13 +14,17 @@ import android.view.View;
 import android.widget.CheckBox;
 
 
-/*
- The UserGuardian is designed to help inexperienced people keeping their bitcoin safe.
- This is accomplished by showing security warnings whenever the user does something that harms
- his security or privacy.
- To avoid too many popups, these messages have a "do not show again" option.
- Please note that a dialog which will not be shown executes the callback like it does when "ok" is pressed.
-*/
+/**
+ * The UserGuardian is designed to help inexperienced people keeping their bitcoin safe.
+ * Use this class to show security warnings whenever the user does something that harms
+ * his security or privacy.
+ * To avoid too many popups, these messages have a "do not show again" option.
+ *
+ * A class using the UserGuardian class needs to implement the UserGuardianInterface
+ * to handle users choice.
+ *
+ * Please note that a dialog which will not be shown executes the callback like it does when "ok" is pressed.
+ */
 public class UserGuardian {
 
     public static final String COPY_TO_CLIPBOARD = "guardianCopyToClipboard";
@@ -28,48 +32,59 @@ public class UserGuardian {
     public static final String DISABLE_SCRAMBLED_PIN = "guardianDisableScrambledPin";
     public static final String DISABLE_SCREEN_PROTECTION = "guardianDisableScreenProtection";
 
-    private final Context context;
-    private final UserGuardianInterface action;
-    private String currentDialogName;
-    private CheckBox dontShowAgain;
+    private final Context mContext;
+    private final UserGuardianInterface mAction;
+    private String mCurrentDialogName;
+    private CheckBox mDontShowAgain;
 
 
     public UserGuardian(Context ctx, UserGuardianInterface caller) {
-        context = ctx;
-        action = caller;
+        mContext = ctx;
+        mAction = caller;
     }
 
 
-    // Warn the user about security issues when copying stuff to clipboard.
+    /**
+     * Warn the user about security issues when copying stuff to clipboard.
+     */
     public void securityCopyToClipboard(){
-        currentDialogName = COPY_TO_CLIPBOARD;
+        mCurrentDialogName = COPY_TO_CLIPBOARD;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setTitle(R.string.guardian_Title);
         adb.setMessage(R.string.guardian_copyToClipboard);
         showGuardianDialog(adb);
     }
 
-    // Warn the user about pasting a payment request from clipboard.
+
+    /**
+     * Warn the user about pasting a payment request from clipboard.
+     */
     public void securityPasteFromClipboard(){
-        currentDialogName = PASTE_FROM_CLIPBOARD;
+        mCurrentDialogName = PASTE_FROM_CLIPBOARD;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
         adb.setTitle(R.string.guardian_Title);
         adb.setMessage(R.string.guardian_pasteFromClipboard);
         showGuardianDialog(adb);
     }
 
-    // Warn the user to not disable scrambled pin.
+
+    /**
+     * Warn the user to not disable scrambled pin input.
+     */
     public void securityScrambledPin(){
-        currentDialogName = DISABLE_SCRAMBLED_PIN;
+        mCurrentDialogName = DISABLE_SCRAMBLED_PIN;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setTitle(R.string.guardian_Title);
         adb.setMessage(R.string.guardian_disableScrambledPin);
         showGuardianDialog(adb);
     }
 
-    // Warn the user to not disable screen protection.
+
+    /**
+     * Warn the user to not disable screen protection.
+     */
     public void securityScreenProtection(){
-        currentDialogName = DISABLE_SCREEN_PROTECTION;
+        mCurrentDialogName = DISABLE_SCREEN_PROTECTION;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setTitle(R.string.guardian_Title);
         adb.setMessage(R.string.guardian_disableScreenProtection);
@@ -77,51 +92,9 @@ public class UserGuardian {
     }
 
 
-    // Create a dialog with a "do not show again" option that has everything set
-    // except title and message.
-    private AlertDialog.Builder createDontShowAgainDialog (Boolean hasCancelOption){
-        AlertDialog.Builder adb = new AlertDialog.Builder(context);
-        LayoutInflater adbInflater = LayoutInflater.from(context);
-        View DialogLayout = adbInflater.inflate(R.layout.dialog_checkbox, null);
-        dontShowAgain = DialogLayout.findViewById(R.id.skip);
-        adb.setView(DialogLayout);
-        adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                if (dontShowAgain.isChecked()){
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(currentDialogName, false);
-                    editor.apply();
-                }
-
-                // Do what you want to do on "OK" action
-                action.guardianDialogConfirmed(currentDialogName);
-                return;
-            }
-        });
-        if (hasCancelOption) {
-            adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
-            });
-        }
-        return adb;
-    }
-
-
-    // Show the dialog or execute callback if it should not be shown.
-    private void showGuardianDialog (AlertDialog.Builder adb){
-       if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(currentDialogName, true)){
-           adb.show();
-       }
-       else{
-           action.guardianDialogConfirmed(currentDialogName);
-       }
-    }
-
-    // Reset all "do not show again" selections
+    /**
+     * Reset all "do not show again" selections.
+     */
     public static void reenableAllSecurityWarnings(Context ctx){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
         SharedPreferences.Editor editor = settings.edit();
@@ -130,5 +103,58 @@ public class UserGuardian {
         editor.putBoolean(DISABLE_SCRAMBLED_PIN, true);
         editor.putBoolean(DISABLE_SCREEN_PROTECTION, true);
         editor.apply();
+    }
+
+
+
+    /**
+     * Create a dialog with a "do not show again" option that is already set up
+     * except title and message.
+     * This helps keeping the dialog functions organized and simple.
+     *
+     * @param hasCancelOption wether it has a cancle option or not
+     * @return returns a preconfigured AlertDialog.Builder which can be further configured later
+     */
+    private AlertDialog.Builder createDontShowAgainDialog (Boolean hasCancelOption){
+        AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
+        LayoutInflater adbInflater = LayoutInflater.from(mContext);
+        View DialogLayout = adbInflater.inflate(R.layout.dialog_checkbox, null);
+        mDontShowAgain = DialogLayout.findViewById(R.id.skip);
+        adb.setView(DialogLayout);
+        adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (mDontShowAgain.isChecked()){
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean(mCurrentDialogName, false);
+                    editor.apply();
+                }
+
+                // Execute interface callback on "OK"
+                mAction.guardianDialogConfirmed(mCurrentDialogName);
+            }
+        });
+        if (hasCancelOption) {
+            adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) { }
+            });
+        }
+        return adb;
+    }
+
+
+    /**
+     * Show the dialog or execute callback if it should not be shown.
+     *
+     * @param adb The AlertDialog.Builder which should be shown.
+     */
+    private void showGuardianDialog (AlertDialog.Builder adb){
+       if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mCurrentDialogName, true)){
+           adb.show();
+       }
+       else{
+           mAction.guardianDialogConfirmed(mCurrentDialogName);
+       }
     }
 }

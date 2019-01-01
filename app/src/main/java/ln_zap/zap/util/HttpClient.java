@@ -6,7 +6,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-
+/**
+ * Singleton to handle the volley http RequestQueue
+ */
 public class HttpClient {
     private static HttpClient mHttpClientInstance;
     private RequestQueue mRequestQueue;

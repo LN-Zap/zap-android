@@ -64,6 +64,7 @@
             android:title="@string/settings_resetPin"
             app:iconSpaceReserved="false"/>
 
+        <!--
         <ListPreference
             android:key="btcAddressType"
             android:title="@string/settings_addressType"
@@ -71,6 +72,7 @@
             android:entryValues="@array/addressType"
             android:dialogTitle="@string/settings_addressType"
             app:iconSpaceReserved="false"/>
+        -->
 
     </PreferenceCategory>
 

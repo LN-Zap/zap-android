@@ -30,20 +30,20 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
     private static final String LOG_TAG = "Settings";
 
 
-    private UserGuardian UG;
-    private SwitchPreference swScreenProtection;
-    private SwitchPreference swScrambledPin;
+    private UserGuardian mUG;
+    private SwitchPreference mSwScreenProtection;
+    private SwitchPreference mSwScrambledPin;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the settings from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey);
 
-        UG = new UserGuardian(getActivity(),this);
+        mUG = new UserGuardian(getActivity(),this);
 
         // Action when clicked on "currency". The list has to be generated based on the exchange rate
-        // data we received from our provider. Therefore when the provider adds new coins,
-        // we can use them without changing our code.
+        // data we received from our provider. Therefore when the provider adds new currencies,
+        // they will automatically show up in Zap.
         final ListPreference listCurrency = findPreference("currency");
         listCurrency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -118,12 +118,12 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
         });
 
         // On change screen recording option
-        swScreenProtection = (SwitchPreference) findPreference("preventScreenRecording");
-        swScreenProtection.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mSwScreenProtection = (SwitchPreference) findPreference("preventScreenRecording");
+        mSwScreenProtection.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (swScreenProtection.isChecked()){
-                    UG.securityScreenProtection();
+                if (mSwScreenProtection.isChecked()){
+                    mUG.securityScreenProtection();
                     // the value is set from the guardian callback, that's why we don't chang switch state here.
                     return false;
                 }
@@ -135,12 +135,12 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
         });
 
         // On change scramble pin option
-        swScrambledPin = (SwitchPreference) findPreference("scramblePin");
-        swScrambledPin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mSwScrambledPin = (SwitchPreference) findPreference("scramblePin");
+        mSwScrambledPin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (swScrambledPin.isChecked()){
-                    UG.securityScrambledPin();
+                if (mSwScrambledPin.isChecked()){
+                    mUG.securityScrambledPin();
                     // the value is set from the guardian callback, that's why we don't chang switch state here.
                     return false;
                 }
@@ -167,17 +167,13 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
     public void guardianDialogConfirmed(String DialogName) {
         switch (DialogName) {
             case UserGuardian.DISABLE_SCRAMBLED_PIN:
-                swScrambledPin.setChecked(false);
+                mSwScrambledPin.setChecked(false);
                 break;
             case UserGuardian.DISABLE_SCREEN_PROTECTION:
-                swScreenProtection.setChecked(false);
+                mSwScreenProtection.setChecked(false);
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 break;
         }
     }
 
-    // populate currency selection with available currencies
-    public void createCurrencyList() {
-
-    }
 }

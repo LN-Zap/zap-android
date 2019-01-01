@@ -24,11 +24,11 @@ import ln_zap.zap.util.MonetaryUtil;
  */
 public class Wallet extends Fragment {
 
-    private SharedPreferences prefs;
-    private TextView tvPrimaryBalance;
-    private TextView tvPrimaryBalanceUnit;
-    private TextView tvSecondaryBalance;
-    private TextView tvSecondaryBalanceUnit;
+    private SharedPreferences mPrefs;
+    private TextView mTvPrimaryBalance;
+    private TextView mTvPrimaryBalanceUnit;
+    private TextView mTvSecondaryBalance;
+    private TextView mTvSecondaryBalanceUnit;
 
 
     public Wallet() {
@@ -42,13 +42,13 @@ public class Wallet extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // Get View elements
-        tvPrimaryBalance = view.findViewById(R.id.BalancePrimary);
-        tvPrimaryBalanceUnit = view.findViewById(R.id.BalancePrimaryUnit);
-        tvSecondaryBalance = view.findViewById(R.id.BalanceSecondary);
-        tvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
+        mTvPrimaryBalance = view.findViewById(R.id.BalancePrimary);
+        mTvPrimaryBalanceUnit = view.findViewById(R.id.BalancePrimaryUnit);
+        mTvSecondaryBalance = view.findViewById(R.id.BalanceSecondary);
+        mTvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
 
         setBalance();
 
@@ -57,14 +57,14 @@ public class Wallet extends Fragment {
         clBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(prefs.getBoolean("isBitcoinPrimary", true)){
-                    SharedPreferences.Editor editor = prefs.edit();
+                if(mPrefs.getBoolean("isBitcoinPrimary", true)){
+                    SharedPreferences.Editor editor = mPrefs.edit();
                     editor.putBoolean("isBitcoinPrimary", false);
                     editor.apply();
                     setBalance();
                 }
                 else{
-                    SharedPreferences.Editor editor = prefs.edit();
+                    SharedPreferences.Editor editor = mPrefs.edit();
                     editor.putBoolean("isBitcoinPrimary", true);
                     editor.apply();
                     setBalance();
@@ -94,7 +94,7 @@ public class Wallet extends Fragment {
             }
         });
 
-        // temporarily the update of the exchange rates happens here. Later it will have to
+        // Temporarily the update of the exchange rates happens here. Later it will have to
         // be scheduled
         MonetaryUtil.getInstance(getActivity()).getExchangeRates();
 
@@ -106,10 +106,10 @@ public class Wallet extends Fragment {
         // placeholder value
         long myBalance = 120871010L;
 
-            tvPrimaryBalance.setText(MonetaryUtil.getInstance(getActivity()).getPrimaryDisplayAmount(myBalance));
-            tvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance(getActivity()).getPrimaryDisplayUnit());
-            tvSecondaryBalance.setText(MonetaryUtil.getInstance(getActivity()).getSecondaryDisplayAmount(myBalance));
-            tvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance(getActivity()).getSecondaryDisplayUnit());
+            mTvPrimaryBalance.setText(MonetaryUtil.getInstance(getActivity()).getPrimaryDisplayAmount(myBalance));
+            mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance(getActivity()).getPrimaryDisplayUnit());
+            mTvSecondaryBalance.setText(MonetaryUtil.getInstance(getActivity()).getSecondaryDisplayAmount(myBalance));
+            mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance(getActivity()).getSecondaryDisplayUnit());
 
     }
 

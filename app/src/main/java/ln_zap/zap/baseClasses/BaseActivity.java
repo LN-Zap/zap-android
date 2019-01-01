@@ -20,12 +20,13 @@ public abstract class BaseActivity extends Activity {
         initializeScreenRecordingSecurity();
     }
 
-    /*Secure against screenshots and automated screen recording.
-      Keep in mind that this does not prevent popups and other
-      dialogues to be secured as well. Extra security measures might have to be considered.
-      Check out the following link for more details:
-      https://github.com/commonsguy/cwac-security/blob/master/docs/FLAGSECURE.md
-      */
+    /**
+     * Secure against screenshots and automated screen recording.
+     * Keep in mind that this does not prevent popups and other
+     * dialogues to be secured as well. Extra security measures might have to be considered.
+     * Check out the following link for more details:
+     * https://github.com/commonsguy/cwac-security/blob/master/docs/FLAGSECURE.md
+     */
     private void initializeScreenRecordingSecurity() {
         if (true)
         {

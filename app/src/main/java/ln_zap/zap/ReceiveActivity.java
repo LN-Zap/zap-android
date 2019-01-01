@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 
 public class ReceiveActivity extends BaseAppCompatActivity {
 
-    private LinearLayout LightningTab;
-    private LinearLayout OnChainTab;
-    private boolean onChain = false;
+    private LinearLayout mLightningTab;
+    private LinearLayout mOnChainTab;
+    private boolean mOnChain = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,25 +21,25 @@ public class ReceiveActivity extends BaseAppCompatActivity {
 
 
         // Action when clicked on "Lightning"
-        LightningTab = findViewById(R.id.receiveLightningButton);
-        LightningTab.setOnClickListener(new View.OnClickListener() {
+        mLightningTab = findViewById(R.id.receiveLightningButton);
+        mLightningTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LightningTab.setAlpha(1);
-                OnChainTab.setAlpha(0.2f);
-                onChain = false;
+                mLightningTab.setAlpha(1);
+                mOnChainTab.setAlpha(0.2f);
+                mOnChain = false;
             }
         });
 
 
         // Action when clicked on "On Chain"
-        OnChainTab = findViewById(R.id.receiveOnChainButton);
-        OnChainTab.setOnClickListener(new View.OnClickListener() {
+        mOnChainTab = findViewById(R.id.receiveOnChainButton);
+        mOnChainTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LightningTab.setAlpha(0.2f);
-                OnChainTab.setAlpha(1);
-                onChain = true;
+                mLightningTab.setAlpha(0.2f);
+                mOnChainTab.setAlpha(1);
+                mOnChain = true;
             }
         });
 
@@ -50,7 +50,7 @@ public class ReceiveActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReceiveActivity.this, GenerateRequestActivity.class);
-                intent.putExtra("onChain", onChain);
+                intent.putExtra("onChain", mOnChain);
                 startActivity(intent);
             }
         });

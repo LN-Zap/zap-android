@@ -24,9 +24,9 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
-    private ImageButton btnFlashlight;
-    private int highlightColor;
-    private int grayColor;
+    private ImageButton mBtnFlashlight;
+    private int mHighlightColor;
+    private int mGrayColor;
 
     @Override
     public void onCreate(Bundle state) {
@@ -42,13 +42,13 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
         // Prepare colors
         String hexHighlightColor = "#" + Integer.toHexString(ContextCompat.getColor(this, R.color.lightningOrange) & 0x00ffffff);
-        highlightColor = Color.parseColor(hexHighlightColor);
+        mHighlightColor = Color.parseColor(hexHighlightColor);
         String hexGreyColor = "#" + Integer.toHexString(ContextCompat.getColor(this, R.color.gray) & 0x00ffffff);
-        grayColor = Color.parseColor(hexGreyColor);
+        mGrayColor = Color.parseColor(hexGreyColor);
 
         // Styling the scanner view
         mScannerView.setLaserEnabled(false);
-        mScannerView.setBorderColor(highlightColor);
+        mScannerView.setBorderColor(mHighlightColor);
         mScannerView.setBorderStrokeWidth(20);
         mScannerView.setIsBorderCornerRounded(true);
 
@@ -76,17 +76,17 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
         });
 
         // Action when clicked on "flash button"
-        btnFlashlight = findViewById(R.id.scannerFlashButton);
-        btnFlashlight.setOnClickListener(new View.OnClickListener() {
+        mBtnFlashlight = findViewById(R.id.scannerFlashButton);
+        mBtnFlashlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mScannerView.getFlash()){
                     mScannerView.setFlash(false);
-                    btnFlashlight.setImageTintList(ColorStateList.valueOf(grayColor));
+                    mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mGrayColor));
                 }
                 else{
                     mScannerView.setFlash(true);
-                    btnFlashlight.setImageTintList(ColorStateList.valueOf(highlightColor));
+                    mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mHighlightColor));
                 }
             }
         });
