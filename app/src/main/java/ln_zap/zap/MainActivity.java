@@ -1,9 +1,13 @@
 package ln_zap.zap;
 
 import androidx.fragment.app.Fragment;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -61,6 +65,11 @@ public class MainActivity extends BaseAppCompatActivity {
         mCurrentFragment = new Wallet();
         mFt.replace(R.id.mainContent, mCurrentFragment);
         mFt.commit();
+
+        //Temporarily set the network to testnet on app start.
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putBoolean("mainnet",false);
+        editor.apply();
 
         BottomNavigationView navigation = findViewById(R.id.mainNavigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
