@@ -81,7 +81,7 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
         listCurrency.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MonetaryUtil.getInstance(getActivity()).loadCurrency(String.valueOf(newValue));
+                MonetaryUtil.getInstance().loadCurrencyFromPrefs(String.valueOf(newValue));
                 return true;
             }
         });

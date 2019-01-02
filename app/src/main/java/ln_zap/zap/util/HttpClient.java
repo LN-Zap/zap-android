@@ -1,10 +1,10 @@
 package ln_zap.zap.util;
 
-import android.content.Context;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+
+import ln_zap.zap.baseClasses.App;
 
 /**
  * Singleton to handle the volley http RequestQueue
@@ -14,14 +14,14 @@ public class HttpClient {
     private RequestQueue mRequestQueue;
 
 
-    private HttpClient(Context ctx) {
-        mRequestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
+    private HttpClient() {
+        mRequestQueue = Volley.newRequestQueue(App.getAppContext());
     }
 
 
-    public static synchronized HttpClient getInstance(Context ctx) {
+    public static synchronized HttpClient getInstance() {
         if (mHttpClientInstance == null) {
-            mHttpClientInstance = new HttpClient(ctx);
+            mHttpClientInstance = new HttpClient();
         }
         return mHttpClientInstance;
     }

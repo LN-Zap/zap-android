@@ -18,11 +18,14 @@ import ln_zap.zap.R;
 import ln_zap.zap.ReceiveActivity;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.ZapLog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Wallet extends Fragment {
+public class Wallet extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private static final String LOG_TAG = "Wallet Fragment";
 
     private SharedPreferences mPrefs;
     private TextView mTvPrimaryBalance;
@@ -50,7 +53,7 @@ public class Wallet extends Fragment {
         mTvSecondaryBalance = view.findViewById(R.id.BalanceSecondary);
         mTvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
 
-        setBalance();
+        updateTotalBalanceDisplay();
 
         // Swap action when clicked on balance
         ConstraintLayout clBalance = view.findViewById(R.id.BalanceLayout);
@@ -61,13 +64,13 @@ public class Wallet extends Fragment {
                     SharedPreferences.Editor editor = mPrefs.edit();
                     editor.putBoolean("isBitcoinPrimary", false);
                     editor.apply();
-                    setBalance();
+                    updateTotalBalanceDisplay();
                 }
                 else{
                     SharedPreferences.Editor editor = mPrefs.edit();
                     editor.putBoolean("isBitcoinPrimary", true);
                     editor.apply();
-                    setBalance();
+                    updateTotalBalanceDisplay();
                 }
             }
         });
@@ -94,23 +97,48 @@ public class Wallet extends Fragment {
             }
         });
 
-        // Temporarily the update of the exchange rates happens here. Later it will have to
-        // be scheduled
-        MonetaryUtil.getInstance(getActivity()).getExchangeRates();
+
 
         return view;
     }
 
 
-    private void setBalance(){
+    private void updateTotalBalanceDisplay(){
         // placeholder value
         long myBalance = 120871010L;
 
-            mTvPrimaryBalance.setText(MonetaryUtil.getInstance(getActivity()).getPrimaryDisplayAmount(myBalance));
-            mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance(getActivity()).getPrimaryDisplayUnit());
-            mTvSecondaryBalance.setText(MonetaryUtil.getInstance(getActivity()).getSecondaryDisplayAmount(myBalance));
-            mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance(getActivity()).getSecondaryDisplayUnit());
+            mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(myBalance));
+            mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+            mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(myBalance));
+            mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Set up a listener whenever a key changes
+        mPrefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Unregister the listener whenever a key changes
+        mPrefs.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key)
+    {
+        if (key.equals("isBitcoinPrimary") || key.equals("fiat_USD")){
+            updateTotalBalanceDisplay();
+            ZapLog.debug(LOG_TAG,"Total balance display updated");
+        }
     }
 
 }

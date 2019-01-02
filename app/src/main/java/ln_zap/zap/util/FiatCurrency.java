@@ -24,17 +24,22 @@ public class FiatCurrency {
      */
     private String mSymbol;
 
+    /**
+     * Time of the exchange rate data (in seconds since 00:00:00 UTC on January 1, 1970)
+     * This is used to protect the User from initiate an "invoice" with old exchange data.
+     */
+    private long mTimestamp;
 
-    // ToDo: Timestamp    (To prevent the User to initiate a request with old exchange data.)
-
-    public FiatCurrency(String code, double rate){
+    public FiatCurrency(String code, double rate, long timestamp){
         mCode = code;
         mRate = rate;
+        mTimestamp = timestamp;
     }
 
-    public FiatCurrency(String code, double rate, String symbol){
+    public FiatCurrency(String code, double rate, long timestamp, String symbol){
         mCode = code;
         mRate = rate;
+        mTimestamp = timestamp;
         mSymbol = symbol;
     }
 
@@ -44,6 +49,10 @@ public class FiatCurrency {
 
     public double getRate() {
         return mRate;
+    }
+
+    public long getTimestamp() {
+        return mTimestamp;
     }
 
     public String getSymbol() {

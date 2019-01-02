@@ -3,6 +3,7 @@ package ln_zap.zap.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
+import ln_zap.zap.baseClasses.App;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -39,21 +40,32 @@ public class MonetaryUtil {
 
 
 
-    private MonetaryUtil(Context ctx){
-        mContext = ctx.getApplicationContext();
+    private MonetaryUtil(){
+        mContext = App.getAppContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mCurrentCurrency = new FiatCurrency(mPrefs.getString("currency","USD"),0);
+        if(mPrefs.getString("fiat_" + mPrefs.getString("currency","USD"), "").equals("")){
+            mCurrentCurrency = new FiatCurrency(mPrefs.getString("currency","USD"),0,0);
+        }
+        else{
+            loadCurrencyFromPrefs(mPrefs.getString("currency","USD"));
+        }
     }
 
-    public static MonetaryUtil getInstance(Context ctx){
+    public static MonetaryUtil getInstance(){
         if(mInstance == null) {
-            mInstance = new MonetaryUtil(ctx);
+            mInstance = new MonetaryUtil();
         }
 
         return mInstance;
     }
 
 
+    /**
+     * Get the amount and display unit of the primary currency as properly formatted string.
+     *
+     * @param value in Satoshis
+     * @return formatted string
+     */
     public String getPrimaryDisplayAmountAndUnit(long value){
         if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getBitcoinDisplayAmountAndUnit(value);
@@ -63,6 +75,13 @@ public class MonetaryUtil {
         }
     }
 
+
+    /**
+     * Get the amount of the primary currency as properly formatted string.
+     *
+     * @param value in Satoshis
+     * @return formatted string
+     */
     public String getPrimaryDisplayAmount(long value){
         if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getBitcoinDisplayAmount(value);
@@ -72,6 +91,12 @@ public class MonetaryUtil {
         }
     }
 
+
+    /**
+     * Get the display unit of the primary currency as properly formatted string.
+     *
+     * @return formatted string
+     */
     public String getPrimaryDisplayUnit(){
         if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getBitcoinDisplayUnit();
@@ -82,6 +107,12 @@ public class MonetaryUtil {
     }
 
 
+    /**
+     * Get the amount and display unit of the secondary currency as properly formatted string.
+     *
+     * @param value in Satoshis
+     * @return formatted string
+     */
     public String getSecondaryDisplayAmountAndUnit(long value){
         if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return "";
@@ -91,6 +122,13 @@ public class MonetaryUtil {
         }
     }
 
+
+    /**
+     * Get the amount of the secondary currency as properly formatted string.
+     *
+     * @param value in Satoshis
+     * @return formatted string
+     */
     public String getSecondaryDisplayAmount(long value){
         if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getFiatDisplayAmount(value);
@@ -100,6 +138,12 @@ public class MonetaryUtil {
         }
     }
 
+
+    /**
+     * Get the display unit of the secondary currency as properly formatted string.
+     *
+     * @return formatted string
+     */
     public String getSecondaryDisplayUnit(){
         if(mPrefs.getBoolean("isBitcoinPrimary", true)){
             return getFiatDisplayUnit();
@@ -109,15 +153,39 @@ public class MonetaryUtil {
         }
     }
 
-    public void loadCurrency(String currencyCode){
+
+    /**
+     * This function returns how old our fiat exchange rate data is.
+     *
+     * @return Age in seconds.
+     */
+    public long getExchangeRateAge(){
+        return (System.currentTimeMillis()/1000)-mCurrentCurrency.getTimestamp();
+    }
+
+
+    /**
+     * Load a currency from the default settings using a currencyCode (USD, EUR, ...)
+     * By loading it, we have access to it without parsing the JSON string over and over.
+     *
+     * @param currencyCode (USD, EUR, etc.)
+     */
+    public void loadCurrencyFromPrefs(String currencyCode){
         try {
             JSONObject selectedCurrency = new JSONObject(mPrefs.getString("fiat_" + currencyCode, "{}"));
-            FiatCurrency currency = new FiatCurrency(currencyCode, selectedCurrency.getDouble("rate"));
+            FiatCurrency currency = new FiatCurrency(currencyCode, selectedCurrency.getDouble("rate"), selectedCurrency.getLong("timestamp"));
             mCurrentCurrency = currency;
         }
         catch(JSONException e){
             e.printStackTrace();
         }
+    }
+
+
+
+    private void setCurrency(String currencyCode, Double rate, Long timestamp){
+            FiatCurrency currency = new FiatCurrency(currencyCode, rate, timestamp);
+            mCurrentCurrency = currency;
     }
 
 
@@ -127,17 +195,18 @@ public class MonetaryUtil {
     private String getBitcoinDisplayAmountAndUnit(long value){
 
         String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
+        String networkID = mPrefs.getBoolean("mainnet",true) ? "" : "t";
         switch (selectedBTCUnit) {
             case "BTC":
-                return formatAsBtcDisplayAmount(value) + " " + BTC_UNIT;
+                return formatAsBtcDisplayAmount(value) + " " + networkID + BTC_UNIT;
             case "mBTC":
-                return formatAsMbtcDisplayAmount(value) + " " + MBTC_UNIT;
+                return formatAsMbtcDisplayAmount(value) + " " + networkID + MBTC_UNIT;
             case "bit":
-                return formatAsBitsDisplayAmount(value) + " " + BIT_UNIT;
+                return formatAsBitsDisplayAmount(value) + " " + networkID + BIT_UNIT;
             case "Satoshi":
-                return formatAsSatoshiDisplayAmount(value) + " " + SATOSHI_UNIT;
+                return formatAsSatoshiDisplayAmount(value) + " " + networkID + SATOSHI_UNIT;
             default:
-                return formatAsBtcDisplayAmount(value) + " " + BTC_UNIT;
+                return formatAsBtcDisplayAmount(value) + " " + networkID + BTC_UNIT;
         }
 
     }
@@ -163,17 +232,18 @@ public class MonetaryUtil {
     private String getBitcoinDisplayUnit(){
 
         String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
+        String networkID = mPrefs.getBoolean("mainnet",true) ? "" : "t";
         switch (selectedBTCUnit) {
             case "BTC":
-                return BTC_UNIT;
+                return networkID + BTC_UNIT;
             case "mBTC":
-                return MBTC_UNIT;
+                return networkID + MBTC_UNIT;
             case "bit":
-                return BIT_UNIT;
+                return networkID + BIT_UNIT;
             case "Satoshi":
-                return SATOSHI_UNIT;
+                return networkID + SATOSHI_UNIT;
             default:
-                return BTC_UNIT;
+                return networkID + BTC_UNIT;
         }
 
     }
@@ -262,11 +332,16 @@ public class MonetaryUtil {
     }
 
 
-    // request exchange rates from "blockchain.info" and save result in shared preferences.
-    public void getExchangeRates() {
+    /**
+     * Creates a Request that fetches fiat exchange rate data from "blockchain.info".
+     * When executed this request saves the result in shared preferences and
+     * updates the currentCurrency of the MonetaryUtil Singleton.
+     *
+     * @return JsonObjectRequest
+     */
+    public JsonObjectRequest getExchangeRates() {
 
         // Creating request
-        ZapLog.debug(LOG_TAG,"Fiat exchange rate request initiated");
         JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://blockchain.info/ticker", null,
                 new Response.Listener<JSONObject>() {
             @Override
@@ -288,8 +363,13 @@ public class MonetaryUtil {
                         JSONObject FiatCurrency = new JSONObject();
                         FiatCurrency.put("rate",ReceivedCurrency.getDouble("15m"));
                         FiatCurrency.put("symbol", ReceivedCurrency.getString("symbol"));
+                        FiatCurrency.put("timestamp",System.currentTimeMillis()/1000);
                         editor.putString("fiat_" + fiatCode, FiatCurrency.toString());
                         availableCurrenciesArray.put(fiatCode);
+                        // Update the current fiat currency of the Monetary util
+                        if (fiatCode.equals(mPrefs.getString("currency","USD"))){
+                            setCurrency(fiatCode,ReceivedCurrency.getDouble("15m"),System.currentTimeMillis()/1000);
+                        }
                     } catch (JSONException e) {
                         ZapLog.debug(LOG_TAG,"Unable to decode currency from fiat exchange rate request");
                     }
@@ -302,9 +382,6 @@ public class MonetaryUtil {
                 }
                 editor.apply();
 
-                // ToDo: We now have the new data. Make sure everything gets updated.
-                // this only loads the currency, but does not update text fields
-                loadCurrency(mPrefs.getString("currency","USD"));
             }
         }, new Response.ErrorListener() {
                 @Override
@@ -313,8 +390,7 @@ public class MonetaryUtil {
                 }
         });
 
-        // Adding request to request queue
-        HttpClient.getInstance(mContext).addToRequestQueue(rateRequest, "rateRequest");
+        return rateRequest;
     }
 
 }

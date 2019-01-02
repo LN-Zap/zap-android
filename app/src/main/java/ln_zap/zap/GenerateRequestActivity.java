@@ -99,7 +99,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
                 new AlertDialog.Builder(GenerateRequestActivity.this)
                         .setTitle(R.string.details)
                         .setMessage(mDataToEncode)
-                        .setCancelable(false)
+                        .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) { }
                         }).show();
