@@ -2,7 +2,9 @@ package ln_zap.zap;
 
 import androidx.preference.PreferenceManager;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
+import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.UserGuardian;
 import ln_zap.zap.util.ZapLog;
 
 import android.content.Intent;
@@ -14,8 +16,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ReceiveActivity extends BaseAppCompatActivity {
+public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardianInterface {
 
+    private UserGuardian mUG;
     private LinearLayout mLightningTab;
     private LinearLayout mOnChainTab;
     private TextView mTvUnit;
@@ -29,6 +32,7 @@ public class ReceiveActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_receive);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ReceiveActivity.this);
+        mUG = new UserGuardian(this,this);
 
         mTvUnit = findViewById(R.id.receiveUnit);
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
@@ -84,11 +88,29 @@ public class ReceiveActivity extends BaseAppCompatActivity {
         btnGenerateRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ReceiveActivity.this, GenerateRequestActivity.class);
-                intent.putExtra("onChain", mOnChain);
-                startActivity(intent);
+                // Warn the user if his exchange rate is older than 1 hour and he requests the value in terms of fiat.
+                if (!mPrefs.getBoolean("isBitcoinPrimary", true) && MonetaryUtil.getInstance().getExchangeRateAge() > 3600){
+                    mUG.securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
+                }
+                else{
+                    generateRequest();
+                }
             }
         });
+    }
 
+    public void generateRequest(){
+        Intent intent = new Intent(ReceiveActivity.this, GenerateRequestActivity.class);
+        intent.putExtra("onChain", mOnChain);
+        startActivity(intent);
+    }
+
+    @Override
+    public void guardianDialogConfirmed(String DialogName) {
+        switch (DialogName) {
+            case UserGuardian.OLD_EXCHANGE_RATE:
+                generateRequest();
+                break;
+        }
     }
 }

@@ -72,7 +72,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
         ivQRCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUG.securityCopyToClipboard();
+                mUG.securityCopyToClipboard(mDataToEncode);
             }
         });
 
@@ -111,7 +111,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
         btnCopyLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUG.securityCopyToClipboard();
+                mUG.securityCopyToClipboard(mDataToEncode);
             }
         });
 
