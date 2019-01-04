@@ -1,5 +1,6 @@
 package ln_zap.zap.util;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Context;
 
@@ -13,6 +14,7 @@ import androidx.preference.PreferenceManager;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 
 
@@ -210,8 +212,14 @@ public class UserGuardian {
      * @param adb The AlertDialog.Builder which should be shown.
      */
     private void showGuardianDialog (AlertDialog.Builder adb){
+
        if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mCurrentDialogName, true)){
-           adb.show();
+           Dialog dlg = adb.create();
+           // Apply FLAG_SECURE to dialog to prevent screen recording
+           if(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("preventScreenRecording",true)) {
+               dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+           }
+           dlg.show();
        }
        else{
            mAction.guardianDialogConfirmed(mCurrentDialogName);

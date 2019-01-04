@@ -31,6 +31,7 @@
             android:title="@string/settings_blockExplorer"
             android:entries="@array/blockExplorer"
             android:entryValues="@array/blockExplorer"
+            android:defaultValue="BlockCypher"
             android:dialogTitle="@string/settings_blockExplorer"
             app:iconSpaceReserved="false"/>
 

@@ -45,8 +45,6 @@ public class PinEntryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pin_input);
 
-        // Make sure the pin entry view is always protected against screen recording. Ignore users settings.
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
 
         mUserInput = new StringBuilder();
         mNumpad = new ScrambledNumpad();

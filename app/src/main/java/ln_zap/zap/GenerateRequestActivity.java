@@ -1,10 +1,12 @@
 package ln_zap.zap;
 
+import androidx.preference.PreferenceManager;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 
 import ln_zap.zap.util.UserGuardian;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -96,13 +99,19 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
         btnDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(GenerateRequestActivity.this)
+                AlertDialog.Builder adb = new AlertDialog.Builder(GenerateRequestActivity.this)
                         .setTitle(R.string.details)
                         .setMessage(mDataToEncode)
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) { }
-                        }).show();
+                        });
+                Dialog dlg = adb.create();
+                // Apply FLAG_SECURE to dialog to prevent screen recording
+                if(PreferenceManager.getDefaultSharedPreferences(GenerateRequestActivity.this).getBoolean("preventScreenRecording",true)) {
+                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+                dlg.show();
             }
         });
 
