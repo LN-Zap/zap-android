@@ -2,15 +2,27 @@
 <PreferenceScreen android:icon="@null"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/navigation_settings"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="topPrefScreen">
 
     <PreferenceCategory android:title="@string/settings_category_prefs"
         app:iconSpaceReserved="false"
         >
 
         <ListPreference
-            android:key="currency"
+            android:key="firstCurrency"
+            android:title="@string/settings_btcUnit"
+            android:summary="%s"
+            android:entries="@array/btcUnitSelectionList"
+            android:entryValues="@array/btcUnit"
+            android:defaultValue="sat"
+            android:dialogTitle="@string/settings_btcUnit"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="secondCurrency"
             android:title="@string/settings_currency"
+            android:summary="%s"
             android:entries="@array/currency"
             android:entryValues="@array/currency"
             android:dialogTitle="@string/settings_currency"
@@ -18,17 +30,9 @@
             app:iconSpaceReserved="false"/>
 
         <ListPreference
-            android:key="btcUnit"
-            android:title="@string/settings_btcUnit"
-            android:entries="@array/btcUnit"
-            android:entryValues="@array/btcUnit"
-            android:defaultValue="BTC"
-            android:dialogTitle="@string/settings_btcUnit"
-            app:iconSpaceReserved="false"/>
-
-        <ListPreference
             android:key="blockExplorer"
             android:title="@string/settings_blockExplorer"
+            android:summary="%s"
             android:entries="@array/blockExplorer"
             android:entryValues="@array/blockExplorer"
             android:defaultValue="BlockCypher"
@@ -38,6 +42,7 @@
         <ListPreference
             android:key="language"
             android:title="@string/settings_language"
+            android:summary="%s"
             android:entries="@array/settings_language_list"
             android:entryValues="@array/languageValues"
             android:defaultValue="system"
@@ -54,6 +59,11 @@
 
     <PreferenceCategory android:title="@string/navigation_wallet"
         app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="manageLightningChannels"
+            android:title="@string/settings_manageChannels"
+            app:iconSpaceReserved="false"/>
 
         <Preference
             android:key="resetConfig"
@@ -93,6 +103,12 @@
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
 
+        <SwitchPreference
+            android:key="hideTotalBalance"
+            android:title="@string/settings_hideTotalBalance"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"/>
+
         <Preference
             android:key="resetGuardian"
             android:title="@string/settings_resetSecurityWarnings"
@@ -113,6 +129,11 @@
         <Preference
             android:key="reportIssue"
             android:title="@string/settings_reportIssue"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:key="about"
+            android:title="@string/settings_about"
             app:iconSpaceReserved="false"/>
 
     </PreferenceCategory>

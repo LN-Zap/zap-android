@@ -1,8 +1,11 @@
 package ln_zap.zap.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -11,11 +14,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import androidx.preference.Preference;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
+import ln_zap.zap.BuildConfig;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.R;
 import ln_zap.zap.util.AppUtil;
@@ -33,6 +41,8 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
     private UserGuardian mUG;
     private SwitchPreference mSwScreenProtection;
     private SwitchPreference mSwScrambledPin;
+    private SharedPreferences mPrefs;
+    private ListPreference mListCurrency;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -40,48 +50,40 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
         setPreferencesFromResource(R.xml.settings, rootKey);
 
         mUG = new UserGuardian(getActivity(),this);
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        // Action when clicked on "currency". The list has to be generated based on the exchange rate
-        // data we received from our provider. Therefore when the provider adds new currencies,
+
+        // Update our current selected first currency in the MonetaryUtil
+        final ListPreference listBtcUnit = findPreference("firstCurrency");
+        listBtcUnit.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                MonetaryUtil.getInstance().loadFirstCurrencyFromPrefs(String.valueOf(newValue));
+                return true;
+            }
+        });
+
+
+        // Action when clicked on "currency".
+        // The list has to be generated on the fly based on the exchange rate data
+        // we received from our provider. Therefore when the provider adds new currencies,
         // they will automatically show up in Zap.
-        final ListPreference listCurrency = findPreference("currency");
-        listCurrency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        mListCurrency = findPreference("secondCurrency");
+        createSecondCurrencyList();
+        mListCurrency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-                CharSequence[] entries = null;
-
-                try {
-                    JSONObject jsonAvailableCurrencies = new JSONObject(prefs.getString("fiat_available", "[]"));
-
-                    JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
-                    entries = new CharSequence[currencies.length()];
-
-                    for (int i = 0, count = currencies.length(); i < count; i++) {
-                        try {
-                            entries[i] = currencies.getString(i);
-                        } catch (JSONException e) {
-                            ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
-                        }
-                    }
-
-                } catch (JSONException e) {
-                    ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
-                }
-
-                listCurrency.setEntries(entries);
-                listCurrency.setEntryValues(entries);
+                createSecondCurrencyList();
 
                 return true;
             }
         });
 
-        // Update our current selected currency in the MonetaryUtil
-        listCurrency.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        // Update our current selected second currency in the MonetaryUtil
+        mListCurrency.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MonetaryUtil.getInstance().loadCurrencyFromPrefs(String.valueOf(newValue));
+                MonetaryUtil.getInstance().loadSecondCurrencyFromPrefs(String.valueOf(newValue));
                 return true;
             }
         });
@@ -117,8 +119,38 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
             }
         });
 
+        // Action when clicked on "Manage channels"
+        final Preference prefManageChannels = findPreference("manageLightningChannels");
+        prefManageChannels.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Toast.makeText(getActivity(),R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        // Action when clicked on "reset connection settings"
+        final Preference prefResetConfig = findPreference("resetConfig");
+        prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Toast.makeText(getActivity(),R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        // Action when clicked on "change pin"
+        final Preference prefChangePin = findPreference("changePIN");
+        prefChangePin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Toast.makeText(getActivity(),R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
         // On change screen recording option
-        mSwScreenProtection = (SwitchPreference) findPreference("preventScreenRecording");
+        mSwScreenProtection = findPreference("preventScreenRecording");
         mSwScreenProtection.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -160,6 +192,55 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
                 return true;
             }
         });
+
+        // Action when clicked on "need help"
+        final Preference prefHelp = findPreference("help");
+        prefHelp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                String url = "https://ln-zap.github.io/zap-tutorials/";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                getActivity().startActivity(browserIntent);
+                return true;
+            }
+        });
+
+        // Action when clicked on "reportBug"
+        final Preference prefIssue = findPreference("reportIssue");
+        prefIssue.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                String url = "https://github.com/michaelWuensch/zap-android/issues";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                getActivity().startActivity(browserIntent);
+                return true;
+            }
+        });
+
+
+        // Action when clicked on "About"
+        final Preference prefAbout = findPreference("about");
+        prefAbout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.app_name)
+                        .setMessage("Version: " + BuildConfig.VERSION_NAME +
+                                "\nBuild: " + BuildConfig.VERSION_CODE +
+                                "\nLnd version: ")
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) { }
+                        });
+                Dialog dlg = adb.create();
+                // Apply FLAG_SECURE to dialog to prevent screen recording
+                if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("preventScreenRecording",true)) {
+                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+                dlg.show();
+                return true;
+            }
+        });
     }
 
 
@@ -175,5 +256,40 @@ public class Settings extends PreferenceFragmentCompat implements UserGuardianIn
                 break;
         }
     }
+
+    private CharSequence[] joinCharSequenceArrays(CharSequence[] first, CharSequence[] second) {
+        List<CharSequence> both = new ArrayList<CharSequence>(first.length + second.length);
+        Collections.addAll(both, first);
+        Collections.addAll(both, second);
+        return both.toArray(new CharSequence[both.size()]);
+    }
+
+    private void createSecondCurrencyList(){
+        CharSequence[] btcEntryValues = getActivity().getResources().getStringArray(R.array.btcUnit);
+        CharSequence[] btcEntries = getActivity().getResources().getStringArray(R.array.btcUnitSelectionList);
+        CharSequence[] fiatEntryValues = null;
+
+        try {
+            JSONObject jsonAvailableCurrencies = new JSONObject(mPrefs.getString("fiat_available", "[]"));
+
+            JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
+            fiatEntryValues = new CharSequence[currencies.length()];
+            for (int i = 0, count = currencies.length(); i < count; i++) {
+                try {
+                    fiatEntryValues[i] = currencies.getString(i);
+                } catch (JSONException e) {
+                    ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+                }
+            }
+
+        } catch (JSONException e) {
+            ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+        }
+        CharSequence[] entryValues = joinCharSequenceArrays(btcEntryValues,fiatEntryValues);
+        CharSequence[] entries = joinCharSequenceArrays(btcEntries,fiatEntryValues);
+        mListCurrency.setEntries(entries);
+        mListCurrency.setEntryValues(entryValues);
+    }
+
 
 }

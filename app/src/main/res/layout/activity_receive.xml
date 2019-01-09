@@ -87,35 +87,68 @@
             app:srcCompat="@color/seaBlueGradient" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/receiveAmount"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="70dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/receiveAmountTopLayout"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@color/seaBlueGradient"
-        android:ems="10"
-        android:hint="@string/amount"
-        android:inputType="numberDecimal"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/receiveLightningButton" />
+        app:layout_constraintTop_toBottomOf="@+id/receiveLightningButton">
 
-    <TextView
-        android:id="@+id/receiveUnit"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@color/seaBlueGradient"
-        android:gravity="center"
-        android:text="UNIT"
-        android:textColor="@color/lightningOrange"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/receiveAmount"
-        app:layout_constraintTop_toTopOf="@id/receiveAmount" />
+        <EditText
+            android:id="@+id/receiveAmount"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="15dp"
+            android:background="@color/seaBlueGradient"
+            android:ems="10"
+            android:hint="@string/amount"
+            android:inputType="numberDecimal"
+            android:paddingStart="20dp"
+            android:paddingEnd="10dp"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/receiveUnitLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/receiveUnitLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/receiveAmount"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/receiveUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:text="UNIT"
+                android:textAlignment="textEnd"
+                android:textSize="30sp"
+                android:textStyle="italic" />
+
+            <ImageView
+                android:id="@+id/receiveSwitchUnitImage"
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingStart="4dp"
+                android:tint="@color/lightningOrange"
+                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

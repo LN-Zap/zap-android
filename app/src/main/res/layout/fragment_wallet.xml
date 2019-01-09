@@ -25,6 +25,8 @@
             android:id="@+id/BalancePrimaryLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -36,7 +38,8 @@
                 android:text="Primary"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="40sp"
+                android:textSize="38sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +53,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold|italic" />
+                android:textStyle="italic" />
 
         </LinearLayout>
 
@@ -79,12 +82,12 @@
                 android:id="@+id/BalanceSecondaryUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="6dp"
                 android:text="Unit"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="15sp"
-                android:textStyle="bold|italic" />
+                android:textStyle="italic" />
         </LinearLayout>
 
 
@@ -123,5 +126,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.74"
         app:layout_constraintStart_toEndOf="@+id/sendButton" />
+
+    <ImageView
+        android:id="@+id/switchButtonImage"
+        android:layout_width="28dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="4dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="10dp"
+        android:src="@drawable/ic_swap_vert_black_24dp"
+        android:tint="@color/lightningOrange"
+        app:layout_constraintBottom_toBottomOf="@+id/BalanceLayout"
+        app:layout_constraintStart_toEndOf="@+id/BalanceLayout"
+        app:layout_constraintTop_toTopOf="@+id/BalanceLayout"
+        app:layout_constraintVertical_bias="0.6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

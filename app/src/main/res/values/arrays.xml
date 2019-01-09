@@ -7,13 +7,16 @@
 
     <string-array name="btcUnit">
         <item>BTC</item>
-
-        <!-- Uncomment this to support mBTC and bits
         <item>mBTC</item>
         <item>bit</item>
-        -->
+        <item>sat</item>
+    </string-array>
 
-        <item>Satoshi</item>
+    <string-array name="btcUnitSelectionList">
+        <item>Bitcoin (BTC)</item>
+        <item>Milli Bitcoin (mBTC)</item>
+        <item>Bits (bit)</item>
+        <item>Satoshis (sat)</item>
     </string-array>
 
     <string-array name="addressType">

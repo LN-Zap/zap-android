@@ -5,7 +5,6 @@ import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.UserGuardian;
-import ln_zap.zap.util.ZapLog;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +37,8 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
         mEtAmount = findViewById(R.id.receiveAmount);
 
+        //mEtAmount.setShowSoftInputOnFocus(false);
+
 
         // Action when clicked on "Lightning"
         mLightningTab = findViewById(R.id.receiveLightningButton);
@@ -63,23 +64,12 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         });
 
         // Action when clicked on receive unit
-        mTvUnit.setOnClickListener(new View.OnClickListener() {
+        LinearLayout llUnit = findViewById(R.id.receiveUnitLayout);
+        llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPrefs.getBoolean("isBitcoinPrimary", true)){
-                    SharedPreferences.Editor editor = mPrefs.edit();
-                    editor.putBoolean("isBitcoinPrimary", false);
-                    editor.apply();
-                    mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                    //setBalance();
-                }
-                else{
-                    SharedPreferences.Editor editor = mPrefs.edit();
-                    editor.putBoolean("isBitcoinPrimary", true);
-                    editor.apply();
-                    mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                    //setBalance();
-                }
+                MonetaryUtil.getInstance().switchCurrencies();
+                mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             }
         });
 
@@ -88,8 +78,8 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         btnGenerateRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Warn the user if his exchange rate is older than 1 hour and he requests the value in terms of fiat.
-                if (!mPrefs.getBoolean("isBitcoinPrimary", true) && MonetaryUtil.getInstance().getExchangeRateAge() > 3600){
+                // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
+                if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600){
                     mUG.securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
                 }
                 else{

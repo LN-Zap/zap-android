@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.preference.PreferenceManager;
@@ -60,18 +61,18 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
         clBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPrefs.getBoolean("isBitcoinPrimary", true)){
-                    SharedPreferences.Editor editor = mPrefs.edit();
-                    editor.putBoolean("isBitcoinPrimary", false);
-                    editor.apply();
-                    updateTotalBalanceDisplay();
-                }
-                else{
-                    SharedPreferences.Editor editor = mPrefs.edit();
-                    editor.putBoolean("isBitcoinPrimary", true);
-                    editor.apply();
-                    updateTotalBalanceDisplay();
-                }
+                MonetaryUtil.getInstance().switchCurrencies();
+                updateTotalBalanceDisplay();
+            }
+        });
+
+        // Swap action when clicked swap icon next to balance
+        ImageView ivSwapImage = view.findViewById(R.id.switchButtonImage);
+        ivSwapImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MonetaryUtil.getInstance().switchCurrencies();
+                updateTotalBalanceDisplay();
             }
         });
 
@@ -104,13 +105,22 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
 
 
     private void updateTotalBalanceDisplay(){
+
         // placeholder value
         long myBalance = 120871010L;
 
-            mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(myBalance));
-            mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-            mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(myBalance));
-            mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
+        // Adapt unit text size depending on its length
+        if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2){
+            mTvPrimaryBalanceUnit.setTextSize(20);
+        }
+        else{
+            mTvPrimaryBalanceUnit.setTextSize(32);
+        }
+
+        mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(myBalance));
+        mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(myBalance));
+        mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
     }
 
@@ -135,7 +145,8 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key)
     {
-        if (key.equals("isBitcoinPrimary") || key.equals("fiat_USD")){
+        //update if currency has been switched or new exchange data arrived
+        if (key.equals("firstCurrencyIsPrimary") || key.equals("fiat_USD")){
             updateTotalBalanceDisplay();
             ZapLog.debug(LOG_TAG,"Total balance display updated");
         }

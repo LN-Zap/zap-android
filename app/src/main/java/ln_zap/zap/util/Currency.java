@@ -1,20 +1,19 @@
 package ln_zap.zap.util;
 
 /**
- * This class is used to create fiat currency objects,
- * which hold all information relevant for Zap about that fiat currency.
+ * This class is used to create currency objects,
+ * which hold all information relevant for Zap about that currency.
  */
-public class FiatCurrency {
+public class Currency {
 
     /**
      * The currency Code. Used as display symbol if Symbol is empty.
-     * Example: "USD", "EUR"
+     * Example: "USD", "EUR", "BTC", ...
      */
     private String mCode;
 
     /**
-     * The exchange rate to BTC.
-     * ALWAYS use the rate to BTC here, not to Satoshis for example.
+     * The exchange rate to Satoshis, as Satoshis are always our base unit.
      */
     private double mRate;
 
@@ -30,18 +29,34 @@ public class FiatCurrency {
      */
     private long mTimestamp;
 
-    public FiatCurrency(String code, double rate, long timestamp){
+    /**
+     * States if this currency is a bitcoin unit (e.g. mBtc) or another currency
+     * with a changing exchange rate like fiat currencies or other cryptos.
+     */
+    private boolean mIsBitcoin;
+
+    public Currency(String code, double rate, long timestamp){
+        mIsBitcoin = false;
         mCode = code;
         mRate = rate;
         mTimestamp = timestamp;
     }
 
-    public FiatCurrency(String code, double rate, long timestamp, String symbol){
+    public Currency(String code, double rate, long timestamp, String symbol){
+        mIsBitcoin = false;
         mCode = code;
         mRate = rate;
         mTimestamp = timestamp;
         mSymbol = symbol;
     }
+
+    public Currency(String code, double rate){
+        mIsBitcoin = true;
+        mCode = code;
+        mRate = rate;
+    }
+
+
 
     public String getCode() {
         return mCode;
@@ -58,4 +73,6 @@ public class FiatCurrency {
     public String getSymbol() {
         return mSymbol;
     }
+
+    public boolean isBitcoin() { return mIsBitcoin; }
 }

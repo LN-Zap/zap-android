@@ -7,6 +7,7 @@
         <item name="colorAccent">@color/lightningOrange</item>
         <item name="android:colorBackground">@color/deepSeaBlue</item>
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/gray</item>
     </style>
 
     <!-- Base application theme with action bar. -->
