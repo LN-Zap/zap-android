@@ -66,7 +66,6 @@ public class UserGuardian {
         }
 
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setTitle(R.string.guardian_Title);
         adb.setMessage(mContext.getResources().getString(R.string.guardian_copyToClipboard, compareString));
         showGuardianDialog(adb);
     }
@@ -78,7 +77,6 @@ public class UserGuardian {
     public void securityPasteFromClipboard(){
         mCurrentDialogName = PASTE_FROM_CLIPBOARD;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
-        adb.setTitle(R.string.guardian_Title);
         adb.setMessage(R.string.guardian_pasteFromClipboard);
         showGuardianDialog(adb);
     }
@@ -90,7 +88,6 @@ public class UserGuardian {
     public void securityScrambledPin(){
         mCurrentDialogName = DISABLE_SCRAMBLED_PIN;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setTitle(R.string.guardian_Title);
         adb.setMessage(R.string.guardian_disableScrambledPin);
         showGuardianDialog(adb);
     }
@@ -102,7 +99,6 @@ public class UserGuardian {
     public void securityScreenProtection(){
         mCurrentDialogName = DISABLE_SCREEN_PROTECTION;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setTitle(R.string.guardian_Title);
         adb.setMessage(R.string.guardian_disableScreenProtection);
         showGuardianDialog(adb);
     }
@@ -118,7 +114,6 @@ public class UserGuardian {
     public void securityHighOnChainFee(float feeRate){
         mCurrentDialogName = HIGH_ONCHAIN_FEE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setTitle(R.string.guardian_Title);
         adb.setMessage(mContext.getResources().getString(R.string.guardian_highOnChainFee, String.format("%.1f", feeRate*100)));
         showGuardianDialog(adb);
     }
@@ -133,7 +128,6 @@ public class UserGuardian {
     public void securityOldExchangeRate(double age){
         mCurrentDialogName = OLD_EXCHANGE_RATE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setTitle(R.string.guardian_Title);
         adb.setMessage(mContext.getResources().getString(R.string.guardian_oldExchangeRate,String.format("%.1f", age/3600)));
         showGuardianDialog(adb);
     }
@@ -145,7 +139,6 @@ public class UserGuardian {
     public void securityTooMuchMoney(){
         mCurrentDialogName = TOO_MUCH_MONEY;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
-        adb.setTitle(R.string.guardian_Title);
         adb.setMessage(R.string.guardian_tooMuchMoney);
         showGuardianDialog(adb);
     }
@@ -171,7 +164,7 @@ public class UserGuardian {
 
     /**
      * Create a dialog with a "do not show again" option that is already set up
-     * except title and message.
+     * except the message.
      * This helps keeping the dialog functions organized and simple.
      *
      * @param hasCancelOption wether it has a cancle option or not
@@ -182,7 +175,9 @@ public class UserGuardian {
         LayoutInflater adbInflater = LayoutInflater.from(mContext);
         View DialogLayout = adbInflater.inflate(R.layout.dialog_checkbox, null);
         mDontShowAgain = DialogLayout.findViewById(R.id.skip);
+        View titleView = adbInflater.inflate(R.layout.guardian_title, null);
         adb.setView(DialogLayout);
+        adb.setCustomTitle(titleView);
         adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
