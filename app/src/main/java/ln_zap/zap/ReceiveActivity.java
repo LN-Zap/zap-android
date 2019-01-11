@@ -68,6 +68,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mEtAmount.setText(MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString()));
                 MonetaryUtil.getInstance().switchCurrencies();
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             }

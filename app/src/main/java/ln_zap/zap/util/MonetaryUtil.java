@@ -290,108 +290,32 @@ public class MonetaryUtil {
         }
     }
 
-    /*
-    public String convertPrimaryToSecondaryCurrency(String value){
-        if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
-            value / mFirstCurrency.getRate() * mSecondCurrency.getRate()
-            return mSecondCurrency;
+    /**
+     * Use this method to switch the input amount of a textfield right before currencies are swapped.
+     * @param primaryValue value string of the input field
+     * @return value string for the input field converted in the secondary currency
+     */
+    public String convertPrimaryToSecondaryCurrency(String primaryValue){
+        if (primaryValue.equals("")){
+            return "";
         }
-        else{
-            return mFirstCurrency;
-        }
-
-    }
-    */
- /*
-
-    public double convertBitcoinToFiat(double value){
-        String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
-        NumberFormat NF = fiatFormat();
-        switch (selectedBTCUnit) {
-            case "BTC":
-                return Double.valueOf(NF.format(value * mSecondCurrency.getRate()));
-            case "mBTC":
-                return Double.valueOf(NF.format(value * mSecondCurrency.getRate() / 1e3));
-            case "bit":
-                return Double.valueOf(NF.format(value * mSecondCurrency.getRate() / 1e6));
-            case "sat":
-                return Double.valueOf(NF.format(value * mSecondCurrency.getRate() / 1e8));
-            default:
-                return Double.valueOf(NF.format(value * mSecondCurrency.getRate()));
+        else {
+            if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+                double value = Double.parseDouble(primaryValue);
+                double result = (value / mFirstCurrency.getRate() * mSecondCurrency.getRate());
+                DecimalFormat df = TextInputCurrencyFormat(mSecondCurrency);
+                return df.format(result);
+            }
+            else{
+                double value = Double.parseDouble(primaryValue); ;
+                double result = (value / mSecondCurrency.getRate()) * mFirstCurrency.getRate();
+                DecimalFormat df = TextInputCurrencyFormat(mFirstCurrency);
+                return df.format(result);
+            }
         }
     }
 
 
-    public double convertFiatToBitcoin(double value){
-        String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
-        NumberFormat NF = bitcoinFormat();
-        switch (selectedBTCUnit) {
-            case "BTC":
-                return Double.valueOf(NF.format(value / mSecondCurrency.getRate()));
-            case "mBTC":
-                return Double.valueOf(NF.format(value / mSecondCurrency.getRate() * 1e3));
-            case "bit":
-                return Double.valueOf(NF.format(value / mSecondCurrency.getRate() * 1e6));
-            case "sat":
-                return Double.valueOf(NF.format(value / mSecondCurrency.getRate() * 1e8));
-            default:
-                return Double.valueOf(NF.format(value / mSecondCurrency.getRate()));
-        }
-    }
-
-    private long convertBtcToSatoshi(double value){
-        String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
-        switch (selectedBTCUnit) {
-            case "BTC":
-                return (long) value * 100000000;
-            case "mBTC":
-                return (long) value * 100000;
-            case "bit":
-                return (long) value * 100;
-            case "sat":
-                return (long) value;
-            default:
-                return (long) value * 100000000;
-        }
-    }
-
-
-
-    public NumberFormat fiatFormat(){
-        NumberFormat fiatFormat = NumberFormat.getInstance(mContext.getResources().getConfiguration().locale);
-        fiatFormat.setMaximumFractionDigits(2);
-        fiatFormat.setMinimumFractionDigits(2);
-        return fiatFormat;
-    }
-
-    public NumberFormat bitcoinFormat(){
-        String selectedBTCUnit = mPrefs.getString("btcUnit","BTC");
-        NumberFormat btcFormat = NumberFormat.getInstance(mContext.getResources().getConfiguration().locale);
-        switch (selectedBTCUnit) {
-            case "BTC":
-                btcFormat.setMaximumFractionDigits(8);
-                btcFormat.setMinimumFractionDigits(0);
-                break;
-            case "mBTC":
-                btcFormat.setMaximumFractionDigits(5);
-                btcFormat.setMinimumFractionDigits(0);
-                break;
-            case "bit":
-                btcFormat.setMaximumFractionDigits(2);
-                btcFormat.setMinimumFractionDigits(0);
-                break;
-            case "sat":
-                btcFormat.setMaximumFractionDigits(0);
-                btcFormat.setMinimumFractionDigits(0);
-                break;
-            default:
-                btcFormat.setMaximumFractionDigits(8);
-                btcFormat.setMinimumFractionDigits(0);
-        }
-        return btcFormat;
-    }
-
-*/
 
     private void setFirstCurrency(String currencyCode, Double rate){
         mFirstCurrency = new Currency(currencyCode, rate);
@@ -562,6 +486,38 @@ public class MonetaryUtil {
             return result;
         }
     }
+
+
+    private DecimalFormat TextInputCurrencyFormat (final Currency currency){
+        // We have to use the Locale.US here to ensure Double.parse works correctly later.
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        DecimalFormat df = (DecimalFormat)nf;
+        df.setGroupingUsed(false);
+        if(currency.isBitcoin()){
+
+            switch (currency.getCode()) {
+                case BTC_UNIT:
+                    df.setMaximumFractionDigits(8);
+                    break;
+                case MBTC_UNIT:
+                    df.setMaximumFractionDigits(5);
+                    break;
+                case BIT_UNIT:
+                    df.setMaximumFractionDigits(2);
+                    break;
+                case SATOSHI_UNIT:
+                    df.setMaximumFractionDigits(0);
+                    break;
+                default:
+                    df.setMaximumFractionDigits(8);
+            }
+        }
+        else {
+            df.setMaximumFractionDigits(2);
+        }
+        return df;
+    }
+
 
 
     /**
