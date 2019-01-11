@@ -90,7 +90,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/receiveAmountTopLayout"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_marginStart="9dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -110,7 +110,7 @@
             android:inputType="numberDecimal"
             android:paddingStart="20dp"
             android:paddingEnd="10dp"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/receiveUnitLayout"
             app:layout_constraintStart_toStartOf="parent"
@@ -144,11 +144,44 @@
                 android:layout_width="18dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:paddingTop="5dp"
                 android:paddingStart="4dp"
+                android:paddingTop="5dp"
                 android:tint="@color/lightningOrange"
                 app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
         </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/receiveMemoTopLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/seaBlueGradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/receiveAmountTopLayout">
+
+        <EditText
+            android:id="@+id/receiveMemo"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="15dp"
+            android:background="@color/seaBlueGradient"
+            android:ems="10"
+            android:hint="@string/memo"
+            android:inputType="text"
+            android:maxLength="50"
+            android:paddingStart="20dp"
+            android:paddingEnd="10dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

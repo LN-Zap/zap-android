@@ -75,7 +75,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
         ivQRCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUG.securityCopyToClipboard(mDataToEncode);
+                //mUG.securityCopyToClipboard(mDataToEncode);
             }
         });
 

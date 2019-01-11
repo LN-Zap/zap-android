@@ -9,6 +9,9 @@ import ln_zap.zap.util.UserGuardian;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +40,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
         mEtAmount = findViewById(R.id.receiveAmount);
 
+        // This will cause the default keyboard not to be shown. (Default keyboard is not secure against recording)
         //mEtAmount.setShowSoftInputOnFocus(false);
 
 
@@ -63,6 +67,8 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
             }
         });
 
+
+
         // Action when clicked on receive unit
         LinearLayout llUnit = findViewById(R.id.receiveUnitLayout);
         llUnit.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +91,33 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
                 }
                 else{
                     generateRequest();
+                }
+            }
+        });
+
+        mEtAmount.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1,
+                                          int arg2, int arg3) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int start, int before,
+                                      int count) {
+                if (arg0.length() == 0) {
+                    // No entered text so will show hint
+                    mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                } else {
+                    mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
                 }
             }
         });
