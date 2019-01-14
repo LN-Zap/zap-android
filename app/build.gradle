@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+// Needed for gRPC
+apply plugin: 'com.google.protobuf'
+
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -17,6 +21,40 @@ android {
         }
     }
 }
+
+
+//  Needed for gRPC
+sourceSets {
+    main.java.srcDirs += "${protobuf.generatedFilesBaseDir}/main/javalite"
+}
+
+
+//  Needed for gRPC
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.6.1"
+    }
+    plugins {
+        javalite { artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0" }
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.17.1'
+        }
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                javalite { }
+                grpc {
+                    // This will generate the ServiceGrpc
+                    // Options added to --grpc_out
+                    option 'lite'
+                }
+            }
+        }
+    }
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -38,6 +76,16 @@ dependencies {
 
     // Library to detect when app goes to background or foreground
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha01'
+
+    // gRPC implementation to communicate with lnd
+    implementation 'io.grpc:grpc-okhttp:1.17.1'
+    implementation 'io.grpc:grpc-protobuf-lite:1.17.1'
+    implementation 'io.grpc:grpc-stub:1.17.1'
+    implementation 'javax.annotation:javax.annotation-api:1.2'
+    compileOnly 'com.google.api.grpc:googleapis-common-protos:0.0.3'
+
+    // Used for base encoding
+    implementation 'com.google.guava:guava:27.0.1-android'
 
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'com.google.android.material:material:1.1.0-alpha02'

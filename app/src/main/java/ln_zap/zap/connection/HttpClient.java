@@ -1,4 +1,4 @@
-package ln_zap.zap.util;
+package ln_zap.zap.connection;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;

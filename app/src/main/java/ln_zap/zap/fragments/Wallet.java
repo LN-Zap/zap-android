@@ -14,12 +14,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
+import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
+import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
+
 import androidx.preference.PreferenceManager;
+
+import io.grpc.StatusRuntimeException;
+
+
 import ln_zap.zap.R;
 import ln_zap.zap.ReceiveActivity;
+import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.ZapLog;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +39,7 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
     private static final String LOG_TAG = "Wallet Fragment";
 
     private SharedPreferences mPrefs;
+    private long mTotalBalance = 0;
     private TextView mTvPrimaryBalance;
     private TextView mTvPrimaryBalanceUnit;
     private TextView mTvSecondaryBalance;
@@ -100,14 +111,44 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
 
 
 
+        // gRPC!!!
+        // blocking stub
+        LightningGrpc.LightningBlockingStub BalanceClient = LightningGrpc
+                .newBlockingStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        WalletBalanceRequest balanceRequest = WalletBalanceRequest.newBuilder().build();
+
+        WalletBalanceResponse balanceResponse;
+
+        try {
+            balanceResponse = BalanceClient.walletBalance(balanceRequest);
+            ZapLog.debug(LOG_TAG,balanceResponse.toString());
+            mTotalBalance = balanceResponse.getTotalBalance();
+            updateTotalBalanceDisplay();
+        }
+        catch(StatusRuntimeException e){
+            ZapLog.debug(LOG_TAG,"An Error occured on the balance Request");
+            e.printStackTrace();
+        }
+
+        /*
+        // non blocking stub
+        LightningGrpc.LightningFutureStub aBalanceClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+
+        WalletBalanceRequest aBalanceRequest = WalletBalanceRequest.newBuilder().build();
+        */
+
+
+
         return view;
     }
 
 
     private void updateTotalBalanceDisplay(){
-
-        // placeholder value
-        long myBalance = 120871010L;
 
         // Adapt unit text size depending on its length
         if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2){
@@ -117,9 +158,9 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
             mTvPrimaryBalanceUnit.setTextSize(32);
         }
 
-        mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(myBalance));
+        mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(mTotalBalance));
         mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-        mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(myBalance));
+        mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(mTotalBalance));
         mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
     }

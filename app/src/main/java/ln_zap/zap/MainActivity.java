@@ -25,7 +25,7 @@ import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.fragments.History;
 import ln_zap.zap.fragments.Settings;
 import ln_zap.zap.fragments.Wallet;
-import ln_zap.zap.util.HttpClient;
+import ln_zap.zap.connection.HttpClient;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.ZapLog;
 
