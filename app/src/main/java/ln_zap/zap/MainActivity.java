@@ -22,6 +22,7 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
+import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.fragments.History;
 import ln_zap.zap.fragments.Settings;
 import ln_zap.zap.fragments.Wallet;
@@ -131,6 +132,9 @@ public class MainActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToForeground() {
         ZapLog.debug(LOG_TAG,"Zap moved to foreground");
         setupExchangeRateSchedule();
+
+        // restart lnd connection
+        LndConnection.getInstance().restartBackgroundTasks();
     }
 
     // This function gets called when app is moved to background.
@@ -142,6 +146,8 @@ public class MainActivity extends BaseAppCompatActivity implements LifecycleObse
             mExchangeRateScheduler.shutdownNow();
             mIsExchangeRateSchedulerRunning = false;
         }
+        // Kill lnd connection
+        LndConnection.getInstance().stopBackgroundTasks();
     }
 
 

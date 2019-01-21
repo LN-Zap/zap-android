@@ -4,6 +4,7 @@ import androidx.preference.PreferenceManager;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 
+import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.UserGuardian;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -21,16 +22,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.ClipboardManager;
 
-
+import com.google.common.net.UrlEscapers;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import net.glxn.qrgen.android.QRCode;
 
-public class GenerateRequestActivity extends BaseAppCompatActivity implements UserGuardianInterface {
+
+public class GeneratedRequestActivity extends BaseAppCompatActivity implements UserGuardianInterface {
 
     private UserGuardian mUG;
     private String mDataToEncode;
     private boolean mOnChain;
+    private String mAddress;
+    private String mMemo;
+    private String mAmount;
+    private String mLnInvoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +44,13 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
 
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
-        if(extras != null)
+        if(extras != null) {
             mOnChain = extras.getBoolean("onChain");
+            mAddress = extras.getString("address");
+            mAmount = extras.getString("amount");
+            mMemo = extras.getString("memo");
+            mLnInvoice = extras.getString("lnInvoice");
+        }
 
         setContentView(R.layout.activity_generate_request);
         mUG = new UserGuardian(this,this);
@@ -52,12 +63,24 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
             TextView tvTypeText = findViewById(R.id.requestTypeText);
             tvTypeText.setText(R.string.onChain);
 
-            // Generate data to encode (placeholder for now)
-            mDataToEncode = "2N3GLxzXzkg8aH2wFgsRuEdsEcARfN3DbQg";
+            // Generate data to encode
+
+            mDataToEncode = "bitcoin:" + mAddress;
+            mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
+            // convert the value to the expected format for onChain invoices.
+            mAmount = MonetaryUtil.getInstance().convertPrimaryToBitcoin(mAmount);
+
+            if(mAmount != null)
+                if(!(mAmount.isEmpty() || mAmount.equals("0")))
+                    mDataToEncode = appendParameter(mDataToEncode,"amount",mAmount);
+            if(mMemo != null)
+                if(!mMemo.isEmpty())
+                    mDataToEncode = appendParameter(mDataToEncode,"message",mMemo);
         }
         else {
             // Generate data to encode (placeholder for now)
-            mDataToEncode = "lntb1u1pwq4jtvpp5r8j6shz7z7grpt6j9l3ep30means72nutpqsd9230pcehsqvqd5sdq8w3jhxaqcqzysxqzjc30qekk28rddvpkzc5uwata53rgsvxc7k4cfy3fmrjuwun70m79lq9e3s4aqflxn024v8wsz5cavgarm7qq6tjmdztjuv3jeurgvfayqqgajfl0";
+            mDataToEncode = mLnInvoice;
+            //mDataToEncode = "lntb1u1pwq4jtvpp5r8j6shz7z7grpt6j9l3ep30means72nutpqsd9230pcehsqvqd5sdq8w3jhxaqcqzysxqzjc30qekk28rddvpkzc5uwata53rgsvxc7k4cfy3fmrjuwun70m79lq9e3s4aqflxn024v8wsz5cavgarm7qq6tjmdztjuv3jeurgvfayqqgajfl0";
         }
 
 
@@ -99,7 +122,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
         btnDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder adb = new AlertDialog.Builder(GenerateRequestActivity.this)
+                AlertDialog.Builder adb = new AlertDialog.Builder(GeneratedRequestActivity.this)
                         .setTitle(R.string.details)
                         .setMessage(mDataToEncode)
                         .setCancelable(true)
@@ -108,7 +131,7 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if(PreferenceManager.getDefaultSharedPreferences(GenerateRequestActivity.this).getBoolean("preventScreenRecording",true)) {
+                if(PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this).getBoolean("preventScreenRecording",true)) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -124,6 +147,13 @@ public class GenerateRequestActivity extends BaseAppCompatActivity implements Us
             }
         });
 
+    }
+
+    private String appendParameter(String base, String name, String value){
+        if(!base.contains("?"))
+            return base + "?" + name + "=" + value;
+        else
+            return base + "&" + name + "=" + value;
     }
 
     @Override

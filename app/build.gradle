@@ -71,7 +71,7 @@ dependencies {
     // HTTP library to perform API interaction
     implementation 'com.android.volley:volley:1.1.1'
 
-    // Bitcoin implementation
+    // Bitcoin implementation   // confilicts with current protobuf implementation.
     // implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
 
     // Library to detect when app goes to background or foreground
@@ -84,8 +84,9 @@ dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.2'
     compileOnly 'com.google.api.grpc:googleapis-common-protos:0.0.3'
 
-    // Used for base encoding
+    // Used for base encoding and URI escaping
     implementation 'com.google.guava:guava:27.0.1-android'
+
 
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'com.google.android.material:material:1.1.0-alpha02'

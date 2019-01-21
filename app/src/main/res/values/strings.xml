@@ -80,6 +80,7 @@
     <!-- //////////////// Receive //////////////////// -->
 
     <string name="receive_generateRequest">Generate Request</string>
+    <string name="receive_generateRequest_failed">Request generation failed.</string>
 
 
     <!-- //////////////// User Guardian //////////////////// -->

@@ -45,7 +45,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name=".GenerateRequestActivity"
+            android:name=".GeneratedRequestActivity"
             android:label="@string/activity_receive"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />

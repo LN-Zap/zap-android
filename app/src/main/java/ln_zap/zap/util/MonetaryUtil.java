@@ -241,7 +241,9 @@ public class MonetaryUtil {
                     mSecondCurrency = currency;
                 }
                 catch(JSONException e){
-                    e.printStackTrace();
+                    // App was probably never started before. If we can't find the fiat in the prefs,
+                    // create a placeholder currency.
+                    mSecondCurrency = new Currency("USD",0,0);
                 }
         }
     }
@@ -315,6 +317,60 @@ public class MonetaryUtil {
         }
     }
 
+    /**
+     * Converts the supplied value to satoshis. The exchange rate of the primary currency is used.
+     * @param primaryValue
+     * @return String without grouping or fractions
+     */
+    public String convertPrimaryToSatoshi(String primaryValue){
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        DecimalFormat df = (DecimalFormat)nf;
+        df.setGroupingUsed(false);
+        df.setMaximumFractionDigits(0);
+        if (primaryValue.equals("")){
+            return "0";
+        }
+        else {
+            if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+                double value = Double.parseDouble(primaryValue);
+                double result = (value / mFirstCurrency.getRate());
+                return df.format(result);
+            }
+            else{
+                double value = Double.parseDouble(primaryValue);
+                double result = (value / mSecondCurrency.getRate());
+                return df.format(result);
+            }
+        }
+    }
+
+    /**
+     * Converts the supplied value to bitcoin. The exchange rate of the primary currency is used.
+     * @param primaryValue
+     * @return String without grouping and maximum fractions of 8 digits
+     */
+    public String convertPrimaryToBitcoin(String primaryValue){
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        DecimalFormat df = (DecimalFormat)nf;
+        df.setGroupingUsed(false);
+        df.setMaximumFractionDigits(8);
+
+        if (primaryValue.equals("")){
+            return "0";
+        }
+        else {
+            if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+                double value = Double.parseDouble(primaryValue);
+                double result = (value / mFirstCurrency.getRate() /1e8);
+                return df.format(result);
+            }
+            else{
+                double value = Double.parseDouble(primaryValue);
+                double result = (value / mSecondCurrency.getRate() /1e8);
+                return df.format(result);
+            }
+        }
+    }
 
 
     private void setFirstCurrency(String currencyCode, Double rate){

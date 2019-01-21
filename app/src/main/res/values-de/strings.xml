@@ -47,6 +47,7 @@
     <!-- //////////////// Receive //////////////////// -->
 
     <string name="receive_generateRequest">Anfrage generieren</string>
+    <string name="receive_generateRequest_failed">Generieren der Anfrage fehlgeschlagen.</string>
 
 
     <!-- //////////////// User Guardian //////////////////// -->

@@ -2,10 +2,13 @@ package ln_zap.zap.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+
 import android.os.Bundle;
+
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +21,16 @@ import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import java.util.concurrent.ExecutionException;
+
 import androidx.preference.PreferenceManager;
-
-import io.grpc.StatusRuntimeException;
-
 
 import ln_zap.zap.R;
 import ln_zap.zap.ReceiveActivity;
 import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
+import ln_zap.zap.util.ExecuteOnCaller;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.ZapLog;
 
@@ -112,6 +116,7 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
 
 
         // gRPC!!!
+        /*
         // blocking stub
         LightningGrpc.LightningBlockingStub BalanceClient = LightningGrpc
                 .newBlockingStub(LndConnection.getInstance().getSecureChannel())
@@ -131,22 +136,36 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
             ZapLog.debug(LOG_TAG,"An Error occured on the balance Request");
             e.printStackTrace();
         }
+    */
 
-        /*
         // non blocking stub
-        LightningGrpc.LightningFutureStub aBalanceClient = LightningGrpc
+        LightningGrpc.LightningFutureStub asyncBalanceClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
                 .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
 
         WalletBalanceRequest aBalanceRequest = WalletBalanceRequest.newBuilder().build();
-        */
+        final ListenableFuture<WalletBalanceResponse> balanceFuture = asyncBalanceClient.walletBalance(aBalanceRequest);
 
+        balanceFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WalletBalanceResponse balanceResponse = balanceFuture.get();
+                    ZapLog.debug(LOG_TAG,balanceResponse.toString());
+                    mTotalBalance = balanceResponse.getTotalBalance();
+                    updateTotalBalanceDisplay();
 
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG,"Interrupted");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG,"Exception in task");
+                }
+            }
+        },new ExecuteOnCaller());
 
         return view;
     }
-
 
     private void updateTotalBalanceDisplay(){
 

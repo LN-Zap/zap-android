@@ -12,17 +12,28 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.github.lightningnetwork.lnd.lnrpc.PayReq;
+import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
+import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
+import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
+
+
 import java.util.ArrayList;
 
 import androidx.core.content.ContextCompat;
+import io.grpc.StatusRuntimeException;
 import ln_zap.zap.R;
 import ln_zap.zap.SendActivity;
+import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.util.PermissionsUtil;
+import ln_zap.zap.util.ZapLog;
 import me.dm7.barcodescanner.zbar.BarcodeFormat;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
+    private static final String LOG_TAG = "QR-Code Activity";
+
     private ZBarScannerView mScannerView;
     private ImageButton mBtnFlashlight;
     private int mHighlightColor;
@@ -108,8 +119,55 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
     @Override
     public void handleResult(Result rawResult) {
-        Toast.makeText(this, "Contents = " + rawResult.getContents() +
-                ", Format = " + rawResult.getBarcodeFormat().getName(), Toast.LENGTH_SHORT).show();
+
+        // Check if it is a testnet lightning invoice. These checks have to be made more seriously later.
+        if(rawResult.getContents().contains("lntb")){
+            String input = rawResult.getContents().substring(10);
+            ZapLog.debug(LOG_TAG, input);
+            // decode lightning invoice
+
+            PayReqString decodePaymentRequest = PayReqString.newBuilder()
+                    .setPayReq(input)
+                    .build();
+
+            try {
+                PayReq decodedPayment = LndConnection.getInstance().getBlockingClient().decodePayReq(decodePaymentRequest);
+                ZapLog.debug(LOG_TAG, decodedPayment.toString());
+                if (decodedPayment.getTimestamp()+decodedPayment.getExpiry() < System.currentTimeMillis()/1000) {
+                    Toast.makeText(this, "payment request expired", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    // send lightning payment
+                    // blocking stub
+
+                    SendRequest sendRequest = SendRequest.newBuilder()
+                            .setDestString(decodedPayment.getDestination())
+                            .setPaymentHashString(decodedPayment.getPaymentHash())
+                            .setAmt(decodedPayment.getNumSatoshis())
+                            .build();
+
+                    SendResponse sendResponse = LndConnection.getInstance().getBlockingClient().sendPaymentSync(sendRequest);
+                    ZapLog.debug(LOG_TAG, sendResponse.toString());
+
+                    //Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
+                    //intent.putExtra("onChain", false);
+                    //intent.putExtra("content", rawResult.getContents());
+                    //startActivity(intent);
+                }
+
+            } catch (StatusRuntimeException e){
+                Toast.makeText(this, "unable to decode payment request", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+
+        } else {
+            Toast.makeText(this, "Contents = " + rawResult.getContents() +
+                    ", Format = " + rawResult.getBarcodeFormat().getName(), Toast.LENGTH_SHORT).show();
+        }
+
+
         // Note:
         // * Wait 2 seconds to resume the preview.
         // * On older devices continuously stopping and resuming camera preview can result in freezing the app.

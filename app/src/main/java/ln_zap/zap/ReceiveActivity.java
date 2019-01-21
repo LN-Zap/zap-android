@@ -2,9 +2,12 @@ package ln_zap.zap;
 
 import androidx.preference.PreferenceManager;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
+import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.interfaces.UserGuardianInterface;
+import ln_zap.zap.util.ExecuteOnCaller;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.UserGuardian;
+import ln_zap.zap.util.ZapLog;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,14 +20,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.github.lightningnetwork.lnd.lnrpc.AddInvoiceResponse;
+import com.github.lightningnetwork.lnd.lnrpc.Invoice;
+import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
+import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
+import com.github.lightningnetwork.lnd.lnrpc.NewAddressResponse;
+import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.ExecutionException;
 
 public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardianInterface {
+
+    private static final String LOG_TAG = "Receive Activity";
 
     private UserGuardian mUG;
     private LinearLayout mLightningTab;
     private LinearLayout mOnChainTab;
     private TextView mTvUnit;
     private EditText mEtAmount;
+    private EditText mEtMemo;
     private SharedPreferences mPrefs;
     private boolean mOnChain = false;
 
@@ -39,6 +55,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         mTvUnit = findViewById(R.id.receiveUnit);
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
         mEtAmount = findViewById(R.id.receiveAmount);
+        mEtMemo = findViewById(R.id.receiveMemo);
 
         // This will cause the default keyboard not to be shown. (Default keyboard is not secure against recording)
         //mEtAmount.setShowSoftInputOnFocus(false);
@@ -124,9 +141,89 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
     }
 
     public void generateRequest(){
-        Intent intent = new Intent(ReceiveActivity.this, GenerateRequestActivity.class);
-        intent.putExtra("onChain", mOnChain);
-        startActivity(intent);
+
+        if (mOnChain) {
+
+            // generate onChain request
+
+            // non blocking stub
+            LightningGrpc.LightningFutureStub asyncAddressClient = LightningGrpc
+                    .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                    .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+            NewAddressRequest asyncNewAddressRequest = NewAddressRequest.newBuilder()
+                    .setTypeValue(0) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
+                    .build();
+
+            final ListenableFuture<NewAddressResponse> addressFuture = asyncAddressClient.newAddress(asyncNewAddressRequest);
+
+
+            addressFuture.addListener(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        NewAddressResponse addressResponse = addressFuture.get();
+                        ZapLog.debug(LOG_TAG, addressResponse.toString());
+
+                        Intent intent = new Intent(ReceiveActivity.this, GeneratedRequestActivity.class);
+                        intent.putExtra("onChain", mOnChain);
+                        intent.putExtra("address", addressResponse.getAddress());
+                        intent.putExtra("amount", mEtAmount.getText().toString());
+                        intent.putExtra("memo",mEtMemo.getText().toString());
+                        startActivity(intent);
+
+                    } catch (InterruptedException e) {
+                        ZapLog.debug(LOG_TAG, "Interrupted");
+                        Toast.makeText(ReceiveActivity.this,R.string.receive_generateRequest_failed,Toast.LENGTH_SHORT).show();
+                    } catch (ExecutionException e) {
+                        ZapLog.debug(LOG_TAG, "Exception in task");
+                        Toast.makeText(ReceiveActivity.this,R.string.receive_generateRequest_failed,Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }, new ExecuteOnCaller());
+
+        }
+        else{
+            // generate lightning request
+
+            // non blocking stub
+            LightningGrpc.LightningFutureStub asyncInvoiceClient = LightningGrpc
+                    .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                    .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+
+            Invoice asyncInvoiceRequest = Invoice.newBuilder()
+                    .setValue(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
+                    .setMemo(mEtMemo.getText().toString())
+                    .build();
+
+            final ListenableFuture<AddInvoiceResponse> invoiceFuture = asyncInvoiceClient.addInvoice(asyncInvoiceRequest);
+
+
+            invoiceFuture.addListener(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        AddInvoiceResponse invoiceResponse = invoiceFuture.get();
+                        ZapLog.debug(LOG_TAG, invoiceResponse.toString());
+
+                        Intent intent = new Intent(ReceiveActivity.this, GeneratedRequestActivity.class);
+                        intent.putExtra("onChain", mOnChain);
+                        intent.putExtra("lnInvoice", invoiceResponse.getPaymentRequest());
+                        startActivity(intent);
+
+                    } catch (InterruptedException e) {
+                        ZapLog.debug(LOG_TAG, "Interrupted");
+                        Toast.makeText(ReceiveActivity.this,R.string.receive_generateRequest_failed,Toast.LENGTH_SHORT).show();
+                    } catch (ExecutionException e) {
+                        ZapLog.debug(LOG_TAG, "Exception in task");
+                        Toast.makeText(ReceiveActivity.this,R.string.receive_generateRequest_failed,Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }, new ExecuteOnCaller());
+
+        }
+
     }
 
     @Override
