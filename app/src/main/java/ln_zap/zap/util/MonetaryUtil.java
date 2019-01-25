@@ -90,7 +90,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getPrimaryDisplayAmountAndUnit(long value){
-        return getPrimaryDisplayAmount(value) + "" + getPrimaryDisplayUnit();
+        return getPrimaryDisplayAmount(value) + " " + getPrimaryDisplayUnit();
     }
 
 
@@ -133,7 +133,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getSecondaryDisplayAmountAndUnit(long value){
-        return getSecondaryDisplayAmount(value) + "" + getSecondaryDisplayUnit();
+        return getSecondaryDisplayAmount(value) + " " + getSecondaryDisplayUnit();
     }
 
 

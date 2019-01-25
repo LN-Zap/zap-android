@@ -68,8 +68,8 @@ public class Wallet {
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
                 .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
-        WalletBalanceRequest aBalanceRequest = WalletBalanceRequest.newBuilder().build();
-        final ListenableFuture<WalletBalanceResponse> balanceFuture = asyncBalanceClient.walletBalance(aBalanceRequest);
+        WalletBalanceRequest asyncBalanceRequest = WalletBalanceRequest.newBuilder().build();
+        final ListenableFuture<WalletBalanceResponse> balanceFuture = asyncBalanceClient.walletBalance(asyncBalanceRequest);
 
         balanceFuture.addListener(new Runnable() {
             @Override
