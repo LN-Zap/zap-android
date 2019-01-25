@@ -5,10 +5,8 @@ import android.content.SharedPreferences;
 
 import android.os.Bundle;
 
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,40 +15,35 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
-import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
-import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
-
-import com.google.common.util.concurrent.ListenableFuture;
-import java.util.concurrent.ExecutionException;
-
 import androidx.preference.PreferenceManager;
 
 import ln_zap.zap.R;
 import ln_zap.zap.ReceiveActivity;
-import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
-import ln_zap.zap.util.ExecuteOnCaller;
+import ln_zap.zap.util.Balances;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Wallet extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, Wallet.BalanceListener {
 
     private static final String LOG_TAG = "Wallet Fragment";
 
     private SharedPreferences mPrefs;
-    private long mTotalBalance = 0;
     private TextView mTvPrimaryBalance;
     private TextView mTvPrimaryBalanceUnit;
     private TextView mTvSecondaryBalance;
     private TextView mTvSecondaryBalanceUnit;
 
+    private boolean mPreferenceChangeListenerRegistered = false;
+    private boolean mBalanceChangeListenerRegistered = false;
 
-    public Wallet() {
+
+    public WalletFragment() {
         // Required empty public constructor
     }
 
@@ -113,56 +106,8 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
             }
         });
 
-
-
-        // gRPC!!!
-        /*
-        // blocking stub
-        LightningGrpc.LightningBlockingStub BalanceClient = LightningGrpc
-                .newBlockingStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        WalletBalanceRequest balanceRequest = WalletBalanceRequest.newBuilder().build();
-
-        WalletBalanceResponse balanceResponse;
-
-        try {
-            balanceResponse = BalanceClient.walletBalance(balanceRequest);
-            ZapLog.debug(LOG_TAG,balanceResponse.toString());
-            mTotalBalance = balanceResponse.getTotalBalance();
-            updateTotalBalanceDisplay();
-        }
-        catch(StatusRuntimeException e){
-            ZapLog.debug(LOG_TAG,"An Error occured on the balance Request");
-            e.printStackTrace();
-        }
-    */
-
-        // non blocking stub
-        LightningGrpc.LightningFutureStub asyncBalanceClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-
-        WalletBalanceRequest aBalanceRequest = WalletBalanceRequest.newBuilder().build();
-        final ListenableFuture<WalletBalanceResponse> balanceFuture = asyncBalanceClient.walletBalance(aBalanceRequest);
-
-        balanceFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    WalletBalanceResponse balanceResponse = balanceFuture.get();
-                    ZapLog.debug(LOG_TAG,balanceResponse.toString());
-                    mTotalBalance = balanceResponse.getTotalBalance();
-                    updateTotalBalanceDisplay();
-
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG,"Interrupted");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG,"Exception in task");
-                }
-            }
-        },new ExecuteOnCaller());
+        // fetch the current balance from LND
+        Wallet.getInstance().fetchBalanceFromLND();
 
         return view;
     }
@@ -177,39 +122,53 @@ public class Wallet extends Fragment implements SharedPreferences.OnSharedPrefer
             mTvPrimaryBalanceUnit.setTextSize(32);
         }
 
-        mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(mTotalBalance));
+        Balances balances = Wallet.getInstance().getBalances();
+
+        mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.total()));
         mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-        mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(mTotalBalance));
+        mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
         mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
+
+        ZapLog.debug(LOG_TAG,"Total balance display updated");
 
     }
 
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+    {
+        //update if currency has been switched or new exchange data arrived
+        if (key.equals("firstCurrencyIsPrimary") || key.equals("fiat_USD")){
+            updateTotalBalanceDisplay();
+        }
+    }
+
+    @Override
+    public void onBalanceUpdated() {
+        updateTotalBalanceDisplay();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        // Set up a listener whenever a key changes
-        mPrefs.registerOnSharedPreferenceChangeListener(this);
+
+        // Register listeners
+        if(!mPreferenceChangeListenerRegistered){
+            mPrefs.registerOnSharedPreferenceChangeListener(this);
+            mPreferenceChangeListenerRegistered = true;
+        }
+        if(!mBalanceChangeListenerRegistered) {
+            Wallet.getInstance().registerBalanceListener(this);
+            mBalanceChangeListenerRegistered = true;
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Unregister the listener whenever a key changes
+        // Unregister listeners
         mPrefs.unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key)
-    {
-        //update if currency has been switched or new exchange data arrived
-        if (key.equals("firstCurrencyIsPrimary") || key.equals("fiat_USD")){
-            updateTotalBalanceDisplay();
-            ZapLog.debug(LOG_TAG,"Total balance display updated");
-        }
+        Wallet.getInstance().unregisterBalanceListener(this);
     }
 
 }

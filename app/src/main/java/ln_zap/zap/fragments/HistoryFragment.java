@@ -13,10 +13,10 @@ import ln_zap.zap.util.BlockExplorer;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class History extends Fragment {
+public class HistoryFragment extends Fragment {
 
 
-    public History() {
+    public HistoryFragment() {
         // Required empty public constructor
     }
 

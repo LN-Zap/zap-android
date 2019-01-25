@@ -23,9 +23,9 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.connection.LndConnection;
-import ln_zap.zap.fragments.History;
-import ln_zap.zap.fragments.Settings;
-import ln_zap.zap.fragments.Wallet;
+import ln_zap.zap.fragments.HistoryFragment;
+import ln_zap.zap.fragments.SettingsFragment;
+import ln_zap.zap.fragments.WalletFragment;
 import ln_zap.zap.connection.HttpClient;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.ZapLog;
@@ -51,7 +51,7 @@ public class MainActivity extends BaseAppCompatActivity implements LifecycleObse
 
         // Set wallet fragment as beginning fragment
         mFt = getSupportFragmentManager().beginTransaction();
-        mCurrentFragment = new Wallet();
+        mCurrentFragment = new WalletFragment();
         mFt.replace(R.id.mainContent, mCurrentFragment);
         mFt.commit();
 
@@ -78,7 +78,7 @@ public class MainActivity extends BaseAppCompatActivity implements LifecycleObse
                 case R.id.navigation_wallet:
                     // Display the fragment as main content.
                     mFt = getSupportFragmentManager().beginTransaction();
-                    mCurrentFragment = new Wallet();
+                    mCurrentFragment = new WalletFragment();
                     mFt.replace(R.id.mainContent, mCurrentFragment);
                     //mFt.addToBackStack(null);
                     mFt.commit();
@@ -86,7 +86,7 @@ public class MainActivity extends BaseAppCompatActivity implements LifecycleObse
                 case R.id.navigation_history:
                     // Display the fragment as main content.
                     mFt = getSupportFragmentManager().beginTransaction();
-                    mCurrentFragment = new History();
+                    mCurrentFragment = new HistoryFragment();
                     mFt.replace(R.id.mainContent, mCurrentFragment);
                     //mFt.addToBackStack(null);
                     mFt.commit();
@@ -94,7 +94,7 @@ public class MainActivity extends BaseAppCompatActivity implements LifecycleObse
                 case R.id.navigation_settings:
                     // Display the fragment as main content.
                     mFt = getSupportFragmentManager().beginTransaction();
-                    mCurrentFragment = new Settings();
+                    mCurrentFragment = new SettingsFragment();
                     mFt.replace(R.id.mainContent, mCurrentFragment);
                     //mFt.addToBackStack(null);
                     mFt.commit();

@@ -26,7 +26,6 @@ public class LndConnection {
     private ExecutorService mLndThreads;
     private boolean mIsShutdown = false;
     private LightningGrpc.LightningBlockingStub mBlockingClient;
-    private LightningGrpc.LightningFutureStub mAsyncClient;
 
 
     private LndConnection() {
@@ -63,10 +62,6 @@ public class LndConnection {
                 .newBlockingStub(mSecureChannel)
                 .withCallCredentials(mMacaroon);
 
-        // Non blocking client for async gRPC calls
-        mAsyncClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
     }
 
     public static synchronized LndConnection getInstance() {
@@ -110,7 +105,4 @@ public class LndConnection {
         return mBlockingClient;
     }
 
-    public LightningGrpc.LightningFutureStub getAsyncClient() {
-        return mAsyncClient;
-    }
 }

@@ -59,6 +59,7 @@
             android:name=".SendActivity"
             android:label="@string/activity_send"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppThemeWithActionBar" />
     </application>
 

@@ -345,6 +345,30 @@ public class MonetaryUtil {
     }
 
     /**
+     * Converts the given satoshis to primary currency.
+     * @param value
+     * @return String without grouping
+     */
+    public String convertSatoshiToPrimary(Long value){
+
+        if (value == 0){
+            return "0";
+        }
+        else {
+            if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+                double result = (value * mFirstCurrency.getRate());
+                DecimalFormat df = TextInputCurrencyFormat(mFirstCurrency);
+                return df.format(result);
+            }
+            else{
+                double result = (value * mSecondCurrency.getRate());
+                DecimalFormat df = TextInputCurrencyFormat(mSecondCurrency);
+                return df.format(result);
+            }
+        }
+    }
+
+    /**
      * Converts the supplied value to bitcoin. The exchange rate of the primary currency is used.
      * @param primaryValue
      * @return String without grouping and maximum fractions of 8 digits
@@ -529,11 +553,17 @@ public class MonetaryUtil {
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
         DecimalFormat df = (DecimalFormat)nf;
         df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(2);
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(22);
         String result= df.format(value);
 
-        // If we have a fraction, then always show 2 fraction digits for fiat
+        return result;
+
+        // If we have a fraction, then always show 2 fraction digits for fiat.
+        // If there is no fraction, don't show a fraction.
+        // remove df.setMinimumFractionDigits(2); from above to make this work.
+        /*
         if (result.contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator()))){
             df.setMinimumFractionDigits(2);
             return df.format(value);
@@ -541,6 +571,7 @@ public class MonetaryUtil {
         else {
             return result;
         }
+        */
     }
 
 

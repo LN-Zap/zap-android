@@ -33,7 +33,7 @@ import ln_zap.zap.util.UserGuardian;
 import ln_zap.zap.util.ZapLog;
 
 
-public class Settings extends PreferenceFragmentCompat implements UserGuardianInterface {
+public class SettingsFragment extends PreferenceFragmentCompat implements UserGuardianInterface {
 
     private static final String LOG_TAG = "Settings";
 
