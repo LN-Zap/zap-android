@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
@@ -56,6 +57,10 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
         mEtAmount = findViewById(R.id.receiveAmount);
         mEtMemo = findViewById(R.id.receiveMemo);
+
+        // add "optional" hint to optional fields
+        mEtAmount.setHint(getResources().getString(R.string.amount) + " (" + getResources().getString(R.string.optional) + ")");
+        mEtMemo.setHint(getResources().getString(R.string.memo) + " (" + getResources().getString(R.string.optional) + ")");
 
         // This will cause the default keyboard not to be shown. (Default keyboard is not secure against recording)
         //mEtAmount.setShowSoftInputOnFocus(false);

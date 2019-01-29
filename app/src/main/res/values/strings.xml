@@ -56,6 +56,7 @@
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="send">Send</string>
     <string name="receive">Receive</string>
+    <string name="optional">optional</string>
 
     <!-- //////////////// Activity names //////////////////// -->
 
@@ -107,7 +108,7 @@
     <string name="settings_category_help">Help</string>
 
     <string name="settings_btcUnit">Bitcoin Unit</string>
-    <string name="settings_currency">Second Currency (Bitcoin or Fiat)</string>
+    <string name="settings_currency">Second Unit</string>
 
     <string name="settings_blockExplorer">Block Explorer</string>
     <string name="settings_language">Language</string>

@@ -22,6 +22,7 @@
     <string name="copied_to_clipboard">In Zwischenablage kopiert</string>
     <string name="send">Senden</string>
     <string name="receive">Empfangen</string>
+    <string name="optional">optional</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->
@@ -72,7 +73,7 @@
     <string name="settings_category_help">Hilfe</string>
 
     <string name="settings_btcUnit">Bitcoin Einheit</string>
-    <string name="settings_currency">Zweite Währung (Bitcoin oder Fiat)</string>
+    <string name="settings_currency">Zweite Einheit</string>
 
     <string name="settings_blockExplorer">Block-Explorer</string>
     <string name="settings_language">Sprache</string>
