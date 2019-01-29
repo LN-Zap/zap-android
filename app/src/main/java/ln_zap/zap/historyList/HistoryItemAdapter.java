@@ -1,42 +1,17 @@
 package ln_zap.zap.historyList;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.view.View;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 import ln_zap.zap.R;
-import ln_zap.zap.util.MonetaryUtil;
+
 
 public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<HistoryListItem> mItems;
-
-
-    // Provide access to all the views for a data item in a view holder
-    public static class TransactionViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mAmount;
-        public TextView mDescription;
-        public TransactionViewHolder(View v) {
-            super(v);
-            mAmount = v.findViewById(R.id.transactionAmount);
-            mDescription = v.findViewById(R.id.transactionDescription);
-        }
-    }
-
-    // Provide access to all the views for a data item in a view holder
-    public static class DateViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
-        public DateViewHolder(TextView v) {
-            super(v);
-            mTextView = v;
-        }
-    }
 
     @Override
     public int getItemViewType(int position) {
@@ -71,21 +46,13 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int type = getItemViewType(position);
         switch (type) {
             case HistoryListItem.TYPE_DATE:
-                DateViewHolder dateHolder = (DateViewHolder) holder;
+                DateLineViewHolder dateHolder = (DateLineViewHolder) holder;
                 break;
 
             case HistoryListItem.TYPE_TRANSACTION:
                 TransactionViewHolder transactionHolder = (TransactionViewHolder) holder;
-                TransactionItem tItem = (TransactionItem) mItems.get(position);
-                Long amt = tItem.getOnChainTransaction().getAmount();
-                transactionHolder.mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
-
-                if (amt>0){
-                    transactionHolder.mAmount.setTextColor(Color.GREEN);
-                    transactionHolder.mDescription.setText("Empfangen");
-                }else{
-                    transactionHolder.mAmount.setTextColor(Color.RED);
-                }
+                TransactionItem transactionItem = (TransactionItem) mItems.get(position);
+                transactionHolder.bindTransactionItem(transactionItem);
                 break;
         }
     }

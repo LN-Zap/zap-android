@@ -3,7 +3,6 @@ package ln_zap.zap.qrCodeScanner;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -49,10 +48,8 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
         mScannerView.setFormats(formats);
 
         // Prepare colors
-        String hexHighlightColor = "#" + Integer.toHexString(ContextCompat.getColor(this, R.color.lightningOrange) & 0x00ffffff);
-        mHighlightColor = Color.parseColor(hexHighlightColor);
-        String hexGreyColor = "#" + Integer.toHexString(ContextCompat.getColor(this, R.color.gray) & 0x00ffffff);
-        mGrayColor = Color.parseColor(hexGreyColor);
+        mHighlightColor = ContextCompat.getColor(this, R.color.lightningOrange);
+        mGrayColor = ContextCompat.getColor(this, R.color.gray);
 
         // Styling the scanner view
         mScannerView.setLaserEnabled(false);
