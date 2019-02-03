@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <!-- //////////////// Notice for translators ////////////////////
+<!-- //////////////// Notice for translators ////////////////////
 
     First of all, thanks for taking the time to translate this wallet!
 
@@ -73,9 +73,13 @@
 
     <!-- //////////////// PIN dialog //////////////////// -->
 
-    <string name="pin_create">Create a PIN (5-8 digits)</string>
+    <string name="pin_create">Create PIN</string>
     <string name="pin_confirm">Confirm PIN</string>
     <string name="pin_enter">Enter PIN</string>
+    <string name="pin_enter_old">Enter old PIN</string>
+    <string name="pin_enter_new">Enter new PIN</string>
+    <string name="pin_confirm_new">Confirm new PIN</string>
+    <string name="pin_entered_wrong">Wrong PIN</string>
 
 
     <!-- //////////////// Receive //////////////////// -->
@@ -122,7 +126,7 @@
     <string name="settings_addressType">Bitcoin Address Type</string>
     <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
-    <string name="settings_resetPin">Reset PIN</string>
+    <string name="settings_changePin">Change PIN</string>
 
 
     <string name="settings_scramblePin">Scramble PIN Screen</string>

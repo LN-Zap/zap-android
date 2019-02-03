@@ -72,7 +72,7 @@
 
         <Preference
             android:key="changePIN"
-            android:title="@string/settings_resetPin"
+            android:title="@string/settings_changePin"
             app:iconSpaceReserved="false"/>
 
         <!--

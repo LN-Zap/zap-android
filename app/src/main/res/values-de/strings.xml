@@ -42,7 +42,11 @@
 
     <string name="pin_confirm">PIN bestätigen</string>
     <string name="pin_enter">PIN eingeben</string>
-    <string name="pin_create">PIN erstellen (5-8 Zeichen)</string>
+    <string name="pin_create">PIN erstellen</string>
+    <string name="pin_enter_old">Alte PIN eingeben</string>
+    <string name="pin_enter_new">Neue PIN erstellen</string>
+    <string name="pin_confirm_new">Neue PIN bestätigen</string>
+    <string name="pin_entered_wrong">Falsche PIN</string>
 
 
     <!-- //////////////// Receive //////////////////// -->
@@ -87,7 +91,7 @@
     <string name="settings_addressType">Bitcoin Adresstyp</string>
     <string name="settings_manageChannels">Kanäle verwalten</string>
     <string name="settings_resetConnection">Verbindungseinstellungen zurücksetzen</string>
-    <string name="settings_resetPin">PIN zurücksetzen</string>
+    <string name="settings_changePin">PIN ändern</string>
 
 
     <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>

@@ -19,6 +19,7 @@ import androidx.preference.PreferenceManager;
 
 import ln_zap.zap.R;
 import ln_zap.zap.ReceiveActivity;
+import ln_zap.zap.Setup.SetupActivity;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.util.Balances;
 import ln_zap.zap.util.MonetaryUtil;
@@ -102,6 +103,20 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ReceiveActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Action when clicked on "setup wallet"
+        Button btnSetup = view.findViewById(R.id.setupWallet);
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            btnSetup.setVisibility(View.INVISIBLE);
+        }
+        btnSetup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SetupActivity.class);
+                intent.putExtra("setupMode", SetupActivity.FULL_SETUP);
                 startActivity(intent);
             }
         });

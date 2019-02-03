@@ -24,6 +24,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import ln_zap.zap.BuildConfig;
+import ln_zap.zap.Setup.SetupActivity;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.R;
 import ln_zap.zap.util.AppUtil;
@@ -135,6 +136,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Toast.makeText(getActivity(),R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SetupActivity.class);
+                intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
+                startActivity(intent);
                 return true;
             }
         });
@@ -145,6 +149,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Toast.makeText(getActivity(),R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SetupActivity.class);
+                intent.putExtra("setupMode", SetupActivity.CHANGE_PIN);
+                startActivity(intent);
                 return true;
             }
         });

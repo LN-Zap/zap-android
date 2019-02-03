@@ -30,7 +30,7 @@ import ln_zap.zap.connection.HttpClient;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.ZapLog;
 
-public class MainActivity extends BaseAppCompatActivity implements LifecycleObserver {
+public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver {
 
     private static final String LOG_TAG = "Main Activity";
 
