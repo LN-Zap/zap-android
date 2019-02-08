@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,6 +23,7 @@ public class SetupActivity extends BaseAppCompatActivity {
 
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
+    private SharedPreferences mPrefs;
     private int mSetupMode = 0;
 
     @Override
@@ -35,13 +37,18 @@ public class SetupActivity extends BaseAppCompatActivity {
             mSetupMode = extras.getInt("setupMode",0);
         }
 
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
 
         // Set pin fragment as beginning fragment
         showCreatePin();
 
         switch(mSetupMode) {
             case FULL_SETUP:
-                showEula();
+                if (mPrefs.getBoolean("eulaAccepted",false))
+                    showCreatePin();
+                else
+                    showEula();
                 break;
             case CHANGE_PIN:
                 showEnterPin();
@@ -56,15 +63,30 @@ public class SetupActivity extends BaseAppCompatActivity {
         showCreatePin();
     }
 
-    public void pinCreated(){
+    public void pinCreated(String value, Integer length){
+
+        // Save the created PIN in shared preferences UNSECURE!!!
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putString("pin_UNSECURE_temp", value);
+        editor.putInt("pin_length_temp", length);
+        editor.apply();
         showConfirmPin();
+
     }
 
-    public void pinConfirmed(){
+    public void pinConfirmed(String value, Integer length){
+
+        // Save the created PIN in shared preferences UNSECURE!!!
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putString("pin_UNSECURE", value);
+        editor.putInt("pin_length", length);
+        editor.apply();
+
         if (mSetupMode == FULL_SETUP){
             showConnectChoice();
         }
         if (mSetupMode == CHANGE_PIN){
+            Toast.makeText(SetupActivity.this,"PIN changed!",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(SetupActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -77,8 +99,7 @@ public class SetupActivity extends BaseAppCompatActivity {
         }
         if (mSetupMode == CHANGE_CONNECTION){
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = prefs.edit();
+            SharedPreferences.Editor editor = mPrefs.edit();
             editor.putBoolean("isWalletSetup", false);
             editor.apply();
 

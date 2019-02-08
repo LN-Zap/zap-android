@@ -135,7 +135,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(getActivity(),R.string.coming_soon,Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SetupActivity.class);
                 intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
                 startActivity(intent);
@@ -148,10 +147,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefChangePin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(getActivity(),R.string.coming_soon,Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SetupActivity.class);
                 intent.putExtra("setupMode", SetupActivity.CHANGE_PIN);
                 startActivity(intent);
+                return true;
+            }
+        });
+
+        // Action when clicked on "reset all"
+        final Preference prefResetAll = findPreference("resetAll");
+        prefResetAll.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Toast.makeText(getActivity(),"preferences reset",Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.clear();
+                editor.apply();
                 return true;
             }
         });

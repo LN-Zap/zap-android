@@ -92,18 +92,18 @@ public class PinFragment extends Fragment {
         mTvPrompt = view.findViewById(R.id.pinPrompt);
         mTvPrompt.setText(mPromptString);
 
-
         mVibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
+        // Do not scramble numpad when we want to create a PIN
         boolean scramble = false;
 
+        // Only scramble if we are in enter mode
         if (mMode == ENTER_MODE){
             scramble = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("scramblePin",true);
         }
 
 
-        // Define buttons
-
+        // Get numpad buttons and assign a number to each of them
         mBtnNumpad[0] = view.findViewById(R.id.pinNumpad1);
         mBtnNumpad[0].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(0).getValue()) : "1");
         mBtnNumpad[1] = view.findViewById(R.id.pinNumpad2);
@@ -125,30 +125,10 @@ public class PinFragment extends Fragment {
         mBtnNumpad[9] = view.findViewById(R.id.pinNumpad0);
         mBtnNumpad[9].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(9).getValue()) : "0");
 
-
         mBtnPinConfirm = view.findViewById(R.id.pinConfirm);
         mBtnPinBack = view.findViewById(R.id.pinBack);
 
-        // Set OnClickListeners for numpad buttons
-        for (Button btn : mBtnNumpad){
-            btn.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin",true))    {
-                        mVibrator.vibrate(55);
-                    }
-                    mUserInput.append(((Button) v).getText().toString());
-                    displayUserInput();
-
-                    if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE){
-                        pinEntered();
-                    }
-                }
-            });
-        }
-
-
-        // Get pin hints
+        // Get PIN hints
         mPinHints[0] = view.findViewById(R.id.pinHint1);
         mPinHints[1] = view.findViewById(R.id.pinHint2);
         mPinHints[2] = view.findViewById(R.id.pinHint3);
@@ -160,11 +140,32 @@ public class PinFragment extends Fragment {
         mPinHints[8] = view.findViewById(R.id.pinHint9);
         mPinHints[9] = view.findViewById(R.id.pinHint10);
 
-
         // Set all layout element states to the current user input (empty right now)
         displayUserInput();
 
 
+        // Set action for numpad buttons
+        for (Button btn : mBtnNumpad){
+            btn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // vibrate
+                    if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin",true))    {
+                        mVibrator.vibrate(55);
+                    }
+                    // Add input
+                    mUserInput.append(((Button) v).getText().toString());
+                    displayUserInput();
+
+                    // Auto accept if PIN input length was reached
+                    if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE){
+                        pinEntered();
+                    }
+                }
+            });
+        }
+
+        // Set action on confirm button
         mBtnPinConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,6 +173,7 @@ public class PinFragment extends Fragment {
             }
         });
 
+        // Set action on back button (delete one digit)
         mBtnPinBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,6 +189,7 @@ public class PinFragment extends Fragment {
             }
         });
 
+        // set long click action on back button (delete all digits)
         mBtnPinBack.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -200,6 +203,7 @@ public class PinFragment extends Fragment {
                 return false;
             }
         });
+
         return view;
     }
 
@@ -211,7 +215,7 @@ public class PinFragment extends Fragment {
             for (int i = 0; i < mUserInput.toString().length(); i++) {
                 mPinHints[i].setVisibility(View.VISIBLE);
             }
-            // Hide not used PIN hints
+            // Hide unused PIN hints
             for (int i = mUserInput.toString().length(); i < mPinHints.length; i++) {
                 if(i==0)
                     mPinHints[i].setVisibility(View.INVISIBLE);
@@ -220,15 +224,15 @@ public class PinFragment extends Fragment {
         }
         else{
 
-            // Set used PIN hints active
+            // Set entered PIN hints active
             for (int i = 0; i < mUserInput.toString().length(); i++) {
                 mPinHints[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.lightningOrange));
             }
-            // Set unused PIN hints inactive
+            // Set not yet entered PIN hints inactive
             for (int i = mUserInput.toString().length(); i < mPinLength; i++) {
                 mPinHints[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.invisibleGray));
             }
-            // Hide not used PIN hints
+            // Hide unused PIN hints
             for (int i = mPinLength; i < mPinHints.length; i++) {
                 mPinHints[i].setVisibility(View.GONE);
             }
@@ -277,24 +281,31 @@ public class PinFragment extends Fragment {
 
         // Check if PIN was correct
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean correct = prefs.getString("pin_UNSECURE", "").equals(mUserInput.toString());
+
+        boolean correct;
+        if (mMode == ENTER_MODE)
+            correct = prefs.getString("pin_UNSECURE", "").equals(mUserInput.toString());
+        else
+            correct = prefs.getString("pin_UNSECURE_temp", "").equals(mUserInput.toString());
+
         if (correct) {
-            // Go to next Step
+            // Go to next step
             if (mMode == ENTER_MODE){
                 ((SetupActivity) getActivity()).correctPinEntered();
             }
             else if (mMode == CONFIRM_MODE){
-                ((SetupActivity) getActivity()).pinConfirmed();
+                ((SetupActivity) getActivity()).pinConfirmed(mUserInput.toString(),mUserInput.toString().length());
             }
         }
         else{
+            // Show error
             Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
 
             final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
             View view = getActivity().findViewById(R.id.pinInputLayout);
             view.startAnimation(animShake);
 
-            // clear the user input
+            // Clear the user input
             mUserInput.setLength(0);
             displayUserInput();
         }
@@ -302,16 +313,8 @@ public class PinFragment extends Fragment {
 
     public void createPin(){
 
-        // save the created PIN in Shared preferences UNSECURE!!!
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("pin_UNSECURE", mUserInput.toString());
-        editor.putInt("pin_length", mUserInput.toString().length());
-        editor.putBoolean("isWalletSetup", true);
-        editor.apply();
-
-        // Go to next Step
-        ((SetupActivity) getActivity()).pinCreated();
+        // Go to next step
+        ((SetupActivity) getActivity()).pinCreated(mUserInput.toString(), mUserInput.toString().length());
     }
 
 }

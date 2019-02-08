@@ -136,6 +136,11 @@
             android:title="@string/settings_about"
             app:iconSpaceReserved="false"/>
 
+        <Preference
+            android:key="resetAll"
+            android:title="reset all preferences (dev)"
+            app:iconSpaceReserved="false"/>
+
     </PreferenceCategory>
 
 
