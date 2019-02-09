@@ -24,7 +24,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import ln_zap.zap.BuildConfig;
-import ln_zap.zap.Setup.SetupActivity;
+import ln_zap.zap.setup.SetupActivity;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.R;
 import ln_zap.zap.util.AppUtil;

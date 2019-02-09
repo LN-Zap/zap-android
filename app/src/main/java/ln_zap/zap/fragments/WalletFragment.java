@@ -19,7 +19,7 @@ import androidx.preference.PreferenceManager;
 
 import ln_zap.zap.R;
 import ln_zap.zap.ReceiveActivity;
-import ln_zap.zap.Setup.SetupActivity;
+import ln_zap.zap.setup.SetupActivity;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.util.Balances;
 import ln_zap.zap.util.MonetaryUtil;

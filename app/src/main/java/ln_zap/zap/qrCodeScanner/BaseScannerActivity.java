@@ -1,13 +1,24 @@
 package ln_zap.zap.qrCodeScanner;
 
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Bundle;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import androidx.core.content.ContextCompat;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.R;
+import me.dm7.barcodescanner.zbar.BarcodeFormat;
+import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 public class BaseScannerActivity extends BaseAppCompatActivity {
+    protected ZBarScannerView mScannerView;
+    protected int mHighlightColor;
+    protected int mGrayColor;
+
     public void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -15,6 +26,29 @@ public class BaseScannerActivity extends BaseAppCompatActivity {
         if(ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+
+        mScannerView = new ZBarScannerView(this);
+
+        // Only respond to QR-Codes
+        ArrayList<BarcodeFormat> formats = new ArrayList<>();
+        formats.add(BarcodeFormat.QRCODE);
+        mScannerView.setFormats(formats);
+
+        // Prepare colors
+        mHighlightColor = ContextCompat.getColor(this, R.color.lightningOrange);
+        mGrayColor = ContextCompat.getColor(this, R.color.gray);
+
+        // Styling the scanner view
+        mScannerView.setLaserEnabled(false);
+        mScannerView.setBorderColor(mHighlightColor);
+        mScannerView.setBorderStrokeWidth(20);
+        mScannerView.setIsBorderCornerRounded(true);
+
     }
 
     @Override

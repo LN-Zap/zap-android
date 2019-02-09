@@ -13,9 +13,6 @@ import android.widget.Toast;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 
-import java.util.ArrayList;
-
-import androidx.core.content.ContextCompat;
 import io.grpc.StatusRuntimeException;
 import ln_zap.zap.R;
 import ln_zap.zap.SendActivity;
@@ -23,39 +20,20 @@ import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.util.PermissionsUtil;
 import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
-import me.dm7.barcodescanner.zbar.BarcodeFormat;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
     private static final String LOG_TAG = "QR-Code Activity";
 
-    private ZBarScannerView mScannerView;
     private ImageButton mBtnFlashlight;
-    private int mHighlightColor;
-    private int mGrayColor;
+
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        setContentView(R.layout.activity_qr_code_scanner);
+        setContentView(R.layout.activity_qr_code_send);
         setupToolbar();
-        mScannerView = new ZBarScannerView(this);
-
-        // Only respond to QR-Codes
-        ArrayList<BarcodeFormat> formats = new ArrayList<>();
-        formats.add(BarcodeFormat.QRCODE);
-        mScannerView.setFormats(formats);
-
-        // Prepare colors
-        mHighlightColor = ContextCompat.getColor(this, R.color.lightningOrange);
-        mGrayColor = ContextCompat.getColor(this, R.color.gray);
-
-        // Styling the scanner view
-        mScannerView.setLaserEnabled(false);
-        mScannerView.setBorderColor(mHighlightColor);
-        mScannerView.setBorderStrokeWidth(20);
-        mScannerView.setIsBorderCornerRounded(true);
 
         // Check for camera permission
         if (PermissionsUtil.hasCameraPermission(QRCodeScannerActivity.this)){
@@ -64,6 +42,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
         else{
             PermissionsUtil.requestCameraPermission(QRCodeScannerActivity.this,true);
         }
+
     }
 
     private void showCameraView(){

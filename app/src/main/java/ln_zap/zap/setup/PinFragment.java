@@ -1,4 +1,4 @@
-package ln_zap.zap.Setup;
+package ln_zap.zap.setup;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -85,7 +85,13 @@ public class PinFragment extends Fragment {
         View view = inflater.inflate(R.layout.pin_input, container, false);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mPinLength = prefs.getInt("pin_length",4);
+
+        // Get PIN length
+        if(mMode == CONFIRM_MODE) {
+            mPinLength = prefs.getInt("pin_length_temp", 4);
+        } else {
+            mPinLength = prefs.getInt("pin_length", 4);
+        }
 
         mUserInput = new StringBuilder();
         mNumpad = new ScrambledNumpad();

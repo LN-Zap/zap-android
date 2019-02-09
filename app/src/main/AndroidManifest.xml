@@ -67,9 +67,14 @@
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Setup.SetupActivity"
+            android:name=".setup.SetupActivity"
             android:label="Setup"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".setup.ConnectRemoteNodeActivity"
+            android:label="Connect to remote node"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppOverlayTheme" />
         <activity
             android:name=".PinEntryActivity"
             android:label="PIN"

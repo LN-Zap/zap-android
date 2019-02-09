@@ -1,4 +1,4 @@
-package ln_zap.zap.Setup;
+package ln_zap.zap.setup;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
