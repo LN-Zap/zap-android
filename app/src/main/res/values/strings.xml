@@ -57,11 +57,16 @@
     <string name="send">Send</string>
     <string name="receive">Receive</string>
     <string name="optional">optional</string>
+    <string name="next">Next</string>
+    <string name="coming_soon">Coming soon...</string>
+    <string name="needHelp">Need help?</string>
+
 
     <!-- //////////////// Activity names //////////////////// -->
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Send</string>
+    <string name="activity_connectRemoteNode">Connect to remote node</string>
 
 
     <!-- //////////////// Bottom Navigation //////////////////// -->
@@ -80,6 +85,37 @@
     <string name="pin_enter_new">Enter new PIN</string>
     <string name="pin_confirm_new">Confirm new PIN</string>
     <string name="pin_entered_wrong">Wrong PIN</string>
+
+
+    <!-- //////////////// Welcome //////////////////// -->
+
+    <string name="welcome">Welcome</string>
+    <string name="welcome_intro">Thanks for using Zap!\n\n
+        You can explore the app without any setup. In this mode you\'ll see fictitious numbers to give you a feeling of what it will look like.\n\n
+        If you like it, click the big \"Setup Wallet\" button to get started.\n\n
+        Let\'s go!</string>
+    <string name="welcome_explore_app">Explore App</string>
+
+
+    <!-- //////////////// Setup //////////////////// -->
+
+    <string name="setup_connect_heading">How do you want to use ZAP?</string>
+    <string name="setup_connect_local_description">Create a wallet on this phone.</string>
+    <string name="setup_connect_local_button">Create Wallet</string>
+    <string name="setup_connect_remote_description">Remote control your own node.</string>
+    <string name="setup_connect_remote_button">Connect to Remote Node</string>
+    <string name="setup_eula_heading">Conditions</string>
+    <string name="setup_eula_explanation">Zap is completely free. However, to use it, you have to accept our terms:</string>
+    <string name="setup_eula_iAccept">I accept</string>
+
+
+    <!-- //////////////// Demo Mode (this section includes all special strings that are shown before a wallet is setup) //////////////////// -->
+
+    <string name="demo_setupWalletBtn">Setup Wallet</string>
+    <string name="demo_encodedOnChainRequest">Please setup a wallet for real on-chain requests.</string>
+    <!-- The following text is a bit longer to achieve a more realistically looking lightning request qr-code -->
+    <string name="demo_encodedLightningRequest">Instead of a real bitcoin lightning invoice this text is used to create an example qr code. Please setup a wallet for real bitcoin lightning invoices.</string>
+    <string name="demo_setupWalletFirst">You first have to setup a wallet.</string>
 
 
     <!-- //////////////// Receive //////////////////// -->
@@ -141,11 +177,13 @@
     <string name="settings_restartRequired">Zap will be restarted to make this change. Do you want to continue?</string>
 
 
-    <!-- //////////////// Other ////////////////////// -->
+    <!-- //////////////// Errors ////////////////////// -->
 
     <string name="error_blockExplorer_title">Block Explorer</string>
     <!-- Parameters for the following string are:  %1$s: Name of selected block explorer, %2$s: "mainnet" or "testnet" -->
     <string name="error_blockExplorer_message">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
-    <string name="coming_soon">Coming soon...</string>
+    <string name="error_invalidPaymentReqest">Invalid payment information.\n\nPlease use a Bitcoin address or Lightning payment request to initiate a payment.</string>
+    <string name="error_invalidRemoteConnectionString">Invalid connection information.</string>
+
 
 </resources>

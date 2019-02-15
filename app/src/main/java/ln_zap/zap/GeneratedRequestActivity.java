@@ -12,6 +12,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +38,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
     private String mMemo;
     private String mAmount;
     private String mLnInvoice;
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,34 +57,49 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         setContentView(R.layout.activity_generate_request);
         mUG = new UserGuardian(this,this);
 
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this);
 
-        if(mOnChain){
+        if (mOnChain) {
             // Show "On Chain" at top
             ImageView ivTypeIcon = findViewById(R.id.requestTypeIcon);
             ivTypeIcon.setImageResource(R.drawable.ic_onchain_black_24dp);
             TextView tvTypeText = findViewById(R.id.requestTypeText);
             tvTypeText.setText(R.string.onChain);
-
-            // Generate data to encode
-
-            mDataToEncode = "bitcoin:" + mAddress;
-            mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
-            // convert the value to the expected format for onChain invoices.
-            mAmount = MonetaryUtil.getInstance().convertPrimaryToBitcoin(mAmount);
-
-            if(mAmount != null)
-                if(!(mAmount.isEmpty() || mAmount.equals("0")))
-                    mDataToEncode = appendParameter(mDataToEncode,"amount",mAmount);
-            if(mMemo != null)
-                if(!mMemo.isEmpty())
-                    mDataToEncode = appendParameter(mDataToEncode,"message",mMemo);
-        }
-        else {
-            // Generate data to encode (placeholder for now)
-            mDataToEncode = mLnInvoice;
-            //mDataToEncode = "lntb1u1pwq4jtvpp5r8j6shz7z7grpt6j9l3ep30means72nutpqsd9230pcehsqvqd5sdq8w3jhxaqcqzysxqzjc30qekk28rddvpkzc5uwata53rgsvxc7k4cfy3fmrjuwun70m79lq9e3s4aqflxn024v8wsz5cavgarm7qq6tjmdztjuv3jeurgvfayqqgajfl0";
         }
 
+
+        if(mPrefs.getBoolean("isWalletSetup", false)) {
+            if (mOnChain) {
+
+                // Generate data to encode
+
+                mDataToEncode = "bitcoin:" + mAddress;
+                mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
+
+                // Convert the value to the expected format for onChain invoices.
+                mAmount = MonetaryUtil.getInstance().convertPrimaryToBitcoin(mAmount);
+
+                // Append amount and memo to the invoice
+                if (mAmount != null)
+                    if (!(mAmount.isEmpty() || mAmount.equals("0")))
+                        mDataToEncode = appendParameter(mDataToEncode, "amount", mAmount);
+                if (mMemo != null)
+                    if (!mMemo.isEmpty())
+                        mDataToEncode = appendParameter(mDataToEncode, "message", mMemo);
+            } else {
+                // Generate data to encode
+                mDataToEncode = mLnInvoice;
+            }
+        } else {
+            // Wallet is not setup yet, show demo info
+            if (mOnChain) {
+                // Generate data to encode
+                mDataToEncode = getResources().getString(R.string.demo_encodedOnChainRequest);
+            } else {
+                // Generate data to encode (placeholder for now)
+                mDataToEncode = getResources().getString(R.string.demo_encodedLightningRequest);
+            }
+        }
 
 
         // Generate "QR-Code"

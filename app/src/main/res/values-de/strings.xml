@@ -23,12 +23,15 @@
     <string name="send">Senden</string>
     <string name="receive">Empfangen</string>
     <string name="optional">optional</string>
-
+    <string name="next">Weiter</string>
+    <string name="coming_soon">Bald verfügbar...</string>
+    <string name="needHelp">Du brauchst Hilfe?</string>
 
     <!-- //////////////// Activity names //////////////////// -->
 
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Senden</string>
+    <string name="activity_connectRemoteNode">Mit Node verbinden</string>
 
 
     <!-- //////////////// Bottom Navigation //////////////////// -->
@@ -49,6 +52,37 @@
     <string name="pin_entered_wrong">Falsche PIN</string>
 
 
+    <!-- //////////////// Welcome //////////////////// -->
+
+    <string name="welcome">Willkommen</string>
+    <string name="welcome_intro">Danke, dass du dich für Zap entschieden hast!\n\n
+        Du kannst die App ohne Setup testen. In diesem Modus wirst du fiktive Zahlen sehen, damit du ein Gefühl dafür bekommst, wie es später aussehen wird.\n\n
+        Wenn dir Zap gefällt, nutze den großen \"Wallet Einrichten\" Button um eine echte Wallet einzurichten.\n\n
+        Los geht\'s!</string>
+    <string name="welcome_explore_app">App erkunden</string>
+
+
+    <!-- //////////////// Setup //////////////////// -->
+
+    <string name="setup_connect_heading">Wie möchtest du Zap verwenden?</string>
+    <string name="setup_connect_local_description">Eine Wallet auf diesem Smartphone erstellen.</string>
+    <string name="setup_connect_local_button">Wallet erstellen</string>
+    <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
+    <string name="setup_connect_remote_button">Mit Node verbinden</string>
+    <string name="setup_eula_heading">Bedingungen</string>
+    <string name="setup_eula_explanation">Zap ist komplett kostenlos. Um es zu verwenden, musst du jedoch unseren Bedingungen zustimmen:</string>
+    <string name="setup_eula_iAccept">Ich akzeptiere</string>
+
+
+    <!-- //////////////// Demo Mode (this section includes all special strings that are shown before a wallet is setup) //////////////////// -->
+
+    <string name="demo_setupWalletBtn">Wallet einrichten</string>
+    <string name="demo_encodedOnChainRequest">Bitte richte eine Wallet ein, um echte Zahlungsanfragen zu generieren.</string>
+    <!-- The following text is a bit longer to achieve a more realistically looking lightning request qr-code -->
+    <string name="demo_encodedLightningRequest">Statt einer echten Zahlungsanfrage wird dieser Text verwendet, um einen beispielhaften QR-Code zu generieren. Bitte richte eine Wallet ein, um echte Zahlungsanfragen zu generieren.</string>
+    <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
+
+
     <!-- //////////////// Receive //////////////////// -->
 
     <string name="receive_generateRequest">Anfrage generieren</string>
@@ -61,7 +95,7 @@
     <string name="guardian_Title">Achtung</string>
     <string name="guardian_reset">Alle Sicherheitswarnungen sind wieder aktiv.</string>
     <!-- Parameters for the following string are:  %1$s: End of the copied string -->
-    <string name="guardian_copyToClipboard">Andere Apps (auch bösartige) können auf diese Daten zugreifen und sie verändern, wenn sie in die Zwischenablage kopiert werden.\n\nUm sicher zu gehen, dass beim Einfügen nichts geändert wurde, vergleiche das Ende mit:\n\n%1$s\n</string>
+    <string name="guardian_copyToClipboard">Andere Apps (auch bösartige) können auf diese Daten zugreifen und sie verändern, wenn sie in die Zwischenablage kopiert werden.\n\nUm sicher zu gehen, dass bis zum Einfügen nichts geändert wurde, vergleiche das Ende mit:\n\n%1$s\n</string>
     <string name="guardian_pasteFromClipboard">Überprüfe vorsichtshalber immer die letzten 3 bis 5 Stellen wenn du etwas von der Zwischenablage einfügst. Eine bösartige App könnte die Daten geändert haben, ohne dass du es bemerkt hast.</string>
     <string name="guardian_disableScrambledPin">Wenn die Ziffern bei der PIN-Eingabe nicht durchmischt sind, kann die PIN leicht durch deine Fingerbewegung erraten werden.</string>
     <string name="guardian_disableScreenProtection">Bösartige Software könnte unbemerkt Videos oder Screenshots aufnehmen, während du Zap nutzt. Wir empfehlen diese Funktion nur dann zu deaktivieren, wenn du selbst genau das machen möchtest.</string>
@@ -99,18 +133,19 @@
     <string name="settings_hideTotalBalance">Gesamtguthaben verstecken</string>
     <string name="settings_resetSecurityWarnings">Sicherheitswarnungen zurücksetzen</string>
 
-    <string name="settings_help">Hilfe nötig?</string>
-    <string name="settings_reportIssue">Bug melden</string>
+    <string name="settings_help">Du brauchst Hilfe?</string>
+    <string name="settings_reportIssue">Feedback senden</string>
     <string name="settings_about">Über</string>
 
     <string name="settings_restartRequired">Zap wird neugestartet, um diese Änderung vorzunehmen. Fortfahren?</string>
 
 
-    <!-- //////////////// Other ////////////////////// -->
+    <!-- //////////////// Errors ////////////////////// -->
 
     <string name="error_blockExplorer_title">Block-Explorer</string>
     <!-- Parameters for the following string are:  %1$s: Name of selected block explorer, %2$s: "mainnet" or "testnet" -->
     <string name="error_blockExplorer_message">"Der momentan ausgewählte Block-Explorer (%1$s) unterstützt das %2$s nicht. \nBitte wähle in den Einstellungen einen anderen Block-Explorer um fortzufahren."</string>
-    <string name="coming_soon">Bald verfügbar...</string>
+    <string name="error_invalidPaymentReqest">Ungültige Zahlungsinformationen.\n\nBitte verwende eine Bitcoin Adresse oder eine Lightning Zahlungsanfrage um eine Zahlung durchzuführen.</string>
+    <string name="error_invalidRemoteConnectionString">Ungültige Verbindungsinformationen.</string>
 
 </resources>

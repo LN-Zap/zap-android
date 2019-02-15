@@ -1,18 +1,25 @@
 package ln_zap.zap.qrCodeScanner;
 
+import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
+import com.google.android.material.snackbar.Snackbar;
 
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import io.grpc.StatusRuntimeException;
 import ln_zap.zap.R;
 import ln_zap.zap.SendActivity;
@@ -27,6 +34,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
     private static final String LOG_TAG = "QR-Code Activity";
 
     private ImageButton mBtnFlashlight;
+    private SharedPreferences mPrefs;
 
 
     @Override
@@ -34,6 +42,8 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
         super.onCreate(state);
         setContentView(R.layout.activity_qr_code_send);
         setupToolbar();
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(QRCodeScannerActivity.this);
 
         // Check for camera permission
         if (PermissionsUtil.hasCameraPermission(QRCodeScannerActivity.this)){
@@ -54,9 +64,8 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
         btnPaste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                validateInvoice(clipboard.getPrimaryClip().toString());
             }
         });
 
@@ -94,45 +103,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
     @Override
     public void handleResult(Result rawResult) {
 
-        // Check if it is a testnet lightning invoice. These checks have to be made more seriously later.
-        if(rawResult.getContents().contains("lntb")){
-            String input = rawResult.getContents().substring(10);
-            ZapLog.debug(LOG_TAG, input);
-
-            // decode lightning invoice
-            PayReqString decodePaymentRequest = PayReqString.newBuilder()
-                    .setPayReq(input)
-                    .build();
-
-            try {
-                Wallet.getInstance().mPaymentRequest = LndConnection.getInstance().getBlockingClient().decodePayReq(decodePaymentRequest);
-                ZapLog.debug(LOG_TAG, Wallet.getInstance().mPaymentRequest.toString());
-
-                if (Wallet.getInstance().mPaymentRequest.getTimestamp() + Wallet.getInstance().mPaymentRequest.getExpiry() < System.currentTimeMillis()/1000) {
-                    Toast.makeText(this, "payment request expired", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
-                    intent.putExtra("onChain", false);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(intent);
-
-                }
-
-            } catch (StatusRuntimeException e){
-                Toast.makeText(this, "unable to decode payment request", Toast.LENGTH_SHORT).show();
-                Wallet.getInstance().mPaymentRequest = null;
-                e.printStackTrace();
-            }
-
-
-
-
-        } else {
-            Toast.makeText(this, "Contents = " + rawResult.getContents() +
-                    ", Format = " + rawResult.getBarcodeFormat().getName(), Toast.LENGTH_SHORT).show();
-        }
-
+        validateInvoice(rawResult.getContents());
 
         // Note:
         // * Wait 2 seconds to resume the preview.
@@ -147,6 +118,56 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
         }, 2000);
     }
 
+    private void validateInvoice(String invoice){
+
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            // Check if it is a testnet lightning invoice. These checks have to be made more seriously later.
+            if (invoice.contains("lntb")) {
+                String input = invoice.substring(10);
+                ZapLog.debug(LOG_TAG, input);
+
+                // decode lightning invoice
+                PayReqString decodePaymentRequest = PayReqString.newBuilder()
+                        .setPayReq(input)
+                        .build();
+
+                try {
+                    Wallet.getInstance().mPaymentRequest = LndConnection.getInstance().getBlockingClient().decodePayReq(decodePaymentRequest);
+                    ZapLog.debug(LOG_TAG, Wallet.getInstance().mPaymentRequest.toString());
+
+                    if (Wallet.getInstance().mPaymentRequest.getTimestamp() + Wallet.getInstance().mPaymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
+                        Toast.makeText(this, "payment request expired", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
+                        intent.putExtra("onChain", false);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
+
+                    }
+
+                } catch (StatusRuntimeException e) {
+                    Toast.makeText(this, "unable to decode payment request", Toast.LENGTH_SHORT).show();
+                    Wallet.getInstance().mPaymentRequest = null;
+                    e.printStackTrace();
+                }
+
+
+            } else {
+                Snackbar msg = Snackbar.make(findViewById(android.R.id.content).getRootView(),R.string.error_invalidPaymentReqest,Snackbar.LENGTH_LONG);
+                View sbView = msg.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
+                msg.setDuration(7000);
+                msg.show();
+            }
+        } else {
+            // The wallet is not setup yet, go to next screen without data.
+            Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
+            intent.putExtra("onChain", false);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+        }
+    }
 
     // Handle users permission choice
     @Override

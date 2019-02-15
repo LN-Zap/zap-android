@@ -146,89 +146,94 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
     }
 
     public void generateRequest(){
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            // The wallet is setup. Communicate with LND and generate the request.
+            if (mOnChain) {
 
-        if (mOnChain) {
+                // generate onChain request
 
-            // generate onChain request
+                // non blocking stub
+                LightningGrpc.LightningFutureStub asyncAddressClient = LightningGrpc
+                        .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                        .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
-            // non blocking stub
-            LightningGrpc.LightningFutureStub asyncAddressClient = LightningGrpc
-                    .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                    .withCallCredentials(LndConnection.getInstance().getMacaroon());
+                NewAddressRequest asyncNewAddressRequest = NewAddressRequest.newBuilder()
+                        .setTypeValue(0) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
+                        .build();
 
-            NewAddressRequest asyncNewAddressRequest = NewAddressRequest.newBuilder()
-                    .setTypeValue(0) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
-                    .build();
-
-            final ListenableFuture<NewAddressResponse> addressFuture = asyncAddressClient.newAddress(asyncNewAddressRequest);
+                final ListenableFuture<NewAddressResponse> addressFuture = asyncAddressClient.newAddress(asyncNewAddressRequest);
 
 
-            addressFuture.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        NewAddressResponse addressResponse = addressFuture.get();
-                        ZapLog.debug(LOG_TAG, addressResponse.toString());
+                addressFuture.addListener(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            NewAddressResponse addressResponse = addressFuture.get();
+                            ZapLog.debug(LOG_TAG, addressResponse.toString());
 
-                        Intent intent = new Intent(ReceiveActivity.this, GeneratedRequestActivity.class);
-                        intent.putExtra("onChain", mOnChain);
-                        intent.putExtra("address", addressResponse.getAddress());
-                        intent.putExtra("amount", mEtAmount.getText().toString());
-                        intent.putExtra("memo",mEtMemo.getText().toString());
-                        startActivity(intent);
+                            Intent intent = new Intent(ReceiveActivity.this, GeneratedRequestActivity.class);
+                            intent.putExtra("onChain", mOnChain);
+                            intent.putExtra("address", addressResponse.getAddress());
+                            intent.putExtra("amount", mEtAmount.getText().toString());
+                            intent.putExtra("memo", mEtMemo.getText().toString());
+                            startActivity(intent);
 
-                    } catch (InterruptedException e) {
-                        ZapLog.debug(LOG_TAG, "Interrupted");
-                        Toast.makeText(ReceiveActivity.this,R.string.receive_generateRequest_failed,Toast.LENGTH_SHORT).show();
-                    } catch (ExecutionException e) {
-                        ZapLog.debug(LOG_TAG, "Exception in task");
-                        Toast.makeText(ReceiveActivity.this,R.string.receive_generateRequest_failed,Toast.LENGTH_SHORT).show();
+                        } catch (InterruptedException e) {
+                            ZapLog.debug(LOG_TAG, "Interrupted");
+                            Toast.makeText(ReceiveActivity.this, R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
+                        } catch (ExecutionException e) {
+                            ZapLog.debug(LOG_TAG, "Exception in task");
+                            Toast.makeText(ReceiveActivity.this, R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            }, new ExecuteOnCaller());
+                }, new ExecuteOnCaller());
 
-        }
-        else{
-            // generate lightning request
+            } else {
+                // generate lightning request
 
-            // non blocking stub
-            LightningGrpc.LightningFutureStub asyncInvoiceClient = LightningGrpc
-                    .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                    .withCallCredentials(LndConnection.getInstance().getMacaroon());
+                // non blocking stub
+                LightningGrpc.LightningFutureStub asyncInvoiceClient = LightningGrpc
+                        .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                        .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
 
-            Invoice asyncInvoiceRequest = Invoice.newBuilder()
-                    .setValue(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
-                    .setMemo(mEtMemo.getText().toString())
-                    .build();
+                Invoice asyncInvoiceRequest = Invoice.newBuilder()
+                        .setValue(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
+                        .setMemo(mEtMemo.getText().toString())
+                        .build();
 
-            final ListenableFuture<AddInvoiceResponse> invoiceFuture = asyncInvoiceClient.addInvoice(asyncInvoiceRequest);
+                final ListenableFuture<AddInvoiceResponse> invoiceFuture = asyncInvoiceClient.addInvoice(asyncInvoiceRequest);
 
 
-            invoiceFuture.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        AddInvoiceResponse invoiceResponse = invoiceFuture.get();
-                        ZapLog.debug(LOG_TAG, invoiceResponse.toString());
+                invoiceFuture.addListener(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            AddInvoiceResponse invoiceResponse = invoiceFuture.get();
+                            ZapLog.debug(LOG_TAG, invoiceResponse.toString());
 
-                        Intent intent = new Intent(ReceiveActivity.this, GeneratedRequestActivity.class);
-                        intent.putExtra("onChain", mOnChain);
-                        intent.putExtra("lnInvoice", invoiceResponse.getPaymentRequest());
-                        startActivity(intent);
+                            Intent intent = new Intent(ReceiveActivity.this, GeneratedRequestActivity.class);
+                            intent.putExtra("onChain", mOnChain);
+                            intent.putExtra("lnInvoice", invoiceResponse.getPaymentRequest());
+                            startActivity(intent);
 
-                    } catch (InterruptedException e) {
-                        ZapLog.debug(LOG_TAG, "Interrupted");
-                        Toast.makeText(ReceiveActivity.this,R.string.receive_generateRequest_failed,Toast.LENGTH_SHORT).show();
-                    } catch (ExecutionException e) {
-                        ZapLog.debug(LOG_TAG, "Exception in task");
-                        Toast.makeText(ReceiveActivity.this,R.string.receive_generateRequest_failed,Toast.LENGTH_SHORT).show();
+                        } catch (InterruptedException e) {
+                            ZapLog.debug(LOG_TAG, "Interrupted");
+                            Toast.makeText(ReceiveActivity.this, R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
+                        } catch (ExecutionException e) {
+                            ZapLog.debug(LOG_TAG, "Exception in task");
+                            Toast.makeText(ReceiveActivity.this, R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            }, new ExecuteOnCaller());
+                }, new ExecuteOnCaller());
 
+            }
+        } else {
+            // The wallet is not setup. Continue for demo mode.
+            Intent intent = new Intent(ReceiveActivity.this, GeneratedRequestActivity.class);
+            intent.putExtra("onChain", mOnChain);
+            startActivity(intent);
         }
-
     }
 
     @Override

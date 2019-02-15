@@ -72,7 +72,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".setup.ConnectRemoteNodeActivity"
-            android:label="Connect to remote node"
+            android:label="@string/activity_connectRemoteNode"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity

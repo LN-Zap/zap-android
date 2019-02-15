@@ -56,6 +56,17 @@ public class Wallet {
     }
 
     /**
+     * This will return a Balance object that contains all types of balances.
+     * Use this only for the demo mode. The balances are not real and will always be the same.
+     *
+     * @return
+     */
+    public Balances getDemoBalances(){
+        return new Balances(2637452, 2637452,
+                0, 200000, 0);
+    }
+
+    /**
      * This will fetch the current balance from LND.
      * All Listeners registered to BalanceListener will be informed about any changes.
      */

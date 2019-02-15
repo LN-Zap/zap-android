@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import java.util.concurrent.Executors;
@@ -38,6 +38,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mIsExchangeRateSchedulerRunning = false;
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
+    private SharedPreferences mPrefs;
 
 
 
@@ -45,6 +46,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -56,7 +59,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mFt.commit();
 
         // ToDo: set the network to testnet on app start. This has to be done on app setup later.
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        SharedPreferences.Editor editor = mPrefs.edit();
         editor.putBoolean("mainnet",false);
         editor.apply();
 
@@ -133,8 +136,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         ZapLog.debug(LOG_TAG,"Zap moved to foreground");
         setupExchangeRateSchedule();
 
-        // restart lnd connection
-        LndConnection.getInstance().restartBackgroundTasks();
+        // Restart lnd connection
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            LndConnection.getInstance().restartBackgroundTasks();
+        }
     }
 
     // This function gets called when app is moved to background.
@@ -146,8 +151,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mExchangeRateScheduler.shutdownNow();
             mIsExchangeRateSchedulerRunning = false;
         }
+
         // Kill lnd connection
-        LndConnection.getInstance().stopBackgroundTasks();
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            LndConnection.getInstance().stopBackgroundTasks();
+        }
     }
 
 

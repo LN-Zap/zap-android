@@ -85,7 +85,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:text="Need Help?"
+            android:text="@string/needHelp"
             android:textAllCaps="false"
             android:textColor="@color/lightningOrange"
             android:textSize="18sp"

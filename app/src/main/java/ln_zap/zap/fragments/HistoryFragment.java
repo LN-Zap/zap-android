@@ -1,5 +1,6 @@
 package ln_zap.zap.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ln_zap.zap.R;
@@ -37,6 +39,7 @@ public class HistoryFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private SharedPreferences mPrefs;
 
     private List<HistoryListItem> mHistoryItems;
 
@@ -51,6 +54,8 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         mRecyclerView = view.findViewById(R.id.historyList);
 
         // use a linear layout manager
@@ -60,7 +65,14 @@ public class HistoryFragment extends Fragment {
 
         mHistoryItems = new ArrayList<>();
 
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            updateHistory();
+        }
 
+        return view;
+    }
+
+    private void updateHistory(){
         // fetch on-chain transactions
         LightningGrpc.LightningFutureStub asyncTransactionsClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -76,7 +88,7 @@ public class HistoryFragment extends Fragment {
                     TransactionDetails transactionResponse = transactionFuture.get();
 
                     List<Transaction> transactionList = Lists.reverse(transactionResponse.getTransactionsList());
-                    for (Transaction t : transactionList){
+                    for (Transaction t : transactionList) {
                         TransactionItem transactionItem = new TransactionItem(t);
                         mHistoryItems.add(transactionItem);
                     }
@@ -86,17 +98,13 @@ public class HistoryFragment extends Fragment {
                     mAdapter = new HistoryItemAdapter(mHistoryItems);
                     mRecyclerView.setAdapter(mAdapter);
 
-                    ZapLog.debug(LOG_TAG,transactionResponse.toString());
+                    ZapLog.debug(LOG_TAG, transactionResponse.toString());
                 } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG,"Transaction request interrupted.");
+                    ZapLog.debug(LOG_TAG, "Transaction request interrupted.");
                 } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG,"Exception in transaction request task.");
+                    ZapLog.debug(LOG_TAG, "Exception in transaction request task.");
                 }
             }
-        },new ExecuteOnCaller());
-
-
-        return view;
+        }, new ExecuteOnCaller());
     }
-
 }

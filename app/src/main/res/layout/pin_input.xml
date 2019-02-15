@@ -30,9 +30,12 @@
     <LinearLayout
         android:id="@+id/pinHintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_below="@id/pinPromptLayout"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/rounded_rectangle_seablue"
         android:gravity="center"
         android:orientation="horizontal"
@@ -92,6 +95,7 @@
                 android:layout_weight="1"
                 android:src="@drawable/ic_nav_wallet_balck_24dp"
                 android:tint="@color/invisibleGray" />
+
             <ImageView
                 android:id="@+id/pinHint7"
                 android:layout_width="25dp"

@@ -122,7 +122,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // fetch the current balance from LND
-        Wallet.getInstance().fetchBalanceFromLND();
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            Wallet.getInstance().fetchBalanceFromLND();
+        }
 
         return view;
     }
@@ -137,7 +139,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mTvPrimaryBalanceUnit.setTextSize(32);
         }
 
-        Balances balances = Wallet.getInstance().getBalances();
+        Balances balances;
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            balances = Wallet.getInstance().getBalances();
+        } else {
+            balances = Wallet.getInstance().getDemoBalances();
+        }
 
         mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.total()));
         mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());

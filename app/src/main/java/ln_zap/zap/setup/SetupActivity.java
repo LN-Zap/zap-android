@@ -98,13 +98,7 @@ public class SetupActivity extends BaseAppCompatActivity {
             showCreatePin();
         }
         if (mSetupMode == CHANGE_CONNECTION){
-
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.putBoolean("isWalletSetup", false);
-            editor.apply();
-
             showConnectChoice();
-
         }
     }
 

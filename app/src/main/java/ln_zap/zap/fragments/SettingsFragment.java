@@ -135,9 +135,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SetupActivity.class);
-                intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
-                startActivity(intent);
+                if (mPrefs.getBoolean("isWalletSetup", false)){
+                    Intent intent = new Intent(getActivity(), SetupActivity.class);
+                    intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst,Toast.LENGTH_LONG).show();
+                }
                 return true;
             }
         });
@@ -147,9 +151,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefChangePin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SetupActivity.class);
-                intent.putExtra("setupMode", SetupActivity.CHANGE_PIN);
-                startActivity(intent);
+
+                if (mPrefs.getBoolean("isWalletSetup", false)){
+                    Intent intent = new Intent(getActivity(), SetupActivity.class);
+                    intent.putExtra("setupMode", SetupActivity.CHANGE_PIN);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst,Toast.LENGTH_LONG).show();
+                }
                 return true;
             }
         });
@@ -163,6 +172,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.clear();
                 editor.apply();
+                AppUtil.getInstance(getActivity()).restartApp();
                 return true;
             }
         });

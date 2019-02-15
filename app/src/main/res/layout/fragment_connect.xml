@@ -10,7 +10,7 @@ tools:context=".setup.ConnectFragment">
         android:id="@+id/heading"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="How do you want to use Zap?"
+        android:text="@string/setup_connect_heading"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@ tools:context=".setup.ConnectFragment">
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Create a wallet on this phone."
+            android:text="@string/setup_connect_local_description"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/connect_btnCreateWallet"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@ tools:context=".setup.ConnectFragment">
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:enabled="false"
-            android:text="Create Wallet"
+            android:text="@string/setup_connect_local_button"
             app:layout_constraintBottom_toBottomOf="@+id/connect_detailsRemoteNode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,7 @@ tools:context=".setup.ConnectFragment">
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Use Zap to remote control your own node."
+            android:text="@string/setup_connect_remote_description"
             android:textAlignment="center" />
 
         <Button
@@ -102,7 +102,7 @@ tools:context=".setup.ConnectFragment">
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Connect to Remote Node" />
+            android:text="@string/setup_connect_remote_button" />
 
     </LinearLayout>
 

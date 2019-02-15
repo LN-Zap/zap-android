@@ -11,12 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.content.ClipboardManager;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import ln_zap.zap.HomeActivity;
 import ln_zap.zap.R;
 import ln_zap.zap.qrCodeScanner.BaseScannerActivity;
 import ln_zap.zap.util.PermissionsUtil;
+import ln_zap.zap.util.ZapLog;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
@@ -37,7 +45,17 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         btnPaste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connect();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                verifyDesiredConnection(clipboard.getPrimaryClip().toString());
+            }
+        });
+
+        // ToDO: This is just for development and has to be removed later!!!
+        btnPaste.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                verifyDesiredConnection("lndconnect://157.230.97.66:10009?cert=MIIB6zCCAZGgAwIBAgIRALk4MnZPN5DY9Zblrfdg26swCgYIKoZIzj0EAwIwMTEfMB0GA1UEChMWbG5kIGF1dG9nZW5lcmF0ZWQgY2VydDEOMAwGA1UEAxMFWmFwMDEwHhcNMTkwMTAzMTEzNjUxWhcNMjAwMjI4MTEzNjUxWjAxMR8wHQYDVQQKExZsbmQgYXV0b2dlbmVyYXRlZCBjZXJ0MQ4wDAYDVQQDEwVaYXAwMTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABIM_5RHSfEsj3bDD56goP8Fm4u8Kdh7DPyRZ8-xVEAz7YwXLm2zLJLYxCSBeMPbRKs7F5CuRePKrgBFr6tDdPoGjgYkwgYYwDgYDVR0PAQH_BAQDAgKkMA8GA1UdEwEB_wQFMAMBAf8wYwYDVR0RBFwwWoIFWmFwMDGCCWxvY2FsaG9zdIIEdW5peIIKdW5peHBhY2tldIcEfwAAAYcQAAAAAAAAAAAAAAAAAAAAAYcEneZhQocEChMABYcQ_oAAAAAAAABsUEr__iJjMjAKBggqhkjOPQQDAgNIADBFAiBWsPEhXswlcj2aVd05v6wjf5jBe_OCyjZEu5PRbMSzuQIhAJpZXCg62zy6jt6S0LenZ7o-X3yiByRpoeFbVjfo5jQo&macaroon=AgEDbG5kAs8BAwoQ7a5y27C7Q4_FQFYaHP2uuBIBMBoWCgdhZGRyZXNzEgRyZWFkEgV3cml0ZRoTCgRpbmZvEgRyZWFkEgV3cml0ZRoXCghpbnZvaWNlcxIEcmVhZBIFd3JpdGUaFgoHbWVzc2FnZRIEcmVhZBIFd3JpdGUaFwoIb2ZmY2hhaW4SBHJlYWQSBXdyaXRlGhYKB29uY2hhaW4SBHJlYWQSBXdyaXRlGhQKBXBlZXJzEgRyZWFkEgV3cml0ZRoSCgZzaWduZXISCGdlbmVyYXRlAAAGIKUDrvb9TjXUpc3Dca_8zSZ6wcI4PWg7mqaPxh_oZZAX");
+                return false;
             }
         });
 
@@ -82,13 +100,55 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         });
     }
 
-    private void connect(){
+    private void verifyDesiredConnection(String connectString){
 
-        // ToDO: Create connection to remote node
+        // Uncomment this to connect to dev node
+        //connectString = "lndconnect://157.230.97.66:10009?cert=MIIB6zCCAZGgAwIBAgIRALk4MnZPN5DY9Zblrfdg26swCgYIKoZIzj0EAwIwMTEfMB0GA1UEChMWbG5kIGF1dG9nZW5lcmF0ZWQgY2VydDEOMAwGA1UEAxMFWmFwMDEwHhcNMTkwMTAzMTEzNjUxWhcNMjAwMjI4MTEzNjUxWjAxMR8wHQYDVQQKExZsbmQgYXV0b2dlbmVyYXRlZCBjZXJ0MQ4wDAYDVQQDEwVaYXAwMTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABIM_5RHSfEsj3bDD56goP8Fm4u8Kdh7DPyRZ8-xVEAz7YwXLm2zLJLYxCSBeMPbRKs7F5CuRePKrgBFr6tDdPoGjgYkwgYYwDgYDVR0PAQH_BAQDAgKkMA8GA1UdEwEB_wQFMAMBAf8wYwYDVR0RBFwwWoIFWmFwMDGCCWxvY2FsaG9zdIIEdW5peIIKdW5peHBhY2tldIcEfwAAAYcQAAAAAAAAAAAAAAAAAAAAAYcEneZhQocEChMABYcQ_oAAAAAAAABsUEr__iJjMjAKBggqhkjOPQQDAgNIADBFAiBWsPEhXswlcj2aVd05v6wjf5jBe_OCyjZEu5PRbMSzuQIhAJpZXCg62zy6jt6S0LenZ7o-X3yiByRpoeFbVjfo5jQo&macaroon=AgEDbG5kAs8BAwoQ7a5y27C7Q4_FQFYaHP2uuBIBMBoWCgdhZGRyZXNzEgRyZWFkEgV3cml0ZRoTCgRpbmZvEgRyZWFkEgV3cml0ZRoXCghpbnZvaWNlcxIEcmVhZBIFd3JpdGUaFgoHbWVzc2FnZRIEcmVhZBIFd3JpdGUaFwoIb2ZmY2hhaW4SBHJlYWQSBXdyaXRlGhYKB29uY2hhaW4SBHJlYWQSBXdyaXRlGhQKBXBlZXJzEgRyZWFkEgV3cml0ZRoSCgZzaWduZXISCGdlbmVyYXRlAAAGIKUDrvb9TjXUpc3Dca_8zSZ6wcI4PWg7mqaPxh_oZZAX";
 
-        // Mark the wallet es "setup"
+
+        URI connectURI = null;
+            try {
+                connectURI = new URI(connectString);
+                if (!connectURI.getScheme().equals("lndconnect")) {
+                    connectionError();
+                } else {
+
+                    String cert = null;
+                    String macaroon = null;
+
+                    // Fetch params
+                    String[] valuePairs = connectURI.getQuery().split("&");
+                    for (String pair : valuePairs) {
+                        String[] param = pair.split("=");
+                        if (param[0].equals("cert")){
+                            cert = param[1];
+                        }
+                        if (param[0].equals("macaroon")){
+                            macaroon = param[1];
+                        }
+                    }
+
+                    // Everything is ok, initiate connection
+                    connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
+                }
+            }
+            catch (URISyntaxException e){
+                ZapLog.debug(LOG_TAG, "URI could not be parsed");
+                e.printStackTrace();
+                connectionError();
+            }
+
+    }
+
+    private void connect(String host, int port, String cert, String macaroon){
+
+        // Save connection as plain text in preferences (UNSECURE!)
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("remoteHost", host);
+        editor.putInt("remotePort", port);
+        editor.putString("remoteCert", cert);
+        editor.putString("remoteMacaroon", macaroon);
         editor.putBoolean("isWalletSetup", true);
         editor.apply();
 
@@ -96,6 +156,14 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    private void connectionError(){
+        Snackbar msg = Snackbar.make(findViewById(android.R.id.content).getRootView(),R.string.error_invalidRemoteConnectionString,Snackbar.LENGTH_LONG);
+        View sbView = msg.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
+        msg.setDuration(4000);
+        msg.show();
     }
 
     @Override
@@ -114,7 +182,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     @Override
     public void handleResult(Result rawResult) {
 
-        connect();
+        verifyDesiredConnection(rawResult.getContents());
 
         // Note:
         // * Wait 2 seconds to resume the preview.
