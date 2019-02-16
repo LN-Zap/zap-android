@@ -29,9 +29,10 @@
 
     <LinearLayout
         android:id="@+id/pinHintLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="52dp"
         android:layout_below="@id/pinPromptLayout"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
@@ -53,7 +54,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -61,7 +62,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -69,7 +70,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -77,7 +78,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -85,7 +86,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -93,7 +94,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -101,7 +102,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -109,7 +110,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -117,7 +118,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
@@ -125,7 +126,7 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_nav_wallet_balck_24dp"
+                android:src="@drawable/bolt_black_filled_24dp"
                 android:tint="@color/invisibleGray" />
         </LinearLayout>
     </LinearLayout>

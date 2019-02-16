@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.ClipboardManager;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -32,6 +33,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     private static final String LOG_TAG = "Connect to remote node activity";
 
     private ImageButton mBtnFlashlight;
+    private TextView mTvPermissionRequired;
 
 
     @Override
@@ -39,6 +41,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         super.onCreate(state);
         setContentView(R.layout.activity_qr_code_connect);
         setupToolbar();
+
+        mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
 
         // Action when clicked on "paste"
         Button btnPaste = findViewById(R.id.scannerPaste);
@@ -208,6 +212,10 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, show the camera view.
                     showCameraView();
+                }
+                else {
+                    // Permission denied, show required permission message.
+                    mTvPermissionRequired.setVisibility(View.VISIBLE);
                 }
             }
         }

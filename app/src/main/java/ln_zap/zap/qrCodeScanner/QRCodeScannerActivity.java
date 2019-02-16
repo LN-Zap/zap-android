@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -34,6 +33,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
     private static final String LOG_TAG = "QR-Code Activity";
 
     private ImageButton mBtnFlashlight;
+    private TextView mTvPermissionRequired;
     private SharedPreferences mPrefs;
 
 
@@ -43,6 +43,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
         setContentView(R.layout.activity_qr_code_send);
         setupToolbar();
 
+        mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(QRCodeScannerActivity.this);
 
         // Check for camera permission
@@ -180,9 +181,8 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
                     // Permission was granted, show the camera view.
                     showCameraView();
                 } else {
-                    // Permission denied, go to send activity immediately.
-                    Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
-                    startActivity(intent);
+                    // Permission denied, show required permission message.
+                    mTvPermissionRequired.setVisibility(View.VISIBLE);
                 }
             }
         }

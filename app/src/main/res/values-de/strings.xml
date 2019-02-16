@@ -55,11 +55,11 @@
     <!-- //////////////// Welcome //////////////////// -->
 
     <string name="welcome">Willkommen</string>
-    <string name="welcome_intro">Danke, dass du dich für Zap entschieden hast!\n\n
+    <string name="welcome_intro">Willkommen!\n\n
         Du kannst die App ohne Setup testen. In diesem Modus wirst du fiktive Zahlen sehen, damit du ein Gefühl dafür bekommst, wie es später aussehen wird.\n\n
-        Wenn dir Zap gefällt, nutze den großen \"Wallet Einrichten\" Button um eine echte Wallet einzurichten.\n\n
-        Los geht\'s!</string>
-    <string name="welcome_explore_app">App erkunden</string>
+        Wenn dir Zap gefällt, nutze den großen \"Wallet Einrichten\" Button um eine echte Wallet einzurichten.
+        </string>
+    <string name="welcome_startButton">Los geht\'s!</string>
 
 
     <!-- //////////////// Setup //////////////////// -->
@@ -70,7 +70,7 @@
     <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
     <string name="setup_eula_heading">Bedingungen</string>
-    <string name="setup_eula_explanation">Zap ist komplett kostenlos. Um es zu verwenden, musst du jedoch unseren Bedingungen zustimmen:</string>
+    <string name="setup_eula_explanation">Zap ist komplett kostenlos. Trotzdem musst du unseren Nutzungsbedingungen zustimmen:</string>
     <string name="setup_eula_iAccept">Ich akzeptiere</string>
 
 
@@ -147,5 +147,6 @@
     <string name="error_blockExplorer_message">"Der momentan ausgewählte Block-Explorer (%1$s) unterstützt das %2$s nicht. \nBitte wähle in den Einstellungen einen anderen Block-Explorer um fortzufahren."</string>
     <string name="error_invalidPaymentReqest">Ungültige Zahlungsinformationen.\n\nBitte verwende eine Bitcoin Adresse oder eine Lightning Zahlungsanfrage um eine Zahlung durchzuführen.</string>
     <string name="error_invalidRemoteConnectionString">Ungültige Verbindungsinformationen.</string>
+    <string name="error_cameraPermissionRequired">Um QR-Codes zu scannen musst du Zap die Erlaubnis geben, die Kamera zu verwenden.</string>
 
 </resources>

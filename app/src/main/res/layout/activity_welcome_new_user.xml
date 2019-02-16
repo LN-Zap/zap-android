@@ -7,47 +7,50 @@
     tools:context=".SendActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="30dp"
-        android:text="@string/welcome"
-        android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread_inside" />
-
-    <TextView
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="17dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/welcome_intro"
         android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/welcomeStartButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/welcome_explore_app"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/welcomeStartButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/rounded_rectangle_seablue"
+        android:backgroundTint="@color/seaBlueGradient"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:text="@string/welcome_startButton"
+        android:textAllCaps="false"
+        android:textColor="@color/lightningOrange"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_cloudlightning" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
