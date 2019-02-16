@@ -131,6 +131,7 @@
     <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
     <string name="settings_preventScreenRecording">Bildschirmaufnahmen blockieren</string>
     <string name="settings_hideTotalBalance">Gesamtguthaben verstecken</string>
+    <string name="settings_hideTotalBalance_explanation">Wenn diese Funktion aktiv ist, kannst du auf das Zap logo auf dem Homescreen tippen, um dein Guthaben anzuzeigen.</string>
     <string name="settings_resetSecurityWarnings">Sicherheitswarnungen zurücksetzen</string>
 
     <string name="settings_help">Du brauchst Hilfe?</string>

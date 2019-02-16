@@ -168,6 +168,7 @@
     <string name="settings_scramblePin">Scramble PIN Screen</string>
     <string name="settings_preventScreenRecording">Prevent Screen Recording</string>
     <string name="settings_hideTotalBalance">Hide total balance</string>
+    <string name="settings_hideTotalBalance_explanation">When activated, tap the Zap logo on the home screen to reveal your balance.</string>
     <string name="settings_resetSecurityWarnings">Reset Security Warnings</string>
 
     <string name="settings_help">Need Help?</string>

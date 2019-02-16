@@ -42,6 +42,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
     private UserGuardian mUG;
     private SwitchPreference mSwScreenProtection;
     private SwitchPreference mSwScrambledPin;
+    private SwitchPreference mSwHideTotalBalance;
     private SharedPreferences mPrefs;
     private ListPreference mListCurrency;
 
@@ -194,8 +195,29 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             }
         });
 
+        // On hide balance option
+        mSwHideTotalBalance = findPreference("hideTotalBalance");
+        mSwHideTotalBalance.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (!mSwHideTotalBalance.isChecked()){
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage(R.string.settings_hideTotalBalance_explanation)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            }).show();
+                    return true;
+                }
+                else{
+                    return true;
+                }
+            }
+        });
+
         // On change scramble pin option
-        mSwScrambledPin = (SwitchPreference) findPreference("scramblePin");
+        mSwScrambledPin = findPreference("scramblePin");
         mSwScrambledPin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {

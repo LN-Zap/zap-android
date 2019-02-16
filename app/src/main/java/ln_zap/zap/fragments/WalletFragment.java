@@ -39,6 +39,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private TextView mTvPrimaryBalanceUnit;
     private TextView mTvSecondaryBalance;
     private TextView mTvSecondaryBalanceUnit;
+    private ConstraintLayout mClBalanceLayout;
+    private ImageView mIvLogo;
+    private ImageView mIvSwitchButton;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -58,16 +61,35 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // Get View elements
+        mClBalanceLayout = view.findViewById(R.id.BalanceLayout);
+        mIvLogo = view.findViewById(R.id.logo);
+        mIvSwitchButton = view.findViewById(R.id.switchButtonImage);
         mTvPrimaryBalance = view.findViewById(R.id.BalancePrimary);
         mTvPrimaryBalanceUnit = view.findViewById(R.id.BalancePrimaryUnit);
         mTvSecondaryBalance = view.findViewById(R.id.BalanceSecondary);
         mTvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
 
+        // Hide balance if the setting was chosen
+        if(mPrefs.getBoolean("hideTotalBalance", false)){
+            mClBalanceLayout.setVisibility(View.GONE);
+            mIvSwitchButton.setVisibility(View.GONE);
+            mIvLogo.setVisibility(View.VISIBLE);
+        }
+
+        // Action when clicked on the logo
+        mIvLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClBalanceLayout.setVisibility(View.VISIBLE);
+                mIvSwitchButton.setVisibility(View.VISIBLE);
+                mIvLogo.setVisibility(View.GONE);
+            }
+        });
+
         updateTotalBalanceDisplay();
 
         // Swap action when clicked on balance
-        ConstraintLayout clBalance = view.findViewById(R.id.BalanceLayout);
-        clBalance.setOnClickListener(new View.OnClickListener() {
+        mClBalanceLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MonetaryUtil.getInstance().switchCurrencies();
@@ -76,8 +98,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // Swap action when clicked swap icon next to balance
-        ImageView ivSwapImage = view.findViewById(R.id.switchButtonImage);
-        ivSwapImage.setOnClickListener(new View.OnClickListener() {
+        mIvSwitchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MonetaryUtil.getInstance().switchCurrencies();
