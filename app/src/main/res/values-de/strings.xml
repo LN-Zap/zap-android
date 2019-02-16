@@ -81,6 +81,12 @@
     <!-- The following text is a bit longer to achieve a more realistically looking lightning request qr-code -->
     <string name="demo_encodedLightningRequest">Statt einer echten Zahlungsanfrage wird dieser Text verwendet, um einen beispielhaften QR-Code zu generieren. Bitte richte eine Wallet ein, um echte Zahlungsanfragen zu generieren.</string>
     <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
+    <string name="demo_exampleMemo">Beispiel Verwendungszweck.</string>
+
+
+    <!-- //////////////// Receive //////////////////// -->
+
+    <string name="send_sendPayment">Zahlung senden</string>
 
 
     <!-- //////////////// Receive //////////////////// -->
@@ -131,7 +137,7 @@
     <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
     <string name="settings_preventScreenRecording">Bildschirmaufnahmen blockieren</string>
     <string name="settings_hideTotalBalance">Gesamtguthaben verstecken</string>
-    <string name="settings_hideTotalBalance_explanation">Wenn diese Funktion aktiv ist, kannst du auf das Zap logo auf dem Homescreen tippen, um dein Guthaben anzuzeigen.</string>
+    <string name="settings_hideTotalBalance_explanation">Wenn diese Funktion aktiv ist, kannst du auf das Zap Logo auf dem Homescreen tippen, um dein Guthaben anzuzeigen.</string>
     <string name="settings_resetSecurityWarnings">Sicherheitswarnungen zurücksetzen</string>
 
     <string name="settings_help">Du brauchst Hilfe?</string>

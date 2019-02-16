@@ -7,11 +7,11 @@
     tools:context=".SendActivity">
 
     <Button
-        android:id="@+id/sendGenerateRequest"
+        android:id="@+id/sendButton"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:background="@drawable/orange_gradient"
-        android:text="Send payment"
+        android:text="@string/send_sendPayment"
         android:textAllCaps="false"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

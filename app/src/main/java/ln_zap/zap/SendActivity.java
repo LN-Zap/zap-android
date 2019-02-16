@@ -80,7 +80,7 @@ public class SendActivity extends BaseAppCompatActivity {
                 }
 
                 // Action when clicked on "Send payment"
-                Button btnSend = findViewById(R.id.sendGenerateRequest);
+                Button btnSend = findViewById(R.id.sendButton);
                 btnSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -109,10 +109,10 @@ public class SendActivity extends BaseAppCompatActivity {
             // Wallet is not setup yet, show demo send screen
 
             mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(153267l));
-            mEtMemo.setText("This is a demo description and a random value.");
+            mEtMemo.setText(getResources().getString(R.string.demo_exampleMemo));
 
             // Action when clicked on send in demo mode
-            Button btnSend = findViewById(R.id.sendGenerateRequest);
+            Button btnSend = findViewById(R.id.sendButton);
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

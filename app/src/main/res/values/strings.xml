@@ -116,6 +116,12 @@
     <!-- The following text is a bit longer to achieve a more realistically looking lightning request qr-code -->
     <string name="demo_encodedLightningRequest">Instead of a real bitcoin lightning invoice this text is used to create an example qr code. Please setup a wallet for real bitcoin lightning invoices.</string>
     <string name="demo_setupWalletFirst">You first have to setup a wallet.</string>
+    <string name="demo_exampleMemo">This is an example Memo.</string>
+
+
+    <!-- //////////////// Receive //////////////////// -->
+
+    <string name="send_sendPayment">Send payment</string>
 
 
     <!-- //////////////// Receive //////////////////// -->
