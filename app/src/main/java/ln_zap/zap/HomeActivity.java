@@ -2,6 +2,7 @@ package ln_zap.zap;
 
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import ln_zap.zap.fragments.SettingsFragment;
 import ln_zap.zap.fragments.WalletFragment;
 import ln_zap.zap.connection.HttpClient;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.TimeOutUtil;
 import ln_zap.zap.util.ZapLog;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver {
@@ -134,6 +136,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onMoveToForeground() {
         ZapLog.debug(LOG_TAG,"Zap moved to foreground");
+
+        if(mPrefs.getBoolean("isWalletSetup", false) && TimeOutUtil.getInstance().isTimedOut()){
+            // Go to PIN entry screen
+            Intent intent = new Intent(this, PinEntryActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
         setupExchangeRateSchedule();
 
         // Restart lnd connection
@@ -146,6 +156,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onMoveToBackground() {
         ZapLog.debug(LOG_TAG,"Zap moved to background");
+
+        TimeOutUtil.getInstance().startTimer();
+
         if (mIsExchangeRateSchedulerRunning) {
             // Kill the scheduled exchange rate requests to go easy on the battery.
             mExchangeRateScheduler.shutdownNow();

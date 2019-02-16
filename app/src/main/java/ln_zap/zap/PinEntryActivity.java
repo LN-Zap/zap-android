@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import ln_zap.zap.baseClasses.BaseActivity;
 import ln_zap.zap.util.ScrambledNumpad;
+import ln_zap.zap.util.TimeOutUtil;
 
 
 public class PinEntryActivity extends BaseActivity {
@@ -34,6 +35,9 @@ public class PinEntryActivity extends BaseActivity {
     private ScrambledNumpad mNumpad;
     private StringBuilder mUserInput;
     private Vibrator mVibrator;
+    private int mNumFails = 0;
+    private int mMaxFails = 3;
+    private boolean mScramble;
 
 
     @Override
@@ -51,32 +55,32 @@ public class PinEntryActivity extends BaseActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mPinLength = prefs.getInt("pin_length",4);
 
-        boolean scramble = prefs.getBoolean("scramblePin",true);
+        mScramble = prefs.getBoolean("scramblePin",true);
 
 
 
         // Define buttons
 
         mBtnNumpad[0] = findViewById(R.id.pinNumpad1);
-        mBtnNumpad[0].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(0).getValue()) : "1");
+        mBtnNumpad[0].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(0).getValue()) : "1");
         mBtnNumpad[1] = findViewById(R.id.pinNumpad2);
-        mBtnNumpad[1].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(1).getValue()) : "2");
+        mBtnNumpad[1].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(1).getValue()) : "2");
         mBtnNumpad[2] = findViewById(R.id.pinNumpad3);
-        mBtnNumpad[2].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(2).getValue()) : "3");
+        mBtnNumpad[2].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(2).getValue()) : "3");
         mBtnNumpad[3] = findViewById(R.id.pinNumpad4);
-        mBtnNumpad[3].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(3).getValue()) : "4");
+        mBtnNumpad[3].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(3).getValue()) : "4");
         mBtnNumpad[4] = findViewById(R.id.pinNumpad5);
-        mBtnNumpad[4].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(4).getValue()) : "5");
+        mBtnNumpad[4].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(4).getValue()) : "5");
         mBtnNumpad[5] = findViewById(R.id.pinNumpad6);
-        mBtnNumpad[5].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(5).getValue()) : "6");
+        mBtnNumpad[5].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(5).getValue()) : "6");
         mBtnNumpad[6] = findViewById(R.id.pinNumpad7);
-        mBtnNumpad[6].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(6).getValue()) : "7");
+        mBtnNumpad[6].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(6).getValue()) : "7");
         mBtnNumpad[7] = findViewById(R.id.pinNumpad8);
-        mBtnNumpad[7].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(7).getValue()) : "8");
+        mBtnNumpad[7].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(7).getValue()) : "8");
         mBtnNumpad[8] = findViewById(R.id.pinNumpad9);
-        mBtnNumpad[8].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(8).getValue()) : "9");
+        mBtnNumpad[8].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(8).getValue()) : "9");
         mBtnNumpad[9] = findViewById(R.id.pinNumpad0);
-        mBtnNumpad[9].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(9).getValue()) : "0");
+        mBtnNumpad[9].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(9).getValue()) : "0");
 
         mBtnPinConfirm = findViewById(R.id.pinConfirm);
         mBtnPinBack = findViewById(R.id.pinBack);
@@ -180,24 +184,27 @@ public class PinEntryActivity extends BaseActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean correct = prefs.getString("pin_UNSECURE", "").equals(mUserInput.toString());
         if (correct) {
+            TimeOutUtil.getInstance().startTimer();
             Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
         else{
-            Toast.makeText(this, R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
+            mNumFails ++;
 
-            final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
-            View view = findViewById(R.id.pinInputLayout);
-            view.startAnimation(animShake);
+                Toast.makeText(this, R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
 
-            if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",true))    {
-                mVibrator.vibrate(200);
-            }
+                final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
+                View view = findViewById(R.id.pinInputLayout);
+                view.startAnimation(animShake);
 
-            // clear the user input
-            mUserInput.setLength(0);
-            displayUserInput();
+                if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
+                    mVibrator.vibrate(200);
+                }
+
+                // clear the user input
+                mUserInput.setLength(0);
+                displayUserInput();
         }
     }
 
