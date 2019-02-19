@@ -60,11 +60,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mFt.replace(R.id.mainContent, mCurrentFragment);
         mFt.commit();
 
-        // ToDo: set the network to testnet on app start. This has to be done on app setup later.
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putBoolean("mainnet",false);
-        editor.apply();
-
         // Setup fiat exchange rate schedule on first startup
         setupExchangeRateSchedule();
 

@@ -26,7 +26,7 @@ public class BlockExplorer {
     public static void showTransaction(String transactionID, Context ctx){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         String explorer = prefs.getString("blockExplorer", "BlockCypher");
-        boolean mainnet = prefs.getBoolean("mainnet", true);
+        boolean mainnet = !Wallet.getInstance().isTestnet();
         String networkID = "";
         String url = "";
         boolean supported = true;
@@ -74,7 +74,7 @@ public class BlockExplorer {
     public static void showAddress(String address, Context ctx){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         String explorer = prefs.getString("blockExplorer", "BlockCypher");
-        boolean mainnet = prefs.getBoolean("mainnet", true);
+        boolean mainnet = !Wallet.getInstance().isTestnet();
         String networkID = "";
         String url = "";
         boolean supported = true;

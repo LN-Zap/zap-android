@@ -82,6 +82,13 @@ public class MonetaryUtil {
         return mInstance;
     }
 
+    public Currency getFirstCurrency() {
+        return mFirstCurrency;
+    }
+
+    public Currency getSecondCurrency() {
+        return mSecondCurrency;
+    }
 
     /**
      * Get the amount and display unit of the primary currency as properly formatted string.

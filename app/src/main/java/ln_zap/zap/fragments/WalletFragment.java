@@ -30,7 +30,8 @@ import ln_zap.zap.util.ZapLog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, Wallet.BalanceListener {
+public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
+        Wallet.BalanceListener,Wallet.InfoListener {
 
     private static final String LOG_TAG = "Wallet Fragment";
 
@@ -39,12 +40,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private TextView mTvPrimaryBalanceUnit;
     private TextView mTvSecondaryBalance;
     private TextView mTvSecondaryBalanceUnit;
+    private TextView mTvBtcRate;
+    private TextView mTvMode;
     private ConstraintLayout mClBalanceLayout;
     private ImageView mIvLogo;
     private ImageView mIvSwitchButton;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
+    private boolean mInfoChangeListenerRegistered = false;
 
 
     public WalletFragment() {
@@ -68,6 +72,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvPrimaryBalanceUnit = view.findViewById(R.id.BalancePrimaryUnit);
         mTvSecondaryBalance = view.findViewById(R.id.BalanceSecondary);
         mTvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
+        mTvBtcRate = view.findViewById(R.id.btcRate);
+        mTvMode = view.findViewById(R.id.mode);
 
         // Hide balance if the setting was chosen
         if(mPrefs.getBoolean("hideTotalBalance", false)){
@@ -142,9 +148,17 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        // fetch the current balance from LND
+        // Show info about testnet if it is already known
+        if (Wallet.getInstance().isInfoFetched()){
+            onInfoUpdated();
+        }
+
+        // fetch the current balance and info from LND
         if (mPrefs.getBoolean("isWalletSetup", false)) {
             Wallet.getInstance().fetchBalanceFromLND();
+            Wallet.getInstance().fetchInfoFromLND();
+        } else {
+            mTvMode.setText("DEMO MODE");
         }
 
         return view;
@@ -172,6 +186,21 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
         mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
+        if (MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()){
+            // Hide btc rate info if both units are btc
+            mTvBtcRate.setVisibility(View.GONE);
+        } else {
+            String rate;
+            if (MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin()) {
+                rate = MonetaryUtil.getInstance().getSecondaryDisplayAmountAndUnit(100000000);
+            } else {
+                rate = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(100000000);
+            }
+
+            rate = "1 BTC ≈ " + rate;
+            mTvBtcRate.setText(rate);
+            mTvBtcRate.setVisibility(View.VISIBLE);
+        }
         ZapLog.debug(LOG_TAG,"Total balance display updated");
 
     }
@@ -192,6 +221,19 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     @Override
+    public void onInfoUpdated() {
+        if (Wallet.getInstance().isTestnet()) {
+            mTvMode.setText("TESTNET");
+            mTvMode.setVisibility(View.VISIBLE);
+        }
+
+        else {
+            mTvMode.setText("");
+            mTvMode.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -204,6 +246,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             Wallet.getInstance().registerBalanceListener(this);
             mBalanceChangeListenerRegistered = true;
         }
+        if(!mInfoChangeListenerRegistered) {
+            Wallet.getInstance().registerInfoListener(this);
+            mInfoChangeListenerRegistered = true;
+        }
     }
 
     @Override
@@ -212,6 +258,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         // Unregister listeners
         mPrefs.unregisterOnSharedPreferenceChangeListener(this);
         Wallet.getInstance().unregisterBalanceListener(this);
+        Wallet.getInstance().unregisterInfoListener(this);
     }
 
 }

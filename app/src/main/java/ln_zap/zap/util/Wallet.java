@@ -3,6 +3,8 @@ package ln_zap.zap.util;
 
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
+import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
+import com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse;
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
@@ -20,14 +22,20 @@ public class Wallet {
     private static final String LOG_TAG = "Wallet Util";
 
     private static Wallet mInstance = null;
-    public PayReq mPaymentRequest;
+    public PayReq mPaymentRequest = null;
     private long mOnChainBalanceTotal = 0;
     private long mOnChainBalanceConfirmed = 0;
     private long mOnChainBalanceUnconfirmed = 0;
     private long mChannelBalance = 0;
     private long mChannelBalancePending = 0;
 
-    private final Set<BalanceListener> listeners = new HashSet<>();
+    private boolean mInfoFetched = false;
+    private boolean mSyncedToChain = false;
+    private boolean mTestnet = false;
+    private String mLNDVersion = "not connected";
+
+    private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
+    private final Set<InfoListener> mInfoListeners = new HashSet<>();
 
 
 
@@ -40,6 +48,23 @@ public class Wallet {
         }
 
         return mInstance;
+    }
+
+    /**
+     * Use this to reset the wallet information when the connection type was changed.
+     */
+    public void reset(){
+        mPaymentRequest = null;
+        mOnChainBalanceTotal = 0;
+        mOnChainBalanceConfirmed = 0;
+        mOnChainBalanceUnconfirmed = 0;
+        mChannelBalance = 0;
+        mChannelBalancePending = 0;
+
+        mInfoFetched = false;
+        mSyncedToChain = false;
+        mTestnet = false;
+        mLNDVersion = "not connected";
     }
 
 
@@ -129,6 +154,53 @@ public class Wallet {
         },new ExecuteOnCaller());
     }
 
+    public void fetchInfoFromLND(){
+        // Retrieve info from LND with gRPC (async)
+
+        LightningGrpc.LightningFutureStub asyncInfoClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        GetInfoRequest asyncInfoRequest = GetInfoRequest.newBuilder().build();
+        final ListenableFuture<GetInfoResponse> infoFuture = asyncInfoClient.getInfo(asyncInfoRequest);
+
+        infoFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    GetInfoResponse infoResponse = infoFuture.get();
+                    ZapLog.debug(LOG_TAG,infoResponse.toString());
+                    // Save the received data.
+                    mSyncedToChain = infoResponse.getSyncedToChain();
+                    mTestnet = infoResponse.getTestnet();
+                    mLNDVersion = infoResponse.getVersion();
+                    mInfoFetched = true;
+                    broadcastInfoUpdate();
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG,"Info request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG,"Exception in info request task.");
+                }
+            }
+        },new ExecuteOnCaller());
+    }
+
+    public boolean isSyncedToChain() {
+        return mSyncedToChain;
+    }
+
+    public boolean isTestnet() {
+        return mTestnet;
+    }
+
+    public String getLNDVersion() {
+        return mLNDVersion;
+    }
+
+    public boolean isInfoFetched() {
+        return mInfoFetched;
+    }
+
     private void setOnChainBalance(long total, long confirmed, long unconfirmed){
         mOnChainBalanceTotal = total;
         mOnChainBalanceConfirmed = confirmed;
@@ -144,24 +216,45 @@ public class Wallet {
 
 
 
-    // Event handling to notify all registered Listeners to a balance update.
+    // Event handling to notify all registered listeners to a balance update.
 
     private void broadcastBalanceUpdate() {
-        for( BalanceListener listener : listeners ) {
+        for( BalanceListener listener : mBalanceListeners) {
             listener.onBalanceUpdated();
         }
     }
 
     public void registerBalanceListener(BalanceListener listener) {
-        listeners.add( listener );
+        mBalanceListeners.add(listener);
     }
 
     public void unregisterBalanceListener(BalanceListener listener) {
-        listeners.remove(listener);
+        mBalanceListeners.remove(listener);
     }
 
     public interface BalanceListener {
         void onBalanceUpdated();
+    }
+
+
+    // Event handling to notify all registeredlisteners to an info update.
+
+    private void broadcastInfoUpdate() {
+        for( InfoListener listener : mInfoListeners) {
+            listener.onInfoUpdated();
+        }
+    }
+
+    public void registerInfoListener(InfoListener listener) {
+        mInfoListeners.add(listener);
+    }
+
+    public void unregisterInfoListener(InfoListener listener) {
+        mInfoListeners.remove(listener);
+    }
+
+    public interface InfoListener {
+        void onInfoUpdated();
     }
 }
 

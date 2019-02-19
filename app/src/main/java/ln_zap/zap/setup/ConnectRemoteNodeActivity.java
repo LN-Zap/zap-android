@@ -25,6 +25,7 @@ import ln_zap.zap.HomeActivity;
 import ln_zap.zap.R;
 import ln_zap.zap.qrCodeScanner.BaseScannerActivity;
 import ln_zap.zap.util.PermissionsUtil;
+import ln_zap.zap.util.TimeOutUtil;
 import ln_zap.zap.util.ZapLog;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
@@ -155,6 +156,9 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         editor.putString("remoteMacaroon", macaroon);
         editor.putBoolean("isWalletSetup", true);
         editor.apply();
+
+        // Do not ask for pin again...
+        TimeOutUtil.getInstance().startTimer();
 
         // Show home screen, remove history stack
         Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);

@@ -31,6 +31,7 @@ import ln_zap.zap.util.AppUtil;
 
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.UserGuardian;
+import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
 
@@ -275,9 +276,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             public boolean onPreferenceClick(Preference preference) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.app_name)
-                        .setMessage("Version: " + BuildConfig.VERSION_NAME +
-                                "\nBuild: " + BuildConfig.VERSION_CODE +
-                                "\nLnd version: ")
+                        .setMessage("Version:  " + BuildConfig.VERSION_NAME +
+                                "\nBuild:  " + BuildConfig.VERSION_CODE +
+                                "\nLND version:  " + Wallet.getInstance().getLNDVersion().split(" commit")[0])
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) { }
