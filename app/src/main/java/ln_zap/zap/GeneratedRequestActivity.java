@@ -71,7 +71,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         if(mPrefs.getBoolean("isWalletSetup", false)) {
             if (mOnChain) {
 
-                // Generate data to encode
+                // Generate on-chain request data to encode
 
                 mDataToEncode = "bitcoin:" + mAddress;
                 mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
@@ -87,8 +87,8 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
                     if (!mMemo.isEmpty())
                         mDataToEncode = appendParameter(mDataToEncode, "message", mMemo);
             } else {
-                // Generate data to encode
-                mDataToEncode = mLnInvoice;
+                // Generate lightning request data to encode
+                mDataToEncode = "lightning:" + mLnInvoice;
             }
         } else {
             // Wallet is not setup yet, show demo info

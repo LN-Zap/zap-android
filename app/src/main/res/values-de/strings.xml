@@ -84,7 +84,7 @@
     <string name="demo_exampleMemo">Beispiel Verwendungszweck.</string>
 
 
-    <!-- //////////////// Receive //////////////////// -->
+    <!-- //////////////// Send //////////////////// -->
 
     <string name="send_sendPayment">Zahlung senden</string>
 
@@ -152,7 +152,10 @@
     <string name="error_blockExplorer_title">Block-Explorer</string>
     <!-- Parameters for the following string are:  %1$s: Name of selected block explorer, %2$s: "mainnet" or "testnet" -->
     <string name="error_blockExplorer_message">"Der momentan ausgewählte Block-Explorer (%1$s) unterstützt das %2$s nicht. \nBitte wähle in den Einstellungen einen anderen Block-Explorer um fortzufahren."</string>
-    <string name="error_invalidPaymentReqest">Ungültige Zahlungsinformationen.\n\nBitte verwende eine Bitcoin Adresse oder eine Lightning Zahlungsanfrage um eine Zahlung durchzuführen.</string>
+    <string name="error_notAPaymentRequest">Ungültige Zahlungsinformationen.\n\nBitte verwende eine Bitcoin Adresse oder eine Lightning Zahlungsanfrage um eine Zahlung durchzuführen.</string>
+    <string name="error_paymentRequestExpired">Die Zahlungsanfrage is abgelaufen.</string>
+    <string name="error_useTestnetRequest">Du bist mit dem TESTNET verbunden. Bitte verwende TESTNET Adressen oder Zahlungsanfragen.</string>
+    <string name="error_useMainnetRequest">Du bist mit dem MAINNET verbunden. Bitte verwende MAINNET Adressen oder Zahlungsanfragen.</string>
     <string name="error_invalidRemoteConnectionString">Ungültige Verbindungsinformationen.</string>
     <string name="error_cameraPermissionRequired">Um QR-Codes zu scannen musst du Zap die Erlaubnis geben, die Kamera zu verwenden.</string>
 
