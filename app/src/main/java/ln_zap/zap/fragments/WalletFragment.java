@@ -1,5 +1,8 @@
 package ln_zap.zap.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -11,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -100,6 +104,32 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onClick(View v) {
                 MonetaryUtil.getInstance().switchCurrencies();
                 updateTotalBalanceDisplay();
+            }
+        });
+
+        mClBalanceLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String balances = "On-Chain confirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().getBalances().onChainConfirmed())
+                        + "\nOn-Chain unconfirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().getBalances().onChainUnconfirmed())
+                        + "\nChannel balance: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().getBalances().channelBalance())
+                        + "\nChannel pending: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().getBalances().channelBalancePending());
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
+                        .setMessage(balances)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                            }
+                        });
+
+                Dialog dlg = adb.create();
+                // Apply FLAG_SECURE to dialog to prevent screen recording
+                if(mPrefs.getBoolean("preventScreenRecording",true)) {
+                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+                dlg.show();
+                return false;
             }
         });
 

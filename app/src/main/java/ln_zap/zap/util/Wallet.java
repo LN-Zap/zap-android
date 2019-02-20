@@ -116,7 +116,7 @@ public class Wallet {
                     // Update the on-chain balances of our wallet util to the fetched values
                     setOnChainBalance(balanceResponse.getTotalBalance(),
                             balanceResponse.getConfirmedBalance(),
-                            balanceResponse.getConfirmedBalance());
+                            balanceResponse.getUnconfirmedBalance());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG,"Wallet balance request interrupted.");
                 } catch (ExecutionException e) {
