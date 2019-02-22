@@ -38,7 +38,7 @@
     <!-- Style for the toolbar at the top of QR-Code scanner activity. -->
     <style name="TransparentToolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:windowActionBarOverlay">true</item>
-        <!-- Support Library compability -->
+        <!-- Support Library compatibility -->
         <item name="windowActionBarOverlay">true</item>
     </style>
 

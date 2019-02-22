@@ -67,6 +67,7 @@
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Send</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>
+    <string name="activity_manage_channels">Manage channels</string>
 
 
     <!-- //////////////// Bottom Navigation //////////////////// -->

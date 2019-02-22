@@ -24,6 +24,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import ln_zap.zap.BuildConfig;
+import ln_zap.zap.channelManagement.ManageChannelsActivity;
 import ln_zap.zap.setup.SetupActivity;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.R;
@@ -127,7 +128,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefManageChannels.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(getActivity(),R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ManageChannelsActivity.class);
+                startActivity(intent);
                 return true;
             }
         });

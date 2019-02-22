@@ -79,6 +79,11 @@
             android:name=".PinEntryActivity"
             android:label="PIN"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".channelManagement.ManageChannelsActivity"
+            android:label="@string/activity_manage_channels"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
     </application>
 
 </manifest>

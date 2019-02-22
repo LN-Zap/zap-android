@@ -32,6 +32,7 @@
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Senden</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
+    <string name="activity_manage_channels">Kanäle verwalten</string>
 
 
     <!-- //////////////// Bottom Navigation //////////////////// -->
