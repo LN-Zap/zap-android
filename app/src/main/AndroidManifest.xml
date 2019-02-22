@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ln_zap.zap">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".baseClasses.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,14 +15,75 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:name=".LandingActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- bitcoin and lightning uri scheme -->
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="bitcoin" />
+                <data android:scheme="lightning" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WelcomeNewUserActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".qrCodeScanner.QRCodeScannerActivity"
+            android:label="@string/activity_send"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppOverlayTheme" />
+        <activity
+            android:name=".GeneratedRequestActivity"
+            android:label="@string/activity_receive"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".ReceiveActivity"
+            android:label="@string/activity_receive"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".SendActivity"
+            android:label="@string/activity_send"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".setup.SetupActivity"
+            android:label="Setup"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".setup.ConnectRemoteNodeActivity"
+            android:label="@string/activity_connectRemoteNode"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppOverlayTheme" />
+        <activity
+            android:name=".PinEntryActivity"
+            android:label="PIN"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".channelManagement.ManageChannelsActivity"
+            android:label="@string/activity_manage_channels"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
     </application>
 
 </manifest>

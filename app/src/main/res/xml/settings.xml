@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:icon="@null"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/navigation_settings"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="topPrefScreen">
+
+    <PreferenceCategory android:title="@string/settings_category_prefs"
+        app:iconSpaceReserved="false"
+        >
+
+        <ListPreference
+            android:key="firstCurrency"
+            android:title="@string/settings_btcUnit"
+            android:summary="%s"
+            android:entries="@array/btcUnitSelectionList"
+            android:entryValues="@array/btcUnit"
+            android:defaultValue="sat"
+            android:dialogTitle="@string/settings_btcUnit"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="secondCurrency"
+            android:title="@string/settings_currency"
+            android:summary="%s"
+            android:entries="@array/currency"
+            android:entryValues="@array/currency"
+            android:dialogTitle="@string/settings_currency"
+            android:defaultValue="USD"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="blockExplorer"
+            android:title="@string/settings_blockExplorer"
+            android:summary="%s"
+            android:entries="@array/blockExplorer"
+            android:entryValues="@array/blockExplorer"
+            android:defaultValue="BlockCypher"
+            android:dialogTitle="@string/settings_blockExplorer"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="language"
+            android:title="@string/settings_language"
+            android:summary="%s"
+            android:entries="@array/settings_language_list"
+            android:entryValues="@array/languageValues"
+            android:defaultValue="system"
+            android:dialogTitle="@string/settings_language"
+            app:iconSpaceReserved="false"/>
+
+        <SwitchPreference
+            android:key="hapticPin"
+            android:title="@string/settings_hapticPin"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/navigation_wallet"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="manageLightningChannels"
+            android:title="@string/settings_manageChannels"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:key="resetConfig"
+            android:title="@string/settings_resetConnection"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:key="changePIN"
+            android:title="@string/settings_changePin"
+            app:iconSpaceReserved="false"/>
+
+        <!--
+        <ListPreference
+            android:key="btcAddressType"
+            android:title="@string/settings_addressType"
+            android:entries="@array/addressType"
+            android:entryValues="@array/addressType"
+            android:dialogTitle="@string/settings_addressType"
+            app:iconSpaceReserved="false"/>
+        -->
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_category_security"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:key="scramblePin"
+            android:title="@string/settings_scramblePin"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"/>
+
+        <SwitchPreference
+            android:key="preventScreenRecording"
+            android:title="@string/settings_preventScreenRecording"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"/>
+
+        <SwitchPreference
+            android:key="hideTotalBalance"
+            android:title="@string/settings_hideTotalBalance"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:key="resetGuardian"
+            android:title="@string/settings_resetSecurityWarnings"
+            app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="@string/settings_category_help"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="help"
+            android:title="@string/settings_help"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:key="reportIssue"
+            android:title="@string/settings_reportIssue"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:key="about"
+            android:title="@string/settings_about"
+            app:iconSpaceReserved="false"/>
+
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Development"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="resetAll"
+            android:title="reset all preferences"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

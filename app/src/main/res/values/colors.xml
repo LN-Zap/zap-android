@@ -10,4 +10,6 @@
     <color name="gray">#959595</color>
     <color name="invisibleGray">#555555</color>
     <color name="purple">#7600FC</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 </resources>
