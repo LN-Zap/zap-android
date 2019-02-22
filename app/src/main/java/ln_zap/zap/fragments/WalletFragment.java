@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +51,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ConstraintLayout mClBalanceLayout;
     private ImageView mIvLogo;
     private ImageView mIvSwitchButton;
+    private Animation mBalanceFadeOutAnimation;
+    private Animation mLogoFadeInAnimation;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -78,11 +82,32 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
         mTvBtcRate = view.findViewById(R.id.btcRate);
         mTvMode = view.findViewById(R.id.mode);
+        mBalanceFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.balance_fade_out);
+        mLogoFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logo_fade_in);
+
+        mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener(){
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                mClBalanceLayout.setVisibility(View.VISIBLE);
+                mIvSwitchButton.setVisibility(View.VISIBLE);
+                mIvLogo.setVisibility(View.INVISIBLE);
+            }
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                mClBalanceLayout.setVisibility(View.INVISIBLE);
+                mIvSwitchButton.setVisibility(View.INVISIBLE);
+                mIvLogo.setVisibility(View.VISIBLE);
+                mIvLogo.startAnimation(mLogoFadeInAnimation);
+            }
+        });
 
         // Hide balance if the setting was chosen
         if(mPrefs.getBoolean("hideTotalBalance", false)){
-            mClBalanceLayout.setVisibility(View.GONE);
-            mIvSwitchButton.setVisibility(View.GONE);
+            mClBalanceLayout.setVisibility(View.INVISIBLE);
+            mIvSwitchButton.setVisibility(View.INVISIBLE);
             mIvLogo.setVisibility(View.VISIBLE);
         }
 
@@ -90,20 +115,26 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mIvLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClBalanceLayout.setVisibility(View.VISIBLE);
-                mIvSwitchButton.setVisibility(View.VISIBLE);
-                mIvLogo.setVisibility(View.GONE);
+                mBalanceFadeOutAnimation.reset();
+                mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
+                mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
             }
         });
 
         updateTotalBalanceDisplay();
 
-        // Swap action when clicked on balance
+        // Swap action when clicked on balance or cancel the fade out in case balance is hidden
         mClBalanceLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MonetaryUtil.getInstance().switchCurrencies();
-                updateTotalBalanceDisplay();
+                if(!mPrefs.getBoolean("hideTotalBalance", false)){
+                    MonetaryUtil.getInstance().switchCurrencies();
+                    updateTotalBalanceDisplay();
+                } else{
+                    mBalanceFadeOutAnimation.reset();
+                    mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
+                    mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
+                }
             }
         });
 
@@ -139,6 +170,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onClick(View v) {
                 MonetaryUtil.getInstance().switchCurrencies();
                 updateTotalBalanceDisplay();
+
+                // also cancel fade out if hideTotalBalance option is active
+                if(mPrefs.getBoolean("hideTotalBalance", false)) {
+                    mBalanceFadeOutAnimation.reset();
+                    mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
+                    mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
+                }
             }
         });
 
