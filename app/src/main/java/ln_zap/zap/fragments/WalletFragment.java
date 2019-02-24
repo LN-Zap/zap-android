@@ -37,7 +37,7 @@ import ln_zap.zap.util.ZapLog;
  * A simple {@link Fragment} subclass.
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.BalanceListener,Wallet.InfoListener {
+        Wallet.BalanceListener,Wallet.InfoListener, MonetaryUtil.ExchangeRateListener {
 
     private static final String LOG_TAG = "Wallet Fragment";
 
@@ -57,6 +57,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
     private boolean mInfoChangeListenerRegistered = false;
+    private boolean mExchangeRateListenerRegistered = false;
 
 
     public WalletFragment() {
@@ -277,10 +278,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-        //update if currency has been switched or new exchange data arrived
-        if (key.equals("firstCurrencyIsPrimary") || key.equals("fiat_USD")){
+        // Update if primary currency has been switched from another activity
+        if (key.equals("firstCurrencyIsPrimary")){
             updateTotalBalanceDisplay();
         }
+    }
+
+    @Override
+    public void onExchangeRatesUpdated() {
+        updateTotalBalanceDisplay();
     }
 
     @Override
@@ -318,6 +324,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             Wallet.getInstance().registerInfoListener(this);
             mInfoChangeListenerRegistered = true;
         }
+        if(!mExchangeRateListenerRegistered) {
+            MonetaryUtil.getInstance().registerExchangeRateListener(this);
+            mExchangeRateListenerRegistered = true;
+        }
     }
 
     @Override
@@ -327,6 +337,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mPrefs.unregisterOnSharedPreferenceChangeListener(this);
         Wallet.getInstance().unregisterBalanceListener(this);
         Wallet.getInstance().unregisterInfoListener(this);
+        MonetaryUtil.getInstance().unregisterExchangeRateListener(this);
     }
 
 }

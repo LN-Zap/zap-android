@@ -237,7 +237,7 @@ public class Wallet {
     }
 
 
-    // Event handling to notify all registeredlisteners to an info update.
+    // Event handling to notify all registered listeners to an info update.
 
     private void broadcastInfoUpdate() {
         for( InfoListener listener : mInfoListeners) {
