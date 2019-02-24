@@ -44,6 +44,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
     private EditText mEtMemo;
     private SharedPreferences mPrefs;
     private boolean mOnChain = false;
+    private boolean mAmoutValid = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +122,13 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
+
+                // cut off last inputted character if not valid
+                if (!mAmoutValid){
+                    String input = arg0.toString();
+                    int length = arg0.length();
+                    arg0.delete(length - 1, length);
+                }
 
             }
 
@@ -141,6 +148,9 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
                 } else {
                     mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
                 }
+
+                // validate input
+                mAmoutValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
             }
         });
     }

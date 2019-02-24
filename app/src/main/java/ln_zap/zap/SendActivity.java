@@ -10,6 +10,8 @@ import ln_zap.zap.util.ZapLog;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +33,7 @@ public class SendActivity extends BaseAppCompatActivity {
     private EditText mEtAmount;
     private EditText mEtMemo;
     private SharedPreferences mPrefs;
+    private boolean mAmoutValid = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,28 @@ public class SendActivity extends BaseAppCompatActivity {
             });
         }
 
+        mEtAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // validate input
+                mAmoutValid = MonetaryUtil.getInstance().validateCurrencyInput(s.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // cut off last inputted character if not valid
+                if (!mAmoutValid){
+                    String input = s.toString();
+                    int length = s.length();
+                    s.delete(length - 1, length);
+                }
+            }
+        });
 
         // Action when clicked on receive unit
         LinearLayout llUnit = findViewById(R.id.sendUnitLayout);

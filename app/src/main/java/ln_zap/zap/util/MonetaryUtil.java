@@ -19,6 +19,8 @@ import java.text.NumberFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -404,6 +406,56 @@ public class MonetaryUtil {
     }
 
 
+    /**
+     * Checks if a numerical currency input is valid
+     * @param input
+     * @return boolean
+     */
+    public boolean validateCurrencyInput(String input, Currency currency){
+
+        int numberOfDecimals = 0;
+
+        // Bitcoin
+        if (currency.isBitcoin()){
+
+            String btcUnit = mPrefs.getString("firstCurrency","sat");
+            switch(btcUnit) {
+                case BTC_UNIT:
+                    numberOfDecimals = 8;
+                    break;
+                case MBTC_UNIT:
+                    numberOfDecimals = 5;
+                    break;
+                case BIT_UNIT:
+                    numberOfDecimals = 2;
+                    break;
+                case SATOSHI_UNIT:
+                    numberOfDecimals = 0;
+                    break;
+                default:
+                    numberOfDecimals = 0;
+            }
+        }
+
+        // Fiat
+        else{
+            numberOfDecimals = 2;
+        }
+
+        // Regex selecting any or no number of digits optionally followed by "." or "," that is followed by up to numberOfDecimals digits
+        String regexPattern = "[0-9]*([\\.,]{0,1}[0-9]{0," + numberOfDecimals + "})";
+
+        Pattern pattern = Pattern.compile(regexPattern);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    
     private void setFirstCurrency(String currencyCode, Double rate){
         mFirstCurrency = new Currency(currencyCode, rate);
     }
