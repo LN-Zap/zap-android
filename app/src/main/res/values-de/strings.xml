@@ -159,5 +159,7 @@
     <string name="error_useMainnetRequest">Du bist mit dem MAINNET verbunden. Bitte verwende MAINNET Adressen oder Zahlungsanfragen.</string>
     <string name="error_invalidRemoteConnectionString">Ungültige Verbindungsinformationen.</string>
     <string name="error_cameraPermissionRequired">Um QR-Codes zu scannen musst du Zap die Erlaubnis geben, die Kamera zu verwenden.</string>
+    <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
+    <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
 
 </resources>

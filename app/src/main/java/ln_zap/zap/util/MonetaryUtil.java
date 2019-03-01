@@ -17,10 +17,13 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Set;
+
 
 
 /**
@@ -40,6 +43,8 @@ public class MonetaryUtil {
     private SharedPreferences mPrefs;
     private Currency mFirstCurrency;
     private Currency mSecondCurrency;
+
+    private final Set<ExchangeRateListener> mExchangeRateListeners = new HashSet<>();
 
 
 
@@ -716,6 +721,22 @@ public class MonetaryUtil {
                 }
                 editor.apply();
 
+                // If this was the first time executed since installation, automatically set the
+                // currency to correct currency according to the systems locale. Only do this,
+                // if this currency is included in the fetched data.
+                if (!mPrefs.getBoolean("isDefaultCurrencySet", false)) {
+                    String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
+                    if (currencyCode != null) {
+                        if (!mPrefs.getString("fiat_" + currencyCode, "").equals("")) {
+                            loadSecondCurrencyFromPrefs(currencyCode);
+                            editor.putBoolean("isDefaultCurrencySet", true);
+                            editor.putString("secondCurrency", currencyCode);
+                            editor.apply();
+                        }
+                    }
+                }
+
+                broadcastExchangeRateUpdate();
             }
         }, new Response.ErrorListener() {
                 @Override
@@ -725,6 +746,27 @@ public class MonetaryUtil {
         });
 
         return rateRequest;
+    }
+
+
+    // Event handling to notify all registered listeners to an exchange rate change.
+
+    private void broadcastExchangeRateUpdate() {
+        for( ExchangeRateListener listener : mExchangeRateListeners) {
+            listener.onExchangeRatesUpdated();
+        }
+    }
+
+    public void registerExchangeRateListener(ExchangeRateListener listener) {
+        mExchangeRateListeners.add(listener);
+    }
+
+    public void unregisterExchangeRateListener(ExchangeRateListener listener) {
+        mExchangeRateListeners.remove(listener);
+    }
+
+    public interface ExchangeRateListener {
+        void onExchangeRatesUpdated();
     }
 
 }
