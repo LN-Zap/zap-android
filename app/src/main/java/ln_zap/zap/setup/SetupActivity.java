@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import ln_zap.zap.HomeActivity;
 import ln_zap.zap.R;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
+import ln_zap.zap.util.TimeOutUtil;
 
 
 public class SetupActivity extends BaseAppCompatActivity {
@@ -87,6 +88,11 @@ public class SetupActivity extends BaseAppCompatActivity {
         }
         if (mSetupMode == CHANGE_PIN){
             Toast.makeText(SetupActivity.this,"PIN changed!",Toast.LENGTH_SHORT).show();
+
+            // Reset the PIN timeout. We don't want to ask for PIN again...
+            TimeOutUtil.getInstance().startTimer();
+
+            // Go to home screen
             Intent intent = new Intent(SetupActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
