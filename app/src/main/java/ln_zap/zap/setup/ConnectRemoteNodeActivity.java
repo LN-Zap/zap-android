@@ -51,7 +51,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                verifyDesiredConnection(clipboard.getPrimaryClip().toString());
+                try {
+                    verifyDesiredConnection(clipboard.getPrimaryClip().toString());
+                } catch (NullPointerException e){
+                    showError(getResources().getString(R.string.error_emptyClipboardConnect),4000);
+                }
             }
         });
 
@@ -107,15 +111,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     private void verifyDesiredConnection(String connectString){
 
-        // Uncomment this to connect to dev node
-        //connectString = "lndconnect://157.230.97.66:10009?cert=MIIB6zCCAZGgAwIBAgIRALk4MnZPN5DY9Zblrfdg26swCgYIKoZIzj0EAwIwMTEfMB0GA1UEChMWbG5kIGF1dG9nZW5lcmF0ZWQgY2VydDEOMAwGA1UEAxMFWmFwMDEwHhcNMTkwMTAzMTEzNjUxWhcNMjAwMjI4MTEzNjUxWjAxMR8wHQYDVQQKExZsbmQgYXV0b2dlbmVyYXRlZCBjZXJ0MQ4wDAYDVQQDEwVaYXAwMTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABIM_5RHSfEsj3bDD56goP8Fm4u8Kdh7DPyRZ8-xVEAz7YwXLm2zLJLYxCSBeMPbRKs7F5CuRePKrgBFr6tDdPoGjgYkwgYYwDgYDVR0PAQH_BAQDAgKkMA8GA1UdEwEB_wQFMAMBAf8wYwYDVR0RBFwwWoIFWmFwMDGCCWxvY2FsaG9zdIIEdW5peIIKdW5peHBhY2tldIcEfwAAAYcQAAAAAAAAAAAAAAAAAAAAAYcEneZhQocEChMABYcQ_oAAAAAAAABsUEr__iJjMjAKBggqhkjOPQQDAgNIADBFAiBWsPEhXswlcj2aVd05v6wjf5jBe_OCyjZEu5PRbMSzuQIhAJpZXCg62zy6jt6S0LenZ7o-X3yiByRpoeFbVjfo5jQo&macaroon=AgEDbG5kAs8BAwoQ7a5y27C7Q4_FQFYaHP2uuBIBMBoWCgdhZGRyZXNzEgRyZWFkEgV3cml0ZRoTCgRpbmZvEgRyZWFkEgV3cml0ZRoXCghpbnZvaWNlcxIEcmVhZBIFd3JpdGUaFgoHbWVzc2FnZRIEcmVhZBIFd3JpdGUaFwoIb2ZmY2hhaW4SBHJlYWQSBXdyaXRlGhYKB29uY2hhaW4SBHJlYWQSBXdyaXRlGhQKBXBlZXJzEgRyZWFkEgV3cml0ZRoSCgZzaWduZXISCGdlbmVyYXRlAAAGIKUDrvb9TjXUpc3Dca_8zSZ6wcI4PWg7mqaPxh_oZZAX";
-
-
         URI connectURI = null;
             try {
                 connectURI = new URI(connectString);
                 if (!connectURI.getScheme().equals("lndconnect")) {
-                    connectionError();
+                    showError(getResources().getString(R.string.error_invalidRemoteConnectionString),4000);
                 } else {
 
                     String cert = null;
@@ -140,7 +140,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             catch (URISyntaxException e){
                 ZapLog.debug(LOG_TAG, "URI could not be parsed");
                 e.printStackTrace();
-                connectionError();
+                showError(getResources().getString(R.string.error_invalidRemoteConnectionString),4000);
             }
 
     }
@@ -166,11 +166,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         startActivity(intent);
     }
 
-    private void connectionError(){
-        Snackbar msg = Snackbar.make(findViewById(android.R.id.content).getRootView(),R.string.error_invalidRemoteConnectionString,Snackbar.LENGTH_LONG);
+    private void showError(String message, int duration){
+        Snackbar msg = Snackbar.make(findViewById(android.R.id.content).getRootView(),message,Snackbar.LENGTH_LONG);
         View sbView = msg.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
-        msg.setDuration(4000);
+        msg.setDuration(duration);
         msg.show();
     }
 
