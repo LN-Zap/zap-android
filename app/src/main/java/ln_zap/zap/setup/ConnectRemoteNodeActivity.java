@@ -167,7 +167,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     }
 
     private void showError(String message, int duration){
-        Snackbar msg = Snackbar.make(findViewById(android.R.id.content).getRootView(),message,Snackbar.LENGTH_LONG);
+        Snackbar msg = Snackbar.make(findViewById(R.id.content_frame),message,Snackbar.LENGTH_LONG);
         View sbView = msg.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
         msg.setDuration(duration);
