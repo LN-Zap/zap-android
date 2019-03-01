@@ -33,7 +33,7 @@ public class SendActivity extends BaseAppCompatActivity {
     private EditText mEtAmount;
     private EditText mEtMemo;
     private SharedPreferences mPrefs;
-    private boolean mAmoutValid = true;
+    private boolean mAmountValid = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,13 +133,13 @@ public class SendActivity extends BaseAppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // validate input
-                mAmoutValid = MonetaryUtil.getInstance().validateCurrencyInput(s.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(s.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 // cut off last inputted character if not valid
-                if (!mAmoutValid){
+                if (!mAmountValid){
                     String input = s.toString();
                     int length = s.length();
                     s.delete(length - 1, length);
@@ -152,8 +152,9 @@ public class SendActivity extends BaseAppCompatActivity {
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEtAmount.setText(MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString()));
+                String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
                 MonetaryUtil.getInstance().switchCurrencies();
+                mEtAmount.setText(convertedAmount);
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             }
         });
