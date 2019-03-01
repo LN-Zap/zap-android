@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ln_zap.zap.R;
+import ln_zap.zap.baseClasses.App;
 
 
 public class AppUtil {
@@ -20,6 +21,7 @@ public class AppUtil {
 
 	private static AppUtil mInstance = null;
 	private static Context mContext = null;
+	private JSONObject mFiatList = null;
 
 
 
@@ -61,7 +63,7 @@ public class AppUtil {
 	}
 
     /**
-     * This function will return a currency code (3 Letters) that corresponds to the locale of the
+     * This function will return a currency code (ISO 4217, 3 Letters) that corresponds to the locale of the
      * system.
      * @return
      */
@@ -85,6 +87,37 @@ public class AppUtil {
         return currencyCode;
     }
 
+
+	/**
+	 * This function will return the currency name from the given ISO4217 code (3 Letters).
+	 * @return the name of the currency. Returns null if the currency code was not found.
+	 */
+	public String getCurrencyNameFromCurrencyCode(String currencyCode){
+		String currencyName = null;
+
+		// Load the currency list from JSON file if it is not loaded yet.
+		if (mFiatList == null){
+			String currencies = loadJSONFromResource(R.raw.currency_list);
+			try {
+				mFiatList = new JSONObject(currencies);
+			} catch (JSONException e) {
+				ZapLog.debug(LOG_TAG, "Error reading currency_list JSON: " + e.getMessage());
+			}
+		}
+
+		// Now we should have the list as JSON object
+		if (mFiatList != null){
+			if (mFiatList.has(currencyCode)) {
+				try {
+					currencyName = mFiatList.getJSONObject(currencyCode).getString("CurrencyName");
+				} catch (JSONException e) {
+					ZapLog.debug(LOG_TAG, "Error reading currencyName JSON: " + e.getMessage());
+				}
+			}
+		}
+
+		return currencyName;
+	}
 
 	public void restartApp() {
 		ProcessPhoenix.triggerRebirth(mContext);

@@ -13,10 +13,10 @@
     </string-array>
 
     <string-array name="btcUnitSelectionList">
-        <item>Bitcoin (BTC)</item>
-        <item>Milli Bitcoin (mBTC)</item>
-        <item>Bits (bit)</item>
-        <item>Satoshis (sat)</item>
+        <item>(BTC) Bitcoin</item>
+        <item>(mBTC) Milli Bitcoin</item>
+        <item>(bit) Bits</item>
+        <item>(sat) Satoshis</item>
     </string-array>
 
     <string-array name="addressType">

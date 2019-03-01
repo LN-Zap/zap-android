@@ -714,6 +714,12 @@ public class MonetaryUtil {
                     }
                 }
                 try {
+                    // Switch the order. Blockchain.info has USD first, we want to have it alphabetically.
+                    // ToDO: this is a quick fix, it only works as long as there is no currency alphabetically after USD
+                    availableCurrenciesArray.remove(0);
+                    availableCurrenciesArray.put("USD");
+
+                    // Save the codes of all found currencies in a JSON object, which will then be stored on shared preferences
                     availableCurrencies.put("currencies", availableCurrenciesArray);
                     editor.putString("fiat_available", availableCurrencies.toString());
                 } catch(JSONException e) {

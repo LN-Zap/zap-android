@@ -318,18 +318,29 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
     }
 
     private void createSecondCurrencyList(){
+
         CharSequence[] btcEntryValues = getActivity().getResources().getStringArray(R.array.btcUnit);
-        CharSequence[] btcEntries = getActivity().getResources().getStringArray(R.array.btcUnitSelectionList);
+        CharSequence[] btcEntriesDisplayValue = getActivity().getResources().getStringArray(R.array.btcUnitSelectionList);
         CharSequence[] fiatEntryValues = null;
+        CharSequence[] fiatEntryDisplayValue = null;
 
         try {
             JSONObject jsonAvailableCurrencies = new JSONObject(mPrefs.getString("fiat_available", "[]"));
 
             JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
             fiatEntryValues = new CharSequence[currencies.length()];
+            fiatEntryDisplayValue = new CharSequence[currencies.length()];
             for (int i = 0, count = currencies.length(); i < count; i++) {
                 try {
                     fiatEntryValues[i] = currencies.getString(i);
+
+                    String currencyName = AppUtil.getInstance(getActivity()).getCurrencyNameFromCurrencyCode(currencies.getString(i));
+                    if (currencyName == null){
+                        currencyName = currencies.getString(i);
+                    } else {
+                        currencyName = "(" + currencies.getString(i) + ") " + currencyName;
+                    }
+                    fiatEntryDisplayValue[i] = currencyName;
                 } catch (JSONException e) {
                     ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
                 }
@@ -338,10 +349,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         } catch (JSONException e) {
             ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
         }
+
+        // Combine btc list with fiat list
         CharSequence[] entryValues = joinCharSequenceArrays(btcEntryValues,fiatEntryValues);
-        CharSequence[] entries = joinCharSequenceArrays(btcEntries,fiatEntryValues);
-        mListCurrency.setEntries(entries);
+        CharSequence[] entryDisplayValues = joinCharSequenceArrays(btcEntriesDisplayValue,fiatEntryDisplayValue);
+
+        // Use the arrays for the list preference
         mListCurrency.setEntryValues(entryValues);
+        mListCurrency.setEntries(entryDisplayValues);
+
     }
 
 

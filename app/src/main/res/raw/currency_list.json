@@ -199,6 +199,10 @@
     "CurrencyName": "Guyana Dollar",
     "CurrencyMinorUnit": 2
   },
+  "HKD": {
+    "CurrencyName": "Hong Kong Dollar",
+    "CurrencyMinorUnit": 2
+  },
   "HNL": {
     "CurrencyName": "Lempira",
     "CurrencyMinorUnit": 2
@@ -509,6 +513,10 @@
   },
   "TTD": {
     "CurrencyName": "Trinidad and Tobago Dollar",
+    "CurrencyMinorUnit": 2
+  },
+  "TWD": {
+    "CurrencyName": "Taiwan New Dollar",
     "CurrencyMinorUnit": 2
   },
   "TZS": {
