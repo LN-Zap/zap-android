@@ -44,6 +44,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
     private EditText mEtMemo;
     private SharedPreferences mPrefs;
     private boolean mOnChain = false;
+    private boolean mAmountValid = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +97,9 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEtAmount.setText(MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString()));
+                String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
                 MonetaryUtil.getInstance().switchCurrencies();
+                mEtAmount.setText(convertedAmount);
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             }
         });
@@ -121,7 +123,13 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
+
+                // cut off last inputted character if not valid
+                if (!mAmountValid){
+                    String input = arg0.toString();
+                    int length = arg0.length();
+                    arg0.delete(length - 1, length);
+                }
 
             }
 
@@ -141,6 +149,9 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
                 } else {
                     mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
                 }
+
+                // validate input
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
             }
         });
     }
