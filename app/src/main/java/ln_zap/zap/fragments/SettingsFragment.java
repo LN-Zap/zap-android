@@ -175,7 +175,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                 Toast.makeText(getActivity(),"preferences reset",Toast.LENGTH_SHORT).show();
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.clear();
-                editor.apply();
+                editor.commit();
                 AppUtil.getInstance(getActivity()).restartApp();
                 return true;
             }

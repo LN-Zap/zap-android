@@ -236,7 +236,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
         if(Wallet.getInstance().isTestnet()){
             // We are on testnet
-            if( address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.startsWith("tb1")){
+            if( address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.toLowerCase().startsWith("tb1")){
                 goToOnChainPaymentScreen();
             } else if(address.startsWith("1") || address.startsWith("3") || address.startsWith("bc1")){
                 // Show error. Please use a TESTNET invoice.
@@ -251,7 +251,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
             // We are on mainnet
             if( address.startsWith("1") || address.startsWith("3") || address.startsWith("bc1")){
                 goToOnChainPaymentScreen();
-            } else if(address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.startsWith("tb1")){
+            } else if(address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.toLowerCase().startsWith("tb1")){
                 showError(getResources().getString(R.string.error_useMainnetRequest),5000);
             }
             else {
