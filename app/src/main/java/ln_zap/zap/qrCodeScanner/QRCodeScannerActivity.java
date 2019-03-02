@@ -12,10 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
@@ -35,6 +37,10 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;
     private SharedPreferences mPrefs;
+
+    private String mOnChainAddress;
+    private long mOnChainInvoiceAmount;
+    private String mOnChainInvoiceMessage;
 
 
     @Override
@@ -125,6 +131,10 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
     private void validateInvoice(String invoice){
 
+        mOnChainAddress = null;
+        mOnChainInvoiceAmount = 0L;
+        mOnChainInvoiceMessage = null;
+
         if (mPrefs.getBoolean("isWalletSetup", false)) {
 
             // Our wallet is setup
@@ -164,10 +174,52 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
             else{
                 // We do not have a lightning invoice... check if it is a valid bitcoin address / invoice
 
-                // ToDo: Do all necessary checks
+                // Check if we have a bitcoin invoice with the "bitcoin:" uri scheme
+                if(invoice.substring(0,8).equalsIgnoreCase("bitcoin:")){
 
-                // Show error: Not an invoice
-                showError(getResources().getString(R.string.error_notAPaymentRequest),7000);
+                    // Add "//" to make it parsable for the java URI class if it is not present
+                    if(!invoice.substring(0,10).equalsIgnoreCase("bitcoin://")) {
+                        invoice = "bitcoin://" + invoice.substring(8);
+                    }
+
+                    URI bitcoinURI = null;
+                    try {
+                        bitcoinURI = new URI(invoice);
+
+                        mOnChainAddress = bitcoinURI.getHost();
+
+                        String message = null;
+
+                        // Fetch params
+                        if(bitcoinURI.getQuery() != null) {
+                            String[] valuePairs = bitcoinURI.getQuery().split("&");
+                            for (String pair : valuePairs) {
+                                String[] param = pair.split("=");
+                                if (param[0].equals("amount")) {
+                                    mOnChainInvoiceAmount = (long) (Double.parseDouble(param[1]) * 1e8);
+                                }
+                                if (param[0].equals("message")) {
+                                    mOnChainInvoiceMessage = param[1];
+                                }
+                            }
+                        }
+                        validateOnChainAddress(mOnChainAddress);
+
+                    }
+                    catch (URISyntaxException e){
+                        ZapLog.debug(LOG_TAG, "URI could not be parsed");
+                        e.printStackTrace();
+                        showError("Error reading the bitcoin invoice",4000);
+                    }
+
+                }
+                else{
+                    // We also don't have a bitcoin invoice, check if the is a valid bitcoin address
+                    mOnChainAddress = invoice;
+                    validateOnChainAddress(mOnChainAddress);
+                }
+
+
             }
 
 
@@ -178,6 +230,48 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         }
+    }
+
+    private void validateOnChainAddress(String address){
+
+        if(Wallet.getInstance().isTestnet()){
+            // We are on testnet
+            if( address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.startsWith("tb1")){
+                goToOnChainPaymentScreen();
+            } else if(address.startsWith("1") || address.startsWith("3") || address.startsWith("bc1")){
+                // Show error. Please use a TESTNET invoice.
+                showError(getResources().getString(R.string.error_useTestnetRequest),5000);
+            }
+            else {
+                // Show error. No valid payment info.
+                showError(getResources().getString(R.string.error_notAPaymentRequest),7000);
+            }
+        }
+        else {
+            // We are on mainnet
+            if( address.startsWith("1") || address.startsWith("3") || address.startsWith("bc1")){
+                goToOnChainPaymentScreen();
+            } else if(address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.startsWith("tb1")){
+                showError(getResources().getString(R.string.error_useMainnetRequest),5000);
+            }
+            else {
+                // Show error. No valid payment info.
+                showError(getResources().getString(R.string.error_notAPaymentRequest),7000);
+            }
+        }
+
+
+    }
+
+    private void goToOnChainPaymentScreen(){
+        // Decoded successfully, go to send page.
+        Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
+        intent.putExtra("onChain", true);
+        intent.putExtra("onChainAddress", mOnChainAddress);
+        intent.putExtra("amount", mOnChainInvoiceAmount);
+        intent.putExtra("message", mOnChainInvoiceMessage);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
 
     private void decodeLightningInvoice(String invoice){

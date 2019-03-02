@@ -122,19 +122,25 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                     String macaroon = null;
 
                     // Fetch params
-                    String[] valuePairs = connectURI.getQuery().split("&");
-                    for (String pair : valuePairs) {
-                        String[] param = pair.split("=");
-                        if (param[0].equals("cert")){
-                            cert = param[1];
+                    if(connectURI.getQuery() != null) {
+                        String[] valuePairs = connectURI.getQuery().split("&");
+                        for (String pair : valuePairs) {
+                            String[] param = pair.split("=");
+                            if (param[0].equals("cert")) {
+                                cert = param[1];
+                            }
+                            if (param[0].equals("macaroon")) {
+                                macaroon = param[1];
+                            }
                         }
-                        if (param[0].equals("macaroon")){
-                            macaroon = param[1];
-                        }
-                    }
 
-                    // Everything is ok, initiate connection
-                    connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
+                        // Everything is ok, initiate connection
+                        connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
+
+                    } else {
+                        ZapLog.debug(LOG_TAG, "Connect URI has not parameters");
+                        showError(getResources().getString(R.string.error_invalidRemoteConnectionString),4000);
+                    }
                 }
             }
             catch (URISyntaxException e){

@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.SendCoinsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
 import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
 
@@ -27,13 +29,15 @@ public class SendActivity extends BaseAppCompatActivity {
     private static final String LOG_TAG = "Send Activity";
 
     private boolean mOnChain;
-    // fixed amount is used as basis when switching display currency to avoid rounding issues
-    private long mFixedAmount;
+    // fixed amount (satoshis) is used as basis when switching display currency to avoid rounding issues
+    private long mFixedAmount = 0L;
     private TextView mTvUnit;
     private EditText mEtAmount;
     private EditText mEtMemo;
     private SharedPreferences mPrefs;
     private boolean mAmountValid = true;
+    private String mMemo;
+    private String mOnChainAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,9 @@ public class SendActivity extends BaseAppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             mOnChain = extras.getBoolean("onChain");
+            mOnChainAddress = extras.getString("onChainAddress");
+            mFixedAmount = extras.getLong("amount");
+            mMemo = extras.getString("message");
         }
 
         setContentView(R.layout.activity_send);
@@ -67,6 +74,58 @@ public class SendActivity extends BaseAppCompatActivity {
         if(mPrefs.getBoolean("isWalletSetup", false)) {
 
             if (mOnChain) {
+                if (mFixedAmount != 0L) {
+                    mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                    mEtAmount.clearFocus();
+                    mEtAmount.setFocusable(false);
+                }
+                if (mMemo != null){
+                    mEtMemo.setText(mMemo);
+                }
+
+                // Action when clicked on "Send payment"
+                Button btnSend = findViewById(R.id.sendButton);
+                btnSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        ZapLog.debug(LOG_TAG, "Trying to send on-chain payment...");
+                        // Send on-chain payment
+
+                        long sendAmount = 0L;
+                        if (mFixedAmount != 0L) {
+                            sendAmount = mFixedAmount;
+                        } else {
+                            sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                        }
+
+                        if (sendAmount != 0L) {
+
+                            SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
+                                    .setAddr(mOnChainAddress)
+                                    .setAmount(sendAmount)
+                                    .setSatPerByte(5)
+                                    .build();
+                            try {
+                                SendCoinsResponse sendResponse = LndConnection.getInstance().getBlockingClient().sendCoins(sendRequest);
+                                ZapLog.debug(LOG_TAG, sendResponse.toString());
+                                Toast.makeText(SendActivity.this, "Send successful!", Toast.LENGTH_SHORT).show();
+                            } catch (StatusRuntimeException e) {
+                                // possible error messages: checksum mismatch, decoded address is of unknown format
+                                Toast.makeText(SendActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                ZapLog.debug(LOG_TAG, "Error during payment!");
+                                ZapLog.debug(LOG_TAG, e.getMessage());
+                            }
+
+                        }
+                        else{
+                            // Send amount == 0
+                            Toast.makeText(SendActivity.this, "Send amount is to small.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
             } else {
 
                 if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() != 0) {
@@ -78,8 +137,6 @@ public class SendActivity extends BaseAppCompatActivity {
 
                 if (Wallet.getInstance().mPaymentRequest.getDescription() != null) {
                     mEtMemo.setText(Wallet.getInstance().mPaymentRequest.getDescription());
-                    mEtMemo.clearFocus();
-                    mEtMemo.setFocusable(false);
                 }
 
                 // Action when clicked on "Send payment"
@@ -88,7 +145,7 @@ public class SendActivity extends BaseAppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        ZapLog.debug(LOG_TAG, "send it");
+                        ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
                         // send lightning payment
 
                         SendRequest sendRequest = SendRequest.newBuilder()
@@ -152,10 +209,15 @@ public class SendActivity extends BaseAppCompatActivity {
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
-                MonetaryUtil.getInstance().switchCurrencies();
-                mEtAmount.setText(convertedAmount);
-                mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+                if (mFixedAmount == 0L){
+                    String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
+                    MonetaryUtil.getInstance().switchCurrencies();
+                    mEtAmount.setText(convertedAmount);
+                    mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+                } else {
+                    MonetaryUtil.getInstance().switchCurrencies();
+                    mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                }
             }
         });
 
