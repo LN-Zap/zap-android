@@ -25,6 +25,8 @@ import com.github.lightningnetwork.lnd.lnrpc.SendCoinsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
 import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
 
+import java.util.concurrent.TimeUnit;
+
 public class SendActivity extends BaseAppCompatActivity {
     private static final String LOG_TAG = "Send Activity";
 
@@ -107,7 +109,10 @@ public class SendActivity extends BaseAppCompatActivity {
                                     .setSatPerByte(5)
                                     .build();
                             try {
-                                SendCoinsResponse sendResponse = LndConnection.getInstance().getBlockingClient().sendCoins(sendRequest);
+                                SendCoinsResponse sendResponse = LndConnection.getInstance()
+                                        .getBlockingClient()
+                                        .withDeadlineAfter(5, TimeUnit.SECONDS)
+                                        .sendCoins(sendRequest);
                                 ZapLog.debug(LOG_TAG, sendResponse.toString());
                                 Toast.makeText(SendActivity.this, "Send successful!", Toast.LENGTH_SHORT).show();
                             } catch (StatusRuntimeException e) {
@@ -154,7 +159,10 @@ public class SendActivity extends BaseAppCompatActivity {
                                 .setAmt(Wallet.getInstance().mPaymentRequest.getNumSatoshis())
                                 .build();
                         try {
-                            SendResponse sendResponse = LndConnection.getInstance().getBlockingClient().sendPaymentSync(sendRequest);
+                            SendResponse sendResponse = LndConnection.getInstance()
+                                    .getBlockingClient()
+                                    .withDeadlineAfter(5, TimeUnit.SECONDS)
+                                    .sendPaymentSync(sendRequest);
                             ZapLog.debug(LOG_TAG, sendResponse.toString());
                             Toast.makeText(SendActivity.this, sendResponse.getPaymentError(), Toast.LENGTH_SHORT).show();
                         } catch (StatusRuntimeException e) {
