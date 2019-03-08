@@ -3,6 +3,7 @@ package ln_zap.zap;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -24,12 +25,14 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.connection.LndConnection;
+import ln_zap.zap.connection.NetworkChangeReceiver;
 import ln_zap.zap.fragments.HistoryFragment;
 import ln_zap.zap.fragments.SettingsFragment;
 import ln_zap.zap.fragments.WalletFragment;
 import ln_zap.zap.connection.HttpClient;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.TimeOutUtil;
+import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver {
@@ -37,7 +40,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private static final String LOG_TAG = "Main Activity";
 
     private ScheduledExecutorService mExchangeRateScheduler;
+    private ScheduledExecutorService mLNDInfoScheduler;
+    private NetworkChangeReceiver mNetworkChangeReceiver;
     private boolean mIsExchangeRateSchedulerRunning = false;
+    private boolean mIsLNDInfoSchedulerRunning = false;
+    private boolean mIsNetworkChangeReceiverRunning = false;
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
     private SharedPreferences mPrefs;
@@ -60,8 +67,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mFt.replace(R.id.mainContent, mCurrentFragment);
         mFt.commit();
 
-        // Setup fiat exchange rate schedule on first startup
-        setupExchangeRateSchedule();
 
         // Setup Listener
         BottomNavigationView navigation = findViewById(R.id.mainNavigation);
@@ -105,9 +110,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     };
 
 
+    // This schedule keeps us up to date on exchange rates
     private void setupExchangeRateSchedule() {
 
         if (!mIsExchangeRateSchedulerRunning) {
+            mIsExchangeRateSchedulerRunning = true;
             final JsonObjectRequest request = MonetaryUtil.getInstance().getExchangeRates();
 
             mExchangeRateScheduler =
@@ -121,7 +128,39 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                             HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
                         }
                     }, 0, 3, TimeUnit.MINUTES);
-            mIsExchangeRateSchedulerRunning = true;
+        }
+
+    }
+
+
+    // This scheduled LND info request lets us know
+    // if we have a working connection to LND and if we are still in sync with the network
+    private void setupLNDInfoSchedule() {
+
+        if (!mIsLNDInfoSchedulerRunning) {
+            mIsLNDInfoSchedulerRunning = true;
+            mLNDInfoScheduler =
+                    Executors.newSingleThreadScheduledExecutor();
+
+            mLNDInfoScheduler.scheduleAtFixedRate
+                    (new Runnable() {
+                        public void run() {
+                            ZapLog.debug(LOG_TAG, "LND info check initiated");
+                            Wallet.getInstance().fetchInfoFromLND();
+                        }
+                    }, 0, 30, TimeUnit.SECONDS);
+        }
+
+    }
+
+    // Register the network status changed listener to handle network changes
+    private void registerNetworkStatusChangeListener() {
+
+        if (!mIsNetworkChangeReceiverRunning) {
+            mIsNetworkChangeReceiverRunning = true;
+            mNetworkChangeReceiver = new NetworkChangeReceiver();
+            IntentFilter networkStatusIntentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+            registerReceiver(mNetworkChangeReceiver, networkStatusIntentFilter);
         }
 
     }
@@ -140,10 +179,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
 
         setupExchangeRateSchedule();
+        registerNetworkStatusChangeListener();
 
         // Restart lnd connection
         if (mPrefs.getBoolean("isWalletSetup", false)) {
             LndConnection.getInstance().restartBackgroundTasks();
+            setupLNDInfoSchedule();
         }
     }
 
@@ -158,6 +199,18 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             // Kill the scheduled exchange rate requests to go easy on the battery.
             mExchangeRateScheduler.shutdownNow();
             mIsExchangeRateSchedulerRunning = false;
+        }
+
+        if (mIsLNDInfoSchedulerRunning) {
+            // Kill the LND info requests to go easy on the battery.
+            mLNDInfoScheduler.shutdownNow();
+            mIsLNDInfoSchedulerRunning = false;
+        }
+
+        if (mIsNetworkChangeReceiverRunning){
+            // Kill the Network state change listener to go easy on the battery.
+            unregisterReceiver(mNetworkChangeReceiver);
+            mIsNetworkChangeReceiverRunning = false;
         }
 
         // Kill lnd connection

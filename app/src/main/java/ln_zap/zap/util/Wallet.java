@@ -5,30 +5,46 @@ import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse;
+import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
+import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
+import com.github.lightningnetwork.lnd.lnrpc.Transaction;
+import com.github.lightningnetwork.lnd.lnrpc.TransactionDetails;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import ln_zap.zap.connection.LndConnection;
+import ln_zap.zap.historyList.HistoryItemAdapter;
+import ln_zap.zap.historyList.TransactionItem;
 
 public class Wallet {
 
     private static final String LOG_TAG = "Wallet Util";
 
     private static Wallet mInstance = null;
+
     public PayReq mPaymentRequest = null;
+    public List<Transaction> mOnChainTransactionList;
+    public List<Invoice> mInvoiceList;
+
     private long mOnChainBalanceTotal = 0;
     private long mOnChainBalanceConfirmed = 0;
     private long mOnChainBalanceUnconfirmed = 0;
     private long mChannelBalance = 0;
     private long mChannelBalancePending = 0;
 
+    private boolean mConnectedToLND = false;
     private boolean mInfoFetched = false;
     private boolean mSyncedToChain = false;
     private boolean mTestnet = false;
@@ -154,6 +170,11 @@ public class Wallet {
         },new ExecuteOnCaller());
     }
 
+
+    /**
+     * This will fetch the current info from LND.
+     * All Listeners registered to InfoListener will be informed about any changes.
+     */
     public void fetchInfoFromLND(){
         // Retrieve info from LND with gRPC (async)
 
@@ -175,14 +196,85 @@ public class Wallet {
                     mTestnet = infoResponse.getTestnet();
                     mLNDVersion = infoResponse.getVersion();
                     mInfoFetched = true;
-                    broadcastInfoUpdate();
+                    mConnectedToLND = true;
+                    broadcastInfoUpdate(true);
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG,"Info request interrupted.");
                 } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG,"Exception in info request task.");
+                    if(e.getMessage().toLowerCase().contains("unavailable")){
+                        mConnectedToLND = false;
+                        broadcastInfoUpdate(false);
+                    }
+                    ZapLog.debug(LOG_TAG,e.getMessage());
                 }
             }
         },new ExecuteOnCaller());
+    }
+
+
+    /**
+     * This will fetch all On-Chain transactions involved with the current wallet from LND.
+     */
+    public void fetchTransactionsFromLND(){
+        // fetch on-chain transactions
+        LightningGrpc.LightningFutureStub asyncTransactionsClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        GetTransactionsRequest asyncTransactionRequest = GetTransactionsRequest.newBuilder().build();
+        final ListenableFuture<TransactionDetails> transactionFuture = asyncTransactionsClient.getTransactions(asyncTransactionRequest);
+
+        transactionFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    TransactionDetails transactionResponse = transactionFuture.get();
+
+                    mOnChainTransactionList = Lists.reverse(transactionResponse.getTransactionsList());
+
+                    ZapLog.debug(LOG_TAG, transactionResponse.toString());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "Transaction request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in transaction request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
+
+    /**
+     * This will fetch lightning invoices from LND.
+     */
+    public void fetchInvoicesFromLND(){
+        // Fetch lightning invoices
+        LightningGrpc.LightningFutureStub asyncInvoiceClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        ListInvoiceRequest asyncInvoiceRequest = ListInvoiceRequest.newBuilder()
+                //.setReversed(true)
+                //.setPendingOnly(true)
+                //.setNumMaxInvoices(3)
+                .build();
+        final ListenableFuture<ListInvoiceResponse> invoiceFuture = asyncInvoiceClient.listInvoices(asyncInvoiceRequest);
+
+        invoiceFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ListInvoiceResponse invoiceResponse = invoiceFuture.get();
+
+                    mInvoiceList = invoiceResponse.getInvoicesList();
+
+                    ZapLog.debug(LOG_TAG, String.valueOf(invoiceResponse.toString()));
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "Invoice request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in invoice request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
     }
 
     public boolean isSyncedToChain() {
@@ -199,6 +291,10 @@ public class Wallet {
 
     public boolean isInfoFetched() {
         return mInfoFetched;
+    }
+
+    public boolean isConnectedToLND() {
+        return mConnectedToLND;
     }
 
     private void setOnChainBalance(long total, long confirmed, long unconfirmed){
@@ -239,9 +335,9 @@ public class Wallet {
 
     // Event handling to notify all registered listeners to an info update.
 
-    private void broadcastInfoUpdate() {
+    private void broadcastInfoUpdate(boolean connected) {
         for( InfoListener listener : mInfoListeners) {
-            listener.onInfoUpdated();
+            listener.onInfoUpdated(connected);
         }
     }
 
@@ -254,7 +350,7 @@ public class Wallet {
     }
 
     public interface InfoListener {
-        void onInfoUpdated();
+        void onInfoUpdated(boolean connected);
     }
 }
 

@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
@@ -282,7 +283,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
                 .build();
 
         try {
-            Wallet.getInstance().mPaymentRequest = LndConnection.getInstance().getBlockingClient().decodePayReq(decodePaymentRequest);
+            Wallet.getInstance().mPaymentRequest = LndConnection.getInstance().getBlockingClient().withDeadlineAfter(3, TimeUnit.SECONDS).decodePayReq(decodePaymentRequest);
             ZapLog.debug(LOG_TAG, Wallet.getInstance().mPaymentRequest.toString());
 
             if (Wallet.getInstance().mPaymentRequest.getTimestamp() + Wallet.getInstance().mPaymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {

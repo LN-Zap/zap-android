@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -217,15 +218,16 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        // Show info about testnet if it is already known
-        if (Wallet.getInstance().isInfoFetched()){
-            onInfoUpdated();
-        }
+        // Show info about mode (offline, testnet or mainnet) if it is already known
+        onInfoUpdated(Wallet.getInstance().isInfoFetched());
+
 
         // fetch the current balance and info from LND
         if (mPrefs.getBoolean("isWalletSetup", false)) {
             Wallet.getInstance().fetchBalanceFromLND();
-            Wallet.getInstance().fetchInfoFromLND();
+
+            // ToDO: The history does not have to be fetched every time. Remove this later
+            Wallet.getInstance().fetchTransactionsFromLND();
         } else {
             mTvMode.setText("DEMO MODE");
         }
@@ -295,15 +297,21 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     @Override
-    public void onInfoUpdated() {
-        if (Wallet.getInstance().isTestnet()) {
-            mTvMode.setText("TESTNET");
-            mTvMode.setVisibility(View.VISIBLE);
+    public void onInfoUpdated(boolean connected) {
+        if(connected) {
+            if (Wallet.getInstance().isTestnet()) {
+                mTvMode.setText("TESTNET");
+                mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superGreen));
+                mTvMode.setVisibility(View.VISIBLE);
+            } else {
+                mTvMode.setText("");
+                mTvMode.setVisibility(View.GONE);
+            }
         }
-
         else {
-            mTvMode.setText("");
-            mTvMode.setVisibility(View.GONE);
+            mTvMode.setText("OFFLINE");
+            mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superRed));
+            mTvMode.setVisibility(View.VISIBLE);
         }
     }
 
