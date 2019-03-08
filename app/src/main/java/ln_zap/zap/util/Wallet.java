@@ -211,6 +211,11 @@ public class Wallet {
         },new ExecuteOnCaller());
     }
 
+    public void simulateFetchInfoForDemo(boolean connected){
+        mConnectedToLND = connected;
+        broadcastInfoUpdate(connected);
+    }
+
 
     /**
      * This will fetch all On-Chain transactions involved with the current wallet from LND.

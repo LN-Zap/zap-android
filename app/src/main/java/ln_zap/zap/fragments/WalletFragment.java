@@ -299,13 +299,20 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onInfoUpdated(boolean connected) {
         if(connected) {
-            if (Wallet.getInstance().isTestnet()) {
-                mTvMode.setText("TESTNET");
+            if((mPrefs.getBoolean("isWalletSetup", false))){
+                if (Wallet.getInstance().isTestnet()) {
+                    mTvMode.setText("TESTNET");
+                    mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superGreen));
+                    mTvMode.setVisibility(View.VISIBLE);
+                } else {
+                    mTvMode.setText("");
+                    mTvMode.setVisibility(View.GONE);
+                }
+            } else {
+                // Wallet is not setup
+                mTvMode.setText("DEMOMODE");
                 mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superGreen));
                 mTvMode.setVisibility(View.VISIBLE);
-            } else {
-                mTvMode.setText("");
-                mTvMode.setVisibility(View.GONE);
             }
         }
         else {
