@@ -8,6 +8,7 @@
         <item name="android:colorBackground">@color/deepSeaBlue</item>
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
         <item name="android:textColorSecondary">@color/gray</item>
+        <item name="android:navigationBarColor">@color/black</item>
     </style>
 
     <!-- Base application theme with action bar. -->
@@ -17,6 +18,7 @@
         <item name="colorAccent">@color/lightningOrange</item>
         <item name="android:colorBackground">@color/deepSeaBlue</item>
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+        <item name="android:navigationBarColor">@color/black</item>
     </style>
 
 
@@ -32,6 +34,7 @@
         <item name="android:colorBackground">@color/deepSeaBlue</item>
         <item name="android:textColorPrimary">#212121</item>
         <item name="android:textColorSecondary">#727272</item>
+        <item name="android:navigationBarColor">@color/black</item>
     </style>
 
 
