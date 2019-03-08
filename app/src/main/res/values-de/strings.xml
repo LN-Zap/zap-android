@@ -26,6 +26,8 @@
     <string name="next">Weiter</string>
     <string name="coming_soon">Bald verfügbar...</string>
     <string name="needHelp">Du brauchst Hilfe?</string>
+    <string name="offline">offline</string>
+    <string name="demo_mode">Demo Modus</string>
 
     <!-- //////////////// Activity names //////////////////// -->
 

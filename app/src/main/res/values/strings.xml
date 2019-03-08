@@ -60,6 +60,8 @@
     <string name="next">Next</string>
     <string name="coming_soon">Coming soon...</string>
     <string name="needHelp">Need help?</string>
+    <string name="offline">offline</string>
+    <string name="demo_mode">demo mode</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->

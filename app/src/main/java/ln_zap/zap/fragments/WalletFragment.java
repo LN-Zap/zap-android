@@ -310,13 +310,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 }
             } else {
                 // Wallet is not setup
-                mTvMode.setText("DEMOMODE");
+                mTvMode.setText(getActivity().getResources().getString(R.string.demo_mode).toUpperCase());
                 mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superGreen));
                 mTvMode.setVisibility(View.VISIBLE);
             }
         }
         else {
-            mTvMode.setText("OFFLINE");
+            mTvMode.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
             mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superRed));
             mTvMode.setVisibility(View.VISIBLE);
         }
