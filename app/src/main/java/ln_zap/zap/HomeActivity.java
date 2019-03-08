@@ -192,7 +192,16 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onMoveToBackground() {
         ZapLog.debug(LOG_TAG,"Zap moved to background");
+        stopListenersAndSchedules();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopListenersAndSchedules();
+    }
+
+    private void stopListenersAndSchedules(){
         TimeOutUtil.getInstance().startTimer();
 
         if (mIsExchangeRateSchedulerRunning) {
@@ -218,6 +227,4 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             LndConnection.getInstance().stopBackgroundTasks();
         }
     }
-
-
 }
