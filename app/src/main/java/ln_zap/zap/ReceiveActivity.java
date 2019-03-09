@@ -163,13 +163,20 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
 
                 // generate onChain request
 
+                int addressType;
+                if (mPrefs.getString("btcAddressType", "p2psh").equals("bech32")){
+                    addressType = 0;
+                } else {
+                    addressType = 1;
+                }
+
                 // non blocking stub
                 LightningGrpc.LightningFutureStub asyncAddressClient = LightningGrpc
                         .newFutureStub(LndConnection.getInstance().getSecureChannel())
                         .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
                 NewAddressRequest asyncNewAddressRequest = NewAddressRequest.newBuilder()
-                        .setTypeValue(0) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
+                        .setTypeValue(addressType) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
                         .build();
 
                 final ListenableFuture<NewAddressResponse> addressFuture = asyncAddressClient.newAddress(asyncNewAddressRequest);

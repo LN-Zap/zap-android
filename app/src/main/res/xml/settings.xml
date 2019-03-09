@@ -29,15 +29,6 @@
             android:defaultValue="USD"
             app:iconSpaceReserved="false"/>
 
-        <ListPreference
-            android:key="blockExplorer"
-            android:title="@string/settings_blockExplorer"
-            android:summary="%s"
-            android:entries="@array/blockExplorer"
-            android:entryValues="@array/blockExplorer"
-            android:defaultValue="BlockCypher"
-            android:dialogTitle="@string/settings_blockExplorer"
-            app:iconSpaceReserved="false"/>
 
         <ListPreference
             android:key="language"
@@ -57,13 +48,19 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/navigation_wallet"
-        app:iconSpaceReserved="false">
 
+    <PreferenceCategory android:title="@string/lightning"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="manageLightningChannels"
             android:title="@string/settings_manageChannels"
             app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/navigation_wallet"
+        app:iconSpaceReserved="false">
 
         <Preference
             android:key="resetConfig"
@@ -75,15 +72,6 @@
             android:title="@string/settings_changePin"
             app:iconSpaceReserved="false"/>
 
-        <!--
-        <ListPreference
-            android:key="btcAddressType"
-            android:title="@string/settings_addressType"
-            android:entries="@array/addressType"
-            android:entryValues="@array/addressType"
-            android:dialogTitle="@string/settings_addressType"
-            app:iconSpaceReserved="false"/>
-        -->
 
     </PreferenceCategory>
 
@@ -136,9 +124,18 @@
             android:title="@string/settings_about"
             app:iconSpaceReserved="false"/>
 
-
-
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_category_advanced"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="goToAdvanced"
+            android:title="@string/settings_advanced_settings"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
 
     <PreferenceCategory
         android:title="Development"
@@ -146,7 +143,7 @@
 
         <Preference
             android:key="resetAll"
-            android:title="reset all preferences"
+            android:title="Reset APP"
             app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 

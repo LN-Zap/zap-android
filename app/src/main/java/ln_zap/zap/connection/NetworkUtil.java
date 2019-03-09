@@ -38,4 +38,9 @@ public class NetworkUtil {
         }
         return status;
     }
+
+    public static boolean isConnectedToInternet(Context context){
+        int status = getConnectivityStatusString(context);
+        return status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED;
+    }
 }

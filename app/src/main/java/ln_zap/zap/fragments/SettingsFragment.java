@@ -23,6 +23,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
+import ln_zap.zap.AdvancedSettingsActivity;
 import ln_zap.zap.BuildConfig;
 import ln_zap.zap.channelManagement.ManageChannelsActivity;
 import ln_zap.zap.setup.SetupActivity;
@@ -177,6 +178,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                 editor.clear();
                 editor.commit();
                 AppUtil.getInstance(getActivity()).restartApp();
+                return true;
+            }
+        });
+
+        // Action when clicked on "advanced settings"
+        final Preference prefAdvanced = findPreference("goToAdvanced");
+        prefAdvanced.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), AdvancedSettingsActivity.class);
+                startActivity(intent);
                 return true;
             }
         });

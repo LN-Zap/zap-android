@@ -26,6 +26,7 @@ import androidx.preference.PreferenceManager;
 
 import ln_zap.zap.R;
 import ln_zap.zap.ReceiveActivity;
+import ln_zap.zap.connection.NetworkUtil;
 import ln_zap.zap.setup.SetupActivity;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.util.Balances;
@@ -218,18 +219,20 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        // Show info about mode (offline, testnet or mainnet) if it is already known
-        onInfoUpdated(Wallet.getInstance().isInfoFetched());
+
 
 
         // fetch the current balance and info from LND
         if (mPrefs.getBoolean("isWalletSetup", false)) {
+
+            // Show info about mode (offline, testnet or mainnet) if it is already known
+            onInfoUpdated(Wallet.getInstance().isInfoFetched());
+
+
             Wallet.getInstance().fetchBalanceFromLND();
 
             // ToDO: The history does not have to be fetched every time. Remove this later
             Wallet.getInstance().fetchTransactionsFromLND();
-        } else {
-            mTvMode.setText("DEMO MODE");
         }
 
         return view;
@@ -342,6 +345,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if(!mExchangeRateListenerRegistered) {
             MonetaryUtil.getInstance().registerExchangeRateListener(this);
             mExchangeRateListenerRegistered = true;
+        }
+
+
+        if (!mPrefs.getBoolean("isWalletSetup", false)) {
+            // If the App is not setup yet,
+            // this will cause to get the status text updated. Otherwise it would be empty.
+            Wallet.getInstance().simulateFetchInfoForDemo(NetworkUtil.isConnectedToInternet(getActivity()));
         }
     }
 
