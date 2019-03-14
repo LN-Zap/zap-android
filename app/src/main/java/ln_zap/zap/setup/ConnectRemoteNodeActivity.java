@@ -52,7 +52,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 try {
-                    verifyDesiredConnection(clipboard.getPrimaryClip().toString());
+                    verifyDesiredConnection(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
                 } catch (NullPointerException e){
                     showError(getResources().getString(R.string.error_emptyClipboardConnect),4000);
                 }

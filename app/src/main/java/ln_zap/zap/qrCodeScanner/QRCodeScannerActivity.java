@@ -74,7 +74,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 try {
-                    validateInvoice(clipboard.getPrimaryClip().toString());
+                    validateInvoice(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
                 } catch (NullPointerException e){
                     showError(getResources().getString(R.string.error_emptyClipboardPayment),4000);
                 }
