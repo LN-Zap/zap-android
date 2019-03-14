@@ -86,6 +86,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name=".walletManagement.ManageWalletsActivity"
+            android:label="@string/activity_manage_wallets"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+
+        <activity
             android:name=".AdvancedSettingsActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_advanced_settings"

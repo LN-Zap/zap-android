@@ -1,25 +1,43 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ListPreference
-        android:key="blockExplorer"
-        android:title="@string/settings_blockExplorer"
-        android:summary="%s"
-        android:entries="@array/blockExplorer"
-        android:entryValues="@array/blockExplorer"
-        android:defaultValue="BlockCypher"
-        android:dialogTitle="@string/settings_blockExplorer"
-        app:iconSpaceReserved="false"/>
+    <PreferenceCategory android:title="@string/settings_category_general"
+        app:iconSpaceReserved="false">
 
-    <ListPreference
-        android:key="btcAddressType"
-        android:title="@string/settings_addressType"
-        android:summary="%s"
-        android:entries="@array/settings_receiveAddressTypeNames"
-        android:entryValues="@array/addressType"
-        android:defaultValue="p2psh"
-        android:dialogTitle="@string/settings_addressType"
-        app:iconSpaceReserved="false"/>
+        <ListPreference
+            android:key="blockExplorer"
+            android:title="@string/settings_blockExplorer"
+            android:summary="%s"
+            android:entries="@array/blockExplorer"
+            android:entryValues="@array/blockExplorer"
+            android:defaultValue="BlockCypher"
+            android:dialogTitle="@string/settings_blockExplorer"
+            app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            android:key="btcAddressType"
+            android:title="@string/settings_addressType"
+            android:summary="%s"
+            android:entries="@array/settings_receiveAddressDisplayValues"
+            android:entryValues="@array/addressType"
+            android:defaultValue="p2psh"
+            android:dialogTitle="@string/settings_addressType"
+            app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/lightning"
+        app:iconSpaceReserved="false">
+        <ListPreference
+            android:key="lightning_expiry"
+            android:title="@string/settings_lnRequestExpiryTitle"
+            android:summary="%s"
+            android:entries="@array/settings_lnRequestExpiryDisplayValues"
+            android:entryValues="@array/lnRequestExpiry"
+            android:defaultValue="86400"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
 
 
 </PreferenceScreen>

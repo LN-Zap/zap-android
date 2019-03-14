@@ -69,7 +69,8 @@
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Send</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>
-    <string name="activity_manage_channels">Manage channels</string>
+    <string name="activity_manage_channels">Manage Lightning Channels</string>
+    <string name="activity_manage_wallets">Manage Wallets</string>
     <string name="title_activity_advanced_settings">Advanced Settings</string>
 
 
@@ -153,7 +154,7 @@
 
     <!-- //////////////// Settings ////////////////////// -->
 
-    <string name="settings_category_prefs">Preferences</string>
+    <string name="settings_category_general">General</string>
     <string name="settings_category_security">Security</string>
     <string name="settings_category_help">Help</string>
     <string name="settings_category_advanced">Advanced</string>
@@ -164,12 +165,12 @@
     <string name="settings_language">Language</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
 
-    <string-array name="settings_language_list">
+    <string-array name="settings_language_displayValues">
         <item>System Language</item>
         <item>English</item>
     </string-array>
 
-    <string name="settings_manageChannels">Manage Lightning Channels</string>
+    <string name="settings_manageChannels">Manage lightning channels of current wallet</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
     <string name="settings_changePin">Change PIN</string>
 
@@ -194,9 +195,19 @@
     <string name="settings_blockExplorer">Block Explorer</string>
     <string name="settings_addressType">Bitcoin Address Type</string>
 
-    <string-array name="settings_receiveAddressTypeNames">
+    <string-array name="settings_receiveAddressDisplayValues">
         <item>Compatibility (P2PSH)</item>
         <item>Native (Bech32)</item>
+    </string-array>
+
+    <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
+
+    <string-array name="settings_lnRequestExpiryDisplayValues">
+        <item>10 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>6 hours</item>
+        <item>24 hours</item>
     </string-array>
 
 

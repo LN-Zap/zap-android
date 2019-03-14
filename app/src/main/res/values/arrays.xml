@@ -12,7 +12,7 @@
         <item>sat</item>
     </string-array>
 
-    <string-array name="btcUnitSelectionList">
+    <string-array name="btcUnitDisplayValues">
         <item>(BTC) Bitcoin</item>
         <item>(mBTC) Milli Bitcoin</item>
         <item>(bit) Bits</item>
@@ -35,6 +35,14 @@
     <string-array name="languageValues">
         <item>system</item>
         <item>english</item>
+    </string-array>
+
+    <string-array name="lnRequestExpiry">
+        <item>600</item>
+        <item>1800</item>
+        <item>3600</item>
+        <item>21600</item>
+        <item>86400</item>
     </string-array>
 
 </resources>

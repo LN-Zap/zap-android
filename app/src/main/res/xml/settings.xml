@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:key="topPrefScreen">
 
-    <PreferenceCategory android:title="@string/settings_category_prefs"
+    <PreferenceCategory android:title="@string/settings_category_general"
         app:iconSpaceReserved="false"
         >
 
@@ -13,7 +13,7 @@
             android:key="firstCurrency"
             android:title="@string/settings_btcUnit"
             android:summary="%s"
-            android:entries="@array/btcUnitSelectionList"
+            android:entries="@array/btcUnitDisplayValues"
             android:entryValues="@array/btcUnit"
             android:defaultValue="sat"
             android:dialogTitle="@string/settings_btcUnit"
@@ -34,7 +34,7 @@
             android:key="language"
             android:title="@string/settings_language"
             android:summary="%s"
-            android:entries="@array/settings_language_list"
+            android:entries="@array/settings_language_displayValues"
             android:entryValues="@array/languageValues"
             android:defaultValue="system"
             android:dialogTitle="@string/settings_language"
@@ -49,28 +49,26 @@
     </PreferenceCategory>
 
 
-    <PreferenceCategory android:title="@string/lightning"
+    <PreferenceCategory android:title="@string/navigation_wallet"
         app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="manageWallets"
+            android:title="@string/activity_manage_wallets"
+            app:iconSpaceReserved="false"/>
+
+
         <Preference
             android:key="manageLightningChannels"
             android:title="@string/settings_manageChannels"
             app:iconSpaceReserved="false"/>
 
-    </PreferenceCategory>
-
-
-    <PreferenceCategory android:title="@string/navigation_wallet"
-        app:iconSpaceReserved="false">
-
+        <!--
         <Preference
             android:key="resetConfig"
             android:title="@string/settings_resetConnection"
             app:iconSpaceReserved="false"/>
-
-        <Preference
-            android:key="changePIN"
-            android:title="@string/settings_changePin"
-            app:iconSpaceReserved="false"/>
+            -->
 
 
     </PreferenceCategory>
@@ -78,6 +76,11 @@
     <PreferenceCategory
         android:title="@string/settings_category_security"
         app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="changePIN"
+            android:title="@string/settings_changePin"
+            app:iconSpaceReserved="false"/>
 
         <SwitchPreference
             android:key="scramblePin"
@@ -146,6 +149,5 @@
             android:title="Reset APP"
             app:iconSpaceReserved="false"/>
     </PreferenceCategory>
-
 
 </PreferenceScreen>

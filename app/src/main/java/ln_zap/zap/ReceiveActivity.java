@@ -218,6 +218,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
                 Invoice asyncInvoiceRequest = Invoice.newBuilder()
                         .setValue(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
                         .setMemo(mEtMemo.getText().toString())
+                        .setExpiry(Long.parseLong(mPrefs.getString("lightning_expiry","86400"))) // in seconds
                         .build();
 
                 final ListenableFuture<AddInvoiceResponse> invoiceFuture = asyncInvoiceClient.addInvoice(asyncInvoiceRequest);

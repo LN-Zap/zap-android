@@ -35,6 +35,7 @@ import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.UserGuardian;
 import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
+import ln_zap.zap.walletManagement.ManageWalletsActivity;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat implements UserGuardianInterface {
@@ -125,6 +126,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         });
 
         // Action when clicked on "Manage channels"
+        final Preference prefManageWallets = findPreference("manageWallets");
+        prefManageWallets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), ManageWalletsActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        // Action when clicked on "Manage channels"
         final Preference prefManageChannels = findPreference("manageLightningChannels");
         prefManageChannels.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -135,6 +147,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             }
         });
 
+
+        /*
         // Action when clicked on "reset connection settings"
         final Preference prefResetConfig = findPreference("resetConfig");
         prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -150,6 +164,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                 return true;
             }
         });
+        */
 
         // Action when clicked on "change pin"
         final Preference prefChangePin = findPreference("changePIN");
@@ -173,7 +188,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefResetAll.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(getActivity(),"preferences reset",Toast.LENGTH_SHORT).show();
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.clear();
                 editor.commit();
@@ -332,7 +346,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
     private void createSecondCurrencyList(){
 
         CharSequence[] btcEntryValues = getActivity().getResources().getStringArray(R.array.btcUnit);
-        CharSequence[] btcEntriesDisplayValue = getActivity().getResources().getStringArray(R.array.btcUnitSelectionList);
+        CharSequence[] btcEntriesDisplayValue = getActivity().getResources().getStringArray(R.array.btcUnitDisplayValues);
         CharSequence[] fiatEntryValues = null;
         CharSequence[] fiatEntryDisplayValue = null;
 
