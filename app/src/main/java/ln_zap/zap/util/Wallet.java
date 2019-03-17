@@ -10,7 +10,10 @@ import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceResponse;
+import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
+import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.TransactionDetails;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
@@ -22,11 +25,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import ln_zap.zap.connection.LndConnection;
-import ln_zap.zap.historyList.HistoryItemAdapter;
-import ln_zap.zap.historyList.TransactionItem;
+
 
 public class Wallet {
 
@@ -37,6 +38,7 @@ public class Wallet {
     public PayReq mPaymentRequest = null;
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
+    public List<Payment> mPaymentsList;
 
     private long mOnChainBalanceTotal = 0;
     private long mOnChainBalanceConfirmed = 0;
@@ -270,7 +272,7 @@ public class Wallet {
                 try {
                     ListInvoiceResponse invoiceResponse = invoiceFuture.get();
 
-                    mInvoiceList = invoiceResponse.getInvoicesList();
+                    mInvoiceList = Lists.reverse(invoiceResponse.getInvoicesList());
 
                     ZapLog.debug(LOG_TAG, String.valueOf(invoiceResponse.toString()));
                 } catch (InterruptedException e) {
@@ -281,6 +283,39 @@ public class Wallet {
             }
         }, new ExecuteOnCaller());
     }
+
+
+    /**
+     * This will fetch lightning payments from LND.
+     */
+    public void fetchPaymentsFromLND(){
+        // Fetch lightning payments
+        LightningGrpc.LightningFutureStub asyncPaymentsClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        ListPaymentsRequest asyncPaymentsRequest = ListPaymentsRequest.newBuilder()
+                .build();
+        final ListenableFuture<ListPaymentsResponse> paymentsFuture = asyncPaymentsClient.listPayments(asyncPaymentsRequest);
+
+        paymentsFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ListPaymentsResponse paymentsResponse = paymentsFuture.get();
+
+                    mPaymentsList = Lists.reverse(paymentsResponse.getPaymentsList());
+
+                    ZapLog.debug(LOG_TAG, String.valueOf(paymentsResponse.toString()));
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "Payment request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in payment request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
 
     public boolean isSyncedToChain() {
         return mSyncedToChain;

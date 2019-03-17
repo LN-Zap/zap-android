@@ -62,6 +62,8 @@
     <string name="needHelp">Need help?</string>
     <string name="offline">offline</string>
     <string name="demo_mode">demo mode</string>
+    <string name="sent">Sent</string>
+    <string name="received">Received</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->

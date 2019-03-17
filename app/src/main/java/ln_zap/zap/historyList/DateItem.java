@@ -2,9 +2,11 @@ package ln_zap.zap.historyList;
 
 public class DateItem extends HistoryListItem {
 
-    // here getters and setters
-    // for title and so on, built
-    // using date
+    public long mDate;
+
+    public DateItem(long date){
+        mDate = date;
+    }
 
     @Override
     public int getType() {

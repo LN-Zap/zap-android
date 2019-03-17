@@ -28,6 +28,8 @@
     <string name="needHelp">Du brauchst Hilfe?</string>
     <string name="offline">offline</string>
     <string name="demo_mode">Demo Modus</string>
+    <string name="sent">Gesendet</string>
+    <string name="received">Empfangen</string>
 
     <!-- //////////////// Activity names //////////////////// -->
 

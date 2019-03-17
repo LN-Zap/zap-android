@@ -7,6 +7,7 @@ public class TransactionItem extends HistoryListItem {
 
     public TransactionItem(Transaction onChainTransaction){
         mOnChainTransaction = onChainTransaction;
+        mCreationDate = onChainTransaction.getTimeStamp();
     }
 
     @Override
