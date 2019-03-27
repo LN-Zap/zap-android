@@ -30,6 +30,9 @@
     <string name="demo_mode">Demo Modus</string>
     <string name="sent">Gesendet</string>
     <string name="received">Empfangen</string>
+    <string name="today">Heute</string>
+    <string name="yesterday">Gestern</string>
+
 
     <!-- //////////////// Activity names //////////////////// -->
 

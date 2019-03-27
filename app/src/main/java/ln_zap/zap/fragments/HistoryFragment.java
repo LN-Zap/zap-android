@@ -111,8 +111,9 @@ public class HistoryFragment extends Fragment {
 
 
         // Add the Date Lines
+        // Our start date is tomorrow to make sure the first date is set even if it is today.
         String tempDateText = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                .format(new Date());
+                .format(new Date(System.currentTimeMillis()+24*60*60*1000));
         for (int i = 0; i < mHistoryItems.size(); i++) {
 
             String currDateText = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
