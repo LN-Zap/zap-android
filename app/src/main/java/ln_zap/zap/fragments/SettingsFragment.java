@@ -105,13 +105,16 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-
+                                SharedPreferences.Editor editor = mPrefs.edit();
 
                                 if (listLanguage.getValue().equals("system")) {
-                                    listLanguage.setValue("english");
+
+                                    //listLanguage.setValue("english");
                                 } else {
-                                    listLanguage.setValue("system");
+                                    editor.putString("language", "system");
                                 }
+                                // We have to use commit here, apply would not finish before the app is restarted.
+                                editor.commit();
                                 AppUtil.getInstance(getActivity()).restartApp();
 
                             }
@@ -190,6 +193,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             public boolean onPreferenceClick(Preference preference) {
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.clear();
+                // We have to use commit here, apply would not finish before the app is restarted.
                 editor.commit();
                 AppUtil.getInstance(getActivity()).restartApp();
                 return true;
