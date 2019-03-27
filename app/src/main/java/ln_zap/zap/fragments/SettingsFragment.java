@@ -108,8 +108,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                                 SharedPreferences.Editor editor = mPrefs.edit();
 
                                 if (listLanguage.getValue().equals("system")) {
-
-                                    //listLanguage.setValue("english");
+                                    editor.putString("language", "english");
                                 } else {
                                     editor.putString("language", "system");
                                 }
