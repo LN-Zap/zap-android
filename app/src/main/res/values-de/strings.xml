@@ -32,6 +32,7 @@
     <string name="received">Empfangen</string>
     <string name="today">Heute</string>
     <string name="yesterday">Gestern</string>
+    <string name="fee">Gebühr</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->
@@ -60,6 +61,11 @@
     <string name="pin_enter_new">Neue PIN erstellen</string>
     <string name="pin_confirm_new">Neue PIN bestätigen</string>
     <string name="pin_entered_wrong">Falsche PIN</string>
+
+
+    <!-- //////////////// Payment Details //////////////////// -->
+    <string name="requested_payment">Zahlung angefordert</string>
+    <string name="request_expired">Anfrage abgelaufen</string>
 
 
     <!-- //////////////// Welcome //////////////////// -->

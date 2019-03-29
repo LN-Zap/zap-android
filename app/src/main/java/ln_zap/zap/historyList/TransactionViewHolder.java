@@ -4,9 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,26 +14,61 @@ import ln_zap.zap.util.MonetaryUtil;
 
 public class TransactionViewHolder extends RecyclerView.ViewHolder {
     // each data item is just a string in this case
-    public TextView mAmount;
-    public TextView mDescription;
-    public Context  mCtx;
+    private TextView mAmount;
+    private TextView mTransactionType;
+    private TextView mDescription;
+    private TextView mTransactionFee;
+    private TextView mTimeOfDay;
+    private Context mContext;
     public TransactionViewHolder(View v) {
         super(v);
         mAmount = v.findViewById(R.id.transactionAmount);
-        mDescription = v.findViewById(R.id.transactionDescription);
-        mCtx = v.getContext();
+        mTransactionType = v.findViewById(R.id.transactionType);
+        mTimeOfDay = v.findViewById(R.id.timeOfDay);
+        mTransactionFee = v.findViewById(R.id.transactionFeeAmount);
+        mContext = v.getContext();
     }
 
     public void bindTransactionItem(TransactionItem transactionItem){
-        Long amt = transactionItem.getOnChainTransaction().getAmount();
-        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
 
-        if (amt>0){
-            mAmount.setTextColor(ContextCompat.getColor(mCtx, R.color.superGreen));
-            mDescription.setText(mCtx.getResources().getString(R.string.received));
-        }else{
-            mAmount.setTextColor(ContextCompat.getColor(mCtx, R.color.superRed));
-            mDescription.setText(mCtx.getResources().getString(R.string.sent));
+        // Set time of Day
+        DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, mContext.getResources().getConfiguration().locale);
+        String formattedTime = df.format(new Date(transactionItem.mCreationDate * 1000L));
+        mTimeOfDay.setText(formattedTime);
+
+        // Set amount
+        Long amt = transactionItem.getOnChainTransaction().getAmount();
+
+        // compare the amount with 0
+        int result = amt.compareTo(0L);
+
+        switch (result) {
+            case 0:
+                // amount = 0
+                mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
+                mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                mTransactionType.setText("Internal");
+                mTransactionFee.setVisibility(View.GONE);
+                break;
+            case 1:
+                // amount > 0
+                mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
+                mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superGreen));
+                mTransactionType.setText(mContext.getResources().getString(R.string.received));
+                mTransactionFee.setVisibility(View.GONE);
+                break;
+            case -1:
+                // amount < 0
+                mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt).replace("-","- "));
+                mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superRed));
+                mTransactionType.setText(mContext.getResources().getString(R.string.sent));
+                Long feeAmt = transactionItem.getOnChainTransaction().getTotalFees();
+                String feeText = mContext.getResources().getString(R.string.fee)
+                        + ": " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(feeAmt);
+                mTransactionFee.setVisibility(View.VISIBLE);
+                mTransactionFee.setText(feeText);
+                break;
         }
+
     }
 }

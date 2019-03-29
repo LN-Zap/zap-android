@@ -66,6 +66,7 @@
     <string name="received">Received</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+    <string name="fee">Fee</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->
@@ -94,6 +95,11 @@
     <string name="pin_enter_new">Enter new PIN</string>
     <string name="pin_confirm_new">Confirm new PIN</string>
     <string name="pin_entered_wrong">Wrong PIN</string>
+
+
+    <!-- //////////////// Payment Details //////////////////// -->
+    <string name="requested_payment">Requested payment</string>
+    <string name="request_expired">Request expired</string>
 
 
     <!-- //////////////// Welcome //////////////////// -->
