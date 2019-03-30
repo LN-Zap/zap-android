@@ -24,7 +24,11 @@ public class TimeOutUtil {
     }
 
     public boolean isTimedOut() {
-        return (System.currentTimeMillis() - appClosed) > TIMEOUT_DELAY;
+        boolean timedOut = (System.currentTimeMillis() - appClosed) > TIMEOUT_DELAY;
+        // Do also not allow times prior to "appClosed".
+        // This would allow to circumventing timeout check by setting the time of the device manually.
+        boolean invalidTime = System.currentTimeMillis() < appClosed;
+        return timedOut || invalidTime;
     }
 
     public void reset() { appClosed = 0L; }
