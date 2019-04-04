@@ -22,6 +22,7 @@ import java.util.Locale;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ln_zap.zap.R;
 import ln_zap.zap.historyList.DateItem;
 import ln_zap.zap.historyList.HistoryItemAdapter;
@@ -35,7 +36,7 @@ import ln_zap.zap.util.ZapLog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HistoryFragment extends Fragment implements Wallet.HistoryListener {
+public class HistoryFragment extends Fragment implements Wallet.HistoryListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String LOG_TAG = "History Fragment";
 
@@ -43,6 +44,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener 
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SharedPreferences mPrefs;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private List<HistoryListItem> mHistoryItems;
 
@@ -66,6 +68,10 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
 
         mHistoryItems = new ArrayList<>();
@@ -139,6 +145,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener 
     @Override
     public void onHistoryUpdated() {
         updateHistoryDisplayList();
+        mSwipeRefreshLayout.setRefreshing(false);
         ZapLog.debug(LOG_TAG, "History updated!");
     }
 
@@ -159,5 +166,10 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener 
 
         // Unregister listeners
         Wallet.getInstance().unregisterHistoryListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        Wallet.getInstance().fetchLNDTransactionHistory();
     }
 }
