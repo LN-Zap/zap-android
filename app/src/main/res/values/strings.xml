@@ -67,6 +67,7 @@
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="fee">Fee</string>
+    <string name="confirmExit">Do you really want to quit Zap?</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->

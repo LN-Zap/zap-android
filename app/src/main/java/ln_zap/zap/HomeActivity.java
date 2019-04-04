@@ -2,6 +2,8 @@ package ln_zap.zap;
 
 import androidx.fragment.app.Fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -48,6 +50,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
     private SharedPreferences mPrefs;
+
 
 
 
@@ -226,5 +229,24 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         if (mPrefs.getBoolean("isWalletSetup", false)) {
             LndConnection.getInstance().stopBackgroundTasks();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.confirmExit)
+                .setCancelable(true)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        HomeActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
     }
 }

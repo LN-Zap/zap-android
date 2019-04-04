@@ -33,6 +33,7 @@
     <string name="today">Heute</string>
     <string name="yesterday">Gestern</string>
     <string name="fee">Gebühr</string>
+    <string name="confirmExit">Zap wirklich beenden?</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->
