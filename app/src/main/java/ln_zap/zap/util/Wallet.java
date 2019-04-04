@@ -49,11 +49,15 @@ public class Wallet {
     private boolean mConnectedToLND = false;
     private boolean mInfoFetched = false;
     private boolean mSyncedToChain = false;
+    private boolean mTransactionUpdated = false;
+    private boolean mInvoicesUpdated = false;
+    private boolean mPaymentsUpdated = false;
     private boolean mTestnet = false;
     private String mLNDVersion = "not connected";
 
     private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
     private final Set<InfoListener> mInfoListeners = new HashSet<>();
+    private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
 
 
 
@@ -218,6 +222,30 @@ public class Wallet {
         broadcastInfoUpdate(connected);
     }
 
+    /**
+     * This will fetch all transaction History from LND.
+     * After that the history is provided in lists that can be handled in a synchronized way.
+     */
+    public void fetchLNDTransactionHistory(){
+        // Set all updated flags to false. This way we can determine later, when update is finished.
+        mTransactionUpdated = false;
+        mInvoicesUpdated = false;
+        mPaymentsUpdated = false;
+
+        fetchTransactionsFromLND();
+        fetchInvoicesFromLND();
+        fetchPaymentsFromLND();
+    }
+
+    /**
+     * checks if the history update is finished and then broadcast an update to all registered classes.
+     */
+    private void isHistoryUpdateFinished(){
+        if (mTransactionUpdated && mInvoicesUpdated && mPaymentsUpdated){
+            broadcastHistoryUpdate();
+        }
+    }
+
 
     /**
      * This will fetch all On-Chain transactions involved with the current wallet from LND.
@@ -238,6 +266,9 @@ public class Wallet {
                     TransactionDetails transactionResponse = transactionFuture.get();
 
                     mOnChainTransactionList = Lists.reverse(transactionResponse.getTransactionsList());
+
+                    mTransactionUpdated = true;
+                    isHistoryUpdateFinished();
 
                     ZapLog.debug(LOG_TAG, transactionResponse.toString());
                 } catch (InterruptedException e) {
@@ -274,6 +305,9 @@ public class Wallet {
 
                     mInvoiceList = Lists.reverse(invoiceResponse.getInvoicesList());
 
+                    mInvoicesUpdated = true;
+                    isHistoryUpdateFinished();
+
                     ZapLog.debug(LOG_TAG, String.valueOf(invoiceResponse.toString()));
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Invoice request interrupted.");
@@ -305,6 +339,9 @@ public class Wallet {
                     ListPaymentsResponse paymentsResponse = paymentsFuture.get();
 
                     mPaymentsList = Lists.reverse(paymentsResponse.getPaymentsList());
+
+                    mPaymentsUpdated = true;
+                    isHistoryUpdateFinished();
 
                     ZapLog.debug(LOG_TAG, String.valueOf(paymentsResponse.toString()));
                 } catch (InterruptedException e) {
@@ -392,6 +429,28 @@ public class Wallet {
     public interface InfoListener {
         void onInfoUpdated(boolean connected);
     }
+
+
+    // Event handling to notify all registered listeners to a history update.
+
+    private void broadcastHistoryUpdate() {
+        for( HistoryListener listener : mHistoryListeners) {
+            listener.onHistoryUpdated();
+        }
+    }
+
+    public void registerHistoryListener(HistoryListener listener) {
+        mHistoryListeners.add(listener);
+    }
+
+    public void unregisterHistoryListener(HistoryListener listener) {
+        mHistoryListeners.remove(listener);
+    }
+
+    public interface HistoryListener {
+        void onHistoryUpdated();
+    }
+
 }
 
 

@@ -232,9 +232,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             Wallet.getInstance().fetchBalanceFromLND();
 
             // ToDO: The history does not have to be fetched every time. Remove this later
-            Wallet.getInstance().fetchTransactionsFromLND();
-            Wallet.getInstance().fetchInvoicesFromLND();
-            Wallet.getInstance().fetchPaymentsFromLND();
+            Wallet.getInstance().fetchLNDTransactionHistory();
         }
 
         return view;

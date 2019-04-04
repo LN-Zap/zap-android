@@ -30,11 +30,12 @@ import ln_zap.zap.historyList.LnInvoiceItem;
 import ln_zap.zap.historyList.LnPaymentItem;
 import ln_zap.zap.historyList.TransactionItem;
 import ln_zap.zap.util.Wallet;
+import ln_zap.zap.util.ZapLog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements Wallet.HistoryListener {
 
     private static final String LOG_TAG = "History Fragment";
 
@@ -44,6 +45,8 @@ public class HistoryFragment extends Fragment {
     private SharedPreferences mPrefs;
 
     private List<HistoryListItem> mHistoryItems;
+
+    private boolean mHistoryChangeListenerRegistered = false;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -68,8 +71,6 @@ public class HistoryFragment extends Fragment {
         mHistoryItems = new ArrayList<>();
 
         if (mPrefs.getBoolean("isWalletSetup", false)) {
-           // Wallet.getInstance().fetchTransactionsFromLND();
-           // Wallet.getInstance().fetchInvoicesFromLND();
             updateHistoryDisplayList();
         }
 
@@ -80,6 +81,7 @@ public class HistoryFragment extends Fragment {
 
     private void updateHistoryDisplayList(){
 
+        mHistoryItems.clear();
 
         // Add all payment relevant items
 
@@ -132,5 +134,30 @@ public class HistoryFragment extends Fragment {
         mAdapter = new HistoryItemAdapter(mHistoryItems);
         mRecyclerView.setAdapter(mAdapter);
 
+    }
+
+    @Override
+    public void onHistoryUpdated() {
+        updateHistoryDisplayList();
+        ZapLog.debug(LOG_TAG, "History updated!");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Register listeners
+        if (!mHistoryChangeListenerRegistered) {
+            Wallet.getInstance().registerHistoryListener(this);
+            mHistoryChangeListenerRegistered = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // Unregister listeners
+        Wallet.getInstance().unregisterHistoryListener(this);
     }
 }
