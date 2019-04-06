@@ -70,10 +70,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mFt.replace(R.id.mainContent, mCurrentFragment);
         mFt.commit();
 
-
         // Setup Listener
         BottomNavigationView navigation = findViewById(R.id.mainNavigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // Fetch the transaction history
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            Wallet.getInstance().fetchLNDTransactionHistory();
+        }
     }
 
 
@@ -188,6 +192,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         if (mPrefs.getBoolean("isWalletSetup", false)) {
             LndConnection.getInstance().restartBackgroundTasks();
             setupLNDInfoSchedule();
+
+            // Fetch the transaction history
+            Wallet.getInstance().fetchLNDTransactionHistory();
         }
     }
 

@@ -65,8 +65,10 @@
 
 
     <!-- //////////////// Payment Details //////////////////// -->
-    <string name="requested_payment">Zahlung angefordert</string>
-    <string name="request_expired">Anfrage abgelaufen</string>
+
+    <string name="requested_payment">Angefordert</string>
+    <string name="request_expired">Abgelaufen</string>
+    <string name="internal">Intern</string>
 
 
     <!-- //////////////// Welcome //////////////////// -->

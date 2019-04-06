@@ -15,17 +15,20 @@ import ln_zap.zap.util.MonetaryUtil;
 public class TransactionViewHolder extends RecyclerView.ViewHolder {
     // each data item is just a string in this case
     private TextView mAmount;
-    private TextView mTransactionType;
+    private TextView mTransactionState;
     private TextView mDescription;
     private TextView mTransactionFee;
     private TextView mTimeOfDay;
+    private View mRootView;
     private Context mContext;
     public TransactionViewHolder(View v) {
         super(v);
         mAmount = v.findViewById(R.id.transactionAmount);
-        mTransactionType = v.findViewById(R.id.transactionType);
+        mDescription = v.findViewById(R.id.transactionDescription);
+        mTransactionState = v.findViewById(R.id.transactionState);
         mTimeOfDay = v.findViewById(R.id.timeOfDay);
         mTransactionFee = v.findViewById(R.id.transactionFeeAmount);
+        mRootView = v.findViewById(R.id.transactionRootView);
         mContext = v.getContext();
     }
 
@@ -47,28 +50,39 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
                 // amount = 0
                 mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
                 mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                mTransactionType.setText("Internal");
+                mTransactionState.setText(R.string.internal);
                 mTransactionFee.setVisibility(View.GONE);
+                mDescription.setVisibility(View.GONE);
                 break;
             case 1:
                 // amount > 0
                 mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
                 mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superGreen));
-                mTransactionType.setText(mContext.getResources().getString(R.string.received));
+                mTransactionState.setText(mContext.getResources().getString(R.string.received));
                 mTransactionFee.setVisibility(View.GONE);
+                mDescription.setVisibility(View.GONE);
                 break;
             case -1:
                 // amount < 0
                 mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt).replace("-","- "));
                 mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superRed));
-                mTransactionType.setText(mContext.getResources().getString(R.string.sent));
+                mTransactionState.setText(mContext.getResources().getString(R.string.sent));
                 Long feeAmt = transactionItem.getOnChainTransaction().getTotalFees();
                 String feeText = mContext.getResources().getString(R.string.fee)
                         + ": " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(feeAmt);
                 mTransactionFee.setVisibility(View.VISIBLE);
                 mTransactionFee.setText(feeText);
+                mDescription.setVisibility(View.GONE);
                 break;
         }
 
+
+        // Set on click listener
+        mRootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }

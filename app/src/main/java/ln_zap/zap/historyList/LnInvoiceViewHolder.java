@@ -19,7 +19,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
 
     private TextView mAmount;
     private ImageView mTransactionTypeIcon;
-    private TextView mTransactionType;
+    private TextView mTransactionState;
     private TextView mDescription;
     private TextView mTimeOfDay;
     private View mRootView;
@@ -29,7 +29,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
         super(v);
         mAmount = v.findViewById(R.id.transactionAmount);
         mTransactionTypeIcon = v.findViewById(R.id.transactionTypeIcon);
-        mTransactionType = v.findViewById(R.id.transactionType);
+        mTransactionState = v.findViewById(R.id.transactionState);
         mDescription = v.findViewById(R.id.transactionDescription);
         mTimeOfDay = v.findViewById(R.id.timeOfDay);
         mRootView = v.findViewById(R.id.transactionRootView);
@@ -40,7 +40,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
 
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         mRootView.setAlpha(1f);
-        mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
         mTransactionTypeIcon.setImageResource(R.drawable.ic_clock_black_24dp);
         mTransactionTypeIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
 
@@ -58,7 +58,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
                 // The invoice has been payed
 
                 // Set transaction type text
-                mTransactionType.setText(mContext.getResources().getString(R.string.received));
+                mTransactionState.setText(mContext.getResources().getString(R.string.received));
                 mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superGreen));
                 mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amtPayed));
                 mTransactionTypeIcon.setImageResource(R.drawable.bolt_black_filled_24dp);
@@ -70,14 +70,14 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
                     // The invoice has expired
 
                     // Set transaction type text
-                    mTransactionType.setText(mContext.getResources().getString(R.string.request_expired));
+                    mTransactionState.setText(mContext.getResources().getString(R.string.request_expired));
                     mAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                     mRootView.setAlpha(0.5f);
                 } else {
                     // The invoice has not yet expired
 
                     // Set transaction type text
-                    mTransactionType.setText(mContext.getResources().getString(R.string.requested_payment));
+                    mTransactionState.setText(mContext.getResources().getString(R.string.requested_payment));
                     mAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                 }
             }
@@ -88,7 +88,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
                 // The invoice has been payed
 
                 // Set transaction type text
-                mTransactionType.setText(mContext.getResources().getString(R.string.received));
+                mTransactionState.setText(mContext.getResources().getString(R.string.received));
                 mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superGreen));
                 mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
                 mTransactionTypeIcon.setImageResource(R.drawable.bolt_black_filled_24dp);
@@ -100,14 +100,14 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
                     // The invoice has expired
 
                     // Set transaction type text
-                    mTransactionType.setText(mContext.getResources().getString(R.string.request_expired));
+                    mTransactionState.setText(mContext.getResources().getString(R.string.request_expired));
                     mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
                     mRootView.setAlpha(0.5f);
                 } else {
                     // The invoice has not yet expired
 
                     // Set transaction type text
-                    mTransactionType.setText(mContext.getResources().getString(R.string.requested_payment));
+                    mTransactionState.setText(mContext.getResources().getString(R.string.requested_payment));
                     mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
                 }
             }
@@ -121,16 +121,12 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
             mDescription.setText(lnInvoiceItem.getInvoice().getMemo());
         }
 
-        // Set amount
+        // Set on click listener
+        mRootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-
-
-        // Only make it green if it was actually payed!
-        if (amt>0){
-            //mAmount.setTextColor(ContextCompat.getColor(mCtx, R.color.superGreen));
-
-        }else{
-           // mAmount.setTextColor(ContextCompat.getColor(mCtx, R.color.superRed));
-        }
+            }
+        });
     }
 }

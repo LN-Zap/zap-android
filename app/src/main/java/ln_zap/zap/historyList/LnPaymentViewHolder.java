@@ -15,17 +15,20 @@ import ln_zap.zap.util.MonetaryUtil;
 public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
     // each data item is just a string in this case
     private TextView mAmount;
-    private TextView mTransactionType;
+    private TextView mTransactionState;
     private TextView mDescription;
     private TextView mTransactionFee;
     private TextView mTimeOfDay;
+    private View mRootView;
     private Context mContext;
     public LnPaymentViewHolder(View v) {
         super(v);
         mAmount = v.findViewById(R.id.transactionAmount);
-        mTransactionType = v.findViewById(R.id.transactionType);
+        mTransactionState = v.findViewById(R.id.transactionState);
+        mDescription = v.findViewById(R.id.transactionDescription);
         mTimeOfDay = v.findViewById(R.id.timeOfDay);
         mTransactionFee = v.findViewById(R.id.transactionFeeAmount);
+        mRootView = v.findViewById(R.id.transactionRootView);
         mContext = v.getContext();
     }
 
@@ -35,6 +38,13 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
         DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, mContext.getResources().getConfiguration().locale);
         String formattedTime = df.format(new Date(lnPaymentItem.mCreationDate * 1000L));
         mTimeOfDay.setText(formattedTime);
+
+        // Set state
+        mTransactionState.setText(R.string.sent);
+
+        // Set description
+        mDescription.setVisibility(View.GONE);
+        // memo is not yet available in lnPayments in LND;
 
         // Set amount
         Long amt = lnPaymentItem.getPayment().getValueSat();
@@ -47,5 +57,13 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
         String feeText = mContext.getResources().getString(R.string.fee)
                         + ": " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(feeAmt);
         mTransactionFee.setText(feeText);
+
+        // Set on click listener
+        mRootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }
