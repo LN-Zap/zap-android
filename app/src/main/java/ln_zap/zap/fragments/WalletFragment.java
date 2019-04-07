@@ -231,6 +231,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
             Wallet.getInstance().fetchBalanceFromLND();
 
+            // ToDo: This has to be done somewhere else later.
+            Wallet.getInstance().fetchOpenChannelsFromLND();
         }
 
         return view;

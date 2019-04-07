@@ -1,19 +1,29 @@
 package ln_zap.zap.util;
 
 
+import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
+import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
+import com.github.lightningnetwork.lnd.lnrpc.ListChannelsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ListChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsResponse;
+import com.github.lightningnetwork.lnd.lnrpc.NodeInfo;
+import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
+import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.TransactionDetails;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
@@ -22,11 +32,13 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import ln_zap.zap.connection.LndConnection;
+
 
 
 public class Wallet {
@@ -39,6 +51,15 @@ public class Wallet {
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
     public List<Payment> mPaymentsList;
+
+    public List<Channel> mOpenChannelsList;
+    public List<PendingChannelsResponse.PendingOpenChannel> mPendingOpenChannelsList;
+    public List<PendingChannelsResponse.ClosedChannel> mPendingClosedChannelsList;
+    public List<PendingChannelsResponse.ForceClosedChannel> mPendingForceClosedChannelsList;
+    public List<PendingChannelsResponse.WaitingCloseChannel> mPendingWaitingCloseChannelsList;
+    public List<ChannelCloseSummary> mClosedChannelsList;
+
+    public List<NodeInfo> mNodeInfos = new LinkedList<>();
 
     private long mOnChainBalanceTotal = 0;
     private long mOnChainBalanceConfirmed = 0;
@@ -134,7 +155,9 @@ public class Wallet {
             public void run() {
                 try {
                     WalletBalanceResponse balanceResponse = balanceFuture.get();
-                    ZapLog.debug(LOG_TAG,balanceResponse.toString());
+
+                    // ZapLog.debug(LOG_TAG,balanceResponse.toString());
+
                     // Update the on-chain balances of our wallet util to the fetched values
                     setOnChainBalance(balanceResponse.getTotalBalance(),
                             balanceResponse.getConfirmedBalance(),
@@ -163,7 +186,9 @@ public class Wallet {
             public void run() {
                 try {
                     ChannelBalanceResponse channelBalanceResponse = channelBalanceFuture.get();
-                    ZapLog.debug(LOG_TAG,channelBalanceResponse.toString());
+
+                    // ZapLog.debug(LOG_TAG,channelBalanceResponse.toString());
+
                     // Update the channel balances of our wallet util to the fetched values
                     setChannelBalance(channelBalanceResponse.getBalance(),
                             channelBalanceResponse.getPendingOpenBalance());
@@ -196,13 +221,16 @@ public class Wallet {
             public void run() {
                 try {
                     GetInfoResponse infoResponse = infoFuture.get();
-                    ZapLog.debug(LOG_TAG,infoResponse.toString());
+
                     // Save the received data.
                     mSyncedToChain = infoResponse.getSyncedToChain();
                     mTestnet = infoResponse.getTestnet();
                     mLNDVersion = infoResponse.getVersion();
                     mInfoFetched = true;
                     mConnectedToLND = true;
+
+                    // ZapLog.debug(LOG_TAG,infoResponse.toString());
+
                     broadcastInfoUpdate(true);
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG,"Info request interrupted.");
@@ -270,7 +298,7 @@ public class Wallet {
                     mTransactionUpdated = true;
                     isHistoryUpdateFinished();
 
-                    ZapLog.debug(LOG_TAG, transactionResponse.toString());
+                    // ZapLog.debug(LOG_TAG, transactionResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Transaction request interrupted.");
                 } catch (ExecutionException e) {
@@ -308,7 +336,7 @@ public class Wallet {
                     mInvoicesUpdated = true;
                     isHistoryUpdateFinished();
 
-                    ZapLog.debug(LOG_TAG, String.valueOf(invoiceResponse.toString()));
+                    // ZapLog.debug(LOG_TAG, String.valueOf(invoiceResponse.toString()));
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Invoice request interrupted.");
                 } catch (ExecutionException e) {
@@ -343,7 +371,7 @@ public class Wallet {
                     mPaymentsUpdated = true;
                     isHistoryUpdateFinished();
 
-                    ZapLog.debug(LOG_TAG, String.valueOf(paymentsResponse.toString()));
+                    // ZapLog.debug(LOG_TAG, String.valueOf(paymentsResponse.toString()));
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Payment request interrupted.");
                 } catch (ExecutionException e) {
@@ -352,6 +380,152 @@ public class Wallet {
             }
         }, new ExecuteOnCaller());
     }
+
+
+    /**
+     * This will fetch all open channels for the current wallet from LND.
+     */
+    public void fetchOpenChannelsFromLND(){
+        // fetch open channels
+        LightningGrpc.LightningFutureStub asyncOpenChannelsClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        ListChannelsRequest asyncOpenChannelsRequest = ListChannelsRequest.newBuilder().build();
+        final ListenableFuture<ListChannelsResponse> openChannelsFuture = asyncOpenChannelsClient.listChannels(asyncOpenChannelsRequest);
+
+        openChannelsFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ListChannelsResponse openChannelsResponse = openChannelsFuture.get();
+
+                    mOpenChannelsList = openChannelsResponse.getChannelsList();
+
+                    // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+                    for (Channel c : mOpenChannelsList) {
+                        fetchNodeInfoFromLND(c.getRemotePubkey());
+                    }
+
+                    // ZapLog.debug(LOG_TAG, openChannelsResponse.toString());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "List open channels request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in list open channels request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
+
+    /**
+     * This will fetch all pending channels for the current wallet from LND.
+     */
+    public void fetchPendingChannelsFromLND(){
+        // fetch pending channels
+        LightningGrpc.LightningFutureStub asyncPendingChannelsClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        PendingChannelsRequest asyncPendingChannelsRequest = PendingChannelsRequest.newBuilder().build();
+        final ListenableFuture<PendingChannelsResponse> pendingChannelsFuture = asyncPendingChannelsClient.pendingChannels(asyncPendingChannelsRequest);
+
+        pendingChannelsFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PendingChannelsResponse pendingChannelsResponse = pendingChannelsFuture.get();
+
+                    mPendingOpenChannelsList = pendingChannelsResponse.getPendingOpenChannelsList();
+                    mPendingClosedChannelsList = pendingChannelsResponse.getPendingClosingChannelsList();
+                    mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
+                    mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
+                    // ZapLog.debug(LOG_TAG, pendingChannelsResponse.toString());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "List pending channels request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in list pending channels request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
+
+    /**
+     * This will fetch all closed channels for the current wallet from LND.
+     */
+    public void fetchClosedChannelsFromLND(){
+        // fetch closed channels
+        LightningGrpc.LightningFutureStub asyncClosedChannelsClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        ClosedChannelsRequest asyncClosedChannelsRequest = ClosedChannelsRequest.newBuilder().build();
+        final ListenableFuture<ClosedChannelsResponse> closedChannelsFuture = asyncClosedChannelsClient.closedChannels(asyncClosedChannelsRequest);
+
+        closedChannelsFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ClosedChannelsResponse closedChannelsResponse = closedChannelsFuture.get();
+
+                    mClosedChannelsList = closedChannelsResponse.getChannelsList();
+                    // ZapLog.debug(LOG_TAG, closedChannelsResponse.toString());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "List closed channels request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in list closed channels request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
+
+    /**
+     * This will fetch the NodeInfo according to the supplied pubkey.
+     * The NodeInfo will then be added to the mNodeInfos list (no duplicates) which can then
+     * be used for non async tasks, such as getting the aliases for channels.
+     * @param pubkey
+     */
+    public void fetchNodeInfoFromLND(String pubkey){
+        // fetch node info
+        LightningGrpc.LightningFutureStub asyncNodeInfoClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        NodeInfoRequest asyncNodeInfoRequest = NodeInfoRequest.newBuilder()
+                .setPubKey(pubkey)
+                .build();
+        final ListenableFuture<NodeInfo> nodeInfoFuture = asyncNodeInfoClient.getNodeInfo(asyncNodeInfoRequest);
+
+        nodeInfoFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    NodeInfo nodeInfoResponse = nodeInfoFuture.get();
+
+                    // Add the nodeInfo to our list, if it is not already a member of the group.
+                    boolean nodeInfoAlreadyExists = false;
+                    for (NodeInfo i : mNodeInfos) {
+                        if (i.getNode().getPubKey().equals(nodeInfoResponse.getNode().getPubKey())){
+                            nodeInfoAlreadyExists = true;
+                            break;
+                        }
+                    }
+                    if (!nodeInfoAlreadyExists) {
+                        mNodeInfos.add(nodeInfoResponse);
+                    }
+
+                    // ZapLog.debug(LOG_TAG, nodeInfoResponse.toString());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "Get node info request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
 
 
     public boolean isSyncedToChain() {
