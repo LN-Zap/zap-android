@@ -81,6 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/channel_local_balance"
+                app:layout_constraintStart_toStartOf="parent"
                 android:textSize="12sp" />
 
             <TextView
@@ -152,6 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="localBalance"
+                app:layout_constraintStart_toStartOf="parent"
                 android:textSize="12sp" />
 
             <TextView
