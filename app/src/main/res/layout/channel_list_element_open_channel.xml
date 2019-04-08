@@ -93,7 +93,8 @@
                 android:text="@string/channel_capacity"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/remoteBalanceTitle"
@@ -106,14 +107,16 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:minHeight="16dp">
 
             <ProgressBar
                 android:id="@+id/localBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="3dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="5dp"
+                android:progressDrawable="@drawable/channel_local_balance_progress_bar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/lightningIcon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -125,19 +128,21 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:tint="@color/lightningOrange"
-                app:srcCompat="@drawable/bolt_black_filled_24dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/bolt_black_filled_24dp" />
 
             <ProgressBar
                 android:id="@+id/remoteBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
+                android:layout_height="6dp"
+                android:layout_marginStart="5dp"
                 android:layoutDirection="rtl"
+                android:progressDrawable="@drawable/channel_remote_balance_progress_bar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/lightningIcon"
@@ -165,7 +170,8 @@
                 android:text="Kapazität"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/remoteBalance"

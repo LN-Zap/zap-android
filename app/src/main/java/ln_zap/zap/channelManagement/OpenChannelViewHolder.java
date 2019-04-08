@@ -1,6 +1,7 @@
 package ln_zap.zap.channelManagement;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,7 +44,7 @@ public class OpenChannelViewHolder extends RecyclerView.ViewHolder {
         mContext = v.getContext();
     }
 
-    public void bindOpenChannelItem(OpenChannelItem openChannelItem){
+    public void bindOpenChannelItem(final OpenChannelItem openChannelItem){
 
 
         // Set state
@@ -54,7 +55,7 @@ public class OpenChannelViewHolder extends RecyclerView.ViewHolder {
         } else {
             mStatus.setText(R.string.channel_state_offline);
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.superRed)));
-            mRootView.setAlpha(0.5f);
+            mRootView.setAlpha(0.65f);
         }
 
 
@@ -67,8 +68,8 @@ public class OpenChannelViewHolder extends RecyclerView.ViewHolder {
         mRemoteBar.setProgress((int)(remoteBarValue * 100f));
 
         mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(availableCapacity));
-        mLocalBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(openChannelItem.getChannel().getLocalBalance()));
-        mRemoteBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(openChannelItem.getChannel().getRemoteBalance()));
+        mLocalBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(openChannelItem.getChannel().getLocalBalance()));
+        mRemoteBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(openChannelItem.getChannel().getRemoteBalance()));
 
 
         // Set name
@@ -93,7 +94,9 @@ public class OpenChannelViewHolder extends RecyclerView.ViewHolder {
         mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mContext, OpenChannelDetailsActivity.class);
+                intent.putExtra("channelID", openChannelItem.getChannel().getChanId());
+                mContext.startActivity(intent);
             }
         });
 

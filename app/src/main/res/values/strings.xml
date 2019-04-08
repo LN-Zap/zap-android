@@ -77,7 +77,8 @@
     <string name="activity_connectRemoteNode">Connect to remote node</string>
     <string name="activity_manage_channels">Manage Lightning Channels</string>
     <string name="activity_manage_wallets">Manage Wallets</string>
-    <string name="title_activity_advanced_settings">Advanced Settings</string>
+    <string name="activity_advanced_settings">Advanced Settings</string>
+    <string name="activity_channel_details">Channel Details</string>
 
 
     <!-- //////////////// Bottom Navigation //////////////////// -->

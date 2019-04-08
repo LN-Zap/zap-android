@@ -22,6 +22,7 @@ import com.github.lightningnetwork.lnd.lnrpc.NodeInfo;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
+import com.github.lightningnetwork.lnd.lnrpc.PaymentHash;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
@@ -30,6 +31,7 @@ import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.ByteString;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,6 +53,7 @@ public class Wallet {
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
     public List<Payment> mPaymentsList;
+    public List<Invoice> mPayedInvoicesList = new LinkedList<>();
 
     public List<Channel> mOpenChannelsList;
     public List<PendingChannelsResponse.PendingOpenChannel> mPendingOpenChannelsList;
@@ -367,9 +370,17 @@ public class Wallet {
                     ListPaymentsResponse paymentsResponse = paymentsFuture.get();
 
                     mPaymentsList = Lists.reverse(paymentsResponse.getPaymentsList());
-
                     mPaymentsUpdated = true;
                     isHistoryUpdateFinished();
+
+                    /*
+                    // Load invoices for all involved payments. This allows us to display memos later.
+                    if (mPaymentsList != null) {
+                        for (Payment p : mPaymentsList) {
+                            lookupInvoiceWithLND(p.getPaymentHashBytes());
+                        }
+                    }
+                    */
 
                     // ZapLog.debug(LOG_TAG, String.valueOf(paymentsResponse.toString()));
                 } catch (InterruptedException e) {
@@ -504,7 +515,7 @@ public class Wallet {
                 try {
                     NodeInfo nodeInfoResponse = nodeInfoFuture.get();
 
-                    // Add the nodeInfo to our list, if it is not already a member of the group.
+                    // Add the nodeInfo to our list, if it is not already a member of the list.
                     boolean nodeInfoAlreadyExists = false;
                     for (NodeInfo i : mNodeInfos) {
                         if (i.getNode().getPubKey().equals(nodeInfoResponse.getNode().getPubKey())){
@@ -521,6 +532,54 @@ public class Wallet {
                     ZapLog.debug(LOG_TAG, "Get node info request interrupted.");
                 } catch (ExecutionException e) {
                     ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
+
+    /**
+     * This will fetch an Invoice according to the supplied txHash.
+     * The Invoice will then be added to the mPayedInvoicesList (no duplicates) which can then
+     * be used for non async tasks, such as getting the memo for lightning payments.
+     * @param paymentHash
+     */
+    public void lookupInvoiceWithLND(ByteString paymentHash){
+        // fetch invoice
+        LightningGrpc.LightningFutureStub asyncLookupInvoiceClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        PaymentHash asyncPaymentHashRequest = PaymentHash.newBuilder()
+                .setRHash(paymentHash)
+                .build();
+        final ListenableFuture<Invoice> invoiceFuture = asyncLookupInvoiceClient.lookupInvoice(asyncPaymentHashRequest);
+
+        invoiceFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Invoice invoiceResponse = invoiceFuture.get();
+
+                    // Add the invoice to our list, if it is not already a member of the list.
+                    boolean invoiceAlreadyExists = false;
+                    for (Invoice i : mPayedInvoicesList) {
+                        if (i.getRHash().equals(invoiceResponse.getRHash())){
+                            invoiceAlreadyExists = true;
+                            break;
+                        }
+                    }
+                    if (!invoiceAlreadyExists) {
+                        mPayedInvoicesList.add(invoiceResponse);
+                    }
+
+                     ZapLog.debug(LOG_TAG, invoiceResponse.toString());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "lookup invoice request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in lookup invoice request task.");
+                    ZapLog.debug(LOG_TAG, e.getMessage());
+
                 }
             }
         }, new ExecuteOnCaller());

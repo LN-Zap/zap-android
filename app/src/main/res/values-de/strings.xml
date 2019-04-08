@@ -43,7 +43,8 @@
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
     <string name="activity_manage_channels">Lightning-Kanäle verwalten</string>
     <string name="activity_manage_wallets">Wallets Verwalten</string>
-    <string name="title_activity_advanced_settings">Erweiterte Einstellungen</string>
+    <string name="activity_advanced_settings">Erweiterte Einstellungen</string>
+    <string name="activity_channel_details">Kanal Details</string>
 
 
     <!-- //////////////// Bottom Navigation //////////////////// -->

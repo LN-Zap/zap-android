@@ -90,11 +90,15 @@
             android:label="@string/activity_manage_wallets"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
-
         <activity
             android:name=".AdvancedSettingsActivity"
+            android:label="@string/activity_advanced_settings"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_advanced_settings"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".channelManagement.OpenChannelDetailsActivity"
+            android:label="@string/activity_channel_details"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
     </application>
 
