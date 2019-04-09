@@ -140,9 +140,12 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
             // Our wallet is setup
 
+            // convert to lower case
+            invoice = invoice.toLowerCase();
+
             // Remove the "lightning:" uri scheme if it is present, LND needs it without uri scheme
             if(invoice.substring(0,10).equalsIgnoreCase("lightning:")){
-                invoice = invoice.substring(10).toLowerCase();
+                invoice = invoice.substring(10);
             }
 
             // Check if the invoice is a lightning invoice
