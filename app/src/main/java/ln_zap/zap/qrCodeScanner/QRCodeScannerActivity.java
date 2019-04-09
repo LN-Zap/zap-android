@@ -142,7 +142,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
             // Remove the "lightning:" uri scheme if it is present, LND needs it without uri scheme
             if(invoice.substring(0,10).equalsIgnoreCase("lightning:")){
-                invoice = invoice.substring(10);
+                invoice = invoice.substring(10).toLowerCase();
             }
 
             // Check if the invoice is a lightning invoice
