@@ -141,23 +141,23 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
             // Our wallet is setup
 
             // convert to lower case
-            invoice = invoice.toLowerCase();
+            String lnInvoice = invoice.toLowerCase();
 
             // Remove the "lightning:" uri scheme if it is present, LND needs it without uri scheme
-            if(invoice.substring(0,10).equalsIgnoreCase("lightning:")){
-                invoice = invoice.substring(10);
+            if(lnInvoice.substring(0,10).equalsIgnoreCase("lightning:")){
+                lnInvoice = lnInvoice.substring(10);
             }
 
             // Check if the invoice is a lightning invoice
-            if(invoice.substring(0,4).equals("lntb") || invoice.substring(0,4).equals("lnbc")){
+            if(lnInvoice.substring(0,4).equals("lntb") || lnInvoice.substring(0,4).equals("lnbc")){
 
                 // We have a lightning invoice
 
                 // Check if the invoice is for the same network the app is connected to
-                String lnInvoiceType = invoice.substring(0,4);
+                String lnInvoiceType = lnInvoice.substring(0,4);
                 if(Wallet.getInstance().isTestnet()){
                     if(lnInvoiceType.equals("lntb")){
-                        decodeLightningInvoice(invoice);
+                        decodeLightningInvoice(lnInvoice);
                     }
                     else {
                         // Show error. Please use a TESTNET invoice.
@@ -166,7 +166,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
                 }
                 else {
                     if(lnInvoiceType.equals("lnbc")){
-                        decodeLightningInvoice(invoice);
+                        decodeLightningInvoice(lnInvoice);
                     }
                     else {
                         // Show error. Please use a MAINNET invoice.
