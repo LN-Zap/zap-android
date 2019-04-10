@@ -20,6 +20,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import ln_zap.zap.R;
+import ln_zap.zap.RefConstants;
+import ln_zap.zap.UtilFunctions;
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.util.ScrambledNumpad;
 
 
@@ -56,7 +59,7 @@ public class PinFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param mode set the mode to either create, confirm or enter pin.
+     * @param mode   set the mode to either create, confirm or enter pin.
      * @param prompt Short text to describe what is happening.
      * @return A new instance of fragment PinFragment.
      */
@@ -87,11 +90,15 @@ public class PinFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // Get PIN length
-        if(mMode == CONFIRM_MODE) {
-            mPinLength = prefs.getInt("pin_length_temp", 4);
+        String pinString = null;
+        if (mMode == CONFIRM_MODE) {
+            pinString = App.getAppContext().pinTemp;
         } else {
-            mPinLength = prefs.getInt("pin_length", 4);
+            pinString = App.getAppContext().inMemoryPin;
         }
+
+        // TODO: do away with pin length eventually because it is vulnerability to hint in UI how long pin is
+        mPinLength = pinString != null ? pinString.length() : 4;
 
         mUserInput = new StringBuilder();
         mNumpad = new ScrambledNumpad();
@@ -104,8 +111,8 @@ public class PinFragment extends Fragment {
         boolean scramble = false;
 
         // Only scramble if we are in enter mode
-        if (mMode == ENTER_MODE){
-            scramble = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("scramblePin",true);
+        if (mMode == ENTER_MODE) {
+            scramble = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("scramblePin", true);
         }
 
 
@@ -151,12 +158,12 @@ public class PinFragment extends Fragment {
 
 
         // Set action for numpad buttons
-        for (Button btn : mBtnNumpad){
+        for (Button btn : mBtnNumpad) {
             btn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // vibrate
-                    if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin",true))    {
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                     // Add input
@@ -164,7 +171,7 @@ public class PinFragment extends Fragment {
                     displayUserInput();
 
                     // Auto accept if PIN input length was reached
-                    if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE){
+                    if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE) {
                         pinEntered();
                     }
                 }
@@ -175,7 +182,7 @@ public class PinFragment extends Fragment {
         mBtnPinConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                    createPin();
+                createPin();
             }
         });
 
@@ -186,7 +193,7 @@ public class PinFragment extends Fragment {
 
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.deleteCharAt(mUserInput.length() - 1);
-                    if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin",true))    {
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -201,7 +208,7 @@ public class PinFragment extends Fragment {
             public boolean onLongClick(View view) {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.setLength(0);
-                    if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin",true))    {
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -214,21 +221,19 @@ public class PinFragment extends Fragment {
     }
 
     private void displayUserInput() {
-
         // Correctly display number of hints as visual PIN representation
-        if(mMode == CREATE_MODE) {
+        if (mMode == CREATE_MODE) {
             // Show used PIN hints as inactive
             for (int i = 0; i < mUserInput.toString().length(); i++) {
                 mPinHints[i].setVisibility(View.VISIBLE);
             }
             // Hide unused PIN hints
             for (int i = mUserInput.toString().length(); i < mPinHints.length; i++) {
-                if(i==0)
+                if (i == 0)
                     mPinHints[i].setVisibility(View.INVISIBLE);
                 mPinHints[i].setVisibility(View.GONE);
             }
-        }
-        else{
+        } else {
 
             // Set entered PIN hints active
             for (int i = 0; i < mUserInput.toString().length(); i++) {
@@ -246,29 +251,27 @@ public class PinFragment extends Fragment {
 
 
         // Disable numpad if max PIN length reached
-        if (mUserInput.toString().length() >= MAX_PIN_LENGTH){
-            for (Button btn : mBtnNumpad){
+        if (mUserInput.toString().length() >= MAX_PIN_LENGTH) {
+            for (Button btn : mBtnNumpad) {
                 btn.setEnabled(false);
                 btn.setAlpha(0.3f);
             }
-        }
-        else{
-            for (Button btn : mBtnNumpad){
+        } else {
+            for (Button btn : mBtnNumpad) {
                 btn.setEnabled(true);
                 btn.setAlpha(1f);
             }
         }
 
         // Show confirm button when creating PIN
-        if(mMode == CREATE_MODE) {
+        if (mMode == CREATE_MODE) {
             // Show confirm button only if the PIN has a valid length.
             if (mUserInput.toString().length() >= MIN_PIN_LENGTH && mUserInput.toString().length() <= MAX_PIN_LENGTH) {
                 mBtnPinConfirm.setVisibility(View.VISIBLE);
             } else {
                 mBtnPinConfirm.setVisibility(View.INVISIBLE);
             }
-        }
-        else{
+        } else {
             mBtnPinConfirm.setVisibility(View.INVISIBLE);
         }
 
@@ -283,27 +286,29 @@ public class PinFragment extends Fragment {
 
     }
 
-    public void pinEntered(){
-
+    public void pinEntered() {
         // Check if PIN was correct
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         boolean correct;
-        if (mMode == ENTER_MODE)
-            correct = prefs.getString("pin_UNSECURE", "").equals(mUserInput.toString());
-        else
-            correct = prefs.getString("pin_UNSECURE_temp", "").equals(mUserInput.toString());
+        if (mMode == ENTER_MODE) {
+            String userEnteredPin = mUserInput.toString();
+            String hashedInput = UtilFunctions.sha256HashZapSalt(userEnteredPin);
+            correct = prefs.getString(RefConstants.pin_hash, "").equals(hashedInput);
+        } else if (mMode == CONFIRM_MODE) {
+            correct = mUserInput.toString().equals(App.getAppContext().pinTemp);
+        } else {
+            correct = mUserInput.toString().equals(App.getAppContext().inMemoryPin);
+        }
 
         if (correct) {
             // Go to next step
-            if (mMode == ENTER_MODE){
+            if (mMode == ENTER_MODE) {
                 ((SetupActivity) getActivity()).correctPinEntered();
+            } else if (mMode == CONFIRM_MODE) {
+                ((SetupActivity) getActivity()).pinConfirmed(mUserInput.toString(), mUserInput.toString().length());
             }
-            else if (mMode == CONFIRM_MODE){
-                ((SetupActivity) getActivity()).pinConfirmed(mUserInput.toString(),mUserInput.toString().length());
-            }
-        }
-        else{
+        } else {
             // Show error
             Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
 
@@ -317,8 +322,7 @@ public class PinFragment extends Fragment {
         }
     }
 
-    public void createPin(){
-
+    public void createPin() {
         // Go to next step
         ((SetupActivity) getActivity()).pinCreated(mUserInput.toString(), mUserInput.toString().length());
     }

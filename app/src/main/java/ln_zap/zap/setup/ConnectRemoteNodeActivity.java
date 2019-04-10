@@ -15,14 +15,20 @@ import android.content.ClipboardManager;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Ref;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+import at.favre.lib.armadillo.Armadillo;
 import ln_zap.zap.HomeActivity;
 import ln_zap.zap.R;
+import ln_zap.zap.RefConstants;
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.qrCodeScanner.BaseScannerActivity;
 import ln_zap.zap.util.PermissionsUtil;
 import ln_zap.zap.util.TimeOutUtil;
@@ -53,8 +59,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 try {
                     verifyDesiredConnection(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
-                } catch (NullPointerException e){
-                    showError(getResources().getString(R.string.error_emptyClipboardConnect),4000);
+                } catch (NullPointerException e) {
+                    showError(getResources().getString(R.string.error_emptyClipboardConnect), 4000);
                 }
             }
         });
@@ -80,15 +86,14 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         });
 
         // Check for camera permission
-        if (PermissionsUtil.hasCameraPermission(ConnectRemoteNodeActivity.this)){
+        if (PermissionsUtil.hasCameraPermission(ConnectRemoteNodeActivity.this)) {
             showCameraView();
-        }
-        else{
-            PermissionsUtil.requestCameraPermission(ConnectRemoteNodeActivity.this,true);
+        } else {
+            PermissionsUtil.requestCameraPermission(ConnectRemoteNodeActivity.this, true);
         }
     }
 
-    private void showCameraView(){
+    private void showCameraView() {
         ViewGroup contentFrame = findViewById(R.id.content_frame);
         contentFrame.addView(mScannerView);
 
@@ -97,11 +102,10 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         mBtnFlashlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mScannerView.getFlash()){
+                if (mScannerView.getFlash()) {
                     mScannerView.setFlash(false);
                     mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mGrayColor));
-                }
-                else{
+                } else {
                     mScannerView.setFlash(true);
                     mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mHighlightColor));
                 }
@@ -109,59 +113,65 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         });
     }
 
-    private void verifyDesiredConnection(String connectString){
+    private void verifyDesiredConnection(String connectString) {
 
         URI connectURI = null;
-            try {
-                connectURI = new URI(connectString);
-                if (!connectURI.getScheme().equals("lndconnect")) {
-                    showError(getResources().getString(R.string.error_invalidRemoteConnectionString),4000);
-                } else {
+        try {
+            connectURI = new URI(connectString);
+            if (!connectURI.getScheme().equals("lndconnect")) {
+                showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+            } else {
 
-                    String cert = null;
-                    String macaroon = null;
+                String cert = null;
+                String macaroon = null;
 
-                    // Fetch params
-                    if(connectURI.getQuery() != null) {
-                        String[] valuePairs = connectURI.getQuery().split("&");
-                        for (String pair : valuePairs) {
-                            String[] param = pair.split("=");
-                            if (param[0].equals("cert")) {
-                                cert = param[1];
-                            }
-                            if (param[0].equals("macaroon")) {
-                                macaroon = param[1];
-                            }
+                // Fetch params
+                if (connectURI.getQuery() != null) {
+                    String[] valuePairs = connectURI.getQuery().split("&");
+                    for (String pair : valuePairs) {
+                        String[] param = pair.split("=");
+                        if (param[0].equals("cert")) {
+                            cert = param[1];
                         }
-
-                        // Everything is ok, initiate connection
-                        connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
-
-                    } else {
-                        ZapLog.debug(LOG_TAG, "Connect URI has not parameters");
-                        showError(getResources().getString(R.string.error_invalidRemoteConnectionString),4000);
+                        if (param[0].equals("macaroon")) {
+                            macaroon = param[1];
+                        }
                     }
+
+                    // Everything is ok, initiate connection
+                    connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
+
+                } else {
+                    ZapLog.debug(LOG_TAG, "Connect URI has not parameters");
+                    showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
                 }
             }
-            catch (URISyntaxException e){
-                ZapLog.debug(LOG_TAG, "URI could not be parsed");
-                e.printStackTrace();
-                showError(getResources().getString(R.string.error_invalidRemoteConnectionString),4000);
-            }
+        } catch (URISyntaxException e) {
+            ZapLog.debug(LOG_TAG, "URI could not be parsed");
+            e.printStackTrace();
+            showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+        }
 
     }
 
-    private void connect(String host, int port, String cert, String macaroon){
+    private void connect(String host, int port, String cert, String macaroon) {
+        App ctx = App.getAppContext();
+        SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+                .encryptionFingerprint(ctx)
+                .password(ctx.inMemoryPin.toCharArray())
+                .build();
 
-        // Save connection as plain text in preferences (UNSECURE!)
+        prefsRemote.edit()
+                .putString(RefConstants.remote_host, host)
+                .putInt(RefConstants.remote_port, port)
+                .putString(RefConstants.remote_cert, cert)
+                .putString(RefConstants.remote_macaroon, macaroon)
+                .apply();
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("remoteHost", host);
-        editor.putInt("remotePort", port);
-        editor.putString("remoteCert", cert);
-        editor.putString("remoteMacaroon", macaroon);
-        editor.putBoolean("isWalletSetup", true);
-        editor.apply();
+        prefs.edit()
+                .putBoolean("isWalletSetup", true)
+                .apply();
 
         // Do not ask for pin again...
         TimeOutUtil.getInstance().startTimer();
@@ -172,8 +182,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         startActivity(intent);
     }
 
-    private void showError(String message, int duration){
-        Snackbar msg = Snackbar.make(findViewById(R.id.content_frame),message,Snackbar.LENGTH_LONG);
+    private void showError(String message, int duration) {
+        Snackbar msg = Snackbar.make(findViewById(R.id.content_frame), message, Snackbar.LENGTH_LONG);
         View sbView = msg.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
         msg.setDuration(duration);
@@ -222,8 +232,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, show the camera view.
                     showCameraView();
-                }
-                else {
+                } else {
                     // Permission denied, show required permission message.
                     mTvPermissionRequired.setVisibility(View.VISIBLE);
                 }

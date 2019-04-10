@@ -20,6 +20,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // when referencing `armadillo` for encrypted SharedSettings without compileOptions we get error
+    // Error: Invoke-customs are only supported starting with Android O (--min-api 26)
+    // https://stackoverflow.com/questions/49891730/invoke-customs-are-only-supported-starting-with-android-0-min-api-26
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 
@@ -59,10 +67,13 @@ protobuf {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // QR-Code scanner: To Do: check if this is secure
+    // encrypted SharedSettings
+    implementation 'at.favre.lib:armadillo:0.7.0'
+
+    // QR-Code scanner: ToDo: check if this is secure
     implementation 'me.dm7.barcodescanner:zbar:1.9.8'
 
-    // QR-Code generator: To Do: check if this is secure
+    // QR-Code generator: ToDo: check if this is secure
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
     // Library to restart app
@@ -71,7 +82,7 @@ dependencies {
     // HTTP library to perform API interaction
     implementation 'com.android.volley:volley:1.1.1'
 
-    // Bitcoin implementation   // confilicts with current protobuf implementation.
+    // Bitcoin implementation   // conflicts with current protobuf implementation.
     // implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
 
     // Library to detect when app goes to background or foreground
