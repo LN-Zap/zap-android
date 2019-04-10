@@ -12,13 +12,15 @@ import java.util.concurrent.Executors;
 import javax.net.ssl.SSLSocketFactory;
 
 import androidx.preference.PreferenceManager;
+import at.favre.lib.armadillo.Armadillo;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
+import ln_zap.zap.RefConstants;
 import ln_zap.zap.baseClasses.App;
 
 /**
  * Singleton to handle the connection to lnd
- *
+ * <p>
  * Please note:
  * IP, Certificate and Macaroon are placeholders right now.
  */
@@ -30,21 +32,24 @@ public class LndConnection {
     private ExecutorService mLndThreads;
     private boolean mIsShutdown = false;
     private LightningGrpc.LightningBlockingStub mBlockingClient;
-    private SharedPreferences mPrefs;
+    private SharedPreferences mPrefsRemote;
 
 
     private LndConnection() {
-
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
+        App ctx = App.getAppContext();
+        mPrefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+                .encryptionFingerprint(ctx)
+                .password(ctx.inMemoryPin.toCharArray())
+                .build();
 
         // Macaroon
-        String macaroonBase64UrlString = mPrefs.getString("remoteMacaroon","");
+        String macaroonBase64UrlString = mPrefsRemote.getString(RefConstants.remote_macaroon, "");
         byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroonBase64UrlString);
         String macaroon = BaseEncoding.base16().encode(macaroonBytes);
         mMacaroon = new MacaroonCallCredential(macaroon);
 
         // SSL
-        String certificateBase64UrlString = mPrefs.getString("remoteCert","");
+        String certificateBase64UrlString = mPrefsRemote.getString(RefConstants.remote_cert, "");
         byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
         mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
@@ -57,12 +62,12 @@ public class LndConnection {
         // mLndThreads = Executors.newFixedThreadPool(5);
     }
 
-    private void generateChannelAndStubs(){
-        String host = mPrefs.getString("remoteHost","");
-        int port = mPrefs.getInt("remotePort",10009);
+    private void generateChannelAndStubs() {
+        String host = mPrefsRemote.getString(RefConstants.remote_host, "");
+        int port = mPrefsRemote.getInt(RefConstants.remote_port, 10009);
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
         mSecureChannel = OkHttpChannelBuilder
-                .forAddress(host,port)
+                .forAddress(host, port)
                 .sslSocketFactory(mSSLFactory)
                 .build();
 
@@ -80,7 +85,7 @@ public class LndConnection {
         return mLndConnectionInstance;
     }
 
-    public void stopBackgroundTasks(){
+    public void stopBackgroundTasks() {
         // Close the OKHttpChannel
         mSecureChannel.shutdownNow();
         // Shutdown the thread pool for lnd requests
@@ -88,7 +93,7 @@ public class LndConnection {
         mIsShutdown = true;
     }
 
-    public void restartBackgroundTasks(){
+    public void restartBackgroundTasks() {
         generateChannelAndStubs();
 
         // Shutdown the thread pool for lnd requests

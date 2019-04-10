@@ -15,14 +15,20 @@ import android.content.ClipboardManager;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Ref;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+import at.favre.lib.armadillo.Armadillo;
 import ln_zap.zap.HomeActivity;
 import ln_zap.zap.R;
+import ln_zap.zap.RefConstants;
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.qrCodeScanner.BaseScannerActivity;
 import ln_zap.zap.util.PermissionsUtil;
 import ln_zap.zap.util.TimeOutUtil;
@@ -149,15 +155,23 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     }
 
     private void connect(String host, int port, String cert, String macaroon) {
-        // Save connection as plain text in preferences (UNSECURE!)
+        App ctx = App.getAppContext();
+        SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+                .encryptionFingerprint(ctx)
+                .password(ctx.inMemoryPin.toCharArray())
+                .build();
+
+        prefsRemote.edit()
+                .putString(RefConstants.remote_host, host)
+                .putInt(RefConstants.remote_port, port)
+                .putString(RefConstants.remote_cert, cert)
+                .putString(RefConstants.remote_macaroon, macaroon)
+                .apply();
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("remoteHost", host);
-        editor.putInt("remotePort", port);
-        editor.putString("remoteCert", cert);
-        editor.putString("remoteMacaroon", macaroon);
-        editor.putBoolean("isWalletSetup", true);
-        editor.apply();
+        prefs.edit()
+                .putBoolean("isWalletSetup", true)
+                .apply();
 
         // Do not ask for pin again...
         TimeOutUtil.getInstance().startTimer();
