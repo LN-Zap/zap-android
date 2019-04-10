@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import ln_zap.zap.HomeActivity;
 import ln_zap.zap.R;
+import ln_zap.zap.RefConstants;
+import ln_zap.zap.UtilFunctions;
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.util.TimeOutUtil;
 
@@ -34,8 +37,8 @@ public class SetupActivity extends BaseAppCompatActivity {
 
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            mSetupMode = extras.getInt("setupMode",0);
+        if (extras != null) {
+            mSetupMode = extras.getInt("setupMode", 0);
         }
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -44,9 +47,9 @@ public class SetupActivity extends BaseAppCompatActivity {
         // Set pin fragment as beginning fragment
         showCreatePin();
 
-        switch(mSetupMode) {
+        switch (mSetupMode) {
             case FULL_SETUP:
-                if (mPrefs.getBoolean("eulaAccepted",false))
+                if (mPrefs.getBoolean("eulaAccepted", false))
                     showCreatePin();
                 else
                     showEula();
@@ -60,34 +63,28 @@ public class SetupActivity extends BaseAppCompatActivity {
         }
     }
 
-    public void eulaAccepted(){
+    public void eulaAccepted() {
         showCreatePin();
     }
 
-    public void pinCreated(String value, Integer length){
-
-        // Save the created PIN in shared preferences UNSECURE!!!
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putString("pin_UNSECURE_temp", value);
-        editor.putInt("pin_length_temp", length);
-        editor.apply();
+    public void pinCreated(String value, Integer length) {
+        App.getAppContext().pinTemp = value;
         showConfirmPin();
-
     }
 
-    public void pinConfirmed(String value, Integer length){
+    public void pinConfirmed(String value, Integer length) {
+        App.getAppContext().inMemoryPin = value;
+        App.getAppContext().pinTemp = null;
 
-        // Save the created PIN in shared preferences UNSECURE!!!
         SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putString("pin_UNSECURE", value);
-        editor.putInt("pin_length", length);
+        editor.putString(RefConstants.pin_hash, UtilFunctions.sha256HashZapSalt(value));
         editor.apply();
 
-        if (mSetupMode == FULL_SETUP){
+        if (mSetupMode == FULL_SETUP) {
             showConnectChoice();
         }
-        if (mSetupMode == CHANGE_PIN){
-            Toast.makeText(SetupActivity.this,"PIN changed!",Toast.LENGTH_SHORT).show();
+        if (mSetupMode == CHANGE_PIN) {
+            Toast.makeText(SetupActivity.this, "PIN changed!", Toast.LENGTH_SHORT).show();
 
             // Reset the PIN timeout. We don't want to ask for PIN again...
             TimeOutUtil.getInstance().startTimer();
@@ -99,45 +96,44 @@ public class SetupActivity extends BaseAppCompatActivity {
         }
     }
 
-    public void correctPinEntered(){
-        if (mSetupMode == CHANGE_PIN){
+    public void correctPinEntered() {
+        if (mSetupMode == CHANGE_PIN) {
             showCreatePin();
         }
-        if (mSetupMode == CHANGE_CONNECTION){
+        if (mSetupMode == CHANGE_CONNECTION) {
             showConnectChoice();
         }
     }
 
-    private void showCreatePin(){
+    private void showCreatePin() {
         if (mSetupMode == CHANGE_PIN) {
             changeFragment(PinFragment.newInstance(PinFragment.CREATE_MODE, getResources().getString(R.string.pin_enter_new)));
-        }
-        else{
+        } else {
             changeFragment(PinFragment.newInstance(PinFragment.CREATE_MODE, getResources().getString(R.string.pin_create)));
         }
     }
 
-    private void showConfirmPin(){
+    private void showConfirmPin() {
         if (mSetupMode == CHANGE_PIN) {
             changeFragment(PinFragment.newInstance(PinFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm_new)));
-        }else{
+        } else {
             changeFragment(PinFragment.newInstance(PinFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm)));
         }
     }
 
-    private void showEnterPin(){
+    private void showEnterPin() {
         if (mSetupMode == CHANGE_PIN) {
             changeFragment(PinFragment.newInstance(PinFragment.ENTER_MODE, getResources().getString(R.string.pin_enter_old)));
-        }else{
+        } else {
             changeFragment(PinFragment.newInstance(PinFragment.ENTER_MODE, getResources().getString(R.string.pin_enter)));
         }
     }
 
-    private void showConnectChoice(){
+    private void showConnectChoice() {
         changeFragment(new ConnectFragment());
     }
 
-    private void showEula(){
+    private void showEula() {
         changeFragment(new EulaFragment());
     }
 
@@ -145,7 +141,7 @@ public class SetupActivity extends BaseAppCompatActivity {
         mFt = getSupportFragmentManager().beginTransaction();
         mFt.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         mCurrentFragment = fragment;
-        mFt.replace(R.id.mainContent,mCurrentFragment);
+        mFt.replace(R.id.mainContent, mCurrentFragment);
         mFt.commit();
     }
 

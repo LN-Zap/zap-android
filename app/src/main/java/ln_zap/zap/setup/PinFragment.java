@@ -56,7 +56,7 @@ public class PinFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param mode set the mode to either create, confirm or enter pin.
+     * @param mode   set the mode to either create, confirm or enter pin.
      * @param prompt Short text to describe what is happening.
      * @return A new instance of fragment PinFragment.
      */
@@ -104,8 +104,8 @@ public class PinFragment extends Fragment {
         boolean scramble = false;
 
         // Only scramble if we are in enter mode
-        if (mMode == ENTER_MODE){
-            scramble = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("scramblePin",true);
+        if (mMode == ENTER_MODE) {
+            scramble = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("scramblePin", true);
         }
 
 
@@ -151,12 +151,12 @@ public class PinFragment extends Fragment {
 
 
         // Set action for numpad buttons
-        for (Button btn : mBtnNumpad){
+        for (Button btn : mBtnNumpad) {
             btn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // vibrate
-                    if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin",true))    {
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                     // Add input
@@ -164,7 +164,7 @@ public class PinFragment extends Fragment {
                     displayUserInput();
 
                     // Auto accept if PIN input length was reached
-                    if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE){
+                    if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE) {
                         pinEntered();
                     }
                 }
@@ -175,7 +175,7 @@ public class PinFragment extends Fragment {
         mBtnPinConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                    createPin();
+                createPin();
             }
         });
 
@@ -186,7 +186,7 @@ public class PinFragment extends Fragment {
 
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.deleteCharAt(mUserInput.length() - 1);
-                    if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin",true))    {
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -201,7 +201,7 @@ public class PinFragment extends Fragment {
             public boolean onLongClick(View view) {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.setLength(0);
-                    if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin",true))    {
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -214,21 +214,19 @@ public class PinFragment extends Fragment {
     }
 
     private void displayUserInput() {
-
         // Correctly display number of hints as visual PIN representation
-        if(mMode == CREATE_MODE) {
+        if (mMode == CREATE_MODE) {
             // Show used PIN hints as inactive
             for (int i = 0; i < mUserInput.toString().length(); i++) {
                 mPinHints[i].setVisibility(View.VISIBLE);
             }
             // Hide unused PIN hints
             for (int i = mUserInput.toString().length(); i < mPinHints.length; i++) {
-                if(i==0)
+                if (i == 0)
                     mPinHints[i].setVisibility(View.INVISIBLE);
                 mPinHints[i].setVisibility(View.GONE);
             }
-        }
-        else{
+        } else {
 
             // Set entered PIN hints active
             for (int i = 0; i < mUserInput.toString().length(); i++) {
@@ -246,29 +244,27 @@ public class PinFragment extends Fragment {
 
 
         // Disable numpad if max PIN length reached
-        if (mUserInput.toString().length() >= MAX_PIN_LENGTH){
-            for (Button btn : mBtnNumpad){
+        if (mUserInput.toString().length() >= MAX_PIN_LENGTH) {
+            for (Button btn : mBtnNumpad) {
                 btn.setEnabled(false);
                 btn.setAlpha(0.3f);
             }
-        }
-        else{
-            for (Button btn : mBtnNumpad){
+        } else {
+            for (Button btn : mBtnNumpad) {
                 btn.setEnabled(true);
                 btn.setAlpha(1f);
             }
         }
 
         // Show confirm button when creating PIN
-        if(mMode == CREATE_MODE) {
+        if (mMode == CREATE_MODE) {
             // Show confirm button only if the PIN has a valid length.
             if (mUserInput.toString().length() >= MIN_PIN_LENGTH && mUserInput.toString().length() <= MAX_PIN_LENGTH) {
                 mBtnPinConfirm.setVisibility(View.VISIBLE);
             } else {
                 mBtnPinConfirm.setVisibility(View.INVISIBLE);
             }
-        }
-        else{
+        } else {
             mBtnPinConfirm.setVisibility(View.INVISIBLE);
         }
 
@@ -317,8 +313,7 @@ public class PinFragment extends Fragment {
         }
     }
 
-    public void createPin(){
-
+    public void createPin() {
         // Go to next step
         ((SetupActivity) getActivity()).pinCreated(mUserInput.toString(), mUserInput.toString().length());
     }

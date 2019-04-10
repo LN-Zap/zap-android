@@ -7,6 +7,7 @@ import android.os.Vibrator;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.baseClasses.BaseActivity;
 import ln_zap.zap.util.ScrambledNumpad;
 import ln_zap.zap.util.TimeOutUtil;
@@ -109,7 +111,7 @@ public class PinEntryActivity extends BaseActivity {
 
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.deleteCharAt(mUserInput.length() - 1);
-                    if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",true))    {
+                    if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -123,7 +125,7 @@ public class PinEntryActivity extends BaseActivity {
             public boolean onLongClick(View view) {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.setLength(0);
-                    if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",true))    {
+                    if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -135,13 +137,13 @@ public class PinEntryActivity extends BaseActivity {
     }
 
     public void OnNumberPadClick(View view) {
-        if(PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin",true))    {
+        if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
             mVibrator.vibrate(55);
         }
         mUserInput.append(((Button) view).getText().toString());
         displayUserInput();
 
-        if (mUserInput.toString().length() == mPinLength){
+        if (mUserInput.toString().length() == mPinLength) {
             pinEntered();
         }
     }
@@ -163,10 +165,8 @@ public class PinEntryActivity extends BaseActivity {
             mPinHints[i].setVisibility(View.GONE);
         }
 
-
         // Hide confirm button
         mBtnPinConfirm.setVisibility(View.INVISIBLE);
-
 
         // Disable back button if user input is empty.
         if (mUserInput.toString().length() > 0) {
@@ -179,32 +179,34 @@ public class PinEntryActivity extends BaseActivity {
 
     }
 
-    public void pinEntered(){
+    public void pinEntered() {
         // Check if PIN was correct
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean correct = prefs.getString("pin_UNSECURE", "").equals(mUserInput.toString());
+        String userEnteredPin = mUserInput.toString();
+        String hashedInput = UtilFunctions.sha256HashZapSalt(userEnteredPin);
+        boolean correct = prefs.getString(RefConstants.pin_hash, "").equals(hashedInput);
         if (correct) {
+            App.getAppContext().inMemoryPin = userEnteredPin;
             TimeOutUtil.getInstance().startTimer();
             Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }
-        else{
-            mNumFails ++;
+        } else {
+            mNumFails++;
 
-                Toast.makeText(this, R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
 
-                final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
-                View view = findViewById(R.id.pinInputLayout);
-                view.startAnimation(animShake);
+            final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
+            View view = findViewById(R.id.pinInputLayout);
+            view.startAnimation(animShake);
 
-                if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
-                    mVibrator.vibrate(200);
-                }
+            if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
+                mVibrator.vibrate(200);
+            }
 
-                // clear the user input
-                mUserInput.setLength(0);
-                displayUserInput();
+            // clear the user input
+            mUserInput.setLength(0);
+            displayUserInput();
         }
     }
 
