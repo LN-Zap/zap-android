@@ -79,7 +79,8 @@ public class SetupActivity extends BaseAppCompatActivity {
         SharedPreferences.Editor editor = mPrefs.edit();
         editor.putString(RefConstants.pin_hash, UtilFunctions.sha256HashZapSalt(value));
         // TODO: do away with pin length eventually because it is vulnerability to hint in UI how long pin is
-        editor.putInt(RefConstants.pin_hash, value.length());
+        editor.putInt(RefConstants.pin_length, value.length());
+        editor.commit();
 
         if (mSetupMode == FULL_SETUP) {
             showConnectChoice();
