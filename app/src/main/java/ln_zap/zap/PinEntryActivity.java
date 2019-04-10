@@ -55,10 +55,9 @@ public class PinEntryActivity extends BaseActivity {
         mVibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mPinLength = prefs.getInt("pin_length",4);
+        mPinLength = prefs.getInt(RefConstants.pin_length, 4);
 
-        mScramble = prefs.getBoolean("scramblePin",true);
-
+        mScramble = prefs.getBoolean("scramblePin", true);
 
 
         // Define buttons

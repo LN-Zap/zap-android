@@ -20,6 +20,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import ln_zap.zap.R;
+import ln_zap.zap.RefConstants;
+import ln_zap.zap.UtilFunctions;
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.util.ScrambledNumpad;
 
 
@@ -87,11 +90,15 @@ public class PinFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // Get PIN length
-        if(mMode == CONFIRM_MODE) {
-            mPinLength = prefs.getInt("pin_length_temp", 4);
+        String pinString = null;
+        if (mMode == CONFIRM_MODE) {
+            pinString = App.getAppContext().pinTemp;
         } else {
-            mPinLength = prefs.getInt("pin_length", 4);
+            pinString = App.getAppContext().inMemoryPin;
         }
+
+        // TODO: do away with pin length eventually because it is vulnerability to hint in UI how long pin is
+        mPinLength = pinString != null ? pinString.length() : 4;
 
         mUserInput = new StringBuilder();
         mNumpad = new ScrambledNumpad();
@@ -279,27 +286,29 @@ public class PinFragment extends Fragment {
 
     }
 
-    public void pinEntered(){
-
+    public void pinEntered() {
         // Check if PIN was correct
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         boolean correct;
-        if (mMode == ENTER_MODE)
-            correct = prefs.getString("pin_UNSECURE", "").equals(mUserInput.toString());
-        else
-            correct = prefs.getString("pin_UNSECURE_temp", "").equals(mUserInput.toString());
+        if (mMode == ENTER_MODE) {
+            String userEnteredPin = mUserInput.toString();
+            String hashedInput = UtilFunctions.sha256HashZapSalt(userEnteredPin);
+            correct = prefs.getString(RefConstants.pin_hash, "").equals(hashedInput);
+        } else if (mMode == CONFIRM_MODE) {
+            correct = mUserInput.toString().equals(App.getAppContext().pinTemp);
+        } else {
+            correct = mUserInput.toString().equals(App.getAppContext().inMemoryPin);
+        }
 
         if (correct) {
             // Go to next step
-            if (mMode == ENTER_MODE){
+            if (mMode == ENTER_MODE) {
                 ((SetupActivity) getActivity()).correctPinEntered();
+            } else if (mMode == CONFIRM_MODE) {
+                ((SetupActivity) getActivity()).pinConfirmed(mUserInput.toString(), mUserInput.toString().length());
             }
-            else if (mMode == CONFIRM_MODE){
-                ((SetupActivity) getActivity()).pinConfirmed(mUserInput.toString(),mUserInput.toString().length());
-            }
-        }
-        else{
+        } else {
             // Show error
             Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
 
