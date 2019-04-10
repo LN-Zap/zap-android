@@ -70,6 +70,10 @@
     <string name="requested_payment">Angefordert</string>
     <string name="request_expired">Abgelaufen</string>
     <string name="internal">Intern</string>
+    <string name="opened_channel">Kanal geöffnet</string>
+    <string name="closed_channel">Kanag geschlossen</string>
+    <string name="normal_payments">Normale Zahlungen</string>
+    <string name="expired_requests">Abgelaufene Anfragen</string>
 
 
     <!-- //////////////// Channel Management //////////////////// -->

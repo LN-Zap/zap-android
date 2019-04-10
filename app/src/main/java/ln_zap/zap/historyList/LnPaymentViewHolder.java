@@ -3,6 +3,7 @@ package ln_zap.zap.historyList;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -62,7 +63,7 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
         mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(mContext,R.string.coming_soon,Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -77,6 +77,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         // Fetch the transaction history
         if (mPrefs.getBoolean("isWalletSetup", false)) {
             Wallet.getInstance().fetchLNDTransactionHistory();
+
+            Wallet.getInstance().fetchOpenChannelsFromLND();
+            Wallet.getInstance().fetchClosedChannelsFromLND();
         }
     }
 
@@ -195,6 +198,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             // Fetch the transaction history
             Wallet.getInstance().fetchLNDTransactionHistory();
+
+            Wallet.getInstance().fetchOpenChannelsFromLND();
+            Wallet.getInstance().fetchClosedChannelsFromLND();
         }
     }
 

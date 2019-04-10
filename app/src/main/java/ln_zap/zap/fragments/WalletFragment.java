@@ -228,11 +228,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             // Show info about mode (offline, testnet or mainnet) if it is already known
             onInfoUpdated(Wallet.getInstance().isInfoFetched());
 
-
             Wallet.getInstance().fetchBalanceFromLND();
-
-            // ToDo: This has to be done somewhere else later.
-            Wallet.getInstance().fetchOpenChannelsFromLND();
         }
 
         return view;

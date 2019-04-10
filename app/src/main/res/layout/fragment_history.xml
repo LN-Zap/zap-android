@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HistoryFragment">
 
+    <ImageView
+        android:id="@+id/listOptions"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_list_black_24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:tint="@color/gray" />
+
     <TextView
         android:id="@+id/heading"
         android:layout_width="0dp"

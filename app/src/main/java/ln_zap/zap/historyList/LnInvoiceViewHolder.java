@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -13,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ln_zap.zap.R;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.Wallet;
 
 
 public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
@@ -66,7 +68,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
             } else {
                 // The invoice has not been payed yet
 
-                if (lnInvoiceItem.mCreationDate + lnInvoiceItem.getInvoice().getExpiry() < System.currentTimeMillis() / 1000) {
+                if (Wallet.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
                     // The invoice has expired
 
                     // Set transaction type text
@@ -96,7 +98,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
             } else {
                 // The invoice has not been payed yet
 
-                if (lnInvoiceItem.mCreationDate + lnInvoiceItem.getInvoice().getExpiry() < System.currentTimeMillis() / 1000) {
+                if (Wallet.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
                     // The invoice has expired
 
                     // Set transaction type text
@@ -125,7 +127,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
         mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(mContext,R.string.coming_soon,Toast.LENGTH_SHORT).show();
             }
         });
     }

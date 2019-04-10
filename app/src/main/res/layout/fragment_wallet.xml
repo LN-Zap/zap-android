@@ -14,17 +14,26 @@
         android:background="@drawable/line"
         android:backgroundTint="@color/seaBlueGradient">
 
+        <ImageView
+            android:id="@+id/zapLogo"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_cloudlightning"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <TextView
             android:id="@+id/walletName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Wallet Name"
+            android:text="ZAP"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/zapLogo"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

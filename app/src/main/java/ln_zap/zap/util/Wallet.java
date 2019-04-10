@@ -1,6 +1,8 @@
 package ln_zap.zap.util;
 
 
+import android.content.Context;
+
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
@@ -39,6 +41,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import ln_zap.zap.R;
 import ln_zap.zap.connection.LndConnection;
 
 
@@ -451,6 +454,22 @@ public class Wallet {
                     mPendingClosedChannelsList = pendingChannelsResponse.getPendingClosingChannelsList();
                     mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
                     mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
+
+                    // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+                    for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
+                        fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
+                    }
+                    for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
+                        fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
+                    }
+                    for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
+                        fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
+                    }
+                    for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
+                        fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
+                    }
+
+
                     // ZapLog.debug(LOG_TAG, pendingChannelsResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "List pending channels request interrupted.");
@@ -481,6 +500,12 @@ public class Wallet {
                     ClosedChannelsResponse closedChannelsResponse = closedChannelsFuture.get();
 
                     mClosedChannelsList = closedChannelsResponse.getChannelsList();
+
+                    // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+                    for (ChannelCloseSummary c : mClosedChannelsList) {
+                        fetchNodeInfoFromLND(c.getRemotePubkey());
+                    }
+
                     // ZapLog.debug(LOG_TAG, closedChannelsResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "List closed channels request interrupted.");
@@ -585,6 +610,203 @@ public class Wallet {
         }, new ExecuteOnCaller());
     }
 
+    /**
+     * Retruns if the invoice has been payed already.
+     * @param invoice
+     * @return
+     */
+    public boolean isInvoicePayed(Invoice invoice){
+        boolean payed;
+        if (invoice.getValue() == 0){
+            payed = invoice.getAmtPaidSat() !=0;
+        } else {
+            payed = invoice.getValue() == invoice.getAmtPaidSat();
+        }
+        return payed;
+    }
+
+    /**
+     * Returns if the invoice has been expired. This function just checks if the expiration date is in the past.
+     * It will also return expired for already payed invoices.
+     * @param invoice
+     * @return
+     */
+    public boolean isInvoiceExpired(Invoice invoice){
+        return invoice.getCreationDate() + invoice.getExpiry() < System.currentTimeMillis() / 1000;
+    }
+
+
+    /**
+     * This function determines if we put the given on-chain transaction into the internal group.
+     * @param transaction
+     * @return
+     */
+    public boolean isTransactionInternal(Transaction transaction){
+
+        // open channels
+        if (mOpenChannelsList != null) {
+            for (Channel c : mOpenChannelsList) {
+                String[] parts = c.getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return true;
+                }
+            }
+        }
+
+        // pending open channels
+        if (mPendingOpenChannelsList != null) {
+            for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
+                String[] parts = c.getChannel().getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return true;
+                }
+            }
+        }
+
+        // pending closed channels
+        if (mPendingClosedChannelsList != null) {
+            for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
+                String[] parts = c.getChannel().getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return true;
+                }
+            }
+        }
+
+        // pending force closed channels
+        if (mPendingForceClosedChannelsList != null) {
+            for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
+                String[] parts = c.getChannel().getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return true;
+                }
+            }
+        }
+
+        // pending waiting for close channels
+        if (mPendingWaitingCloseChannelsList != null) {
+            for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
+                String[] parts = c.getChannel().getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return true;
+                }
+            }
+        }
+
+
+        // closed channels
+        if (mClosedChannelsList != null) {
+            for (ChannelCloseSummary c : mClosedChannelsList) {
+                String[] parts = c.getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0]) || transaction.getTxHash().equals(c.getClosingTxHash())) {
+                    return true;
+                }
+            }
+        }
+
+        if (transaction.getAmount() == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * This functions helps us to link on-chain channel transaction with the corresponding channel's public node alias.
+     * @return pubKey of the Node the channel is linked to
+     */
+    private String getNodePubKeyFromChannelTransaction(Transaction transaction){
+
+        // open channels
+        if (mOpenChannelsList != null) {
+            for (Channel c : mOpenChannelsList) {
+                String[] parts = c.getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return c.getRemotePubkey();
+                }
+            }
+        }
+
+        // pending open channels
+        if (mPendingOpenChannelsList != null) {
+            for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
+                String[] parts = c.getChannel().getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return c.getChannel().getRemoteNodePub();
+                }
+            }
+        }
+
+        // pending closed channels
+        if (mPendingClosedChannelsList != null) {
+            for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
+                String[] parts = c.getChannel().getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return c.getChannel().getRemoteNodePub();
+                }
+            }
+        }
+
+        // pending force closed channels
+        if (mPendingForceClosedChannelsList != null) {
+            for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
+                String[] parts = c.getChannel().getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return c.getChannel().getRemoteNodePub();
+                }
+            }
+        }
+
+        // pending waiting for close channels
+        if (mPendingWaitingCloseChannelsList != null) {
+            for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
+                String[] parts = c.getChannel().getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0])) {
+                    return c.getChannel().getRemoteNodePub();
+                }
+            }
+        }
+
+
+        // closed channels
+        if (mClosedChannelsList != null) {
+            for (ChannelCloseSummary c : mClosedChannelsList) {
+                String[] parts = c.getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0]) || transaction.getTxHash().equals(c.getClosingTxHash())) {
+                    return c.getRemotePubkey();
+                }
+            }
+        }
+
+        return "";
+    }
+
+    /**
+     * This functions helps us to link on-chain channel transaction with the corresponding channel's public node alias.
+     * @return alias
+     */
+    public String getNodeAliasFromChannelTransaction(Transaction transaction, Context mContext){
+        String pubKey = getNodePubKeyFromChannelTransaction(transaction);
+        String alias = "";
+        for (NodeInfo i : Wallet.getInstance().mNodeInfos) {
+            if (i.getNode().getPubKey().equals(pubKey)){
+                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0,8))){
+                    String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
+                    alias = unnamed + " (" + i.getNode().getPubKey().substring(0,5) + "...)";
+                } else {
+                    alias = i.getNode().getAlias();
+                }
+                break;
+            }
+        }
+
+        if (alias.equals("")){
+            return mContext.getResources().getString(R.string.channel_no_alias);
+        } else {
+            return alias;
+        }
+
+    }
 
 
     public boolean isSyncedToChain() {
