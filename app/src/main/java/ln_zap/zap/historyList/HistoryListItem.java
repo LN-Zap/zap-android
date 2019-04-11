@@ -6,6 +6,7 @@ public abstract class HistoryListItem implements Comparable<HistoryListItem>{
     public static final int TYPE_TRANSACTION = 1;
     public static final int TYPE_LN_INVOICE = 2;
     public static final int TYPE_LN_PAYMENT = 3;
+    public static final int TYPE_DEMO = 4;
 
     public long mCreationDate = 0;
 

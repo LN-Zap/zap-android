@@ -48,12 +48,12 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
         // memo is not yet available in lnPayments in LND;
 
         // Set amount
-        Long amt = lnPaymentItem.getPayment().getValueSat();
+        long amt = lnPaymentItem.getPayment().getValueSat();
         mAmount.setText("- " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
         mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superRed));
 
         // Set fee
-        Long feeAmt = lnPaymentItem.getPayment().getFee();
+        long feeAmt = lnPaymentItem.getPayment().getFee();
 
         String feeText = mContext.getResources().getString(R.string.fee)
                         + ": " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(feeAmt);

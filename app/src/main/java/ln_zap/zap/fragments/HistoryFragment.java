@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ln_zap.zap.R;
 import ln_zap.zap.historyList.DateItem;
+import ln_zap.zap.historyList.DemoItem;
 import ln_zap.zap.historyList.HistoryItemAdapter;
 import ln_zap.zap.historyList.HistoryListItem;
 import ln_zap.zap.historyList.LnInvoiceItem;
@@ -90,9 +93,9 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
         mHistoryItems = new ArrayList<>();
 
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
-            updateHistoryDisplayList();
-        }
+
+        updateHistoryDisplayList();
+
 
         mListOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,9 +106,9 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
                 Switch normalSwitch = DialogLayout.findViewById(R.id.switchNormal);
                 Switch expiredSwitch = DialogLayout.findViewById(R.id.switchExpired);
                 Switch internalSwitch = DialogLayout.findViewById(R.id.switchInternal);
-                normalSwitch.setChecked(mPrefs.getBoolean("showNormalTransactions",true));
-                expiredSwitch.setChecked(mPrefs.getBoolean("showExpiredRequests",false));
-                internalSwitch.setChecked(mPrefs.getBoolean("showInternalTransactions",true));
+                normalSwitch.setChecked(mPrefs.getBoolean("showNormalTransactions", true));
+                expiredSwitch.setChecked(mPrefs.getBoolean("showExpiredRequests", false));
+                internalSwitch.setChecked(mPrefs.getBoolean("showInternalTransactions", true));
                 normalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -141,7 +144,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
                 });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if(mPrefs.getBoolean("preventScreenRecording",true)) {
+                if (mPrefs.getBoolean("preventScreenRecording", true)) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -149,11 +152,10 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         });
 
 
-
         return view;
     }
 
-    private void updateHistoryDisplayList(){
+    private void updateHistoryDisplayList() {
 
         mHistoryItems.clear();
 
@@ -161,60 +163,76 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         List<HistoryListItem> expiredRequest = new LinkedList<>();
         List<HistoryListItem> internalTransactions = new LinkedList<>();
 
-        // Add all payment relevant items to one of the lists above
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
 
-        if (Wallet.getInstance().mOnChainTransactionList != null) {
-            for (Transaction t : Wallet.getInstance().mOnChainTransactionList) {
-                TransactionItem transactionItem = new TransactionItem(t);
+            // Add all payment relevant items to one of the lists above
 
-                if (Wallet.getInstance().isTransactionInternal(t)){
-                    internalTransactions.add(transactionItem);
-                } else {
-                    normalPayments.add(transactionItem);
-                }
-            }
-        }
+            if (Wallet.getInstance().mOnChainTransactionList != null) {
+                for (Transaction t : Wallet.getInstance().mOnChainTransactionList) {
+                    TransactionItem transactionItem = new TransactionItem(t);
 
-        if (Wallet.getInstance().mInvoiceList != null) {
-            for (Invoice i : Wallet.getInstance().mInvoiceList) {
-
-                LnInvoiceItem lnInvoiceItem = new LnInvoiceItem(i);
-
-                // add to list according to current state of the invoice
-                if (Wallet.getInstance().isInvoicePayed(i)){
-                    normalPayments.add(lnInvoiceItem);
-                } else {
-                    if (Wallet.getInstance().isInvoiceExpired(i)){
-                        expiredRequest.add(lnInvoiceItem);
+                    if (Wallet.getInstance().isTransactionInternal(t)) {
+                        internalTransactions.add(transactionItem);
                     } else {
-                        normalPayments.add(lnInvoiceItem);
+                        normalPayments.add(transactionItem);
                     }
                 }
             }
-        }
 
-        if (Wallet.getInstance().mPaymentsList != null) {
-            for (Payment p : Wallet.getInstance().mPaymentsList) {
-                LnPaymentItem lnPaymentItem = new LnPaymentItem(p);
-                normalPayments.add(lnPaymentItem);
+            if (Wallet.getInstance().mInvoiceList != null) {
+                for (Invoice i : Wallet.getInstance().mInvoiceList) {
+
+                    LnInvoiceItem lnInvoiceItem = new LnInvoiceItem(i);
+
+                    // add to list according to current state of the invoice
+                    if (Wallet.getInstance().isInvoicePayed(i)) {
+                        normalPayments.add(lnInvoiceItem);
+                    } else {
+                        if (Wallet.getInstance().isInvoiceExpired(i)) {
+                            expiredRequest.add(lnInvoiceItem);
+                        } else {
+                            normalPayments.add(lnInvoiceItem);
+                        }
+                    }
+                }
             }
-        }
 
+            if (Wallet.getInstance().mPaymentsList != null) {
+                for (Payment p : Wallet.getInstance().mPaymentsList) {
+                    LnPaymentItem lnPaymentItem = new LnPaymentItem(p);
+                    normalPayments.add(lnPaymentItem);
+                }
+            }
+
+        } else {
+            // Create demo transactions for demo mode
+            DemoItem demo1 = new DemoItem(1, "Demo on-chain transaction", 0, 259030, 7045, false, false);
+            DemoItem demo2 = new DemoItem(2, "demo lightning invoice", 0, 12030, 0, false, false);
+            DemoItem demo3 = new DemoItem(3, "demo lightning transaction", 0, 10000, 0, false, false);
+            DemoItem demo4 = new DemoItem(2, "demo lightning invoice", 0, 35730, 0, false, true);
+            DemoItem demo5 = new DemoItem(1, "Zap lightning node", 0, -8486, 0, true, false);
+            DemoItem demo6 = new DemoItem(1, "Demo on-chain transaction", 0, -153056, 7045, false, false);
+            normalPayments.add(demo1);
+            normalPayments.add(demo2);
+            normalPayments.add(demo3);
+            normalPayments.add(demo6);
+            expiredRequest.add(demo4);
+            internalTransactions.add(demo5);
+        }
 
         // Apply filters
 
-        if (mPrefs.getBoolean("showNormalTransactions",true)) {
+        if (mPrefs.getBoolean("showNormalTransactions", true)) {
             mHistoryItems.addAll(normalPayments);
         }
 
-        if (mPrefs.getBoolean("showExpiredRequests",false)) {
+        if (mPrefs.getBoolean("showExpiredRequests", false)) {
             mHistoryItems.addAll(expiredRequest);
         }
 
-        if (mPrefs.getBoolean("showInternalTransactions",true)) {
+        if (mPrefs.getBoolean("showInternalTransactions", true)) {
             mHistoryItems.addAll(internalTransactions);
         }
-
 
 
         // Sort by Date
@@ -224,12 +242,12 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         // Add the Date Lines
         // Our start date is tomorrow to make sure the first date is set even if it is today.
         String tempDateText = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                .format(new Date(System.currentTimeMillis()+24*60*60*1000));
+                .format(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
         for (int i = 0; i < mHistoryItems.size(); i++) {
 
             String currDateText = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
                     .format(new Date(mHistoryItems.get(i).mCreationDate * 1000L));
-            if (!tempDateText.equals(currDateText)){
+            if (!tempDateText.equals(currDateText)) {
                 DateItem dateItem = new DateItem(mHistoryItems.get(i).mCreationDate);
                 mHistoryItems.add(i, dateItem);
                 i++;

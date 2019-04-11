@@ -40,6 +40,9 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case HistoryListItem.TYPE_LN_PAYMENT:
                 View lnPaymentView = inflater.inflate(R.layout.history_list_element_ln_payment, parent, false);
                 return new LnPaymentViewHolder(lnPaymentView);
+            case HistoryListItem.TYPE_DEMO:
+                View demoView = inflater.inflate(R.layout.history_list_element_ln_payment, parent, false);
+                return new DemoViewHolder(demoView);
             default:
                 View defaultView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);
                 return new TransactionViewHolder(defaultView);
@@ -73,6 +76,11 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 LnPaymentViewHolder lnPaymentHolder = (LnPaymentViewHolder) holder;
                 LnPaymentItem lnPaymentItem = (LnPaymentItem) mItems.get(position);
                 lnPaymentHolder.bindLnPaymentItem(lnPaymentItem);
+                break;
+            case HistoryListItem.TYPE_DEMO:
+                DemoViewHolder demoHolder = (DemoViewHolder) holder;
+                DemoItem demoItem = (DemoItem) mItems.get(position);
+                demoHolder.bindDemoItem(demoItem);
                 break;
         }
     }

@@ -71,7 +71,7 @@
     <string name="request_expired">Abgelaufen</string>
     <string name="internal">Intern</string>
     <string name="opened_channel">Kanal geöffnet</string>
-    <string name="closed_channel">Kanag geschlossen</string>
+    <string name="closed_channel">Kanal geschlossen</string>
     <string name="normal_payments">Normale Zahlungen</string>
     <string name="expired_requests">Abgelaufene Anfragen</string>
 
@@ -116,6 +116,7 @@
     <string name="demo_encodedLightningRequest">Statt einer echten Zahlungsanfrage wird dieser Text verwendet, um einen beispielhaften QR-Code zu generieren. Bitte richte eine Wallet ein, um echte Zahlungsanfragen zu generieren.</string>
     <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
     <string name="demo_exampleMemo">Beispiel Verwendungszweck.</string>
+    <string name="demo_payment_details_not_available">Zahlungsdetails sind im Demo Modus nicht verfügbar.</string>
 
 
     <!-- //////////////// Send //////////////////// -->

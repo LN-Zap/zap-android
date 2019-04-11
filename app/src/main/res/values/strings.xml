@@ -151,6 +151,7 @@
     <string name="demo_encodedLightningRequest">Instead of a real bitcoin lightning invoice this text is used to create an example qr code. Please setup a wallet for real bitcoin lightning invoices.</string>
     <string name="demo_setupWalletFirst">You first have to setup a wallet.</string>
     <string name="demo_exampleMemo">This is an example Memo.</string>
+    <string name="demo_payment_details_not_available">Payment details are not available in demo mode.</string>
 
 
     <!-- //////////////// Send //////////////////// -->
