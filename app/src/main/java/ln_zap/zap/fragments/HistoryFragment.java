@@ -291,6 +291,10 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
     @Override
     public void onRefresh() {
-        Wallet.getInstance().fetchLNDTransactionHistory();
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
+            Wallet.getInstance().fetchLNDTransactionHistory();
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }
