@@ -21,6 +21,10 @@ android {
         }
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     // when referencing `armadillo` for encrypted SharedSettings without compileOptions we get error
     // Error: Invoke-customs are only supported starting with Android O (--min-api 26)
     // https://stackoverflow.com/questions/49891730/invoke-customs-are-only-supported-starting-with-android-0-min-api-26
