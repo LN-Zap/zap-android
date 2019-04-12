@@ -19,12 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ln_zap.zap.baseClasses.App;
-import ln_zap.zap.baseClasses.BaseActivity;
+import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.util.ScrambledNumpad;
 import ln_zap.zap.util.TimeOutUtil;
 
 
-public class PinEntryActivity extends BaseActivity {
+public class PinEntryActivity extends BaseAppCompatActivity {
 
     private int mPinLength = 0;
 
