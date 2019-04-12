@@ -590,15 +590,11 @@ public class MonetaryUtil {
     }
 
     private String formatAsSatoshiDisplayAmount(long value) {
-        // Satoshis are the smallest unit, there are no fractions.
-        // To avoid a value being recognized as a fraction, we use spaces as group separators.
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setGroupingSeparator(' ');
-        DecimalFormat df = new DecimalFormat("#", symbols);
+        Locale loc = mContext.getResources().getConfiguration().locale;
+        NumberFormat nf = NumberFormat.getNumberInstance(loc);
+        DecimalFormat df = (DecimalFormat)nf;
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(16);
-        df.setGroupingUsed(true);
-        df.setGroupingSize(3);
         return df.format(value);
     }
 
@@ -621,21 +617,7 @@ public class MonetaryUtil {
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(22);
         String result= df.format(value);
-
         return result;
-
-        // If we have a fraction, then always show 2 fraction digits for fiat.
-        // If there is no fraction, don't show a fraction.
-        // remove df.setMinimumFractionDigits(2); from above to make this work.
-        /*
-        if (result.contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator()))){
-            df.setMinimumFractionDigits(2);
-            return df.format(value);
-        }
-        else {
-            return result;
-        }
-        */
     }
 
 
