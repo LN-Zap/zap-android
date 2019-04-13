@@ -117,6 +117,11 @@
     <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
     <string name="demo_exampleMemo">Beispiel Verwendungszweck.</string>
     <string name="demo_payment_details_not_available">Zahlungsdetails sind im Demo Modus nicht verfügbar.</string>
+    <string name="demo_buy_coffee">Eine Tasse Kaffee</string>
+    <string name="demo_from_alice">Von Alice</string>
+    <string name="demo_from_carol">Von Carol</string>
+    <string name="demo_to_bob">An Bob für Kinoticket</string>
+    <string name="demo_ln_NodeName">Bitrefill.com</string>
 
 
     <!-- //////////////// Send //////////////////// -->

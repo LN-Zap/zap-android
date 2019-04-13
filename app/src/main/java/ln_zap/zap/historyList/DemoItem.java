@@ -6,7 +6,6 @@ public class DemoItem extends HistoryListItem {
 
     private int mTransactionType; // 1 - on-chain tx, 2 - lnInvoice, 3 - lnPayment
     private String mDescription;
-    private long mDate;
     private long mAmount;
     private long mFee;
 
@@ -16,7 +15,7 @@ public class DemoItem extends HistoryListItem {
     public DemoItem(int txType, String description, long date, long amount, long fee, boolean internal, boolean expired) {
         mTransactionType = txType;
         mDescription = description;
-        mDate = date;
+        mCreationDate = date;
         mAmount = amount;
         mFee = fee;
         mInternal = internal;
@@ -34,10 +33,6 @@ public class DemoItem extends HistoryListItem {
 
     public String getDescription() {
         return mDescription;
-    }
-
-    public long getDate() {
-        return mDate;
     }
 
     public long getAmount() {

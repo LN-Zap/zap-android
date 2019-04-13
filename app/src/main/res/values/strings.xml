@@ -152,6 +152,12 @@
     <string name="demo_setupWalletFirst">You first have to setup a wallet.</string>
     <string name="demo_exampleMemo">This is an example Memo.</string>
     <string name="demo_payment_details_not_available">Payment details are not available in demo mode.</string>
+    <string name="demo_buy_coffee">One cup of coffee</string>
+    <string name="demo_from_alice">From Alice</string>
+    <string name="demo_from_carol">From Carol</string>
+    <string name="demo_to_bob">To Bob for cinema ticket</string>
+    <string name="demo_ln_NodeName">Bitrefill.com</string>
+
 
 
     <!-- //////////////// Send //////////////////// -->

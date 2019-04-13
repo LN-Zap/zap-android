@@ -46,7 +46,7 @@ public class DemoViewHolder extends RecyclerView.ViewHolder {
 
         // Set time of Day
         DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, mContext.getResources().getConfiguration().locale);
-        String formattedTime = df.format(new Date(demoItem.getDate()));
+        String formattedTime = df.format(new Date(demoItem.mCreationDate * 1000L));
         mTimeOfDay.setText(formattedTime);
 
         // Set description
@@ -121,7 +121,7 @@ public class DemoViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     // Set state
                     mTransactionState.setText(R.string.sent);
-                    mAmount.setText("- " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(demoItem.getAmount()));
+                    mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(demoItem.getAmount()).replace("-", "- "));
                     mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superRed));
                     Long feeAmt = demoItem.getFee();
                     String feeText = mContext.getResources().getString(R.string.fee)
