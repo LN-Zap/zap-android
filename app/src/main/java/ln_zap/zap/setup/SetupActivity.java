@@ -89,7 +89,7 @@ public class SetupActivity extends BaseAppCompatActivity {
             Toast.makeText(SetupActivity.this, "PIN changed!", Toast.LENGTH_SHORT).show();
 
             // Reset the PIN timeout. We don't want to ask for PIN again...
-            TimeOutUtil.getInstance().startTimer();
+            TimeOutUtil.getInstance().restartTimer();
 
             // Go to home screen
             Intent intent = new Intent(SetupActivity.this, HomeActivity.class);

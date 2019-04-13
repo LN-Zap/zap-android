@@ -186,7 +186,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         boolean correct = prefs.getString(RefConstants.pin_hash, "").equals(hashedInput);
         if (correct) {
             App.getAppContext().inMemoryPin = userEnteredPin;
-            TimeOutUtil.getInstance().startTimer();
+            TimeOutUtil.getInstance().restartTimer();
             Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

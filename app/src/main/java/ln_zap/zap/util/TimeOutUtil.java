@@ -7,6 +7,7 @@ public class TimeOutUtil {
 
     private static long appClosed = 0L;
     private static TimeOutUtil instance = null;
+    private boolean canBeRestarted = true;
 
     private TimeOutUtil() { ; }
 
@@ -19,7 +20,7 @@ public class TimeOutUtil {
         return instance;
     }
 
-    public void startTimer() {
+    public void restartTimer() {
         appClosed = System.currentTimeMillis();
     }
 
@@ -31,6 +32,11 @@ public class TimeOutUtil {
         return timedOut || invalidTime;
     }
 
-    public void reset() { appClosed = 0L; }
+    public boolean getCanBeRestarted() {
+        return canBeRestarted;
+    }
 
+    public void setCanBeRestarted(boolean canBeRestarted) {
+        this.canBeRestarted = canBeRestarted;
+    }
 }

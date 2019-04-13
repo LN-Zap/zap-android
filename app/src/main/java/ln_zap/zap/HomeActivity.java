@@ -186,21 +186,25 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             Intent intent = new Intent(this, PinEntryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }
+        } else {
+            setupExchangeRateSchedule();
+            registerNetworkStatusChangeListener();
 
-        setupExchangeRateSchedule();
-        registerNetworkStatusChangeListener();
+            // Restart lnd connection
+            if (mPrefs.getBoolean("isWalletSetup", false)) {
+                TimeOutUtil.getInstance().setCanBeRestarted(true);
 
-        // Restart lnd connection
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
-            LndConnection.getInstance().restartBackgroundTasks();
-            setupLNDInfoSchedule();
+                ZapLog.debug(LOG_TAG,"Starting to establish connections...");
+                LndConnection.getInstance().restartBackgroundTasks();
+                setupLNDInfoSchedule();
 
-            // Fetch the transaction history
-            Wallet.getInstance().fetchLNDTransactionHistory();
+                // Fetch the transaction history
+                Wallet.getInstance().fetchLNDTransactionHistory();
 
-            Wallet.getInstance().fetchOpenChannelsFromLND();
-            Wallet.getInstance().fetchClosedChannelsFromLND();
+                // Fetch the channels from LND
+                Wallet.getInstance().fetchOpenChannelsFromLND();
+                Wallet.getInstance().fetchClosedChannelsFromLND();
+            }
         }
     }
 
@@ -218,7 +222,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     private void stopListenersAndSchedules(){
-        TimeOutUtil.getInstance().startTimer();
+        if (TimeOutUtil.getInstance().getCanBeRestarted()) {
+            TimeOutUtil.getInstance().restartTimer();
+            ZapLog.debug(LOG_TAG,"PIN timer restarted");
+        }
+        TimeOutUtil.getInstance().setCanBeRestarted(false);
 
         if (mIsExchangeRateSchedulerRunning) {
             // Kill the scheduled exchange rate requests to go easy on the battery.

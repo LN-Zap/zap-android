@@ -174,7 +174,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                 .apply();
 
         // Do not ask for pin again...
-        TimeOutUtil.getInstance().startTimer();
+        TimeOutUtil.getInstance().restartTimer();
 
         // Show home screen, remove history stack
         Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
