@@ -35,13 +35,13 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 View transactionView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);
                 return new TransactionViewHolder(transactionView);
             case HistoryListItem.TYPE_LN_INVOICE:
-                View lnTransactionView = inflater.inflate(R.layout.history_list_element_ln_invoice, parent, false);
+                View lnTransactionView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);
                 return new LnInvoiceViewHolder(lnTransactionView);
             case HistoryListItem.TYPE_LN_PAYMENT:
-                View lnPaymentView = inflater.inflate(R.layout.history_list_element_ln_payment, parent, false);
+                View lnPaymentView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);
                 return new LnPaymentViewHolder(lnPaymentView);
             case HistoryListItem.TYPE_DEMO:
-                View demoView = inflater.inflate(R.layout.history_list_element_ln_payment, parent, false);
+                View demoView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);
                 return new DemoViewHolder(demoView);
             default:
                 View defaultView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);

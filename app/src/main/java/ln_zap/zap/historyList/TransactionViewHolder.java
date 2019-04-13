@@ -17,22 +17,24 @@ import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.Wallet;
 
 public class TransactionViewHolder extends RecyclerView.ViewHolder {
-    // each data item is just a string in this case
-    private TextView mAmount;
+
     private ImageView mIcon;
+    private TextView mTimeOfDay;
     private TextView mTransactionState;
     private TextView mDescription;
+    private TextView mAmount;
     private TextView mTransactionFee;
-    private TextView mTimeOfDay;
     private View mRootView;
     private Context mContext;
+
     public TransactionViewHolder(View v) {
         super(v);
-        mAmount = v.findViewById(R.id.transactionAmount);
+
         mIcon = v.findViewById(R.id.transactionTypeIcon);
-        mDescription = v.findViewById(R.id.transactionDescription);
-        mTransactionState = v.findViewById(R.id.transactionState);
         mTimeOfDay = v.findViewById(R.id.timeOfDay);
+        mTransactionState = v.findViewById(R.id.transactionState);
+        mDescription = v.findViewById(R.id.transactionDescription);
+        mAmount = v.findViewById(R.id.transactionAmount);
         mTransactionFee = v.findViewById(R.id.transactionFeeAmount);
         mRootView = v.findViewById(R.id.transactionRootView);
         mContext = v.getContext();

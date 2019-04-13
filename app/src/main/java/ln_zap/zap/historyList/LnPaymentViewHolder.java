@@ -1,7 +1,9 @@
 package ln_zap.zap.historyList;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,26 +16,34 @@ import ln_zap.zap.R;
 import ln_zap.zap.util.MonetaryUtil;
 
 public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
-    // each data item is just a string in this case
-    private TextView mAmount;
+
+    private ImageView mIcon;
+    private TextView mTimeOfDay;
     private TextView mTransactionState;
     private TextView mDescription;
+    private TextView mAmount;
     private TextView mTransactionFee;
-    private TextView mTimeOfDay;
     private View mRootView;
     private Context mContext;
+
     public LnPaymentViewHolder(View v) {
         super(v);
-        mAmount = v.findViewById(R.id.transactionAmount);
+
+        mIcon = v.findViewById(R.id.transactionTypeIcon);
+        mTimeOfDay = v.findViewById(R.id.timeOfDay);
         mTransactionState = v.findViewById(R.id.transactionState);
         mDescription = v.findViewById(R.id.transactionDescription);
-        mTimeOfDay = v.findViewById(R.id.timeOfDay);
+        mAmount = v.findViewById(R.id.transactionAmount);
         mTransactionFee = v.findViewById(R.id.transactionFeeAmount);
         mRootView = v.findViewById(R.id.transactionRootView);
         mContext = v.getContext();
     }
 
     public void bindLnPaymentItem(LnPaymentItem lnPaymentItem){
+
+        // Set Icon
+        mIcon.setImageResource(R.drawable.bolt_black_filled_24dp);
+        mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
 
         // Set time of Day
         DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, mContext.getResources().getConfiguration().locale);

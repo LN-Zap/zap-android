@@ -19,21 +19,24 @@ import ln_zap.zap.util.Wallet;
 
 public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView mAmount;
-    private ImageView mTransactionTypeIcon;
+    private ImageView mIcon;
+    private TextView mTimeOfDay;
     private TextView mTransactionState;
     private TextView mDescription;
-    private TextView mTimeOfDay;
+    private TextView mAmount;
+    private TextView mTransactionFee;
     private View mRootView;
-    private Context  mContext;
+    private Context mContext;
 
     public LnInvoiceViewHolder(View v) {
         super(v);
-        mAmount = v.findViewById(R.id.transactionAmount);
-        mTransactionTypeIcon = v.findViewById(R.id.transactionTypeIcon);
+
+        mIcon = v.findViewById(R.id.transactionTypeIcon);
+        mTimeOfDay = v.findViewById(R.id.timeOfDay);
         mTransactionState = v.findViewById(R.id.transactionState);
         mDescription = v.findViewById(R.id.transactionDescription);
-        mTimeOfDay = v.findViewById(R.id.timeOfDay);
+        mAmount = v.findViewById(R.id.transactionAmount);
+        mTransactionFee = v.findViewById(R.id.transactionFeeAmount);
         mRootView = v.findViewById(R.id.transactionRootView);
         mContext = v.getContext();
     }
@@ -43,8 +46,9 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         mRootView.setAlpha(1f);
         mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
-        mTransactionTypeIcon.setImageResource(R.drawable.ic_clock_black_24dp);
-        mTransactionTypeIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
+        mIcon.setImageResource(R.drawable.ic_clock_black_24dp);
+        mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
+        mTransactionFee.setVisibility(View.GONE);
 
         // Set time of Day
         DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, mContext.getResources().getConfiguration().locale);
@@ -63,8 +67,8 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
                 mTransactionState.setText(mContext.getResources().getString(R.string.received));
                 mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superGreen));
                 mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amtPayed));
-                mTransactionTypeIcon.setImageResource(R.drawable.bolt_black_filled_24dp);
-                mTransactionTypeIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
+                mIcon.setImageResource(R.drawable.bolt_black_filled_24dp);
+                mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
             } else {
                 // The invoice has not been payed yet
 
@@ -93,8 +97,8 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
                 mTransactionState.setText(mContext.getResources().getString(R.string.received));
                 mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superGreen));
                 mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
-                mTransactionTypeIcon.setImageResource(R.drawable.bolt_black_filled_24dp);
-                mTransactionTypeIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
+                mIcon.setImageResource(R.drawable.bolt_black_filled_24dp);
+                mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
             } else {
                 // The invoice has not been payed yet
 
