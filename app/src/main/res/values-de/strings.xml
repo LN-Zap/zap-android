@@ -72,6 +72,7 @@
     <string name="internal">Intern</string>
     <string name="opened_channel">Kanal geöffnet</string>
     <string name="closed_channel">Kanal geschlossen</string>
+    <string name="filter_transactions">Transaktionen filtern</string>
     <string name="normal_payments">Normale Zahlungen</string>
     <string name="expired_requests">Abgelaufene Anfragen</string>
 

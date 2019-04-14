@@ -134,6 +134,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
                     }
                 });
                 adb.setView(DialogLayout);
+                adb.setTitle(R.string.filter_transactions);
                 adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
