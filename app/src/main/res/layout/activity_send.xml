@@ -85,7 +85,7 @@
             android:id="@+id/sendUnitLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="end"
             android:orientation="horizontal"
             android:paddingEnd="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -100,7 +100,7 @@
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:text="UNIT"
-                android:textAlignment="textEnd"
+                android:textAlignment="center"
                 android:textSize="30sp"
                 android:textStyle="italic" />
 

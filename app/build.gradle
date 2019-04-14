@@ -93,9 +93,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha04'
 
     // gRPC implementation to communicate with lnd
-    implementation 'io.grpc:grpc-okhttp:1.17.1'
-    implementation 'io.grpc:grpc-protobuf-lite:1.17.1'
-    implementation 'io.grpc:grpc-stub:1.17.1'
+    implementation 'io.grpc:grpc-okhttp:1.20.0'
+    implementation 'io.grpc:grpc-protobuf-lite:1.20.0'
+    implementation 'io.grpc:grpc-stub:1.20.0'
     implementation 'javax.annotation:javax.annotation-api:1.2'
     compileOnly 'com.google.api.grpc:googleapis-common-protos:0.0.3'
 
