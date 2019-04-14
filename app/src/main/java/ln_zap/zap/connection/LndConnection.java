@@ -13,6 +13,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import androidx.preference.PreferenceManager;
 import at.favre.lib.armadillo.Armadillo;
+import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import ln_zap.zap.RefConstants;
@@ -39,6 +40,7 @@ public class LndConnection {
         App ctx = App.getAppContext();
         mPrefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
                 .encryptionFingerprint(ctx)
+                .keyStretchingFunction(new PBKDF2KeyStretcher(3000,null))
                 .password(ctx.inMemoryPin.toCharArray())
                 .build();
 

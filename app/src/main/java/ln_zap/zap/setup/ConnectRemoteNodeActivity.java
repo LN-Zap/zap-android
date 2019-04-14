@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import at.favre.lib.armadillo.Armadillo;
+import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import ln_zap.zap.HomeActivity;
 import ln_zap.zap.R;
 import ln_zap.zap.RefConstants;
@@ -155,6 +156,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         App ctx = App.getAppContext();
         SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
                 .encryptionFingerprint(ctx)
+                .keyStretchingFunction(new PBKDF2KeyStretcher(3000,null))
                 .password(ctx.inMemoryPin.toCharArray())
                 .build();
 
