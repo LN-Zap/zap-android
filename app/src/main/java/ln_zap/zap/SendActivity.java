@@ -47,7 +47,7 @@ public class SendActivity extends BaseAppCompatActivity {
 
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
+        if (extras != null) {
             mOnChain = extras.getBoolean("onChain");
             mOnChainAddress = extras.getString("onChainAddress");
             mFixedAmount = extras.getLong("amount");
@@ -64,7 +64,7 @@ public class SendActivity extends BaseAppCompatActivity {
         mEtMemo = findViewById(R.id.sendMemo);
 
 
-        if(mOnChain) {
+        if (mOnChain) {
 
             // Show "On Chain" at top
             ImageView ivTypeIcon = findViewById(R.id.sendTypeIcon);
@@ -73,7 +73,7 @@ public class SendActivity extends BaseAppCompatActivity {
             tvTypeText.setText(R.string.onChain);
         }
 
-        if(mPrefs.getBoolean("isWalletSetup", false)) {
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
 
             if (mOnChain) {
                 if (mFixedAmount != 0L) {
@@ -81,7 +81,7 @@ public class SendActivity extends BaseAppCompatActivity {
                     mEtAmount.clearFocus();
                     mEtAmount.setFocusable(false);
                 }
-                if (mMemo != null){
+                if (mMemo != null) {
                     mEtMemo.setText(mMemo);
                 }
 
@@ -122,8 +122,7 @@ public class SendActivity extends BaseAppCompatActivity {
                                 ZapLog.debug(LOG_TAG, e.getMessage());
                             }
 
-                        }
-                        else{
+                        } else {
                             // Send amount == 0
                             Toast.makeText(SendActivity.this, "Send amount is to small.", Toast.LENGTH_SHORT).show();
                         }
@@ -184,7 +183,7 @@ public class SendActivity extends BaseAppCompatActivity {
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(SendActivity.this, R.string.demo_setupWalletFirst,Toast.LENGTH_LONG).show();
+                    Toast.makeText(SendActivity.this, R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -204,7 +203,7 @@ public class SendActivity extends BaseAppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 // cut off last inputted character if not valid
-                if (!mAmountValid){
+                if (!mAmountValid) {
                     String input = s.toString();
                     int length = s.length();
                     s.delete(length - 1, length);
@@ -217,7 +216,7 @@ public class SendActivity extends BaseAppCompatActivity {
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mFixedAmount == 0L){
+                if (mFixedAmount == 0L) {
                     String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
                     MonetaryUtil.getInstance().switchCurrencies();
                     mEtAmount.setText(convertedAmount);

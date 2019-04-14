@@ -58,9 +58,6 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
     private SharedPreferences mPrefs;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private boolean showNormalTransactions = true;
-    private boolean showExpiredRequest = false;
-    private boolean showInternalTransactions = false;
 
     private List<HistoryListItem> mHistoryItems;
 
@@ -214,7 +211,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
             DemoItem firstOnChainPayment = new DemoItem(1, "", 1554441308, -353056, 7045, false, false);
             DemoItem receivedMoreBitcoin = new DemoItem(1, "", 1554601308, 260000, 7045, false, false);
             DemoItem receivedFirstLnPayment = new DemoItem(3, getActivity().getResources().getString(R.string.demo_from_alice), 1554611308, 34061, 0, false, false);
-            DemoItem activePaymentRequest = new DemoItem(2, getActivity().getResources().getString(R.string.demo_from_carol), (System.currentTimeMillis()/1000)-5000, 100000, 0, false, false);
+            DemoItem activePaymentRequest = new DemoItem(2, getActivity().getResources().getString(R.string.demo_from_carol), (System.currentTimeMillis() / 1000) - 5000, 100000, 0, false, false);
 
 
             normalPayments.add(receivedFirstBitcoin);

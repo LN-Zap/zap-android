@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="25dp"
-    android:paddingRight="25dp"
     android:paddingTop="25dp"
+    android:paddingRight="25dp"
     android:paddingBottom="15dp">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
         android:text="@string/guardian_Title"
         android:textColor="@color/lightningOrange"
-        android:textSize="24sp"
-        android:paddingBottom="5dp"/>
+        android:textSize="24sp" />
 
     <ImageView
         android:id="@+id/receiveLightningLine"

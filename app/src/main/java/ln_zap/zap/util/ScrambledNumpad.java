@@ -11,7 +11,7 @@ import java.util.AbstractMap.SimpleImmutableEntry;
  */
 public class ScrambledNumpad {
 
-    private List<SimpleImmutableEntry<Integer,Integer>> mNumpad;
+    private List<SimpleImmutableEntry<Integer, Integer>> mNumpad;
     private List<Integer> mPositions;
 
     public ScrambledNumpad() {
@@ -32,10 +32,10 @@ public class ScrambledNumpad {
 
         SecureRandom random = new SecureRandom();
 
-        for(int i = 0; i < 10; i++)  {
+        for (int i = 0; i < 10; i++) {
 
             int randomPos = random.nextInt(mPositions.size());
-            SimpleImmutableEntry<Integer,Integer> pair = new SimpleImmutableEntry<>(i, mPositions.get(randomPos));
+            SimpleImmutableEntry<Integer, Integer> pair = new SimpleImmutableEntry<>(i, mPositions.get(randomPos));
             mPositions.remove(randomPos);
             mNumpad.add(pair);
 
@@ -44,7 +44,7 @@ public class ScrambledNumpad {
     }
 
 
-    public List<SimpleImmutableEntry<Integer,Integer>> getNumpad()  {
+    public List<SimpleImmutableEntry<Integer, Integer>> getNumpad() {
         return mNumpad;
     }
 

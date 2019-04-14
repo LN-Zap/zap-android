@@ -5,7 +5,7 @@ import com.github.lightningnetwork.lnd.lnrpc.Channel;
 public class OpenChannelItem extends ChannelListItem {
     private Channel mChannel;
 
-    public OpenChannelItem(Channel channel){
+    public OpenChannelItem(Channel channel) {
         mChannel = channel;
     }
 

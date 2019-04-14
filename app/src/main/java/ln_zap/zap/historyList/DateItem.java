@@ -4,7 +4,7 @@ public class DateItem extends HistoryListItem {
 
     public long mDate;
 
-    public DateItem(long date){
+    public DateItem(long date) {
         mDate = date;
     }
 

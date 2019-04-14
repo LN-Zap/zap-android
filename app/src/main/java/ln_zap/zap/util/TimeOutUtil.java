@@ -9,11 +9,13 @@ public class TimeOutUtil {
     private static TimeOutUtil instance = null;
     private boolean canBeRestarted = true;
 
-    private TimeOutUtil() { ; }
+    private TimeOutUtil() {
+        ;
+    }
 
     public static TimeOutUtil getInstance() {
 
-        if(instance == null) {
+        if (instance == null) {
             instance = new TimeOutUtil();
         }
 

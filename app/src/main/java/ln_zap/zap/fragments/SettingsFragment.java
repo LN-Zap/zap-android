@@ -55,7 +55,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         // Load the settings from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey);
 
-        mUG = new UserGuardian(getActivity(),this);
+        mUG = new UserGuardian(getActivity(), this);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 
@@ -174,12 +174,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                if (mPrefs.getBoolean("isWalletSetup", false)){
+                if (mPrefs.getBoolean("isWalletSetup", false)) {
                     Intent intent = new Intent(getActivity(), SetupActivity.class);
                     intent.putExtra("setupMode", SetupActivity.CHANGE_PIN);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
                 }
                 return true;
             }
@@ -215,12 +215,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         mSwScreenProtection.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (mSwScreenProtection.isChecked()){
+                if (mSwScreenProtection.isChecked()) {
                     mUG.securityScreenProtection();
                     // the value is set from the guardian callback, that's why we don't chang switch state here.
                     return false;
-                }
-                else{
+                } else {
                     getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                     return true;
                 }
@@ -232,7 +231,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         mSwHideTotalBalance.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (!mSwHideTotalBalance.isChecked()){
+                if (!mSwHideTotalBalance.isChecked()) {
                     new AlertDialog.Builder(getActivity())
                             .setMessage(R.string.settings_hideTotalBalance_explanation)
                             .setCancelable(true)
@@ -241,8 +240,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                                 }
                             }).show();
                     return true;
-                }
-                else{
+                } else {
                     return true;
                 }
             }
@@ -253,12 +251,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         mSwScrambledPin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (mSwScrambledPin.isChecked()){
+                if (mSwScrambledPin.isChecked()) {
                     mUG.securityScrambledPin();
                     // the value is set from the guardian callback, that's why we don't chang switch state here.
                     return false;
-                }
-                else{
+                } else {
                     return true;
                 }
             }
@@ -270,7 +267,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 UserGuardian.reenableAllSecurityWarnings(getActivity());
-                Toast.makeText(getActivity(),R.string.guardian_reset,Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.guardian_reset, Toast.LENGTH_LONG).show();
                 return true;
             }
         });
@@ -312,11 +309,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                                 "\nLND version:  " + Wallet.getInstance().getLNDVersion().split(" commit")[0])
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) { }
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("preventScreenRecording",true)) {
+                if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("preventScreenRecording", true)) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -346,7 +344,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         return both.toArray(new CharSequence[both.size()]);
     }
 
-    private void createSecondCurrencyList(){
+    private void createSecondCurrencyList() {
 
         CharSequence[] btcEntryValues = getActivity().getResources().getStringArray(R.array.btcUnit);
         CharSequence[] btcEntriesDisplayValue = getActivity().getResources().getStringArray(R.array.btcUnitDisplayValues);
@@ -364,7 +362,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                     fiatEntryValues[i] = currencies.getString(i);
 
                     String currencyName = AppUtil.getInstance(getActivity()).getCurrencyNameFromCurrencyCode(currencies.getString(i));
-                    if (currencyName == null){
+                    if (currencyName == null) {
                         currencyName = currencies.getString(i);
                     } else {
                         currencyName = "(" + currencies.getString(i) + ") " + currencyName;
@@ -380,8 +378,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         }
 
         // Combine btc list with fiat list
-        CharSequence[] entryValues = joinCharSequenceArrays(btcEntryValues,fiatEntryValues);
-        CharSequence[] entryDisplayValues = joinCharSequenceArrays(btcEntriesDisplayValue,fiatEntryDisplayValue);
+        CharSequence[] entryValues = joinCharSequenceArrays(btcEntryValues, fiatEntryValues);
+        CharSequence[] entryDisplayValues = joinCharSequenceArrays(btcEntriesDisplayValue, fiatEntryDisplayValue);
 
         // Use the arrays for the list preference
         mListCurrency.setEntryValues(entryValues);

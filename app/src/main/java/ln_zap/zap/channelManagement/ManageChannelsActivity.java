@@ -54,7 +54,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity {
         updateChannelsDisplayList();
     }
 
-    private void updateChannelsDisplayList(){
+    private void updateChannelsDisplayList() {
         mChannelItems.clear();
 
         // Add all open channel items

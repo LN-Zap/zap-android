@@ -40,7 +40,7 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
         mContext = v.getContext();
     }
 
-    public void bindTransactionItem(TransactionItem transactionItem){
+    public void bindTransactionItem(TransactionItem transactionItem) {
 
         // Normal state
         mAmount.setVisibility(View.VISIBLE);
@@ -56,7 +56,7 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
         // compare the amount with 0
         int result = amt.compareTo(0L);
 
-        if (Wallet.getInstance().isTransactionInternal(transactionItem.getOnChainTransaction())){
+        if (Wallet.getInstance().isTransactionInternal(transactionItem.getOnChainTransaction())) {
 
             // internal transaction like opening a channel etc.
             mTransactionState.setText(R.string.internal);
@@ -78,7 +78,7 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
                     mAmount.setVisibility(View.GONE);
                     mTransactionState.setText(R.string.closed_channel);
                     mTransactionFee.setVisibility(View.GONE);
-                    String aliasClosed = Wallet.getInstance().getNodeAliasFromChannelTransaction(transactionItem.getOnChainTransaction(),mContext);
+                    String aliasClosed = Wallet.getInstance().getNodeAliasFromChannelTransaction(transactionItem.getOnChainTransaction(), mContext);
                     mDescription.setText(aliasClosed);
                     mDescription.setVisibility(View.VISIBLE);
                     break;
@@ -89,7 +89,7 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
                     mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superRed));
                     mTransactionState.setText(R.string.opened_channel);
                     mTransactionFee.setVisibility(View.GONE);
-                    String aliasOpened = Wallet.getInstance().getNodeAliasFromChannelTransaction(transactionItem.getOnChainTransaction(),mContext);
+                    String aliasOpened = Wallet.getInstance().getNodeAliasFromChannelTransaction(transactionItem.getOnChainTransaction(), mContext);
                     mDescription.setText(aliasOpened);
                     mDescription.setVisibility(View.VISIBLE);
                     break;
@@ -138,7 +138,7 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
         mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.coming_soon, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -39,7 +39,7 @@ import ln_zap.zap.util.ZapLog;
  * A simple {@link Fragment} subclass.
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.BalanceListener,Wallet.InfoListener, MonetaryUtil.ExchangeRateListener {
+        Wallet.BalanceListener, Wallet.InfoListener, MonetaryUtil.ExchangeRateListener {
 
     private static final String LOG_TAG = "Wallet Fragment";
 
@@ -88,16 +88,18 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mBalanceFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.balance_fade_out);
         mLogoFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logo_fade_in);
 
-        mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener(){
+        mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation arg0) {
                 mClBalanceLayout.setVisibility(View.VISIBLE);
                 mIvSwitchButton.setVisibility(View.VISIBLE);
                 mIvLogo.setVisibility(View.INVISIBLE);
             }
+
             @Override
             public void onAnimationRepeat(Animation arg0) {
             }
+
             @Override
             public void onAnimationEnd(Animation arg0) {
                 mClBalanceLayout.setVisibility(View.INVISIBLE);
@@ -108,7 +110,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // Hide balance if the setting was chosen
-        if(mPrefs.getBoolean("hideTotalBalance", false)){
+        if (mPrefs.getBoolean("hideTotalBalance", false)) {
             mClBalanceLayout.setVisibility(View.INVISIBLE);
             mIvSwitchButton.setVisibility(View.INVISIBLE);
             mIvLogo.setVisibility(View.VISIBLE);
@@ -130,10 +132,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mClBalanceLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mPrefs.getBoolean("hideTotalBalance", false)){
+                if (!mPrefs.getBoolean("hideTotalBalance", false)) {
                     MonetaryUtil.getInstance().switchCurrencies();
                     updateTotalBalanceDisplay();
-                } else{
+                } else {
                     mBalanceFadeOutAnimation.reset();
                     mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
                     mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
@@ -159,7 +161,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if(mPrefs.getBoolean("preventScreenRecording",true)) {
+                if (mPrefs.getBoolean("preventScreenRecording", true)) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -175,7 +177,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 updateTotalBalanceDisplay();
 
                 // also cancel fade out if hideTotalBalance option is active
-                if(mPrefs.getBoolean("hideTotalBalance", false)) {
+                if (mPrefs.getBoolean("hideTotalBalance", false)) {
                     mBalanceFadeOutAnimation.reset();
                     mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
                     mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
@@ -220,8 +222,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
 
-
-
         // fetch the current balance and info from LND
         if (mPrefs.getBoolean("isWalletSetup", false)) {
 
@@ -234,13 +234,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         return view;
     }
 
-    private void updateTotalBalanceDisplay(){
+    private void updateTotalBalanceDisplay() {
 
         // Adapt unit text size depending on its length
-        if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2){
+        if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2) {
             mTvPrimaryBalanceUnit.setTextSize(20);
-        }
-        else{
+        } else {
             mTvPrimaryBalanceUnit.setTextSize(32);
         }
 
@@ -256,7 +255,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
         mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
-        if (MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()){
+        if (MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()) {
             // Hide btc rate info if both units are btc
             mTvBtcRate.setVisibility(View.GONE);
         } else {
@@ -271,16 +270,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mTvBtcRate.setText(rate);
             mTvBtcRate.setVisibility(View.VISIBLE);
         }
-        ZapLog.debug(LOG_TAG,"Total balance display updated");
+        ZapLog.debug(LOG_TAG, "Total balance display updated");
 
     }
 
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
-    {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Update if primary currency has been switched from another activity
-        if (key.equals("firstCurrencyIsPrimary")){
+        if (key.equals("firstCurrencyIsPrimary")) {
             updateTotalBalanceDisplay();
         }
     }
@@ -297,8 +295,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onInfoUpdated(boolean connected) {
-        if(connected) {
-            if((mPrefs.getBoolean("isWalletSetup", false))){
+        if (connected) {
+            if ((mPrefs.getBoolean("isWalletSetup", false))) {
                 if (Wallet.getInstance().isTestnet()) {
                     mTvMode.setText("TESTNET");
                     mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superGreen));
@@ -313,8 +311,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superGreen));
                 mTvMode.setVisibility(View.VISIBLE);
             }
-        }
-        else {
+        } else {
             mTvMode.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
             mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superRed));
             mTvMode.setVisibility(View.VISIBLE);
@@ -326,19 +323,19 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         super.onResume();
 
         // Register listeners
-        if(!mPreferenceChangeListenerRegistered){
+        if (!mPreferenceChangeListenerRegistered) {
             mPrefs.registerOnSharedPreferenceChangeListener(this);
             mPreferenceChangeListenerRegistered = true;
         }
-        if(!mBalanceChangeListenerRegistered) {
+        if (!mBalanceChangeListenerRegistered) {
             Wallet.getInstance().registerBalanceListener(this);
             mBalanceChangeListenerRegistered = true;
         }
-        if(!mInfoChangeListenerRegistered) {
+        if (!mInfoChangeListenerRegistered) {
             Wallet.getInstance().registerInfoListener(this);
             mInfoChangeListenerRegistered = true;
         }
-        if(!mExchangeRateListenerRegistered) {
+        if (!mExchangeRateListenerRegistered) {
             MonetaryUtil.getInstance().registerExchangeRateListener(this);
             mExchangeRateListenerRegistered = true;
         }

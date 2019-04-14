@@ -35,14 +35,14 @@ public class Currency {
      */
     private boolean mIsBitcoin;
 
-    public Currency(String code, double rate, long timestamp){
+    public Currency(String code, double rate, long timestamp) {
         mIsBitcoin = false;
         mCode = code;
         mRate = rate;
         mTimestamp = timestamp;
     }
 
-    public Currency(String code, double rate, long timestamp, String symbol){
+    public Currency(String code, double rate, long timestamp, String symbol) {
         mIsBitcoin = false;
         mCode = code;
         mRate = rate;
@@ -50,12 +50,11 @@ public class Currency {
         mSymbol = symbol;
     }
 
-    public Currency(String code, double rate){
+    public Currency(String code, double rate) {
         mIsBitcoin = true;
         mCode = code;
         mRate = rate;
     }
-
 
 
     public String getCode() {
@@ -74,5 +73,7 @@ public class Currency {
         return mSymbol;
     }
 
-    public boolean isBitcoin() { return mIsBitcoin; }
+    public boolean isBitcoin() {
+        return mIsBitcoin;
+    }
 }

@@ -6,6 +6,7 @@ import ln_zap.zap.interfaces.UserGuardianInterface;
 
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.UserGuardian;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
@@ -46,7 +47,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
 
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
+        if (extras != null) {
             mOnChain = extras.getBoolean("onChain");
             mAddress = extras.getString("address");
             mAmount = extras.getString("amount");
@@ -55,7 +56,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         }
 
         setContentView(R.layout.activity_generate_request);
-        mUG = new UserGuardian(this,this);
+        mUG = new UserGuardian(this, this);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this);
 
@@ -68,7 +69,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         }
 
 
-        if(mPrefs.getBoolean("isWalletSetup", false)) {
+        if (mPrefs.getBoolean("isWalletSetup", false)) {
             if (mOnChain) {
 
                 // Generate on-chain request data to encode
@@ -105,7 +106,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         // Generate "QR-Code"
         Bitmap bmpQRCode = QRCode
                 .from(mDataToEncode)
-                .withSize(750,750)
+                .withSize(750, 750)
                 .withErrorCorrection(ErrorCorrectionLevel.L)
                 .bitmap();
         ImageView ivQRCode = findViewById(R.id.requestQRCode);
@@ -144,11 +145,12 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
                         .setMessage(mDataToEncode)
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) { }
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if(PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this).getBoolean("preventScreenRecording",true)) {
+                if (PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this).getBoolean("preventScreenRecording", true)) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -166,8 +168,8 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
 
     }
 
-    private String appendParameter(String base, String name, String value){
-        if(!base.contains("?"))
+    private String appendParameter(String base, String name, String value) {
+        if (!base.contains("?"))
             return base + "?" + name + "=" + value;
         else
             return base + "&" + name + "=" + value;
@@ -182,10 +184,10 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         }
     }
 
-    private void copyToClipboard(){
+    private void copyToClipboard() {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Address", mDataToEncode);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(this,R.string.copied_to_clipboard,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 }

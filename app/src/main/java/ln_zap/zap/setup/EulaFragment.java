@@ -41,7 +41,7 @@ public class EulaFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mNextButton.setEnabled(isChecked);
-                if (isChecked){
+                if (isChecked) {
                     mNextButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.lightningOrange));
                 } else {
                     mNextButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.gray));
@@ -54,15 +54,15 @@ public class EulaFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                    // Set the eulaAccepted preference to true to ensure the app only asks once for this.
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean("eulaAccepted", true);
-                    editor.apply();
+                // Set the eulaAccepted preference to true to ensure the app only asks once for this.
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("eulaAccepted", true);
+                editor.apply();
 
-                    // Go to next setup step.
-                    ((SetupActivity) getActivity()).eulaAccepted();
-                }
+                // Go to next setup step.
+                ((SetupActivity) getActivity()).eulaAccepted();
+            }
         });
 
         return view;

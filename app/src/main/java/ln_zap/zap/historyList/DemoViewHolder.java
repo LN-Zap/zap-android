@@ -59,7 +59,7 @@ public class DemoViewHolder extends RecyclerView.ViewHolder {
 
         switch (demoItem.getTransactionType()) {
             case HistoryListItem.TYPE_TRANSACTION:
-                if (demoItem.isInternal()){
+                if (demoItem.isInternal()) {
                     mTransactionTypeIcon.setImageResource(R.drawable.ic_internal_black_24dp);
                     mTransactionTypeIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
                     if (demoItem.getAmount() > 0) {
@@ -102,7 +102,7 @@ public class DemoViewHolder extends RecyclerView.ViewHolder {
                 mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(demoItem.getAmount()));
                 mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
                 mTransactionFee.setVisibility(View.GONE);
-                if (demoItem.isExpired()){
+                if (demoItem.isExpired()) {
                     mTransactionState.setText(R.string.request_expired);
                     mRootView.setAlpha(0.5f);
                 } else {

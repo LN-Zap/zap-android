@@ -31,10 +31,10 @@
             android:id="@+id/receiveLightningIcon"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
-            android:tint="@color/white"
             android:paddingTop="15dp"
-            android:paddingBottom="5dp"/>
+            android:paddingBottom="5dp"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
 
         <TextView
             android:id="@+id/receiveLightningText"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp"
             android:text="@string/lightning"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <ImageView
             android:id="@+id/receiveLightningLine"
@@ -56,20 +56,20 @@
         android:id="@+id/receiveOnChainButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:alpha="0.2"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/receiveLightningButton"
-        app:layout_constraintTop_toTopOf="parent"
-        android:alpha="0.2">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/receiveOnChainIcon"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_onchain_black_24dp"
-            android:tint="@color/white"
             android:paddingTop="15dp"
-            android:paddingBottom="5dp"/>
+            android:paddingBottom="5dp"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/ic_onchain_black_24dp" />
 
         <TextView
             android:id="@+id/receiveOnChainText"
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp"
             android:text="@string/onChain"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <ImageView
             android:id="@+id/receiveOnChainLine"

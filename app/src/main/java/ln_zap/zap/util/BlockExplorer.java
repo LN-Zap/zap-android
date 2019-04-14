@@ -23,7 +23,7 @@ public class BlockExplorer {
      * @param transactionID transaction to show
      * @param ctx
      */
-    public static void showTransaction(String transactionID, Context ctx){
+    public static void showTransaction(String transactionID, Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         String explorer = prefs.getString("blockExplorer", "BlockCypher");
         boolean mainnet = !Wallet.getInstance().isTestnet();
@@ -54,13 +54,12 @@ public class BlockExplorer {
                 break;
         }
 
-        if(supported) {
+        if (supported) {
             // Call the url
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             ctx.startActivity(browserIntent);
-        }
-        else{
-            unsupportedNetwork(explorer, mainnet ? "mainnet" : "testnet",ctx);
+        } else {
+            unsupportedNetwork(explorer, mainnet ? "mainnet" : "testnet", ctx);
         }
     }
 
@@ -71,7 +70,7 @@ public class BlockExplorer {
      * @param address address to show
      * @param ctx
      */
-    public static void showAddress(String address, Context ctx){
+    public static void showAddress(String address, Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         String explorer = prefs.getString("blockExplorer", "BlockCypher");
         boolean mainnet = !Wallet.getInstance().isTestnet();
@@ -102,24 +101,24 @@ public class BlockExplorer {
                 break;
         }
 
-        if(supported) {
+        if (supported) {
             // Call the url
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             ctx.startActivity(browserIntent);
-        }
-        else{
-            unsupportedNetwork(explorer, mainnet ? "mainnet" : "testnet",ctx);
+        } else {
+            unsupportedNetwork(explorer, mainnet ? "mainnet" : "testnet", ctx);
         }
     }
 
 
-    private static void unsupportedNetwork(String explorer, String network, Context ctx){
+    private static void unsupportedNetwork(String explorer, String network, Context ctx) {
         new AlertDialog.Builder(ctx)
                 .setTitle(R.string.error_blockExplorer_title)
-                .setMessage(ctx.getResources().getString(R.string.error_blockExplorer_message, explorer,network))
+                .setMessage(ctx.getResources().getString(R.string.error_blockExplorer_message, explorer, network))
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) { }
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
                 })
                 .show();
     }

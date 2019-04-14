@@ -20,6 +20,7 @@ public class UtilFunctions {
     }
 
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
+
     public static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         int v;

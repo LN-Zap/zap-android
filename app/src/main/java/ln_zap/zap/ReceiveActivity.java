@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
@@ -52,7 +51,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         setContentView(R.layout.activity_receive);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ReceiveActivity.this);
-        mUG = new UserGuardian(this,this);
+        mUG = new UserGuardian(this, this);
 
         mTvUnit = findViewById(R.id.receiveUnit);
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
@@ -91,7 +90,6 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         });
 
 
-
         // Action when clicked on receive unit
         LinearLayout llUnit = findViewById(R.id.receiveUnitLayout);
         llUnit.setOnClickListener(new View.OnClickListener() {
@@ -110,22 +108,21 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
             @Override
             public void onClick(View v) {
                 // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
-                if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600){
+                if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600) {
                     mUG.securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
-                }
-                else{
+                } else {
                     generateRequest();
                 }
             }
         });
 
-        mEtAmount.addTextChangedListener(new TextWatcher(){
+        mEtAmount.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable arg0) {
 
                 // cut off last inputted character if not valid
-                if (!mAmountValid){
+                if (!mAmountValid) {
                     String input = arg0.toString();
                     int length = arg0.length();
                     arg0.delete(length - 1, length);
@@ -156,7 +153,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
         });
     }
 
-    public void generateRequest(){
+    public void generateRequest() {
         if (mPrefs.getBoolean("isWalletSetup", false)) {
             // The wallet is setup. Communicate with LND and generate the request.
             if (mOnChain) {
@@ -164,7 +161,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
                 // generate onChain request
 
                 int addressType;
-                if (mPrefs.getString("btcAddressType", "p2psh").equals("bech32")){
+                if (mPrefs.getString("btcAddressType", "p2psh").equals("bech32")) {
                     addressType = 0;
                 } else {
                     addressType = 1;
@@ -218,7 +215,7 @@ public class ReceiveActivity extends BaseAppCompatActivity implements UserGuardi
                 Invoice asyncInvoiceRequest = Invoice.newBuilder()
                         .setValue(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
                         .setMemo(mEtMemo.getText().toString())
-                        .setExpiry(Long.parseLong(mPrefs.getString("lightning_expiry","86400"))) // in seconds
+                        .setExpiry(Long.parseLong(mPrefs.getString("lightning_expiry", "86400"))) // in seconds
                         .build();
 
                 final ListenableFuture<AddInvoiceResponse> invoiceFuture = asyncInvoiceClient.addInvoice(asyncInvoiceRequest);

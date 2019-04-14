@@ -45,7 +45,6 @@ import ln_zap.zap.R;
 import ln_zap.zap.connection.LndConnection;
 
 
-
 public class Wallet {
 
     private static final String LOG_TAG = "Wallet Util";
@@ -87,12 +86,13 @@ public class Wallet {
     private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
 
 
-
-    private Wallet() { ; }
+    private Wallet() {
+        ;
+    }
 
     public static Wallet getInstance() {
 
-        if(mInstance == null) {
+        if (mInstance == null) {
             mInstance = new Wallet();
         }
 
@@ -102,7 +102,7 @@ public class Wallet {
     /**
      * Use this to reset the wallet information when the connection type was changed.
      */
-    public void reset(){
+    public void reset() {
         mPaymentRequest = null;
         mOnChainBalanceTotal = 0;
         mOnChainBalanceConfirmed = 0;
@@ -124,7 +124,7 @@ public class Wallet {
      *
      * @return
      */
-    public Balances getBalances(){
+    public Balances getBalances() {
         return new Balances(mOnChainBalanceTotal, mOnChainBalanceConfirmed,
                 mOnChainBalanceUnconfirmed, mChannelBalance, mChannelBalancePending);
     }
@@ -135,7 +135,7 @@ public class Wallet {
      *
      * @return
      */
-    public Balances getDemoBalances(){
+    public Balances getDemoBalances() {
         return new Balances(2637452, 2637452,
                 0, 200000, 0);
     }
@@ -144,7 +144,7 @@ public class Wallet {
      * This will fetch the current balance from LND.
      * All Listeners registered to BalanceListener will be informed about any changes.
      */
-    public void fetchBalanceFromLND(){
+    public void fetchBalanceFromLND() {
 
         // Retrieve balance with gRPC (async)
 
@@ -169,12 +169,12 @@ public class Wallet {
                             balanceResponse.getConfirmedBalance(),
                             balanceResponse.getUnconfirmedBalance());
                 } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG,"Wallet balance request interrupted.");
+                    ZapLog.debug(LOG_TAG, "Wallet balance request interrupted.");
                 } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG,"Exception in wallet balance request task.");
+                    ZapLog.debug(LOG_TAG, "Exception in wallet balance request task.");
                 }
             }
-        },new ExecuteOnCaller());
+        }, new ExecuteOnCaller());
 
 
         // fetch channel balance
@@ -199,12 +199,12 @@ public class Wallet {
                     setChannelBalance(channelBalanceResponse.getBalance(),
                             channelBalanceResponse.getPendingOpenBalance());
                 } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG,"Channel balance request interrupted.");
+                    ZapLog.debug(LOG_TAG, "Channel balance request interrupted.");
                 } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG,"Exception in channel balance request task.");
+                    ZapLog.debug(LOG_TAG, "Exception in channel balance request task.");
                 }
             }
-        },new ExecuteOnCaller());
+        }, new ExecuteOnCaller());
     }
 
 
@@ -212,7 +212,7 @@ public class Wallet {
      * This will fetch the current info from LND.
      * All Listeners registered to InfoListener will be informed about any changes.
      */
-    public void fetchInfoFromLND(){
+    public void fetchInfoFromLND() {
         // Retrieve info from LND with gRPC (async)
 
         LightningGrpc.LightningFutureStub asyncInfoClient = LightningGrpc
@@ -239,19 +239,19 @@ public class Wallet {
 
                     broadcastInfoUpdate(true);
                 } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG,"Info request interrupted.");
+                    ZapLog.debug(LOG_TAG, "Info request interrupted.");
                 } catch (ExecutionException e) {
-                    if(e.getMessage().toLowerCase().contains("unavailable")){
+                    if (e.getMessage().toLowerCase().contains("unavailable")) {
                         mConnectedToLND = false;
                         broadcastInfoUpdate(false);
                     }
-                    ZapLog.debug(LOG_TAG,e.getMessage());
+                    ZapLog.debug(LOG_TAG, e.getMessage());
                 }
             }
-        },new ExecuteOnCaller());
+        }, new ExecuteOnCaller());
     }
 
-    public void simulateFetchInfoForDemo(boolean connected){
+    public void simulateFetchInfoForDemo(boolean connected) {
         mConnectedToLND = connected;
         broadcastInfoUpdate(connected);
     }
@@ -260,7 +260,7 @@ public class Wallet {
      * This will fetch all transaction History from LND.
      * After that the history is provided in lists that can be handled in a synchronized way.
      */
-    public void fetchLNDTransactionHistory(){
+    public void fetchLNDTransactionHistory() {
         // Set all updated flags to false. This way we can determine later, when update is finished.
         mTransactionUpdated = false;
         mInvoicesUpdated = false;
@@ -274,8 +274,8 @@ public class Wallet {
     /**
      * checks if the history update is finished and then broadcast an update to all registered classes.
      */
-    private void isHistoryUpdateFinished(){
-        if (mTransactionUpdated && mInvoicesUpdated && mPaymentsUpdated){
+    private void isHistoryUpdateFinished() {
+        if (mTransactionUpdated && mInvoicesUpdated && mPaymentsUpdated) {
             broadcastHistoryUpdate();
         }
     }
@@ -284,7 +284,7 @@ public class Wallet {
     /**
      * This will fetch all On-Chain transactions involved with the current wallet from LND.
      */
-    public void fetchTransactionsFromLND(){
+    public void fetchTransactionsFromLND() {
         // fetch on-chain transactions
         LightningGrpc.LightningFutureStub asyncTransactionsClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -318,7 +318,7 @@ public class Wallet {
     /**
      * This will fetch lightning invoices from LND.
      */
-    public void fetchInvoicesFromLND(){
+    public void fetchInvoicesFromLND() {
         // Fetch lightning invoices
         LightningGrpc.LightningFutureStub asyncInvoiceClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -356,7 +356,7 @@ public class Wallet {
     /**
      * This will fetch lightning payments from LND.
      */
-    public void fetchPaymentsFromLND(){
+    public void fetchPaymentsFromLND() {
         // Fetch lightning payments
         LightningGrpc.LightningFutureStub asyncPaymentsClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -399,7 +399,7 @@ public class Wallet {
     /**
      * This will fetch all open channels for the current wallet from LND.
      */
-    public void fetchOpenChannelsFromLND(){
+    public void fetchOpenChannelsFromLND() {
         // fetch open channels
         LightningGrpc.LightningFutureStub asyncOpenChannelsClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -435,7 +435,7 @@ public class Wallet {
     /**
      * This will fetch all pending channels for the current wallet from LND.
      */
-    public void fetchPendingChannelsFromLND(){
+    public void fetchPendingChannelsFromLND() {
         // fetch pending channels
         LightningGrpc.LightningFutureStub asyncPendingChannelsClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -484,7 +484,7 @@ public class Wallet {
     /**
      * This will fetch all closed channels for the current wallet from LND.
      */
-    public void fetchClosedChannelsFromLND(){
+    public void fetchClosedChannelsFromLND() {
         // fetch closed channels
         LightningGrpc.LightningFutureStub asyncClosedChannelsClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -521,9 +521,10 @@ public class Wallet {
      * This will fetch the NodeInfo according to the supplied pubkey.
      * The NodeInfo will then be added to the mNodeInfos list (no duplicates) which can then
      * be used for non async tasks, such as getting the aliases for channels.
+     *
      * @param pubkey
      */
-    public void fetchNodeInfoFromLND(String pubkey){
+    public void fetchNodeInfoFromLND(String pubkey) {
         // fetch node info
         LightningGrpc.LightningFutureStub asyncNodeInfoClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -543,7 +544,7 @@ public class Wallet {
                     // Add the nodeInfo to our list, if it is not already a member of the list.
                     boolean nodeInfoAlreadyExists = false;
                     for (NodeInfo i : mNodeInfos) {
-                        if (i.getNode().getPubKey().equals(nodeInfoResponse.getNode().getPubKey())){
+                        if (i.getNode().getPubKey().equals(nodeInfoResponse.getNode().getPubKey())) {
                             nodeInfoAlreadyExists = true;
                             break;
                         }
@@ -567,9 +568,10 @@ public class Wallet {
      * This will fetch an Invoice according to the supplied txHash.
      * The Invoice will then be added to the mPayedInvoicesList (no duplicates) which can then
      * be used for non async tasks, such as getting the memo for lightning payments.
+     *
      * @param paymentHash
      */
-    public void lookupInvoiceWithLND(ByteString paymentHash){
+    public void lookupInvoiceWithLND(ByteString paymentHash) {
         // fetch invoice
         LightningGrpc.LightningFutureStub asyncLookupInvoiceClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -589,7 +591,7 @@ public class Wallet {
                     // Add the invoice to our list, if it is not already a member of the list.
                     boolean invoiceAlreadyExists = false;
                     for (Invoice i : mPayedInvoicesList) {
-                        if (i.getRHash().equals(invoiceResponse.getRHash())){
+                        if (i.getRHash().equals(invoiceResponse.getRHash())) {
                             invoiceAlreadyExists = true;
                             break;
                         }
@@ -598,7 +600,7 @@ public class Wallet {
                         mPayedInvoicesList.add(invoiceResponse);
                     }
 
-                     ZapLog.debug(LOG_TAG, invoiceResponse.toString());
+                    ZapLog.debug(LOG_TAG, invoiceResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "lookup invoice request interrupted.");
                 } catch (ExecutionException e) {
@@ -612,13 +614,14 @@ public class Wallet {
 
     /**
      * Retruns if the invoice has been payed already.
+     *
      * @param invoice
      * @return
      */
-    public boolean isInvoicePayed(Invoice invoice){
+    public boolean isInvoicePayed(Invoice invoice) {
         boolean payed;
-        if (invoice.getValue() == 0){
-            payed = invoice.getAmtPaidSat() !=0;
+        if (invoice.getValue() == 0) {
+            payed = invoice.getAmtPaidSat() != 0;
         } else {
             payed = invoice.getValue() == invoice.getAmtPaidSat();
         }
@@ -628,20 +631,22 @@ public class Wallet {
     /**
      * Returns if the invoice has been expired. This function just checks if the expiration date is in the past.
      * It will also return expired for already payed invoices.
+     *
      * @param invoice
      * @return
      */
-    public boolean isInvoiceExpired(Invoice invoice){
+    public boolean isInvoiceExpired(Invoice invoice) {
         return invoice.getCreationDate() + invoice.getExpiry() < System.currentTimeMillis() / 1000;
     }
 
 
     /**
      * This function determines if we put the given on-chain transaction into the internal group.
+     *
      * @param transaction
      * @return
      */
-    public boolean isTransactionInternal(Transaction transaction){
+    public boolean isTransactionInternal(Transaction transaction) {
 
         // open channels
         if (mOpenChannelsList != null) {
@@ -713,9 +718,10 @@ public class Wallet {
 
     /**
      * This functions helps us to link on-chain channel transaction with the corresponding channel's public node alias.
+     *
      * @return pubKey of the Node the channel is linked to
      */
-    private String getNodePubKeyFromChannelTransaction(Transaction transaction){
+    private String getNodePubKeyFromChannelTransaction(Transaction transaction) {
 
         // open channels
         if (mOpenChannelsList != null) {
@@ -783,16 +789,17 @@ public class Wallet {
 
     /**
      * This functions helps us to link on-chain channel transaction with the corresponding channel's public node alias.
+     *
      * @return alias
      */
-    public String getNodeAliasFromChannelTransaction(Transaction transaction, Context mContext){
+    public String getNodeAliasFromChannelTransaction(Transaction transaction, Context mContext) {
         String pubKey = getNodePubKeyFromChannelTransaction(transaction);
         String alias = "";
         for (NodeInfo i : Wallet.getInstance().mNodeInfos) {
-            if (i.getNode().getPubKey().equals(pubKey)){
-                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0,8))){
+            if (i.getNode().getPubKey().equals(pubKey)) {
+                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0, 8))) {
                     String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
-                    alias = unnamed + " (" + i.getNode().getPubKey().substring(0,5) + "...)";
+                    alias = unnamed + " (" + i.getNode().getPubKey().substring(0, 5) + "...)";
                 } else {
                     alias = i.getNode().getAlias();
                 }
@@ -800,7 +807,7 @@ public class Wallet {
             }
         }
 
-        if (alias.equals("")){
+        if (alias.equals("")) {
             return mContext.getResources().getString(R.string.channel_no_alias);
         } else {
             return alias;
@@ -829,25 +836,24 @@ public class Wallet {
         return mConnectedToLND;
     }
 
-    private void setOnChainBalance(long total, long confirmed, long unconfirmed){
+    private void setOnChainBalance(long total, long confirmed, long unconfirmed) {
         mOnChainBalanceTotal = total;
         mOnChainBalanceConfirmed = confirmed;
         mOnChainBalanceUnconfirmed = unconfirmed;
         broadcastBalanceUpdate();
     }
 
-    private void setChannelBalance(long balance, long pending){
+    private void setChannelBalance(long balance, long pending) {
         mChannelBalance = balance;
         mChannelBalancePending = pending;
         broadcastBalanceUpdate();
     }
 
 
-
     // Event handling to notify all registered listeners to a balance update.
 
     private void broadcastBalanceUpdate() {
-        for( BalanceListener listener : mBalanceListeners) {
+        for (BalanceListener listener : mBalanceListeners) {
             listener.onBalanceUpdated();
         }
     }
@@ -868,7 +874,7 @@ public class Wallet {
     // Event handling to notify all registered listeners to an info update.
 
     private void broadcastInfoUpdate(boolean connected) {
-        for( InfoListener listener : mInfoListeners) {
+        for (InfoListener listener : mInfoListeners) {
             listener.onInfoUpdated(connected);
         }
     }
@@ -889,7 +895,7 @@ public class Wallet {
     // Event handling to notify all registered listeners to a history update.
 
     private void broadcastHistoryUpdate() {
-        for( HistoryListener listener : mHistoryListeners) {
+        for (HistoryListener listener : mHistoryListeners) {
             listener.onHistoryUpdated();
         }
     }

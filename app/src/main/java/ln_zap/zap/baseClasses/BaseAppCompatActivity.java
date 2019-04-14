@@ -1,7 +1,9 @@
 package ln_zap.zap.baseClasses;
 
 import android.content.Context;
+
 import androidx.preference.PreferenceManager;
+
 import android.view.MenuItem;
 import android.view.WindowManager;
 
@@ -26,7 +28,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
         // Enable back button if an action bar is supported by the theme
         final ActionBar ab = getSupportActionBar();
-        if(ab != null) {
+        if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
         }
     }
@@ -39,11 +41,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * https://github.com/commonsguy/cwac-security/blob/master/docs/FLAGSECURE.md
      */
     private void initializeScreenRecordingSecurity() {
-        if (true)
-        {
-            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("preventScreenRecording",true)){
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            }
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("preventScreenRecording", true)) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
     }
 

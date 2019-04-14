@@ -17,10 +17,10 @@ public class NetworkUtil {
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (null != activeNetwork) {
-            if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
                 return TYPE_WIFI;
 
-            if(activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE)
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE)
                 return TYPE_MOBILE;
         }
         return TYPE_NOT_CONNECTED;
@@ -39,7 +39,7 @@ public class NetworkUtil {
         return status;
     }
 
-    public static boolean isConnectedToInternet(Context context){
+    public static boolean isConnectedToInternet(Context context) {
         int status = getConnectivityStatusString(context);
         return status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED;
     }

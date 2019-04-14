@@ -5,7 +5,7 @@ import com.github.lightningnetwork.lnd.lnrpc.Payment;
 public class LnPaymentItem extends HistoryListItem {
     private Payment mPayment;
 
-    public LnPaymentItem(Payment payment){
+    public LnPaymentItem(Payment payment) {
         mPayment = payment;
         mCreationDate = payment.getCreationDate();
     }

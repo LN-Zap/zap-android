@@ -1,6 +1,7 @@
 package ln_zap.zap.util;
 
 import android.util.Log;
+
 import ln_zap.zap.BuildConfig;
 
 /**
@@ -11,7 +12,7 @@ import ln_zap.zap.BuildConfig;
 public class ZapLog {
     public static void debug(final String tag, String message) {
         if (BuildConfig.BUILD_TYPE.equals("debug")) {
-            Log.d("(ZapLog) "+ tag, message);
+            Log.d("(ZapLog) " + tag, message);
         }
     }
 }

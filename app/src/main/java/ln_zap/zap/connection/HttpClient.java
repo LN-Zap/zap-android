@@ -32,7 +32,7 @@ public class HttpClient {
     }
 
 
-    public <T> void addToRequestQueue(Request<T> req,String tag) {
+    public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(tag);
         getRequestQueue().add(req);
     }

@@ -15,12 +15,9 @@ import android.content.ClipboardManager;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Ref;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+
 import androidx.preference.PreferenceManager;
 
 import java.util.Locale;
@@ -21,8 +22,7 @@ public class LocaleUtil {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         if (prefs.getString("language", "system").equals("system")) {
             return Resources.getSystem().getConfiguration().locale.getLanguage();
-        }
-        else    {
+        } else {
             return "en";
         }
     }

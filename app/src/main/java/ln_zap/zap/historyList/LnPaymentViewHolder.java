@@ -39,7 +39,7 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
         mContext = v.getContext();
     }
 
-    public void bindLnPaymentItem(LnPaymentItem lnPaymentItem){
+    public void bindLnPaymentItem(LnPaymentItem lnPaymentItem) {
 
         // Set Icon
         mIcon.setImageResource(R.drawable.bolt_black_filled_24dp);
@@ -66,14 +66,14 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
         long feeAmt = lnPaymentItem.getPayment().getFee();
 
         String feeText = mContext.getResources().getString(R.string.fee)
-                        + ": " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(feeAmt);
+                + ": " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(feeAmt);
         mTransactionFee.setText(feeText);
 
         // Set on click listener
         mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.coming_soon, Toast.LENGTH_SHORT).show();
             }
         });
     }

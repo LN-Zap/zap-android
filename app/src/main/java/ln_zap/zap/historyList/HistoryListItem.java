@@ -1,6 +1,6 @@
 package ln_zap.zap.historyList;
 
-public abstract class HistoryListItem implements Comparable<HistoryListItem>{
+public abstract class HistoryListItem implements Comparable<HistoryListItem> {
 
     public static final int TYPE_DATE = 0;
     public static final int TYPE_TRANSACTION = 1;
@@ -15,6 +15,6 @@ public abstract class HistoryListItem implements Comparable<HistoryListItem>{
     @Override
     public int compareTo(HistoryListItem o) {
         HistoryListItem other = (HistoryListItem) o;
-        return Long.compare(this.mCreationDate,other.mCreationDate);
+        return Long.compare(this.mCreationDate, other.mCreationDate);
     }
 }

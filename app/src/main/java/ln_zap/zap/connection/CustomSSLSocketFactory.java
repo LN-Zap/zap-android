@@ -1,8 +1,5 @@
 package ln_zap.zap.connection;
 
-import android.content.Context;
-//import android.support.annotation.RawRes;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +26,7 @@ public final class CustomSSLSocketFactory {
     /**
      * Creates an SSLSocketFactory instance for use with the provided CA certificate.
      *
-     * @param certificate	Certificate as byte array
+     * @param certificate Certificate as byte array
      * @return An SSLSocketFactory which trusts the provided CA when provided to network clients
      */
     public static SSLSocketFactory create(byte[] certificate) {

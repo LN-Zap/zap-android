@@ -5,7 +5,7 @@ import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 public class TransactionItem extends HistoryListItem {
     private Transaction mOnChainTransaction;
 
-    public TransactionItem(Transaction onChainTransaction){
+    public TransactionItem(Transaction onChainTransaction) {
         mOnChainTransaction = onChainTransaction;
         mCreationDate = onChainTransaction.getTimeStamp();
     }

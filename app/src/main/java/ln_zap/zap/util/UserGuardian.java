@@ -9,9 +9,9 @@ import ln_zap.zap.R;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
+
 import androidx.preference.PreferenceManager;
 
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,10 +23,10 @@ import android.widget.CheckBox;
  * Use this class to show security warnings whenever the user does something that harms
  * his security or privacy.
  * To avoid too many popups, these messages have a "do not show again" option.
- *
+ * <p>
  * A class using the UserGuardian class needs to implement the UserGuardianInterface
  * to handle users choice.
- *
+ * <p>
  * Please note that a dialog which will not be shown executes the callback like it does when "ok" is pressed.
  */
 public class UserGuardian {
@@ -57,12 +57,12 @@ public class UserGuardian {
      *
      * @param data the data that is copied to clipboard
      */
-    public void securityCopyToClipboard(String data){
+    public void securityCopyToClipboard(String data) {
         mCurrentDialogName = COPY_TO_CLIPBOARD;
 
         String compareString = "";
-        if (data.length()>7){
-            compareString = "... " + data.substring(data.length()-6,data.length());
+        if (data.length() > 7) {
+            compareString = "... " + data.substring(data.length() - 6, data.length());
         }
 
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
@@ -74,7 +74,7 @@ public class UserGuardian {
     /**
      * Warn the user about pasting a payment request from clipboard.
      */
-    public void securityPasteFromClipboard(){
+    public void securityPasteFromClipboard() {
         mCurrentDialogName = PASTE_FROM_CLIPBOARD;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
         adb.setMessage(R.string.guardian_pasteFromClipboard);
@@ -85,7 +85,7 @@ public class UserGuardian {
     /**
      * Warn the user to not disable scrambled pin input.
      */
-    public void securityScrambledPin(){
+    public void securityScrambledPin() {
         mCurrentDialogName = DISABLE_SCRAMBLED_PIN;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setMessage(R.string.guardian_disableScrambledPin);
@@ -96,7 +96,7 @@ public class UserGuardian {
     /**
      * Warn the user to not disable screen protection.
      */
-    public void securityScreenProtection(){
+    public void securityScreenProtection() {
         mCurrentDialogName = DISABLE_SCREEN_PROTECTION;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setMessage(R.string.guardian_disableScreenProtection);
@@ -111,10 +111,10 @@ public class UserGuardian {
      *
      * @param feeRate 0 = 0% ; 1 = 100% (equal transaction amount) ; >1 you pay more fees than you transact
      */
-    public void securityHighOnChainFee(float feeRate){
+    public void securityHighOnChainFee(float feeRate) {
         mCurrentDialogName = HIGH_ONCHAIN_FEE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setMessage(mContext.getResources().getString(R.string.guardian_highOnChainFee, String.format("%.1f", feeRate*100)));
+        adb.setMessage(mContext.getResources().getString(R.string.guardian_highOnChainFee, String.format("%.1f", feeRate * 100)));
         showGuardianDialog(adb);
     }
 
@@ -125,10 +125,10 @@ public class UserGuardian {
      *
      * @param age in seconds
      */
-    public void securityOldExchangeRate(double age){
+    public void securityOldExchangeRate(double age) {
         mCurrentDialogName = OLD_EXCHANGE_RATE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setMessage(mContext.getResources().getString(R.string.guardian_oldExchangeRate,String.format("%.1f", age/3600)));
+        adb.setMessage(mContext.getResources().getString(R.string.guardian_oldExchangeRate, String.format("%.1f", age / 3600)));
         showGuardianDialog(adb);
     }
 
@@ -136,7 +136,7 @@ public class UserGuardian {
     /**
      * Warn the user if he stores a large amounts of Bitcoin in his wallet.
      */
-    public void securityTooMuchMoney(){
+    public void securityTooMuchMoney() {
         mCurrentDialogName = TOO_MUCH_MONEY;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
         adb.setMessage(R.string.guardian_tooMuchMoney);
@@ -147,7 +147,7 @@ public class UserGuardian {
     /**
      * Reset all "do not show again" selections.
      */
-    public static void reenableAllSecurityWarnings(Context ctx){
+    public static void reenableAllSecurityWarnings(Context ctx) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(COPY_TO_CLIPBOARD, true);
@@ -161,7 +161,6 @@ public class UserGuardian {
     }
 
 
-
     /**
      * Create a dialog with a "do not show again" option that is already set up
      * except the message.
@@ -170,7 +169,7 @@ public class UserGuardian {
      * @param hasCancelOption wether it has a cancle option or not
      * @return returns a preconfigured AlertDialog.Builder which can be further configured later
      */
-    private AlertDialog.Builder createDontShowAgainDialog (Boolean hasCancelOption){
+    private AlertDialog.Builder createDontShowAgainDialog(Boolean hasCancelOption) {
         AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
         LayoutInflater adbInflater = LayoutInflater.from(mContext);
         View DialogLayout = adbInflater.inflate(R.layout.dialog_checkbox, null);
@@ -181,7 +180,7 @@ public class UserGuardian {
         adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
-                if (mDontShowAgain.isChecked()){
+                if (mDontShowAgain.isChecked()) {
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(mCurrentDialogName, false);
@@ -194,7 +193,8 @@ public class UserGuardian {
         });
         if (hasCancelOption) {
             adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) { }
+                public void onClick(DialogInterface dialog, int which) {
+                }
             });
         }
         return adb;
@@ -206,18 +206,17 @@ public class UserGuardian {
      *
      * @param adb The AlertDialog.Builder which should be shown.
      */
-    private void showGuardianDialog (AlertDialog.Builder adb){
+    private void showGuardianDialog(AlertDialog.Builder adb) {
 
-       if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mCurrentDialogName, true)){
-           Dialog dlg = adb.create();
-           // Apply FLAG_SECURE to dialog to prevent screen recording
-           if(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("preventScreenRecording",true)) {
-               dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-           }
-           dlg.show();
-       }
-       else{
-           mAction.guardianDialogConfirmed(mCurrentDialogName);
-       }
+        if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mCurrentDialogName, true)) {
+            Dialog dlg = adb.create();
+            // Apply FLAG_SECURE to dialog to prevent screen recording
+            if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("preventScreenRecording", true)) {
+                dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            }
+            dlg.show();
+        } else {
+            mAction.guardianDialogConfirmed(mCurrentDialogName);
+        }
     }
 }

@@ -41,7 +41,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
         mContext = v.getContext();
     }
 
-    public void bindLnInvoiceItem(LnInvoiceItem lnInvoiceItem){
+    public void bindLnInvoiceItem(LnInvoiceItem lnInvoiceItem) {
 
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         mRootView.setAlpha(1f);
@@ -58,7 +58,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
         Long amt = lnInvoiceItem.getInvoice().getValue();
         Long amtPayed = lnInvoiceItem.getInvoice().getAmtPaidSat();
 
-        if(amt.equals(0L)){
+        if (amt.equals(0L)) {
             // if no specific value was requested
             if (!amtPayed.equals(0L)) {
                 // The invoice has been payed
@@ -120,7 +120,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
         }
 
         // Set description
-        if (lnInvoiceItem.getInvoice().getMemo().equals("")){
+        if (lnInvoiceItem.getInvoice().getMemo().equals("")) {
             mDescription.setVisibility(View.GONE);
         } else {
             mDescription.setVisibility(View.VISIBLE);
@@ -131,7 +131,7 @@ public class LnInvoiceViewHolder extends RecyclerView.ViewHolder {
         mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,R.string.coming_soon,Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.coming_soon, Toast.LENGTH_SHORT).show();
             }
         });
     }

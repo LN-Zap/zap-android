@@ -2,6 +2,7 @@ package ln_zap.zap.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.preference.PreferenceManager;
 import ln_zap.zap.baseClasses.App;
 
@@ -16,14 +17,12 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
-
 
 
 /**
@@ -47,42 +46,39 @@ public class MonetaryUtil {
     private final Set<ExchangeRateListener> mExchangeRateListeners = new HashSet<>();
 
 
-
-
-    private MonetaryUtil(){
+    private MonetaryUtil() {
         mContext = App.getAppContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        loadFirstCurrencyFromPrefs(mPrefs.getString("firstCurrency","sat"));
+        loadFirstCurrencyFromPrefs(mPrefs.getString("firstCurrency", "sat"));
 
 
-        String SecondCurrency = mPrefs.getString("secondCurrency","USD");
+        String SecondCurrency = mPrefs.getString("secondCurrency", "USD");
         switch (SecondCurrency) {
             case BTC_UNIT:
-                setSecondCurrency(SecondCurrency,1e-8);
+                setSecondCurrency(SecondCurrency, 1e-8);
                 break;
             case MBTC_UNIT:
-                setSecondCurrency(SecondCurrency,1e-5);
+                setSecondCurrency(SecondCurrency, 1e-5);
                 break;
             case BIT_UNIT:
-                setSecondCurrency(SecondCurrency,1e-2);
+                setSecondCurrency(SecondCurrency, 1e-2);
                 break;
             case SATOSHI_UNIT:
-                setSecondCurrency(SecondCurrency,1d);
+                setSecondCurrency(SecondCurrency, 1d);
                 break;
             default:
                 // Here we go if the user has selected a fiat currency as second currency.
-                if(mPrefs.getString("fiat_" + mPrefs.getString("secondCurrency","USD"), "").equals("")){
-                    mSecondCurrency = new Currency(mPrefs.getString("secondCurrency","USD"),0,0);
-                }
-                else{
-                    loadSecondCurrencyFromPrefs(mPrefs.getString("secondCurrency","USD"));
+                if (mPrefs.getString("fiat_" + mPrefs.getString("secondCurrency", "USD"), "").equals("")) {
+                    mSecondCurrency = new Currency(mPrefs.getString("secondCurrency", "USD"), 0, 0);
+                } else {
+                    loadSecondCurrencyFromPrefs(mPrefs.getString("secondCurrency", "USD"));
                 }
         }
     }
 
-    public static MonetaryUtil getInstance(){
-        if(mInstance == null) {
+    public static MonetaryUtil getInstance() {
+        if (mInstance == null) {
             mInstance = new MonetaryUtil();
         }
 
@@ -103,7 +99,7 @@ public class MonetaryUtil {
      * @param value in Satoshis
      * @return formatted string
      */
-    public String getPrimaryDisplayAmountAndUnit(long value){
+    public String getPrimaryDisplayAmountAndUnit(long value) {
         return getPrimaryDisplayAmount(value) + " " + getPrimaryDisplayUnit();
     }
 
@@ -114,15 +110,13 @@ public class MonetaryUtil {
      * @param value in Satoshis
      * @return formatted string
      */
-    public String getPrimaryDisplayAmount(long value){
-        if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+    public String getPrimaryDisplayAmount(long value) {
+        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
             return getFirstCurrencyAmount(value);
-        }
-        else{
+        } else {
             return getSecondCurrencyAmount(value);
         }
     }
-
 
 
     /**
@@ -130,11 +124,10 @@ public class MonetaryUtil {
      *
      * @return formatted string
      */
-    public String getPrimaryDisplayUnit(){
-        if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+    public String getPrimaryDisplayUnit() {
+        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
             return getFirstDisplayUnit();
-        }
-        else{
+        } else {
             return getSecondDisplayUnit();
         }
     }
@@ -146,7 +139,7 @@ public class MonetaryUtil {
      * @param value in Satoshis
      * @return formatted string
      */
-    public String getSecondaryDisplayAmountAndUnit(long value){
+    public String getSecondaryDisplayAmountAndUnit(long value) {
         return getSecondaryDisplayAmount(value) + " " + getSecondaryDisplayUnit();
     }
 
@@ -157,11 +150,10 @@ public class MonetaryUtil {
      * @param value in Satoshis
      * @return formatted string
      */
-    public String getSecondaryDisplayAmount(long value){
-        if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+    public String getSecondaryDisplayAmount(long value) {
+        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
             return getSecondCurrencyAmount(value);
-        }
-        else{
+        } else {
             return getFirstCurrencyAmount(value);
         }
     }
@@ -172,11 +164,10 @@ public class MonetaryUtil {
      *
      * @return formatted string
      */
-    public String getSecondaryDisplayUnit(){
-        if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+    public String getSecondaryDisplayUnit() {
+        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
             return getSecondDisplayUnit();
-        }
-        else{
+        } else {
             return getFirstDisplayUnit();
         }
     }
@@ -187,30 +178,31 @@ public class MonetaryUtil {
      *
      * @return Age in seconds.
      */
-    public long getExchangeRateAge(){
-        return (System.currentTimeMillis()/1000)- mSecondCurrency.getTimestamp();
+    public long getExchangeRateAge() {
+        return (System.currentTimeMillis() / 1000) - mSecondCurrency.getTimestamp();
     }
 
     /**
      * Load the first currency from the default settings using a currencyCode (BTC, mBTC, ...)
+     *
      * @param currencyCode
      */
-    public void loadFirstCurrencyFromPrefs(String currencyCode){
+    public void loadFirstCurrencyFromPrefs(String currencyCode) {
         switch (currencyCode) {
             case BTC_UNIT:
-                setFirstCurrency(currencyCode,1e-8);
+                setFirstCurrency(currencyCode, 1e-8);
                 break;
             case MBTC_UNIT:
-                setFirstCurrency(currencyCode,1e-5);
+                setFirstCurrency(currencyCode, 1e-5);
                 break;
             case BIT_UNIT:
-                setFirstCurrency(currencyCode,1e-2);
+                setFirstCurrency(currencyCode, 1e-2);
                 break;
             case SATOSHI_UNIT:
-                setFirstCurrency(currencyCode,1d);
+                setFirstCurrency(currencyCode, 1d);
                 break;
             default:
-                setFirstCurrency(currencyCode,1e-8);
+                setFirstCurrency(currencyCode, 1e-8);
         }
     }
 
@@ -221,43 +213,41 @@ public class MonetaryUtil {
      *
      * @param currencyCode (USD, EUR, etc.)
      */
-    public void loadSecondCurrencyFromPrefs(String currencyCode){
+    public void loadSecondCurrencyFromPrefs(String currencyCode) {
         switch (currencyCode) {
             case BTC_UNIT:
-                setSecondCurrency(currencyCode,1e-8);
+                setSecondCurrency(currencyCode, 1e-8);
                 break;
             case MBTC_UNIT:
-                setSecondCurrency(currencyCode,1e-5);
+                setSecondCurrency(currencyCode, 1e-5);
                 break;
             case BIT_UNIT:
-                setSecondCurrency(currencyCode,1e-2);
+                setSecondCurrency(currencyCode, 1e-2);
                 break;
             case SATOSHI_UNIT:
-                setSecondCurrency(currencyCode,1d);
+                setSecondCurrency(currencyCode, 1d);
                 break;
             default:
 
                 try {
                     JSONObject selectedCurrency = new JSONObject(mPrefs.getString("fiat_" + currencyCode, "{}"));
                     Currency currency;
-                    if (selectedCurrency.has("symbol")){
+                    if (selectedCurrency.has("symbol")) {
                         currency = new Currency(currencyCode,
                                 selectedCurrency.getDouble("rate"),
                                 selectedCurrency.getLong("timestamp"),
                                 selectedCurrency.getString("symbol"));
-                    }
-                    else{
+                    } else {
                         currency = new Currency(currencyCode,
                                 selectedCurrency.getDouble("rate"),
                                 selectedCurrency.getLong("timestamp"));
                     }
 
                     mSecondCurrency = currency;
-                }
-                catch(JSONException e){
+                } catch (JSONException e) {
                     // App was probably never started before. If we can't find the fiat in the prefs,
                     // create a placeholder currency.
-                    mSecondCurrency = new Currency("USD",0,0);
+                    mSecondCurrency = new Currency("USD", 0, 0);
                 }
         }
     }
@@ -266,13 +256,12 @@ public class MonetaryUtil {
     /**
      * Switch which of the currencies (first or second one) is used as primary currency
      */
-    public void switchCurrencies(){
-        if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+    public void switchCurrencies() {
+        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
             SharedPreferences.Editor editor = mPrefs.edit();
             editor.putBoolean("firstCurrencyIsPrimary", false);
             editor.apply();
-        }
-        else{
+        } else {
             SharedPreferences.Editor editor = mPrefs.edit();
             editor.putBoolean("firstCurrencyIsPrimary", true);
             editor.apply();
@@ -281,13 +270,13 @@ public class MonetaryUtil {
 
     /**
      * Get primary currency object
+     *
      * @return
      */
-    public Currency getPrimaryCurrency(){
-        if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+    public Currency getPrimaryCurrency() {
+        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
             return mFirstCurrency;
-        }
-        else{
+        } else {
             return mSecondCurrency;
         }
     }
@@ -295,35 +284,35 @@ public class MonetaryUtil {
 
     /**
      * Get secondary currency object
+     *
      * @return
      */
-    public Currency getSecondaryCurrency(){
-        if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+    public Currency getSecondaryCurrency() {
+        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
             return mSecondCurrency;
-        }
-        else{
+        } else {
             return mFirstCurrency;
         }
     }
 
     /**
      * Use this method to switch the input amount of a textfield right before currencies are swapped.
+     *
      * @param primaryValue value string of the input field
      * @return value string for the input field converted in the secondary currency
      */
-    public String convertPrimaryToSecondaryCurrency(String primaryValue){
-        if (primaryValue.equals("")){
+    public String convertPrimaryToSecondaryCurrency(String primaryValue) {
+        if (primaryValue.equals("")) {
             return "";
-        }
-        else {
-            if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+        } else {
+            if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mFirstCurrency.getRate() * mSecondCurrency.getRate());
                 DecimalFormat df = TextInputCurrencyFormat(mSecondCurrency);
                 return df.format(result);
-            }
-            else{
-                double value = Double.parseDouble(primaryValue); ;
+            } else {
+                double value = Double.parseDouble(primaryValue);
+                ;
                 double result = (value / mSecondCurrency.getRate()) * mFirstCurrency.getRate();
                 DecimalFormat df = TextInputCurrencyFormat(mFirstCurrency);
                 return df.format(result);
@@ -333,24 +322,23 @@ public class MonetaryUtil {
 
     /**
      * Converts the supplied value to satoshis. The exchange rate of the primary currency is used.
+     *
      * @param primaryValue
      * @return String without grouping or fractions
      */
-    public String convertPrimaryToSatoshi(String primaryValue){
+    public String convertPrimaryToSatoshi(String primaryValue) {
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-        DecimalFormat df = (DecimalFormat)nf;
+        DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(0);
-        if (primaryValue.equals("")){
+        if (primaryValue.equals("")) {
             return "0";
-        }
-        else {
-            if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+        } else {
+            if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mFirstCurrency.getRate());
                 return df.format(result);
-            }
-            else{
+            } else {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mSecondCurrency.getRate());
                 return df.format(result);
@@ -360,21 +348,20 @@ public class MonetaryUtil {
 
     /**
      * Converts the given satoshis to primary currency.
+     *
      * @param value
      * @return String without grouping
      */
-    public String convertSatoshiToPrimary(Long value){
+    public String convertSatoshiToPrimary(Long value) {
 
-        if (value == 0){
+        if (value == 0) {
             return "0";
-        }
-        else {
-            if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+        } else {
+            if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
                 double result = (value * mFirstCurrency.getRate());
                 DecimalFormat df = TextInputCurrencyFormat(mFirstCurrency);
                 return df.format(result);
-            }
-            else{
+            } else {
                 double result = (value * mSecondCurrency.getRate());
                 DecimalFormat df = TextInputCurrencyFormat(mSecondCurrency);
                 return df.format(result);
@@ -384,27 +371,26 @@ public class MonetaryUtil {
 
     /**
      * Converts the supplied value to bitcoin. The exchange rate of the primary currency is used.
+     *
      * @param primaryValue
      * @return String without grouping and maximum fractions of 8 digits
      */
-    public String convertPrimaryToBitcoin(String primaryValue){
+    public String convertPrimaryToBitcoin(String primaryValue) {
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-        DecimalFormat df = (DecimalFormat)nf;
+        DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(8);
 
-        if (primaryValue.equals("")){
+        if (primaryValue.equals("")) {
             return "0";
-        }
-        else {
-            if(mPrefs.getBoolean("firstCurrencyIsPrimary", true)){
+        } else {
+            if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
                 double value = Double.parseDouble(primaryValue);
-                double result = (value / mFirstCurrency.getRate() /1e8);
+                double result = (value / mFirstCurrency.getRate() / 1e8);
                 return df.format(result);
-            }
-            else{
+            } else {
                 double value = Double.parseDouble(primaryValue);
-                double result = (value / mSecondCurrency.getRate() /1e8);
+                double result = (value / mSecondCurrency.getRate() / 1e8);
                 return df.format(result);
             }
         }
@@ -413,18 +399,19 @@ public class MonetaryUtil {
 
     /**
      * Checks if a numerical currency input is valid
+     *
      * @param input
      * @return boolean
      */
-    public boolean validateCurrencyInput(String input, Currency currency){
+    public boolean validateCurrencyInput(String input, Currency currency) {
 
         int numberOfDecimals = 0;
 
         // Bitcoin
-        if (currency.isBitcoin()){
+        if (currency.isBitcoin()) {
 
-            String btcUnit = mPrefs.getString("firstCurrency","sat");
-            switch(btcUnit) {
+            String btcUnit = mPrefs.getString("firstCurrency", "sat");
+            switch (btcUnit) {
                 case BTC_UNIT:
                     numberOfDecimals = 8;
                     break;
@@ -443,7 +430,7 @@ public class MonetaryUtil {
         }
 
         // Fiat
-        else{
+        else {
             numberOfDecimals = 2;
         }
 
@@ -460,52 +447,50 @@ public class MonetaryUtil {
         }
     }
 
-    
-    private void setFirstCurrency(String currencyCode, Double rate){
+
+    private void setFirstCurrency(String currencyCode, Double rate) {
         mFirstCurrency = new Currency(currencyCode, rate);
     }
 
-    private void setFirstCurrency(String currencyCode, Double rate, Long timestamp){
+    private void setFirstCurrency(String currencyCode, Double rate, Long timestamp) {
         mFirstCurrency = new Currency(currencyCode, rate, timestamp);
     }
 
-    private void setFirstCurrency(String currencyCode, Double rate, Long timestamp, String symbol){
+    private void setFirstCurrency(String currencyCode, Double rate, Long timestamp, String symbol) {
         mFirstCurrency = new Currency(currencyCode, rate, timestamp, symbol);
     }
 
-    private void setSecondCurrency(String currencyCode, Double rate){
+    private void setSecondCurrency(String currencyCode, Double rate) {
         mSecondCurrency = new Currency(currencyCode, rate);
     }
 
-    private void setSecondCurrency(String currencyCode, Double rate, Long timestamp){
+    private void setSecondCurrency(String currencyCode, Double rate, Long timestamp) {
         mSecondCurrency = new Currency(currencyCode, rate, timestamp);
     }
 
-    private void setSecondCurrency(String currencyCode, Double rate, Long timestamp, String symbol){
+    private void setSecondCurrency(String currencyCode, Double rate, Long timestamp, String symbol) {
         mSecondCurrency = new Currency(currencyCode, rate, timestamp, symbol);
     }
 
 
-    private String getFirstDisplayUnit(){
-        if (mFirstCurrency.getSymbol() == null){
+    private String getFirstDisplayUnit() {
+        if (mFirstCurrency.getSymbol() == null) {
             return mFirstCurrency.getCode();
-        }
-        else{
+        } else {
             return mFirstCurrency.getSymbol();
         }
     }
 
-    private String getSecondDisplayUnit(){
-        if (mSecondCurrency.getSymbol() == null){
+    private String getSecondDisplayUnit() {
+        if (mSecondCurrency.getSymbol() == null) {
             return mSecondCurrency.getCode();
-        }
-        else{
+        } else {
             return mSecondCurrency.getSymbol();
         }
     }
 
-    private String getFirstCurrencyAmount(long value){
-        if (mFirstCurrency.isBitcoin()){
+    private String getFirstCurrencyAmount(long value) {
+        if (mFirstCurrency.isBitcoin()) {
             switch (mFirstCurrency.getCode()) {
                 case BTC_UNIT:
                     return formatAsBtcDisplayAmount(value);
@@ -518,14 +503,13 @@ public class MonetaryUtil {
                 default:
                     return formatAsBtcDisplayAmount(value);
             }
-        }
-        else {
+        } else {
             return getFiatDisplayAmount(value);
         }
     }
 
-    private String getSecondCurrencyAmount(long value){
-        if (mSecondCurrency.isBitcoin()){
+    private String getSecondCurrencyAmount(long value) {
+        if (mSecondCurrency.isBitcoin()) {
             switch (mSecondCurrency.getCode()) {
                 case BTC_UNIT:
                     return formatAsBtcDisplayAmount(value);
@@ -538,13 +522,10 @@ public class MonetaryUtil {
                 default:
                     return formatAsBtcDisplayAmount(value);
             }
-        }
-        else {
+        } else {
             return getFiatDisplayAmount(value);
         }
     }
-
-
 
 
     ////////// Bitcoin display functions /////////////
@@ -553,38 +534,37 @@ public class MonetaryUtil {
     private String formatAsBtcDisplayAmount(long value) {
         Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
-        DecimalFormat df = (DecimalFormat)nf;
+        DecimalFormat df = (DecimalFormat) nf;
         df.setMaximumFractionDigits(8);
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(16);
-        return df.format(value /1e8);
+        return df.format(value / 1e8);
     }
 
     private String formatAsMbtcDisplayAmount(long value) {
         Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
-        DecimalFormat df = (DecimalFormat)nf;
+        DecimalFormat df = (DecimalFormat) nf;
         df.setMaximumFractionDigits(5);
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(19);
-        return df.format(value /100000d);
+        return df.format(value / 100000d);
     }
 
     private String formatAsBitsDisplayAmount(long value) {
         Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
-        DecimalFormat df = (DecimalFormat)nf;
+        DecimalFormat df = (DecimalFormat) nf;
         df.setMaximumFractionDigits(2);
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(22);
-        String result= df.format(value /100d);
+        String result = df.format(value / 100d);
 
         // If we have a fraction, then always show 2 fraction digits for bits
-        if (result.contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator()))){
+        if (result.contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator()))) {
             df.setMinimumFractionDigits(2);
-            return df.format(value /100d);
-        }
-        else {
+            return df.format(value / 100d);
+        } else {
             return result;
         }
     }
@@ -592,7 +572,7 @@ public class MonetaryUtil {
     private String formatAsSatoshiDisplayAmount(long value) {
         Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
-        DecimalFormat df = (DecimalFormat)nf;
+        DecimalFormat df = (DecimalFormat) nf;
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(16);
         return df.format(value);
@@ -602,8 +582,8 @@ public class MonetaryUtil {
     ////////// Fiat functions /////////////
 
 
-    private String getFiatDisplayAmount(long value){
-        double fiatValue = (mSecondCurrency.getRate())*value;
+    private String getFiatDisplayAmount(long value) {
+        double fiatValue = (mSecondCurrency.getRate()) * value;
         return formatAsFiatDisplayAmount(fiatValue);
     }
 
@@ -611,22 +591,22 @@ public class MonetaryUtil {
     private String formatAsFiatDisplayAmount(double value) {
         Locale loc = mContext.getResources().getConfiguration().locale;
         NumberFormat nf = NumberFormat.getNumberInstance(loc);
-        DecimalFormat df = (DecimalFormat)nf;
+        DecimalFormat df = (DecimalFormat) nf;
         df.setMaximumFractionDigits(2);
         df.setMinimumFractionDigits(2);
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(22);
-        String result= df.format(value);
+        String result = df.format(value);
         return result;
     }
 
 
-    private DecimalFormat TextInputCurrencyFormat (final Currency currency){
+    private DecimalFormat TextInputCurrencyFormat(final Currency currency) {
         // We have to use the Locale.US here to ensure Double.parse works correctly later.
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-        DecimalFormat df = (DecimalFormat)nf;
+        DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
-        if(currency.isBitcoin()){
+        if (currency.isBitcoin()) {
 
             switch (currency.getCode()) {
                 case BTC_UNIT:
@@ -644,13 +624,11 @@ public class MonetaryUtil {
                 default:
                     df.setMaximumFractionDigits(8);
             }
-        }
-        else {
+        } else {
             df.setMaximumFractionDigits(2);
         }
         return df;
     }
-
 
 
     /**
@@ -665,72 +643,72 @@ public class MonetaryUtil {
         // Creating request
         JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://blockchain.info/ticker", null,
                 new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        final SharedPreferences.Editor editor = mPrefs.edit();
+
+                        // JSON Object that will hold all available currencies to later populate selection list.
+                        JSONObject availableCurrencies = new JSONObject();
+
+                        JSONArray availableCurrenciesArray = new JSONArray();
+
+                        // loop through all returned currencies
+                        Iterator<String> iter = response.keys();
+                        while (iter.hasNext()) {
+                            String fiatCode = iter.next();
+                            try {
+                                JSONObject ReceivedCurrency = response.getJSONObject(fiatCode);
+                                JSONObject FiatCurrency = new JSONObject();
+                                FiatCurrency.put("rate", ReceivedCurrency.getDouble("15m") / 1e8);
+                                FiatCurrency.put("symbol", ReceivedCurrency.getString("symbol"));
+                                FiatCurrency.put("timestamp", System.currentTimeMillis() / 1000);
+                                editor.putString("fiat_" + fiatCode, FiatCurrency.toString());
+                                availableCurrenciesArray.put(fiatCode);
+                                // Update the current fiat currency of the Monetary util
+                                if (fiatCode.equals(mPrefs.getString("secondCurrency", "USD"))) {
+                                    setSecondCurrency(fiatCode, ReceivedCurrency.getDouble("15m") / 1e8, System.currentTimeMillis() / 1000, ReceivedCurrency.getString("symbol"));
+                                }
+                            } catch (JSONException e) {
+                                ZapLog.debug(LOG_TAG, "Unable to decode currency from fiat exchange rate request");
+                            }
+                        }
+                        try {
+                            // Switch the order. Blockchain.info has USD first, we want to have it alphabetically.
+                            // ToDO: this is a quick fix, it only works as long as there is no currency alphabetically after USD
+                            availableCurrenciesArray.remove(0);
+                            availableCurrenciesArray.put("USD");
+
+                            // Save the codes of all found currencies in a JSON object, which will then be stored on shared preferences
+                            availableCurrencies.put("currencies", availableCurrenciesArray);
+                            editor.putString("fiat_available", availableCurrencies.toString());
+                        } catch (JSONException e) {
+                            ZapLog.debug(LOG_TAG, "unable to add array to object");
+                        }
+                        editor.apply();
+
+                        // If this was the first time executed since installation, automatically set the
+                        // currency to correct currency according to the systems locale. Only do this,
+                        // if this currency is included in the fetched data.
+                        if (!mPrefs.getBoolean("isDefaultCurrencySet", false)) {
+                            String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
+                            if (currencyCode != null) {
+                                if (!mPrefs.getString("fiat_" + currencyCode, "").equals("")) {
+                                    loadSecondCurrencyFromPrefs(currencyCode);
+                                    editor.putBoolean("isDefaultCurrencySet", true);
+                                    editor.putString("secondCurrency", currencyCode);
+                                    editor.apply();
+                                }
+                            }
+                        }
+
+                        broadcastExchangeRateUpdate();
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onResponse(JSONObject response) {
-
-                final SharedPreferences.Editor editor = mPrefs.edit();
-
-                // JSON Object that will hold all available currencies to later populate selection list.
-                JSONObject availableCurrencies = new JSONObject();
-
-                JSONArray availableCurrenciesArray = new JSONArray();
-
-                // loop through all returned currencies
-                Iterator<String> iter = response.keys();
-                while (iter.hasNext()) {
-                    String fiatCode = iter.next();
-                    try {
-                        JSONObject ReceivedCurrency = response.getJSONObject(fiatCode);
-                        JSONObject FiatCurrency = new JSONObject();
-                        FiatCurrency.put("rate",ReceivedCurrency.getDouble("15m") / 1e8);
-                        FiatCurrency.put("symbol", ReceivedCurrency.getString("symbol"));
-                        FiatCurrency.put("timestamp",System.currentTimeMillis()/1000);
-                        editor.putString("fiat_" + fiatCode, FiatCurrency.toString());
-                        availableCurrenciesArray.put(fiatCode);
-                        // Update the current fiat currency of the Monetary util
-                        if (fiatCode.equals(mPrefs.getString("secondCurrency","USD"))){
-                            setSecondCurrency(fiatCode,ReceivedCurrency.getDouble("15m") / 1e8,System.currentTimeMillis()/1000, ReceivedCurrency.getString("symbol"));
-                        }
-                    } catch (JSONException e) {
-                        ZapLog.debug(LOG_TAG,"Unable to decode currency from fiat exchange rate request");
-                    }
-                }
-                try {
-                    // Switch the order. Blockchain.info has USD first, we want to have it alphabetically.
-                    // ToDO: this is a quick fix, it only works as long as there is no currency alphabetically after USD
-                    availableCurrenciesArray.remove(0);
-                    availableCurrenciesArray.put("USD");
-
-                    // Save the codes of all found currencies in a JSON object, which will then be stored on shared preferences
-                    availableCurrencies.put("currencies", availableCurrenciesArray);
-                    editor.putString("fiat_available", availableCurrencies.toString());
-                } catch(JSONException e) {
-                    ZapLog.debug(LOG_TAG,"unable to add array to object");
-                }
-                editor.apply();
-
-                // If this was the first time executed since installation, automatically set the
-                // currency to correct currency according to the systems locale. Only do this,
-                // if this currency is included in the fetched data.
-                if (!mPrefs.getBoolean("isDefaultCurrencySet", false)) {
-                    String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
-                    if (currencyCode != null) {
-                        if (!mPrefs.getString("fiat_" + currencyCode, "").equals("")) {
-                            loadSecondCurrencyFromPrefs(currencyCode);
-                            editor.putBoolean("isDefaultCurrencySet", true);
-                            editor.putString("secondCurrency", currencyCode);
-                            editor.apply();
-                        }
-                    }
-                }
-
-                broadcastExchangeRateUpdate();
+            public void onErrorResponse(VolleyError error) {
+                ZapLog.debug(LOG_TAG, "Fiat exchange rate request failed");
             }
-        }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    ZapLog.debug(LOG_TAG,"Fiat exchange rate request failed");
-                }
         });
 
         return rateRequest;
@@ -740,7 +718,7 @@ public class MonetaryUtil {
     // Event handling to notify all registered listeners to an exchange rate change.
 
     private void broadcastExchangeRateUpdate() {
-        for( ExchangeRateListener listener : mExchangeRateListeners) {
+        for (ExchangeRateListener listener : mExchangeRateListeners) {
             listener.onExchangeRatesUpdated();
         }
     }

@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.preference.PreferenceManager;
+
 import android.view.MenuItem;
 
 import java.util.concurrent.Executors;
@@ -50,8 +52,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
     private SharedPreferences mPrefs;
-
-
 
 
     @Override
@@ -179,9 +179,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     // This function gets called when app is moved to foreground.
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onMoveToForeground() {
-        ZapLog.debug(LOG_TAG,"Zap moved to foreground");
+        ZapLog.debug(LOG_TAG, "Zap moved to foreground");
 
-        if(mPrefs.getBoolean("isWalletSetup", false) && TimeOutUtil.getInstance().isTimedOut()){
+        if (mPrefs.getBoolean("isWalletSetup", false) && TimeOutUtil.getInstance().isTimedOut()) {
             // Go to PIN entry screen
             Intent intent = new Intent(this, PinEntryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -194,7 +194,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             if (mPrefs.getBoolean("isWalletSetup", false)) {
                 TimeOutUtil.getInstance().setCanBeRestarted(true);
 
-                ZapLog.debug(LOG_TAG,"Starting to establish connections...");
+                ZapLog.debug(LOG_TAG, "Starting to establish connections...");
                 LndConnection.getInstance().restartBackgroundTasks();
                 setupLNDInfoSchedule();
 
@@ -211,7 +211,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     // This function gets called when app is moved to background.
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onMoveToBackground() {
-        ZapLog.debug(LOG_TAG,"Zap moved to background");
+        ZapLog.debug(LOG_TAG, "Zap moved to background");
         stopListenersAndSchedules();
     }
 
@@ -221,10 +221,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         stopListenersAndSchedules();
     }
 
-    private void stopListenersAndSchedules(){
+    private void stopListenersAndSchedules() {
         if (TimeOutUtil.getInstance().getCanBeRestarted()) {
             TimeOutUtil.getInstance().restartTimer();
-            ZapLog.debug(LOG_TAG,"PIN timer restarted");
+            ZapLog.debug(LOG_TAG, "PIN timer restarted");
         }
         TimeOutUtil.getInstance().setCanBeRestarted(false);
 
@@ -240,7 +240,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mIsLNDInfoSchedulerRunning = false;
         }
 
-        if (mIsNetworkChangeReceiverRunning){
+        if (mIsNetworkChangeReceiverRunning) {
             // Kill the Network state change listener to go easy on the battery.
             unregisterReceiver(mNetworkChangeReceiver);
             mIsNetworkChangeReceiverRunning = false;

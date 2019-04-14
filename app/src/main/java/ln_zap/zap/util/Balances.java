@@ -12,7 +12,7 @@ public class Balances {
 
     public Balances(long onChainTotal, long onChainConfirmed,
                     long onChainUnconfirmed, long channelBalance,
-                    long channelBalancePending){
+                    long channelBalancePending) {
         mOnChainBalanceTotal = onChainTotal;
         mOnChainBalanceConfirmed = onChainConfirmed;
         mOnChainBalanceUnconfirmed = onChainUnconfirmed;
@@ -20,7 +20,7 @@ public class Balances {
         mChannelBalancePending = channelBalancePending;
     }
 
-    public long total(){
+    public long total() {
         return mOnChainBalanceTotal + mChannelBalance + mChannelBalancePending;
     }
 

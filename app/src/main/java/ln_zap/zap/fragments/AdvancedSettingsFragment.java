@@ -21,7 +21,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         // Load the settings from an XML resource
         setPreferencesFromResource(R.xml.advanced_settings, rootKey);
 
-        mUG = new UserGuardian(getActivity(),this);
+        mUG = new UserGuardian(getActivity(), this);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 

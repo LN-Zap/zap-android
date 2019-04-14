@@ -21,10 +21,9 @@ public class PermissionsUtil {
         return hasPermission(context, Manifest.permission.CAMERA);
     }
 
-    public static void requestCameraPermission(Context context, boolean forceRequest){
-        requestPermissions(context, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE, forceRequest );
+    public static void requestCameraPermission(Context context, boolean forceRequest) {
+        requestPermissions(context, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE, forceRequest);
     }
-
 
 
     private static boolean hasPermission(Context context, String permission) {
@@ -33,14 +32,13 @@ public class PermissionsUtil {
 
     private static void requestPermissions(Context context, String[] permissions, int code, boolean forceRequest) {
 
-        for(int i = 0; i < permissions.length; i++)   {
+        for (int i = 0; i < permissions.length; i++) {
             // Do not request permission if user already denied it.
             // If forceRequest is true, the user will still be asked unless he ticked "don't ask me again".
-            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity)context, permissions[i]) & !forceRequest) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permissions[i]) & !forceRequest) {
                 ZapLog.debug("PermissionsUtil", "User denied this request before, no permission requested");
-            }
-            else    {
-                ActivityCompat.requestPermissions((Activity)context, permissions, code);
+            } else {
+                ActivityCompat.requestPermissions((Activity) context, permissions, code);
                 break;
             }
         }

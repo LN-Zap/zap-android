@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+
 import androidx.core.content.ContextCompat;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.R;
@@ -23,7 +24,7 @@ public class BaseScannerActivity extends BaseAppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
-        if(ab != null) {
+        if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
         }
     }
