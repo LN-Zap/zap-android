@@ -9,6 +9,11 @@
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
         <item name="android:textColorSecondary">@color/gray</item>
         <item name="android:navigationBarColor">@color/black</item>
+
+        <item name="android:dialogTheme">@style/ZapDialog</item>
+        <item name="android:alertDialogTheme">@style/ZapDialog</item>
+        <item name="dialogTheme">@style/ZapDialog</item>
+        <item name="alertDialogTheme">@style/ZapDialog</item>
     </style>
 
     <!-- Base application theme with action bar. -->
@@ -19,6 +24,11 @@
         <item name="android:colorBackground">@color/deepSeaBlue</item>
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
         <item name="android:navigationBarColor">@color/black</item>
+
+        <item name="android:dialogTheme">@style/ZapDialog</item>
+        <item name="android:alertDialogTheme">@style/ZapDialog</item>
+        <item name="dialogTheme">@style/ZapDialog</item>
+        <item name="alertDialogTheme">@style/ZapDialog</item>
     </style>
 
 
@@ -35,6 +45,11 @@
         <item name="android:textColorPrimary">#212121</item>
         <item name="android:textColorSecondary">#727272</item>
         <item name="android:navigationBarColor">@color/black</item>
+
+        <item name="android:dialogTheme">@style/ZapDialog</item>
+        <item name="android:alertDialogTheme">@style/ZapDialog</item>
+        <item name="dialogTheme">@style/ZapDialog</item>
+        <item name="alertDialogTheme">@style/ZapDialog</item>
     </style>
 
 
@@ -43,6 +58,14 @@
         <item name="android:windowActionBarOverlay">true</item>
         <!-- Support Library compatibility -->
         <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <!-- Style for all dialogs. If we use Theme.AppCompat.Dialog as parent instead, the dialog size adapts to wrap content -->
+    <style name="ZapDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@drawable/rounded_rectangle_seablue</item>
+        <item name="colorAccent">@color/lightningOrange</item>
+        <item name="android:windowBackground">@drawable/transparent_dialog_background</item>
+        <item name="android:backgroundDimAmount">0.65</item>
     </style>
 
 </resources>
