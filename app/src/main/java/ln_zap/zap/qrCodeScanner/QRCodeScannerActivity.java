@@ -279,6 +279,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
                     .getBlockingClient()
                     .withDeadlineAfter(3, TimeUnit.SECONDS)
                     .decodePayReq(decodePaymentRequest);
+            Wallet.getInstance().mPaymentRequestString = invoice;
             ZapLog.debug(LOG_TAG, Wallet.getInstance().mPaymentRequest.toString());
 
             if (Wallet.getInstance().mPaymentRequest.getTimestamp() + Wallet.getInstance().mPaymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
@@ -297,6 +298,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
             // If LND can't decode the payment request, show the error LND throws (always english)
             showError(e.getMessage(), 3000);
             Wallet.getInstance().mPaymentRequest = null;
+            Wallet.getInstance().mPaymentRequestString = "";
             e.printStackTrace();
         }
     }

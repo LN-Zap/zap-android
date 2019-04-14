@@ -52,6 +52,7 @@ public class Wallet {
     private static Wallet mInstance = null;
 
     public PayReq mPaymentRequest = null;
+    public String mPaymentRequestString = "";
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
     public List<Payment> mPaymentsList;

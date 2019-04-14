@@ -151,19 +151,32 @@ public class SendActivity extends BaseAppCompatActivity {
 
                         ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
                         // send lightning payment
+                        SendRequest sendRequest;
 
-                        SendRequest sendRequest = SendRequest.newBuilder()
-                                .setDestString(Wallet.getInstance().mPaymentRequest.getDestination())
-                                .setPaymentHashString(Wallet.getInstance().mPaymentRequest.getPaymentHash())
-                                .setAmt(Wallet.getInstance().mPaymentRequest.getNumSatoshis())
-                                .build();
+                        if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
+                            sendRequest = SendRequest.newBuilder()
+                                    .setPaymentRequest(Wallet.getInstance().mPaymentRequestString)
+                                    .setAmt(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
+                                    .build();
+                        } else {
+                            sendRequest = SendRequest.newBuilder()
+                                    .setPaymentRequest(Wallet.getInstance().mPaymentRequestString)
+                                    .build();
+                        }
+
                         try {
                             SendResponse sendResponse = LndConnection.getInstance()
                                     .getBlockingClient()
                                     .withDeadlineAfter(5, TimeUnit.SECONDS)
                                     .sendPaymentSync(sendRequest);
                             ZapLog.debug(LOG_TAG, sendResponse.toString());
-                            Toast.makeText(SendActivity.this, sendResponse.getPaymentError(), Toast.LENGTH_SHORT).show();
+
+                            if (sendResponse.hasPaymentRoute()) {
+                                Toast.makeText(SendActivity.this, "Send successful!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SendActivity.this, sendResponse.getPaymentError(), Toast.LENGTH_SHORT).show();
+                            }
+
                         } catch (StatusRuntimeException e) {
                             ZapLog.debug(LOG_TAG, "Error during payment!");
                             ZapLog.debug(LOG_TAG, e.toString());
