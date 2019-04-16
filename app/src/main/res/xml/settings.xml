@@ -53,23 +53,24 @@
         android:title="@string/navigation_wallet"
         app:iconSpaceReserved="false">
 
+        <!-- Multi wallet support
         <Preference
             android:key="manageWallets"
             android:title="@string/activity_manage_wallets"
             app:iconSpaceReserved="false" />
-
+            -->
 
         <Preference
             android:key="manageLightningChannels"
             android:title="@string/settings_manageChannels"
             app:iconSpaceReserved="false" />
 
-        <!--
+
         <Preference
             android:key="resetConfig"
             android:title="@string/settings_resetConnection"
             app:iconSpaceReserved="false"/>
-            -->
+
 
 
     </PreferenceCategory>

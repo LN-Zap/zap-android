@@ -7,6 +7,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private TextView mEmptyListText;
 
     private List<ChannelListItem> mChannelItems;
 
@@ -34,6 +36,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity {
 
 
         mRecyclerView = findViewById(R.id.channelsList);
+        mEmptyListText = findViewById(R.id.listEmpty);
 
         // Use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
@@ -64,6 +67,15 @@ public class ManageChannelsActivity extends BaseAppCompatActivity {
                 OpenChannelItem openChannelItem = new OpenChannelItem(c);
                 mChannelItems.add(openChannelItem);
             }
+        }
+
+
+        // Show "No channels" if the list is empty
+
+        if (mChannelItems.size() == 0) {
+            mEmptyListText.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyListText.setVisibility(View.GONE);
         }
 
 

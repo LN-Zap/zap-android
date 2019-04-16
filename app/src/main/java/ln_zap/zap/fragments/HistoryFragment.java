@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
@@ -55,6 +56,8 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private TextView mEmptyListText;
+    private TextView mTitle;
     private SharedPreferences mPrefs;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -78,6 +81,13 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
         mRecyclerView = view.findViewById(R.id.historyList);
         mListOptions = view.findViewById(R.id.listOptions);
+        mEmptyListText = view.findViewById(R.id.listEmpty);
+        mTitle = view.findViewById(R.id.heading);
+
+        // Make clear we are on demo mode, if we are
+        if (!mPrefs.getBoolean("isWalletSetup", false)) {
+            mTitle.setText(getResources().getString(R.string.demo_history));
+        }
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -86,6 +96,9 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         // SwipeRefreshLayout
         mSwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.seaBlueGradient3));
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.white));
 
 
         mHistoryItems = new ArrayList<>();
@@ -262,7 +275,16 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         }
 
 
-        // show the list
+        // Show "No transactions" if the list is empty
+
+        if (mHistoryItems.size() == 0) {
+            mEmptyListText.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyListText.setVisibility(View.GONE);
+        }
+
+
+        // Show the list
 
         mAdapter = new HistoryItemAdapter(mHistoryItems);
         mRecyclerView.setAdapter(mAdapter);

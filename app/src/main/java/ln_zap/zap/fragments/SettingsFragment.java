@@ -127,7 +127,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             }
         });
 
-        // Action when clicked on "Manage channels"
+        /*
+        // Action when clicked on "Manage wallets"
         final Preference prefManageWallets = findPreference("manageWallets");
         prefManageWallets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -137,6 +138,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                 return true;
             }
         });
+        */
 
         // Action when clicked on "Manage channels"
         final Preference prefManageChannels = findPreference("manageLightningChannels");
@@ -150,7 +152,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         });
 
 
-        /*
+
         // Action when clicked on "reset connection settings"
         final Preference prefResetConfig = findPreference("resetConfig");
         prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -166,7 +168,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                 return true;
             }
         });
-        */
+
 
         // Action when clicked on "change pin"
         final Preference prefChangePin = findPreference("changePIN");
@@ -289,7 +291,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefIssue.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                String url = "https://github.com/michaelWuensch/zap-android/issues";
+                String url = "https://github.com/LN-Zap/zap-android/issues";
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 getActivity().startActivity(browserIntent);
                 return true;

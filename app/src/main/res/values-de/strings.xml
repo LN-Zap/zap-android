@@ -65,7 +65,7 @@
     <string name="pin_entered_wrong">Falsche PIN</string>
 
 
-    <!-- //////////////// Payment Details //////////////////// -->
+    <!-- //////////////// Payment History //////////////////// -->
 
     <string name="requested_payment">Angefordert</string>
     <string name="request_expired">Abgelaufen</string>
@@ -75,6 +75,7 @@
     <string name="filter_transactions">Transaktionen filtern</string>
     <string name="normal_payments">Normale Zahlungen</string>
     <string name="expired_requests">Abgelaufene Anfragen</string>
+    <string name="no_transactions">Keine Transaktionen</string>
 
 
     <!-- //////////////// Channel Management //////////////////// -->
@@ -85,6 +86,7 @@
     <string name="channel_no_alias">Unbenannt</string>
     <string name="channel_state_open">offen</string>
     <string name="channel_state_offline">offline</string>
+    <string name="no_channels">Keine Kanäle</string>
 
 
     <!-- //////////////// Welcome //////////////////// -->
@@ -123,6 +125,7 @@
     <string name="demo_from_carol">Von Carol</string>
     <string name="demo_to_bob">An Bob für Kinoticket</string>
     <string name="demo_ln_NodeName">Bitrefill.com</string>
+    <string name="demo_history">Verlauf (Demo)</string>
 
 
     <!-- //////////////// Send //////////////////// -->
@@ -169,7 +172,7 @@
         <item>Englisch</item>
     </string-array>
 
-    <string name="settings_manageChannels">Lightning-Kanäle der aktuellen Wallet verwalten</string>
+    <string name="settings_manageChannels">Lightning-Kanäle verwalten</string>
     <string name="settings_resetConnection">Verbindungseinstellungen zurücksetzen</string>
     <string name="settings_changePin">PIN ändern</string>
 

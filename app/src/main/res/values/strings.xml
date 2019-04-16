@@ -99,7 +99,7 @@
     <string name="pin_entered_wrong">Wrong PIN</string>
 
 
-    <!-- //////////////// Payment Details //////////////////// -->
+    <!-- //////////////// Payment History //////////////////// -->
 
     <string name="requested_payment">Requested</string>
     <string name="request_expired">Expired</string>
@@ -109,6 +109,7 @@
     <string name="filter_transactions">Filter transactions</string>
     <string name="normal_payments">Normal Payments</string>
     <string name="expired_requests">Expired Requests</string>
+    <string name="no_transactions">No transactions</string>
 
 
 
@@ -120,6 +121,7 @@
     <string name="channel_no_alias">Unnamed</string>
     <string name="channel_state_open">open</string>
     <string name="channel_state_offline">offline</string>
+    <string name="no_channels">No channels</string>
 
 
     <!-- //////////////// Welcome //////////////////// -->
@@ -158,6 +160,7 @@
     <string name="demo_from_carol">From Carol</string>
     <string name="demo_to_bob">To Bob for cinema ticket</string>
     <string name="demo_ln_NodeName">Bitrefill.com</string>
+    <string name="demo_history">History (Demo)</string>
 
 
 
@@ -207,7 +210,7 @@
         <item>English</item>
     </string-array>
 
-    <string name="settings_manageChannels">Manage lightning channels of current wallet</string>
+    <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
     <string name="settings_changePin">Change PIN</string>
 
