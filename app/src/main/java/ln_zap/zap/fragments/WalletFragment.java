@@ -22,15 +22,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import ln_zap.zap.R;
-import ln_zap.zap.ReceiveActivity;
 import ln_zap.zap.connection.NetworkUtil;
 import ln_zap.zap.setup.SetupActivity;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.util.Balances;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.OnSingleClickListener;
 import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
@@ -55,6 +56,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ImageView mIvSwitchButton;
     private Animation mBalanceFadeOutAnimation;
     private Animation mLogoFadeInAnimation;
+    private FragmentManager mFragmentManager;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -74,6 +76,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        mFragmentManager = getFragmentManager();
+
 
         // Get View elements
         mClBalanceLayout = view.findViewById(R.id.BalanceLayout);
@@ -187,9 +192,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         // Action when clicked on "send"
         Button btnSend = view.findViewById(R.id.sendButton);
-        btnSend.setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), QRCodeScannerActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
@@ -199,11 +204,11 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         // Action when clicked on "receive"
         Button btnReceive = view.findViewById(R.id.receiveButton);
-        btnReceive.setOnClickListener(new View.OnClickListener() {
+        btnReceive.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ReceiveActivity.class);
-                startActivity(intent);
+            public void onSingleClick(View v) {
+                ReceiveBSDFragment receiveBottomSheetDialog = new ReceiveBSDFragment();
+                receiveBottomSheetDialog.show(mFragmentManager, "receiveBottomSheetDialog");
             }
         });
 

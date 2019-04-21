@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Numpad"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="3"
+    android:rowCount="4">
+
+    <Button
+        android:id="@+id/Numpad1"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="1"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad2"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="2"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad3"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="3"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad4"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="4"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad5"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="5"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad6"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="6"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad7"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="7"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad8"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="8"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad9"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="9"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/NumpadDot"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="."
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <Button
+        android:id="@+id/Numpad0"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:typeface="sans" />
+
+    <ImageButton
+        android:id="@+id/NumpadBack"
+        android:layout_height="50dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_clickable_item"
+        android:src="@drawable/ic_delete_black_36dp"
+        android:tint="@color/white" />
+
+</GridLayout>

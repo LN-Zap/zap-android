@@ -8,7 +8,7 @@
     android:layout_marginTop="5dp"
     android:layout_marginEnd="10dp"
     android:layout_marginBottom="5dp"
-    android:background="@drawable/bg_history_item"
+    android:background="@drawable/bg_clickable_item"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="5dp"

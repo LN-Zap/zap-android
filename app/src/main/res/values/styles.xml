@@ -65,7 +65,27 @@
         <item name="android:background">@drawable/rounded_rectangle_seablue</item>
         <item name="colorAccent">@color/lightningOrange</item>
         <item name="android:windowBackground">@drawable/transparent_dialog_background</item>
-        <item name="android:backgroundDimAmount">0.65</item>
+        <item name="android:backgroundDimAmount">0.7</item>
     </style>
+
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <!-- A background image could be defined here. But with the modal Icons on top this does not really work.
+             That's why we make it transparent and define the background in the layouts-->
+        <item name="android:background">#00000000</item>
+    </style>
+
+    <style name="BaseZapBottomSheetDialog" parent="@style/Theme.Design.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="colorAccent">@color/lightningOrange</item>
+        <item name="android:backgroundDimAmount">0.7</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="ZapBottomSheetDialogTheme" parent="BaseZapBottomSheetDialog" />
+
 
 </resources>

@@ -7,7 +7,7 @@
     <string name="ok">Ok</string>
     <string name="cancel">Abbrechen</string>
     <string name="lightning">Lightning</string>
-    <string name="onChain">On Chain</string>
+    <string name="onChain">On-Chain</string>
     <string name="share">Teilen</string>
     <string name="copy">Kopieren</string>
     <string name="paste">Einfügen</string>
@@ -34,6 +34,7 @@
     <string name="yesterday">Gestern</string>
     <string name="fee">Gebühr</string>
     <string name="confirmExit">Zap wirklich beenden?</string>
+    <string name="or">oder</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->
@@ -137,6 +138,8 @@
 
     <string name="receive_generateRequest">Anfrage generieren</string>
     <string name="receive_generateRequest_failed">Generieren der Anfrage fehlgeschlagen.</string>
+    <string name="receive_lightning_request">Lightning Zahlungsanfrage</string>
+    <string name="receive_on_chain_request">On-Chain Zahlungsanfrage</string>
 
 
     <!-- //////////////// User Guardian //////////////////// -->
