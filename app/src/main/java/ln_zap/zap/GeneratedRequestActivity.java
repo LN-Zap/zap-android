@@ -1,6 +1,7 @@
 package ln_zap.zap;
 
 import androidx.preference.PreferenceManager;
+
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 
@@ -122,7 +123,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
 
 
         // Action when clicked on "share"
-        Button btnShare = findViewById(R.id.requestShareButton);
+        View btnShare = findViewById(R.id.shareBtn);
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +159,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         });
 
         // Action when clicked on "copy"
-        Button btnCopyLink = findViewById(R.id.requestCopyButton);
+        View btnCopyLink = findViewById(R.id.copyBtn);
         btnCopyLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

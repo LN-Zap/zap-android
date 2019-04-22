@@ -23,7 +23,7 @@
     <LinearLayout
         android:id="@+id/linearLayoutCreate"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -44,12 +44,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/setup_connect_local_description"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/connect_btnCreateWallet"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/heading"
-            app:layout_constraintVertical_bias="0.62" />
+            android:textAlignment="center" />
 
         <Button
             android:id="@+id/connect_btnCreateWallet"
@@ -59,12 +54,24 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_clickable_item"
             android:enabled="false"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:text="@string/setup_connect_local_button"
-            app:layout_constraintBottom_toBottomOf="@+id/connect_detailsRemoteNode"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/connect_detailsCreate" />
+            android:textAllCaps="false"
+            android:textColor="@color/gray"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/coming_soon"
+            android:textAlignment="center"
+            android:textSize="10sp"/>
 
     </LinearLayout>
 
@@ -102,7 +109,13 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/setup_connect_remote_button" />
+            android:background="@drawable/bg_clickable_item"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="@string/setup_connect_remote_button"
+            android:textAllCaps="false"
+            android:textColor="@color/lightningOrange"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

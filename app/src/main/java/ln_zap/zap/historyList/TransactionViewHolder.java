@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ln_zap.zap.R;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.OnSingleClickListener;
 import ln_zap.zap.util.Wallet;
 
 public class TransactionViewHolder extends RecyclerView.ViewHolder {
@@ -135,9 +136,9 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
         }
 
         // Set on click listener
-        mRootView.setOnClickListener(new View.OnClickListener() {
+        mRootView.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 Toast.makeText(mContext, R.string.coming_soon, Toast.LENGTH_SHORT).show();
             }
         });

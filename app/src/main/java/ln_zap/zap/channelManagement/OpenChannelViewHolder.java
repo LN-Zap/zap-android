@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ln_zap.zap.R;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.OnSingleClickListener;
 import ln_zap.zap.util.Wallet;
 
 
@@ -90,9 +91,9 @@ public class OpenChannelViewHolder extends RecyclerView.ViewHolder {
 
 
         // Set on click listener
-        mRootView.setOnClickListener(new View.OnClickListener() {
+        mRootView.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 Intent intent = new Intent(mContext, OpenChannelDetailsActivity.class);
                 intent.putExtra("channelID", openChannelItem.getChannel().getChanId());
                 mContext.startActivity(intent);

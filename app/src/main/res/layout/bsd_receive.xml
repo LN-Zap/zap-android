@@ -128,6 +128,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -197,6 +198,74 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/noIncomingChannelBalanceView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:paddingStart="30dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="30dp"
+        android:visibility="invisible"
+        android:scrollbarSize="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleLayout">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/gray" />
+
+        <TextView
+            android:id="@+id/noIncomingChannelBalanceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/no_channels"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@color/gray" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <Button
+        android:id="@+id/manageChannels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="@string/settings_manageChannels"
+        android:textAllCaps="false"
+        android:textColor="@color/lightningOrange"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/noIncomingChannelBalanceView" />
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

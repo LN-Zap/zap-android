@@ -46,13 +46,14 @@ import androidx.transition.TransitionManager;
 
 import java.util.concurrent.ExecutionException;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 import ln_zap.zap.GeneratedRequestActivity;
 import ln_zap.zap.R;
+import ln_zap.zap.channelManagement.ManageChannelsActivity;
 import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.util.ExecuteOnCaller;
 import ln_zap.zap.util.MonetaryUtil;
+import ln_zap.zap.util.OnSingleClickListener;
+import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
 
@@ -83,8 +84,9 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
     private Boolean mOnChain;
     private BottomSheetBehavior mBehavior;
     private FrameLayout mBottomSheet;
-    private ScheduledExecutorService mPeekAnimationScheduler;
-    private int mPeekAnimationCounter;
+    private TextView mTvNoIncomingBalance;
+    private Button mBtnManageChannels;
+    private View mViewNoIncomingBalance;
     private boolean mAmountValid = true;
 
 
@@ -115,6 +117,9 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
         mNumpad = view.findViewById(R.id.Numpad);
         mBtnNext = view.findViewById(R.id.nextButton);
         mBtnGenerateRequest = view.findViewById(R.id.generateRequestButton);
+        mBtnManageChannels = view.findViewById(R.id.manageChannels);
+        mTvNoIncomingBalance = view.findViewById(R.id.noIncomingChannelBalanceText);
+        mViewNoIncomingBalance = view.findViewById(R.id.noIncomingChannelBalanceView);
 
 
         // Get numpad buttons
@@ -218,6 +223,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
                 mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_lightning));
                 mModalTitle.setText(R.string.receive_lightning_request);
 
+
                 // Animate bsd Icon size
                 ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(mIvBsdIcon, "scaleX", 0f, 1f);
                 ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(mIvBsdIcon, "scaleY", 0f, 1f);
@@ -229,12 +235,39 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
                 scaleUpIcon.play(scaleUpX).with(scaleUpY);
                 scaleUpIcon.start();
 
+                // Check if we can receive anything over the lightning network
+                boolean canReceiveLightningPayment;
+                boolean hasActiveChannels = Wallet.getInstance().hasOpenActiveChannels();
+
+                if (hasActiveChannels) {
+                    if (Wallet.getInstance().getMaxChannelRemoteBalance() > 0L) {
+                        // We have remote balances on at least one channel, so we can receive a lightning payment!
+                        canReceiveLightningPayment = true;
+                    } else {
+                        mTvNoIncomingBalance.setText(R.string.receive_noIncomeBalance);
+                        canReceiveLightningPayment = false;
+                    }
+                } else {
+                    mTvNoIncomingBalance.setText(R.string.receive_noActiveChannels);
+                    canReceiveLightningPayment = false;
+                }
+
+                // In Demo Mode, we want to show the working way...
+                if (!mPrefs.getBoolean("isWalletSetup", false)) {
+                    canReceiveLightningPayment = true;
+                }
+
                 // Animate Layout changes
                 ConstraintSet csRoot = new ConstraintSet();
                 csRoot.clone(mRootLayout);
-                csRoot.constrainHeight(mNumpad.getId(),ConstraintSet.WRAP_CONTENT);
-                csRoot.constrainHeight(mReceiveAmountView.getId(),ConstraintSet.WRAP_CONTENT);
-                csRoot.constrainHeight(mBtnNext.getId(),ConstraintSet.WRAP_CONTENT);
+                if (canReceiveLightningPayment) {
+                    csRoot.constrainHeight(mNumpad.getId(), ConstraintSet.WRAP_CONTENT);
+                    csRoot.constrainHeight(mReceiveAmountView.getId(), ConstraintSet.WRAP_CONTENT);
+                    csRoot.constrainHeight(mBtnNext.getId(), ConstraintSet.WRAP_CONTENT);
+                } else {
+                    csRoot.constrainHeight(mTvNoIncomingBalance.getId(), ConstraintSet.WRAP_CONTENT);
+                    csRoot.constrainHeight(mViewNoIncomingBalance.getId(), ConstraintSet.WRAP_CONTENT);
+                }
 
                 Transition transition = new ChangeBounds();
                 transition.setInterpolator(new DecelerateInterpolator(3));
@@ -243,7 +276,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
                 csRoot.applyTo(mRootLayout);
 
 
-                FrameLayout bottomSheet =  getDialog().findViewById(R.id.design_bottom_sheet);
+                FrameLayout bottomSheet = getDialog().findViewById(R.id.design_bottom_sheet);
                 bottomSheet.setForegroundGravity(Gravity.BOTTOM);
                 //CoordinatorLayout layout = (CoordinatorLayout) bottomSheet.getParent();
                 mBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -253,15 +286,22 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
                 // Expand bottom sheet after size has changed
                 mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-
+                // Manage visibilities
                 mIvBsdIcon.setVisibility(View.VISIBLE);
                 mChooseTypeView.setVisibility(View.GONE);
-                mBtnNext.setVisibility(View.VISIBLE);
                 mMemoView.setVisibility(View.GONE);
+                if (canReceiveLightningPayment) {
+                    mBtnNext.setVisibility(View.VISIBLE);
+                    mTvNoIncomingBalance.setVisibility(View.GONE);
+                    mBtnManageChannels.setVisibility(View.GONE);
 
-
-                // Request focus on amount input
-                mEtAmount.requestFocus();
+                    // Request focus on amount input
+                    mEtAmount.requestFocus();
+                } else {
+                    mBtnNext.setVisibility(View.GONE);
+                    mViewNoIncomingBalance.setVisibility(View.VISIBLE);
+                    mBtnManageChannels.setVisibility(View.VISIBLE);
+                }
 
             }
         });
@@ -289,9 +329,9 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
                 // Animate Layout changes
                 ConstraintSet csRoot = new ConstraintSet();
                 csRoot.clone(mRootLayout);
-                csRoot.constrainHeight(mNumpad.getId(),ConstraintSet.WRAP_CONTENT);
-                csRoot.constrainHeight(mReceiveAmountView.getId(),ConstraintSet.WRAP_CONTENT);
-                csRoot.constrainHeight(mBtnNext.getId(),ConstraintSet.WRAP_CONTENT);
+                csRoot.constrainHeight(mNumpad.getId(), ConstraintSet.WRAP_CONTENT);
+                csRoot.constrainHeight(mReceiveAmountView.getId(), ConstraintSet.WRAP_CONTENT);
+                csRoot.constrainHeight(mBtnNext.getId(), ConstraintSet.WRAP_CONTENT);
 
                 Transition transition = new ChangeBounds();
                 transition.setInterpolator(new DecelerateInterpolator(3));
@@ -300,7 +340,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
                 csRoot.applyTo(mRootLayout);
 
 
-                FrameLayout bottomSheet =  getDialog().findViewById(R.id.design_bottom_sheet);
+                FrameLayout bottomSheet = getDialog().findViewById(R.id.design_bottom_sheet);
                 bottomSheet.setForegroundGravity(Gravity.BOTTOM);
                 //CoordinatorLayout layout = (CoordinatorLayout) bottomSheet.getParent();
                 mBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -341,6 +381,16 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 generateRequest();
+            }
+        });
+
+        // Action when clicked on "manage Channels" button
+        mBtnManageChannels.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                Intent intent = new Intent(getActivity(), ManageChannelsActivity.class);
+                startActivity(intent);
+                dismiss();
             }
         });
 
@@ -434,6 +484,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
 
                 final ListenableFuture<NewAddressResponse> addressFuture = asyncAddressClient.newAddress(asyncNewAddressRequest);
 
+                ZapLog.debug(LOG_TAG, "OnChain generating...");
 
                 addressFuture.addListener(new Runnable() {
                     @Override

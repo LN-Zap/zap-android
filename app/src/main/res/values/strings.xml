@@ -164,7 +164,6 @@
     <string name="demo_history">History (Demo)</string>
 
 
-
     <!-- //////////////// Send //////////////////// -->
 
     <string name="send_sendPayment">Send payment</string>
@@ -176,6 +175,8 @@
     <string name="receive_generateRequest_failed">Request generation failed.</string>
     <string name="receive_lightning_request">Lightning Request</string>
     <string name="receive_on_chain_request">On-Chain Request</string>
+    <string name="receive_noActiveChannels">To receive Bitcoin over the lightning network, you first have to open channels.</string>
+    <string name="receive_noIncomeBalance">To receive Bitcoin over the lightning network, at least one of your channels needs some balance on your counterpartys side.\n\nTo achieve that, you have to spend something on lightning network first.\n\nIn the manage channels area you can always see how much you are able to send or receive over the lightning network right now.</string>
 
 
     <!-- //////////////// User Guardian //////////////////// -->

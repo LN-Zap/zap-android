@@ -816,6 +816,47 @@ public class Wallet {
 
     }
 
+    /**
+     * Returns if the wallet has at least one online channel.
+     *
+     * @return
+     */
+    public boolean hasOpenActiveChannels() {
+        if (mOpenChannelsList != null) {
+            if (mOpenChannelsList.size() != 0) {
+                for (Channel c : mOpenChannelsList) {
+                    if (c.getActive()) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns the the highest remote balance of all active channels.
+     * This can be used to determine maximum possible receive amount for a lightning invoice as long as there is no splicing.
+     *
+     * @return
+     */
+    public long getMaxChannelRemoteBalance() {
+        long tempMax = 0L;
+        if (mOpenChannelsList != null) {
+            for (Channel c : mOpenChannelsList) {
+                if (c.getActive()) {
+                    if (c.getRemoteBalance() > tempMax) {
+                        tempMax = c.getRemoteBalance();
+                    }
+                }
+            }
+        }
+        return tempMax;
+    }
 
     public boolean isSyncedToChain() {
         return mSyncedToChain;
