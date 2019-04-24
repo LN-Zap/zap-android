@@ -138,6 +138,12 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
             // Our wallet is setup
 
+            // Avoid index out of bounds. An invoice with less than 11 characters isn't valid.
+            if (invoice.length() < 11){
+                showError(getResources().getString(R.string.error_notAPaymentRequest), 7000);
+                return;
+            }
+
             // convert to lower case
             String lnInvoice = invoice.toLowerCase();
 
