@@ -69,6 +69,7 @@
     <string name="fee">Fee</string>
     <string name="confirmExit">Do you really want to quit Zap?</string>
     <string name="or">or</string>
+    <string name="max_amount">Maximum Amount:</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->

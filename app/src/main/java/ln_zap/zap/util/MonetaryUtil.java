@@ -440,11 +440,14 @@ public class MonetaryUtil {
         Pattern pattern = Pattern.compile(regexPattern);
         Matcher matcher = pattern.matcher(input);
 
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        boolean matchedPattern = matcher.matches();
+
+        // Check if the input is too large. We limit the input to the value of 1000 BTC.
+        // This will prevent any overflow errors when calculating in satoshis or later mSats.
+
+        boolean notTooBig = (Long.parseLong(convertPrimaryToSatoshi(input)) <= 1e11);
+
+        return matchedPattern && notTooBig;
     }
 
 

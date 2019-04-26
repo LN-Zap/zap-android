@@ -35,6 +35,7 @@
     <string name="fee">Gebühr</string>
     <string name="confirmExit">Zap wirklich beenden?</string>
     <string name="or">oder</string>
+    <string name="max_amount">Maximaler Betrag:</string>
 
 
     <!-- //////////////// Activity names //////////////////// -->

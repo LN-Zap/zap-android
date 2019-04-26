@@ -50,14 +50,16 @@ import ln_zap.zap.GeneratedRequestActivity;
 import ln_zap.zap.R;
 import ln_zap.zap.channelManagement.ManageChannelsActivity;
 import ln_zap.zap.connection.LndConnection;
+import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.util.ExecuteOnCaller;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.OnSingleClickListener;
+import ln_zap.zap.util.UserGuardian;
 import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
 
-public class ReceiveBSDFragment extends BottomSheetDialogFragment {
+public class ReceiveBSDFragment extends BottomSheetDialogFragment implements UserGuardianInterface {
 
     private static final String LOG_TAG = "Receive Activity";
 
@@ -87,6 +89,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
     private TextView mTvNoIncomingBalance;
     private Button mBtnManageChannels;
     private View mViewNoIncomingBalance;
+    private UserGuardian mUG;
     private boolean mAmountValid = true;
 
 
@@ -100,6 +103,8 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
         if (mPrefs.getBoolean("preventScreenRecording", true)) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
+
+        mUG = new UserGuardian(getActivity(), this);
 
         mBtnCloseBSD = view.findViewById(R.id.closeButton);
         mBtnLn = view.findViewById(R.id.lnBtn);
@@ -170,28 +175,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 // remove Input
-
-                boolean selection = mEtAmount.getSelectionStart() != mEtAmount.getSelectionEnd();
-
-                int start = Math.max(mEtAmount.getSelectionStart(), 0);
-                int end = Math.max(mEtAmount.getSelectionEnd(), 0);
-
-                String before = mEtAmount.getText().toString().substring(0, start);
-                String after = mEtAmount.getText().toString().substring(end);
-
-                if (selection) {
-                    String outputText = before + after;
-                    mEtAmount.setText(outputText);
-                    mEtAmount.setSelection(start);
-                } else {
-                    if (before.length() >= 1) {
-                        String newBefore = before.substring(0, before.length() - 1);
-                        String outputText = newBefore + after;
-                        mEtAmount.setText(outputText);
-                        mEtAmount.setSelection(start - 1);
-                    }
-                }
-
+                deleteAmountInput();
             }
         });
 
@@ -205,7 +189,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
         // set unit to current primary unit
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
 
-
+        // Action when clicked on "x" (close) button
         mBtnCloseBSD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,7 +261,6 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
 
 
                 FrameLayout bottomSheet = getDialog().findViewById(R.id.design_bottom_sheet);
-                bottomSheet.setForegroundGravity(Gravity.BOTTOM);
                 //CoordinatorLayout layout = (CoordinatorLayout) bottomSheet.getParent();
                 mBehavior = BottomSheetBehavior.from(bottomSheet);
                 mBehavior.setPeekHeight(bottomSheet.getHeight());
@@ -371,6 +354,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
                 mMemoView.setVisibility(View.VISIBLE);
                 mBtnGenerateRequest.setVisibility(View.VISIBLE);
 
+                mEtAmount.setEnabled(false);
                 mEtMemo.requestFocus();
                 showKeyboard();
             }
@@ -380,7 +364,12 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
         mBtnGenerateRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generateRequest();
+                // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
+                if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600) {
+                    mUG.securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
+                } else {
+                    generateRequest();
+                }
             }
         });
 
@@ -414,13 +403,30 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
             @Override
             public void afterTextChanged(Editable arg0) {
 
-                // cut off last inputted character if not valid
+                // remove the last inputted character if not valid
                 if (!mAmountValid) {
-                    String input = arg0.toString();
-                    int length = arg0.length();
-                    arg0.delete(length - 1, length);
+                    deleteAmountInput();
                 }
 
+                // make text red if input is too large
+                if (mOnChain) {
+                    // always make it white, we have no limit for on-chain
+                    mEtAmount.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                    long maxReceivable = Wallet.getInstance().getMaxChannelRemoteBalance();
+                    if (currentValue > maxReceivable) {
+                        mEtAmount.setTextColor(getResources().getColor(R.color.superRed));
+                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxReceivable);
+                        Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
+                        mBtnNext.setEnabled(false);
+                        mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                    } else {
+                        mEtAmount.setTextColor(getResources().getColor(R.color.white));
+                        mBtnNext.setEnabled(true);
+                        mBtnNext.setTextColor(getResources().getColor(R.color.lightningOrange));
+                    }
+                }
             }
 
             @Override
@@ -452,6 +458,29 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
     @Override
     public int getTheme() {
         return R.style.ZapBottomSheetDialogTheme;
+    }
+
+    private void deleteAmountInput() {
+        boolean selection = mEtAmount.getSelectionStart() != mEtAmount.getSelectionEnd();
+
+        int start = Math.max(mEtAmount.getSelectionStart(), 0);
+        int end = Math.max(mEtAmount.getSelectionEnd(), 0);
+
+        String before = mEtAmount.getText().toString().substring(0, start);
+        String after = mEtAmount.getText().toString().substring(end);
+
+        if (selection) {
+            String outputText = before + after;
+            mEtAmount.setText(outputText);
+            mEtAmount.setSelection(start);
+        } else {
+            if (before.length() >= 1) {
+                String newBefore = before.substring(0, before.length() - 1);
+                String outputText = newBefore + after;
+                mEtAmount.setText(outputText);
+                mEtAmount.setSelection(start - 1);
+            }
+        }
     }
 
     public void showKeyboard() {
@@ -558,6 +587,15 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment {
             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
             intent.putExtra("onChain", mOnChain);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void guardianDialogConfirmed(String DialogName) {
+        switch (DialogName) {
+            case UserGuardian.OLD_EXCHANGE_RATE:
+                generateRequest();
+                break;
         }
     }
 }

@@ -200,7 +200,6 @@
     </LinearLayout>
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/noIncomingChannelBalanceView"
         android:layout_width="match_parent"
@@ -209,8 +208,8 @@
         android:paddingTop="10dp"
         android:paddingEnd="30dp"
         android:paddingBottom="30dp"
-        android:visibility="invisible"
         android:scrollbarSize="0dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleLayout">
@@ -227,14 +226,14 @@
             android:id="@+id/noIncomingChannelBalanceText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
+            android:text="@string/no_channels"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/no_channels"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -265,7 +264,6 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/noIncomingChannelBalanceView" />
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -339,6 +337,36 @@
                 android:tint="@color/lightningOrange"
                 app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
         </LinearLayout>
+
+        <!-- If we want to show the maximum amount, we could enable it here
+        <TextView
+            android:id="@+id/maximumAmountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/max_amount"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:translationY="-5dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/receiveAmount" />
+
+        <TextView
+            android:id="@+id/maximumAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="0dp"
+            android:text="@string/max_amount"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:translationY="-5dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/maximumAmountLabel"
+            app:layout_constraintTop_toTopOf="@id/maximumAmountLabel" />
+        -->
 
         <ImageView
             android:id="@+id/line2"

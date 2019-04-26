@@ -36,7 +36,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     /**
      * Secure against screenshots and automated screen recording.
      * Keep in mind that this does not prevent popups and other
-     * dialogues to be secured as well. Extra security measures might have to be considered.
+     * dialogs to be secured as well. Extra security measures have to be considered.
      * Check out the following link for more details:
      * https://github.com/commonsguy/cwac-security/blob/master/docs/FLAGSECURE.md
      */
