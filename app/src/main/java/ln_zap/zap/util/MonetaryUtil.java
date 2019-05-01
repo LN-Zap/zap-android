@@ -56,10 +56,10 @@ public class MonetaryUtil {
         String SecondCurrency = mPrefs.getString("secondCurrency", "USD");
         switch (SecondCurrency) {
             case BTC_UNIT:
-                setSecondCurrency(SecondCurrency, 1e-8);
+                setSecondCurrency(SecondCurrency, 1e-8, "\u20BF");
                 break;
             case MBTC_UNIT:
-                setSecondCurrency(SecondCurrency, 1e-5);
+                setSecondCurrency(SecondCurrency, 1e-5, "m\u20BF");
                 break;
             case BIT_UNIT:
                 setSecondCurrency(SecondCurrency, 1e-2);
@@ -190,10 +190,10 @@ public class MonetaryUtil {
     public void loadFirstCurrencyFromPrefs(String currencyCode) {
         switch (currencyCode) {
             case BTC_UNIT:
-                setFirstCurrency(currencyCode, 1e-8);
+                setFirstCurrency(currencyCode, 1e-8, "\u20BF");
                 break;
             case MBTC_UNIT:
-                setFirstCurrency(currencyCode, 1e-5);
+                setFirstCurrency(currencyCode, 1e-5,"m\u20BF");
                 break;
             case BIT_UNIT:
                 setFirstCurrency(currencyCode, 1e-2);
@@ -216,10 +216,10 @@ public class MonetaryUtil {
     public void loadSecondCurrencyFromPrefs(String currencyCode) {
         switch (currencyCode) {
             case BTC_UNIT:
-                setSecondCurrency(currencyCode, 1e-8);
+                setSecondCurrency(currencyCode, 1e-8, "\u20BF");
                 break;
             case MBTC_UNIT:
-                setSecondCurrency(currencyCode, 1e-5);
+                setSecondCurrency(currencyCode, 1e-5, "m\u20BF");
                 break;
             case BIT_UNIT:
                 setSecondCurrency(currencyCode, 1e-2);
@@ -455,16 +455,17 @@ public class MonetaryUtil {
         mFirstCurrency = new Currency(currencyCode, rate);
     }
 
-    private void setFirstCurrency(String currencyCode, Double rate, Long timestamp) {
-        mFirstCurrency = new Currency(currencyCode, rate, timestamp);
+    private void setFirstCurrency(String currencyCode, Double rate, String symbol) {
+        mFirstCurrency = new Currency(currencyCode, rate, symbol);
     }
 
-    private void setFirstCurrency(String currencyCode, Double rate, Long timestamp, String symbol) {
-        mFirstCurrency = new Currency(currencyCode, rate, timestamp, symbol);
-    }
 
     private void setSecondCurrency(String currencyCode, Double rate) {
         mSecondCurrency = new Currency(currencyCode, rate);
+    }
+
+    private void setSecondCurrency(String currencyCode, Double rate, String symbol) {
+        mSecondCurrency = new Currency(currencyCode, rate, symbol);
     }
 
     private void setSecondCurrency(String currencyCode, Double rate, Long timestamp) {
