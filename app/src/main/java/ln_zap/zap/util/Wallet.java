@@ -79,6 +79,7 @@ public class Wallet {
     private boolean mTransactionUpdated = false;
     private boolean mInvoicesUpdated = false;
     private boolean mPaymentsUpdated = false;
+    private boolean mUpdatingHistory = false;
     private boolean mTestnet = false;
     private String mLNDVersion = "not connected";
 
@@ -263,13 +264,17 @@ public class Wallet {
      */
     public void fetchLNDTransactionHistory() {
         // Set all updated flags to false. This way we can determine later, when update is finished.
-        mTransactionUpdated = false;
-        mInvoicesUpdated = false;
-        mPaymentsUpdated = false;
 
-        fetchTransactionsFromLND();
-        fetchInvoicesFromLND();
-        fetchPaymentsFromLND();
+        if (!mUpdatingHistory) {
+            mUpdatingHistory = true;
+            mTransactionUpdated = false;
+            mInvoicesUpdated = false;
+            mPaymentsUpdated = false;
+
+            fetchTransactionsFromLND();
+            fetchInvoicesFromLND();
+            fetchPaymentsFromLND();
+        }
     }
 
     /**
@@ -277,6 +282,7 @@ public class Wallet {
      */
     private void isHistoryUpdateFinished() {
         if (mTransactionUpdated && mInvoicesUpdated && mPaymentsUpdated) {
+            mUpdatingHistory = false;
             broadcastHistoryUpdate();
         }
     }
@@ -317,9 +323,16 @@ public class Wallet {
 
 
     /**
-     * This will fetch lightning invoices from LND.
+     * This will fetch all lightning invoices from LND.
      */
     public void fetchInvoicesFromLND() {
+
+        mInvoiceList = new LinkedList<>();
+
+        fetchInvoicesFromLND(100);
+    }
+
+    public void fetchInvoicesFromLND(long lastIndex) {
         // Fetch lightning invoices
         LightningGrpc.LightningFutureStub asyncInvoiceClient = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -328,20 +341,28 @@ public class Wallet {
         ListInvoiceRequest asyncInvoiceRequest = ListInvoiceRequest.newBuilder()
                 //.setReversed(true)
                 //.setPendingOnly(true)
-                //.setNumMaxInvoices(3)
+                .setNumMaxInvoices(lastIndex)
                 .build();
         final ListenableFuture<ListInvoiceResponse> invoiceFuture = asyncInvoiceClient.listInvoices(asyncInvoiceRequest);
-
+        
         invoiceFuture.addListener(new Runnable() {
             @Override
             public void run() {
                 try {
                     ListInvoiceResponse invoiceResponse = invoiceFuture.get();
 
-                    mInvoiceList = Lists.reverse(invoiceResponse.getInvoicesList());
+                    mInvoiceList.addAll(Lists.reverse(invoiceResponse.getInvoicesList()));
 
-                    mInvoicesUpdated = true;
-                    isHistoryUpdateFinished();
+                    if (invoiceResponse.getLastIndexOffset() < lastIndex){
+                        // we have fetched all available invoices!
+                        mInvoicesUpdated = true;
+                        isHistoryUpdateFinished();
+                    } else {
+                        // there are still invoices to fetch, get the next batch!
+                        fetchInvoicesFromLND(lastIndex + 100);
+                    }
+
+
 
                     // ZapLog.debug(LOG_TAG, String.valueOf(invoiceResponse.toString()));
                 } catch (InterruptedException e) {
