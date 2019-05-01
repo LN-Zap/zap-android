@@ -197,7 +197,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), QRCodeScannerActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -279,6 +279,27 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed. Here it is 1
+        if (requestCode == 1) {
+            // This gets executed if the a vaild payment request was scanned or pasted
+            if (data != null) {
+                boolean onChain = data.getExtras().getBoolean("onChain");
+                if (onChain){
+                    long amount = data.getExtras().getLong("onChainAmount");
+                    String address = data.getExtras().getString("onChainAddress");
+                    String message = data.getExtras().getString("onChainMessage");
+                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment(onChain,amount,address,message);
+                    sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
+                } else {
+                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment(onChain);
+                    sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
+                }
+            }
+        }
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

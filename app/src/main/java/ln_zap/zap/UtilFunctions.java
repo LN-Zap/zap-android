@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 
 public class UtilFunctions {
     public static String sha256Hash(String data) {
+        // TODO: Add keyStretching function to secure against brute force
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(data.getBytes("UTF-8"));

@@ -344,7 +344,7 @@ public class Wallet {
                 .setNumMaxInvoices(lastIndex)
                 .build();
         final ListenableFuture<ListInvoiceResponse> invoiceFuture = asyncInvoiceClient.listInvoices(asyncInvoiceRequest);
-        
+
         invoiceFuture.addListener(new Runnable() {
             @Override
             public void run() {
@@ -872,6 +872,26 @@ public class Wallet {
                 if (c.getActive()) {
                     if (c.getRemoteBalance() > tempMax) {
                         tempMax = c.getRemoteBalance();
+                    }
+                }
+            }
+        }
+        return tempMax;
+    }
+
+    /**
+     * Returns the the highest local balance of all active channels.
+     * This can be used to determine maximum possible send amount for a lightning payment as long as there is no splicing.
+     *
+     * @return
+     */
+    public long getMaxChannelLocalBalance() {
+        long tempMax = 0L;
+        if (mOpenChannelsList != null) {
+            for (Channel c : mOpenChannelsList) {
+                if (c.getActive()) {
+                    if (c.getLocalBalance() > tempMax) {
+                        tempMax = c.getLocalBalance();
                     }
                 }
             }

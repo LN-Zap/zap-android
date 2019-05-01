@@ -132,7 +132,11 @@
 
     <!-- //////////////// Send //////////////////// -->
 
+    <string name="send_lightningPayment">Lightning Zahlung senden</string>
+    <string name="send_onChainPayment">On-chain Zahlung senden</string>
     <string name="send_sendPayment">Zahlung senden</string>
+    <string name="send_success">Zahlung\nerfolgreich</string>
+    <string name="send_fail">Zahlung\nfehlgeschlagen</string>
 
 
     <!-- //////////////// Receive //////////////////// -->
@@ -221,6 +225,7 @@
 
     <!-- //////////////// Errors ////////////////////// -->
 
+    <string name="error">Fehler</string>
     <string name="error_blockExplorer_title">Block-Explorer</string>
     <!-- Parameters for the following string are:  %1$s: Name of selected block explorer, %2$s: "mainnet" or "testnet" -->
     <string name="error_blockExplorer_message">"Der momentan ausgewählte Block-Explorer (%1$s) unterstützt das %2$s nicht. \nBitte wähle in den Einstellungen einen anderen Block-Explorer um fortzufahren."</string>

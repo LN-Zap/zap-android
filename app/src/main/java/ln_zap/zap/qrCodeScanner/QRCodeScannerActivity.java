@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+
 import io.grpc.StatusRuntimeException;
 import ln_zap.zap.R;
-import ln_zap.zap.SendActivity;
 import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.util.PermissionsUtil;
 import ln_zap.zap.util.Wallet;
@@ -139,7 +139,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
             // Our wallet is setup
 
             // Avoid index out of bounds. An invoice with less than 11 characters isn't valid.
-            if (invoice.length() < 11){
+            if (invoice.length() < 11) {
                 showError(getResources().getString(R.string.error_notAPaymentRequest), 7000);
                 return;
             }
@@ -227,10 +227,10 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
         } else {
             // The wallet is not setup yet, go to next screen to show demo data.
-            Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
+            Intent intent = new Intent();
             intent.putExtra("onChain", false);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(intent);
+            setResult(1, intent);
+            finish();
         }
     }
 
@@ -264,13 +264,14 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
     private void goToOnChainPaymentScreen() {
         // Decoded successfully, go to send page.
-        Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
+
+        Intent intent = new Intent();
         intent.putExtra("onChain", true);
         intent.putExtra("onChainAddress", mOnChainAddress);
-        intent.putExtra("amount", mOnChainInvoiceAmount);
-        intent.putExtra("message", mOnChainInvoiceMessage);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
+        intent.putExtra("onChainAmount", mOnChainInvoiceAmount);
+        intent.putExtra("onChainMessage", mOnChainInvoiceMessage);
+        setResult(1, intent);
+        finish();
     }
 
     private void decodeLightningInvoice(String invoice) {
@@ -293,11 +294,10 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
                 showError(getResources().getString(R.string.error_paymentRequestExpired), 3000);
             } else {
                 // Decoded successfully, go to send page.
-                Intent intent = new Intent(QRCodeScannerActivity.this, SendActivity.class);
+                Intent intent = new Intent();
                 intent.putExtra("onChain", false);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-
+                setResult(1, intent);
+                finish();
             }
 
         } catch (StatusRuntimeException e) {

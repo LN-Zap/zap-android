@@ -66,7 +66,6 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     private View mBtnLn;
     private View mBtnOnChain;
     private View mChooseTypeView;
-    private ImageButton mBtnCloseBSD;
     private ImageView mIvBsdIcon;
     private ConstraintLayout mRootLayout;
     private ConstraintLayout mIconAnchor;
@@ -75,7 +74,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     private EditText mEtMemo;
     private TextView mTvUnit;
     private View mMemoView;
-    private TextView mModalTitle;
+    private TextView mTvTitle;
     private SharedPreferences mPrefs;
     private View mNumpad;
     private Button[] mBtnNumpad = new Button[10];
@@ -83,7 +82,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     private ImageButton mBtnNumpadBack;
     private Button mBtnNext;
     private Button mBtnGenerateRequest;
-    private Boolean mOnChain;
+    private boolean mOnChain;
     private BottomSheetBehavior mBehavior;
     private FrameLayout mBottomSheet;
     private TextView mTvNoIncomingBalance;
@@ -106,7 +105,6 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
 
         mUG = new UserGuardian(getActivity(), this);
 
-        mBtnCloseBSD = view.findViewById(R.id.closeButton);
         mBtnLn = view.findViewById(R.id.lnBtn);
         mBtnOnChain = view.findViewById(R.id.onChainBtn);
         mIvBsdIcon = view.findViewById(R.id.bsdIcon);
@@ -118,13 +116,15 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
         mTvUnit = view.findViewById(R.id.receiveUnit);
         mEtMemo = view.findViewById(R.id.receiveMemo);
         mMemoView = view.findViewById(R.id.receiveMemoTopLayout);
-        mModalTitle = view.findViewById(R.id.bsdTitle);
+        mTvTitle = view.findViewById(R.id.bsdTitle);
         mNumpad = view.findViewById(R.id.Numpad);
         mBtnNext = view.findViewById(R.id.nextButton);
         mBtnGenerateRequest = view.findViewById(R.id.generateRequestButton);
-        mBtnManageChannels = view.findViewById(R.id.manageChannels);
+
+
         mTvNoIncomingBalance = view.findViewById(R.id.noIncomingChannelBalanceText);
         mViewNoIncomingBalance = view.findViewById(R.id.noIncomingChannelBalanceView);
+        mBtnManageChannels = view.findViewById(R.id.manageChannels);
 
 
         // Get numpad buttons
@@ -190,7 +190,8 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
 
         // Action when clicked on "x" (close) button
-        mBtnCloseBSD.setOnClickListener(new View.OnClickListener() {
+        ImageButton btnCloseBSD = view.findViewById(R.id.closeButton);
+        btnCloseBSD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -205,7 +206,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
 
                 mOnChain = false;
                 mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_lightning));
-                mModalTitle.setText(R.string.receive_lightning_request);
+                mTvTitle.setText(R.string.receive_lightning_request);
 
 
                 // Animate bsd Icon size
@@ -296,7 +297,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
 
                 mOnChain = true;
                 mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_on_chain));
-                mModalTitle.setText(R.string.receive_on_chain_request);
+                mTvTitle.setText(R.string.receive_on_chain_request);
 
                 // Animate bsd Icon size
                 ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(mIvBsdIcon, "scaleX", 0f, 1f);
@@ -389,6 +390,9 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mEtAmount.getText().toString().equals(".")){
+                    mEtAmount.setText("");
+                }
                 String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
                 MonetaryUtil.getInstance().switchCurrencies();
                 mEtAmount.setText(convertedAmount);
@@ -413,18 +417,25 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                     // always make it white, we have no limit for on-chain
                     mEtAmount.setTextColor(getResources().getColor(R.color.white));
                 } else {
-                    long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                    long maxReceivable = Wallet.getInstance().getMaxChannelRemoteBalance();
-                    if (currentValue > maxReceivable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.superRed));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxReceivable);
-                        Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
-                        mBtnNext.setEnabled(false);
-                        mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                    long maxReceivable;
+                    if (mPrefs.getBoolean("isWalletSetup", false)) {
+                        maxReceivable = Wallet.getInstance().getMaxChannelRemoteBalance();
                     } else {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnNext.setEnabled(true);
-                        mBtnNext.setTextColor(getResources().getColor(R.color.lightningOrange));
+                        maxReceivable = 500000;
+                    }
+                    if(!mEtAmount.getText().toString().equals(".")) {
+                        long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                        if (currentValue > maxReceivable) {
+                            mEtAmount.setTextColor(getResources().getColor(R.color.superRed));
+                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxReceivable);
+                            Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
+                            mBtnNext.setEnabled(false);
+                            mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                        } else {
+                            mEtAmount.setTextColor(getResources().getColor(R.color.white));
+                            mBtnNext.setEnabled(true);
+                            mBtnNext.setTextColor(getResources().getColor(R.color.lightningOrange));
+                        }
                     }
                 }
             }
@@ -483,12 +494,12 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
         }
     }
 
-    public void showKeyboard() {
+    private void showKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
-    public void generateRequest() {
+    private void generateRequest() {
         if (mPrefs.getBoolean("isWalletSetup", false)) {
             // The wallet is setup. Communicate with LND and generate the request.
             if (mOnChain) {
@@ -597,5 +608,27 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                 generateRequest();
                 break;
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        FrameLayout bottomSheet = getDialog().findViewById(R.id.design_bottom_sheet);
+        mBehavior = BottomSheetBehavior.from(bottomSheet);
+
+
+        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
     }
 }

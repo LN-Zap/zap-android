@@ -10,7 +10,7 @@
 
     <Button
         android:id="@+id/Numpad1"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -21,7 +21,7 @@
 
     <Button
         android:id="@+id/Numpad2"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -32,7 +32,7 @@
 
     <Button
         android:id="@+id/Numpad3"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -43,7 +43,7 @@
 
     <Button
         android:id="@+id/Numpad4"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -54,7 +54,7 @@
 
     <Button
         android:id="@+id/Numpad5"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -65,7 +65,7 @@
 
     <Button
         android:id="@+id/Numpad6"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -76,7 +76,7 @@
 
     <Button
         android:id="@+id/Numpad7"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -87,7 +87,7 @@
 
     <Button
         android:id="@+id/Numpad8"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -98,7 +98,7 @@
 
     <Button
         android:id="@+id/Numpad9"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -109,7 +109,7 @@
 
     <Button
         android:id="@+id/NumpadDot"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -120,7 +120,7 @@
 
     <Button
         android:id="@+id/Numpad0"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"
@@ -131,7 +131,7 @@
 
     <ImageButton
         android:id="@+id/NumpadBack"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_columnWeight="1"
         android:layout_margin="5dp"
         android:background="@drawable/bg_clickable_item"

@@ -33,7 +33,6 @@
         android:id="@+id/bsdIcon"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -76,132 +75,9 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/chooseTypeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingStart="15dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="15dp"
-        android:paddingBottom="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleLayout">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lnBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_clickable_item">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/lnBtnIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tint="@color/lightningOrange"
-                    app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
-
-                <TextView
-                    android:id="@+id/lnBtnText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:text="@string/lightning"
-                    android:textColor="@color/lightningOrange"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                app:srcCompat="@color/white" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/or"
-                android:textAlignment="center" />
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                app:srcCompat="@color/white" />
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/onChainBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_clickable_item">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/onChainBtnIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tint="@color/lightningOrange"
-                    app:srcCompat="@drawable/ic_onchain_black_24dp" />
-
-                <TextView
-                    android:id="@+id/onChainBtnText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:text="@string/onChain"
-                    android:textColor="@color/lightningOrange"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/noIncomingChannelBalanceView"
+        android:id="@+id/noOutgoingChannelBalanceView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:paddingStart="30dp"
@@ -223,7 +99,7 @@
             app:srcCompat="@color/gray" />
 
         <TextView
-            android:id="@+id/noIncomingChannelBalanceText"
+            android:id="@+id/noOutgoingChannelBalanceText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="20dp"
@@ -263,18 +139,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noIncomingChannelBalanceView" />
+        app:layout_constraintTop_toBottomOf="@id/noOutgoingChannelBalanceView" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/receiveInputsView"
+        android:id="@+id/sendInputsView"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="wrap_content"
         android:paddingStart="30dp"
         android:paddingTop="10dp"
         android:paddingEnd="30dp"
         android:paddingBottom="10dp"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleLayout">
@@ -298,7 +173,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <EditText
-            android:id="@+id/receiveAmount"
+            android:id="@+id/sendAmount"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="15dp"
@@ -310,12 +185,12 @@
             android:paddingEnd="10dp"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/receiveUnitLayout"
+            app:layout_constraintEnd_toStartOf="@+id/sendUnitLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/receiveUnitLayout"
+            android:id="@+id/sendUnitLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
@@ -323,11 +198,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/receiveAmount"
+            app:layout_constraintStart_toEndOf="@+id/sendAmount"
             app:layout_constraintTop_toTopOf="parent">
 
             <ln_zap.zap.nonClippingText.NonClippingTextView
-                android:id="@+id/receiveUnit"
+                android:id="@+id/sendUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
@@ -337,7 +212,7 @@
                 android:textStyle="italic" />
 
             <ImageView
-                android:id="@+id/receiveSwitchUnitImage"
+                android:id="@+id/sendSwitchUnitImage"
                 android:layout_width="18dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -346,36 +221,6 @@
                 android:tint="@color/lightningOrange"
                 app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
         </LinearLayout>
-
-        <!-- If we want to show the maximum amount, we could enable it here
-        <TextView
-            android:id="@+id/maximumAmountLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="@string/max_amount"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:translationY="-5dp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/receiveAmount" />
-
-        <TextView
-            android:id="@+id/maximumAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingStart="10dp"
-            android:paddingEnd="0dp"
-            android:text="@string/max_amount"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:translationY="-5dp"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/maximumAmountLabel"
-            app:layout_constraintTop_toTopOf="@id/maximumAmountLabel" />
-        -->
 
         <ImageView
             android:id="@+id/line2"
@@ -388,74 +233,80 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        layout="@layout/numpad"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="15dp"
-        android:columnCount="3"
-        android:rowCount="4"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/receiveInputsView" />
-
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/bg_clickable_item"
-        android:text="@string/next"
-        android:textAllCaps="false"
-        android:textColor="@color/lightningOrange"
-        android:textSize="16sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Numpad" />
-
-    <Button
-        android:id="@+id/generateRequestButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/bg_clickable_item"
-        android:text="@string/receive_generateRequest"
-        android:textAllCaps="false"
-        android:textColor="@color/lightningOrange"
-        android:textSize="16sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/receiveMemoTopLayout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/receiveMemoTopLayout"
+        android:id="@+id/sendFeeTopLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="30dp"
         android:paddingTop="0dp"
         android:paddingEnd="30dp"
         android:paddingBottom="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/receiveInputsView">
+        app:layout_constraintTop_toBottomOf="@id/sendInputsView">
+
+        <TextView
+            android:id="@+id/sendFeeLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="#00000000"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="@string/fee"
+            android:maxLength="50"
+            android:textAlignment="viewStart"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/sendFee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="#00000000"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="@string/coming_soon"
+            android:maxLength="50"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/line3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/sendFee"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@color/gray" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sendMemoTopLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="30dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="0dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendFeeTopLayout">
 
         <EditText
-            android:id="@+id/receiveMemo"
+            android:id="@+id/sendMemo"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="15dp"
@@ -464,12 +315,158 @@
             android:hint="@string/memo"
             android:inputType="text"
             android:maxLength="50"
-            android:textSize="20sp"
+            android:textSize="16sp"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        layout="@layout/numpad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
+        android:columnCount="3"
+        android:rowCount="4"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendMemoTopLayout" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="@string/send_sendPayment"
+        android:textAllCaps="false"
+        android:textColor="@color/lightningOrange"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Numpad" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/paymentProgressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/anchor"
+        app:layout_constraintVertical_bias="0.5">
+
+        <ImageView
+            android:id="@+id/progressPaymentTypeIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.Holo.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/superGreen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/progressFinishedIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:tint="@color/superGreen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_check_circle_black_60dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/paymentFinishedLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/finishedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/send_success"
+                android:textAlignment="center"
+                android:textColor="@color/superGreen"
+                android:textSize="36sp" />
+
+            <ImageView
+                android:id="@+id/finishedPaymentTypeIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+
+            <TextView
+                android:id="@+id/finishedText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/bg_clickable_item"
+            android:enabled="false"
+            android:text="@string/ok"
+            android:textAllCaps="false"
+            android:textColor="@color/lightningOrange"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

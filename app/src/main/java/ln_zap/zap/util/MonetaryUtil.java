@@ -2,8 +2,10 @@ package ln_zap.zap.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.EditText;
 
 import androidx.preference.PreferenceManager;
+
 import ln_zap.zap.baseClasses.App;
 
 import com.android.volley.Request;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
@@ -434,6 +437,10 @@ public class MonetaryUtil {
             numberOfDecimals = 2;
         }
 
+        if(input.equals(".")){
+            return true;
+        }
+
         // Regex selecting any or no number of digits optionally followed by "." or "," that is followed by up to numberOfDecimals digits
         String regexPattern = "[0-9]*([\\.,]{0,1}[0-9]{0," + numberOfDecimals + "})";
 
@@ -445,9 +452,29 @@ public class MonetaryUtil {
         // Check if the input is too large. We limit the input to the value of 1000 BTC.
         // This will prevent any overflow errors when calculating in satoshis or later mSats.
 
-        boolean notTooBig = (Long.parseLong(convertPrimaryToSatoshi(input)) <= 1e11);
+        boolean notTooBig = false;
+        try{
+            notTooBig = (Long.parseLong(convertPrimaryToSatoshi(input)) <= 1e11);
+        } catch(NumberFormatException e){
+            return false;
+        }
 
-        return matchedPattern && notTooBig;
+        boolean validZeros;
+        if (input.startsWith("0")){
+            if (input.length()>1){
+                if (input.startsWith("0.")) {
+                    validZeros = true;
+                } else {
+                    validZeros = false;
+                }
+            } else {
+                validZeros = true;
+            }
+        } else {
+            validZeros = true;
+        }
+
+        return matchedPattern && notTooBig && validZeros;
     }
 
 
