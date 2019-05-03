@@ -271,7 +271,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 rate = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(100000000);
             }
 
-            rate = "1 BTC ≈ " + rate;
+            rate = "1 \u20BF ≈ " + rate;
             mTvBtcRate.setText(rate);
             mTvBtcRate.setVisibility(View.VISIBLE);
         }

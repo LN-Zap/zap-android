@@ -11,7 +11,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.1-alpha"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -45,7 +45,7 @@ protobuf {
     plugins {
         javalite { artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0" }
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.17.1'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.20.0'
         }
     }
 
