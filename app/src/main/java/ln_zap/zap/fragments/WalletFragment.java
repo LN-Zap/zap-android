@@ -287,14 +287,25 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             // This gets executed if the a vaild payment request was scanned or pasted
             if (data != null) {
                 boolean onChain = data.getExtras().getBoolean("onChain");
-                if (onChain){
+                if (onChain) {
                     long amount = data.getExtras().getLong("onChainAmount");
                     String address = data.getExtras().getString("onChainAddress");
                     String message = data.getExtras().getString("onChainMessage");
-                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment(onChain,amount,address,message);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("onChain", onChain);
+                    bundle.putLong("onChainAmount", amount);
+                    bundle.putString("onChainAddress", address);
+                    bundle.putString("onChainMessage", message);
+
+                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                    sendBottomSheetDialog.setArguments(bundle);
                     sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
                 } else {
-                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment(onChain);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("onChain", onChain);
+
+                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                    sendBottomSheetDialog.setArguments(bundle);
                     sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
                 }
             }

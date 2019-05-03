@@ -110,23 +110,18 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     private long mFixedAmount;
 
     private boolean mAmountValid = true;
-
-
-    public SendBSDFragment(boolean onChain) {
-        mOnChain = onChain;
-    }
-
-    public SendBSDFragment(boolean onChain, long onChainAmount, String onChainAddress, String onChainMessage) {
-        mOnChain = onChain;
-        mFixedAmount = onChainAmount;
-        mOnChainAddress = onChainAddress;
-        mMemo = onChainMessage;
-    }
-
+    
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        Bundle args = getArguments();
+        mOnChain = args.getBoolean("onChain");
+        mFixedAmount = args.getLong("onChainAmount");
+        mOnChainAddress = args.getString("onChainAddress");
+        mMemo = args.getString("onChainMessage");
+
         View view = inflater.inflate(R.layout.bsd_send, container);
 
         // Apply FLAG_SECURE to dialog to prevent screen recording
