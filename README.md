@@ -18,6 +18,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 - [x] PIN protected access
 - [x] Scrambled PIN by default
 - [x] Protection against screen recording
+- [x] Option to hide total balance
 - [x] User guardian system (warns the user when he is about to do potentially dangerous actions)
 - [ ] Certificate pinning
 
@@ -26,7 +27,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 - [x] Connect to remote Lnd node
 - [ ] Connect to BTCPay Server
 - [x] Connect to lndconnect QR code
-- [ ] Run lnd on your iPhone
+- [ ] Run lnd on your android phone
 
 ## Security
 
