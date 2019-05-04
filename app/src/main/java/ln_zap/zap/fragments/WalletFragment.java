@@ -27,11 +27,13 @@ import androidx.preference.PreferenceManager;
 
 import ln_zap.zap.R;
 import ln_zap.zap.connection.NetworkUtil;
+import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.setup.SetupActivity;
 import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
 import ln_zap.zap.util.Balances;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.OnSingleClickListener;
+import ln_zap.zap.util.UserGuardian;
 import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
@@ -40,10 +42,11 @@ import ln_zap.zap.util.ZapLog;
  * A simple {@link Fragment} subclass.
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.BalanceListener, Wallet.InfoListener, MonetaryUtil.ExchangeRateListener {
+        Wallet.BalanceListener, Wallet.InfoListener, MonetaryUtil.ExchangeRateListener, UserGuardianInterface {
 
     private static final String LOG_TAG = "Wallet Fragment";
 
+    private UserGuardian mUG;
     private SharedPreferences mPrefs;
     private TextView mTvPrimaryBalance;
     private TextView mTvPrimaryBalanceUnit;
@@ -75,6 +78,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
+        mUG = new UserGuardian(getActivity(), this);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         mFragmentManager = getFragmentManager();
@@ -236,6 +240,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             Wallet.getInstance().fetchBalanceFromLND();
         }
 
+        if (!Wallet.getInstance().isTestnet()){
+            mUG.securityMainnetNotReady();
+        }
+
         return view;
     }
 
@@ -395,4 +403,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         MonetaryUtil.getInstance().unregisterExchangeRateListener(this);
     }
 
+    @Override
+    public void guardianDialogConfirmed(String DialogName) {
+
+    }
 }

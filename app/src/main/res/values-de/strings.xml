@@ -155,13 +155,15 @@
     <string name="guardian_Title">Achtung</string>
     <string name="guardian_reset">Alle Sicherheitswarnungen sind wieder aktiv.</string>
     <!-- Parameters for the following string are:  %1$s: End of the copied string -->
-    <string name="guardian_copyToClipboard">Andere Apps (auch bösartige) können auf diese Daten zugreifen und sie verändern, wenn sie in die Zwischenablage kopiert werden.\n\nUm sicher zu gehen, dass bis zum Einfügen nichts geändert wurde, vergleiche das Ende mit:\n\n%1$s\n</string>
+    <string name="guardian_copyToClipboard_onChain">Andere Apps (auch bösartige) können auf diese Daten zugreifen und sie verändern, wenn sie in die Zwischenablage kopiert werden.\n\nUm sicher zu gehen, dass bis zum Einfügen nichts geändert wurde, vergleiche den Anfang mit:\n\n%1$s\n</string>
+    <string name="guardian_copyToClipboard_lightning">Andere Apps (auch bösartige) können auf diese Daten zugreifen und sie verändern, wenn sie in die Zwischenablage kopiert werden.\n\nUm sicher zu gehen, dass bis zum Einfügen nichts geändert wurde, vergleiche das Ende mit:\n\n%1$s\n</string>
     <string name="guardian_pasteFromClipboard">Überprüfe vorsichtshalber immer die letzten 3 bis 5 Stellen wenn du etwas von der Zwischenablage einfügst. Eine bösartige App könnte die Daten geändert haben, ohne dass du es bemerkt hast.</string>
     <string name="guardian_disableScrambledPin">Wenn die Ziffern bei der PIN-Eingabe nicht durchmischt sind, kann die PIN leicht durch deine Fingerbewegung erraten werden.</string>
     <string name="guardian_disableScreenProtection">Bösartige Software könnte unbemerkt Videos oder Screenshots aufnehmen, während du Zap nutzt. Wir empfehlen diese Funktion nur dann zu deaktivieren, wenn du selbst genau das machen möchtest.</string>
     <string name="guardian_highOnChainFee">Du wirst %1$s%% als Netzwerkgebühr bezahlen, wenn du fortfährst.\n\nMögliche Lösungen:\n- Zahle mit dem Lightning Netzwerk\n- Wähle eine niedrigere Gebühr und warte länger\n- Versuche es später nochaml\n- Sende einen größeren Betrag\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_oldExchangeRate">Du hast einen Fiat Betrag angefordert, aber dein Umrechnungskurs ist nicht mehr aktuell. (Zuletzt aktualisiert vor %1$s Stunden)\nStelle sicher, dass du eine Internetverbindung hast, oder fordere den Betrag direkt in Bitcoin an.\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_tooMuchMoney">Glückwunsch, du scheinst eine menge Bitcoin zu haben!\nBitte denk daran, dass Zap eine Hot-Wallet ist.\nWir geben unser Bestes, diese Wallet sicher zu halten.\nTrotzdem empfehlen wir für den Großteil deines Vermögens Cold-Wallets oder Hardware-Wallets in Betracht zu ziehen.</string>
+    <string name="guardian_notReadyForMainnet">Du bist mit dem MAINNET verbunden!\nZap Android is noch in einer frühen Entwicklungsphase. Du könntest echtes Geld verlieren!\n\nFalls du dieses Risiko nicht auf dich nehmen willst, wechsle solange ins Testnet.</string>
 
 
     <!-- //////////////// Settings ////////////////////// -->

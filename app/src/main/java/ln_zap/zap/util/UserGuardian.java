@@ -38,6 +38,7 @@ public class UserGuardian {
     public static final String HIGH_ONCHAIN_FEE = "guardianHighOnCainFees";
     public static final String OLD_EXCHANGE_RATE = "guardianOldExchangeRate";
     public static final String TOO_MUCH_MONEY = "guardianTooMuchMoney";
+    public static final String MAINNET_NOT_READY = "guardianMainnetNotReady";
 
     private final Context mContext;
     private final UserGuardianInterface mAction;
@@ -57,16 +58,28 @@ public class UserGuardian {
      *
      * @param data the data that is copied to clipboard
      */
-    public void securityCopyToClipboard(String data) {
+    public void securityCopyToClipboard(String data, int type) {
         mCurrentDialogName = COPY_TO_CLIPBOARD;
 
         String compareString = "";
-        if (data.length() > 7) {
-            compareString = "... " + data.substring(data.length() - 6, data.length());
+        String message = "";
+        switch (type) {
+            case 0: // On-Chain Request
+                if (data.length() > 15) {
+                    compareString = data.substring(0, 15) + " ...";
+                    message = mContext.getResources().getString(R.string.guardian_copyToClipboard_onChain, compareString);
+                }
+                break;
+            case 1: // Lightning Request
+                if (data.length() > 15) {
+                    compareString = "... " + data.substring(data.length() - 8, data.length());
+                    message = mContext.getResources().getString(R.string.guardian_copyToClipboard_lightning, compareString);
+                }
+                break;
         }
 
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setMessage(mContext.getResources().getString(R.string.guardian_copyToClipboard, compareString));
+        adb.setMessage(message);
         showGuardianDialog(adb);
     }
 
@@ -78,6 +91,16 @@ public class UserGuardian {
         mCurrentDialogName = PASTE_FROM_CLIPBOARD;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
         adb.setMessage(R.string.guardian_pasteFromClipboard);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user about using the wallet on mainnet, while it is still not secure.
+     */
+    public void securityMainnetNotReady() {
+        mCurrentDialogName = MAINNET_NOT_READY;
+        AlertDialog.Builder adb = createDontShowAgainDialog(false);
+        adb.setMessage(R.string.guardian_notReadyForMainnet);
         showGuardianDialog(adb);
     }
 
@@ -134,7 +157,7 @@ public class UserGuardian {
 
 
     /**
-     * Warn the user if he stores a large amounts of Bitcoin in his wallet.
+     * Warn the user if he stores large amounts of Bitcoin in his wallet.
      */
     public void securityTooMuchMoney() {
         mCurrentDialogName = TOO_MUCH_MONEY;

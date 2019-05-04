@@ -163,7 +163,11 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         btnCopyLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUG.securityCopyToClipboard(mDataToEncode);
+                if (mOnChain) {
+                    mUG.securityCopyToClipboard(mDataToEncode, 0);
+                } else {
+                    mUG.securityCopyToClipboard(mDataToEncode, 1);
+                }
             }
         });
 
