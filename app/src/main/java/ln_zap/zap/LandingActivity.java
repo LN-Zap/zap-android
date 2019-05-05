@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.preference.PreferenceManager;
+
+import at.favre.lib.armadillo.Armadillo;
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 
 public class LandingActivity extends BaseAppCompatActivity {
@@ -19,7 +22,15 @@ public class LandingActivity extends BaseAppCompatActivity {
         // in v1 we are now upgrading to encrypted shared pref
         // and thus need to reset all currently entered settings
         if (ver < RefConstants.currentSettingsVer) {
+            // Reset settings
             prefs.edit().clear().commit();
+            // Reset connection settings
+            App ctx = App.getAppContext();
+            SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+                    .encryptionFingerprint(ctx)
+                    .build();
+            prefsRemote.edit().clear().commit();
+            // Set new settings version
             prefs.edit().putInt(RefConstants.settings_ver, RefConstants.currentSettingsVer).apply();
         }
 
@@ -32,9 +43,17 @@ public class LandingActivity extends BaseAppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
-            // Go to welcome screen
-            Intent intent = new Intent(this, WelcomeNewUserActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+            // Clear connection data if something is there
+
+            App ctx = App.getAppContext();
+            SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+                    .encryptionFingerprint(ctx)
+                    .build();
+            prefsRemote.edit().clear().commit();
+
+
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
     }

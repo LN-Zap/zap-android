@@ -1,6 +1,8 @@
 package ln_zap.zap.historyList;
 
-
+/**
+ * This class can be used to generate imaginary transactions for demonstration purposes.
+ */
 public class DemoItem extends HistoryListItem {
 
 

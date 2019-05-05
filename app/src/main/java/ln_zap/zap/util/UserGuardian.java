@@ -27,7 +27,8 @@ import android.widget.CheckBox;
  * A class using the UserGuardian class needs to implement the UserGuardianInterface
  * to handle users choice.
  * <p>
- * Please note that a dialog which will not be shown executes the callback like it does when "ok" is pressed.
+ * Please note that a dialog which will not be shown (do not show again checked) executes
+ * the callback like it does when "ok" is pressed.
  */
 public class UserGuardian {
 
@@ -61,7 +62,7 @@ public class UserGuardian {
     public void securityCopyToClipboard(String data, int type) {
         mCurrentDialogName = COPY_TO_CLIPBOARD;
 
-        String compareString = "";
+        String compareString;
         String message = "";
         switch (type) {
             case 0: // On-Chain Request

@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import ln_zap.zap.R;
 import ln_zap.zap.util.MonetaryUtil;
 
+
+/**
+ * This class can be used to generate imaginary transactions for demonstration purposes.
+ */
 public class DemoViewHolder extends RecyclerView.ViewHolder {
     // each data item is just a string in this case
     private TextView mAmount;
@@ -136,7 +140,7 @@ public class DemoViewHolder extends RecyclerView.ViewHolder {
         mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, R.string.demo_payment_details_not_available, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
             }
         });
     }

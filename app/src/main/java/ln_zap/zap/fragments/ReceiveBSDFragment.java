@@ -421,7 +421,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                     if (mPrefs.getBoolean("isWalletSetup", false)) {
                         maxReceivable = Wallet.getInstance().getMaxChannelRemoteBalance();
                     } else {
-                        maxReceivable = 500000;
+                        maxReceivable = 500000000000L;
                     }
                     if(!mEtAmount.getText().toString().equals(".")) {
                         long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
@@ -594,10 +594,8 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
 
             }
         } else {
-            // The wallet is not setup. Continue for demo mode.
-            Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
-            intent.putExtra("onChain", mOnChain);
-            startActivity(intent);
+            // The wallet is not setup. Show setup wallet message.
+            Toast.makeText(getActivity(), R.string.demo_setupWalletFirst,Toast.LENGTH_LONG).show();
         }
     }
 

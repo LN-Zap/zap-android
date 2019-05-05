@@ -70,37 +70,26 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         }
 
 
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
-            if (mOnChain) {
+        if (mOnChain) {
 
-                // Generate on-chain request data to encode
+            // Generate on-chain request data to encode
 
-                mDataToEncode = "bitcoin:" + mAddress;
-                mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
+            mDataToEncode = "bitcoin:" + mAddress;
+            mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
 
-                // Convert the value to the expected format for onChain invoices.
-                mAmount = MonetaryUtil.getInstance().convertPrimaryToBitcoin(mAmount);
+            // Convert the value to the expected format for onChain invoices.
+            mAmount = MonetaryUtil.getInstance().convertPrimaryToBitcoin(mAmount);
 
-                // Append amount and memo to the invoice
-                if (mAmount != null)
-                    if (!(mAmount.isEmpty() || mAmount.equals("0")))
-                        mDataToEncode = appendParameter(mDataToEncode, "amount", mAmount);
-                if (mMemo != null)
-                    if (!mMemo.isEmpty())
-                        mDataToEncode = appendParameter(mDataToEncode, "message", mMemo);
-            } else {
-                // Generate lightning request data to encode
-                mDataToEncode = "lightning:" + mLnInvoice;
-            }
+            // Append amount and memo to the invoice
+            if (mAmount != null)
+                if (!(mAmount.isEmpty() || mAmount.equals("0")))
+                    mDataToEncode = appendParameter(mDataToEncode, "amount", mAmount);
+            if (mMemo != null)
+                if (!mMemo.isEmpty())
+                    mDataToEncode = appendParameter(mDataToEncode, "message", mMemo);
         } else {
-            // Wallet is not setup yet, show demo info
-            if (mOnChain) {
-                // Generate data to encode
-                mDataToEncode = getResources().getString(R.string.demo_encodedOnChainRequest);
-            } else {
-                // Generate data to encode (placeholder for now)
-                mDataToEncode = getResources().getString(R.string.demo_encodedLightningRequest);
-            }
+            // Generate lightning request data to encode
+            mDataToEncode = "lightning:" + mLnInvoice;
         }
 
 
@@ -113,11 +102,25 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         ImageView ivQRCode = findViewById(R.id.requestQRCode);
         ivQRCode.setImageBitmap(bmpQRCode);
 
-        // Action when clicked on "QR-Code"
-        ivQRCode.setOnClickListener(new View.OnClickListener() {
+        // Action when long clicked on "QR-Code"
+        ivQRCode.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                //mUG.securityCopyToClipboard(mDataToEncode);
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(GeneratedRequestActivity.this)
+                        .setTitle(R.string.details)
+                        .setMessage(mDataToEncode)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        });
+                Dialog dlg = adb.create();
+                // Apply FLAG_SECURE to dialog to prevent screen recording
+                if (PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this).getBoolean("preventScreenRecording", true)) {
+                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+                dlg.show();
+                return false;
             }
         });
 

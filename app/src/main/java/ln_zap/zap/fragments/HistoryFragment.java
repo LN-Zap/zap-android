@@ -36,7 +36,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import ln_zap.zap.R;
 import ln_zap.zap.historyList.DateItem;
-import ln_zap.zap.historyList.DemoItem;
 import ln_zap.zap.historyList.HistoryItemAdapter;
 import ln_zap.zap.historyList.HistoryListItem;
 import ln_zap.zap.historyList.LnInvoiceItem;
@@ -84,10 +83,6 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         mEmptyListText = view.findViewById(R.id.listEmpty);
         mTitle = view.findViewById(R.id.heading);
 
-        // Make clear we are on demo mode, if we are
-        if (!mPrefs.getBoolean("isWalletSetup", false)) {
-            mTitle.setText(getResources().getString(R.string.demo_history));
-        }
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -215,28 +210,6 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
                 }
             }
 
-        } else {
-            // Create demo transactions for demo mode
-            DemoItem receivedFirstBitcoin = new DemoItem(1, "", 1554201308, 2959030, 7045, false, false);
-            DemoItem openFirstChannel = new DemoItem(1, getActivity().getResources().getString(R.string.demo_ln_NodeName), 1554211308, -8486, 0, true, false);
-            DemoItem sentFirstLnPayment = new DemoItem(3, getActivity().getResources().getString(R.string.demo_buy_coffee), 1554301308, -21340, 1, false, false);
-            DemoItem sentSecondLnPayment = new DemoItem(3, getActivity().getResources().getString(R.string.demo_to_bob), 1554311308, -171340, 1, false, false);
-            DemoItem firstExpiredInvoice = new DemoItem(2, getActivity().getResources().getString(R.string.demo_from_alice), 1554311308, 35730, 0, false, true);
-            DemoItem firstOnChainPayment = new DemoItem(1, "", 1554441308, -353056, 7045, false, false);
-            DemoItem receivedMoreBitcoin = new DemoItem(1, "", 1554601308, 260000, 7045, false, false);
-            DemoItem receivedFirstLnPayment = new DemoItem(3, getActivity().getResources().getString(R.string.demo_from_alice), 1554611308, 34061, 0, false, false);
-            DemoItem activePaymentRequest = new DemoItem(2, getActivity().getResources().getString(R.string.demo_from_carol), (System.currentTimeMillis() / 1000) - 5000, 100000, 0, false, false);
-
-
-            normalPayments.add(receivedFirstBitcoin);
-            normalPayments.add(sentFirstLnPayment);
-            normalPayments.add(sentSecondLnPayment);
-            normalPayments.add(receivedFirstLnPayment);
-            normalPayments.add(activePaymentRequest);
-            normalPayments.add(firstOnChainPayment);
-            normalPayments.add(receivedMoreBitcoin);
-            expiredRequest.add(firstExpiredInvoice);
-            internalTransactions.add(openFirstChannel);
         }
 
         // Apply filters

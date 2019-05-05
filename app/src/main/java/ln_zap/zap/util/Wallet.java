@@ -133,13 +133,14 @@ public class Wallet {
 
     /**
      * This will return a Balance object that contains all types of balances.
-     * Use this only for the demo mode. The balances are not real and will always be the same.
+     * Use this only when wallet is not yet setup. The balances are not real and will always be the same.
+     * If desired, these values can be set to specific values for demonstration purposes.
      *
      * @return
      */
     public Balances getDemoBalances() {
-        return new Balances(2637452, 2637452,
-                0, 200000, 0);
+        return new Balances(0, 0,
+                0, 0, 0);
     }
 
     /**

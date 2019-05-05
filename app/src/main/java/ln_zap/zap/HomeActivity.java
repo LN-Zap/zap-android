@@ -27,6 +27,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
+
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.connection.NetworkChangeReceiver;
@@ -34,15 +35,18 @@ import ln_zap.zap.fragments.HistoryFragment;
 import ln_zap.zap.fragments.SettingsFragment;
 import ln_zap.zap.fragments.WalletFragment;
 import ln_zap.zap.connection.HttpClient;
+import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.TimeOutUtil;
+import ln_zap.zap.util.UserGuardian;
 import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
-public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver {
+public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver, Wallet.InfoListener, UserGuardianInterface {
 
     private static final String LOG_TAG = "Main Activity";
 
+    private UserGuardian mUG;
     private ScheduledExecutorService mExchangeRateScheduler;
     private ScheduledExecutorService mLNDInfoScheduler;
     private NetworkChangeReceiver mNetworkChangeReceiver;
@@ -52,6 +56,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
     private SharedPreferences mPrefs;
+    private boolean mInfoChangeListenerRegistered;
+    private boolean mMainnetWarningShownOnce;
 
 
     @Override
@@ -59,6 +65,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mUG = new UserGuardian(this, this);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Register observer to detect if app goes to background
@@ -190,6 +197,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             setupExchangeRateSchedule();
             registerNetworkStatusChangeListener();
 
+            if (!mInfoChangeListenerRegistered) {
+                Wallet.getInstance().registerInfoListener(this);
+                mInfoChangeListenerRegistered = true;
+            }
+
             // Restart lnd connection
             if (mPrefs.getBoolean("isWalletSetup", false)) {
                 TimeOutUtil.getInstance().setCanBeRestarted(true);
@@ -227,6 +239,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             ZapLog.debug(LOG_TAG, "PIN timer restarted");
         }
         TimeOutUtil.getInstance().setCanBeRestarted(false);
+
+        // Unregister Info Listener
+        Wallet.getInstance().unregisterInfoListener(this);
 
         if (mIsExchangeRateSchedulerRunning) {
             // Kill the scheduled exchange rate requests to go easy on the battery.
@@ -269,5 +284,23 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void onInfoUpdated(boolean connected) {
+        if ((mPrefs.getBoolean("isWalletSetup", false))) {
+            if (!Wallet.getInstance().isTestnet()) {
+                if(!mMainnetWarningShownOnce) {
+                    // Show mainnet not ready warning
+                    mUG.securityMainnetNotReady();
+                    mMainnetWarningShownOnce = true;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void guardianDialogConfirmed(String DialogName) {
+
     }
 }

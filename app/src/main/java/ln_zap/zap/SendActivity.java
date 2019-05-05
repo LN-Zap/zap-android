@@ -1,6 +1,7 @@
 package ln_zap.zap;
 
 import androidx.preference.PreferenceManager;
+
 import io.grpc.StatusRuntimeException;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.connection.LndConnection;
@@ -73,130 +74,114 @@ public class SendActivity extends BaseAppCompatActivity {
             tvTypeText.setText(R.string.onChain);
         }
 
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
 
-            if (mOnChain) {
-                if (mFixedAmount != 0L) {
-                    mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
-                    mEtAmount.clearFocus();
-                    mEtAmount.setFocusable(false);
-                }
-                if (mMemo != null) {
-                    mEtMemo.setText(mMemo);
-                }
-
-                // Action when clicked on "Send payment"
-                Button btnSend = findViewById(R.id.sendButton);
-                btnSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        ZapLog.debug(LOG_TAG, "Trying to send on-chain payment...");
-                        // Send on-chain payment
-
-                        long sendAmount = 0L;
-                        if (mFixedAmount != 0L) {
-                            sendAmount = mFixedAmount;
-                        } else {
-                            sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                        }
-
-                        if (sendAmount != 0L) {
-
-                            SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
-                                    .setAddr(mOnChainAddress)
-                                    .setAmount(sendAmount)
-                                    .setSatPerByte(5)
-                                    .build();
-                            try {
-                                SendCoinsResponse sendResponse = LndConnection.getInstance()
-                                        .getBlockingClient()
-                                        .withDeadlineAfter(5, TimeUnit.SECONDS)
-                                        .sendCoins(sendRequest);
-                                ZapLog.debug(LOG_TAG, sendResponse.toString());
-                                Toast.makeText(SendActivity.this, "Send successful!", Toast.LENGTH_SHORT).show();
-                            } catch (StatusRuntimeException e) {
-                                // possible error messages: checksum mismatch, decoded address is of unknown format
-                                Toast.makeText(SendActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                ZapLog.debug(LOG_TAG, "Error during payment!");
-                                ZapLog.debug(LOG_TAG, e.getMessage());
-                            }
-
-                        } else {
-                            // Send amount == 0
-                            Toast.makeText(SendActivity.this, "Send amount is to small.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-
-            } else {
-
-                if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() != 0) {
-                    mFixedAmount = Wallet.getInstance().mPaymentRequest.getNumSatoshis();
-                    mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
-                    mEtAmount.clearFocus();
-                    mEtAmount.setFocusable(false);
-                }
-
-                if (Wallet.getInstance().mPaymentRequest.getDescription() != null) {
-                    mEtMemo.setText(Wallet.getInstance().mPaymentRequest.getDescription());
-                }
-
-                // Action when clicked on "Send payment"
-                Button btnSend = findViewById(R.id.sendButton);
-                btnSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
-                        // send lightning payment
-                        SendRequest sendRequest;
-
-                        if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
-                            sendRequest = SendRequest.newBuilder()
-                                    .setPaymentRequest(Wallet.getInstance().mPaymentRequestString)
-                                    .setAmt(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
-                                    .build();
-                        } else {
-                            sendRequest = SendRequest.newBuilder()
-                                    .setPaymentRequest(Wallet.getInstance().mPaymentRequestString)
-                                    .build();
-                        }
-
-                        try {
-                            SendResponse sendResponse = LndConnection.getInstance()
-                                    .getBlockingClient()
-                                    .withDeadlineAfter(5, TimeUnit.SECONDS)
-                                    .sendPaymentSync(sendRequest);
-                            ZapLog.debug(LOG_TAG, sendResponse.toString());
-
-                            if (sendResponse.hasPaymentRoute()) {
-                                Toast.makeText(SendActivity.this, "Send successful!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(SendActivity.this, sendResponse.getPaymentError(), Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (StatusRuntimeException e) {
-                            ZapLog.debug(LOG_TAG, "Error during payment!");
-                            ZapLog.debug(LOG_TAG, e.toString());
-                        }
-
-                    }
-                });
+        if (mOnChain) {
+            if (mFixedAmount != 0L) {
+                mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                mEtAmount.clearFocus();
+                mEtAmount.setFocusable(false);
             }
-        } else {
-            // Wallet is not setup yet, show demo send screen
+            if (mMemo != null) {
+                mEtMemo.setText(mMemo);
+            }
 
-            mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(153267l));
-            mEtMemo.setText(getResources().getString(R.string.demo_exampleMemo));
-
-            // Action when clicked on send in demo mode
+            // Action when clicked on "Send payment"
             Button btnSend = findViewById(R.id.sendButton);
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(SendActivity.this, R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
+
+                    ZapLog.debug(LOG_TAG, "Trying to send on-chain payment...");
+                    // Send on-chain payment
+
+                    long sendAmount = 0L;
+                    if (mFixedAmount != 0L) {
+                        sendAmount = mFixedAmount;
+                    } else {
+                        sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                    }
+
+                    if (sendAmount != 0L) {
+
+                        SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
+                                .setAddr(mOnChainAddress)
+                                .setAmount(sendAmount)
+                                .setSatPerByte(5)
+                                .build();
+                        try {
+                            SendCoinsResponse sendResponse = LndConnection.getInstance()
+                                    .getBlockingClient()
+                                    .withDeadlineAfter(5, TimeUnit.SECONDS)
+                                    .sendCoins(sendRequest);
+                            ZapLog.debug(LOG_TAG, sendResponse.toString());
+                            Toast.makeText(SendActivity.this, "Send successful!", Toast.LENGTH_SHORT).show();
+                        } catch (StatusRuntimeException e) {
+                            // possible error messages: checksum mismatch, decoded address is of unknown format
+                            Toast.makeText(SendActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            ZapLog.debug(LOG_TAG, "Error during payment!");
+                            ZapLog.debug(LOG_TAG, e.getMessage());
+                        }
+
+                    } else {
+                        // Send amount == 0
+                        Toast.makeText(SendActivity.this, "Send amount is to small.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+        } else {
+
+            if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() != 0) {
+                mFixedAmount = Wallet.getInstance().mPaymentRequest.getNumSatoshis();
+                mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                mEtAmount.clearFocus();
+                mEtAmount.setFocusable(false);
+            }
+
+            if (Wallet.getInstance().mPaymentRequest.getDescription() != null) {
+                mEtMemo.setText(Wallet.getInstance().mPaymentRequest.getDescription());
+            }
+
+            // Action when clicked on "Send payment"
+            Button btnSend = findViewById(R.id.sendButton);
+            btnSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
+                    // send lightning payment
+                    SendRequest sendRequest;
+
+                    if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
+                        sendRequest = SendRequest.newBuilder()
+                                .setPaymentRequest(Wallet.getInstance().mPaymentRequestString)
+                                .setAmt(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
+                                .build();
+                    } else {
+                        sendRequest = SendRequest.newBuilder()
+                                .setPaymentRequest(Wallet.getInstance().mPaymentRequestString)
+                                .build();
+                    }
+
+                    try {
+                        SendResponse sendResponse = LndConnection.getInstance()
+                                .getBlockingClient()
+                                .withDeadlineAfter(5, TimeUnit.SECONDS)
+                                .sendPaymentSync(sendRequest);
+                        ZapLog.debug(LOG_TAG, sendResponse.toString());
+
+                        if (sendResponse.hasPaymentRoute()) {
+                            Toast.makeText(SendActivity.this, "Send successful!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SendActivity.this, sendResponse.getPaymentError(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (StatusRuntimeException e) {
+                        ZapLog.debug(LOG_TAG, "Error during payment!");
+                        ZapLog.debug(LOG_TAG, e.toString());
+                    }
+
                 }
             });
         }

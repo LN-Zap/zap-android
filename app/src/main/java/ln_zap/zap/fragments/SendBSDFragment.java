@@ -110,7 +110,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     private long mFixedAmount;
 
     private boolean mAmountValid = true;
-    
+
 
     @Nullable
     @Override
@@ -433,42 +433,24 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
             mIvProgressPaymentTypeIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_nav_wallet_balck_24dp));
             mTvTitle.setText(R.string.send_lightningPayment);
 
-            if (mPrefs.getBoolean("isWalletSetup", false)) {
-                // The wallet is setup
-                if (Wallet.getInstance().mPaymentRequest.getDescription() == null) {
-                    mMemoView.setVisibility(View.VISIBLE);
-                } else {
-                    ZapLog.debug(LOG_TAG, "make ze reeson vizible!");
-                    mMemoView.setVisibility(View.VISIBLE);
-                    mEtMemo.setText(Wallet.getInstance().mPaymentRequest.getDescription());
-                }
 
-
-                if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() != 0) {
-                    // A specific amount was requested. We are not allowed to change the amount
-                    mFixedAmount = Wallet.getInstance().mPaymentRequest.getNumSatoshis();
-                    mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
-                    mEtAmount.clearFocus();
-                    mEtAmount.setFocusable(false);
-                } else {
-                    // No specific amount was requested. Let User input an amount.
-                    mNumpad.setVisibility(View.VISIBLE);
-                    mBtnSend.setEnabled(false);
-                    mBtnSend.setTextColor(getResources().getColor(R.color.gray));
-
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // We have to call this delayed, as otherwise it will still bring up the softKeyboard
-                            mEtAmount.requestFocus();
-                        }
-                    }, 200);
-
-                }
+            if (Wallet.getInstance().mPaymentRequest.getDescription() == null) {
+                mMemoView.setVisibility(View.VISIBLE);
             } else {
-                // Demo Mode
-                mEtMemo.setText(R.string.demo_exampleMemo);
+                ZapLog.debug(LOG_TAG, "make ze reeson vizible!");
+                mMemoView.setVisibility(View.VISIBLE);
+                mEtMemo.setText(Wallet.getInstance().mPaymentRequest.getDescription());
+            }
+
+
+            if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() != 0) {
+                // A specific amount was requested. We are not allowed to change the amount
+                mFixedAmount = Wallet.getInstance().mPaymentRequest.getNumSatoshis();
+                mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                mEtAmount.clearFocus();
+                mEtAmount.setFocusable(false);
+            } else {
+                // No specific amount was requested. Let User input an amount.
                 mNumpad.setVisibility(View.VISIBLE);
                 mBtnSend.setEnabled(false);
                 mBtnSend.setTextColor(getResources().getColor(R.color.gray));
@@ -481,7 +463,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         mEtAmount.requestFocus();
                     }
                 }, 200);
+
             }
+
 
             // Action when clicked on "Send payment"
             mBtnSend.setOnClickListener(new View.OnClickListener() {

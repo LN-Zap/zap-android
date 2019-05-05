@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.google.android.material.snackbar.Snackbar;
@@ -227,10 +228,7 @@ public class QRCodeScannerActivity extends BaseScannerActivity implements ZBarSc
 
         } else {
             // The wallet is not setup yet, go to next screen to show demo data.
-            Intent intent = new Intent();
-            intent.putExtra("onChain", false);
-            setResult(1, intent);
-            finish();
+            Toast.makeText(this, R.string.demo_setupWalletFirst,Toast.LENGTH_LONG).show();
         }
     }
 
