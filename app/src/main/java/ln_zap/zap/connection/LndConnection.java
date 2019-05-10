@@ -37,6 +37,10 @@ public class LndConnection {
 
 
     private LndConnection() {
+        readSavedConnectionInfo();
+    }
+
+    private void readSavedConnectionInfo(){
         App ctx = App.getAppContext();
         mPrefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
                 .encryptionFingerprint(ctx)
@@ -96,7 +100,7 @@ public class LndConnection {
     }
 
     public void restartBackgroundTasks() {
-        generateChannelAndStubs();
+        readSavedConnectionInfo();
 
         // Shutdown the thread pool for lnd requests
         //if (mIsShutdown){
