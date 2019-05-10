@@ -237,7 +237,7 @@ public class PinFragment extends Fragment {
 
             // Set entered PIN hints active
             for (int i = 0; i < mUserInput.toString().length(); i++) {
-                mPinHints[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.lightningOrange));
+                mPinHints[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.white));
             }
             // Set not yet entered PIN hints inactive
             for (int i = mUserInput.toString().length(); i < mPinLength; i++) {

@@ -155,7 +155,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         // Mark with highlight color
         for (int i = 0; i < mUserInput.toString().length(); i++) {
-            mPinHints[i].setColorFilter(ContextCompat.getColor(this, R.color.lightningOrange));
+            mPinHints[i].setColorFilter(ContextCompat.getColor(this, R.color.white));
         }
         // Set missing
         for (int i = mUserInput.toString().length(); i < mPinLength; i++) {

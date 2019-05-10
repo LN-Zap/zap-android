@@ -48,82 +48,102 @@
 
             <ImageView
                 android:id="@+id/pinHint1"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint2"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint3"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint4"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint5"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint6"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint7"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint8"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint9"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint10"
-                android:layout_width="25dp"
+                android:layout_width="18dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/bolt_black_filled_24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
         </LinearLayout>
     </LinearLayout>
