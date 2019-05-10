@@ -42,6 +42,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import ln_zap.zap.R;
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.connection.LndConnection;
 
 
@@ -81,6 +82,7 @@ public class Wallet {
     private boolean mPaymentsUpdated = false;
     private boolean mUpdatingHistory = false;
     private boolean mTestnet = false;
+    private boolean mConnectionCheckInProgress = false;
     private String mLNDVersion = "not connected";
 
     private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
@@ -127,40 +129,50 @@ public class Wallet {
     public void isLNDReachable() {
         // Retrieve info from LND with gRPC (async)
 
-        LightningGrpc.LightningFutureStub asyncInfoClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
-        GetInfoRequest asyncInfoRequest = GetInfoRequest.newBuilder().build();
-        final ListenableFuture<GetInfoResponse> infoFuture = asyncInfoClient.getInfo(asyncInfoRequest);
+        if (!mConnectionCheckInProgress) {
 
-        ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
+            mConnectionCheckInProgress = true;
 
-        infoFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    GetInfoResponse infoResponse = infoFuture.get();
+            LightningGrpc.LightningFutureStub asyncInfoClient = LightningGrpc
+                    .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                    .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
-                    // Save the received data.
-                    mSyncedToChain = infoResponse.getSyncedToChain();
-                    mTestnet = infoResponse.getTestnet();
-                    mLNDVersion = infoResponse.getVersion();
-                    mInfoFetched = true;
-                    mConnectedToLND = true;
+            GetInfoRequest asyncInfoRequest = GetInfoRequest.newBuilder().build();
+            final ListenableFuture<GetInfoResponse> infoFuture = asyncInfoClient.getInfo(asyncInfoRequest);
 
-                    broadcastWalletLoadedUpdate(true, "");
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
-                    broadcastWalletLoadedUpdate(false, "interruted");
-                } catch (ExecutionException e) {
-                    if (e.getMessage().toLowerCase().contains("unavailable")) {
-                        broadcastWalletLoadedUpdate(false, "unavailable");
+            ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
+
+            infoFuture.addListener(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        GetInfoResponse infoResponse = infoFuture.get();
+
+                        // Save the received data.
+                        mSyncedToChain = infoResponse.getSyncedToChain();
+                        mTestnet = infoResponse.getTestnet();
+                        mLNDVersion = infoResponse.getVersion();
+                        mInfoFetched = true;
+                        mConnectedToLND = true;
+
+
+                        mConnectionCheckInProgress = false;
+                        broadcastWalletLoadedUpdate(true, "");
+                    } catch (InterruptedException e) {
+                        ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
+                        mConnectionCheckInProgress = false;
+                        broadcastWalletLoadedUpdate(false, "interruted");
+                    } catch (ExecutionException e) {
+                        mConnectionCheckInProgress = false;
+                        if (e.getMessage().toLowerCase().contains("unavailable")) {
+                            broadcastWalletLoadedUpdate(false, "unavailable");
+                        }
+                        ZapLog.debug(LOG_TAG, e.getMessage());
                     }
-                    ZapLog.debug(LOG_TAG, e.getMessage());
                 }
-            }
-        }, new ExecuteOnCaller());
+            }, new ExecuteOnCaller());
+        }
     }
 
 
@@ -399,7 +411,7 @@ public class Wallet {
 
                     mInvoiceList.addAll(Lists.reverse(invoiceResponse.getInvoicesList()));
 
-                    if (invoiceResponse.getLastIndexOffset() < lastIndex){
+                    if (invoiceResponse.getLastIndexOffset() < lastIndex) {
                         // we have fetched all available invoices!
                         mInvoicesUpdated = true;
                         isHistoryUpdateFinished();
@@ -407,7 +419,6 @@ public class Wallet {
                         // there are still invoices to fetch, get the next batch!
                         fetchInvoicesFromLND(lastIndex + 100);
                     }
-
 
 
                     // ZapLog.debug(LOG_TAG, String.valueOf(invoiceResponse.toString()));
@@ -624,8 +635,8 @@ public class Wallet {
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Get node info request interrupted.");
                 } catch (ExecutionException e) {
-                   // ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
-                   // ZapLog.debug(LOG_TAG, e.getMessage());
+                    // ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
+                    // ZapLog.debug(LOG_TAG, e.getMessage());
                 }
             }
         }, new ExecuteOnCaller());
@@ -977,7 +988,6 @@ public class Wallet {
         mChannelBalancePending = pending;
         broadcastBalanceUpdate();
     }
-
 
 
     // Event handling to notify all registered listeners if wallet initialization finished successfully.

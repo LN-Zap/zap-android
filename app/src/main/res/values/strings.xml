@@ -266,5 +266,6 @@
     <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
     <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
     <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
+    <string name="error_unableToConnectToLND">Unable to connect to LND.</string>
 
 </resources>

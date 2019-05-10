@@ -229,5 +229,6 @@
     <string name="error_cameraPermissionRequired">Um QR-Codes zu scannen musst du Zap die Erlaubnis geben, die Kamera zu verwenden.</string>
     <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
+    <string name="error_unableToConnectToLND">Die Verbindung zum LND kann nicht hergestellt werden.</string>
 
 </resources>

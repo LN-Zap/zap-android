@@ -301,7 +301,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onInfoUpdated(boolean connected) {
         if ((mPrefs.getBoolean("isWalletSetup", false))) {
             if (!Wallet.getInstance().isTestnet() && Wallet.getInstance().isConnectedToLND()) {
-                if(!mMainnetWarningShownOnce) {
+                if (!mMainnetWarningShownOnce) {
                     // Show mainnet not ready warning
                     mUG.securityMainnetNotReady();
                     mMainnetWarningShownOnce = true;
@@ -316,12 +316,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     @Override
-    public void onWalletLoadedUpdated(boolean connected, String error) {
-        if(connected){
+    public void onWalletLoadedUpdated(boolean success, String error) {
+        if (success) {
             // We managed to establish a connection to LND.
             // Now we can start to fetch all information needed from LND
             App.getAppContext().connectionToLNDEstablished = true;
-
 
             setupLNDInfoSchedule();
 

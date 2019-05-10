@@ -12,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/line"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:backgroundTint="@color/seaBlueGradient">
 
         <ImageView
@@ -77,172 +79,224 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_cloudlightning"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/sendButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.36" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/BalanceLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/sendButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.36">
+        android:id="@+id/walletConnected"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/BalancePrimaryLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/BalancePrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Primary"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="38sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ln_zap.zap.nonClippingText.NonClippingTextView
-                android:id="@+id/BalancePrimaryUnit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Unit"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="italic" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/BalanceSecondaryLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_cloudlightning"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/sendButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/BalancePrimaryLayout">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.36" />
 
-            <TextView
-                android:id="@+id/BalanceSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Secondary"
-                android:textAlignment="center"
-                android:textColor="@color/gray"
-                android:textSize="15sp"
-                app:layout_constraintTop_toBottomOf="@id/BalancePrimary" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/BalanceLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/sendButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.36">
 
-            <ln_zap.zap.nonClippingText.NonClippingTextView
-                android:id="@+id/BalanceSecondaryUnit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:text="Unit"
-                android:textAlignment="center"
-                android:textColor="@color/gray"
-                android:textSize="15sp"
-                android:textStyle="italic" />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/BalancePrimaryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
+                <TextView
+                    android:id="@+id/BalancePrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Primary"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="38sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ln_zap.zap.nonClippingText.NonClippingTextView
+                    android:id="@+id/BalancePrimaryUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Unit"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/BalanceSecondaryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/BalancePrimaryLayout">
+
+                <TextView
+                    android:id="@+id/BalanceSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Secondary"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    app:layout_constraintTop_toBottomOf="@id/BalancePrimary" />
+
+                <ln_zap.zap.nonClippingText.NonClippingTextView
+                    android:id="@+id/BalanceSecondaryUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="Unit"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_send_ripple"
+            android:text="@string/send"
+            android:textAllCaps="false"
+            android:textColor="@color/lightningOrange"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/receiveButton"
+            app:layout_constraintHorizontal_bias="0.29"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/receiveButton"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_receive_ripple"
+            android:text="@string/receive"
+            android:textAllCaps="false"
+            android:textColor="@color/lightningOrange"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.74"
+            app:layout_constraintStart_toEndOf="@+id/sendButton" />
+
+        <ImageView
+            android:id="@+id/switchButtonImage"
+            android:layout_width="28dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="4dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_swap_vert_black_24dp"
+            android:tint="@color/lightningOrange"
+            app:layout_constraintBottom_toBottomOf="@+id/BalanceLayout"
+            app:layout_constraintStart_toEndOf="@+id/BalanceLayout"
+            app:layout_constraintTop_toTopOf="@+id/BalanceLayout"
+            app:layout_constraintVertical_bias="0.6" />
+
+        <Button
+            android:id="@+id/setupWallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_rectangle_orange_gradient"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="@string/demo_setupWalletBtn"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/receiveButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/BalanceLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/button_send_ripple"
-        android:text="@string/send"
-        android:textAllCaps="false"
-        android:textColor="@color/lightningOrange"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/receiveButton"
-        app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toStartOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConnectionError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-    <Button
-        android:id="@+id/receiveButton"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/button_receive_ripple"
-        android:text="@string/receive"
-        android:textAllCaps="false"
-        android:textColor="@color/lightningOrange"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.74"
-        app:layout_constraintStart_toEndOf="@+id/sendButton" />
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="50dp"
+            android:text="@string/error_unableToConnectToLND"
+            android:textAlignment="center"
+            android:textColor="@color/superRed"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/switchButtonImage"
-        android:layout_width="28dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="4dp"
-        android:paddingStart="0dp"
-        android:paddingEnd="10dp"
-        android:src="@drawable/ic_swap_vert_black_24dp"
-        android:tint="@color/lightningOrange"
-        app:layout_constraintBottom_toBottomOf="@+id/BalanceLayout"
-        app:layout_constraintStart_toEndOf="@+id/BalanceLayout"
-        app:layout_constraintTop_toTopOf="@+id/BalanceLayout"
-        app:layout_constraintVertical_bias="0.6" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-    <Button
-        android:id="@+id/setupWallet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/rounded_rectangle_orange_gradient"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:text="@string/demo_setupWalletBtn"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/receiveButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BalanceLayout" />
+        <TextView
+            android:id="@+id/loadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Loading..."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

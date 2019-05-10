@@ -25,7 +25,6 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import ln_zap.zap.R;
@@ -64,6 +63,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private Animation mBalanceFadeOutAnimation;
     private Animation mLogoFadeInAnimation;
     private FragmentManager mFragmentManager;
+    private ConstraintLayout mWalletConnectedLayout;
+    private ConstraintLayout mWalletNotConnectedLayout;
+    private ConstraintLayout mLoadingWalletLayout;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -100,6 +102,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvMode = view.findViewById(R.id.mode);
         mBalanceFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.balance_fade_out);
         mLogoFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logo_fade_in);
+        mWalletConnectedLayout = view.findViewById(R.id.walletConnected);
+        mWalletNotConnectedLayout = view.findViewById(R.id.ConnectionError);
+        mLoadingWalletLayout = view.findViewById(R.id.loading);
+
+        mWalletConnectedLayout.setVisibility(View.GONE);
+        mLoadingWalletLayout.setVisibility(View.VISIBLE);
 
         mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -146,7 +154,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onClick(View v) {
                 if (!mPrefs.getBoolean("hideTotalBalance", false)) {
                     MonetaryUtil.getInstance().switchCurrencies();
-                    updateTotalBalanceDisplay();
                 } else {
                     mBalanceFadeOutAnimation.reset();
                     mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
@@ -186,7 +193,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onClick(View v) {
                 MonetaryUtil.getInstance().switchCurrencies();
-                updateTotalBalanceDisplay();
 
                 // also cancel fade out if hideTotalBalance option is active
                 if (mPrefs.getBoolean("hideTotalBalance", false)) {
@@ -239,10 +245,16 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         if (App.getAppContext().connectionToLNDEstablished) {
             connectionToLNDEstablished();
+        } else {
+            if (mPrefs.getBoolean("isWalletSetup", false)) {
+                Wallet.getInstance().isLNDReachable();
+            }
         }
 
-        // if the wallet is not setup we still want to show an error if a payment url was used.
+        // if the wallet is not setup we still want to show the wallet and an error if a payment url was used.
         if (!mPrefs.getBoolean("isWalletSetup", false)) {
+            mWalletConnectedLayout.setVisibility(View.VISIBLE);
+            mLoadingWalletLayout.setVisibility(View.GONE);
             if (App.getAppContext().getUriSchemeData() != null) {
                 Intent intent = new Intent(getActivity(), SendActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -353,7 +365,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // Update if primary currency has been switched from another activity
+        // Update if primary currency has been switched from this or another activity
         if (key.equals("firstCurrencyIsPrimary")) {
             updateTotalBalanceDisplay();
         }
@@ -372,6 +384,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onInfoUpdated(boolean connected) {
         if (connected) {
+            mWalletConnectedLayout.setVisibility(View.VISIBLE);
+            mLoadingWalletLayout.setVisibility(View.GONE);
+            mWalletNotConnectedLayout.setVisibility(View.GONE);
+
             if ((mPrefs.getBoolean("isWalletSetup", false))) {
                 if (Wallet.getInstance().isTestnet()) {
                     mTvMode.setText("TESTNET");
@@ -387,9 +403,16 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvMode.setVisibility(View.GONE);
             }
         } else {
-            mTvMode.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
-            mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superRed));
-            mTvMode.setVisibility(View.VISIBLE);
+            if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED){
+                mTvMode.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
+                mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superRed));
+                mTvMode.setVisibility(View.VISIBLE);
+            } else {
+                mWalletConnectedLayout.setVisibility(View.GONE);
+                mLoadingWalletLayout.setVisibility(View.GONE);
+                mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
+            }
+
         }
 
     }
@@ -446,7 +469,16 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onWalletLoadedUpdated(boolean success, String error) {
-        connectionToLNDEstablished();
+        if(success) {
+            connectionToLNDEstablished();
+        } else {
+            // Show info about mode (offline, testnet or mainnet) if it is already known
+            if (mPrefs.getBoolean("isWalletSetup", false)) {
+                onInfoUpdated(false);
+            } else {
+                onInfoUpdated(true);
+            }
+        }
     }
 
     private void showError(String message, int duration) {
