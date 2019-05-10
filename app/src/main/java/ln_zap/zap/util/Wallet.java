@@ -614,7 +614,6 @@ public class Wallet {
                     for (NodeInfo i : mNodeInfos) {
                         if (i.getNode().getPubKey().equals(nodeInfoResponse.getNode().getPubKey())) {
                             nodeInfoAlreadyExists = true;
-                            break;
                         }
                     }
                     if (!nodeInfoAlreadyExists) {
@@ -625,8 +624,8 @@ public class Wallet {
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Get node info request interrupted.");
                 } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
-                    ZapLog.debug(LOG_TAG, e.getMessage());
+                   // ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
+                   // ZapLog.debug(LOG_TAG, e.getMessage());
                 }
             }
         }, new ExecuteOnCaller());

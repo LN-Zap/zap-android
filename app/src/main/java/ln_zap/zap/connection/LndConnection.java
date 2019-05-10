@@ -16,6 +16,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import ln_zap.zap.util.RefConstants;
 import ln_zap.zap.baseClasses.App;
+import ln_zap.zap.util.ZapLog;
 
 /**
  * Singleton to handle the connection to lnd
@@ -24,6 +25,9 @@ import ln_zap.zap.baseClasses.App;
  * IP, Certificate and Macaroon are placeholders right now.
  */
 public class LndConnection {
+
+    private static final String LOG_TAG = "Wallet Fragment";
+
     private static LndConnection mLndConnectionInstance;
     private SSLSocketFactory mSSLFactory;
     private MacaroonCallCredential mMacaroon;

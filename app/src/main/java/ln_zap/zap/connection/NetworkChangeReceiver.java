@@ -38,7 +38,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 }, 5000);
             }
         } else {
-            // The wallet is not setup, simulate connection status exclusivly on internet connection.
+            // The wallet is not setup, simulate connection status exclusively on internet connection.
             Wallet.getInstance().simulateFetchInfoForDemo(status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED);
         }
     }

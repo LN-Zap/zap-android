@@ -62,6 +62,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mInfoChangeListenerRegistered;
     private boolean mWalletLoadedListenerRegistered;
     private boolean mMainnetWarningShownOnce;
+    private boolean isInBackground;
 
 
     @Override
@@ -185,6 +186,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToForeground() {
         ZapLog.debug(LOG_TAG, "Zap moved to foreground");
 
+        isInBackground = false;
+
         if (mPrefs.getBoolean("isWalletSetup", false) && TimeOutUtil.getInstance().isTimedOut()) {
             // Go to PIN entry screen
             Intent intent = new Intent(this, PinEntryActivity.class);
@@ -218,13 +221,18 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     // This function gets called when app is moved to background.
+    // For some reason this gets called multiple times. Bool to the rescue...
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onMoveToBackground() {
-        ZapLog.debug(LOG_TAG, "Zap moved to background");
+        if (!isInBackground) {
+            isInBackground = true;
 
-        App.getAppContext().connectionToLNDEstablished = false;
+            ZapLog.debug(LOG_TAG, "Zap moved to background");
 
-        stopListenersAndSchedules();
+            App.getAppContext().connectionToLNDEstablished = false;
+
+            stopListenersAndSchedules();
+        }
     }
 
     @Override
@@ -292,7 +300,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @Override
     public void onInfoUpdated(boolean connected) {
         if ((mPrefs.getBoolean("isWalletSetup", false))) {
-            if (!Wallet.getInstance().isTestnet()) {
+            if (!Wallet.getInstance().isTestnet() && Wallet.getInstance().isConnectedToLND()) {
                 if(!mMainnetWarningShownOnce) {
                     // Show mainnet not ready warning
                     mUG.securityMainnetNotReady();
