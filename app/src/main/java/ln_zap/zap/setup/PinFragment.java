@@ -20,8 +20,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import ln_zap.zap.R;
-import ln_zap.zap.RefConstants;
-import ln_zap.zap.UtilFunctions;
+import ln_zap.zap.util.RefConstants;
+import ln_zap.zap.util.UtilFunctions;
 import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.util.ScrambledNumpad;
 

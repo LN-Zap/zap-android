@@ -3,6 +3,7 @@ package ln_zap.zap;
 import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
+import android.app.AppComponentFactory;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -28,6 +29,7 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.connection.LndConnection;
 import ln_zap.zap.connection.NetworkChangeReceiver;
@@ -42,7 +44,8 @@ import ln_zap.zap.util.UserGuardian;
 import ln_zap.zap.util.Wallet;
 import ln_zap.zap.util.ZapLog;
 
-public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver, Wallet.InfoListener, UserGuardianInterface {
+public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
+        Wallet.InfoListener, Wallet.WalletLoadedListener, UserGuardianInterface {
 
     private static final String LOG_TAG = "Main Activity";
 
@@ -57,6 +60,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private FragmentTransaction mFt;
     private SharedPreferences mPrefs;
     private boolean mInfoChangeListenerRegistered;
+    private boolean mWalletLoadedListenerRegistered;
     private boolean mMainnetWarningShownOnce;
 
 
@@ -81,13 +85,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BottomNavigationView navigation = findViewById(R.id.mainNavigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // Fetch the transaction history
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
-            Wallet.getInstance().fetchLNDTransactionHistory();
-
-            Wallet.getInstance().fetchOpenChannelsFromLND();
-            Wallet.getInstance().fetchClosedChannelsFromLND();
-        }
     }
 
 
@@ -197,6 +194,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             setupExchangeRateSchedule();
             registerNetworkStatusChangeListener();
 
+            if (!mWalletLoadedListenerRegistered) {
+                Wallet.getInstance().registerWalletLoadedListener(this);
+                mWalletLoadedListenerRegistered = true;
+            }
+
             if (!mInfoChangeListenerRegistered) {
                 Wallet.getInstance().registerInfoListener(this);
                 mInfoChangeListenerRegistered = true;
@@ -208,14 +210,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
                 ZapLog.debug(LOG_TAG, "Starting to establish connections...");
                 LndConnection.getInstance().restartBackgroundTasks();
-                setupLNDInfoSchedule();
 
-                // Fetch the transaction history
-                Wallet.getInstance().fetchLNDTransactionHistory();
+                Wallet.getInstance().isLNDReachable();
 
-                // Fetch the channels from LND
-                Wallet.getInstance().fetchOpenChannelsFromLND();
-                Wallet.getInstance().fetchClosedChannelsFromLND();
             }
         }
     }
@@ -224,6 +221,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onMoveToBackground() {
         ZapLog.debug(LOG_TAG, "Zap moved to background");
+
+        App.getAppContext().connectionToLNDEstablished = false;
+
         stopListenersAndSchedules();
     }
 
@@ -240,8 +240,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
         TimeOutUtil.getInstance().setCanBeRestarted(false);
 
-        // Unregister Info Listener
+        // Unregister Wallet Loaded & Info Listener
+        Wallet.getInstance().unregisterWalletLoadedListener(this);
+        mWalletLoadedListenerRegistered = false;
         Wallet.getInstance().unregisterInfoListener(this);
+        mInfoChangeListenerRegistered = false;
 
         if (mIsExchangeRateSchedulerRunning) {
             // Kill the scheduled exchange rate requests to go easy on the battery.
@@ -302,5 +305,26 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @Override
     public void guardianDialogConfirmed(String DialogName) {
 
+    }
+
+    @Override
+    public void onWalletLoadedUpdated(boolean connected, String error) {
+        if(connected){
+            // We managed to establish a connection to LND.
+            // Now we can start to fetch all information needed from LND
+            App.getAppContext().connectionToLNDEstablished = true;
+
+
+            setupLNDInfoSchedule();
+
+            // Fetch the transaction history
+            Wallet.getInstance().fetchLNDTransactionHistory();
+
+            // Fetch the channels from LND
+            Wallet.getInstance().fetchOpenChannelsFromLND();
+            Wallet.getInstance().fetchClosedChannelsFromLND();
+
+            ZapLog.debug(LOG_TAG, "WalletIsLoaded");
+        }
     }
 }

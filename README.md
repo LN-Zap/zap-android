@@ -7,7 +7,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 - [x] Fiat currency prices
 - [x] Support for Bech32 and P2SH addresses
 - [x] BTC, mBTC, bit & Satoshi units
-- [ ] Open `lightning:` & `bitcoin:` urls
+- [x] Open `lightning:` & `bitcoin:` urls
 - [ ] Available in many languages
 - [ ] Resend failed lightning transactions
 - [x] Transaction filter

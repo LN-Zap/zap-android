@@ -25,11 +25,15 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import ln_zap.zap.R;
+import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.connection.NetworkUtil;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 import ln_zap.zap.setup.SetupActivity;
-import ln_zap.zap.qrCodeScanner.QRCodeScannerActivity;
+import ln_zap.zap.SendActivity;
 import ln_zap.zap.util.Balances;
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.OnSingleClickListener;
@@ -42,7 +46,7 @@ import ln_zap.zap.util.ZapLog;
  * A simple {@link Fragment} subclass.
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.BalanceListener, Wallet.InfoListener, MonetaryUtil.ExchangeRateListener, UserGuardianInterface {
+        Wallet.BalanceListener, Wallet.InfoListener, Wallet.WalletLoadedListener, MonetaryUtil.ExchangeRateListener, UserGuardianInterface {
 
     private static final String LOG_TAG = "Wallet Fragment";
 
@@ -65,7 +69,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private boolean mBalanceChangeListenerRegistered = false;
     private boolean mInfoChangeListenerRegistered = false;
     private boolean mExchangeRateListenerRegistered = false;
-
+    private boolean mWalletLoadedListenerRegistered = false;
 
     public WalletFragment() {
         // Required empty public constructor
@@ -135,7 +139,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        updateTotalBalanceDisplay();
 
         // Swap action when clicked on balance or cancel the fade out in case balance is hidden
         mClBalanceLayout.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +202,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         btnSend.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                Intent intent = new Intent(getActivity(), QRCodeScannerActivity.class);
+                Intent intent = new Intent(getActivity(), SendActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivityForResult(intent, 1);
             }
@@ -231,6 +234,26 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
 
+        updateTotalBalanceDisplay();
+
+
+        if (App.getAppContext().connectionToLNDEstablished) {
+            connectionToLNDEstablished();
+        }
+
+        // if the wallet is not setup we still want to show an error if a payment url was used.
+        if (!mPrefs.getBoolean("isWalletSetup", false)) {
+            if (App.getAppContext().getUriSchemeData() != null) {
+                Intent intent = new Intent(getActivity(), SendActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivityForResult(intent, 1);
+            }
+        }
+
+        return view;
+    }
+
+    private void connectionToLNDEstablished() {
 
         if (mPrefs.getBoolean("isWalletSetup", false)) {
 
@@ -239,12 +262,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
             // Fetch the current balance and info from LND
             Wallet.getInstance().fetchBalanceFromLND();
-
         }
 
-
-
-        return view;
+        // check if we have an URI Scheme present. If there is one, start the send activity,
+        // which will then immediately start to validate it.
+        if (App.getAppContext().getUriSchemeData() != null) {
+            Intent intent = new Intent(getActivity(), SendActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivityForResult(intent, 1);
+        }
     }
 
     private void updateTotalBalanceDisplay() {
@@ -294,27 +320,32 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (requestCode == 1) {
             // This gets executed if the a vaild payment request was scanned or pasted
             if (data != null) {
-                boolean onChain = data.getExtras().getBoolean("onChain");
-                if (onChain) {
-                    long amount = data.getExtras().getLong("onChainAmount");
-                    String address = data.getExtras().getString("onChainAddress");
-                    String message = data.getExtras().getString("onChainMessage");
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("onChain", onChain);
-                    bundle.putLong("onChainAmount", amount);
-                    bundle.putString("onChainAddress", address);
-                    bundle.putString("onChainMessage", message);
+                if (data.getExtras().getString("error") == null) {
+                    boolean onChain = data.getExtras().getBoolean("onChain");
+                    if (onChain) {
+                        long amount = data.getExtras().getLong("onChainAmount");
+                        String address = data.getExtras().getString("onChainAddress");
+                        String message = data.getExtras().getString("onChainMessage");
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("onChain", onChain);
+                        bundle.putLong("onChainAmount", amount);
+                        bundle.putString("onChainAddress", address);
+                        bundle.putString("onChainMessage", message);
 
-                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                    sendBottomSheetDialog.setArguments(bundle);
-                    sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
+                        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                        sendBottomSheetDialog.setArguments(bundle);
+                        sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("onChain", onChain);
+
+                        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                        sendBottomSheetDialog.setArguments(bundle);
+                        sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
+                    }
                 } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("onChain", onChain);
-
-                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                    sendBottomSheetDialog.setArguments(bundle);
-                    sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
+                    ZapLog.debug(LOG_TAG, "Error arrived!");
+                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
                 }
             }
         }
@@ -380,6 +411,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             Wallet.getInstance().registerInfoListener(this);
             mInfoChangeListenerRegistered = true;
         }
+        if (!mWalletLoadedListenerRegistered) {
+            Wallet.getInstance().registerWalletLoadedListener(this);
+            mWalletLoadedListenerRegistered = true;
+        }
         if (!mExchangeRateListenerRegistered) {
             MonetaryUtil.getInstance().registerExchangeRateListener(this);
             mExchangeRateListenerRegistered = true;
@@ -400,11 +435,25 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mPrefs.unregisterOnSharedPreferenceChangeListener(this);
         Wallet.getInstance().unregisterBalanceListener(this);
         Wallet.getInstance().unregisterInfoListener(this);
+        Wallet.getInstance().unregisterWalletLoadedListener(this);
         MonetaryUtil.getInstance().unregisterExchangeRateListener(this);
     }
 
     @Override
     public void guardianDialogConfirmed(String DialogName) {
 
+    }
+
+    @Override
+    public void onWalletLoadedUpdated(boolean success, String error) {
+        connectionToLNDEstablished();
+    }
+
+    private void showError(String message, int duration) {
+        Snackbar msg = Snackbar.make(getActivity().findViewById(R.id.mainContent), message, Snackbar.LENGTH_LONG);
+        View sbView = msg.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.superRed));
+        msg.setDuration(duration);
+        msg.show();
     }
 }

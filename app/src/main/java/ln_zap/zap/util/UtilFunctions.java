@@ -1,4 +1,4 @@
-package ln_zap.zap;
+package ln_zap.zap.util;
 
 import java.security.MessageDigest;
 

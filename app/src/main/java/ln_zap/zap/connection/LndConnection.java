@@ -7,16 +7,14 @@ import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.google.common.io.BaseEncoding;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import androidx.preference.PreferenceManager;
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
-import ln_zap.zap.RefConstants;
+import ln_zap.zap.util.RefConstants;
 import ln_zap.zap.baseClasses.App;
 
 /**

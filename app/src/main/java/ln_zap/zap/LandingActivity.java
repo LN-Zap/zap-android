@@ -2,6 +2,7 @@ package ln_zap.zap;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.preference.PreferenceManager;
@@ -9,11 +10,27 @@ import androidx.preference.PreferenceManager;
 import at.favre.lib.armadillo.Armadillo;
 import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
+import ln_zap.zap.util.RefConstants;
+import ln_zap.zap.util.ZapLog;
 
 public class LandingActivity extends BaseAppCompatActivity {
+
+    private static final String LOG_TAG = "Landing Activity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        // get the data from the URI Scheme
+        Intent intent = getIntent();
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            Uri uri = intent.getData();
+            App.getAppContext().setUriSchemeData(uri.toString());
+            ZapLog.debug(LOG_TAG, "URI was detected: " + uri.toString());
+        }
+
+
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         int ver = prefs.getInt(RefConstants.settings_ver, 0);
@@ -39,9 +56,9 @@ public class LandingActivity extends BaseAppCompatActivity {
 
         if (isWalletSetup) {
             // Go to PIN entry screen
-            Intent intent = new Intent(this, PinEntryActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            Intent pinIntent = new Intent(this, PinEntryActivity.class);
+            pinIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(pinIntent);
         } else {
 
             // Clear connection data if something is there
@@ -53,8 +70,8 @@ public class LandingActivity extends BaseAppCompatActivity {
             prefsRemote.edit().clear().commit();
 
 
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            startActivity(homeIntent);
         }
     }
 }

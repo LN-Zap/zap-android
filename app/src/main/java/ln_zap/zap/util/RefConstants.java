@@ -1,4 +1,4 @@
-package ln_zap.zap;
+package ln_zap.zap.util;
 
 public class RefConstants {
     public static final String pin_hash = "pin_hash";

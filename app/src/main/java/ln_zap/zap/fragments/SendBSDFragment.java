@@ -437,7 +437,6 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
             if (Wallet.getInstance().mPaymentRequest.getDescription() == null) {
                 mMemoView.setVisibility(View.VISIBLE);
             } else {
-                ZapLog.debug(LOG_TAG, "make ze reeson vizible!");
                 mMemoView.setVisibility(View.VISIBLE);
                 mEtMemo.setText(Wallet.getInstance().mPaymentRequest.getDescription());
             }

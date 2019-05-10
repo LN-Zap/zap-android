@@ -1,4 +1,4 @@
-package ln_zap.zap.qrCodeScanner;
+package ln_zap.zap.baseClasses;
 
 
 import androidx.appcompat.app.ActionBar;

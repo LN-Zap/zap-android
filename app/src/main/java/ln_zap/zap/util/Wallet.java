@@ -86,6 +86,7 @@ public class Wallet {
     private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
     private final Set<InfoListener> mInfoListeners = new HashSet<>();
     private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
+    private final Set<WalletLoadedListener> mWalletLoadedListeners = new HashSet<>();
 
 
     private Wallet() {
@@ -116,6 +117,50 @@ public class Wallet {
         mSyncedToChain = false;
         mTestnet = false;
         mLNDVersion = "not connected";
+    }
+
+
+    /**
+     * This will be used on loading. If this request finishes without an error, our connection to LND is established.
+     * All Listeners registered to WalletLoadedListener will be informed about any changes.
+     */
+    public void isLNDReachable() {
+        // Retrieve info from LND with gRPC (async)
+
+        LightningGrpc.LightningFutureStub asyncInfoClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        GetInfoRequest asyncInfoRequest = GetInfoRequest.newBuilder().build();
+        final ListenableFuture<GetInfoResponse> infoFuture = asyncInfoClient.getInfo(asyncInfoRequest);
+
+        ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
+
+        infoFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    GetInfoResponse infoResponse = infoFuture.get();
+
+                    // Save the received data.
+                    mSyncedToChain = infoResponse.getSyncedToChain();
+                    mTestnet = infoResponse.getTestnet();
+                    mLNDVersion = infoResponse.getVersion();
+                    mInfoFetched = true;
+                    mConnectedToLND = true;
+
+                    broadcastWalletLoadedUpdate(true, "");
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
+                    broadcastWalletLoadedUpdate(false, "interruted");
+                } catch (ExecutionException e) {
+                    if (e.getMessage().toLowerCase().contains("unavailable")) {
+                        broadcastWalletLoadedUpdate(false, "unavailable");
+                    }
+                    ZapLog.debug(LOG_TAG, e.getMessage());
+                }
+            }
+        }, new ExecuteOnCaller());
     }
 
 
@@ -581,6 +626,7 @@ public class Wallet {
                     ZapLog.debug(LOG_TAG, "Get node info request interrupted.");
                 } catch (ExecutionException e) {
                     ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
+                    ZapLog.debug(LOG_TAG, e.getMessage());
                 }
             }
         }, new ExecuteOnCaller());
@@ -931,6 +977,28 @@ public class Wallet {
         mChannelBalance = balance;
         mChannelBalancePending = pending;
         broadcastBalanceUpdate();
+    }
+
+
+
+    // Event handling to notify all registered listeners if wallet initialization finished successfully.
+
+    private void broadcastWalletLoadedUpdate(boolean success, String error) {
+        for (WalletLoadedListener listener : mWalletLoadedListeners) {
+            listener.onWalletLoadedUpdated(success, error);
+        }
+    }
+
+    public void registerWalletLoadedListener(WalletLoadedListener listener) {
+        mWalletLoadedListeners.add(listener);
+    }
+
+    public void unregisterWalletLoadedListener(WalletLoadedListener listener) {
+        mWalletLoadedListeners.remove(listener);
+    }
+
+    public interface WalletLoadedListener {
+        void onWalletLoadedUpdated(boolean success, String error);
     }
 
 

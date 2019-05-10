@@ -15,9 +15,17 @@ public class App extends Application {
 
     private static App mContext;
 
-    public static App getAppContext() {
-        return mContext;
-    }
+
+    // keeping pin user entered in memory in order to encrypt other preferences/values
+    public String inMemoryPin;
+    // temporary variable when pin confirmation is needed
+    public String pinTemp;
+
+    // keep the data from the URI Scheme in memory, so we can access it from anywhere.
+    private String uriSchemeData;
+
+
+    public boolean connectionToLNDEstablished = false;
 
     @Override
     public void onCreate() {
@@ -30,8 +38,15 @@ public class App extends Application {
         super.attachBaseContext(LocaleUtil.setLocale(ctx));
     }
 
-    // keeping pin user entered in memory in order to encrypt other preferences/values
-    public String inMemoryPin;
-    // temporary variable when pin confirmation is needed
-    public String pinTemp;
+    public static App getAppContext() {
+        return mContext;
+    }
+
+    public String getUriSchemeData() {
+        return uriSchemeData;
+    }
+
+    public void setUriSchemeData(String data) {
+        uriSchemeData = data;
+    }
 }

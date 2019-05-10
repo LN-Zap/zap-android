@@ -1,152 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SendActivity">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:background="@drawable/orange_gradient"
-        android:text="@string/send_sendPayment"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/sendTypeLayout"
-        android:layout_width="0dp"
+    </FrameLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_gravity="top"
+        android:background="#33000000"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/TransparentToolbar" />
 
-        <ImageView
-            android:id="@+id/sendTypeIcon"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="5dp"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/sendTypeText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:text="@string/lightning"
-            android:textAlignment="center" />
-
-        <ImageView
-            android:id="@+id/sendTypeLine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="3dp"
-            app:srcCompat="@color/seaBlueGradient" />
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sendAmountTopLayout"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/seaBlueGradient"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendTypeLayout">
-
-        <EditText
-            android:id="@+id/sendAmount"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="15dp"
-            android:background="@color/seaBlueGradient"
-            android:ems="10"
-            android:hint="@string/amount"
-            android:inputType="numberDecimal"
-            android:paddingStart="20dp"
-            android:paddingEnd="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/sendUnitLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/sendUnitLayout"
+            android:id="@+id/scannerInstructions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="horizontal"
-            android:paddingEnd="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/sendAmount"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/sendUnit"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:text="UNIT"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                android:textStyle="italic" />
-
-            <ImageView
-                android:id="@+id/sendSwitchUnitImage"
-                android:layout_width="18dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingStart="4dp"
-                android:paddingTop="5dp"
-                android:tint="@color/lightningOrange"
-                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sendMemoTopLayout"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/seaBlueGradient"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendAmountTopLayout">
-
-        <EditText
-            android:id="@+id/sendMemo"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="15dp"
-            android:background="@color/seaBlueGradient"
-            android:ems="10"
-            android:hint="@string/memo"
-            android:inputType="text"
-            android:maxLength="50"
-            android:paddingStart="20dp"
-            android:paddingEnd="10dp"
-            android:textSize="20sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/scanQRCode"
+            android:textColor="@color/white"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.25" />
 
+        <TextView
+            android:id="@+id/scannerPermissionRequired"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="50dp"
+            android:text="@string/error_cameraPermissionRequired"
+            android:textAlignment="center"
+            android:textColor="@color/superRed"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scannerInstructions" />
 
+        <ImageButton
+            android:id="@+id/scannerFlashButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#00000000"
+            android:elevation="0dp"
+            android:tint="@color/gray"
+            app:layout_constraintBottom_toTopOf="@+id/scannerPaste"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.85"
+            app:srcCompat="@drawable/ic_flashlight_black_36dp" />
+
+        <Button
+            android:id="@+id/scannerPaste"
+            android:layout_width="250dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_clickable_item"
+            android:text="@string/paste"
+            android:textAllCaps="false"
+            android:textColor="@color/lightningOrange"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
