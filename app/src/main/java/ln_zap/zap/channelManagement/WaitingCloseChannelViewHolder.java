@@ -50,8 +50,8 @@ public class WaitingCloseChannelViewHolder extends RecyclerView.ViewHolder {
 
 
         // Set state
-        mStatus.setText("waiting close");
-        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
+        mStatus.setText(R.string.channel_state_waiting_close);
+        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.superRed)));
         mRootView.setAlpha(0.65f);
 
 

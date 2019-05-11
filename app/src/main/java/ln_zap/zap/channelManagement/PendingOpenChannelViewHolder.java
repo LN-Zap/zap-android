@@ -50,8 +50,8 @@ public class PendingOpenChannelViewHolder extends RecyclerView.ViewHolder {
 
 
         // Set state
-        mStatus.setText("pending open");
-        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
+        mStatus.setText(R.string.channel_state_pending_open);
+        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
         mRootView.setAlpha(0.65f);
 
 

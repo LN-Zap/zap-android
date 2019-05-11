@@ -50,8 +50,8 @@ public class PendingForceClosingChannelViewHolder extends RecyclerView.ViewHolde
 
 
         // Set state
-        mStatus.setText("pending force closing");
-        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
+        mStatus.setText(R.string.channel_state_pending_force_closing);
+        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.superRed)));
         mRootView.setAlpha(0.65f);
 
 

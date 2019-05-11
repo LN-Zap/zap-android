@@ -86,8 +86,12 @@
     <string name="channel_local_balance">Dein Kontostand</string>
     <string name="channel_remote_balance">Remote Kontostand</string>
     <string name="channel_no_alias">Unbenannt</string>
-    <string name="channel_state_open">offen</string>
-    <string name="channel_state_offline">offline</string>
+    <string name="channel_state_open">Offen</string>
+    <string name="channel_state_offline">Offline</string>
+    <string name="channel_state_pending_open">Wird geöffnet</string>
+    <string name="channel_state_pending_closing">Wird geschlossen</string>
+    <string name="channel_state_pending_force_closing">Schließung wird erzwungen</string>
+    <string name="channel_state_waiting_close">Wartet auf Schließung</string>
     <string name="no_channels">Keine Kanäle</string>
 
 

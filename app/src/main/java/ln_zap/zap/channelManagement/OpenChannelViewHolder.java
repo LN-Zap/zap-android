@@ -55,7 +55,7 @@ public class OpenChannelViewHolder extends RecyclerView.ViewHolder {
             mRootView.setAlpha(1f);
         } else {
             mStatus.setText(R.string.channel_state_offline);
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.superRed)));
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
             mRootView.setAlpha(0.65f);
         }
 

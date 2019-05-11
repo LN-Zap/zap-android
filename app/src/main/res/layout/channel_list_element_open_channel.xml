@@ -31,20 +31,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="5dp"
         android:layout_weight="1"
         android:text="Status"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/statusDot"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/statusDot"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/state"
-        app:layout_constraintEnd_toStartOf="@+id/state"
         app:layout_constraintTop_toTopOf="@+id/state"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_status_dot_black_24dp" />
 
     <ImageView
