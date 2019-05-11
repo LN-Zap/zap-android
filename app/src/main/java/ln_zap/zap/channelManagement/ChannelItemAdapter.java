@@ -8,6 +8,10 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 import ln_zap.zap.R;
+import ln_zap.zap.historyList.LnInvoiceItem;
+import ln_zap.zap.historyList.LnInvoiceViewHolder;
+import ln_zap.zap.historyList.LnPaymentItem;
+import ln_zap.zap.historyList.LnPaymentViewHolder;
 
 
 public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -31,14 +35,18 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case ChannelListItem.TYPE_OPEN_CHANNEL:
                 View openChannelView = inflater.inflate(R.layout.channel_list_element_open_channel, parent, false);
                 return new OpenChannelViewHolder(openChannelView);
-                /*
-            case ChannelListItem.TYPE_PENDING_CHANNEL:
-                View pendingChannelView = inflater.inflate(R.layout.history_list_element_ln_invoice, parent, false);
-                return new LnInvoiceViewHolder(pendingChannelView);
-            case ChannelListItem.TYPE_CLOSED_CHANNEL:
-                View closedChannelView = inflater.inflate(R.layout.history_list_element_ln_payment, parent, false);
-                return new LnPaymentViewHolder(closedChannelView);
-                */
+            case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
+                View pendingOpenChannelView = inflater.inflate(R.layout.channel_list_element_open_channel, parent, false);
+                return new PendingOpenChannelViewHolder(pendingOpenChannelView);
+            case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
+                View pendingClosingChannelView = inflater.inflate(R.layout.channel_list_element_open_channel, parent, false);
+                return new PendingClosingChannelViewHolder(pendingClosingChannelView);
+            case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
+                View pendingForceClosingChannelView = inflater.inflate(R.layout.channel_list_element_open_channel, parent, false);
+                return new PendingForceClosingChannelViewHolder(pendingForceClosingChannelView);
+            case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
+                View waitingCloseChannelView = inflater.inflate(R.layout.channel_list_element_open_channel, parent, false);
+                return new WaitingCloseChannelViewHolder(waitingCloseChannelView);
             default:
                 View defaultView = inflater.inflate(R.layout.channel_list_element_open_channel, parent, false);
                 return new OpenChannelViewHolder(defaultView);
@@ -55,19 +63,26 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 OpenChannelItem openChannelItem = (OpenChannelItem) mItems.get(position);
                 openChannelHolder.bindOpenChannelItem(openChannelItem);
                 break;
-            /*
-            case ChannelListItem.TYPE_LN_INVOICE:
-                LnInvoiceViewHolder lnInvoiceHolder = (LnInvoiceViewHolder) holder;
-                LnInvoiceItem lnInvoiceItem = (LnInvoiceItem) mItems.get(position);
-                lnInvoiceHolder.bindLnInvoiceItem(lnInvoiceItem);
+            case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
+                PendingOpenChannelViewHolder pendingOpenChannelHolder = (PendingOpenChannelViewHolder) holder;
+                PendingOpenChannelItem pendingOpenChannelItem = (PendingOpenChannelItem) mItems.get(position);
+                pendingOpenChannelHolder.bindPendingOpenChannelItem(pendingOpenChannelItem);
                 break;
-
-            case ChannelListItem.TYPE_LN_PAYMENT:
-                LnPaymentViewHolder lnPaymentHolder = (LnPaymentViewHolder) holder;
-                LnPaymentItem lnPaymentItem = (LnPaymentItem) mItems.get(position);
-                lnPaymentHolder.bindLnPaymentItem(lnPaymentItem);
+            case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
+                PendingClosingChannelViewHolder pendingClosingChannelHolder = (PendingClosingChannelViewHolder) holder;
+                PendingClosingChannelItem pendingClosingChannelItem = (PendingClosingChannelItem) mItems.get(position);
+                pendingClosingChannelHolder.bindPendingClosingChannelItem(pendingClosingChannelItem);
                 break;
-                */
+            case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
+                PendingForceClosingChannelViewHolder pendingForceClosingChannelHolder = (PendingForceClosingChannelViewHolder) holder;
+                PendingForceClosingChannelItem pendingForceClosingChannelItem = (PendingForceClosingChannelItem) mItems.get(position);
+                pendingForceClosingChannelHolder.bindPendingForceClosingChannelItem(pendingForceClosingChannelItem);
+                break;
+            case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
+                WaitingCloseChannelViewHolder waitingCloseChannelHolder = (WaitingCloseChannelViewHolder) holder;
+                WaitingCloseChannelItem waitingCloseChannelItem = (WaitingCloseChannelItem) mItems.get(position);
+                waitingCloseChannelHolder.bindWaitingCloseChannelItem(waitingCloseChannelItem);
+                break;
         }
     }
 

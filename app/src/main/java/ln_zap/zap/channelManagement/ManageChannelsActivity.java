@@ -3,6 +3,7 @@ package ln_zap.zap.channelManagement;
 import android.os.Bundle;
 
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
+import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -14,9 +15,11 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import ln_zap.zap.R;
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
 import ln_zap.zap.util.Wallet;
+import ln_zap.zap.util.ZapLog;
 
 public class ManageChannelsActivity extends BaseAppCompatActivity {
 
@@ -66,6 +69,41 @@ public class ManageChannelsActivity extends BaseAppCompatActivity {
             for (Channel c : Wallet.getInstance().mOpenChannelsList) {
                 OpenChannelItem openChannelItem = new OpenChannelItem(c);
                 mChannelItems.add(openChannelItem);
+            }
+        }
+
+
+        // Add all pending channel items
+
+        // Add open pending
+        if (Wallet.getInstance().mPendingOpenChannelsList != null) {
+            for (PendingChannelsResponse.PendingOpenChannel c : Wallet.getInstance().mPendingOpenChannelsList) {
+                PendingOpenChannelItem pendingOpenChannelItem = new PendingOpenChannelItem(c);
+                mChannelItems.add(pendingOpenChannelItem);
+            }
+        }
+
+        // Add closing pending
+        if (Wallet.getInstance().mPendingClosedChannelsList != null) {
+            for (PendingChannelsResponse.ClosedChannel c : Wallet.getInstance().mPendingClosedChannelsList) {
+                PendingClosingChannelItem pendingClosingChannelItem = new PendingClosingChannelItem(c);
+                mChannelItems.add(pendingClosingChannelItem);
+            }
+        }
+
+        // Add force closing pending
+        if (Wallet.getInstance().mPendingForceClosedChannelsList != null) {
+            for (PendingChannelsResponse.ForceClosedChannel c : Wallet.getInstance().mPendingForceClosedChannelsList) {
+                PendingForceClosingChannelItem pendingForceClosingChannelItem = new PendingForceClosingChannelItem(c);
+                mChannelItems.add(pendingForceClosingChannelItem);
+            }
+        }
+
+        // Add waiting for close
+        if (Wallet.getInstance().mPendingWaitingCloseChannelsList != null) {
+            for (PendingChannelsResponse.WaitingCloseChannel c : Wallet.getInstance().mPendingWaitingCloseChannelsList) {
+                WaitingCloseChannelItem waitingCloseChannelItem = new WaitingCloseChannelItem(c);
+                mChannelItems.add(waitingCloseChannelItem);
             }
         }
 

@@ -329,6 +329,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             // Fetch the channels from LND
             Wallet.getInstance().fetchOpenChannelsFromLND();
+            Wallet.getInstance().fetchPendingChannelsFromLND();
             Wallet.getInstance().fetchClosedChannelsFromLND();
 
             ZapLog.debug(LOG_TAG, "WalletIsLoaded");
