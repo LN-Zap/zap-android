@@ -1,12 +1,16 @@
 package ln_zap.zap;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
 
 import ln_zap.zap.baseClasses.BaseAppCompatActivity;
+import ln_zap.zap.historyList.LnInvoiceItem;
 import ln_zap.zap.interfaces.UserGuardianInterface;
 
 import ln_zap.zap.util.MonetaryUtil;
 import ln_zap.zap.util.UserGuardian;
+import ln_zap.zap.util.Wallet;
+import ln_zap.zap.util.ZapLog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,13 +29,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.ClipboardManager;
 
+import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.common.net.UrlEscapers;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import net.glxn.qrgen.android.QRCode;
 
 
-public class GeneratedRequestActivity extends BaseAppCompatActivity implements UserGuardianInterface {
+public class GeneratedRequestActivity extends BaseAppCompatActivity implements UserGuardianInterface, Wallet.InvoiceSubscriptionListener {
+
+    private static final String LOG_TAG = "Generated Request Activity";
 
     private UserGuardian mUG;
     private String mDataToEncode;
@@ -40,7 +47,11 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
     private String mMemo;
     private String mAmount;
     private String mLnInvoice;
+    private ConstraintLayout mClRequestView;
+    private ConstraintLayout mClPaymentReceivedView;
+    private TextView mFinishedAmount;
     private SharedPreferences mPrefs;
+    private long mLnInvoiceAddIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
             mAmount = extras.getString("amount");
             mMemo = extras.getString("memo");
             mLnInvoice = extras.getString("lnInvoice");
+            mLnInvoiceAddIndex = extras.getLong("lnInvoiceAddIndex");
         }
 
         setContentView(R.layout.activity_generate_request);
@@ -61,16 +73,26 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this);
 
+        // Register listeners
+        Wallet.getInstance().registerInvoiceSubscriptionListener(this);
+
+        mClRequestView = findViewById(R.id.requestView);
+        mClPaymentReceivedView = findViewById(R.id.paymentReceivedView);
+        mFinishedAmount = findViewById(R.id.finishedText2);
+        mClPaymentReceivedView.setVisibility(View.GONE);
+
+
         if (mOnChain) {
             // Show "On Chain" at top
             ImageView ivTypeIcon = findViewById(R.id.requestTypeIcon);
             ivTypeIcon.setImageResource(R.drawable.ic_onchain_black_24dp);
             TextView tvTypeText = findViewById(R.id.requestTypeText);
             tvTypeText.setText(R.string.onChain);
-        }
 
+            // Set the icon for the request payed screen
+            ImageView ivTypeIcon2 = findViewById(R.id.finishedPaymentTypeIcon);
+            ivTypeIcon2.setImageResource(R.drawable.ic_onchain_black_24dp);
 
-        if (mOnChain) {
 
             // Generate on-chain request data to encode
 
@@ -174,6 +196,15 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
             }
         });
 
+        // Action when clicked on "ok" Button
+        Button btnOk = findViewById(R.id.okButton);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     private String appendParameter(String base, String name, String value) {
@@ -197,5 +228,42 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         ClipData clip = ClipData.newPlainText("Address", mDataToEncode);
         clipboard.setPrimaryClip(clip);
         Toast.makeText(this, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Unregister listeners
+        Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
+    }
+
+    @Override
+    public void onNewInvoiceAdded(Invoice invoice) {
+
+    }
+
+    @Override
+    public void onExistingInvoiceUpdated(Invoice invoice) {
+
+        // This has to happen on the UI thread. Only this thread can change the UI.
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // Check if the invoice was payed
+                if (Wallet.getInstance().isInvoicePayed(invoice)){
+                    // The updated invoice is payed, now check if it is the invoice whe currently have opened.
+                    if (invoice.getAddIndex() == mLnInvoiceAddIndex){
+
+                        // It was payed, show success screen
+
+                        mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getAmtPaidSat()));
+                        mClPaymentReceivedView.setVisibility(View.VISIBLE);
+                        mClRequestView.setVisibility(View.GONE);
+
+                    }
+                }
+            }
+        });
+
     }
 }

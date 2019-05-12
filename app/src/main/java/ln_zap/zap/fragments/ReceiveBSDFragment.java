@@ -579,6 +579,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
                             intent.putExtra("lnInvoice", invoiceResponse.getPaymentRequest());
+                            intent.putExtra("lnInvoiceAddIndex",invoiceResponse.getAddIndex());
                             startActivity(intent);
                             dismiss();
 

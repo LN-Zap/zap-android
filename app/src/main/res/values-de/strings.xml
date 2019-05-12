@@ -141,6 +141,7 @@
     <string name="receive_on_chain_request">On-Chain Zahlungsanfrage</string>
     <string name="receive_noActiveChannels">Um Bitcoin über das Lightning Netzwerk empfangen zu können, musst du erst Kanäle öffnen.</string>
     <string name="receive_noIncomeBalance">Um Bitcoin über das Lightning Netzwerk empfangen zu können, muss mindestens einer deiner Kanäle Guthaben auf der Seite deines Gegenübers aufweisen.\n\nUm das zu erreichen, musst du zuerst Zahlungen über das Lightning Netzwerk schicken.\n\nIn der Kanalverwaltung kannst du immer sehen, wie viel du gerade über das Lightning Netzwerk senden und empfangen kannst.</string>
+    <string name="receive_requestFullfilled">Anfrage\nbezahlt</string>
 
 
     <!-- //////////////// User Guardian //////////////////// -->
