@@ -755,6 +755,22 @@ public class Wallet {
                         broadcastInvoiceAdded(invoice);
                     } else {
                         // this is an update
+
+                        // Find out which element has to be replaced
+                        int changeIndex = -1;
+                        for (int i = 0; i < mInvoiceList.size() - 1; i++) {
+                            if (mInvoiceList.get(i).getAddIndex() == invoice.getAddIndex()) {
+                                changeIndex = i;
+                                break;
+                            }
+                        }
+
+                        // Replace it
+                        if (changeIndex >= 0) {
+                            mInvoiceList.set(changeIndex, invoice);
+                        }
+
+                        // Inform all subscribers
                         broadcastInvoiceUpdated(invoice);
                     }
                 } else {
@@ -1195,6 +1211,7 @@ public class Wallet {
 
     public interface InvoiceSubscriptionListener {
         void onNewInvoiceAdded(Invoice invoice);
+
         void onExistingInvoiceUpdated(Invoice invoice);
     }
 

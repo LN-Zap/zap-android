@@ -35,6 +35,7 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import ln_zap.zap.R;
 import ln_zap.zap.historyList.DateItem;
 import ln_zap.zap.historyList.HistoryItemAdapter;
@@ -324,6 +325,30 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
     @Override
     public void onExistingInvoiceUpdated(Invoice invoice) {
+
+        // This has to happen on the UI thread. Only this thread can change the recycler view.
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+
+                // Find out which element has to be replaced
+                int changeIndex = -1;
+                for (int i = 0; i < mHistoryItems.size() - 1; i++) {
+                    if (mHistoryItems.get(i).getType() == HistoryListItem.TYPE_LN_INVOICE) {
+                        LnInvoiceItem invoiceItem = (LnInvoiceItem) mHistoryItems.get(i);
+                        if (invoiceItem.getInvoice().getAddIndex() == invoice.getAddIndex()) {
+                            changeIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Replace it
+                if (changeIndex >= 0) {
+                    mHistoryItems.set(changeIndex, new LnInvoiceItem(invoice));
+                    mAdapter.notifyItemChanged(changeIndex);
+                }
+            }
+        });
 
     }
 }
