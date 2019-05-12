@@ -26,7 +26,7 @@ import ln_zap.zap.util.ZapLog;
  */
 public class LndConnection {
 
-    private static final String LOG_TAG = "Wallet Fragment";
+    private static final String LOG_TAG = "LND Connection";
 
     private static LndConnection mLndConnectionInstance;
     private SSLSocketFactory mSSLFactory;

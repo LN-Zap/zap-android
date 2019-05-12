@@ -233,7 +233,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     protected void onDestroy() {
         super.onDestroy();
         stopListenersAndSchedules();
-        
+
         // Remove observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
     }
@@ -268,6 +268,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             unregisterReceiver(mNetworkChangeReceiver);
             mIsNetworkChangeReceiverRunning = false;
         }
+
+        // Kill Server Streams
+        Wallet.getInstance().cancelInvoiceSubscription();
+
 
         // Kill lnd connection
         if (mPrefs.getBoolean("isWalletSetup", false)) {
@@ -329,7 +333,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             Wallet.getInstance().fetchPendingChannelsFromLND();
             Wallet.getInstance().fetchClosedChannelsFromLND();
 
-            ZapLog.debug(LOG_TAG, "WalletIsLoaded");
+            Wallet.getInstance().subscribeToInvoices();
+
+            ZapLog.debug(LOG_TAG, "Wallet loaded");
         }
     }
 }

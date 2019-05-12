@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ import ln_zap.zap.util.ZapLog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HistoryFragment extends Fragment implements Wallet.HistoryListener, SwipeRefreshLayout.OnRefreshListener {
+public class HistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String LOG_TAG = "History Fragment";
 
@@ -63,7 +64,6 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
     private List<HistoryListItem> mHistoryItems;
 
-    private boolean mHistoryChangeListenerRegistered = false;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -83,10 +83,21 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         mEmptyListText = view.findViewById(R.id.listEmpty);
         mTitle = view.findViewById(R.id.heading);
 
+        mHistoryItems = new ArrayList<>();
+
+        // Register listeners
+        Wallet.getInstance().registerHistoryListener(this);
+        Wallet.getInstance().registerInvoiceSubscriptionListener(this);
+
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // create and set adapter
+        mAdapter = new HistoryItemAdapter(mHistoryItems);
+        mRecyclerView.setAdapter(mAdapter);
+
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
@@ -94,9 +105,6 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.seaBlueGradient3));
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.white));
-
-
-        mHistoryItems = new ArrayList<>();
 
 
         updateHistoryDisplayList();
@@ -162,6 +170,11 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
     }
 
     private void updateHistoryDisplayList() {
+
+        // Save state, we want to keep the scroll offset after the update.
+        Parcelable recyclerViewState;
+        recyclerViewState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+
 
         mHistoryItems.clear();
 
@@ -257,10 +270,11 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         }
 
 
-        // Show the list
+        // Update the list view
+        mAdapter.notifyDataSetChanged();
 
-        mAdapter = new HistoryItemAdapter(mHistoryItems);
-        mRecyclerView.setAdapter(mAdapter);
+        // Restore state (e.g. scroll offset)
+        mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
     }
 
@@ -275,11 +289,6 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
     public void onResume() {
         super.onResume();
 
-        // Register listeners
-        if (!mHistoryChangeListenerRegistered) {
-            Wallet.getInstance().registerHistoryListener(this);
-            mHistoryChangeListenerRegistered = true;
-        }
     }
 
     @Override
@@ -288,6 +297,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
         // Unregister listeners
         Wallet.getInstance().unregisterHistoryListener(this);
+        Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
     }
 
     @Override
@@ -297,5 +307,23 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onNewInvoiceAdded(Invoice invoice) {
+
+        // This has to happen on the UI thread. Only this thread can change the recycler view.
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                mHistoryItems.add(1, new LnInvoiceItem(invoice));
+                mAdapter.notifyItemInserted(1);
+            }
+        });
+
+    }
+
+    @Override
+    public void onExistingInvoiceUpdated(Invoice invoice) {
+
     }
 }

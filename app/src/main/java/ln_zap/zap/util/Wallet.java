@@ -13,6 +13,7 @@ import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
+import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsResponse;
@@ -41,8 +42,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import javax.annotation.Nullable;
+
+import io.grpc.stub.ClientCallStreamObserver;
 import ln_zap.zap.R;
-import ln_zap.zap.baseClasses.App;
+
 import ln_zap.zap.connection.LndConnection;
 
 
@@ -85,10 +89,13 @@ public class Wallet {
     private boolean mConnectionCheckInProgress = false;
     private String mLNDVersion = "not connected";
 
+    private ClientCallStreamObserver<Invoice> invoiceStreamObserver;
+
     private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
     private final Set<InfoListener> mInfoListeners = new HashSet<>();
     private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
     private final Set<WalletLoadedListener> mWalletLoadedListeners = new HashSet<>();
+    private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
 
 
     private Wallet() {
@@ -692,7 +699,97 @@ public class Wallet {
     }
 
     /**
-     * Retruns if the invoice has been payed already.
+     * Use this to subscribe the wallet to invoice events that happen on LND.
+     * The events will be captured and forwarded to the InvoiceSubscriptionListener.
+     * All parts of the App that want to react on invoice events have to subscribe to the
+     * InvoiceSubscriptionListener.
+     */
+    public void subscribeToInvoices() {
+
+        LightningGrpc.LightningStub streamingInvoiceClient = LightningGrpc
+                .newStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        InvoiceSubscription streamingInvoiceRequest = InvoiceSubscription.newBuilder()
+                .build();
+
+        invoiceStreamObserver = new ClientCallStreamObserver<Invoice>() {
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setOnReadyHandler(Runnable onReadyHandler) {
+
+            }
+
+            @Override
+            public void disableAutoInboundFlowControl() {
+
+            }
+
+            @Override
+            public void request(int count) {
+
+            }
+
+            @Override
+            public void setMessageCompression(boolean enable) {
+
+            }
+
+            @Override
+            public void cancel(@Nullable String message, @Nullable Throwable cause) {
+
+            }
+
+            @Override
+            public void onNext(Invoice invoice) {
+
+                // is this a new invoice or is an old one updated?
+                if (mInvoiceList != null) {
+                    if (invoice.getAddIndex() > mInvoiceList.get(0).getAddIndex()) {
+                        // this is a new one
+                        mInvoiceList.add(0, invoice);
+                        broadcastInvoiceAdded(invoice);
+                    } else {
+                        // this is an update
+                        broadcastInvoiceUpdated(invoice);
+                    }
+                } else {
+                    // this is a new one
+                    mInvoiceList = new LinkedList<>();
+                    mInvoiceList.add(invoice);
+                    broadcastInvoiceAdded(invoice);
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        };
+
+        streamingInvoiceClient.subscribeInvoices(streamingInvoiceRequest, invoiceStreamObserver);
+
+    }
+
+    public void cancelInvoiceSubscription() {
+        if (invoiceStreamObserver != null) {
+            invoiceStreamObserver.cancel(null, null);
+        }
+    }
+
+
+    /**
+     * Returns if the invoice has been payed already.
      *
      * @param invoice
      * @return
@@ -1071,6 +1168,34 @@ public class Wallet {
 
     public interface HistoryListener {
         void onHistoryUpdated();
+    }
+
+
+    // Event handling to notify all registered listeners to an invoice subscription update.
+
+    private void broadcastInvoiceAdded(Invoice invoice) {
+        for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
+            listener.onNewInvoiceAdded(invoice);
+        }
+    }
+
+    private void broadcastInvoiceUpdated(Invoice invoice) {
+        for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
+            listener.onExistingInvoiceUpdated(invoice);
+        }
+    }
+
+    public void registerInvoiceSubscriptionListener(InvoiceSubscriptionListener listener) {
+        mInvoiceSubscriptionListeners.add(listener);
+    }
+
+    public void unregisterInvoiceSubscriptionListener(InvoiceSubscriptionListener listener) {
+        mInvoiceSubscriptionListeners.remove(listener);
+    }
+
+    public interface InvoiceSubscriptionListener {
+        void onNewInvoiceAdded(Invoice invoice);
+        void onExistingInvoiceUpdated(Invoice invoice);
     }
 
 }
