@@ -60,6 +60,7 @@ public class Wallet {
     public String mPaymentRequestString = "";
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
+    public List<Invoice> mTempInvoiceUpdateList;
     public List<Payment> mPaymentsList;
     public List<Invoice> mPayedInvoicesList = new LinkedList<>();
 
@@ -96,6 +97,7 @@ public class Wallet {
     private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
     private final Set<WalletLoadedListener> mWalletLoadedListeners = new HashSet<>();
     private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
+
 
 
     private Wallet() {
@@ -392,7 +394,7 @@ public class Wallet {
      */
     public void fetchInvoicesFromLND() {
 
-        mInvoiceList = new LinkedList<>();
+        mTempInvoiceUpdateList = new LinkedList<>();
 
         fetchInvoicesFromLND(100);
     }
@@ -416,10 +418,12 @@ public class Wallet {
                 try {
                     ListInvoiceResponse invoiceResponse = invoiceFuture.get();
 
-                    mInvoiceList.addAll(Lists.reverse(invoiceResponse.getInvoicesList()));
+                    mTempInvoiceUpdateList.addAll(invoiceResponse.getInvoicesList());
 
                     if (invoiceResponse.getLastIndexOffset() < lastIndex) {
                         // we have fetched all available invoices!
+                        mInvoiceList = Lists.reverse(mTempInvoiceUpdateList);
+                        mTempInvoiceUpdateList = null;
                         mInvoicesUpdated = true;
                         isHistoryUpdateFinished();
                     } else {
@@ -746,6 +750,8 @@ public class Wallet {
 
             @Override
             public void onNext(Invoice invoice) {
+
+                ZapLog.debug(LOG_TAG, "Received Invoice Subscription event.");
 
                 // is this a new invoice or is an old one updated?
                 if (mInvoiceList != null) {
