@@ -270,7 +270,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
 
         // Kill Server Streams
+        Wallet.getInstance().cancelTransactionSubscription();
         Wallet.getInstance().cancelInvoiceSubscription();
+        Wallet.getInstance().cancelChannelEventSubscription();
+        Wallet.getInstance().cancelChannelBackupSubscription();
 
 
         // Kill lnd connection
@@ -333,7 +336,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             Wallet.getInstance().fetchPendingChannelsFromLND();
             Wallet.getInstance().fetchClosedChannelsFromLND();
 
+            Wallet.getInstance().subscribeToTransactions();
             Wallet.getInstance().subscribeToInvoices();
+            Wallet.getInstance().subscribeToChannelEvents();
+            Wallet.getInstance().subscribeToChannelBackup();
 
             ZapLog.debug(LOG_TAG, "Wallet loaded");
         }

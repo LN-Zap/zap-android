@@ -3,10 +3,14 @@ package ln_zap.zap.util;
 
 import android.content.Context;
 
+import com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelEventSubscription;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelEventUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
@@ -90,13 +94,19 @@ public class Wallet {
     private boolean mConnectionCheckInProgress = false;
     private String mLNDVersion = "not connected";
 
-    private ClientCallStreamObserver<Invoice> invoiceStreamObserver;
+    private ClientCallStreamObserver<Invoice> mInvoiceStreamObserver;
+    private ClientCallStreamObserver<TransactionDetails> mTransactionStreamObserver;
+    private ClientCallStreamObserver<ChannelEventUpdate> mChannelEventStreamObserver;
+    private ClientCallStreamObserver<ChanBackupSnapshot> mChannelBackupStreamObserver;
 
     private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
     private final Set<InfoListener> mInfoListeners = new HashSet<>();
     private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
     private final Set<WalletLoadedListener> mWalletLoadedListeners = new HashSet<>();
     private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
+    private final Set<TransactionSubscriptionListener> mTransactionSubscriptionListeners = new HashSet<>();
+    private final Set<ChannelEventSubscriptionListener> mChannelEventSubscriptionListeners = new HashSet<>();
+    private final Set<ChannelBackupSubscriptionListener> mChannelBackupSubscriptionListeners = new HashSet<>();
 
 
 
@@ -703,6 +713,83 @@ public class Wallet {
     }
 
     /**
+     * Use this to subscribe the wallet to transaction events that happen on LND.
+     * The events will be captured and forwarded to the TransactionSubscriptionListener.
+     * All parts of the App that want to react on transaction events have to subscribe to the
+     * TransactionSubscriptionListener.
+     */
+    public void subscribeToTransactions() {
+
+        LightningGrpc.LightningStub streamingTransactionClient = LightningGrpc
+                .newStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        GetTransactionsRequest streamingTransactionRequest = GetTransactionsRequest.newBuilder()
+                .build();
+
+        mTransactionStreamObserver = new ClientCallStreamObserver<TransactionDetails>() {
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setOnReadyHandler(Runnable onReadyHandler) {
+
+            }
+
+            @Override
+            public void disableAutoInboundFlowControl() {
+
+            }
+
+            @Override
+            public void request(int count) {
+
+            }
+
+            @Override
+            public void setMessageCompression(boolean enable) {
+
+            }
+
+            @Override
+            public void cancel(@Nullable String message, @Nullable Throwable cause) {
+
+            }
+
+            @Override
+            public void onNext(TransactionDetails transactionDetails) {
+
+                ZapLog.debug(LOG_TAG, "Received transaction subscription event.");
+
+                broadcastTransactionUpdate(transactionDetails);
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        };
+
+        streamingTransactionClient.getTransactions(streamingTransactionRequest, mTransactionStreamObserver);
+
+    }
+
+    public void cancelTransactionSubscription() {
+        if (mTransactionStreamObserver != null) {
+            mTransactionStreamObserver.cancel(null, null);
+        }
+    }
+
+
+    /**
      * Use this to subscribe the wallet to invoice events that happen on LND.
      * The events will be captured and forwarded to the InvoiceSubscriptionListener.
      * All parts of the App that want to react on invoice events have to subscribe to the
@@ -717,7 +804,7 @@ public class Wallet {
         InvoiceSubscription streamingInvoiceRequest = InvoiceSubscription.newBuilder()
                 .build();
 
-        invoiceStreamObserver = new ClientCallStreamObserver<Invoice>() {
+        mInvoiceStreamObserver = new ClientCallStreamObserver<Invoice>() {
             @Override
             public boolean isReady() {
                 return false;
@@ -751,7 +838,7 @@ public class Wallet {
             @Override
             public void onNext(Invoice invoice) {
 
-                ZapLog.debug(LOG_TAG, "Received Invoice Subscription event.");
+                ZapLog.debug(LOG_TAG, "Received invoice subscription event.");
 
                 // is this a new invoice or is an old one updated?
                 if (mInvoiceList != null) {
@@ -799,15 +886,171 @@ public class Wallet {
             }
         };
 
-        streamingInvoiceClient.subscribeInvoices(streamingInvoiceRequest, invoiceStreamObserver);
+        streamingInvoiceClient.subscribeInvoices(streamingInvoiceRequest, mInvoiceStreamObserver);
 
     }
 
     public void cancelInvoiceSubscription() {
-        if (invoiceStreamObserver != null) {
-            invoiceStreamObserver.cancel(null, null);
+        if (mInvoiceStreamObserver != null) {
+            mInvoiceStreamObserver.cancel(null, null);
         }
     }
+
+
+    /**
+     * Use this to subscribe the wallet to channel events that happen on LND.
+     * The events will be captured and forwarded to the ChannelEventSubscriptionListener.
+     * All parts of the App that want to react on channel events have to subscribe to the
+     * ChannelEventSubscriptionListener.
+     */
+    public void subscribeToChannelEvents() {
+
+        LightningGrpc.LightningStub streamingChannelEventClient = LightningGrpc
+                .newStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        ChannelEventSubscription streamingChannelEventRequest = ChannelEventSubscription.newBuilder()
+                .build();
+
+        mChannelEventStreamObserver = new ClientCallStreamObserver<ChannelEventUpdate>() {
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setOnReadyHandler(Runnable onReadyHandler) {
+
+            }
+
+            @Override
+            public void disableAutoInboundFlowControl() {
+
+            }
+
+            @Override
+            public void request(int count) {
+
+            }
+
+            @Override
+            public void setMessageCompression(boolean enable) {
+
+            }
+
+            @Override
+            public void cancel(@Nullable String message, @Nullable Throwable cause) {
+
+            }
+
+            @Override
+            public void onNext(ChannelEventUpdate channelEventUpdate) {
+
+                ZapLog.debug(LOG_TAG, "Received channel event update.");
+
+                broadcastChannelEvent(channelEventUpdate);
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        };
+
+        streamingChannelEventClient.subscribeChannelEvents(streamingChannelEventRequest, mChannelEventStreamObserver);
+
+    }
+
+    public void cancelChannelEventSubscription() {
+        if (mChannelEventStreamObserver != null) {
+            mChannelEventStreamObserver.cancel(null, null);
+        }
+    }
+
+
+
+    /**
+     * Use this to subscribe the wallet to channel backup events that happen on LND.
+     * The events will be captured and forwarded to the ChannelBackupSubscriptionListener.
+     * All parts of the App that want to react on channel backups have to subscribe to the
+     * ChannelBackupSubscriptionListener.
+     */
+    public void subscribeToChannelBackup() {
+
+        LightningGrpc.LightningStub streamingChannelBackupClient = LightningGrpc
+                .newStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        ChannelBackupSubscription streamingChannelBackupRequest = ChannelBackupSubscription.newBuilder()
+                .build();
+
+        mChannelBackupStreamObserver = new ClientCallStreamObserver<ChanBackupSnapshot>() {
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setOnReadyHandler(Runnable onReadyHandler) {
+
+            }
+
+            @Override
+            public void disableAutoInboundFlowControl() {
+
+            }
+
+            @Override
+            public void request(int count) {
+
+            }
+
+            @Override
+            public void setMessageCompression(boolean enable) {
+
+            }
+
+            @Override
+            public void cancel(@Nullable String message, @Nullable Throwable cause) {
+
+            }
+
+            @Override
+            public void onNext(ChanBackupSnapshot chanBackupSnapshot) {
+
+                ZapLog.debug(LOG_TAG, "Received channel backup event.");
+
+                broadcastChannelBackup(chanBackupSnapshot);
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        };
+
+        streamingChannelBackupClient.subscribeChannelBackups(streamingChannelBackupRequest, mChannelBackupStreamObserver);
+
+    }
+
+    public void cancelChannelBackupSubscription() {
+        if (mChannelBackupStreamObserver != null) {
+            mChannelBackupStreamObserver.cancel(null, null);
+        }
+    }
+
 
 
     /**
@@ -1109,7 +1352,7 @@ public class Wallet {
     }
 
 
-    // Event handling to notify all registered listeners if wallet initialization finished successfully.
+    // Event handling to notify all registered listeners when wallet initialization finished successfully.
 
     private void broadcastWalletLoadedUpdate(boolean success, String error) {
         for (WalletLoadedListener listener : mWalletLoadedListeners) {
@@ -1130,7 +1373,7 @@ public class Wallet {
     }
 
 
-    // Event handling to notify all registered listeners to a balance update.
+    // Event handling to notify all listeners registered to balance updates.
 
     private void broadcastBalanceUpdate() {
         for (BalanceListener listener : mBalanceListeners) {
@@ -1151,7 +1394,7 @@ public class Wallet {
     }
 
 
-    // Event handling to notify all registered listeners to an info update.
+    // Event handling to notify all listeners registered to info updates.
 
     private void broadcastInfoUpdate(boolean connected) {
         for (InfoListener listener : mInfoListeners) {
@@ -1172,7 +1415,7 @@ public class Wallet {
     }
 
 
-    // Event handling to notify all registered listeners to a history update.
+    // Event handling to notify all listeners registered to history updates.
 
     private void broadcastHistoryUpdate() {
         for (HistoryListener listener : mHistoryListeners) {
@@ -1193,7 +1436,7 @@ public class Wallet {
     }
 
 
-    // Event handling to notify all registered listeners to an invoice subscription update.
+    // Event handling to notify all listeners registered to invoice updates.
 
     private void broadcastInvoiceAdded(Invoice invoice) {
         for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
@@ -1219,6 +1462,70 @@ public class Wallet {
         void onNewInvoiceAdded(Invoice invoice);
 
         void onExistingInvoiceUpdated(Invoice invoice);
+    }
+
+
+    // Event handling to notify all listeners registered to transaction update.
+
+    private void broadcastTransactionUpdate(TransactionDetails transactionDetails) {
+        for (TransactionSubscriptionListener listener : mTransactionSubscriptionListeners) {
+            listener.onTransactionEvent(transactionDetails);
+        }
+    }
+
+
+    public void registerTransactionSubscriptionListener(TransactionSubscriptionListener listener) {
+        mTransactionSubscriptionListeners.add(listener);
+    }
+
+    public void unregisterTransactionSubscriptionListener(TransactionSubscriptionListener listener) {
+        mTransactionSubscriptionListeners.remove(listener);
+    }
+
+    public interface TransactionSubscriptionListener {
+        void onTransactionEvent(TransactionDetails transactionDetails);
+    }
+
+
+    // Event handling to notify all listeners registered to channel event updates.
+
+    private void broadcastChannelEvent(ChannelEventUpdate channelEventUpdate) {
+        for (ChannelEventSubscriptionListener listener : mChannelEventSubscriptionListeners) {
+            listener.onChannelEvent(channelEventUpdate);
+        }
+    }
+
+    public void registerChannelEventSubscriptionListener(ChannelEventSubscriptionListener listener) {
+        mChannelEventSubscriptionListeners.add(listener);
+    }
+
+    public void unregisterChannelEventSubscriptionListener(ChannelEventSubscriptionListener listener) {
+        mChannelEventSubscriptionListeners.remove(listener);
+    }
+
+    public interface ChannelEventSubscriptionListener {
+        void onChannelEvent(ChannelEventUpdate channelEventUpdate);
+    }
+
+
+    // Event handling to notify all listeners registered to channel backups.
+
+    private void broadcastChannelBackup(ChanBackupSnapshot chanBackupSnapshot) {
+        for (ChannelBackupSubscriptionListener listener : mChannelBackupSubscriptionListeners) {
+            listener.onChannelBackupEvent(chanBackupSnapshot);
+        }
+    }
+
+    public void registerChannelBackupSubscriptionListener(ChannelBackupSubscriptionListener listener) {
+        mChannelBackupSubscriptionListeners.add(listener);
+    }
+
+    public void unregisterChannelBackuptSubscriptionListener(ChannelBackupSubscriptionListener listener) {
+        mChannelBackupSubscriptionListeners.remove(listener);
+    }
+
+    public interface ChannelBackupSubscriptionListener {
+        void onChannelBackupEvent(ChanBackupSnapshot chanBackupSnapshot);
     }
 
 }
