@@ -3,6 +3,7 @@ package ln_zap.zap;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 
 import androidx.core.content.ContextCompat;
@@ -145,7 +146,14 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         displayUserInput();
 
         if (mUserInput.toString().length() == mPinLength) {
-            pinEntered();
+            // We want to start the pin check after UI has updated, otherwise it doesn't look good.
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    pinEntered();
+                }
+            });
         }
     }
 
@@ -184,7 +192,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         // Check if PIN was correct
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String userEnteredPin = mUserInput.toString();
-        String hashedInput = UtilFunctions.sha256HashZapSalt(userEnteredPin);
+        String hashedInput = UtilFunctions.pinHash(userEnteredPin);
         boolean correct = prefs.getString(RefConstants.pin_hash, "").equals(hashedInput);
         if (correct) {
             App.getAppContext().inMemoryPin = userEnteredPin;

@@ -77,7 +77,7 @@ public class SetupActivity extends BaseAppCompatActivity {
         App.getAppContext().pinTemp = null;
 
         SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putString(RefConstants.pin_hash, UtilFunctions.sha256HashZapSalt(value));
+        editor.putString(RefConstants.pin_hash, UtilFunctions.pinHash(value));
         // TODO: do away with pin length eventually because it is vulnerability to hint in UI how long pin is
         editor.putInt(RefConstants.pin_length, value.length());
         editor.commit();

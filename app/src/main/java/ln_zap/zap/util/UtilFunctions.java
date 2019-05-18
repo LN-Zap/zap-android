@@ -1,6 +1,12 @@
 package ln_zap.zap.util;
 
+import android.os.Build;
+import android.provider.Settings;
+
 import java.security.MessageDigest;
+
+import at.favre.lib.armadillo.PBKDF2KeyStretcher;
+import ln_zap.zap.baseClasses.App;
 
 public class UtilFunctions {
     public static String sha256Hash(String data) {
@@ -16,8 +22,24 @@ public class UtilFunctions {
     }
 
     public static String sha256HashZapSalt(String data) {
-        // TODO: Do salt per device to prevent rainbow tables on stolen hashes
-        return sha256Hash(data + "zapsalt");
+        return sha256Hash(data + getZapsalt());
+    }
+
+
+    public static String pinHash(String data) {
+        //HmacSHA1 with PBKDF2 and ZapSalt
+        PBKDF2KeyStretcher keyStretcher = new PBKDF2KeyStretcher(10000, null);
+        return bytesToHex(keyStretcher.stretch(getZapsalt().getBytes(), data.toCharArray(), 32));
+    }
+
+
+    public static String getZapsalt() {
+        String androidID = Settings.Secure.getString(App.getAppContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        String salt = "zap" + Build.MANUFACTURER + Build.BRAND + Build.MODEL + Build.SERIAL + androidID;
+
+        return salt;
     }
 
     private final static char[] hexArray = "0123456789abcdef".toCharArray();

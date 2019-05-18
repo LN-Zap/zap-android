@@ -3,6 +3,7 @@ package ln_zap.zap.setup;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,7 +173,13 @@ public class PinFragment extends Fragment {
 
                     // Auto accept if PIN input length was reached
                     if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE) {
-                        pinEntered();
+                        Handler handler = new Handler();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                pinEntered();
+                            }
+                        });
                     }
                 }
             });
@@ -293,7 +300,7 @@ public class PinFragment extends Fragment {
         boolean correct;
         if (mMode == ENTER_MODE) {
             String userEnteredPin = mUserInput.toString();
-            String hashedInput = UtilFunctions.sha256HashZapSalt(userEnteredPin);
+            String hashedInput = UtilFunctions.pinHash(userEnteredPin);
             correct = prefs.getString(RefConstants.pin_hash, "").equals(hashedInput);
         } else if (mMode == CONFIRM_MODE) {
             correct = mUserInput.toString().equals(App.getAppContext().pinTemp);

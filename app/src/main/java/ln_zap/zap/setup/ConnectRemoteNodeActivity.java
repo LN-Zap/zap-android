@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import ln_zap.zap.HomeActivity;
@@ -30,6 +31,7 @@ import ln_zap.zap.baseClasses.App;
 import ln_zap.zap.baseClasses.BaseScannerActivity;
 import ln_zap.zap.util.PermissionsUtil;
 import ln_zap.zap.util.TimeOutUtil;
+import ln_zap.zap.util.UtilFunctions;
 import ln_zap.zap.util.ZapLog;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
@@ -147,8 +149,9 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         App ctx = App.getAppContext();
         SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
                 .encryptionFingerprint(ctx)
-                .keyStretchingFunction(new PBKDF2KeyStretcher(3000,null))
+                .keyStretchingFunction(new PBKDF2KeyStretcher(10000, null))
                 .password(ctx.inMemoryPin.toCharArray())
+                .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
                 .build();
 
         prefsRemote.edit()
@@ -156,6 +159,9 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                 .putInt(RefConstants.remote_port, port)
                 .putString(RefConstants.remote_cert, cert)
                 .putString(RefConstants.remote_macaroon, macaroon)
+                // The following string contains host,port,cert and macaroon in one string separated with ";"
+                // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
+                .putString(RefConstants.remote_combined, host + ";" + port + ";" + cert + ";" + macaroon)
                 .apply();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

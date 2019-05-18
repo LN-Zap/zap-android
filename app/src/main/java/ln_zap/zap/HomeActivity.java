@@ -3,7 +3,6 @@ package ln_zap.zap;
 import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
-import android.app.AppComponentFactory;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;

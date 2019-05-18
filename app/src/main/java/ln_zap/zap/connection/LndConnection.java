@@ -16,6 +16,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import ln_zap.zap.util.RefConstants;
 import ln_zap.zap.baseClasses.App;
+import ln_zap.zap.util.UtilFunctions;
 import ln_zap.zap.util.ZapLog;
 
 /**
@@ -35,6 +36,7 @@ public class LndConnection {
     private ExecutorService mLndThreads;
     private boolean mIsShutdown = false;
     private LightningGrpc.LightningBlockingStub mBlockingClient;
+    private String[] mConnectionInfo;
     private SharedPreferences mPrefsRemote;
 
 
@@ -42,22 +44,32 @@ public class LndConnection {
         readSavedConnectionInfo();
     }
 
-    private void readSavedConnectionInfo(){
+    private void readSavedConnectionInfo() {
+
         App ctx = App.getAppContext();
+
         mPrefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
                 .encryptionFingerprint(ctx)
-                .keyStretchingFunction(new PBKDF2KeyStretcher(3000,null))
+                .keyStretchingFunction(new PBKDF2KeyStretcher(10000, null))
                 .password(ctx.inMemoryPin.toCharArray())
+                .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
                 .build();
 
+        // The following string contains host,port,cert and macaroon in one string separated with ";"
+        // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
+        String connectionInfo = mPrefsRemote.getString(RefConstants.remote_combined, "");
+        mConnectionInfo = connectionInfo.split(";");
+        ZapLog.debug(LOG_TAG, connectionInfo);
+
+
         // Macaroon
-        String macaroonBase64UrlString = mPrefsRemote.getString(RefConstants.remote_macaroon, "");
+        String macaroonBase64UrlString = mConnectionInfo[3];
         byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroonBase64UrlString);
         String macaroon = BaseEncoding.base16().encode(macaroonBytes);
         mMacaroon = new MacaroonCallCredential(macaroon);
 
         // SSL
-        String certificateBase64UrlString = mPrefsRemote.getString(RefConstants.remote_cert, "");
+        String certificateBase64UrlString = mConnectionInfo[2];
         byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
         mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
@@ -71,8 +83,9 @@ public class LndConnection {
     }
 
     private void generateChannelAndStubs() {
-        String host = mPrefsRemote.getString(RefConstants.remote_host, "");
-        int port = mPrefsRemote.getInt(RefConstants.remote_port, 10009);
+
+        String host = mConnectionInfo[0];
+        int port = Integer.parseInt(mConnectionInfo[1]);
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
         mSecureChannel = OkHttpChannelBuilder
                 .forAddress(host, port)

@@ -12,6 +12,7 @@ public class RefConstants {
     public static final String remote_port = "remote_port";
     public static final String remote_cert = "remote_cert";
     public static final String remote_macaroon = "remote_macaroon";
+    public static final String remote_combined = "remote_combined";
 
-    public static final int currentSettingsVer = 8;
+    public static final int currentSettingsVer = 12;
 }
