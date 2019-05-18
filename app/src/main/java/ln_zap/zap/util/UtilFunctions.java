@@ -29,7 +29,7 @@ public class UtilFunctions {
     public static String pinHash(String data) {
         //HmacSHA1 with PBKDF2 and ZapSalt
         PBKDF2KeyStretcher keyStretcher = new PBKDF2KeyStretcher(10000, null);
-        return bytesToHex(keyStretcher.stretch(getZapsalt().getBytes(), data.toCharArray(), 32));
+        return bytesToHex(keyStretcher.stretch((getZapsalt() + "pin").getBytes(), data.toCharArray(), 32));
     }
 
 
