@@ -50,7 +50,7 @@ public class LndConnection {
 
         mPrefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
                 .encryptionFingerprint(ctx)
-                .keyStretchingFunction(new PBKDF2KeyStretcher(10000, null))
+                .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
                 .password(ctx.inMemoryPin.toCharArray())
                 .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
                 .build();

@@ -29,6 +29,8 @@ import ln_zap.zap.util.UtilFunctions;
 
 public class PinEntryActivity extends BaseAppCompatActivity {
 
+    public static final int WAIT_TIME = 10;
+
     private int mPinLength = 0;
 
     private ImageButton mBtnPinConfirm;
@@ -40,8 +42,8 @@ public class PinEntryActivity extends BaseAppCompatActivity {
     private ScrambledNumpad mNumpad;
     private StringBuilder mUserInput;
     private Vibrator mVibrator;
-    private int mNumFails = 0;
-    private int mMaxFails = 3;
+    private SharedPreferences mPrefs;
+    private int mNumFails;
     private boolean mScramble;
 
 
@@ -57,10 +59,12 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         mVibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mPinLength = prefs.getInt(RefConstants.pin_length, 4);
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mNumFails = mPrefs.getInt("numPINFails", 0);
 
-        mScramble = prefs.getBoolean("scramblePin", true);
+        mPinLength = mPrefs.getInt(RefConstants.pin_length, 4);
+
+        mScramble = mPrefs.getBoolean("scramblePin", true);
 
 
         // Define buttons
@@ -197,13 +201,20 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         if (correct) {
             App.getAppContext().inMemoryPin = userEnteredPin;
             TimeOutUtil.getInstance().restartTimer();
+
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putInt("numPINFails", 0);
+            editor.apply();
+
             Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
             mNumFails++;
 
-            Toast.makeText(this, R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putInt("numPINFails", mNumFails);
+            editor.apply();
 
             final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
             View view = findViewById(R.id.pinInputLayout);
@@ -216,6 +227,29 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             // clear the user input
             mUserInput.setLength(0);
             displayUserInput();
+
+
+            if (mNumFails > 2) {
+                for (Button btn : mBtnNumpad) {
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.3f);
+                }
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(WAIT_TIME));
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (Button btn : mBtnNumpad) {
+                            btn.setEnabled(true);
+                            btn.setAlpha(1f);
+                        }
+                    }
+                }, WAIT_TIME * 1000);
+            } else {
+                Toast.makeText(this, R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

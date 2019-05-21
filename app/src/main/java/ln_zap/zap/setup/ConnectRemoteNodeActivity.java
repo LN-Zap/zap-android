@@ -149,16 +149,12 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         App ctx = App.getAppContext();
         SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
                 .encryptionFingerprint(ctx)
-                .keyStretchingFunction(new PBKDF2KeyStretcher(10000, null))
+                .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
                 .password(ctx.inMemoryPin.toCharArray())
                 .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
                 .build();
 
         prefsRemote.edit()
-                .putString(RefConstants.remote_host, host)
-                .putInt(RefConstants.remote_port, port)
-                .putString(RefConstants.remote_cert, cert)
-                .putString(RefConstants.remote_macaroon, macaroon)
                 // The following string contains host,port,cert and macaroon in one string separated with ";"
                 // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
                 .putString(RefConstants.remote_combined, host + ";" + port + ";" + cert + ";" + macaroon)

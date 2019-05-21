@@ -65,6 +65,8 @@
     <string name="pin_enter_new">Neue PIN erstellen</string>
     <string name="pin_confirm_new">Neue PIN bestätigen</string>
     <string name="pin_entered_wrong">Falsche PIN</string>
+    <!-- Parameters for the following string are:  %1$s: Number of seconds to wait -->
+    <string name="pin_entered_wrong_wait">Warte %1$s Sekunden.</string>
 
 
     <!-- //////////////// Payment History //////////////////// -->

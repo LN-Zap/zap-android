@@ -99,6 +99,8 @@
     <string name="pin_enter_new">Enter new PIN</string>
     <string name="pin_confirm_new">Confirm new PIN</string>
     <string name="pin_entered_wrong">Wrong PIN</string>
+    <!-- Parameters for the following string are:  %1$s: Number of seconds to wait -->
+    <string name="pin_entered_wrong_wait">Wait %1$s seconds.</string>
 
 
     <!-- //////////////// Payment History //////////////////// -->
