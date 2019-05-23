@@ -2,6 +2,7 @@ package ln_zap.zap.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.widget.EditText;
 
 import androidx.preference.PreferenceManager;
@@ -59,10 +60,18 @@ public class MonetaryUtil {
         String SecondCurrency = mPrefs.getString("secondCurrency", "USD");
         switch (SecondCurrency) {
             case BTC_UNIT:
-                setSecondCurrency(SecondCurrency, 1e-8, "\u20BF");
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setSecondCurrency(SecondCurrency, 1e-8, "\u20BF");
+                } else {
+                    setSecondCurrency(SecondCurrency, 1e-8);
+                }
                 break;
             case MBTC_UNIT:
-                setSecondCurrency(SecondCurrency, 1e-5, "m\u20BF");
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setSecondCurrency(SecondCurrency, 1e-5, "m\u20BF");
+                } else {
+                    setSecondCurrency(SecondCurrency, 1e-5);
+                }
                 break;
             case BIT_UNIT:
                 setSecondCurrency(SecondCurrency, 1e-2);
@@ -193,10 +202,18 @@ public class MonetaryUtil {
     public void loadFirstCurrencyFromPrefs(String currencyCode) {
         switch (currencyCode) {
             case BTC_UNIT:
-                setFirstCurrency(currencyCode, 1e-8, "\u20BF");
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setFirstCurrency(currencyCode, 1e-8, "\u20BF");
+                } else {
+                    setFirstCurrency(currencyCode, 1e-8);
+                }
                 break;
             case MBTC_UNIT:
-                setFirstCurrency(currencyCode, 1e-5,"m\u20BF");
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setFirstCurrency(currencyCode, 1e-8, "m\u20BF");
+                } else {
+                    setFirstCurrency(currencyCode, 1e-8);
+                }
                 break;
             case BIT_UNIT:
                 setFirstCurrency(currencyCode, 1e-2);
@@ -219,10 +236,18 @@ public class MonetaryUtil {
     public void loadSecondCurrencyFromPrefs(String currencyCode) {
         switch (currencyCode) {
             case BTC_UNIT:
-                setSecondCurrency(currencyCode, 1e-8, "\u20BF");
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setSecondCurrency(currencyCode, 1e-8, "\u20BF");
+                } else {
+                    setSecondCurrency(currencyCode, 1e-8);
+                }
                 break;
             case MBTC_UNIT:
-                setSecondCurrency(currencyCode, 1e-5, "m\u20BF");
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setSecondCurrency(currencyCode, 1e-8, "m\u20BF");
+                } else {
+                    setSecondCurrency(currencyCode, 1e-8);
+                }
                 break;
             case BIT_UNIT:
                 setSecondCurrency(currencyCode, 1e-2);
@@ -437,7 +462,7 @@ public class MonetaryUtil {
             numberOfDecimals = 2;
         }
 
-        if(input.equals(".")){
+        if (input.equals(".")) {
             return true;
         }
 
@@ -453,15 +478,15 @@ public class MonetaryUtil {
         // This will prevent any overflow errors when calculating in satoshis or later mSats.
 
         boolean notTooBig = false;
-        try{
+        try {
             notTooBig = (Long.parseLong(convertPrimaryToSatoshi(input)) <= 1e11);
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
 
         boolean validZeros;
-        if (input.startsWith("0")){
-            if (input.length()>1){
+        if (input.startsWith("0")) {
+            if (input.length() > 1) {
                 if (input.startsWith("0.")) {
                     validZeros = true;
                 } else {

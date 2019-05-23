@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -317,7 +318,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 rate = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(100000000);
             }
 
-            rate = "1 \u20BF ≈ " + rate;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                rate = "1 \u20BF ≈ " + rate;
+            } else{
+                rate = "1 BTC ≈ " + rate;
+            }
+
             mTvBtcRate.setText(rate);
             mTvBtcRate.setVisibility(View.VISIBLE);
         }
