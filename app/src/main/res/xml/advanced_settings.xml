@@ -41,5 +41,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/settings_category_security"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="preventScreenRecording"
+            android:title="@string/settings_preventScreenRecording"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

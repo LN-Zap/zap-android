@@ -187,11 +187,11 @@
     <string name="guardian_Title">Attention</string>
     <string name="guardian_reset">All security warnings are enabled again.</string>
     <!-- Parameters for the following string are:  %1$s: compare string -->
-    <string name="guardian_copyToClipboard_onChain">Other apps (also malicious ones) are able to access and modify this data if it is copied to clipboard.\n\nTo be sure nothing has changed while pasting, compare the beginning to:\n\n%1$s\n</string>
-    <string name="guardian_copyToClipboard_lightning">Other apps (also malicious ones) are able to access and modify this data if it is copied to clipboard.\n\nTo be sure nothing has changed while pasting, compare the end to:\n\n%1$s\n</string>
+    <string name="guardian_copyToClipboard_onChain">If you copy this data to your clipboard, other apps (also malicious ones) are able to access and modify it.\n\nTo be sure nothing has changed while pasting, compare the beginning to:\n\n%1$s\n</string>
+    <string name="guardian_copyToClipboard_lightning">If you copy this data to your clipboard, other apps (also malicious ones) are able to access and modify it.\n\nTo be sure nothing has changed while pasting, compare the end to:\n\n%1$s\n</string>
     <string name="guardian_pasteFromClipboard">Always double check the last 3 to 5 digits when pasting from clipboard. A malicious App might have changed the address in the background without you noticing it.</string>
     <string name="guardian_disableScrambledPin">If not scrambled it is easy to guess your PIN just by watching your finger movements.</string>
-    <string name="guardian_disableScreenProtection">Malicious software might be able to record a video or take screenshots while you are using Zap. We recommend to deactivate this only if you need to do exactly that yourself.</string>
+    <string name="guardian_disableScreenProtection">If you allow screen recording, malicious software might be able to record a video or take screenshots while you are using Zap. We recommend to deactivate this only while you want to record a video or take a screenshot.</string>
     <!-- Parameters for the following string are:  %1$s%%: % of transaction value. E.g: 13.2% -->
     <string name="guardian_highOnChainFee">You are about to pay %1$s%% in network fees.\n\nPossible solutions:\n- try a lightning payment instead\n- select lower fee, wait longer\n- try again later\n- transact a bigger amount\n\nDo you want to continue anyway?</string>
     <!-- Parameters for the following string are:  %1$s: Number of hours. E.g: 7.5 -->
@@ -231,7 +231,7 @@
 
     <string name="settings_help">Need Help?</string>
     <string name="settings_reportIssue">Report an Issue</string>
-    <string name="settings_about">About</string>
+    <string name="settings_about">About Zap</string>
 
     <string name="settings_advanced_settings">Advanced Settings</string>
 

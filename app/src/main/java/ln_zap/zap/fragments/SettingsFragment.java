@@ -20,6 +20,7 @@ import java.util.List;
 
 import androidx.preference.Preference;
 import androidx.preference.ListPreference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
@@ -44,7 +45,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
 
 
     private UserGuardian mUG;
-    private SwitchPreference mSwScreenProtection;
     private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwHideTotalBalance;
     private SharedPreferences mPrefs;
@@ -200,6 +200,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                 return true;
             }
         });
+        // Hide development category in release build
+        if (!BuildConfig.BUILD_TYPE.equals("debug")) {
+            final PreferenceCategory devCategory = findPreference("devCategory");
+            devCategory.setVisible(false);
+        }
 
         // Action when clicked on "advanced settings"
         final Preference prefAdvanced = findPreference("goToAdvanced");
@@ -212,21 +217,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             }
         });
 
-        // On change screen recording option
-        mSwScreenProtection = findPreference("preventScreenRecording");
-        mSwScreenProtection.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (mSwScreenProtection.isChecked()) {
-                    mUG.securityScreenProtection();
-                    // the value is set from the guardian callback, that's why we don't chang switch state here.
-                    return false;
-                } else {
-                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                    return true;
-                }
-            }
-        });
 
         // On hide balance option
         mSwHideTotalBalance = findPreference("hideTotalBalance");
@@ -235,6 +225,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (!mSwHideTotalBalance.isChecked()) {
                     new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.settings_hideTotalBalance)
                             .setMessage(R.string.settings_hideTotalBalance_explanation)
                             .setCancelable(true)
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -305,7 +296,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.app_name)
+                        .setTitle(R.string.settings_about)
                         .setMessage("Version:  " + BuildConfig.VERSION_NAME +
                                 "\nBuild:  " + BuildConfig.VERSION_CODE +
                                 "\nLND version:  " + Wallet.getInstance().getLNDVersion().split(" commit")[0])
@@ -331,10 +322,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         switch (DialogName) {
             case UserGuardian.DISABLE_SCRAMBLED_PIN:
                 mSwScrambledPin.setChecked(false);
-                break;
-            case UserGuardian.DISABLE_SCREEN_PROTECTION:
-                mSwScreenProtection.setChecked(false);
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 break;
         }
     }

@@ -91,12 +91,6 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
-            android:defaultValue="true"
-            android:key="preventScreenRecording"
-            android:title="@string/settings_preventScreenRecording"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
             android:defaultValue="false"
             android:key="hideTotalBalance"
             android:title="@string/settings_hideTotalBalance"
@@ -144,6 +138,7 @@
 
     <PreferenceCategory
         android:title="Development"
+        android:key="devCategory"
         app:iconSpaceReserved="false">
 
         <Preference
