@@ -8,6 +8,9 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import at.favre.lib.armadillo.Armadillo;
+import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import ln_zap.zap.HomeActivity;
 import ln_zap.zap.R;
 import ln_zap.zap.util.RefConstants;
@@ -73,6 +76,9 @@ public class SetupActivity extends BaseAppCompatActivity {
     }
 
     public void pinConfirmed(String value, Integer length) {
+
+        String tempInMemoryPin = App.getAppContext().inMemoryPin;
+
         App.getAppContext().inMemoryPin = value;
         App.getAppContext().pinTemp = null;
 
@@ -86,6 +92,32 @@ public class SetupActivity extends BaseAppCompatActivity {
             showConnectChoice();
         }
         if (mSetupMode == CHANGE_PIN) {
+
+            // Encrypt connection data with the new PIN
+            App ctx = App.getAppContext();
+            SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+                    .encryptionFingerprint(ctx)
+                    .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
+                    .password(tempInMemoryPin.toCharArray())
+                    .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
+                    .build();
+
+            String connectionInfo = prefsRemote.getString(RefConstants.remote_combined, "");
+
+            SharedPreferences newPrefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+                    .encryptionFingerprint(ctx)
+                    .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
+                    .password(ctx.inMemoryPin.toCharArray())
+                    .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
+                    .build();
+
+            newPrefsRemote.edit()
+                    // The following string contains host,port,cert and macaroon in one string separated with ";"
+                    // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
+                    .putString(RefConstants.remote_combined, connectionInfo)
+                    .commit();
+
+            // Show success message
             Toast.makeText(SetupActivity.this, "PIN changed!", Toast.LENGTH_SHORT).show();
 
             // Reset the PIN timeout. We don't want to ask for PIN again...
