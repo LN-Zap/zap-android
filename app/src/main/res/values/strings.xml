@@ -37,7 +37,6 @@
 
     <!-- //////////////// General //////////////////// -->
 
-    <string name="app_name">Zap</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="lightning">Lightning</string>
