@@ -220,7 +220,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             View view = findViewById(R.id.pinInputLayout);
             view.startAnimation(animShake);
 
-            if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
+            if (mPrefs.getBoolean("hapticPin", true)) {
                 mVibrator.vibrate(200);
             }
 

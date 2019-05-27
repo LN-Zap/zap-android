@@ -20,6 +20,8 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+
+import ln_zap.zap.PinEntryActivity;
 import ln_zap.zap.R;
 import ln_zap.zap.util.RefConstants;
 import ln_zap.zap.util.UtilFunctions;
@@ -30,6 +32,7 @@ import ln_zap.zap.util.ScrambledNumpad;
 public class PinFragment extends Fragment {
 
     private static final String LOG_TAG = "PIN Fragment";
+    public static final int WAIT_TIME = 10;
 
     public static final int CREATE_MODE = 0;
     public static final int CONFIRM_MODE = 1;
@@ -54,6 +57,7 @@ public class PinFragment extends Fragment {
     private StringBuilder mUserInput;
     private Vibrator mVibrator;
     private int mMode;
+    private int mNumFails;
 
 
     /**
@@ -89,6 +93,8 @@ public class PinFragment extends Fragment {
         View view = inflater.inflate(R.layout.pin_input, container, false);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        mNumFails = prefs.getInt("numPINFails", 0);
 
         // Get PIN length
         String pinString = null;
@@ -311,21 +317,74 @@ public class PinFragment extends Fragment {
         if (correct) {
             // Go to next step
             if (mMode == ENTER_MODE) {
+
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("numPINFails", 0);
+                editor.apply();
+
                 ((SetupActivity) getActivity()).correctPinEntered();
             } else if (mMode == CONFIRM_MODE) {
                 ((SetupActivity) getActivity()).pinConfirmed(mUserInput.toString(), mUserInput.toString().length());
             }
         } else {
-            // Show error
-            Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
+            if (mMode == ENTER_MODE) {
+                mNumFails++;
 
-            final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-            View view = getActivity().findViewById(R.id.pinInputLayout);
-            view.startAnimation(animShake);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("numPINFails", mNumFails);
+                editor.apply();
 
-            // Clear the user input
-            mUserInput.setLength(0);
-            displayUserInput();
+                final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+                View view = getActivity().findViewById(R.id.pinInputLayout);
+                view.startAnimation(animShake);
+
+                if (prefs.getBoolean("hapticPin", true)) {
+                    mVibrator.vibrate(200);
+                }
+
+                // Clear the user input
+                mUserInput.setLength(0);
+                displayUserInput();
+
+                if (mNumFails > 2) {
+                    for (Button btn : mBtnNumpad) {
+                        btn.setEnabled(false);
+                        btn.setAlpha(0.3f);
+                    }
+                    String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(WAIT_TIME));
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Button btn : mBtnNumpad) {
+                                btn.setEnabled(true);
+                                btn.setAlpha(1f);
+                            }
+                        }
+                    }, WAIT_TIME * 1000);
+                } else {
+                    // Show error
+                    Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+                // Show error
+                Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
+
+                final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+                View view = getActivity().findViewById(R.id.pinInputLayout);
+                view.startAnimation(animShake);
+
+                if (prefs.getBoolean("hapticPin", true)) {
+                    mVibrator.vibrate(200);
+                }
+
+                // Clear the user input
+                mUserInput.setLength(0);
+                displayUserInput();
+            }
         }
     }
 
