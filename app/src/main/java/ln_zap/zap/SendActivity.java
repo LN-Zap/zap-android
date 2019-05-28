@@ -252,7 +252,7 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
                 // We are on testnet
                 if (address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.toLowerCase().startsWith("tb1")) {
                     goToOnChainPaymentScreen();
-                } else if (address.startsWith("1") || address.startsWith("3") || address.startsWith("bc1")) {
+                } else if (address.startsWith("1") || address.startsWith("3") || address.toLowerCase().startsWith("bc1")) {
                     // Show error. Please use a TESTNET invoice.
                     showError(getResources().getString(R.string.error_useTestnetRequest), 5000);
                 } else {
@@ -261,7 +261,7 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
                 }
             } else {
                 // We are on mainnet
-                if (address.startsWith("1") || address.startsWith("3") || address.startsWith("bc1")) {
+                if (address.startsWith("1") || address.startsWith("3") || address.toLowerCase().startsWith("bc1")) {
                     goToOnChainPaymentScreen();
                 } else if (address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.toLowerCase().startsWith("tb1")) {
                     showError(getResources().getString(R.string.error_useMainnetRequest), 5000);
