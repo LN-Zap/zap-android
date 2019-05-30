@@ -399,8 +399,12 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                                 try {
                                     SendCoinsResponse sendResponse = sendFuture.get();
 
+                                    // updated the history, so it is shown the next time the user views it
+                                    Wallet.getInstance().updateOnChainTransactionHistory();
+
                                     ZapLog.debug(LOG_TAG, sendResponse.toString());
 
+                                    // show success animation
                                     Handler handler = new Handler();
                                     handler.postDelayed(new Runnable() {
                                         @Override
@@ -525,8 +529,12 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                                 try {
                                     SendResponse sendResponse = sendFuture.get();
 
+                                    // updated the history, so it is shown the next time the user views it
+                                    Wallet.getInstance().updateLightningPaymentHistory();
+
                                     ZapLog.debug(LOG_TAG, sendResponse.toString());
 
+                                    // show success animation
                                     Handler handler = new Handler();
                                     handler.postDelayed(new Runnable() {
                                         @Override
@@ -898,7 +906,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
                     mTvSendFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat()));
 
-                    ZapLog.debug(LOG_TAG, estimateFeeResponse.toString());
+                    // ZapLog.debug(LOG_TAG, estimateFeeResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Fee estimation request interrupted.");
                 } catch (ExecutionException e) {
@@ -944,7 +952,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                     } else {
                         feeString = feeLowerBound + "-" + feeUpperBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
                     }
-                    ZapLog.debug(LOG_TAG, lastRoute.toString());
+
                     mTvSendFee.setText(feeString);
 
                     //ZapLog.debug(LOG_TAG, queryRoutesResponse.toString());

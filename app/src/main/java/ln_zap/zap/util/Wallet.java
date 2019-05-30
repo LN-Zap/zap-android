@@ -336,7 +336,7 @@ public class Wallet {
     }
 
     /**
-     * This will fetch all transaction History from LND.
+     * This will fetch all transaction history from LND.
      * After that the history is provided in lists that can be handled in a synchronized way.
      */
     public void fetchLNDTransactionHistory() {
@@ -351,6 +351,42 @@ public class Wallet {
             fetchTransactionsFromLND();
             fetchInvoicesFromLND();
             fetchPaymentsFromLND();
+        }
+    }
+
+    /**
+     * This will fetch all lightning payment history from LND.
+     * After that the history is provided in lists that can be handled in a synchronized way.
+     *
+     * This will need less bandwidth than updating all history and can be called when a lightning
+     * payment was successful.
+     */
+    public void updateLightningPaymentHistory(){
+        // Set payment update flags to false. This way we can determine later, when update is finished.
+
+        if (!mUpdatingHistory) {
+            mUpdatingHistory = true;
+            mPaymentsUpdated = false;
+
+            fetchPaymentsFromLND();
+        }
+    }
+
+    /**
+     * This will fetch all on-chain transaction history from LND.
+     * After that the history is provided in lists that can be handled in a synchronized way.
+     *
+     * This will need less bandwidth than updating all history and can be called when a lightning
+     * payment was successful.
+     */
+    public void updateOnChainTransactionHistory(){
+        // Set payment update flags to false. This way we can determine later, when update is finished.
+
+        if (!mUpdatingHistory) {
+            mUpdatingHistory = true;
+            mTransactionUpdated = false;
+
+            fetchTransactionsFromLND();
         }
     }
 
