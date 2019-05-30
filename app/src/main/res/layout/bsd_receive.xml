@@ -326,7 +326,7 @@
             app:layout_constraintStart_toEndOf="@+id/receiveAmount"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ln_zap.zap.nonClippingText.NonClippingTextView
+            <zapsolutions.zap.nonClippingText.NonClippingTextView
                 android:id="@+id/receiveUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"

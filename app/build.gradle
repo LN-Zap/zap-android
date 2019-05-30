@@ -7,7 +7,7 @@ apply plugin: 'com.google.protobuf'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "ln_zap.zap"
+        applicationId "zapsolutions.zap"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 2

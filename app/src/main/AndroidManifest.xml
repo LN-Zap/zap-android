@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ln_zap.zap">
+    package="zapsolutions.zap">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".baseClasses.App"
+        android:name="zapsolutions.zap.baseClasses.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LandingActivity"
+            android:name="zapsolutions.zap.LandingActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait">
@@ -40,53 +40,53 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name="zapsolutions.zap.HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WelcomeNewUserActivity"
+            android:name="zapsolutions.zap.WelcomeNewUserActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SendActivity"
+            android:name="zapsolutions.zap.SendActivity"
             android:label="@string/activity_send"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name=".GeneratedRequestActivity"
+            android:name="zapsolutions.zap.GeneratedRequestActivity"
             android:label="@string/activity_receive"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".setup.SetupActivity"
+            android:name="zapsolutions.zap.setup.SetupActivity"
             android:label="Setup"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".setup.ConnectRemoteNodeActivity"
+            android:name="zapsolutions.zap.setup.ConnectRemoteNodeActivity"
             android:label="@string/activity_connectRemoteNode"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name=".PinEntryActivity"
+            android:name="zapsolutions.zap.PinEntryActivity"
             android:label="PIN"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".channelManagement.ManageChannelsActivity"
+            android:name="zapsolutions.zap.channelManagement.ManageChannelsActivity"
             android:label="@string/activity_manage_channels"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".walletManagement.ManageWalletsActivity"
+            android:name="zapsolutions.zap.walletManagement.ManageWalletsActivity"
             android:label="@string/activity_manage_wallets"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".AdvancedSettingsActivity"
+            android:name="zapsolutions.zap.AdvancedSettingsActivity"
             android:label="@string/activity_advanced_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".channelManagement.OpenChannelDetailsActivity"
+            android:name="zapsolutions.zap.channelManagement.OpenChannelDetailsActivity"
             android:label="@string/activity_channel_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
