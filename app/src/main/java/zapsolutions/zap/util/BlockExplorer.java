@@ -4,10 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 
-import androidx.preference.PreferenceManager;
 import zapsolutions.zap.R;
 
 /**
@@ -24,8 +22,7 @@ public class BlockExplorer {
      * @param ctx
      */
     public static void showTransaction(String transactionID, Context ctx) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        String explorer = prefs.getString("blockExplorer", "BlockCypher");
+        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "BlockCypher");
         boolean mainnet = !Wallet.getInstance().isTestnet();
         String networkID = "";
         String url = "";
@@ -71,8 +68,7 @@ public class BlockExplorer {
      * @param ctx
      */
     public static void showAddress(String address, Context ctx) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        String explorer = prefs.getString("blockExplorer", "BlockCypher");
+        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "BlockCypher");
         boolean mainnet = !Wallet.getInstance().isTestnet();
         String networkID = "";
         String url = "";

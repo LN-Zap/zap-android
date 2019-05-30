@@ -1,11 +1,9 @@
 package zapsolutions.zap.setup;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.util.PrefsUtil;
 
 
 public class EulaFragment extends Fragment {
@@ -55,10 +54,7 @@ public class EulaFragment extends Fragment {
             public void onClick(View v) {
 
                 // Set the eulaAccepted preference to true to ensure the app only asks once for this.
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("eulaAccepted", true);
-                editor.apply();
+                PrefsUtil.edit().putBoolean("eulaAccepted", true).apply();
 
                 // Go to next setup step.
                 ((SetupActivity) getActivity()).eulaAccepted();

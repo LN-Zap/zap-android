@@ -26,6 +26,7 @@ import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
@@ -147,7 +148,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     private void connect(String host, int port, String cert, String macaroon) {
         App ctx = App.getAppContext();
-        SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+        SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
                 .encryptionFingerprint(ctx)
                 .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
                 .password(ctx.inMemoryPin.toCharArray())
@@ -157,7 +158,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         prefsRemote.edit()
                 // The following string contains host,port,cert and macaroon in one string separated with ";"
                 // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-                .putString(RefConstants.remote_combined, host + ";" + port + ";" + cert + ";" + macaroon)
+                .putString(PrefsUtil.remote_combined, host + ";" + port + ";" + cert + ";" + macaroon)
                 .apply();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

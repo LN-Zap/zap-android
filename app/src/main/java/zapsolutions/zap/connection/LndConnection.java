@@ -14,7 +14,7 @@ import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
-import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.ZapLog;
@@ -48,7 +48,7 @@ public class LndConnection {
 
         App ctx = App.getAppContext();
 
-        mPrefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+        mPrefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
                 .encryptionFingerprint(ctx)
                 .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
                 .password(ctx.inMemoryPin.toCharArray())
@@ -57,7 +57,7 @@ public class LndConnection {
 
         // The following string contains host,port,cert and macaroon in one string separated with ";"
         // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-        String connectionInfo = mPrefsRemote.getString(RefConstants.remote_combined, "");
+        String connectionInfo = mPrefsRemote.getString(PrefsUtil.remote_combined, "");
         mConnectionInfo = connectionInfo.split(";");
         ZapLog.debug(LOG_TAG, connectionInfo);
 

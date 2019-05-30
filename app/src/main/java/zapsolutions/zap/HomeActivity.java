@@ -6,15 +6,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import androidx.preference.PreferenceManager;
 
 import android.view.MenuItem;
 
@@ -38,6 +35,7 @@ import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
@@ -57,7 +55,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mIsNetworkChangeReceiverRunning = false;
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
-    private SharedPreferences mPrefs;
     private boolean mInfoChangeListenerRegistered;
     private boolean mWalletLoadedListenerRegistered;
     private boolean mMainnetWarningShownOnce;
@@ -69,7 +66,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         setContentView(R.layout.activity_main);
 
         mUG = new UserGuardian(this, this);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -184,7 +180,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToForeground() {
         ZapLog.debug(LOG_TAG, "Zap moved to foreground");
 
-        if (mPrefs.getBoolean("isWalletSetup", false) && TimeOutUtil.getInstance().isTimedOut()) {
+        if (PrefsUtil.isWalletSetup() && TimeOutUtil.getInstance().isTimedOut()) {
             // Go to PIN entry screen
             Intent intent = new Intent(this, PinEntryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -204,7 +200,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             // Restart lnd connection
-            if (mPrefs.getBoolean("isWalletSetup", false)) {
+            if (PrefsUtil.isWalletSetup()) {
                 TimeOutUtil.getInstance().setCanBeRestarted(true);
 
                 ZapLog.debug(LOG_TAG, "Starting to establish connections...");
@@ -276,7 +272,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
 
         // Kill lnd connection
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
+        if (PrefsUtil.isWalletSetup()) {
             LndConnection.getInstance().stopBackgroundTasks();
         }
     }
@@ -302,7 +298,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     @Override
     public void onInfoUpdated(boolean connected) {
-        if ((mPrefs.getBoolean("isWalletSetup", false))) {
+        if ((PrefsUtil.isWalletSetup())) {
             if (!Wallet.getInstance().isTestnet() && Wallet.getInstance().isConnectedToLND()) {
                 if (!mMainnetWarningShownOnce) {
                     // Show mainnet not ready warning

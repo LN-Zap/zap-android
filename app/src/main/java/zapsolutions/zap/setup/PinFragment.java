@@ -1,7 +1,6 @@
 package zapsolutions.zap.setup;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -19,10 +18,9 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.util.ScrambledNumpad;
@@ -91,9 +89,7 @@ public class PinFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.pin_input, container, false);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        mNumFails = prefs.getInt("numPINFails", 0);
+        mNumFails = PrefsUtil.getPrefs().getInt("numPINFails", 0);
 
         // Get PIN length
         String pinString = null;
@@ -118,7 +114,7 @@ public class PinFragment extends Fragment {
 
         // Only scramble if we are in enter mode
         if (mMode == ENTER_MODE) {
-            scramble = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("scramblePin", true);
+            scramble = PrefsUtil.getPrefs().getBoolean("scramblePin", true);
         }
 
 
@@ -169,7 +165,7 @@ public class PinFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // vibrate
-                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
+                    if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                     // Add input
@@ -205,7 +201,7 @@ public class PinFragment extends Fragment {
 
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.deleteCharAt(mUserInput.length() - 1);
-                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
+                    if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -220,7 +216,7 @@ public class PinFragment extends Fragment {
             public boolean onLongClick(View view) {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.setLength(0);
-                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hapticPin", true)) {
+                    if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -300,13 +296,12 @@ public class PinFragment extends Fragment {
 
     public void pinEntered() {
         // Check if PIN was correct
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         boolean correct;
         if (mMode == ENTER_MODE) {
             String userEnteredPin = mUserInput.toString();
             String hashedInput = UtilFunctions.pinHash(userEnteredPin);
-            correct = prefs.getString(RefConstants.pin_hash, "").equals(hashedInput);
+            correct = PrefsUtil.getPrefs().getString(PrefsUtil.pin_hash, "").equals(hashedInput);
         } else if (mMode == CONFIRM_MODE) {
             correct = mUserInput.toString().equals(App.getAppContext().pinTemp);
         } else {
@@ -317,9 +312,7 @@ public class PinFragment extends Fragment {
             // Go to next step
             if (mMode == ENTER_MODE) {
 
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("numPINFails", 0);
-                editor.apply();
+                PrefsUtil.edit().putInt("numPINFails", 0).apply();
 
                 ((SetupActivity) getActivity()).correctPinEntered();
             } else if (mMode == CONFIRM_MODE) {
@@ -329,15 +322,13 @@ public class PinFragment extends Fragment {
             if (mMode == ENTER_MODE) {
                 mNumFails++;
 
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("numPINFails", mNumFails);
-                editor.apply();
+                PrefsUtil.edit().putInt("numPINFails", mNumFails).apply();
 
                 final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
                 View view = getActivity().findViewById(R.id.pinInputLayout);
                 view.startAnimation(animShake);
 
-                if (prefs.getBoolean("hapticPin", true)) {
+                if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
                     mVibrator.vibrate(200);
                 }
 
@@ -376,7 +367,7 @@ public class PinFragment extends Fragment {
                 View view = getActivity().findViewById(R.id.pinInputLayout);
                 view.startAnimation(animShake);
 
-                if (prefs.getBoolean("hapticPin", true)) {
+                if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
                     mVibrator.vibrate(200);
                 }
 

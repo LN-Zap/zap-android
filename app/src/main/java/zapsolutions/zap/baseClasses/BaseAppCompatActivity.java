@@ -2,7 +2,6 @@ package zapsolutions.zap.baseClasses;
 
 import android.content.Context;
 
-import androidx.preference.PreferenceManager;
 
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -11,6 +10,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import zapsolutions.zap.util.LocaleUtil;
+import zapsolutions.zap.util.PrefsUtil;
 
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
     @Override
@@ -41,7 +41,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * https://github.com/commonsguy/cwac-security/blob/master/docs/FLAGSECURE.md
      */
     private void initializeScreenRecordingSecurity() {
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("preventScreenRecording", true)) {
+        if (PrefsUtil.preventScreenRecording()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
     }

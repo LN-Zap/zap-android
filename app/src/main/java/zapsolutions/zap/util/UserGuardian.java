@@ -8,9 +8,6 @@ import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.R;
 
 import android.app.AlertDialog;
-import android.content.SharedPreferences;
-
-import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,16 +169,16 @@ public class UserGuardian {
      * Reset all "do not show again" selections.
      */
     public static void reenableAllSecurityWarnings(Context ctx) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(COPY_TO_CLIPBOARD, true);
-        editor.putBoolean(PASTE_FROM_CLIPBOARD, true);
-        editor.putBoolean(DISABLE_SCRAMBLED_PIN, true);
-        editor.putBoolean(DISABLE_SCREEN_PROTECTION, true);
-        editor.putBoolean(HIGH_ONCHAIN_FEE, true);
-        editor.putBoolean(OLD_EXCHANGE_RATE, true);
-        editor.putBoolean(TOO_MUCH_MONEY, true);
-        editor.apply();
+        PrefsUtil.edit()
+                .putBoolean(COPY_TO_CLIPBOARD, true)
+                .putBoolean(PASTE_FROM_CLIPBOARD, true)
+                .putBoolean(DISABLE_SCRAMBLED_PIN, true)
+                .putBoolean(DISABLE_SCREEN_PROTECTION, true)
+                .putBoolean(HIGH_ONCHAIN_FEE, true)
+                .putBoolean(OLD_EXCHANGE_RATE, true)
+                .putBoolean(TOO_MUCH_MONEY, true)
+                .putBoolean(MAINNET_NOT_READY, true)
+                .apply();
     }
 
 
@@ -205,10 +202,7 @@ public class UserGuardian {
             public void onClick(DialogInterface dialog, int which) {
 
                 if (mDontShowAgain.isChecked()) {
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(mCurrentDialogName, false);
-                    editor.apply();
+                    PrefsUtil.edit().putBoolean(mCurrentDialogName, false).apply();
                 }
 
                 // Execute interface callback on "OK"
@@ -232,10 +226,10 @@ public class UserGuardian {
      */
     private void showGuardianDialog(AlertDialog.Builder adb) {
 
-        if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mCurrentDialogName, true)) {
+        if (PrefsUtil.getPrefs().getBoolean(mCurrentDialogName, true)) {
             Dialog dlg = adb.create();
             // Apply FLAG_SECURE to dialog to prevent screen recording
-            if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("preventScreenRecording", true)) {
+            if (PrefsUtil.preventScreenRecording()) {
                 dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             }
             dlg.show();

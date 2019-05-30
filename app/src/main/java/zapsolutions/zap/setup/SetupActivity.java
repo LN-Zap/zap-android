@@ -3,7 +3,6 @@ package zapsolutions.zap.setup;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +12,7 @@ import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.baseClasses.App;
@@ -30,7 +30,6 @@ public class SetupActivity extends BaseAppCompatActivity {
 
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
-    private SharedPreferences mPrefs;
     private int mSetupMode = 0;
 
     @Override
@@ -44,15 +43,13 @@ public class SetupActivity extends BaseAppCompatActivity {
             mSetupMode = extras.getInt("setupMode", 0);
         }
 
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
 
         // Set pin fragment as beginning fragment
         showCreatePin();
 
         switch (mSetupMode) {
             case FULL_SETUP:
-                if (mPrefs.getBoolean("eulaAccepted", false))
+                if (PrefsUtil.getPrefs().getBoolean("eulaAccepted", false))
                     showCreatePin();
                 else
                     showEula();
@@ -82,11 +79,12 @@ public class SetupActivity extends BaseAppCompatActivity {
         App.getAppContext().inMemoryPin = value;
         App.getAppContext().pinTemp = null;
 
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putString(RefConstants.pin_hash, UtilFunctions.pinHash(value));
-        // TODO: do away with pin length eventually because it is vulnerability to hint in UI how long pin is
-        editor.putInt(RefConstants.pin_length, value.length());
-        editor.commit();
+        // save pin hash in preferences
+        PrefsUtil.edit()
+                .putString(PrefsUtil.pin_hash, UtilFunctions.pinHash(value))
+                .putInt(PrefsUtil.pin_length, value.length())
+                .commit();
+
 
         if (mSetupMode == FULL_SETUP) {
             showConnectChoice();
@@ -95,16 +93,16 @@ public class SetupActivity extends BaseAppCompatActivity {
 
             // Encrypt connection data with the new PIN
             App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
                     .encryptionFingerprint(ctx)
                     .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
                     .password(tempInMemoryPin.toCharArray())
                     .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
                     .build();
 
-            String connectionInfo = prefsRemote.getString(RefConstants.remote_combined, "");
+            String connectionInfo = prefsRemote.getString(PrefsUtil.remote_combined, "");
 
-            SharedPreferences newPrefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+            SharedPreferences newPrefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
                     .encryptionFingerprint(ctx)
                     .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
                     .password(ctx.inMemoryPin.toCharArray())
@@ -114,7 +112,7 @@ public class SetupActivity extends BaseAppCompatActivity {
             newPrefsRemote.edit()
                     // The following string contains host,port,cert and macaroon in one string separated with ";"
                     // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-                    .putString(RefConstants.remote_combined, connectionInfo)
+                    .putString(PrefsUtil.remote_combined, connectionInfo)
                     .commit();
 
             // Show success message

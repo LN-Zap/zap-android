@@ -3,15 +3,13 @@ package zapsolutions.zap.connection;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 
-import androidx.preference.PreferenceManager;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
-    private SharedPreferences mPrefs;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
@@ -19,9 +17,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
         int status = NetworkUtil.getConnectivityStatusString(context);
 
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
+        if (PrefsUtil.isWalletSetup()) {
             if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 // The following command will find out, if we have a connection to LND
                 Wallet.getInstance().fetchInfoFromLND();

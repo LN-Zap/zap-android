@@ -22,7 +22,6 @@ import androidx.preference.Preference;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import zapsolutions.zap.AdvancedSettingsActivity;
 import zapsolutions.zap.BuildConfig;
@@ -33,6 +32,7 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.util.AppUtil;
 
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -46,7 +46,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
     private UserGuardian mUG;
     private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwHideTotalBalance;
-    private SharedPreferences mPrefs;
     private ListPreference mListCurrency;
 
     @Override
@@ -55,8 +54,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         setPreferencesFromResource(R.xml.settings, rootKey);
 
         mUG = new UserGuardian(getActivity(), this);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
 
         // Update our current selected first currency in the MonetaryUtil
         final ListPreference listBtcUnit = findPreference("firstCurrency");
@@ -104,7 +101,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                SharedPreferences.Editor editor = mPrefs.edit();
+                                SharedPreferences.Editor editor = PrefsUtil.edit();
 
                                 if (listLanguage.getValue().equals("system")) {
                                     editor.putString("language", "english");
@@ -157,7 +154,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (mPrefs.getBoolean("isWalletSetup", false)){
+                if (PrefsUtil.isWalletSetup()){
                     Intent intent = new Intent(getActivity(), SetupActivity.class);
                     intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
                     startActivity(intent);
@@ -175,7 +172,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                if (mPrefs.getBoolean("isWalletSetup", false)) {
+                if (PrefsUtil.isWalletSetup()) {
                     Intent intent = new Intent(getActivity(), SetupActivity.class);
                     intent.putExtra("setupMode", SetupActivity.CHANGE_PIN);
                     startActivity(intent);
@@ -191,10 +188,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         prefResetAll.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                SharedPreferences.Editor editor = mPrefs.edit();
-                editor.clear();
                 // We have to use commit here, apply would not finish before the app is restarted.
-                editor.commit();
+                PrefsUtil.edit().clear().commit();
                 AppUtil.getInstance(getActivity()).restartApp();
                 return true;
             }
@@ -306,7 +301,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("preventScreenRecording", true)) {
+                if (PrefsUtil.preventScreenRecording()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -340,7 +335,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         CharSequence[] fiatEntryDisplayValue = null;
 
         try {
-            JSONObject jsonAvailableCurrencies = new JSONObject(mPrefs.getString("fiat_available", "[]"));
+            JSONObject jsonAvailableCurrencies = new JSONObject(PrefsUtil.getPrefs().getString("fiat_available", "[]"));
 
             JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
             fiatEntryValues = new CharSequence[currencies.length()];

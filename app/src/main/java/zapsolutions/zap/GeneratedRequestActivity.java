@@ -7,6 +7,7 @@ import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 
@@ -16,7 +17,6 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -48,7 +48,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
     private ConstraintLayout mClRequestView;
     private ConstraintLayout mClPaymentReceivedView;
     private TextView mFinishedAmount;
-    private SharedPreferences mPrefs;
     private long mLnInvoiceAddIndex;
 
     @Override
@@ -69,7 +68,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         setContentView(R.layout.activity_generate_request);
         mUG = new UserGuardian(this, this);
 
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this);
 
         // Register listeners
         Wallet.getInstance().registerInvoiceSubscriptionListener(this);
@@ -136,7 +134,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this).getBoolean("preventScreenRecording", true)) {
+                if (PrefsUtil.preventScreenRecording()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -174,7 +172,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PreferenceManager.getDefaultSharedPreferences(GeneratedRequestActivity.this).getBoolean("preventScreenRecording", true)) {
+                if (PrefsUtil.preventScreenRecording()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();

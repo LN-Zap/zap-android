@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 
-import androidx.preference.PreferenceManager;
-
 import zapsolutions.zap.baseClasses.App;
 
 import com.android.volley.Request;
@@ -41,7 +39,6 @@ public class MonetaryUtil {
 
     private static MonetaryUtil mInstance;
     private Context mContext;
-    private SharedPreferences mPrefs;
     private Currency mFirstCurrency;
     private Currency mSecondCurrency;
 
@@ -50,12 +47,11 @@ public class MonetaryUtil {
 
     private MonetaryUtil() {
         mContext = App.getAppContext();
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        loadFirstCurrencyFromPrefs(mPrefs.getString("firstCurrency", "sat"));
+        loadFirstCurrencyFromPrefs(PrefsUtil.getPrefs().getString("firstCurrency", "sat"));
 
 
-        String SecondCurrency = mPrefs.getString("secondCurrency", "USD");
+        String SecondCurrency = PrefsUtil.getPrefs().getString("secondCurrency", "USD");
         switch (SecondCurrency) {
             case BTC_UNIT:
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -79,10 +75,10 @@ public class MonetaryUtil {
                 break;
             default:
                 // Here we go if the user has selected a fiat currency as second currency.
-                if (mPrefs.getString("fiat_" + mPrefs.getString("secondCurrency", "USD"), "").equals("")) {
-                    mSecondCurrency = new Currency(mPrefs.getString("secondCurrency", "USD"), 0, 0);
+                if (PrefsUtil.getPrefs().getString("fiat_" + PrefsUtil.getPrefs().getString("secondCurrency", "USD"), "").equals("")) {
+                    mSecondCurrency = new Currency(PrefsUtil.getPrefs().getString("secondCurrency", "USD"), 0, 0);
                 } else {
-                    loadSecondCurrencyFromPrefs(mPrefs.getString("secondCurrency", "USD"));
+                    loadSecondCurrencyFromPrefs(PrefsUtil.getPrefs().getString("secondCurrency", "USD"));
                 }
         }
     }
@@ -121,7 +117,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getPrimaryDisplayAmount(long value) {
-        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+        if (PrefsUtil.firstCurrencyIsPrimary()) {
             return getFirstCurrencyAmount(value);
         } else {
             return getSecondCurrencyAmount(value);
@@ -135,7 +131,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getPrimaryDisplayUnit() {
-        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+        if (PrefsUtil.firstCurrencyIsPrimary()) {
             return getFirstDisplayUnit();
         } else {
             return getSecondDisplayUnit();
@@ -161,7 +157,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getSecondaryDisplayAmount(long value) {
-        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+        if (PrefsUtil.firstCurrencyIsPrimary()) {
             return getSecondCurrencyAmount(value);
         } else {
             return getFirstCurrencyAmount(value);
@@ -175,7 +171,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getSecondaryDisplayUnit() {
-        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+        if (PrefsUtil.firstCurrencyIsPrimary()) {
             return getSecondDisplayUnit();
         } else {
             return getFirstDisplayUnit();
@@ -256,7 +252,7 @@ public class MonetaryUtil {
             default:
 
                 try {
-                    JSONObject selectedCurrency = new JSONObject(mPrefs.getString("fiat_" + currencyCode, "{}"));
+                    JSONObject selectedCurrency = new JSONObject(PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "{}"));
                     Currency currency;
                     if (selectedCurrency.has("symbol")) {
                         currency = new Currency(currencyCode,
@@ -283,14 +279,10 @@ public class MonetaryUtil {
      * Switch which of the currencies (first or second one) is used as primary currency
      */
     public void switchCurrencies() {
-        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.putBoolean("firstCurrencyIsPrimary", false);
-            editor.apply();
+        if (PrefsUtil.firstCurrencyIsPrimary()) {
+            PrefsUtil.edit().putBoolean("firstCurrencyIsPrimary", false).apply();
         } else {
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.putBoolean("firstCurrencyIsPrimary", true);
-            editor.apply();
+            PrefsUtil.edit().putBoolean("firstCurrencyIsPrimary", true).apply();
         }
     }
 
@@ -300,7 +292,7 @@ public class MonetaryUtil {
      * @return
      */
     public Currency getPrimaryCurrency() {
-        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+        if (PrefsUtil.firstCurrencyIsPrimary()) {
             return mFirstCurrency;
         } else {
             return mSecondCurrency;
@@ -314,7 +306,7 @@ public class MonetaryUtil {
      * @return
      */
     public Currency getSecondaryCurrency() {
-        if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+        if (PrefsUtil.firstCurrencyIsPrimary()) {
             return mSecondCurrency;
         } else {
             return mFirstCurrency;
@@ -331,7 +323,7 @@ public class MonetaryUtil {
         if (primaryValue.equals("")) {
             return "";
         } else {
-            if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+            if (PrefsUtil.firstCurrencyIsPrimary()) {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mFirstCurrency.getRate() * mSecondCurrency.getRate());
                 DecimalFormat df = TextInputCurrencyFormat(mSecondCurrency);
@@ -360,7 +352,7 @@ public class MonetaryUtil {
         if (primaryValue.equals("")) {
             return "0";
         } else {
-            if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+            if (PrefsUtil.firstCurrencyIsPrimary()) {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mFirstCurrency.getRate());
                 return df.format(result);
@@ -383,7 +375,7 @@ public class MonetaryUtil {
         if (value == 0) {
             return "0";
         } else {
-            if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+            if (PrefsUtil.firstCurrencyIsPrimary()) {
                 double result = (value * mFirstCurrency.getRate());
                 DecimalFormat df = TextInputCurrencyFormat(mFirstCurrency);
                 return df.format(result);
@@ -410,7 +402,7 @@ public class MonetaryUtil {
         if (primaryValue.equals("")) {
             return "0";
         } else {
-            if (mPrefs.getBoolean("firstCurrencyIsPrimary", true)) {
+            if (PrefsUtil.firstCurrencyIsPrimary()) {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mFirstCurrency.getRate() / 1e8);
                 return df.format(result);
@@ -436,7 +428,7 @@ public class MonetaryUtil {
         // Bitcoin
         if (currency.isBitcoin()) {
 
-            String btcUnit = mPrefs.getString("firstCurrency", "sat");
+            String btcUnit = PrefsUtil.getPrefs().getString("firstCurrency", "sat");
             switch (btcUnit) {
                 case BTC_UNIT:
                     numberOfDecimals = 8;
@@ -700,7 +692,7 @@ public class MonetaryUtil {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        final SharedPreferences.Editor editor = mPrefs.edit();
+                        final SharedPreferences.Editor editor = PrefsUtil.edit();
 
                         // JSON Object that will hold all available currencies to later populate selection list.
                         JSONObject availableCurrencies = new JSONObject();
@@ -720,7 +712,7 @@ public class MonetaryUtil {
                                 editor.putString("fiat_" + fiatCode, FiatCurrency.toString());
                                 availableCurrenciesArray.put(fiatCode);
                                 // Update the current fiat currency of the Monetary util
-                                if (fiatCode.equals(mPrefs.getString("secondCurrency", "USD"))) {
+                                if (fiatCode.equals(PrefsUtil.getPrefs().getString("secondCurrency", "USD"))) {
                                     setSecondCurrency(fiatCode, ReceivedCurrency.getDouble("15m") / 1e8, System.currentTimeMillis() / 1000, ReceivedCurrency.getString("symbol"));
                                 }
                             } catch (JSONException e) {
@@ -744,10 +736,10 @@ public class MonetaryUtil {
                         // If this was the first time executed since installation, automatically set the
                         // currency to correct currency according to the systems locale. Only do this,
                         // if this currency is included in the fetched data.
-                        if (!mPrefs.getBoolean("isDefaultCurrencySet", false)) {
+                        if (!PrefsUtil.getPrefs().getBoolean("isDefaultCurrencySet", false)) {
                             String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
                             if (currencyCode != null) {
-                                if (!mPrefs.getString("fiat_" + currencyCode, "").equals("")) {
+                                if (!PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "").equals("")) {
                                     loadSecondCurrencyFromPrefs(currencyCode);
                                     editor.putBoolean("isDefaultCurrencySet", true);
                                     editor.putString("secondCurrency", currencyCode);

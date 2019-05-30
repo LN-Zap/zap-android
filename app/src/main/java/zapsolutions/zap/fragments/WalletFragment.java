@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -37,6 +36,7 @@ import zapsolutions.zap.SendActivity;
 import zapsolutions.zap.util.Balances;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -51,7 +51,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private static final String LOG_TAG = "Wallet Fragment";
 
     private UserGuardian mUG;
-    private SharedPreferences mPrefs;
     private TextView mTvPrimaryBalance;
     private TextView mTvPrimaryBalanceUnit;
     private TextView mTvSecondaryBalance;
@@ -86,7 +85,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
         mUG = new UserGuardian(getActivity(), this);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         mFragmentManager = getFragmentManager();
 
@@ -132,7 +130,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // Hide balance if the setting was chosen
-        if (mPrefs.getBoolean("hideTotalBalance", false)) {
+        if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
             mClBalanceLayout.setVisibility(View.INVISIBLE);
             mIvSwitchButton.setVisibility(View.INVISIBLE);
             mIvLogo.setVisibility(View.VISIBLE);
@@ -153,7 +151,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mClBalanceLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mPrefs.getBoolean("hideTotalBalance", false)) {
+                if (!PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
                     MonetaryUtil.getInstance().switchCurrencies();
                 } else {
                     mBalanceFadeOutAnimation.reset();
@@ -181,7 +179,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (mPrefs.getBoolean("preventScreenRecording", true)) {
+                if (PrefsUtil.preventScreenRecording()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -196,7 +194,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 MonetaryUtil.getInstance().switchCurrencies();
 
                 // also cancel fade out if hideTotalBalance option is active
-                if (mPrefs.getBoolean("hideTotalBalance", false)) {
+                if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
                     mBalanceFadeOutAnimation.reset();
                     mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
                     mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
@@ -228,7 +226,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         // Action when clicked on "setup wallet"
         Button btnSetup = view.findViewById(R.id.setupWallet);
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
+        if (PrefsUtil.isWalletSetup()) {
             btnSetup.setVisibility(View.INVISIBLE);
         }
         btnSetup.setOnClickListener(new View.OnClickListener() {
@@ -247,13 +245,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (App.getAppContext().connectionToLNDEstablished) {
             connectionToLNDEstablished();
         } else {
-            if (mPrefs.getBoolean("isWalletSetup", false)) {
+            if (PrefsUtil.isWalletSetup()) {
                 Wallet.getInstance().isLNDReachable();
             }
         }
 
         // if the wallet is not setup we still want to show the wallet and an error if a payment url was used.
-        if (!mPrefs.getBoolean("isWalletSetup", false)) {
+        if (!PrefsUtil.isWalletSetup()) {
             mWalletConnectedLayout.setVisibility(View.VISIBLE);
             mLoadingWalletLayout.setVisibility(View.GONE);
             if (App.getAppContext().getUriSchemeData() != null) {
@@ -268,7 +266,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void connectionToLNDEstablished() {
 
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
+        if (PrefsUtil.isWalletSetup()) {
 
             // Show info about mode (offline, testnet or mainnet) if it is already known
             onInfoUpdated(Wallet.getInstance().isInfoFetched());
@@ -296,7 +294,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
 
         Balances balances;
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
+        if (PrefsUtil.isWalletSetup()) {
             balances = Wallet.getInstance().getBalances();
         } else {
             balances = Wallet.getInstance().getDemoBalances();
@@ -394,7 +392,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mLoadingWalletLayout.setVisibility(View.GONE);
             mWalletNotConnectedLayout.setVisibility(View.GONE);
 
-            if ((mPrefs.getBoolean("isWalletSetup", false))) {
+            if (PrefsUtil.isWalletSetup()) {
                 if (Wallet.getInstance().isTestnet()) {
                     mTvMode.setText("TESTNET");
                     mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superGreen));
@@ -429,7 +427,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         // Register listeners
         if (!mPreferenceChangeListenerRegistered) {
-            mPrefs.registerOnSharedPreferenceChangeListener(this);
+            PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
             mPreferenceChangeListenerRegistered = true;
         }
         if (!mBalanceChangeListenerRegistered) {
@@ -450,7 +448,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
 
 
-        if (!mPrefs.getBoolean("isWalletSetup", false)) {
+        if (!PrefsUtil.isWalletSetup()) {
             // If the App is not setup yet,
             // this will cause to get the status text updated. Otherwise it would be empty.
             Wallet.getInstance().simulateFetchInfoForDemo(NetworkUtil.isConnectedToInternet(getActivity()));
@@ -461,7 +459,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     public void onDestroy() {
         super.onDestroy();
         // Unregister listeners
-        mPrefs.unregisterOnSharedPreferenceChangeListener(this);
+        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
         Wallet.getInstance().unregisterBalanceListener(this);
         Wallet.getInstance().unregisterInfoListener(this);
         Wallet.getInstance().unregisterWalletLoadedListener(this);
@@ -479,7 +477,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             connectionToLNDEstablished();
         } else {
             // Show info about mode (offline, testnet or mainnet) if it is already known
-            if (mPrefs.getBoolean("isWalletSetup", false)) {
+            if (PrefsUtil.isWalletSetup()) {
                 onInfoUpdated(false);
             } else {
                 onInfoUpdated(true);

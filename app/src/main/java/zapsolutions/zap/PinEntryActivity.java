@@ -1,13 +1,11 @@
 package zapsolutions.zap;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,7 +19,7 @@ import android.widget.Toast;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.ScrambledNumpad;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UtilFunctions;
@@ -42,7 +40,6 @@ public class PinEntryActivity extends BaseAppCompatActivity {
     private ScrambledNumpad mNumpad;
     private StringBuilder mUserInput;
     private Vibrator mVibrator;
-    private SharedPreferences mPrefs;
     private int mNumFails;
     private boolean mScramble;
 
@@ -59,12 +56,11 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         mVibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mNumFails = mPrefs.getInt("numPINFails", 0);
+        mNumFails = PrefsUtil.getPrefs().getInt("numPINFails", 0);
 
-        mPinLength = mPrefs.getInt(RefConstants.pin_length, 4);
+        mPinLength = PrefsUtil.getPrefs().getInt(PrefsUtil.pin_length, 4);
 
-        mScramble = mPrefs.getBoolean("scramblePin", true);
+        mScramble = PrefsUtil.getPrefs().getBoolean("scramblePin", true);
 
 
         // Define buttons
@@ -117,7 +113,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.deleteCharAt(mUserInput.length() - 1);
-                    if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
+                    if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -131,7 +127,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             public boolean onLongClick(View view) {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.setLength(0);
-                    if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
+                    if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
                         mVibrator.vibrate(55);
                     }
                 }
@@ -143,7 +139,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
     }
 
     public void OnNumberPadClick(View view) {
-        if (PreferenceManager.getDefaultSharedPreferences(PinEntryActivity.this).getBoolean("hapticPin", true)) {
+        if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
             mVibrator.vibrate(55);
         }
         mUserInput.append(((Button) view).getText().toString());
@@ -194,17 +190,14 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
     public void pinEntered() {
         // Check if PIN was correct
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String userEnteredPin = mUserInput.toString();
         String hashedInput = UtilFunctions.pinHash(userEnteredPin);
-        boolean correct = prefs.getString(RefConstants.pin_hash, "").equals(hashedInput);
+        boolean correct = PrefsUtil.getPrefs().getString(PrefsUtil.pin_hash, "").equals(hashedInput);
         if (correct) {
             App.getAppContext().inMemoryPin = userEnteredPin;
             TimeOutUtil.getInstance().restartTimer();
 
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.putInt("numPINFails", 0);
-            editor.apply();
+            PrefsUtil.edit().putInt("numPINFails", 0).apply();
 
             Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -212,15 +205,13 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         } else {
             mNumFails++;
 
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.putInt("numPINFails", mNumFails);
-            editor.apply();
+            PrefsUtil.edit().putInt("numPINFails", mNumFails).apply();
 
             final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
             View view = findViewById(R.id.pinInputLayout);
             view.startAnimation(animShake);
 
-            if (mPrefs.getBoolean("hapticPin", true)) {
+            if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
                 mVibrator.vibrate(200);
             }
 

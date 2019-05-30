@@ -1,12 +1,10 @@
 package zapsolutions.zap.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.WindowManager;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import zapsolutions.zap.R;
@@ -19,7 +17,6 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
     private static final String LOG_TAG = "Advanced Settings";
     private UserGuardian mUG;
     private SwitchPreference mSwScreenProtection;
-    private SharedPreferences mPrefs;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -27,7 +24,6 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         setPreferencesFromResource(R.xml.advanced_settings, rootKey);
 
         mUG = new UserGuardian(getActivity(), this);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 
         // On change screen recording option

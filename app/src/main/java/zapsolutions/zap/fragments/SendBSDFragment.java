@@ -5,7 +5,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,7 +34,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
@@ -65,6 +63,7 @@ import zapsolutions.zap.connection.LndConnection;
 import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -72,8 +71,6 @@ import zapsolutions.zap.util.ZapLog;
 public class SendBSDFragment extends BottomSheetDialogFragment {
 
     private static final String LOG_TAG = "Receive Activity";
-
-    private SharedPreferences mPrefs;
 
     private ConstraintLayout mRootLayout;
     private ImageView mIvBsdIcon;
@@ -132,8 +129,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.bsd_send, container);
 
         // Apply FLAG_SECURE to dialog to prevent screen recording
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (mPrefs.getBoolean("preventScreenRecording", true)) {
+        if (PrefsUtil.preventScreenRecording()) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -252,13 +248,13 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                     long maxSendable;
                     if (mOnChain) {
 
-                        if (mPrefs.getBoolean("isWalletSetup", false)) {
+                        if (PrefsUtil.isWalletSetup()) {
                             maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
                         } else {
                             maxSendable = Wallet.getInstance().getDemoBalances().onChainConfirmed();
                         }
                     } else {
-                        if (mPrefs.getBoolean("isWalletSetup", false)) {
+                        if (PrefsUtil.isWalletSetup()) {
                             maxSendable = Wallet.getInstance().getMaxChannelLocalBalance();
                         } else {
                             maxSendable = 750000;
@@ -493,7 +489,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 public void onClick(View v) {
 
                     // send lightning payment
-                    if (mPrefs.getBoolean("isWalletSetup", false)) {
+                    if (PrefsUtil.isWalletSetup()) {
 
                         switchToSendProgressScreen();
 

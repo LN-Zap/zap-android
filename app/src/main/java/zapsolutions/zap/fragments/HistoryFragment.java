@@ -3,7 +3,6 @@ package zapsolutions.zap.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -31,7 +30,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -43,6 +41,7 @@ import zapsolutions.zap.historyList.HistoryListItem;
 import zapsolutions.zap.historyList.LnInvoiceItem;
 import zapsolutions.zap.historyList.LnPaymentItem;
 import zapsolutions.zap.historyList.TransactionItem;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -59,7 +58,6 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView mEmptyListText;
     private TextView mTitle;
-    private SharedPreferences mPrefs;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
@@ -76,8 +74,6 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
-
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         mRecyclerView = view.findViewById(R.id.historyList);
         mListOptions = view.findViewById(R.id.listOptions);
@@ -120,33 +116,27 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
                 Switch normalSwitch = DialogLayout.findViewById(R.id.switchNormal);
                 Switch expiredSwitch = DialogLayout.findViewById(R.id.switchExpired);
                 Switch internalSwitch = DialogLayout.findViewById(R.id.switchInternal);
-                normalSwitch.setChecked(mPrefs.getBoolean("showNormalTransactions", true));
-                expiredSwitch.setChecked(mPrefs.getBoolean("showExpiredRequests", false));
-                internalSwitch.setChecked(mPrefs.getBoolean("showInternalTransactions", true));
+                normalSwitch.setChecked(PrefsUtil.getPrefs().getBoolean("showNormalTransactions", true));
+                expiredSwitch.setChecked(PrefsUtil.getPrefs().getBoolean("showExpiredRequests", false));
+                internalSwitch.setChecked(PrefsUtil.getPrefs().getBoolean("showInternalTransactions", true));
                 normalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        SharedPreferences.Editor editor = mPrefs.edit();
-                        editor.putBoolean("showNormalTransactions", isChecked);
-                        editor.commit();
+                        PrefsUtil.edit().putBoolean("showNormalTransactions", isChecked).commit();
                         updateHistoryDisplayList();
                     }
                 });
                 expiredSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        SharedPreferences.Editor editor = mPrefs.edit();
-                        editor.putBoolean("showExpiredRequests", isChecked);
-                        editor.commit();
+                        PrefsUtil.edit().putBoolean("showExpiredRequests", isChecked).commit();
                         updateHistoryDisplayList();
                     }
                 });
                 internalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        SharedPreferences.Editor editor = mPrefs.edit();
-                        editor.putBoolean("showInternalTransactions", isChecked);
-                        editor.commit();
+                        PrefsUtil.edit().putBoolean("showInternalTransactions", isChecked).commit();
                         updateHistoryDisplayList();
                     }
                 });
@@ -159,7 +149,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
                 });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (mPrefs.getBoolean("preventScreenRecording", true)) {
+                if (PrefsUtil.preventScreenRecording()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -183,7 +173,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         List<HistoryListItem> expiredRequest = new LinkedList<>();
         List<HistoryListItem> internalTransactions = new LinkedList<>();
 
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
+        if (PrefsUtil.isWalletSetup()) {
 
             // Add all payment relevant items to one of the lists above
 
@@ -228,15 +218,15 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
         // Apply filters
 
-        if (mPrefs.getBoolean("showNormalTransactions", true)) {
+        if (PrefsUtil.getPrefs().getBoolean("showNormalTransactions", true)) {
             mHistoryItems.addAll(normalPayments);
         }
 
-        if (mPrefs.getBoolean("showExpiredRequests", false)) {
+        if (PrefsUtil.getPrefs().getBoolean("showExpiredRequests", false)) {
             mHistoryItems.addAll(expiredRequest);
         }
 
-        if (mPrefs.getBoolean("showInternalTransactions", true)) {
+        if (PrefsUtil.getPrefs().getBoolean("showInternalTransactions", true)) {
             mHistoryItems.addAll(internalTransactions);
         }
 
@@ -303,7 +293,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
     @Override
     public void onRefresh() {
-        if (mPrefs.getBoolean("isWalletSetup", false) && Wallet.getInstance().isInfoFetched()) {
+        if (PrefsUtil.isWalletSetup() && Wallet.getInstance().isInfoFetched()) {
             Wallet.getInstance().fetchLNDTransactionHistory();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);

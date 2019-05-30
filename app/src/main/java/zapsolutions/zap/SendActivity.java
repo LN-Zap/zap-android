@@ -2,7 +2,6 @@ package zapsolutions.zap;
 
 import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -21,13 +20,13 @@ import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 
 import io.grpc.StatusRuntimeException;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.LndConnection;
 import zapsolutions.zap.util.PermissionsUtil;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 import me.dm7.barcodescanner.zbar.Result;
@@ -38,7 +37,6 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
 
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;
-    private SharedPreferences mPrefs;
 
     private boolean mFromURIScheme = false;
 
@@ -54,7 +52,6 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
         setupToolbar();
 
         mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(SendActivity.this);
 
         if (App.getAppContext().getUriSchemeData() != null) {
 
@@ -148,7 +145,7 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
         mOnChainInvoiceAmount = 0L;
         mOnChainInvoiceMessage = null;
 
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
+        if (PrefsUtil.isWalletSetup()) {
 
             // Our wallet is setup
 

@@ -10,6 +10,7 @@ import androidx.preference.PreferenceManager;
 import at.favre.lib.armadillo.Armadillo;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
 
@@ -33,7 +34,7 @@ public class LandingActivity extends BaseAppCompatActivity {
 
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int ver = prefs.getInt(RefConstants.settings_ver, 0);
+        int ver = prefs.getInt(PrefsUtil.settings_ver, 0);
 
         // support for clearing shared preferences,
         // in v1 we are now upgrading to encrypted shared pref
@@ -43,18 +44,16 @@ public class LandingActivity extends BaseAppCompatActivity {
             prefs.edit().clear().commit();
             // Reset connection settings
             App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
                     .encryptionFingerprint(ctx)
                     .build();
             prefsRemote.edit().clear().commit();
             // Set new settings version
-            prefs.edit().putInt(RefConstants.settings_ver, RefConstants.currentSettingsVer).apply();
+            prefs.edit().putInt(PrefsUtil.settings_ver, RefConstants.currentSettingsVer).apply();
         }
 
-        boolean isWalletSetup = PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean("isWalletSetup", false);
 
-        if (isWalletSetup) {
+        if (PrefsUtil.isWalletSetup()) {
             // Go to PIN entry screen
             Intent pinIntent = new Intent(this, PinEntryActivity.class);
             pinIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -64,7 +63,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             // Clear connection data if something is there
 
             App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, RefConstants.prefs_remote)
+            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
                     .encryptionFingerprint(ctx)
                     .build();
             prefsRemote.edit().clear().commit();

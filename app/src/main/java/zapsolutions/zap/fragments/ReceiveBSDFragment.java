@@ -4,7 +4,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,7 +38,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.preference.PreferenceManager;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
@@ -54,6 +52,7 @@ import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -75,7 +74,6 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     private TextView mTvUnit;
     private View mMemoView;
     private TextView mTvTitle;
-    private SharedPreferences mPrefs;
     private View mNumpad;
     private Button[] mBtnNumpad = new Button[10];
     private Button mBtnNumpadDot;
@@ -98,8 +96,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
         View view = inflater.inflate(R.layout.bsd_receive, container);
 
         // Apply FLAG_SECURE to dialog to prevent screen recording
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (mPrefs.getBoolean("preventScreenRecording", true)) {
+        if (PrefsUtil.preventScreenRecording()) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -238,7 +235,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                 }
 
                 // In Demo Mode, we want to show the working way...
-                if (!mPrefs.getBoolean("isWalletSetup", false)) {
+                if (!PrefsUtil.isWalletSetup()) {
                     canReceiveLightningPayment = true;
                 }
 
@@ -418,7 +415,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                     mEtAmount.setTextColor(getResources().getColor(R.color.white));
                 } else {
                     long maxReceivable;
-                    if (mPrefs.getBoolean("isWalletSetup", false)) {
+                    if (PrefsUtil.isWalletSetup()) {
                         maxReceivable = Wallet.getInstance().getMaxChannelRemoteBalance();
                     } else {
                         maxReceivable = 500000000000L;
@@ -500,14 +497,14 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     }
 
     private void generateRequest() {
-        if (mPrefs.getBoolean("isWalletSetup", false)) {
+        if (PrefsUtil.isWalletSetup()) {
             // The wallet is setup. Communicate with LND and generate the request.
             if (mOnChain) {
 
                 // generate onChain request
 
                 int addressType;
-                if (mPrefs.getString("btcAddressType", "p2psh").equals("bech32")) {
+                if (PrefsUtil.getPrefs().getString("btcAddressType", "p2psh").equals("bech32")) {
                     addressType = 0;
                 } else {
                     addressType = 1;
@@ -563,7 +560,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                 Invoice asyncInvoiceRequest = Invoice.newBuilder()
                         .setValue(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
                         .setMemo(mEtMemo.getText().toString())
-                        .setExpiry(Long.parseLong(mPrefs.getString("lightning_expiry", "86400"))) // in seconds
+                        .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
                         .build();
 
                 final ListenableFuture<AddInvoiceResponse> invoiceFuture = asyncInvoiceClient.addInvoice(asyncInvoiceRequest);
