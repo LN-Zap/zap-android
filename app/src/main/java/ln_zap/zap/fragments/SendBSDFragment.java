@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import android.view.animation.AlphaAnimation;
-import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -42,15 +41,23 @@ import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
 
+import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
+import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeResponse;
+import com.github.lightningnetwork.lnd.lnrpc.FeeLimit;
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
+import com.github.lightningnetwork.lnd.lnrpc.QueryRoutesRequest;
+import com.github.lightningnetwork.lnd.lnrpc.QueryRoutesResponse;
+import com.github.lightningnetwork.lnd.lnrpc.Route;
 import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.SendCoinsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
+import com.github.lightningnetwork.lnd.lnrpc.SendRequestOrBuilder;
 import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.text.ParseException;
 import java.util.concurrent.ExecutionException;
 
 import ln_zap.zap.R;
@@ -81,6 +88,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     private TextView mTvUnit;
     private View mMemoView;
     private View mFeeView;
+    private TextView mTvSendFee;
     private View mNumpad;
     private Button[] mBtnNumpad = new Button[10];
     private Button mBtnNumpadDot;
@@ -110,6 +118,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     private long mFixedAmount;
 
     private boolean mAmountValid = true;
+    private long mMaxLightningFee = 0;
 
 
     @Nullable
@@ -141,6 +150,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         mEtMemo = view.findViewById(R.id.sendMemo);
         mMemoView = view.findViewById(R.id.sendMemoTopLayout);
         mFeeView = view.findViewById(R.id.sendFeeTopLayout);
+        mTvSendFee = view.findViewById(R.id.sendFee);
         mNumpad = view.findViewById(R.id.Numpad);
         mBtnSend = view.findViewById(R.id.sendButton);
 
@@ -243,6 +253,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                     // make text red if input is too large
                     long maxSendable;
                     if (mOnChain) {
+
                         if (mPrefs.getBoolean("isWalletSetup", false)) {
                             maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
                         } else {
@@ -292,8 +303,16 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                     mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
                 }
 
+
                 // validate input
                 mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
+
+                // calculate fees
+                if (mAmountValid) {
+                    calculateFee();
+                } else {
+                    mTvSendFee.setText("");
+                }
             }
         });
 
@@ -369,7 +388,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
                                 .setAddr(mOnChainAddress)
                                 .setAmount(sendAmount)
-                                .setSatPerByte(5)
+                                .setTargetConf(3)
                                 .build();
 
                         final ListenableFuture<SendCoinsResponse> sendFuture = asyncOnChainSendClient.sendCoins(sendRequest);
@@ -478,20 +497,21 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
                         ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
 
-                        SendRequest sendRequest;
+                        SendRequest.Builder srb = SendRequest.newBuilder();
+                        srb.setPaymentRequest(Wallet.getInstance().mPaymentRequestString);
+                        srb.setFeeLimit(FeeLimit.newBuilder()
+                                .setFixed(mMaxLightningFee)
+                                .build());
 
                         if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
-                            sendRequest = SendRequest.newBuilder()
-                                    .setPaymentRequest(Wallet.getInstance().mPaymentRequestString)
-                                    .setAmt(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
-                                    .build();
+                            srb.setAmt(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())));
                             mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()))));
                         } else {
-                            sendRequest = SendRequest.newBuilder()
-                                    .setPaymentRequest(Wallet.getInstance().mPaymentRequestString)
-                                    .build();
                             mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().mPaymentRequest.getNumSatoshis()));
                         }
+
+                        SendRequest sendRequest = srb.build();
+
 
                         LightningGrpc.LightningFutureStub asyncLightningSendClient = LightningGrpc
                                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
@@ -594,6 +614,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
             }
         });
 
+
+        // Calculate fee
+        calculateFee();
 
         return view;
     }
@@ -821,5 +844,118 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
+    private void calculateFee() {
+
+        if (mOnChain) {
+            long sendAmount = 0L;
+            if (mFixedAmount != 0L) {
+                sendAmount = mFixedAmount;
+            } else {
+                try {
+                    sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                } catch (NumberFormatException e) {
+
+                }
+            }
+
+            estimateOnChainFee(mOnChainAddress, sendAmount, 3);
+        } else {
+            if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
+                long sendAmount = 0L;
+                try {
+                    sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                } catch (NumberFormatException e) {
+
+                }
+                queryRoutes(Wallet.getInstance().mPaymentRequest.getDestination(), sendAmount);
+            } else {
+                queryRoutes(Wallet.getInstance().mPaymentRequest.getDestination(), Wallet.getInstance().mPaymentRequest.getNumSatoshis());
+            }
+        }
+    }
+
+    /**
+     * This function is used to calculate the expected on chain fee.
+     */
+    private void estimateOnChainFee(String address, long amount, int targetConf) {
+        // let LND estimate fee
+        LightningGrpc.LightningFutureStub asyncEstimateFeeClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
+                .putAddrToAmount(address, amount)
+                .setTargetConf(targetConf)
+                .build();
+        final ListenableFuture<EstimateFeeResponse> estimateFeeFuture = asyncEstimateFeeClient.estimateFee(asyncEstimateFeeRequest);
+
+
+        estimateFeeFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    EstimateFeeResponse estimateFeeResponse = estimateFeeFuture.get();
+
+                    mTvSendFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat()));
+
+                    ZapLog.debug(LOG_TAG, estimateFeeResponse.toString());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "Fee estimation request interrupted.");
+                } catch (ExecutionException e) {
+                    // ZapLog.debug(LOG_TAG, "Exception in fee estimation request task.");
+                    ZapLog.debug(LOG_TAG, e.getMessage());
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
+    /**
+     * Query Routes. This is used to determine the expected fees for a lightning payment.
+     */
+    private void queryRoutes(String pubKey, long amount) {
+        LightningGrpc.LightningFutureStub asyncQueryRoutesClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        QueryRoutesRequest asyncQueryRoutesRequest = QueryRoutesRequest.newBuilder()
+                .setPubKey(pubKey)
+                .setAmt(amount)
+                .build();
+        final ListenableFuture<QueryRoutesResponse> queryRoutesFuture = asyncQueryRoutesClient.queryRoutes(asyncQueryRoutesRequest);
+
+        queryRoutesFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    QueryRoutesResponse queryRoutesResponse = queryRoutesFuture.get();
+
+                    Route firstRoute = queryRoutesResponse.getRoutes(0);
+                    Route lastRoute = queryRoutesResponse.getRoutes(queryRoutesResponse.getRoutesCount() - 1);
+
+                    String feeLowerBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(firstRoute.getTotalFeesMsat() / 1000);
+                    String feeUpperBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(lastRoute.getTotalFeesMsat() / 1000);
+
+                    String feeString;
+
+                    mMaxLightningFee = lastRoute.getTotalFeesMsat() / 1000;
+
+                    if (feeLowerBound.equals(feeUpperBound)) {
+                        feeString = feeLowerBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                    } else {
+                        feeString = feeLowerBound + "-" + feeUpperBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                    }
+                    ZapLog.debug(LOG_TAG, lastRoute.toString());
+                    mTvSendFee.setText(feeString);
+
+                    //ZapLog.debug(LOG_TAG, queryRoutesResponse.toString());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "Query routes request interrupted.");
+                } catch (ExecutionException e) {
+                    // ZapLog.debug(LOG_TAG, "Exception in query routes request task.");
+                    ZapLog.debug(LOG_TAG, e.getMessage());
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
 
 }
