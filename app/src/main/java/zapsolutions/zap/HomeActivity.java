@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,6 +44,7 @@ import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
+        SharedPreferences.OnSharedPreferenceChangeListener,
         Wallet.InfoListener, Wallet.WalletLoadedListener, UserGuardianInterface {
 
     private static final String LOG_TAG = "Main Activity";
@@ -186,6 +189,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
+
+            // start listeners and schedules
             setupExchangeRateSchedule();
             registerNetworkStatusChangeListener();
 
@@ -198,6 +203,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Wallet.getInstance().registerInfoListener(this);
                 mInfoChangeListenerRegistered = true;
             }
+
+            PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
             // Restart lnd connection
             if (PrefsUtil.isWalletSetup()) {
@@ -245,6 +252,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mWalletLoadedListenerRegistered = false;
         Wallet.getInstance().unregisterInfoListener(this);
         mInfoChangeListenerRegistered = false;
+
+        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
 
         if (mIsExchangeRateSchedulerRunning) {
             // Kill the scheduled exchange rate requests to go easy on the battery.
@@ -337,6 +346,18 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             Wallet.getInstance().subscribeToChannelBackup();
 
             ZapLog.debug(LOG_TAG, "Wallet loaded");
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // Update if primary currency has been switched from this or another activity
+        if (key.equals(PrefsUtil.preventScreenRecording)) {
+            if (PrefsUtil.preventScreenRecording()) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            } else {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            }
         }
     }
 }
