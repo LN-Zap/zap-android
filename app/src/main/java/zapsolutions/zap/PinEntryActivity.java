@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
+
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.PrefsUtil;
@@ -136,6 +138,34 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             }
         });
 
+        // If the user closed and restarted the app he still has to wait until the PIN input delay is over.
+        if(mNumFails > 2){
+
+            long timeDiff = System.currentTimeMillis()-PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
+
+            if (timeDiff < WAIT_TIME * 1000) {
+
+                for (Button btn : mBtnNumpad) {
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.3f);
+                }
+
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((WAIT_TIME * 1000 - timeDiff)/1000)));
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (Button btn : mBtnNumpad) {
+                            btn.setEnabled(true);
+                            btn.setAlpha(1f);
+                        }
+                    }
+                }, WAIT_TIME * 1000 - timeDiff);
+            }
+        }
+
     }
 
     public void OnNumberPadClick(View view) {
@@ -227,6 +257,9 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                 }
                 String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(WAIT_TIME));
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+                // Save timestamp. This way the delay can also be forced upon app restart.
+                PrefsUtil.edit().putLong("failedLoginTimestamp", System.currentTimeMillis()).apply();
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
