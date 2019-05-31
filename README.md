@@ -1,4 +1,7 @@
 # Zap Android
+
+[![Screenshot of Zap Android app](docs/screenshot.png)](https://zap.jackmallers.com)
+
 Native android lightning wallet focused on user experience and ease of use ⚡️
 
 ## Features
