@@ -17,19 +17,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
-
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ScrambledNumpad;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UtilFunctions;
 
 
 public class PinEntryActivity extends BaseAppCompatActivity {
-
-    public static final int WAIT_TIME = 10;
 
     private int mPinLength = 0;
 
@@ -60,7 +57,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         mNumFails = PrefsUtil.getPrefs().getInt("numPINFails", 0);
 
-        mPinLength = PrefsUtil.getPrefs().getInt(PrefsUtil.pin_length, 4);
+        mPinLength = PrefsUtil.getPrefs().getInt(PrefsUtil.PIN_LENGTH, RefConstants.PIN_MIN_LENGTH);
 
         mScramble = PrefsUtil.getPrefs().getBoolean("scramblePin", true);
 
@@ -116,7 +113,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.deleteCharAt(mUserInput.length() - 1);
                     if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
-                        mVibrator.vibrate(55);
+                        mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
                     }
                 }
                 displayUserInput();
@@ -130,7 +127,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.setLength(0);
                     if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
-                        mVibrator.vibrate(55);
+                        mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
                     }
                 }
                 displayUserInput();
@@ -139,18 +136,18 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         });
 
         // If the user closed and restarted the app he still has to wait until the PIN input delay is over.
-        if(mNumFails > 2){
+        if (mNumFails >= RefConstants.PIN_MAX_FAILS) {
 
-            long timeDiff = System.currentTimeMillis()-PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
+            long timeDiff = System.currentTimeMillis() - PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
 
-            if (timeDiff < WAIT_TIME * 1000) {
+            if (timeDiff < RefConstants.PIN_DELAY_TIME * 1000) {
 
                 for (Button btn : mBtnNumpad) {
                     btn.setEnabled(false);
                     btn.setAlpha(0.3f);
                 }
 
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((WAIT_TIME * 1000 - timeDiff)/1000)));
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((RefConstants.PIN_DELAY_TIME * 1000 - timeDiff) / 1000)));
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
                 Handler handler = new Handler();
@@ -162,7 +159,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                             btn.setAlpha(1f);
                         }
                     }
-                }, WAIT_TIME * 1000 - timeDiff);
+                }, RefConstants.PIN_DELAY_TIME * 1000 - timeDiff);
             }
         }
 
@@ -222,7 +219,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         // Check if PIN was correct
         String userEnteredPin = mUserInput.toString();
         String hashedInput = UtilFunctions.pinHash(userEnteredPin);
-        boolean correct = PrefsUtil.getPrefs().getString(PrefsUtil.pin_hash, "").equals(hashedInput);
+        boolean correct = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
         if (correct) {
             App.getAppContext().inMemoryPin = userEnteredPin;
             TimeOutUtil.getInstance().restartTimer();
@@ -242,7 +239,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             view.startAnimation(animShake);
 
             if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
-                mVibrator.vibrate(200);
+                mVibrator.vibrate(RefConstants.VIBRATE_LONG);
             }
 
             // clear the user input
@@ -250,12 +247,12 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             displayUserInput();
 
 
-            if (mNumFails > 2) {
+            if (mNumFails >= RefConstants.PIN_MAX_FAILS) {
                 for (Button btn : mBtnNumpad) {
                     btn.setEnabled(false);
                     btn.setAlpha(0.3f);
                 }
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(WAIT_TIME));
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(RefConstants.PIN_DELAY_TIME));
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
                 // Save timestamp. This way the delay can also be forced upon app restart.
@@ -270,7 +267,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                             btn.setAlpha(1f);
                         }
                     }
-                }, WAIT_TIME * 1000);
+                }, RefConstants.PIN_DELAY_TIME * 1000);
             } else {
                 Toast.makeText(this, R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
             }

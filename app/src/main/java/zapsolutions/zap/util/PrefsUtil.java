@@ -12,15 +12,16 @@ import zapsolutions.zap.baseClasses.App;
 public class PrefsUtil {
 
     // shared preference references
-    public static final String isWalletSetup = "isWalletSetup";
-    public static final String preventScreenRecording = "preventScreenRecording";
-    public static final String pin_hash = "pin_hash";
-    public static final String pin_length = "pin_length";
-    public static final String settings_ver = "settings_ver";
+    public static final String IS_WALLET_SETUP = "isWalletSetup";
+    public static final String PREVENT_SCREEN_RECORDING = "preventScreenRecording";
+    public static final String FIRST_CURRENCY_IS_PRIMARY = "firstCurrencyIsPrimary";
+    public static final String PIN_HASH = "pin_hash";
+    public static final String PIN_LENGTH = "pin_length";
+    public static final String SETTINGS_VER = "settings_ver";
 
     // remote node preferences references
-    public static final String prefs_remote = "prefs_remote";
-    public static final String remote_combined = "remote_combined";
+    public static final String PREFS_REMOTE = "prefs_remote";
+    public static final String REMOTE_COMBINED = "remote_combined";
 
 
     // Access to default shared prefs
@@ -37,14 +38,14 @@ public class PrefsUtil {
     // Shortcuts to often used preferences
 
     public static boolean isWalletSetup() {
-        return getPrefs().getBoolean(isWalletSetup, false);
+        return getPrefs().getBoolean(IS_WALLET_SETUP, false);
     }
 
     public static boolean preventScreenRecording() {
-        return getPrefs().getBoolean(preventScreenRecording, true);
+        return getPrefs().getBoolean(PREVENT_SCREEN_RECORDING, true);
     }
 
     public static boolean firstCurrencyIsPrimary(){
-        return getPrefs().getBoolean("firstCurrencyIsPrimary", true);
+        return getPrefs().getBoolean(FIRST_CURRENCY_IS_PRIMARY, true);
     }
 }

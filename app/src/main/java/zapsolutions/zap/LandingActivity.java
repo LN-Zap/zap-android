@@ -34,22 +34,22 @@ public class LandingActivity extends BaseAppCompatActivity {
 
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int ver = prefs.getInt(PrefsUtil.settings_ver, 0);
+        int ver = prefs.getInt(PrefsUtil.SETTINGS_VER, 0);
 
         // support for clearing shared preferences,
         // in v1 we are now upgrading to encrypted shared pref
         // and thus need to reset all currently entered settings
-        if (ver < RefConstants.currentSettingsVer) {
+        if (ver < RefConstants.CURRENT_SETTINGS_VER) {
             // Reset settings
             prefs.edit().clear().commit();
             // Reset connection settings
             App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
+            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
                     .encryptionFingerprint(ctx)
                     .build();
             prefsRemote.edit().clear().commit();
             // Set new settings version
-            prefs.edit().putInt(PrefsUtil.settings_ver, RefConstants.currentSettingsVer).apply();
+            prefs.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
         }
 
 
@@ -63,7 +63,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             // Clear connection data if something is there
 
             App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
+            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
                     .encryptionFingerprint(ctx)
                     .build();
             prefsRemote.edit().clear().commit();

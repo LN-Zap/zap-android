@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.util.ScrambledNumpad;
@@ -29,7 +30,6 @@ import zapsolutions.zap.util.ScrambledNumpad;
 public class PinFragment extends Fragment {
 
     private static final String LOG_TAG = "PIN Fragment";
-    public static final int WAIT_TIME = 10;
 
     public static final int CREATE_MODE = 0;
     public static final int CONFIRM_MODE = 1;
@@ -37,9 +37,6 @@ public class PinFragment extends Fragment {
 
     private static final String ARG_MODE = "pinMode";
     private static final String ARG_PROMPT = "promptString";
-
-    private static final int MIN_PIN_LENGTH = 4;
-    private static final int MAX_PIN_LENGTH = 10;
 
     private int mPinLength = 0;
 
@@ -99,8 +96,7 @@ public class PinFragment extends Fragment {
             pinString = App.getAppContext().inMemoryPin;
         }
 
-        // TODO: do away with pin length eventually because it is vulnerability to hint in UI how long pin is
-        mPinLength = pinString != null ? pinString.length() : 4;
+        mPinLength = pinString != null ? pinString.length() : RefConstants.PIN_MIN_LENGTH;
 
         mUserInput = new StringBuilder();
         mNumpad = new ScrambledNumpad();
@@ -166,7 +162,7 @@ public class PinFragment extends Fragment {
                 public void onClick(View v) {
                     // vibrate
                     if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
-                        mVibrator.vibrate(55);
+                        mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
                     }
                     // Add input
                     mUserInput.append(((Button) v).getText().toString());
@@ -202,7 +198,7 @@ public class PinFragment extends Fragment {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.deleteCharAt(mUserInput.length() - 1);
                     if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
-                        mVibrator.vibrate(55);
+                        mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
                     }
                 }
                 displayUserInput();
@@ -217,13 +213,43 @@ public class PinFragment extends Fragment {
                 if (mUserInput.toString().length() > 0) {
                     mUserInput.setLength(0);
                     if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
-                        mVibrator.vibrate(55);
+                        mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
                     }
                 }
                 displayUserInput();
                 return false;
             }
         });
+
+
+        // If the user closed and restarted the activity he still has to wait until the PIN input delay is over.
+        if (mNumFails >= RefConstants.PIN_MAX_FAILS) {
+
+            long timeDiff = System.currentTimeMillis() - PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
+
+            if (timeDiff < RefConstants.PIN_DELAY_TIME * 1000) {
+
+                for (Button btn : mBtnNumpad) {
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.3f);
+                }
+
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((RefConstants.PIN_DELAY_TIME * 1000 - timeDiff) / 1000)));
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (Button btn : mBtnNumpad) {
+                            btn.setEnabled(true);
+                            btn.setAlpha(1f);
+                        }
+                    }
+                }, RefConstants.PIN_DELAY_TIME * 1000 - timeDiff);
+            }
+        }
+
 
         return view;
     }
@@ -259,7 +285,7 @@ public class PinFragment extends Fragment {
 
 
         // Disable numpad if max PIN length reached
-        if (mUserInput.toString().length() >= MAX_PIN_LENGTH) {
+        if (mUserInput.toString().length() >= RefConstants.PIN_MAX_LENGTH) {
             for (Button btn : mBtnNumpad) {
                 btn.setEnabled(false);
                 btn.setAlpha(0.3f);
@@ -274,7 +300,7 @@ public class PinFragment extends Fragment {
         // Show confirm button when creating PIN
         if (mMode == CREATE_MODE) {
             // Show confirm button only if the PIN has a valid length.
-            if (mUserInput.toString().length() >= MIN_PIN_LENGTH && mUserInput.toString().length() <= MAX_PIN_LENGTH) {
+            if (mUserInput.toString().length() >= RefConstants.PIN_MIN_LENGTH && mUserInput.toString().length() <= RefConstants.PIN_MAX_LENGTH) {
                 mBtnPinConfirm.setVisibility(View.VISIBLE);
             } else {
                 mBtnPinConfirm.setVisibility(View.INVISIBLE);
@@ -301,7 +327,7 @@ public class PinFragment extends Fragment {
         if (mMode == ENTER_MODE) {
             String userEnteredPin = mUserInput.toString();
             String hashedInput = UtilFunctions.pinHash(userEnteredPin);
-            correct = PrefsUtil.getPrefs().getString(PrefsUtil.pin_hash, "").equals(hashedInput);
+            correct = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
         } else if (mMode == CONFIRM_MODE) {
             correct = mUserInput.toString().equals(App.getAppContext().pinTemp);
         } else {
@@ -336,13 +362,16 @@ public class PinFragment extends Fragment {
                 mUserInput.setLength(0);
                 displayUserInput();
 
-                if (mNumFails > 2) {
+                if (mNumFails >= RefConstants.PIN_MAX_FAILS) {
                     for (Button btn : mBtnNumpad) {
                         btn.setEnabled(false);
                         btn.setAlpha(0.3f);
                     }
-                    String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(WAIT_TIME));
+                    String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(RefConstants.PIN_DELAY_TIME));
                     Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+
+                    // Save timestamp. This way the delay can also be forced upon restart of the activity.
+                    PrefsUtil.edit().putLong("failedLoginTimestamp", System.currentTimeMillis()).apply();
 
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -353,7 +382,7 @@ public class PinFragment extends Fragment {
                                 btn.setAlpha(1f);
                             }
                         }
-                    }, WAIT_TIME * 1000);
+                    }, RefConstants.PIN_DELAY_TIME * 1000);
                 } else {
                     // Show error
                     Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
@@ -368,7 +397,7 @@ public class PinFragment extends Fragment {
                 view.startAnimation(animShake);
 
                 if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
-                    mVibrator.vibrate(200);
+                    mVibrator.vibrate(RefConstants.VIBRATE_LONG);
                 }
 
                 // Clear the user input

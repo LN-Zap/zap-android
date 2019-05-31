@@ -148,9 +148,9 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     private void connect(String host, int port, String cert, String macaroon) {
         App ctx = App.getAppContext();
-        SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.prefs_remote)
+        SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
                 .encryptionFingerprint(ctx)
-                .keyStretchingFunction(new PBKDF2KeyStretcher(5000, null))
+                .keyStretchingFunction(new PBKDF2KeyStretcher(RefConstants.NUM_HASH_ITERATIONS, null))
                 .password(ctx.inMemoryPin.toCharArray())
                 .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
                 .build();
@@ -158,7 +158,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         prefsRemote.edit()
                 // The following string contains host,port,cert and macaroon in one string separated with ";"
                 // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-                .putString(PrefsUtil.remote_combined, host + ";" + port + ";" + cert + ";" + macaroon)
+                .putString(PrefsUtil.REMOTE_COMBINED, host + ";" + port + ";" + cert + ";" + macaroon)
                 .apply();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
