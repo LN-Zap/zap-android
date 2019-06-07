@@ -53,7 +53,6 @@ jobs:
           name: Generate APK
           command: |
             ./gradlew assembleDebug
-            mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/zap-android-$CIRCLE_TAG.apk
             rm app/build/outputs/apk/debug/output.json
       - store_artifacts:
           path: app/build/outputs/apk/debug

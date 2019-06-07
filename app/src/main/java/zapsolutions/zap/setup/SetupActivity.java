@@ -49,10 +49,7 @@ public class SetupActivity extends BaseAppCompatActivity {
 
         switch (mSetupMode) {
             case FULL_SETUP:
-                if (PrefsUtil.getPrefs().getBoolean("eulaAccepted", false))
-                    showCreatePin();
-                else
-                    showEula();
+                showCreatePin();
                 break;
             case CHANGE_PIN:
                 showEnterPin();

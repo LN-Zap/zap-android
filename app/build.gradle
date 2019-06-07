@@ -10,16 +10,16 @@ android {
         applicationId "zapsolutions.zap"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 3
-        versionName "0.2.0-alpha"
+        versionCode 4
+        versionName "0.2.1-alpha"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        setProperty("archivesBaseName", "Zap-v" + versionCode + "(" + versionName + ")")
+        setProperty("archivesBaseName", "zap-android-" + versionName)
     }
     buildTypes {
         debug {
             // with the following line we can install release and debug version simultaneously
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Zap debug"
+            resValue "string", "app_name", "Zap Debug"
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -109,11 +109,11 @@ dependencies {
     implementation 'com.google.guava:guava:27.0.1-android'
 
 
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
-    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0-alpha05'
+    implementation 'androidx.preference:preference:1.1.0-beta01'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
