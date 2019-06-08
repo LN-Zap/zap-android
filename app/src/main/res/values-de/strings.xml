@@ -1,7 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
 
-    <!-- //////////////// General //////////////////// -->
+<!-- //////////////// Notice for translators ////////////////////
+
+    First of all, thanks for taking the time to translate this wallet!
+
+
+    Here are a few tips to help you while translating:
+
+    Parameters:
+    Some strings have parameters, which allows them to show different content.
+    Parameters look like this:   %1$s  ,  %2$d  ,  ...
+    Above every string with a parameter there is an explanation, what this parameter can be.
+    With this information you should be able to move the parameter to the correct place in your
+    translated string.
+
+
+    New line:
+    \n is used to make a new line.
+    Avoid putting a space before and after \n as this will lead to a space at the end and the
+    beginning of a line.
+    Correct example:  This is my first line.\nAnd this is my second.
+
+
+    Special Characters:
+    Escape every '  or  " you want to have in your text with a backslash.
+    Correct example:  I want to emphasize \"this\" and \'this\' word.
+
+    Escape every % with %
+    Correct example:   5 is 10%% of 50
+
+    &  =  &amp;
+
+    -->
+
+<resources>
 
     <string name="ok">Ok</string>
     <string name="cancel">Abbrechen</string>
@@ -26,7 +58,6 @@
     <string name="coming_soon">Bald verfügbar...</string>
     <string name="needHelp">Du brauchst Hilfe?</string>
     <string name="offline">offline</string>
-    <string name="demo_mode">Demo Modus</string>
     <string name="sent">Gesendet</string>
     <string name="received">Empfangen</string>
     <string name="today">Heute</string>
@@ -37,8 +68,6 @@
     <string name="max_amount">Maximaler Betrag:</string>
 
 
-    <!-- //////////////// Activity names //////////////////// -->
-
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Senden</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -48,14 +77,10 @@
     <string name="activity_channel_details">Kanal Details</string>
 
 
-    <!-- //////////////// Bottom Navigation //////////////////// -->
-
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Verlauf</string>
     <string name="navigation_settings">Einstellungen</string>
 
-
-    <!-- //////////////// PIN dialog //////////////////// -->
 
     <string name="pin_confirm">PIN bestätigen</string>
     <string name="pin_enter">PIN eingeben</string>
@@ -68,8 +93,6 @@
     <string name="pin_entered_wrong_wait">Warte %1$s Sekunden.</string>
 
 
-    <!-- //////////////// Payment History //////////////////// -->
-
     <string name="requested_payment">Angefordert</string>
     <string name="request_expired">Abgelaufen</string>
     <string name="internal">Intern</string>
@@ -80,8 +103,6 @@
     <string name="expired_requests">Abgelaufene Anfragen</string>
     <string name="no_transactions">Keine Transaktionen</string>
 
-
-    <!-- //////////////// Channel Management //////////////////// -->
 
     <string name="channel_capacity">Kapazität</string>
     <string name="channel_local_balance">Dein Kontostand</string>
@@ -96,18 +117,6 @@
     <string name="no_channels">Keine Kanäle</string>
 
 
-    <!-- //////////////// Welcome //////////////////// -->
-
-    <string name="welcome">Willkommen</string>
-    <string name="welcome_intro">Willkommen!\n\n
-        Du kannst die App ohne Setup testen. In diesem Modus wirst du fiktive Zahlen sehen, damit du ein Gefühl dafür bekommst, wie es später aussehen wird.\n\n
-        Wenn dir Zap gefällt, nutze den großen \"Wallet Einrichten\" Button um eine echte Wallet einzurichten.
-        </string>
-    <string name="welcome_startButton">Los geht\'s!</string>
-
-
-    <!-- //////////////// Setup //////////////////// -->
-
     <string name="setup_connect_heading">Wie möchtest du Zap verwenden?</string>
     <string name="setup_connect_local_description">Eine Wallet auf diesem Smartphone erstellen.</string>
     <string name="setup_connect_local_button">Wallet erstellen</string>
@@ -118,14 +127,9 @@
     <string name="setup_eula_iAccept">Ich akzeptiere</string>
 
 
-    <!-- //////////////// Demo Mode (this section includes all special strings that are shown before a wallet is setup) //////////////////// -->
-
     <string name="demo_setupWalletBtn">Wallet einrichten</string>
     <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
 
-
-
-    <!-- //////////////// Send //////////////////// -->
 
     <string name="send_lightningPayment">Lightning Zahlung senden</string>
     <string name="send_onChainPayment">On-chain Zahlung senden</string>
@@ -133,8 +137,6 @@
     <string name="send_success">Zahlung\nerfolgreich</string>
     <string name="send_fail">Zahlung\nfehlgeschlagen</string>
 
-
-    <!-- //////////////// Receive //////////////////// -->
 
     <string name="receive_generateRequest">Anfrage generieren</string>
     <string name="receive_generateRequest_failed">Generieren der Anfrage fehlgeschlagen.</string>
@@ -145,8 +147,6 @@
     <string name="receive_requestFullfilled">Anfrage\nbezahlt</string>
 
 
-    <!-- //////////////// User Guardian //////////////////// -->
-
     <string name="guardian_doNotShowAgain">Nicht mehr anzeigen.</string>
     <string name="guardian_Title">Achtung</string>
     <string name="guardian_reset">Alle Sicherheitswarnungen sind wieder aktiv.</string>
@@ -156,22 +156,20 @@
     <string name="guardian_pasteFromClipboard">Überprüfe vorsichtshalber immer die letzten 3 bis 5 Stellen wenn du etwas von der Zwischenablage einfügst. Eine bösartige App könnte die Daten geändert haben, ohne dass du es bemerkt hast.</string>
     <string name="guardian_disableScrambledPin">Wenn die Ziffern bei der PIN-Eingabe nicht durchmischt sind, kann die PIN leicht durch deine Fingerbewegung erraten werden.</string>
     <string name="guardian_disableScreenProtection">Wenn du Bildschirmaufnahmen ermöglichst, könnte bösartige Software unbemerkt Videos oder Screenshots aufnehmen, während du Zap nutzt. Wir empfehlen deshalb diese Funktion nur dann vorübergehend zu deaktivieren, wenn du selbst ein Video oder Screenshot aufnehmen möchtest.</string>
+    <!-- Parameters for the following string are:  %1$s%%: % of transaction value. E.g: 13.2% -->
     <string name="guardian_highOnChainFee">Du wirst %1$s%% als Netzwerkgebühr bezahlen, wenn du fortfährst.\n\nMögliche Lösungen:\n- Zahle mit dem Lightning Netzwerk\n- Wähle eine niedrigere Gebühr und warte länger\n- Versuche es später nochaml\n- Sende einen größeren Betrag\n\nMöchtest du trotzdem fortfahren?</string>
+    <!-- Parameters for the following string are:  %1$s: Number of hours. E.g: 7.5 -->
     <string name="guardian_oldExchangeRate">Du hast einen Fiat Betrag angefordert, aber dein Umrechnungskurs ist nicht mehr aktuell. (Zuletzt aktualisiert vor %1$s Stunden)\nStelle sicher, dass du eine Internetverbindung hast, oder fordere den Betrag direkt in Bitcoin an.\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_tooMuchMoney">Glückwunsch, du scheinst eine menge Bitcoin zu haben!\nBitte denk daran, dass Zap eine Hot-Wallet ist.\nWir geben unser Bestes, diese Wallet sicher zu halten.\nTrotzdem empfehlen wir für den Großteil deines Vermögens Cold-Wallets oder Hardware-Wallets in Betracht zu ziehen.</string>
     <string name="guardian_notReadyForMainnet">Du bist mit dem MAINNET verbunden!\nZap Android is noch in einer frühen Entwicklungsphase. Du könntest echtes Geld verlieren!\n\nFalls du dieses Risiko nicht auf dich nehmen willst, wechsle solange ins Testnet.</string>
 
 
-    <!-- //////////////// Settings ////////////////////// -->
-
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_security">Sicherheit</string>
     <string name="settings_category_help">Hilfe</string>
     <string name="settings_category_advanced">Fortgeschritten</string>
-
     <string name="settings_btcUnit">Bitcoin Einheit</string>
     <string name="settings_currency">Zweite Einheit</string>
-
     <string name="settings_language">Sprache</string>
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
 
@@ -183,24 +181,17 @@
     <string name="settings_manageChannels">Lightning-Kanäle verwalten</string>
     <string name="settings_resetConnection">Verbindungseinstellungen zurücksetzen</string>
     <string name="settings_changePin">PIN ändern</string>
-
-
     <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
     <string name="settings_preventScreenRecording">Bildschirmaufnahmen blockieren</string>
     <string name="settings_hideTotalBalance">Gesamtguthaben verstecken</string>
     <string name="settings_hideTotalBalance_explanation">Wenn diese Funktion aktiv ist, kannst du auf das Zap Logo auf dem Homescreen tippen, um dein Guthaben anzuzeigen.</string>
     <string name="settings_resetSecurityWarnings">Sicherheitswarnungen zurücksetzen</string>
-
     <string name="settings_help">Du brauchst Hilfe?</string>
     <string name="settings_reportIssue">Feedback senden</string>
     <string name="settings_about">Über Zap</string>
-
     <string name="settings_advanced_settings">Erweiterte Einstellungen</string>
-
     <string name="settings_restartRequired">Zap wird neugestartet, um diese Änderung vorzunehmen. Fortfahren?</string>
 
-
-    <!-- //////////////// Advanced Settings ////////////////////// -->
 
     <string name="settings_blockExplorer">Block-Explorer</string>
     <string name="settings_addressType">Bitcoin Adresstyp</string>
@@ -220,8 +211,6 @@
         <item>24 Stunden</item>
     </string-array>
 
-
-    <!-- //////////////// Errors ////////////////////// -->
 
     <string name="error">Fehler</string>
     <string name="error_blockExplorer_title">Block-Explorer</string>

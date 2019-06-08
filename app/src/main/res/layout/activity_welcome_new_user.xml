@@ -14,7 +14,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/welcome_intro"
+        android:text="Welcome!\n\n
+        You can explore the app without any setup. In this mode you\'ll see fictitious numbers to give you a feeling of what it will look like.\n\n
+        If you like it, click the big 'Setup Wallet' button to get started."
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +34,7 @@
         android:background="@drawable/bg_clickable_item"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:text="@string/welcome_startButton"
+        android:text="Let's go!"
         android:textAllCaps="false"
         android:textColor="@color/lightningOrange"
         android:textSize="18sp"

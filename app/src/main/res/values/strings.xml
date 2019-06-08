@@ -35,8 +35,6 @@
 
 <resources>
 
-    <!-- //////////////// General //////////////////// -->
-
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="lightning">Lightning</string>
@@ -60,7 +58,6 @@
     <string name="coming_soon">Coming soon...</string>
     <string name="needHelp">Need help?</string>
     <string name="offline">offline</string>
-    <string name="demo_mode">demo mode</string>
     <string name="sent">Sent</string>
     <string name="received">Received</string>
     <string name="today">Today</string>
@@ -71,8 +68,6 @@
     <string name="max_amount">Maximum Amount:</string>
 
 
-    <!-- //////////////// Activity names //////////////////// -->
-
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Send</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>
@@ -82,14 +77,10 @@
     <string name="activity_channel_details">Channel Details</string>
 
 
-    <!-- //////////////// Bottom Navigation //////////////////// -->
-
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">History</string>
     <string name="navigation_settings">Settings</string>
 
-
-    <!-- //////////////// PIN dialog //////////////////// -->
 
     <string name="pin_create">Create PIN</string>
     <string name="pin_confirm">Confirm PIN</string>
@@ -102,8 +93,6 @@
     <string name="pin_entered_wrong_wait">Wait %1$s seconds.</string>
 
 
-    <!-- //////////////// Payment History //////////////////// -->
-
     <string name="requested_payment">Requested</string>
     <string name="request_expired">Expired</string>
     <string name="internal">Internal</string>
@@ -114,9 +103,6 @@
     <string name="expired_requests">Expired Requests</string>
     <string name="no_transactions">No transactions</string>
 
-
-
-    <!-- //////////////// Channel Management //////////////////// -->
 
     <string name="channel_capacity">Capacity</string>
     <string name="channel_local_balance">Your Balance</string>
@@ -131,18 +117,6 @@
     <string name="no_channels">No channels</string>
 
 
-    <!-- //////////////// Welcome //////////////////// -->
-
-    <string name="welcome">Welcome</string>
-    <string name="welcome_intro">Welcome!\n\n
-        You can explore the app without any setup. In this mode you\'ll see fictitious numbers to give you a feeling of what it will look like.\n\n
-        If you like it, click the big \"Setup Wallet\" button to get started.
-        </string>
-    <string name="welcome_startButton">Let\'s go!</string>
-
-
-    <!-- //////////////// Setup //////////////////// -->
-
     <string name="setup_connect_heading">How do you want to use ZAP?</string>
     <string name="setup_connect_local_description">Create a wallet on this phone.</string>
     <string name="setup_connect_local_button">Create Wallet</string>
@@ -153,14 +127,9 @@
     <string name="setup_eula_iAccept">I accept</string>
 
 
-    <!-- //////////////// Demo Mode (this section includes all special strings that are shown before a wallet is setup) //////////////////// -->
-
     <string name="demo_setupWalletBtn">Setup Wallet</string>
     <string name="demo_setupWalletFirst">You first have to setup a wallet.</string>
 
-
-
-    <!-- //////////////// Send //////////////////// -->
 
     <string name="send_lightningPayment">Send lightning payment</string>
     <string name="send_onChainPayment">Send on-chain payment</string>
@@ -168,8 +137,6 @@
     <string name="send_success">Payment\nsuccessful</string>
     <string name="send_fail">Payment\nfailed</string>
 
-
-    <!-- //////////////// Receive //////////////////// -->
 
     <string name="receive_generateRequest">Generate Request</string>
     <string name="receive_generateRequest_failed">Request generation failed.</string>
@@ -179,8 +146,6 @@
     <string name="receive_noIncomeBalance">To receive Bitcoin over the lightning network, at least one of your channels needs some balance on your counterpartys side.\n\nTo achieve that, you have to spend something on lightning network first.\n\nIn the manage channels area you can always see how much you are able to send or receive over the lightning network right now.</string>
     <string name="receive_requestFullfilled">Invoice\npaid</string>
 
-
-    <!-- //////////////// User Guardian //////////////////// -->
 
     <string name="guardian_doNotShowAgain">Don\'t show again.</string>
     <string name="guardian_Title">Attention</string>
@@ -199,16 +164,12 @@
     <string name="guardian_notReadyForMainnet">You are on MAINNET with real Bitcoin!\nZap Android is in early development phase. You might lose funds!\n\nIf you don\'t want to take that risk, switch to testnet in the meantime.</string>
 
 
-    <!-- //////////////// Settings ////////////////////// -->
-
     <string name="settings_category_general">General</string>
     <string name="settings_category_security">Security</string>
     <string name="settings_category_help">Help</string>
     <string name="settings_category_advanced">Advanced</string>
-
     <string name="settings_btcUnit">Bitcoin Unit</string>
     <string name="settings_currency">Second Unit</string>
-
     <string name="settings_language">Language</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
 
@@ -220,24 +181,17 @@
     <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
     <string name="settings_changePin">Change PIN</string>
-
-
     <string name="settings_scramblePin">Scramble PIN Screen</string>
     <string name="settings_preventScreenRecording">Prevent Screen Recording</string>
     <string name="settings_hideTotalBalance">Hide total balance</string>
     <string name="settings_hideTotalBalance_explanation">When activated, tap the Zap logo on the home screen to reveal your balance.</string>
     <string name="settings_resetSecurityWarnings">Reset Security Warnings</string>
-
     <string name="settings_help">Need Help?</string>
     <string name="settings_reportIssue">Report an Issue</string>
     <string name="settings_about">About Zap</string>
-
     <string name="settings_advanced_settings">Advanced Settings</string>
-
     <string name="settings_restartRequired">Zap will be restarted to make this change. Do you want to continue?</string>
 
-
-    <!-- //////////////// Advanced Settings ////////////////////// -->
 
     <string name="settings_blockExplorer">Block Explorer</string>
     <string name="settings_addressType">Bitcoin Address Type</string>
@@ -257,8 +211,6 @@
         <item>24 hours</item>
     </string-array>
 
-
-    <!-- //////////////// Errors ////////////////////// -->
 
     <string name="error">Error</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
