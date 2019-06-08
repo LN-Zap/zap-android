@@ -47,7 +47,7 @@ Hey! Do you like Zap? Awesome! We could actually really use your help!
 
 Open source isn't just writing code. Zap could use your help with any of the following:
 
-- translating the app
+- [translating](docs/TRANSLATING.md) the app
 - Finding (and reporting!) bugs
 - New feature suggestions
 - Answering questions on issues
