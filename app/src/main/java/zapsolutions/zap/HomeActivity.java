@@ -135,9 +135,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mExchangeRateScheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            ZapLog.debug(LOG_TAG, "Fiat exchange rate request initiated");
-                            // Adding request to request queue
-                            HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
+                            if(!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()) {
+                                ZapLog.debug(LOG_TAG, "Fiat exchange rate request initiated");
+                                // Adding request to request queue
+                                HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
+                            }
                         }
                     }, 0, 3, TimeUnit.MINUTES);
         }
