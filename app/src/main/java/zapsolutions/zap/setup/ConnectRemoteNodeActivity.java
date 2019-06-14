@@ -121,19 +121,26 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                 // Fetch params
                 if (connectURI.getQuery() != null) {
                     String[] valuePairs = connectURI.getQuery().split("&");
+
+
+                    boolean validParams = true;
+
                     for (String pair : valuePairs) {
                         String[] param = pair.split("=");
-                        if (param[0].equals("cert")) {
-                            cert = param[1];
-                        }
-                        if (param[0].equals("macaroon")) {
-                            macaroon = param[1];
+                        if (param.length > 0) {
+                            if (param[0].equals("cert")) {
+                                cert = param[1];
+                            }
+                            if (param[0].equals("macaroon")) {
+                                macaroon = param[1];
+                            }
+                        } else {
+                            validParams = false;
                         }
                     }
 
-                    // validate params
-                    boolean validParams = true;
 
+                    // validate params
                     if (cert == null || macaroon == null) {
                         validParams = false;
                     } else {
@@ -159,7 +166,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                     }
 
                 } else {
-                    ZapLog.debug(LOG_TAG, "Connect URI has not parameters");
+                    ZapLog.debug(LOG_TAG, "Connect URI has no parameters");
                     showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
                 }
             }
@@ -226,7 +233,12 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     @Override
     public void handleResult(Result rawResult) {
 
-        verifyDesiredConnection(rawResult.getContents());
+        try {
+            verifyDesiredConnection(rawResult.getContents());
+        } catch (NullPointerException e) {
+            showError(getResources().getString(R.string.error_qr_code_result_null), 4000);
+        }
+
 
         // Note:
         // * Wait 2 seconds to resume the preview.
