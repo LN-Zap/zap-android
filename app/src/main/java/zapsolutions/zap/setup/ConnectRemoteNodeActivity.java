@@ -180,19 +180,21 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                 .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
                 .build();
 
+        // Do not ask for pin again...
+        TimeOutUtil.getInstance().restartTimer();
+
+        // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
         prefsRemote.edit()
                 // The following string contains host,port,cert and macaroon in one string separated with ";"
                 // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
                 .putString(PrefsUtil.REMOTE_COMBINED, host + ";" + port + ";" + cert + ";" + macaroon)
-                .apply();
+                .commit();
 
+        // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit()
                 .putBoolean("isWalletSetup", true)
-                .apply();
-
-        // Do not ask for pin again...
-        TimeOutUtil.getInstance().restartTimer();
+                .commit();
 
         // Show home screen, remove history stack
         Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
