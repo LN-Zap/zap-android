@@ -15,6 +15,7 @@ import android.content.ClipboardManager;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.common.io.BaseEncoding;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -130,8 +131,32 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                         }
                     }
 
-                    // Everything is ok, initiate connection
-                    connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
+                    // validate params
+                    boolean validParams = true;
+
+                    if (cert == null || macaroon == null) {
+                        validParams = false;
+                    } else {
+                        try {
+                            BaseEncoding.base64Url().decode(cert);
+                        } catch (IllegalArgumentException e) {
+                            validParams = false;
+                        }
+
+                        try {
+                            BaseEncoding.base64Url().decode(macaroon);
+                        } catch (IllegalArgumentException e) {
+                            validParams = false;
+                        }
+                    }
+
+                    if (validParams) {
+                        // Everything is ok, initiate connection
+                        connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
+                    } else {
+                        ZapLog.debug(LOG_TAG, "Connect URI has invalid parameters (certificate or macaroon)");
+                        showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+                    }
 
                 } else {
                     ZapLog.debug(LOG_TAG, "Connect URI has not parameters");
