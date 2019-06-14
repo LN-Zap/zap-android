@@ -225,5 +225,6 @@
     <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
     <string name="error_unableToConnectToLND">Die Verbindung zum LND kann nicht hergestellt werden.</string>
+    <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
 
 </resources>

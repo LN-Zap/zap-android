@@ -225,5 +225,6 @@
     <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
     <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
     <string name="error_unableToConnectToLND">Unable to connect to LND.</string>
+    <string name="error_qr_code_result_null">Unable to read QR-Code, please try again.</string>
 
 </resources>
