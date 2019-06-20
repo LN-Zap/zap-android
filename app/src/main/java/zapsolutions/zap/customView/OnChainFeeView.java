@@ -101,7 +101,7 @@ public class OnChainFeeView extends ConstraintLayout {
             }
         });
 
-        // Disable fee tier change until success calculation
+        // Disable fee tier change until successful calculation
         mClSendFeeAmountLayout.setClickable(false);
 
         // Set initial block target time
