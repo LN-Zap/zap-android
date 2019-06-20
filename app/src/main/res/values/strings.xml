@@ -227,4 +227,26 @@
     <string name="error_unableToConnectToLND">Unable to connect to LND.</string>
     <string name="error_qr_code_result_null">Unable to read QR-Code, please try again.</string>
 
+    <plurals name="duration_minute">
+        <item quantity="one">Minute</item>
+        <item quantity="other">Minutes</item>
+    </plurals>
+
+    <plurals name="duration_hour">
+        <item quantity="one">Hour</item>
+        <item quantity="other">Hours</item>
+    </plurals>
+    <plurals name="duration_day">
+        <item quantity="one">Day</item>
+        <item quantity="other">Days</item>
+    </plurals>
+
+    <string name="fee_tier_slow_title">Slow</string>
+    <string name="fee_tier_medium_title">Medium</string>
+    <string name="fee_tier_fast_title">Fast</string>
+    <string name="fee_tier_slow_description">Slow Transaction</string>
+    <string name="fee_tier_medium_description">Medium Transaction</string>
+    <string name="fee_tier_fast_description">Fast Transaction</string>
+    <string name="fee_estimated_duration">Estimated Delivery: %1$d %2$s</string>
+    <string name="fee_not_available">n/A</string>
 </resources>
