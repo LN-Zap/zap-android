@@ -28,7 +28,7 @@ public class OnChainFeeView extends ConstraintLayout {
                 case SLOW: return R.string.fee_tier_slow_title;
                 case MEDIUM: return R.string.fee_tier_medium_title;
                 case FAST: return R.string.fee_tier_fast_title;
-                default: return R.string.fee_tier_slow_title;
+                default: return R.string.fee_tier_fast_title;
             }
         }
 
@@ -37,7 +37,7 @@ public class OnChainFeeView extends ConstraintLayout {
                 case SLOW: return R.string.fee_tier_slow_description;
                 case MEDIUM: return R.string.fee_tier_medium_description;
                 case FAST: return R.string.fee_tier_fast_description;
-                default: return R.string.fee_tier_slow_description;
+                default: return R.string.fee_tier_fast_description;
             }
         }
 
@@ -49,8 +49,8 @@ public class OnChainFeeView extends ConstraintLayout {
             switch (this) {
                 case SLOW: return 6 * 24; // 24 Hours
                 case MEDIUM: return 6 * 6; // 6 Hours
-                case FAST: return 1; // 10 Minutes
-                default: return 0;
+                case FAST:
+                default: return 1 ;// 10 Minutes
             }
         }
     }
