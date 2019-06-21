@@ -11,6 +11,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.tabs.TabLayout;
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.OnSingleClickListener;
+import zapsolutions.zap.util.PrefsUtil;
 
 public class OnChainFeeView extends ConstraintLayout {
 
@@ -19,24 +20,24 @@ public class OnChainFeeView extends ConstraintLayout {
     }
 
     public enum OnChainFeeTier {
-        SLOW,
+        FAST,
         MEDIUM,
-        FAST;
+        SLOW;
 
         public int getTitle() {
             switch (this) {
-                case SLOW: return R.string.fee_tier_slow_title;
-                case MEDIUM: return R.string.fee_tier_medium_title;
                 case FAST: return R.string.fee_tier_fast_title;
+                case MEDIUM: return R.string.fee_tier_medium_title;
+                case SLOW: return R.string.fee_tier_slow_title;
                 default: return R.string.fee_tier_fast_title;
             }
         }
 
         public int getDescription() {
             switch (this) {
-                case SLOW: return R.string.fee_tier_slow_description;
-                case MEDIUM: return R.string.fee_tier_medium_description;
                 case FAST: return R.string.fee_tier_fast_description;
+                case MEDIUM: return R.string.fee_tier_medium_description;
+                case SLOW: return R.string.fee_tier_slow_description;
                 default: return R.string.fee_tier_fast_description;
             }
         }
@@ -47,10 +48,18 @@ public class OnChainFeeView extends ConstraintLayout {
          */
         public int getConfirmationBlockTarget() {
             switch (this) {
-                case SLOW: return 6 * 24; // 24 Hours
+                case FAST: return 1 ; // 10 Minutes
                 case MEDIUM: return 6 * 6; // 6 Hours
-                case FAST:
-                default: return 1 ;// 10 Minutes
+                case SLOW: return 6 * 24; // 24 Hours
+                default: return 1 ; // 10 Minutes
+            }
+        }
+
+        public static OnChainFeeTier parseFromString(String enumAsString) {
+            try {
+                return valueOf(enumAsString);
+            } catch (Exception ex) {
+                return FAST;
             }
         }
     }
@@ -63,7 +72,7 @@ public class OnChainFeeView extends ConstraintLayout {
     private ConstraintLayout mClSendFeeAmountLayout;
     private ConstraintLayout mClSendFeeDurationLayout;
     private FeeTierChangedListener mFeeTierChangedListener;
-    private OnChainFeeView.OnChainFeeTier mOnChainFeeTier = OnChainFeeView.OnChainFeeTier.FAST;
+    private OnChainFeeView.OnChainFeeTier mOnChainFeeTier;
 
     public OnChainFeeView(Context context) {
         super(context);
@@ -91,6 +100,10 @@ public class OnChainFeeView extends ConstraintLayout {
         mFeeArrowUnitImage = view.findViewById(R.id.feeArrowUnitImage);
 
         mClSendFeeDurationLayout = view.findViewById(R.id.feeDurationLayout);
+
+        // Set tier from shared preferences
+        setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
+        mTabLayoutSendFeeSpeed.getTabAt( mOnChainFeeTier.ordinal()).select();
 
         // Toggle tier settings view on amount click
         mClSendFeeAmountLayout.setOnClickListener(new OnSingleClickListener() {
@@ -165,6 +178,9 @@ public class OnChainFeeView extends ConstraintLayout {
         if (mFeeTierChangedListener != null) {
             mFeeTierChangedListener.onFeeTierChanged(feeTier);
         }
+
+        // Update choice to shared preferences
+        PrefsUtil.edit().putString(PrefsUtil.ON_CHAIN_FEE_TIER,feeTier.name()).apply();
     }
 
     /**
