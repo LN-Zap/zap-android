@@ -114,9 +114,6 @@ public class OnChainFeeView extends ConstraintLayout {
             }
         });
 
-        // Disable fee tier change until successful calculation
-        mClSendFeeAmountLayout.setClickable(false);
-
         // Set initial block target time
         setBlockTargetTime(mOnChainFeeTier.getConfirmationBlockTarget());
 
@@ -157,13 +154,10 @@ public class OnChainFeeView extends ConstraintLayout {
 
     public void onFeeSuccess(String amount) {
         mTvSendFeeAmount.setText(amount);
-        mClSendFeeAmountLayout.setClickable(true);
     }
 
     public void onFeeFailure() {
         mTvSendFeeAmount.setText(R.string.fee_not_available);
-        mClSendFeeAmountLayout.setClickable(false);
-        toggleFeeTierView(true);
     }
 
     /**
