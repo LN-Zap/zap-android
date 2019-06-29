@@ -390,7 +390,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
                                 .setAddr(mOnChainAddress)
                                 .setAmount(sendAmount)
-                                .setTargetConf(3)
+                                .setTargetConf(mOnChainFeeView.getFeeTier().getConfirmationBlockTarget())
                                 .build();
 
                         final ListenableFuture<SendCoinsResponse> sendFuture = asyncOnChainSendClient.sendCoins(sendRequest);

@@ -9,16 +9,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            android:ems="10"
             android:text="@string/fee"
             android:maxLength="50"
             android:textAlignment="viewStart"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/sendFeeOnChainAmountLayout"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/sendFeeOnChainAmountLayout"
-            app:layout_constraintHorizontal_weight="2"/>
+            app:layout_constraintBottom_toBottomOf="@id/sendFeeOnChainAmountLayout"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/sendFeeOnChainAmountLayout"
@@ -26,28 +23,25 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/sendFeeOnChainLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_weight="8">
+            app:layout_constraintTop_toTopOf="parent">
 
         <TextView
                 android:id="@+id/sendFeeOnChainAmount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
-                android:ems="10"
                 android:maxLength="50"
                 android:textAlignment="textEnd"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/feeArrowUnitImage"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" android:text="@string/fee_not_available"/>
 
         <TextView
                 android:id="@+id/sendFeeSpeed"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
-                android:ems="10"
                 android:maxLength="50"
                 android:text="@string/fee_tier_fast_description"
                 android:textAlignment="textEnd"
