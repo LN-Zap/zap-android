@@ -60,6 +60,8 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.LndConnection;
 
+import zapsolutions.zap.customView.LightningFeeView;
+import zapsolutions.zap.customView.OnChainFeeView;
 import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -70,7 +72,7 @@ import zapsolutions.zap.util.ZapLog;
 
 public class SendBSDFragment extends BottomSheetDialogFragment {
 
-    private static final String LOG_TAG = "Receive Activity";
+    private static final String LOG_TAG = "Send Activity";
 
     private ConstraintLayout mRootLayout;
     private ImageView mIvBsdIcon;
@@ -82,8 +84,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     private EditText mEtMemo;
     private TextView mTvUnit;
     private View mMemoView;
-    private View mFeeView;
-    private TextView mTvSendFee;
+    private OnChainFeeView mOnChainFeeView;
+    private LightningFeeView mLightningFeeView;
+
     private View mNumpad;
     private Button[] mBtnNumpad = new Button[10];
     private Button mBtnNumpadDot;
@@ -143,8 +146,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         mTvUnit = view.findViewById(R.id.sendUnit);
         mEtMemo = view.findViewById(R.id.sendMemo);
         mMemoView = view.findViewById(R.id.sendMemoTopLayout);
-        mFeeView = view.findViewById(R.id.sendFeeTopLayout);
-        mTvSendFee = view.findViewById(R.id.sendFee);
+        mOnChainFeeView = view.findViewById(R.id.sendFeeOnChainLayout);
+        mLightningFeeView = view.findViewById(R.id.sendFeeLightningLayout);
+
         mNumpad = view.findViewById(R.id.Numpad);
         mBtnSend = view.findViewById(R.id.sendButton);
 
@@ -305,7 +309,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 if (mAmountValid) {
                     calculateFee();
                 } else {
-                    mTvSendFee.setText("");
+                    setFeeFailure();
                 }
             }
         });
@@ -313,6 +317,10 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
         if (mOnChain) {
 
+            mOnChainFeeView.setVisibility(View.VISIBLE);
+            mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> {
+                calculateFee();
+            });
 
             mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_on_chain));
             mIvFinishedPaymentTypeIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_onchain_black_24dp));
@@ -382,7 +390,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
                                 .setAddr(mOnChainAddress)
                                 .setAmount(sendAmount)
-                                .setTargetConf(3)
+                                .setTargetConf(mOnChainFeeView.getFeeTier().getConfirmationBlockTarget())
                                 .build();
 
                         final ListenableFuture<SendCoinsResponse> sendFuture = asyncOnChainSendClient.sendCoins(sendRequest);
@@ -444,7 +452,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
             // Lightning Payment
 
-
+            mLightningFeeView.setVisibility(View.VISIBLE);
             mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_lightning));
             mIvFinishedPaymentTypeIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_nav_wallet_balck_24dp));
             mIvProgressPaymentTypeIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_nav_wallet_balck_24dp));
@@ -616,10 +624,6 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
             }
         });
 
-
-        // Calculate fee
-        calculateFee();
-
         return view;
     }
 
@@ -700,7 +704,8 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         mBtnSend.startAnimation(animateOut);
         mTvTitle.startAnimation(animateOut);
         mIvBsdIcon.startAnimation(animateOut);
-        mFeeView.startAnimation(animateOut);
+        mLightningFeeView.startAnimation(animateOut);
+        mOnChainFeeView.startAnimation(animateOut);
 
         // Set size of progress finished icon to 0
         mProgressFinishedIcon.setScaleX(0);
@@ -847,6 +852,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     }
 
     private void calculateFee() {
+        setCalculatingFee();
 
         if (mOnChain) {
             long sendAmount = 0L;
@@ -860,7 +866,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 }
             }
 
-            estimateOnChainFee(mOnChainAddress, sendAmount, 3);
+            estimateOnChainFee(mOnChainAddress, sendAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
         } else {
             if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
                 long sendAmount = 0L;
@@ -873,6 +879,39 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
             } else {
                 queryRoutes(Wallet.getInstance().mPaymentRequest.getDestination(), Wallet.getInstance().mPaymentRequest.getNumSatoshis());
             }
+        }
+    }
+
+    /**
+     * Show progress while calculating fee
+     */
+    private void setCalculatingFee() {
+        if(mOnChain) {
+            // On chain fee calculation is very fast, no need for progress indication
+        } else {
+            mLightningFeeView.onCalculating();
+        }
+    }
+
+    /**
+     * Show the calculated fee
+     */
+    private void setCalculatedFeeAmount(String amount) {
+        if(mOnChain) {
+            mOnChainFeeView.onFeeSuccess(amount);
+        } else {
+            mLightningFeeView.setAmount(amount);
+        }
+    }
+
+    /**
+     * Show fee calculation failure
+     */
+    private void setFeeFailure() {
+        if(mOnChain) {
+            mOnChainFeeView.onFeeFailure();
+        } else {
+            mLightningFeeView.onFeeFailure();
         }
     }
 
@@ -898,14 +937,16 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 try {
                     EstimateFeeResponse estimateFeeResponse = estimateFeeFuture.get();
 
-                    mTvSendFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat()));
+                    setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat()));
 
                     // ZapLog.debug(LOG_TAG, estimateFeeResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Fee estimation request interrupted.");
+                    setFeeFailure();
                 } catch (ExecutionException e) {
                     // ZapLog.debug(LOG_TAG, "Exception in fee estimation request task.");
                     ZapLog.debug(LOG_TAG, e.getMessage());
+                    setFeeFailure();
                 }
             }
         }, new ExecuteOnCaller());
@@ -947,14 +988,16 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         feeString = feeLowerBound + "-" + feeUpperBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
                     }
 
-                    mTvSendFee.setText(feeString);
+                    setCalculatedFeeAmount(feeString);
 
                     //ZapLog.debug(LOG_TAG, queryRoutesResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Query routes request interrupted.");
+                    setFeeFailure();
                 } catch (ExecutionException e) {
                     // ZapLog.debug(LOG_TAG, "Exception in query routes request task.");
                     ZapLog.debug(LOG_TAG, e.getMessage());
+                    setFeeFailure();
                 }
             }
         }, new ExecuteOnCaller());

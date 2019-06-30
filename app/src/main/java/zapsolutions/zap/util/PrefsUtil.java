@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.customView.OnChainFeeView;
 
 /**
  * This class simplifies management of preferences.
@@ -18,6 +19,7 @@ public class PrefsUtil {
     public static final String PIN_HASH = "pin_hash";
     public static final String PIN_LENGTH = "pin_length";
     public static final String SETTINGS_VER = "settings_ver";
+    public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
 
     // remote node preferences references
     public static final String PREFS_REMOTE = "prefs_remote";
@@ -48,4 +50,6 @@ public class PrefsUtil {
     public static boolean firstCurrencyIsPrimary(){
         return getPrefs().getBoolean(FIRST_CURRENCY_IS_PRIMARY, true);
     }
+
+    public static String getOnChainFeeTier() { return getPrefs().getString(ON_CHAIN_FEE_TIER, OnChainFeeView.OnChainFeeTier.FAST.name()); }
 }

@@ -227,4 +227,26 @@
     <string name="error_unableToConnectToLND">Die Verbindung zum LND kann nicht hergestellt werden.</string>
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
 
+    <plurals name="duration_minute">
+        <item quantity="one">Minute</item>
+        <item quantity="other">Minuten</item>
+    </plurals>
+
+    <plurals name="duration_hour">
+        <item quantity="one">Stunde</item>
+        <item quantity="other">Stunden</item>
+    </plurals>
+    <plurals name="duration_day">
+        <item quantity="one">Tag</item>
+        <item quantity="other">Tage</item>
+    </plurals>
+
+    <string name="fee_tier_slow_title">Langsam</string>
+    <string name="fee_tier_medium_title">Mittel</string>
+    <string name="fee_tier_fast_title">Schnell</string>
+    <string name="fee_tier_slow_description">Langsame Transaktion</string>
+    <string name="fee_tier_medium_description">Mittlere Transaktion</string>
+    <string name="fee_tier_fast_description">Schnelle Transaktion</string>
+    <string name="fee_estimated_duration">Geschätzte Dauer: %1$d %2$s</string>
+    <string name="fee_not_available">n/A</string>
 </resources>
