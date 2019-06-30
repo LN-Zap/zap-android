@@ -85,12 +85,6 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
-            android:defaultValue="true"
-            android:key="scramblePin"
-            android:title="@string/settings_scramblePin"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
             android:defaultValue="false"
             android:key="hideTotalBalance"
             android:title="@string/settings_hideTotalBalance"

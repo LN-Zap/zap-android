@@ -44,7 +44,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
 
 
     private UserGuardian mUG;
-    private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwHideTotalBalance;
     private ListPreference mListCurrency;
 
@@ -233,20 +232,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
             }
         });
 
-        // On change scramble pin option
-        mSwScrambledPin = findPreference("scramblePin");
-        mSwScrambledPin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (mSwScrambledPin.isChecked()) {
-                    mUG.securityScrambledPin();
-                    // the value is set from the guardian callback, that's why we don't chang switch state here.
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        });
 
         // Action when clicked on "reset security warnings"
         final Preference prefResetGuardian = findPreference("resetGuardian");
@@ -313,11 +298,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
 
     @Override
     public void guardianDialogConfirmed(String DialogName) {
-        switch (DialogName) {
-            case UserGuardian.DISABLE_SCRAMBLED_PIN:
-                mSwScrambledPin.setChecked(false);
-                break;
-        }
+
     }
 
     private CharSequence[] joinCharSequenceArrays(CharSequence[] first, CharSequence[] second) {
