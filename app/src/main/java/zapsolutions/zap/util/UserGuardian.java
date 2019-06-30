@@ -135,7 +135,8 @@ public class UserGuardian {
     public void securityHighOnChainFee(float feeRate) {
         mCurrentDialogName = HIGH_ONCHAIN_FEE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setMessage(mContext.getResources().getString(R.string.guardian_highOnChainFee, String.format("%.1f", feeRate * 100)));
+        String feeRateString = String.format("%.1f", feeRate * 100);
+        adb.setMessage(mContext.getResources().getString(R.string.guardian_highOnChainFee, feeRateString));
         showGuardianDialog(adb);
     }
 
@@ -149,7 +150,8 @@ public class UserGuardian {
     public void securityOldExchangeRate(double age) {
         mCurrentDialogName = OLD_EXCHANGE_RATE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setMessage(mContext.getResources().getString(R.string.guardian_oldExchangeRate, String.format("%.1f", age / 3600)));
+        String ageString = String.format("%.1f", age / 3600);
+        adb.setMessage(mContext.getResources().getString(R.string.guardian_oldExchangeRate, ageString));
         showGuardianDialog(adb);
     }
 
