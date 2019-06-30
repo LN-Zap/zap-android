@@ -16,6 +16,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
 
     private static final String LOG_TAG = "Advanced Settings";
     private UserGuardian mUG;
+    private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwScreenProtection;
 
     @Override
@@ -26,6 +27,21 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         mUG = new UserGuardian(getActivity(), this);
 
 
+        // On change scramble pin option
+        mSwScrambledPin = findPreference("scramblePin");
+        mSwScrambledPin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (mSwScrambledPin.isChecked()) {
+                    mUG.securityScrambledPin();
+                    // the value is set from the guardian callback, that's why we don't change switch state here.
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        });
+
         // On change screen recording option
         mSwScreenProtection = findPreference("preventScreenRecording");
         mSwScreenProtection.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -33,7 +49,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScreenProtection.isChecked()) {
                     mUG.securityScreenProtection();
-                    // the value is set from the guardian callback, that's why we don't chang switch state here.
+                    // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
                     getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -48,6 +64,9 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
     @Override
     public void guardianDialogConfirmed(String DialogName) {
         switch (DialogName) {
+            case UserGuardian.DISABLE_SCRAMBLED_PIN:
+                mSwScrambledPin.setChecked(false);
+                break;
             case UserGuardian.DISABLE_SCREEN_PROTECTION:
                 mSwScreenProtection.setChecked(false);
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
