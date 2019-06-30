@@ -34,7 +34,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScrambledPin.isChecked()) {
                     mUG.securityScrambledPin();
-                    // the value is set from the guardian callback, that's why we don't chang switch state here.
+                    // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
                     return true;
@@ -49,7 +49,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScreenProtection.isChecked()) {
                     mUG.securityScreenProtection();
-                    // the value is set from the guardian callback, that's why we don't chang switch state here.
+                    // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
                     getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
