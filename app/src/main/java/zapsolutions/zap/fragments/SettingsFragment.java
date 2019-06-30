@@ -38,12 +38,10 @@ import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 
-public class SettingsFragment extends PreferenceFragmentCompat implements UserGuardianInterface {
+public class SettingsFragment extends PreferenceFragmentCompat{
 
     private static final String LOG_TAG = "Settings";
 
-
-    private UserGuardian mUG;
     private SwitchPreference mSwHideTotalBalance;
     private ListPreference mListCurrency;
 
@@ -51,8 +49,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the settings from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey);
-
-        mUG = new UserGuardian(getActivity(), this);
 
         // Update our current selected first currency in the MonetaryUtil
         final ListPreference listBtcUnit = findPreference("firstCurrency");
@@ -295,11 +291,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements UserGu
         });
     }
 
-
-    @Override
-    public void guardianDialogConfirmed(String DialogName) {
-
-    }
 
     private CharSequence[] joinCharSequenceArrays(CharSequence[] first, CharSequence[] second) {
         List<CharSequence> both = new ArrayList<CharSequence>(first.length + second.length);
