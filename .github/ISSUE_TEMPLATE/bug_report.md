@@ -1,8 +1,3 @@
----
-name: Bug report
-about: Create a report to help us improve
----
-
 <!--- Provide a general summary of the issue in the Title above -->
 
 ## Description
@@ -26,10 +21,10 @@ about: Create a report to help us improve
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
 <!--- reproduce this bug. Include code to reproduce, if relevant -->
 
-- 1.
-- 2.
-- 3.
-- 4.
+1.
+2.
+3.
+4.
 
 ## Context
 
@@ -39,5 +34,6 @@ about: Create a report to help us improve
 
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 
-- Zap version:
-- Operating System and version:
+- Zap version: _(e.g. 0.2.3-alpha)_
+- Android version: _(e.g. API 28)_
+- Device: _(e.g. Google Pixel 3)_

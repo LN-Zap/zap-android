@@ -1,11 +1,6 @@
----
-name: Feature request
-about: Suggest an idea for this project
----
-
 <!--- Provide a general summary of the issue in the Title above -->
 
-## Detailed Description
+## Description
 
 <!--- Provide a detailed description of the change or addition you are proposing -->
 
@@ -22,5 +17,5 @@ about: Suggest an idea for this project
 
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 
-- Zap version:
-- Operating System and version:
+- Zap version: _(e.g. 0.2.3-alpha)_
+- Android version: _(e.g. API 28)_
