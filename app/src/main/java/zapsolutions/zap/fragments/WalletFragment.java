@@ -29,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.connection.LndConnection;
 import zapsolutions.zap.connection.NetworkUtil;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
@@ -66,6 +67,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ConstraintLayout mWalletConnectedLayout;
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
+    private TextView mTvConnectError;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -104,6 +106,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mWalletConnectedLayout = view.findViewById(R.id.walletConnected);
         mWalletNotConnectedLayout = view.findViewById(R.id.ConnectionError);
         mLoadingWalletLayout = view.findViewById(R.id.loading);
+        mTvConnectError = view.findViewById(R.id.connectError);
 
         mWalletConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.VISIBLE);
@@ -316,9 +319,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 rate = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(100000000);
             }
 
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 rate = "1 \u20BF ≈ " + rate;
-            } else{
+            } else {
                 rate = "1 BTC ≈ " + rate;
             }
 
@@ -407,7 +410,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvMode.setVisibility(View.GONE);
             }
         } else {
-            if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED){
+            if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 mTvMode.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
                 mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superRed));
                 mTvMode.setVisibility(View.VISIBLE);
@@ -473,12 +476,21 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onWalletLoadedUpdated(boolean success, String error) {
-        if(success) {
+        if (success) {
             connectionToLNDEstablished();
         } else {
             // Show info about mode (offline, testnet or mainnet) if it is already known
             if (PrefsUtil.isWalletSetup()) {
-                onInfoUpdated(false);
+                if (!error.equals("locked")) {
+                    onInfoUpdated(false);
+                    if (error.equals("authentication")) {
+                        mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
+                    } else if (error.equals("timeout")) {
+                        mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionInfo()[0]));
+                    } else if (error.equals("unavailable")) {
+                        mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, LndConnection.getInstance().getConnectionInfo()[1]));
+                    }
+                }
             } else {
                 onInfoUpdated(true);
             }

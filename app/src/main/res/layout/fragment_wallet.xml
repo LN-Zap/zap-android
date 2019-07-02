@@ -264,13 +264,13 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/connectError"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="50dp"
-            android:text="@string/error_unableToConnectToLND"
+            android:text="@string/error_connection_lnd_unavailable"
             android:textAlignment="center"
             android:textColor="@color/superRed"
             android:textSize="18sp"

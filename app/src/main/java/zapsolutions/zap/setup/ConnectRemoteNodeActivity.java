@@ -27,6 +27,7 @@ import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
+import zapsolutions.zap.connection.CustomSSLSocketFactory;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.baseClasses.App;
@@ -59,10 +60,16 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                String clipboardContent = "";
+                boolean isClipboardContentValid = false;
                 try {
-                    verifyDesiredConnection(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
+                    clipboardContent = clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+                    isClipboardContentValid = true;
                 } catch (NullPointerException e) {
                     showError(getResources().getString(R.string.error_emptyClipboardConnect), 4000);
+                }
+                if (isClipboardContentValid) {
+                    verifyDesiredConnection(clipboardContent);
                 }
             }
         });
@@ -108,72 +115,93 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     private void verifyDesiredConnection(String connectString) {
 
-        URI connectURI = null;
-        try {
-            connectURI = new URI(connectString);
-            if (!connectURI.getScheme().equals("lndconnect")) {
-                showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
-            } else {
+        if (connectString.toLowerCase().startsWith("lndconnect")) {
 
-                String cert = null;
-                String macaroon = null;
+            // Parse lndconnect string
 
-                // Fetch params
-                if (connectURI.getQuery() != null) {
-                    String[] valuePairs = connectURI.getQuery().split("&");
-
-
-                    boolean validParams = true;
-
-                    for (String pair : valuePairs) {
-                        String[] param = pair.split("=");
-                        if (param.length > 0) {
-                            if (param[0].equals("cert")) {
-                                cert = param[1];
-                            }
-                            if (param[0].equals("macaroon")) {
-                                macaroon = param[1];
-                            }
-                        } else {
-                            validParams = false;
-                        }
-                    }
-
-
-                    // validate params
-                    if (cert == null || macaroon == null) {
-                        validParams = false;
-                    } else {
-                        try {
-                            BaseEncoding.base64Url().decode(cert);
-                        } catch (IllegalArgumentException e) {
-                            validParams = false;
-                        }
-
-                        try {
-                            BaseEncoding.base64Url().decode(macaroon);
-                        } catch (IllegalArgumentException e) {
-                            validParams = false;
-                        }
-                    }
-
-                    if (validParams) {
-                        // Everything is ok, initiate connection
-                        connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
-                    } else {
-                        ZapLog.debug(LOG_TAG, "Connect URI has invalid parameters (certificate or macaroon)");
-                        showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
-                    }
-
+            URI connectURI = null;
+            try {
+                connectURI = new URI(connectString);
+                if (!connectURI.getScheme().equals("lndconnect")) {
+                    showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
                 } else {
-                    ZapLog.debug(LOG_TAG, "Connect URI has no parameters");
-                    showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+
+                    String cert = null;
+                    String macaroon = null;
+
+                    // Fetch params
+                    if (connectURI.getQuery() != null) {
+                        String[] valuePairs = connectURI.getQuery().split("&");
+
+                        boolean validParams = true;
+
+                        for (String pair : valuePairs) {
+                            String[] param = pair.split("=");
+                            if (param.length > 1) {
+                                if (param[0].equals("cert")) {
+                                    cert = param[1];
+                                }
+                                if (param[0].equals("macaroon")) {
+                                    macaroon = param[1];
+                                }
+                            }
+                        }
+
+                        // validate cert (Certificate is not mandatory for BTCPay server for example, therefore null is valid)
+                        if (cert != null){
+                            try {
+                                byte[] certificateBytes = BaseEncoding.base64Url().decode(cert);
+                                try {
+                                    CustomSSLSocketFactory.create(certificateBytes);
+                                } catch (RuntimeException e){
+                                    validParams = false;
+                                    ZapLog.debug(LOG_TAG, "certificate creation failed");
+                                    showError(getResources().getString(R.string.error_connection_invalid_certificate), 5000);
+                                }
+                            } catch (IllegalArgumentException e) {
+                                validParams = false;
+                                ZapLog.debug(LOG_TAG, "cert decoding failed");
+                                showError(getResources().getString(R.string.error_connection_invalid_certificate), 5000);
+                            }
+                        }
+
+                        // validate macaroon if everything was valid so far
+                        if (validParams) {
+                            if (macaroon == null) {
+                                validParams = false;
+                                ZapLog.debug(LOG_TAG, "lnd connect string does not include a macaroon");
+                                showError(getResources().getString(R.string.error_connection_no_macaroon), 5000);
+                            } else {
+                                try {
+                                    BaseEncoding.base64Url().decode(macaroon);
+                                } catch (IllegalArgumentException e) {
+                                    validParams = false;
+                                    ZapLog.debug(LOG_TAG, "macaroon decoding failed");
+                                    showError(getResources().getString(R.string.error_connection_invalid_macaroon), 5000);
+                                }
+                            }
+                        }
+
+                        if (validParams) {
+                            // Everything is ok, initiate connection
+                            connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
+                        }
+
+                    } else {
+                        ZapLog.debug(LOG_TAG, "Connect URI has no parameters");
+                        showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
+                    }
                 }
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                ZapLog.debug(LOG_TAG, "URI could not be parsed");
+                showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
+            } catch (NullPointerException e) {
+                ZapLog.debug(LOG_TAG, "ConnectURI was null");
+                showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
             }
-        } catch (URISyntaxException e) {
-            ZapLog.debug(LOG_TAG, "URI could not be parsed");
-            e.printStackTrace();
-            showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+        } else {
+            showError(getResources().getString(R.string.error_connection_unsupported_format), 7000);
         }
 
     }
@@ -233,10 +261,17 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     @Override
     public void handleResult(Result rawResult) {
 
+        String qrCodeContent = "";
+        boolean isQrCodeContentValid = false;
         try {
-            verifyDesiredConnection(rawResult.getContents());
+            qrCodeContent = rawResult.getContents();
+            isQrCodeContentValid = true;
         } catch (NullPointerException e) {
             showError(getResources().getString(R.string.error_qr_code_result_null), 4000);
+        }
+
+        if (isQrCodeContentValid) {
+            verifyDesiredConnection(qrCodeContent);
         }
 
 
