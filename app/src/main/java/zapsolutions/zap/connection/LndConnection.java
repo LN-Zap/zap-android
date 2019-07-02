@@ -62,18 +62,22 @@ public class LndConnection {
         mConnectionInfo = connectionInfo.split(";");
         ZapLog.debug(LOG_TAG, connectionInfo);
 
+        if(mConnectionInfo[2].equals("null")) {
+            // BTC PAY (no cert, hex encoded macaroon)
+            mMacaroon = new MacaroonCallCredential(mConnectionInfo[3]);
+        } else {
+            // LND Connect
+            String macaroonBase64UrlString = mConnectionInfo[3];
 
-        // Macaroon
-        String macaroonBase64UrlString = mConnectionInfo[3];
-        byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroonBase64UrlString);
-        String macaroon = BaseEncoding.base16().encode(macaroonBytes);
-        mMacaroon = new MacaroonCallCredential(macaroon);
+            byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroonBase64UrlString);
+            String macaroon = BaseEncoding.base16().encode(macaroonBytes);
+            mMacaroon = new MacaroonCallCredential(macaroon);
 
-        // SSL
-        String certificateBase64UrlString = mConnectionInfo[2];
-        byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
+            String certificateBase64UrlString = mConnectionInfo[2];
+            byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
-        mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
+            mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
+        }
 
         generateChannelAndStubs();
 
@@ -88,10 +92,19 @@ public class LndConnection {
         String host = mConnectionInfo[0];
         int port = Integer.parseInt(mConnectionInfo[1]);
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
-        mSecureChannel = OkHttpChannelBuilder
-                .forAddress(host, port)
-                .sslSocketFactory(mSSLFactory)
-                .build();
+
+        if(mSSLFactory == null) {
+            // BTCPay
+            mSecureChannel = OkHttpChannelBuilder
+                    .forAddress(host, port)
+                    .build();
+
+        } else {
+            mSecureChannel = OkHttpChannelBuilder
+                    .forAddress(host, port)
+                    .sslSocketFactory(mSSLFactory)
+                    .build();
+        }
 
         // Blocking client to for sync gRPC calls
         mBlockingClient = LightningGrpc

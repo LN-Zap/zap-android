@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.content.ClipboardManager;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.io.BaseEncoding;
 
@@ -25,14 +27,21 @@ import androidx.preference.PreferenceManager;
 
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
+import zapsolutions.zap.connection.btcPay.BTCPayConfiguration;
+import zapsolutions.zap.connection.btcPay.BTCPayConfigurationJson;
+import zapsolutions.zap.connection.HttpClient;
+import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
+import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.ZapLog;
 import me.dm7.barcodescanner.zbar.Result;
@@ -43,7 +52,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;
-
+    private UserGuardian mUG;
 
     @Override
     public void onCreate(Bundle state) {
@@ -107,75 +116,108 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     }
 
     private void verifyDesiredConnection(String connectString) {
+        if(connectString.startsWith("lndconnect:")) {
+            connectLndConnect(connectString);
+        } else if(connectString.startsWith("config=")) {
+            // URL to BTCPayConfigurationJson
+            String configUrl = connectString.replace("config=", "");
+            StringRequest btcPayConfigRequest = new StringRequest(Request.Method.GET, configUrl,
+                    response -> connectToBtcPay(response),
+                    error -> showError(getResources().getString(R.string.error_unableToFetchBTCPayConfig), 4000));
 
-        URI connectURI = null;
+            ZapLog.debug(LOG_TAG, "Fetching BTCPay config...");
+            HttpClient.getInstance().addToRequestQueue(btcPayConfigRequest, "BTCPayConfigRequest");
+        } else {
+            // Either plain BTCPayConfigurationJson or invalid
+            connectToBtcPay(connectString);
+        }
+    }
+
+    private void connectLndConnect(String connectString) {
         try {
-            connectURI = new URI(connectString);
-            if (!connectURI.getScheme().equals("lndconnect")) {
-                showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
-            } else {
+            URI connectURI = new URI(connectString);
 
-                String cert = null;
-                String macaroon = null;
+            String cert = null;
+            String macaroon = null;
 
-                // Fetch params
-                if (connectURI.getQuery() != null) {
-                    String[] valuePairs = connectURI.getQuery().split("&");
+            // Fetch params
+            if (connectURI.getQuery() != null) {
+                String[] valuePairs = connectURI.getQuery().split("&");
 
+                boolean validParams = true;
 
-                    boolean validParams = true;
-
-                    for (String pair : valuePairs) {
-                        String[] param = pair.split("=");
-                        if (param.length > 0) {
-                            if (param[0].equals("cert")) {
-                                cert = param[1];
-                            }
-                            if (param[0].equals("macaroon")) {
-                                macaroon = param[1];
-                            }
-                        } else {
-                            validParams = false;
+                for (String pair : valuePairs) {
+                    String[] param = pair.split("=");
+                    if (param.length > 0) {
+                        if (param[0].equals("cert")) {
+                            cert = param[1];
                         }
-                    }
-
-
-                    // validate params
-                    if (cert == null || macaroon == null) {
+                        if (param[0].equals("macaroon")) {
+                            macaroon = param[1];
+                        }
+                    } else {
                         validParams = false;
-                    } else {
-                        try {
-                            BaseEncoding.base64Url().decode(cert);
-                        } catch (IllegalArgumentException e) {
-                            validParams = false;
-                        }
-
-                        try {
-                            BaseEncoding.base64Url().decode(macaroon);
-                        } catch (IllegalArgumentException e) {
-                            validParams = false;
-                        }
                     }
-
-                    if (validParams) {
-                        // Everything is ok, initiate connection
-                        connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
-                    } else {
-                        ZapLog.debug(LOG_TAG, "Connect URI has invalid parameters (certificate or macaroon)");
-                        showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
-                    }
-
-                } else {
-                    ZapLog.debug(LOG_TAG, "Connect URI has no parameters");
-                    showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
                 }
+
+
+                // validate params
+                if (cert == null || macaroon == null) {
+                    validParams = false;
+                } else {
+                    try {
+                        BaseEncoding.base64Url().decode(cert);
+                    } catch (IllegalArgumentException e) {
+                        validParams = false;
+                    }
+
+                    try {
+                        BaseEncoding.base64Url().decode(macaroon);
+                    } catch (IllegalArgumentException e) {
+                        validParams = false;
+                    }
+                }
+
+                if (validParams) {
+                    // Everything is ok, initiate connection
+                    connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
+                } else {
+                    throw new IllegalArgumentException("Connect URI has invalid parameters (certificate or macaroon)");
+                }
+            } else {
+                throw new IllegalArgumentException("Connect URI has no parameters");
             }
         } catch (URISyntaxException e) {
             ZapLog.debug(LOG_TAG, "URI could not be parsed");
-            e.printStackTrace();
+            showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+        } catch (IllegalArgumentException e) {
+            ZapLog.debug(LOG_TAG, e.getMessage());
             showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
         }
+    }
 
+    private void connectToBtcPay(String btcPayConfigurationJson) {
+        try {
+            // parse config
+            BTCPayConfigurationJson btcPayConfigurations = new Gson().fromJson(btcPayConfigurationJson, BTCPayConfigurationJson.class);
+            BTCPayConfiguration btcPayConfiguration = btcPayConfigurations.getConfiguration("grpc", "BTC");
+
+            // connect
+            if (btcPayConfiguration != null) {
+                mUG = new UserGuardian(this, DialogName -> {
+                    if (UserGuardian.BTC_PAY_CONNECT.equals(DialogName)) {
+                        connect(btcPayConfiguration.getHost(), btcPayConfiguration.getPort(), null, btcPayConfiguration.getMacaroon());
+                    }
+                });
+                mUG.securityConnectToBtcPay(btcPayConfiguration.getHost());
+            } else {
+                ZapLog.debug(LOG_TAG, "BTCPay Configuration does not contain BTC gRPC config");
+                showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+            }
+        } catch (JsonSyntaxException ex) {
+            ZapLog.debug(LOG_TAG, "BTCPay Configuration json syntax is invalid");
+            showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+        }
     }
 
     private void connect(String host, int port, String cert, String macaroon) {
@@ -271,5 +313,4 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             }
         }
     }
-
 }
