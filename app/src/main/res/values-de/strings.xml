@@ -162,7 +162,7 @@
     <string name="guardian_oldExchangeRate">Du hast einen Fiat Betrag angefordert, aber dein Umrechnungskurs ist nicht mehr aktuell. (Zuletzt aktualisiert vor %1$s Stunden)\nStelle sicher, dass du eine Internetverbindung hast, oder fordere den Betrag direkt in Bitcoin an.\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_tooMuchMoney">Glückwunsch, du scheinst eine menge Bitcoin zu haben!\nBitte denk daran, dass Zap eine Hot-Wallet ist.\nWir geben unser Bestes, diese Wallet sicher zu halten.\nTrotzdem empfehlen wir für den Großteil deines Vermögens Cold-Wallets oder Hardware-Wallets in Betracht zu ziehen.</string>
     <string name="guardian_notReadyForMainnet">Du bist mit dem MAINNET verbunden!\nZap Android is noch in einer frühen Entwicklungsphase. Du könntest echtes Geld verlieren!\n\nFalls du dieses Risiko nicht auf dich nehmen willst, wechsle solange ins Testnet.</string>
-
+    <string name="guardian_btcPayConnect">Bist du dir sicher du willst eine Verbindugn mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
 
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_security">Sicherheit</string>
@@ -226,6 +226,7 @@
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
     <string name="error_unableToConnectToLND">Die Verbindung zum LND kann nicht hergestellt werden.</string>
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
+    <string name="error_unableToFetchBTCPayConfig">Konfiguration vom BTCPay Server konnte nicht heruntergeladen werden.</string>
 
     <plurals name="duration_minute">
         <item quantity="one">Minute</item>
