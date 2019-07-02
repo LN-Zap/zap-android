@@ -162,7 +162,7 @@
     <string name="guardian_oldExchangeRate">Du hast einen Fiat Betrag angefordert, aber dein Umrechnungskurs ist nicht mehr aktuell. (Zuletzt aktualisiert vor %1$s Stunden)\nStelle sicher, dass du eine Internetverbindung hast, oder fordere den Betrag direkt in Bitcoin an.\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_tooMuchMoney">Glückwunsch, du scheinst eine menge Bitcoin zu haben!\nBitte denk daran, dass Zap eine Hot-Wallet ist.\nWir geben unser Bestes, diese Wallet sicher zu halten.\nTrotzdem empfehlen wir für den Großteil deines Vermögens Cold-Wallets oder Hardware-Wallets in Betracht zu ziehen.</string>
     <string name="guardian_notReadyForMainnet">Du bist mit dem MAINNET verbunden!\nZap Android is noch in einer frühen Entwicklungsphase. Du könntest echtes Geld verlieren!\n\nFalls du dieses Risiko nicht auf dich nehmen willst, wechsle solange ins Testnet.</string>
-    <string name="guardian_btcPayConnect">Bist du dir sicher du willst eine Verbindugn mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
+    <string name="guardian_btcPayConnect">Bist du dir sicher du willst eine Verbindung mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
 
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_security">Sicherheit</string>
