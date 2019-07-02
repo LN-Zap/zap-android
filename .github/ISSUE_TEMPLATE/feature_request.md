@@ -12,10 +12,3 @@
 ## Possible Implementation
 
 <!--- Not obligatory, but suggest an idea for implementing addition or change -->
-
-## Your Environment
-
-<!--- Include as many relevant details about the environment you experienced the bug in -->
-
-- Zap version: _(e.g. 0.2.3-alpha)_
-- Android version: _(e.g. API 28)_

@@ -37,3 +37,4 @@
 - Zap version: _(e.g. 0.2.3-alpha)_
 - Android version: _(e.g. API 28)_
 - Device: _(e.g. Google Pixel 3)_
+- LND Version: _(e.g. 0.7.0-beta)_
