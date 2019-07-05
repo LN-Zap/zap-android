@@ -108,6 +108,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mLoadingWalletLayout = view.findViewById(R.id.loading);
         mTvConnectError = view.findViewById(R.id.connectError);
 
+        // Show loading screen
         mWalletConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.VISIBLE);
 
@@ -238,6 +239,19 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 Intent intent = new Intent(getActivity(), SetupActivity.class);
                 intent.putExtra("setupMode", SetupActivity.FULL_SETUP);
                 startActivity(intent);
+            }
+        });
+
+
+        // Action when clicked on "retry"
+        Button btnReconnect = view.findViewById(R.id.reconnectBtn);
+        btnReconnect.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                mWalletConnectedLayout.setVisibility(View.GONE);
+                mWalletNotConnectedLayout.setVisibility(View.GONE);
+                mLoadingWalletLayout.setVisibility(View.VISIBLE);
+                Wallet.getInstance().isLNDReachable();
             }
         });
 
@@ -479,7 +493,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (success) {
             connectionToLNDEstablished();
         } else {
-            // Show info about mode (offline, testnet or mainnet) if it is already known
             if (PrefsUtil.isWalletSetup()) {
                 if (!error.equals("locked")) {
                     onInfoUpdated(false);
@@ -495,6 +508,26 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 onInfoUpdated(true);
             }
         }
+    }
+
+    public void showErrorAfterNotUnlocked(){
+        mWalletConnectedLayout.setVisibility(View.GONE);
+        mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
+        mLoadingWalletLayout.setVisibility(View.GONE);
+
+        mTvConnectError.setText(R.string.error_connection_wallet_locked);
+    }
+
+    public void showBackgroundForWalletUnlock(){
+        mWalletConnectedLayout.setVisibility(View.GONE);
+        mWalletNotConnectedLayout.setVisibility(View.GONE);
+        mLoadingWalletLayout.setVisibility(View.GONE);
+    }
+
+    public void showLoadingForWalletUnlock(){
+        mWalletConnectedLayout.setVisibility(View.GONE);
+        mWalletNotConnectedLayout.setVisibility(View.GONE);
+        mLoadingWalletLayout.setVisibility(View.VISIBLE);
     }
 
     private void showError(String message, int duration) {

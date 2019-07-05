@@ -28,6 +28,8 @@ import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.CustomSSLSocketFactory;
+import zapsolutions.zap.connection.lndConnect.LndConnectStringParser;
+import zapsolutions.zap.connection.lndConnect.LndConnectStringResult;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.baseClasses.App;
@@ -116,94 +118,41 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     private void verifyDesiredConnection(String connectString) {
 
         if (connectString.toLowerCase().startsWith("lndconnect")) {
-
-            // Parse lndconnect string
-
-            URI connectURI = null;
-            try {
-                connectURI = new URI(connectString);
-                if (!connectURI.getScheme().equals("lndconnect")) {
-                    showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
-                } else {
-
-                    String cert = null;
-                    String macaroon = null;
-
-                    // Fetch params
-                    if (connectURI.getQuery() != null) {
-                        String[] valuePairs = connectURI.getQuery().split("&");
-
-                        boolean validParams = true;
-
-                        for (String pair : valuePairs) {
-                            String[] param = pair.split("=");
-                            if (param.length > 1) {
-                                if (param[0].equals("cert")) {
-                                    cert = param[1];
-                                }
-                                if (param[0].equals("macaroon")) {
-                                    macaroon = param[1];
-                                }
-                            }
-                        }
-
-                        // validate cert (Certificate is not mandatory for BTCPay server for example, therefore null is valid)
-                        if (cert != null){
-                            try {
-                                byte[] certificateBytes = BaseEncoding.base64Url().decode(cert);
-                                try {
-                                    CustomSSLSocketFactory.create(certificateBytes);
-                                } catch (RuntimeException e){
-                                    validParams = false;
-                                    ZapLog.debug(LOG_TAG, "certificate creation failed");
-                                    showError(getResources().getString(R.string.error_connection_invalid_certificate), 5000);
-                                }
-                            } catch (IllegalArgumentException e) {
-                                validParams = false;
-                                ZapLog.debug(LOG_TAG, "cert decoding failed");
-                                showError(getResources().getString(R.string.error_connection_invalid_certificate), 5000);
-                            }
-                        }
-
-                        // validate macaroon if everything was valid so far
-                        if (validParams) {
-                            if (macaroon == null) {
-                                validParams = false;
-                                ZapLog.debug(LOG_TAG, "lnd connect string does not include a macaroon");
-                                showError(getResources().getString(R.string.error_connection_no_macaroon), 5000);
-                            } else {
-                                try {
-                                    BaseEncoding.base64Url().decode(macaroon);
-                                } catch (IllegalArgumentException e) {
-                                    validParams = false;
-                                    ZapLog.debug(LOG_TAG, "macaroon decoding failed");
-                                    showError(getResources().getString(R.string.error_connection_invalid_macaroon), 5000);
-                                }
-                            }
-                        }
-
-                        if (validParams) {
-                            // Everything is ok, initiate connection
-                            connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
-                        }
-
-                    } else {
-                        ZapLog.debug(LOG_TAG, "Connect URI has no parameters");
-                        showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
-                    }
-                }
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-                ZapLog.debug(LOG_TAG, "URI could not be parsed");
-                showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
-            } catch (NullPointerException e) {
-                ZapLog.debug(LOG_TAG, "ConnectURI was null");
-                showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
-            }
+            connectLndConnect(connectString);
         } else {
             showError(getResources().getString(R.string.error_connection_unsupported_format), 7000);
         }
 
+    }
+
+    private void connectLndConnect(String connectString){
+        LndConnectStringParser parser = new LndConnectStringParser();
+        LndConnectStringResult result;
+        result = parser.parse(connectString);
+
+        if (result.getError() == -1) {
+            // Everything was okay, initiate connection
+            connect(result.getHost(), result.getPort(), result.getCert(), result.getMacaroon());
+
+        } else {
+            switch (result.getError()) {
+                case LndConnectStringParser.ERROR_INVALID_CONNECT_STRING:
+                    showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
+                    break;
+                case LndConnectStringParser.ERROR_NO_MACAROON:
+                    showError(getResources().getString(R.string.error_connection_no_macaroon), 5000);
+                    break;
+                case LndConnectStringParser.ERROR_INVALID_CERTIFICATE:
+                    showError(getResources().getString(R.string.error_connection_invalid_certificate), 5000);
+                    break;
+                case LndConnectStringParser.ERROR_INVALID_MACAROON:
+                    showError(getResources().getString(R.string.error_connection_invalid_macaroon), 5000);
+                    break;
+                case LndConnectStringParser.ERROR_INVALID_HOST_OR_PORT:
+                    showError(getResources().getString(R.string.error_connection_invalid_host_or_port), 5000);
+                    break;
+            }
+        }
     }
 
     private void connect(String host, int port, String cert, String macaroon) {

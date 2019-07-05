@@ -68,6 +68,8 @@
     <string name="confirmExit">Do you really want to quit Zap?</string>
     <string name="or">or</string>
     <string name="max_amount">Maximum Amount:</string>
+    <string name="retry">Retry</string>
+    <string name="loading">Loading</string>
 
 
     <string name="activity_receive">Receive</string>
@@ -226,6 +228,17 @@
     <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
     <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
     <string name="error_qr_code_result_null">Unable to read QR-Code, please try again.</string>
+    <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use a lndconnect string.\n\nlndconnect://...</string>
+    <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalid_certificate">The certificate is invalid.</string>
+    <string name="error_connection_no_macaroon">Your connection information does not contain a macaroon. This is mandatory.</string>
+    <string name="error_connection_invalid_macaroon">The macaroon is invalid.</string>
+    <string name="error_connection_invalid_host_or_port">The provided host or port is invalid.</string>
+    <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
+    <string name="error_connection_server_unreachable">The sever is not responding.\n\nPlease make sure the server is running and still has the following IP:\n\n%1$s</string>
+    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND deamon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
+    <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
+    <string name="error_wrong_password">Wrong password</string>
 
     <plurals name="duration_minute">
         <item quantity="one">Minute</item>
@@ -250,12 +263,6 @@
     <string name="fee_estimated_duration">Estimated Delivery: %1$d %2$s</string>
     <string name="fee_not_available">n/A</string>
 
-    <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use a lndconnect string.\n\nlndconnect://...</string>
-    <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
-    <string name="error_connection_invalid_certificate">The certificate is invalid.</string>
-    <string name="error_connection_no_macaroon">Your connection information does not contain a macaroon. This is mandatory.</string>
-    <string name="error_connection_invalid_macaroon">The macaroon is invalid.</string>
-    <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
-    <string name="error_connection_server_unreachable">The sever is not responding.\n\nPlease make sure the server is running and still has the following IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND deamon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
+    <string name="unlock_wallet">Unlock Wallet</string>
+
 </resources>
