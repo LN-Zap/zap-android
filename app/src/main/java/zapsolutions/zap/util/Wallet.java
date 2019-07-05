@@ -252,11 +252,11 @@ public class Wallet {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            // We have to call this delayed, as otherwise it will hang up lnd. (SubscribeToChannelEvents seems to cause this.)
-                            // To also get channels in an active state, this delay has to be quite high (5 seconds were not enough).
+                            // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
+                            // ToDo: Create a routine that retries this until successfull
                             isLNDReachable();
                         }
-                    }, 1000);
+                    }, 5000);
 
                     Handler handler2 = new Handler();
                     handler2.postDelayed(new Runnable() {
@@ -264,6 +264,7 @@ public class Wallet {
                         public void run() {
                             // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
                             // That's why we update it again 10 seconds later.
+                            // ToDo: Create a routine that retries this until successfull
                             Wallet.getInstance().fetchOpenChannelsFromLND();
                             Wallet.getInstance().fetchPendingChannelsFromLND();
                             Wallet.getInstance().fetchClosedChannelsFromLND();
