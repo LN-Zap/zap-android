@@ -1,3 +1,8 @@
+---
+name: Feature request
+about: Suggest an idea for this project
+
+---
 <!--- Provide a general summary of the issue in the Title above -->
 
 ## Description
