@@ -66,7 +66,6 @@ public class Wallet {
     public List<Invoice> mInvoiceList;
     public List<Invoice> mTempInvoiceUpdateList;
     public List<Payment> mPaymentsList;
-    public List<Invoice> mPayedInvoicesList = new LinkedList<>();
 
     public List<Channel> mOpenChannelsList;
     public List<PendingChannelsResponse.PendingOpenChannel> mPendingOpenChannelsList;
@@ -499,6 +498,7 @@ public class Wallet {
                 .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
         ListPaymentsRequest asyncPaymentsRequest = ListPaymentsRequest.newBuilder()
+                .setIncludeIncomplete(false)
                 .build();
         final ListenableFuture<ListPaymentsResponse> paymentsFuture = asyncPaymentsClient.listPayments(asyncPaymentsRequest);
 
@@ -692,61 +692,13 @@ public class Wallet {
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Get node info request interrupted.");
                 } catch (ExecutionException e) {
-                    // ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
+                    ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
                     // ZapLog.debug(LOG_TAG, e.getMessage());
                 }
             }
         }, new ExecuteOnCaller());
     }
 
-
-    /**
-     * This will fetch an Invoice according to the supplied txHash.
-     * The Invoice will then be added to the mPayedInvoicesList (no duplicates) which can then
-     * be used for non async tasks, such as getting the memo for lightning payments.
-     *
-     * @param paymentHash
-     */
-    public void lookupInvoiceWithLND(ByteString paymentHash) {
-        // fetch invoice
-        LightningGrpc.LightningFutureStub asyncLookupInvoiceClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        PaymentHash asyncPaymentHashRequest = PaymentHash.newBuilder()
-                .setRHash(paymentHash)
-                .build();
-        final ListenableFuture<Invoice> invoiceFuture = asyncLookupInvoiceClient.lookupInvoice(asyncPaymentHashRequest);
-
-        invoiceFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Invoice invoiceResponse = invoiceFuture.get();
-
-                    // Add the invoice to our list, if it is not already a member of the list.
-                    boolean invoiceAlreadyExists = false;
-                    for (Invoice i : mPayedInvoicesList) {
-                        if (i.getRHash().equals(invoiceResponse.getRHash())) {
-                            invoiceAlreadyExists = true;
-                            break;
-                        }
-                    }
-                    if (!invoiceAlreadyExists) {
-                        mPayedInvoicesList.add(invoiceResponse);
-                    }
-
-                    ZapLog.debug(LOG_TAG, invoiceResponse.toString());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "lookup invoice request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in lookup invoice request task.");
-                    ZapLog.debug(LOG_TAG, e.getMessage());
-
-                }
-            }
-        }, new ExecuteOnCaller());
-    }
 
     /**
      * Use this to subscribe the wallet to transaction events that happen on LND.
