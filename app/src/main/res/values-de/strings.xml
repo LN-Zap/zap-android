@@ -30,6 +30,8 @@
     Correct example:   5 is 10%% of 50
 
     &  =  &amp;
+    <  =  &lt;
+    >  =  &gt;
 
     -->
 
@@ -66,6 +68,8 @@
     <string name="confirmExit">Zap wirklich beenden?</string>
     <string name="or">oder</string>
     <string name="max_amount">Maximaler Betrag:</string>
+    <string name="retry">Nochmal versuchen</string>
+    <string name="loading">Lädt</string>
 
 
     <string name="activity_receive">Empfangen</string>
@@ -220,12 +224,21 @@
     <string name="error_paymentRequestExpired">Die Zahlungsanfrage is abgelaufen.</string>
     <string name="error_useTestnetRequest">Du bist mit dem TESTNET verbunden. Bitte verwende TESTNET Adressen oder Zahlungsanfragen.</string>
     <string name="error_useMainnetRequest">Du bist mit dem MAINNET verbunden. Bitte verwende MAINNET Adressen oder Zahlungsanfragen.</string>
-    <string name="error_invalidRemoteConnectionString">Ungültige Verbindungsinformationen.</string>
     <string name="error_cameraPermissionRequired">Um QR-Codes zu scannen musst du Zap die Erlaubnis geben, die Kamera zu verwenden.</string>
     <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
-    <string name="error_unableToConnectToLND">Die Verbindung zum LND kann nicht hergestellt werden.</string>
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
+    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt.\nBitte verwende das lndconnect Format.\n\nlndconnect://...</string>
+    <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.\nBitte stelle sicher, dass du folgendes Format verwendet hast:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalid_certificate">Das Zertifikat is ungültig.</string>
+    <string name="error_connection_no_macaroon">Deine Verbindungsinformationen enthalten kein Macaroon. Das Macaroon muss angegeben werden.</string>
+    <string name="error_connection_invalid_macaroon">Das Macaroon ist ungültig.</string>
+    <string name="error_connection_invalid_host_or_port">Der angegebene Host oder Port is ungültig.</string>
+    <string name="error_connection_invalid_macaroon2">Zugriff verweigert!\n\nDas Macaroon ist ungültig.</string>
+    <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
+    <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND deamon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)\n\n- Stelle sicher, dass das Zertifikat gültig ist.</string>
+    <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
+    <string name="error_wrong_password">Falsches Passwort</string>
 
     <plurals name="duration_minute">
         <item quantity="one">Minute</item>
@@ -249,4 +262,7 @@
     <string name="fee_tier_fast_description">Schnelle Transaktion</string>
     <string name="fee_estimated_duration">Geschätzte Dauer: %1$d %2$s</string>
     <string name="fee_not_available">n/A</string>
+
+    <string name="unlock_wallet">Wallet entsperren</string>
+
 </resources>

@@ -2,6 +2,7 @@ package zapsolutions.zap.util;
 
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
@@ -34,17 +35,22 @@ import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.TransactionDetails;
+import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletRequest;
+import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletResponse;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
+import com.github.lightningnetwork.lnd.lnrpc.WalletUnlockerGrpc;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
 
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
@@ -108,7 +114,6 @@ public class Wallet {
     private final Set<ChannelBackupSubscriptionListener> mChannelBackupSubscriptionListeners = new HashSet<>();
 
 
-
     private Wallet() {
         ;
     }
@@ -144,7 +149,7 @@ public class Wallet {
      * This will be used on loading. If this request finishes without an error, our connection to LND is established.
      * All Listeners registered to WalletLoadedListener will be informed about any changes.
      */
-    public void isLNDReachable() {
+    public void checkIfLndIsReachableAndTriggerWalletLoadedInterface() {
         // Retrieve info from LND with gRPC (async)
 
 
@@ -154,6 +159,7 @@ public class Wallet {
 
             LightningGrpc.LightningFutureStub asyncInfoClient = LightningGrpc
                     .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                    .withDeadlineAfter(5, TimeUnit.SECONDS)
                     .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
             GetInfoRequest asyncInfoRequest = GetInfoRequest.newBuilder().build();
@@ -174,17 +180,35 @@ public class Wallet {
                         mInfoFetched = true;
                         mConnectedToLND = true;
 
-
                         mConnectionCheckInProgress = false;
-                        broadcastWalletLoadedUpdate(true, "");
+                        broadcastWalletLoadedUpdate(true, -1);
                     } catch (InterruptedException e) {
                         ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
                         mConnectionCheckInProgress = false;
-                        broadcastWalletLoadedUpdate(false, "interruted");
+                        broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_INTERRUPTED);
                     } catch (ExecutionException e) {
                         mConnectionCheckInProgress = false;
                         if (e.getMessage().toLowerCase().contains("unavailable")) {
-                            broadcastWalletLoadedUpdate(false, "unavailable");
+                            // This is the case if:
+                            // - LND deamon is not running
+                            // - An incorrect port is used
+                            // - A wrong certificate is used (When the certificate creation failed due to an error)
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
+                        } else if (e.getMessage().toLowerCase().contains("deadline_exceeded")) {
+                            // This is the case if:
+                            // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
+                            ZapLog.debug(LOG_TAG, "Cannot reach remote");
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TIMEOUT);
+                        } else if (e.getMessage().toLowerCase().contains("unimplemented")) {
+                            // This is the case if:
+                            // - The wallet is locked
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
+                            ZapLog.debug(LOG_TAG, "Wallet is locked!");
+                        } else if (e.getMessage().toLowerCase().contains("verification failed")) {
+                            // This is the case if:
+                            // - The macaroon is invalid
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
+                            ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
                         }
                         ZapLog.debug(LOG_TAG, e.getMessage());
                     }
@@ -193,6 +217,74 @@ public class Wallet {
         }
     }
 
+    /**
+     * Call this if the deamon is running, but the wallet is not unlocked yet.
+     *
+     * @param password
+     */
+    public void unlockWallet(String password) {
+        //UnlockWallet
+        WalletUnlockerGrpc.WalletUnlockerFutureStub asyncUnlockClient = WalletUnlockerGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        UnlockWalletRequest asyncUnlockRequest = UnlockWalletRequest.newBuilder()
+                .setWalletPassword(ByteString.copyFrom(password, Charset.defaultCharset()))
+                .build();
+
+        final ListenableFuture<UnlockWalletResponse> unlockFuture = asyncUnlockClient.unlockWallet(asyncUnlockRequest);
+
+        unlockFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    UnlockWalletResponse unlockResponse = unlockFuture.get();
+                    ZapLog.debug(LOG_TAG, "successfully unlocked");
+
+                    if (PrefsUtil.isWalletSetup()) {
+                        LndConnection.getInstance().stopBackgroundTasks();
+                    }
+                    LndConnection.getInstance().restartBackgroundTasks();
+
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
+                            // ToDo: Create a routine that retries this until successful
+                            checkIfLndIsReachableAndTriggerWalletLoadedInterface();
+                        }
+                    }, 10000);
+
+                    Handler handler2 = new Handler();
+                    handler2.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
+                            // That's why we update it again 10 seconds later.
+                            // ToDo: Create a routine that retries this until successful
+                            Wallet.getInstance().fetchOpenChannelsFromLND();
+                            Wallet.getInstance().fetchPendingChannelsFromLND();
+                            Wallet.getInstance().fetchClosedChannelsFromLND();
+                        }
+                    }, 12000);
+
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+
+                    ZapLog.debug(LOG_TAG, e.getMessage());
+
+                    // Show password prompt again after error
+                    broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
+
+                }
+            }
+        }, new ExecuteOnCaller());
+
+    }
 
     /**
      * This will return a Balance object that contains all types of balances.
@@ -356,11 +448,11 @@ public class Wallet {
     /**
      * This will fetch all lightning payment history from LND.
      * After that the history is provided in lists that can be handled in a synchronized way.
-     *
+     * <p>
      * This will need less bandwidth than updating all history and can be called when a lightning
      * payment was successful.
      */
-    public void updateLightningPaymentHistory(){
+    public void updateLightningPaymentHistory() {
         // Set payment update flags to false. This way we can determine later, when update is finished.
 
         if (!mUpdatingHistory) {
@@ -374,11 +466,11 @@ public class Wallet {
     /**
      * This will fetch all on-chain transaction history from LND.
      * After that the history is provided in lists that can be handled in a synchronized way.
-     *
+     * <p>
      * This will need less bandwidth than updating all history and can be called when a lightning
      * payment was successful.
      */
-    public void updateOnChainTransactionHistory(){
+    public void updateOnChainTransactionHistory() {
         // Set payment update flags to false. This way we can determine later, when update is finished.
 
         if (!mUpdatingHistory) {
@@ -962,7 +1054,6 @@ public class Wallet {
     }
 
 
-
     /**
      * Use this to subscribe the wallet to channel backup events that happen on LND.
      * The events will be captured and forwarded to the ChannelBackupSubscriptionListener.
@@ -1038,7 +1129,6 @@ public class Wallet {
             mChannelBackupStreamObserver.cancel(null, null);
         }
     }
-
 
 
     /**
@@ -1342,7 +1432,7 @@ public class Wallet {
 
     // Event handling to notify all registered listeners when wallet initialization finished successfully.
 
-    private void broadcastWalletLoadedUpdate(boolean success, String error) {
+    private void broadcastWalletLoadedUpdate(boolean success, int error) {
         for (WalletLoadedListener listener : mWalletLoadedListeners) {
             listener.onWalletLoadedUpdated(success, error);
         }
@@ -1357,7 +1447,14 @@ public class Wallet {
     }
 
     public interface WalletLoadedListener {
-        void onWalletLoadedUpdated(boolean success, String error);
+
+        int ERROR_LOCKED = 0;
+        int ERROR_INTERRUPTED = 1;
+        int ERROR_TIMEOUT = 2;
+        int ERROR_UNAVAILABLE = 3;
+        int ERROR_AUTHENTICATION = 4;
+
+        void onWalletLoadedUpdated(boolean success, int error);
     }
 
 

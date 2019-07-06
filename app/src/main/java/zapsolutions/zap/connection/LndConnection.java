@@ -22,9 +22,6 @@ import zapsolutions.zap.util.ZapLog;
 
 /**
  * Singleton to handle the connection to lnd
- * <p>
- * Please note:
- * IP, Certificate and Macaroon are placeholders right now.
  */
 public class LndConnection {
 
@@ -73,7 +70,11 @@ public class LndConnection {
         String certificateBase64UrlString = mConnectionInfo[2];
         byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
-        mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
+        try {
+            mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
+        } catch (RuntimeException e) {
+            ZapLog.debug(LOG_TAG, "Error on Certificate");
+        }
 
         generateChannelAndStubs();
 
@@ -139,6 +140,10 @@ public class LndConnection {
 
     public LightningGrpc.LightningBlockingStub getBlockingClient() {
         return mBlockingClient;
+    }
+
+    public String[] getConnectionInfo() {
+        return mConnectionInfo;
     }
 
 }

@@ -34,10 +34,8 @@
     <string name="error_cameraPermissionRequired">Para escanear códigos QR debes permitir que Zap acceda a la cámara.</string>
     <string name="error_emptyClipboardConnect">Su portapapeles no contiene ningún dato de conexión.</string>
     <string name="error_emptyClipboardPayment">Su portapapeles no contiene ningún dato de pago.</string>
-    <string name="error_invalidRemoteConnectionString">Datos de conexión inválidos.</string>
     <string name="error_notAPaymentRequest">Datos de pago inválidos.\nUtilice una dirección Bitcoin o una solicitud de pago para Lightning para iniciar la transferencia.</string>
     <string name="error_paymentRequestExpired">Esta solicitud de pago ha expirado.</string>
-    <string name="error_unableToConnectToLND">No se pudo conectar a LND.</string>
     <string name="error_useMainnetRequest">Estás conectado a la MAINNET. Por favor usa direcciones o solicitudes de pago para MAINNET.</string>
     <string name="error_useTestnetRequest">Estás conectado a la TESTNET. Por favor usa direcciones y solicitudes de pago para TESTNET.</string>
     <string name="expired_requests">Solicitud vencida</string>
