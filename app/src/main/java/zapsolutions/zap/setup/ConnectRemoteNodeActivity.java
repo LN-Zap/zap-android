@@ -15,10 +15,6 @@ import android.content.ClipboardManager;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.common.io.BaseEncoding;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
@@ -27,9 +23,8 @@ import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.CustomSSLSocketFactory;
 import zapsolutions.zap.connection.lndConnect.LndConnectStringParser;
-import zapsolutions.zap.connection.lndConnect.LndConnectStringResult;
+import zapsolutions.zap.connection.LndConnectionConfig;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.baseClasses.App;
@@ -37,7 +32,6 @@ import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UtilFunctions;
-import zapsolutions.zap.util.ZapLog;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
@@ -125,17 +119,12 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     }
 
-    private void connectLndConnect(String connectString){
-        LndConnectStringParser parser = new LndConnectStringParser();
-        LndConnectStringResult result;
-        result = parser.parse(connectString);
+    private void connectLndConnect(String connectString) {
 
-        if (result.getError() == -1) {
-            // Everything was okay, initiate connection
-            connect(result.getHost(), result.getPort(), result.getCert(), result.getMacaroon());
+        LndConnectStringParser parser = new LndConnectStringParser(connectString).parse();
 
-        } else {
-            switch (result.getError()) {
+        if (parser.hasError()) {
+            switch (parser.getError()) {
                 case LndConnectStringParser.ERROR_INVALID_CONNECT_STRING:
                     showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
                     break;
@@ -152,10 +141,14 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                     showError(getResources().getString(R.string.error_connection_invalid_host_or_port), 5000);
                     break;
             }
+        } else {
+            // Connect using the supplied configuration
+            connect(parser.getConnectionConfig());
         }
+
     }
 
-    private void connect(String host, int port, String cert, String macaroon) {
+    private void connect(LndConnectionConfig config) {
         App ctx = App.getAppContext();
         SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
                 .encryptionFingerprint(ctx)
@@ -171,7 +164,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         prefsRemote.edit()
                 // The following string contains host,port,cert and macaroon in one string separated with ";"
                 // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-                .putString(PrefsUtil.REMOTE_COMBINED, host + ";" + port + ";" + cert + ";" + macaroon)
+                .putString(PrefsUtil.REMOTE_COMBINED, config.getHost() + ";" + config.getPort() + ";" + config.getCert() + ";" + config.getMacaroon())
                 .commit();
 
         // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.

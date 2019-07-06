@@ -235,7 +235,7 @@
     <string name="error_connection_invalid_macaroon">Das Macaroon ist ungültig.</string>
     <string name="error_connection_invalid_host_or_port">Der angegebene Host oder Port is ungültig.</string>
     <string name="error_connection_invalid_macaroon2">Zugriff verweigert!\n\nDas Macaroon ist ungültig.</string>
-    <string name="error_connection_server_unreachable">Der Server ist nicht erreichbar.\n\nBitte überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
+    <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
     <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- stelle sicher, dass der LND deamon auf dem server läuft.\n\n- stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)\n\n- stelle sicher, dass das Zertifikat gültig ist.</string>
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
     <string name="error_wrong_password">Falsches Passwort</string>

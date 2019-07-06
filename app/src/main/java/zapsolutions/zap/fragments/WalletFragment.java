@@ -251,7 +251,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mWalletConnectedLayout.setVisibility(View.GONE);
                 mWalletNotConnectedLayout.setVisibility(View.GONE);
                 mLoadingWalletLayout.setVisibility(View.VISIBLE);
-                Wallet.getInstance().isLNDReachable();
+                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
             }
         });
 
@@ -263,7 +263,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             connectionToLNDEstablished();
         } else {
             if (PrefsUtil.isWalletSetup()) {
-                Wallet.getInstance().isLNDReachable();
+                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
             }
         }
 
@@ -489,18 +489,18 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     @Override
-    public void onWalletLoadedUpdated(boolean success, String error) {
+    public void onWalletLoadedUpdated(boolean success, int error) {
         if (success) {
             connectionToLNDEstablished();
         } else {
             if (PrefsUtil.isWalletSetup()) {
-                if (!error.equals("locked")) {
+                if (error != Wallet.WalletLoadedListener.ERROR_LOCKED) {
                     onInfoUpdated(false);
-                    if (error.equals("authentication")) {
+                    if (error == Wallet.WalletLoadedListener.ERROR_AUTHENTICATION) {
                         mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
-                    } else if (error.equals("timeout")) {
+                    } else if (error == Wallet.WalletLoadedListener.ERROR_TIMEOUT) {
                         mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionInfo()[0]));
-                    } else if (error.equals("unavailable")) {
+                    } else if (error == Wallet.WalletLoadedListener.ERROR_UNAVAILABLE) {
                         mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, LndConnection.getInstance().getConnectionInfo()[1]));
                     }
                 }

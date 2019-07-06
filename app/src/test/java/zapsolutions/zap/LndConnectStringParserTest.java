@@ -14,8 +14,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_INVALID_CONNECT_STRING;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -26,8 +26,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_INVALID_CONNECT_STRING;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -38,8 +38,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_INVALID_CONNECT_STRING;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -50,8 +50,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_INVALID_CONNECT_STRING;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -62,8 +62,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_INVALID_HOST_OR_PORT;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -74,8 +74,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_INVALID_HOST_OR_PORT;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -86,8 +86,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_NO_MACAROON;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -98,8 +98,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_INVALID_CERTIFICATE;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -110,8 +110,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = LndConnectStringParser.ERROR_INVALID_MACAROON;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }
@@ -122,8 +122,8 @@ public class LndConnectStringParserTest {
         int output;
         int expected = -1;
 
-        LndConnectStringParser parser = new LndConnectStringParser();
-        output = parser.parse(input).getError();
+        LndConnectStringParser parser = new LndConnectStringParser(input).parse();
+        output = parser.getError();
 
         assertEquals(expected, output);
     }

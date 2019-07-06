@@ -1,20 +1,12 @@
-package zapsolutions.zap.connection.lndConnect;
+package zapsolutions.zap.connection;
 
-public class LndConnectStringResult {
+public class LndConnectionConfig {
 
-    private int error;
     private String host;
     private int port;
     private String cert;
     private String macaroon;
 
-    public int getError() {
-        return error;
-    }
-
-    public void setError(int error) {
-        this.error = error;
-    }
 
     public String getHost() {
         return host;

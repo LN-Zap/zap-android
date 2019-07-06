@@ -150,7 +150,7 @@ public class Wallet {
      * This will be used on loading. If this request finishes without an error, our connection to LND is established.
      * All Listeners registered to WalletLoadedListener will be informed about any changes.
      */
-    public void isLNDReachable() {
+    public void checkIfLndIsReachableAndTriggerWalletLoadedInterface() {
         // Retrieve info from LND with gRPC (async)
 
 
@@ -182,11 +182,11 @@ public class Wallet {
                         mConnectedToLND = true;
 
                         mConnectionCheckInProgress = false;
-                        broadcastWalletLoadedUpdate(true, "");
+                        broadcastWalletLoadedUpdate(true, -1);
                     } catch (InterruptedException e) {
                         ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
                         mConnectionCheckInProgress = false;
-                        broadcastWalletLoadedUpdate(false, "interrupted");
+                        broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_INTERRUPTED);
                     } catch (ExecutionException e) {
                         mConnectionCheckInProgress = false;
                         if (e.getMessage().toLowerCase().contains("unavailable")) {
@@ -194,21 +194,21 @@ public class Wallet {
                             // - LND deamon is not running
                             // - An incorrect port is used
                             // - A wrong certificate is used (When the certificate creation failed due to an error)
-                            broadcastWalletLoadedUpdate(false, "unavailable");
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
                         } else if (e.getMessage().toLowerCase().contains("deadline_exceeded")) {
                             // This is the case if:
                             // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
                             ZapLog.debug(LOG_TAG, "Cannot reach remote");
-                            broadcastWalletLoadedUpdate(false, "timeout");
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TIMEOUT);
                         } else if (e.getMessage().toLowerCase().contains("unimplemented")) {
                             // This is the case if:
                             // - The wallet is locked
-                            broadcastWalletLoadedUpdate(false, "locked");
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
                             ZapLog.debug(LOG_TAG, "Wallet is locked!");
                         } else if (e.getMessage().toLowerCase().contains("verification failed")) {
                             // This is the case if:
                             // - The macaroon is invalid
-                            broadcastWalletLoadedUpdate(false, "authentication");
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
                             ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
                         }
                         ZapLog.debug(LOG_TAG, e.getMessage());
@@ -253,10 +253,10 @@ public class Wallet {
                         @Override
                         public void run() {
                             // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
-                            // ToDo: Create a routine that retries this until successfull
-                            isLNDReachable();
+                            // ToDo: Create a routine that retries this until successful
+                            checkIfLndIsReachableAndTriggerWalletLoadedInterface();
                         }
-                    }, 5000);
+                    }, 10000);
 
                     Handler handler2 = new Handler();
                     handler2.postDelayed(new Runnable() {
@@ -264,12 +264,12 @@ public class Wallet {
                         public void run() {
                             // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
                             // That's why we update it again 10 seconds later.
-                            // ToDo: Create a routine that retries this until successfull
+                            // ToDo: Create a routine that retries this until successful
                             Wallet.getInstance().fetchOpenChannelsFromLND();
                             Wallet.getInstance().fetchPendingChannelsFromLND();
                             Wallet.getInstance().fetchClosedChannelsFromLND();
                         }
-                    }, 10000);
+                    }, 12000);
 
 
                 } catch (InterruptedException e) {
@@ -279,7 +279,7 @@ public class Wallet {
                     ZapLog.debug(LOG_TAG, e.getMessage());
 
                     // Show password prompt again after error
-                    broadcastWalletLoadedUpdate(false, "locked");
+                    broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
 
                 }
             }
@@ -1480,7 +1480,7 @@ public class Wallet {
 
     // Event handling to notify all registered listeners when wallet initialization finished successfully.
 
-    private void broadcastWalletLoadedUpdate(boolean success, String error) {
+    private void broadcastWalletLoadedUpdate(boolean success, int error) {
         for (WalletLoadedListener listener : mWalletLoadedListeners) {
             listener.onWalletLoadedUpdated(success, error);
         }
@@ -1495,7 +1495,14 @@ public class Wallet {
     }
 
     public interface WalletLoadedListener {
-        void onWalletLoadedUpdated(boolean success, String error);
+
+        int ERROR_LOCKED = 0;
+        int ERROR_INTERRUPTED = 1;
+        int ERROR_TIMEOUT = 2;
+        int ERROR_UNAVAILABLE = 3;
+        int ERROR_AUTHENTICATION = 4;
+
+        void onWalletLoadedUpdated(boolean success, int error);
     }
 
 

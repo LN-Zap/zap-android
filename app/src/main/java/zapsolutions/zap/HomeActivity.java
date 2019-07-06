@@ -224,7 +224,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 ZapLog.debug(LOG_TAG, "Starting to establish connections...");
                 LndConnection.getInstance().restartBackgroundTasks();
 
-                Wallet.getInstance().isLNDReachable();
+                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
 
             }
         }
@@ -335,7 +335,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     @Override
-    public void onWalletLoadedUpdated(boolean success, String error) {
+    public void onWalletLoadedUpdated(boolean success, int error) {
         if (success) {
             // We managed to establish a connection to LND.
             // Now we can start to fetch all information needed from LND
@@ -360,7 +360,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             ZapLog.debug(LOG_TAG, "Wallet loaded");
         } else {
-            if (error.equals("locked")) {
+            if (error == Wallet.WalletLoadedListener.ERROR_LOCKED) {
 
 
                 // Show unlock dialog

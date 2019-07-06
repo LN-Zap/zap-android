@@ -235,7 +235,7 @@
     <string name="error_connection_invalid_macaroon">The macaroon is invalid.</string>
     <string name="error_connection_invalid_host_or_port">The provided host or port is invalid.</string>
     <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
-    <string name="error_connection_server_unreachable">The sever is not responding.\n\nPlease make sure the server is running and still has the following IP:\n\n%1$s</string>
+    <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND deamon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
     <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
     <string name="error_wrong_password">Wrong password</string>

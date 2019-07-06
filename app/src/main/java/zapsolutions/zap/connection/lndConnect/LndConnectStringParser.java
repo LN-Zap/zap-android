@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import zapsolutions.zap.connection.CustomSSLSocketFactory;
+import zapsolutions.zap.connection.LndConnectionConfig;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -29,31 +30,38 @@ public class LndConnectStringParser {
     public static final int ERROR_INVALID_MACAROON = 3;
     public static final int ERROR_INVALID_HOST_OR_PORT = 4;
 
+    private int mError = -1;
+    private String mConnectString;
 
-    public LndConnectStringResult parse(String connectString) {
+    private LndConnectionConfig mConnectionConfig;
 
-        LndConnectStringResult result = new LndConnectStringResult();
+    public LndConnectStringParser(String connectString){
+        mConnectString = connectString;
+        mConnectionConfig = new LndConnectionConfig();
+    }
+
+    public LndConnectStringParser parse() {
 
         // validate not null
-        if (connectString == null) {
-            result.setError(ERROR_INVALID_CONNECT_STRING);
-            return result;
+        if (mConnectString == null) {
+            mError = ERROR_INVALID_CONNECT_STRING;
+            return this;
         }
 
         // validate scheme
-        if (!connectString.toLowerCase().startsWith("lndconnect://")) {
-            result.setError(ERROR_INVALID_CONNECT_STRING);
-            return result;
+        if (!mConnectString.toLowerCase().startsWith("lndconnect://")) {
+            mError = ERROR_INVALID_CONNECT_STRING;
+            return this;
         }
 
         URI connectURI = null;
         try {
-            connectURI = new URI(connectString);
+            connectURI = new URI(mConnectString);
 
             // validate host and port
             if (connectURI.getPort() == -1) {
-                result.setError(ERROR_INVALID_HOST_OR_PORT);
-                return result;
+                mError = ERROR_INVALID_HOST_OR_PORT;
+                return this;
             }
 
             String cert = null;
@@ -84,51 +92,66 @@ public class LndConnectStringParser {
                         } catch (RuntimeException e) {
 
                             ZapLog.debug(LOG_TAG, "certificate creation failed");
-                            result.setError(ERROR_INVALID_CERTIFICATE);
-                            return result;
+                            mError = ERROR_INVALID_CERTIFICATE;
+                            return this;
                         }
                     } catch (IllegalArgumentException e) {
                         ZapLog.debug(LOG_TAG, "cert decoding failed");
-                        result.setError(ERROR_INVALID_CERTIFICATE);
-                        return result;
+                        mError = ERROR_INVALID_CERTIFICATE;
+                        return this;
                     }
                 }
 
                 // validate macaroon if everything was valid so far
                 if (macaroon == null) {
                     ZapLog.debug(LOG_TAG, "lnd connect string does not include a macaroon");
-                    result.setError(ERROR_NO_MACAROON);
-                    return result;
+                    mError = ERROR_NO_MACAROON;
+                    return this;
                 } else {
                     try {
                         BaseEncoding.base64Url().decode(macaroon);
                     } catch (IllegalArgumentException e) {
                         ZapLog.debug(LOG_TAG, "macaroon decoding failed");
 
-                        result.setError(ERROR_INVALID_MACAROON);
-                        return result;
+                        mError = ERROR_INVALID_MACAROON;
+                        return this;
                     }
                 }
 
                 // everything is ok, initiate connection
-                result.setError(-1);
-                result.setHost(connectURI.getHost());
-                result.setPort(connectURI.getPort());
-                result.setCert(cert);
-                result.setMacaroon(macaroon);
+                mConnectionConfig.setHost(connectURI.getHost());
+                mConnectionConfig.setPort(connectURI.getPort());
+                mConnectionConfig.setCert(cert);
+                mConnectionConfig.setMacaroon(macaroon);
 
-                return result;
+                return this;
 
             } else {
                 ZapLog.debug(LOG_TAG, "Connect URI has no parameters");
-                result.setError(ERROR_INVALID_CONNECT_STRING);
-                return result;
+                mError = ERROR_INVALID_CONNECT_STRING;
+                return this;
             }
 
         } catch (URISyntaxException e) {
             ZapLog.debug(LOG_TAG, "URI could not be parsed");
-            result.setError(ERROR_INVALID_CONNECT_STRING);
-            return result;
+            mError = ERROR_INVALID_CONNECT_STRING;
+            return this;
         }
+    }
+
+    public boolean hasError() {
+        if (mError > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getError(){
+        return mError;
+    }
+
+    public LndConnectionConfig getConnectionConfig() {
+        return mConnectionConfig;
     }
 }

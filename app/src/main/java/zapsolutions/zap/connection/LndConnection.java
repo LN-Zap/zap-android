@@ -22,9 +22,6 @@ import zapsolutions.zap.util.ZapLog;
 
 /**
  * Singleton to handle the connection to lnd
- * <p>
- * Please note:
- * IP, Certificate and Macaroon are placeholders right now.
  */
 public class LndConnection {
 
