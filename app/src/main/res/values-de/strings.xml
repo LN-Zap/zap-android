@@ -229,7 +229,7 @@
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguration vom BTCPay Server konnte nicht heruntergeladen werden.</string>
-    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt.\nBitte verwende eines der folgenden Formate:\n\n- lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
+    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt.\nBitte verwende eines der folgenden Formate:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
     <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.\nBitte stelle sicher, dass du folgendes Format verwendet hast:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Das Zertifikat is ungültig.</string>
     <string name="error_connection_no_macaroon">Deine Verbindungsinformationen enthalten kein Macaroon. Das Macaroon muss angegeben werden.</string>
