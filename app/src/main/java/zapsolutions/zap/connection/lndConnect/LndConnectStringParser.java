@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
  * A lndconnect string consists of the following parts:
  * lndconnect://<HOST>:<PORT>?cert=<certificate_encoded_as_base64url>&macaroon=<macaroon_encoded_as_base64url>
  * <p>
- * Note: For lndconnect a certificate is mandatory.
+ * Note: For lndconnect a certificate is not mandatory.
  * <p>
  * The parser returns an object containing the desired data or an descriptive error.
  */
@@ -75,7 +75,7 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                     }
                 }
 
-                // validate cert (Certificate is not mandatory for BTCPay server for example, therefore null is valid)
+                // validate cert (Certificate is not mandatory)
                 if (cert != null) {
                     try {
                         byte[] certificateBytes = BaseEncoding.base64Url().decode(cert);
