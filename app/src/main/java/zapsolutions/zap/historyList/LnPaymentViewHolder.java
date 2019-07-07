@@ -9,14 +9,26 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
+import com.github.lightningnetwork.lnd.lnrpc.PayReq;
+import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
+import com.google.common.util.concurrent.ListenableFuture;
+
 import zapsolutions.zap.R;
+import zapsolutions.zap.connection.LndConnection;
+import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
+import zapsolutions.zap.util.ZapLog;
 
 public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
+
+    private static final String LOG_TAG = "LnPaymentViewHolder";
 
     private ImageView mIcon;
     private TextView mTimeOfDay;
@@ -54,10 +66,6 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
         // Set state
         mTransactionState.setText(R.string.sent);
 
-        // Set description
-        mDescription.setVisibility(View.GONE);
-        // memo is not yet available in lnPayments in LND;
-
         // Set amount
         long amt = lnPaymentItem.getPayment().getValueSat();
         mAmount.setText("- " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amt));
@@ -77,5 +85,51 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
                 Toast.makeText(mContext, R.string.coming_soon, Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        // Set description
+        mDescription.setVisibility(View.GONE);
+
+        if (!lnPaymentItem.getPayment().getPaymentRequest().isEmpty()) {
+            // This will only be true for payments done with LND 0.7.0-beta and later
+            decodeLightningInvoice(lnPaymentItem.getPayment().getPaymentRequest());
+        }
+
     }
+
+    private void decodeLightningInvoice(String invoice) {
+
+        // decode lightning invoice
+        LightningGrpc.LightningFutureStub asyncPayReqClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        PayReqString decodePaymentRequest = PayReqString.newBuilder()
+                .setPayReq(invoice)
+                .build();
+
+        final ListenableFuture<PayReq> payReqFuture = asyncPayReqClient.decodePayReq(decodePaymentRequest);
+
+        payReqFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PayReq paymentRequest = payReqFuture.get();
+
+                    if (!paymentRequest.getDescription().isEmpty()) {
+                        // Set description
+                        mDescription.setVisibility(View.VISIBLE);
+                        mDescription.setText(paymentRequest.getDescription());
+                    }
+
+                    // ZapLog.debug(LOG_TAG, String.valueOf(paymentsResponse.toString()));
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "Decode payment request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in decode payment request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+    }
+
 }
