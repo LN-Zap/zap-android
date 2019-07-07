@@ -28,7 +28,7 @@ import zapsolutions.zap.util.ZapLog;
 
 public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
 
-    private static final String LOG_TAG = "Payment List View Holder";
+    private static final String LOG_TAG = "LnPaymentViewHolder";
 
     private ImageView mIcon;
     private TextView mTimeOfDay;
@@ -90,7 +90,7 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
         // Set description
         mDescription.setVisibility(View.GONE);
 
-        if (!lnPaymentItem.getPayment().getPaymentRequest().equals("")) {
+        if (!lnPaymentItem.getPayment().getPaymentRequest().isEmpty()) {
             // This will only be true for payments done with LND 0.7.0-beta and later
             decodeLightningInvoice(lnPaymentItem.getPayment().getPaymentRequest());
         }
@@ -116,7 +116,7 @@ public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
                 try {
                     PayReq paymentRequest = payReqFuture.get();
 
-                    if (!paymentRequest.getDescription().equals("")) {
+                    if (!paymentRequest.getDescription().isEmpty()) {
                         // Set description
                         mDescription.setVisibility(View.VISIBLE);
                         mDescription.setText(paymentRequest.getDescription());
