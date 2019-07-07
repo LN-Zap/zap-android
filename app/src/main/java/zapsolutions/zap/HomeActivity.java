@@ -3,6 +3,7 @@ package zapsolutions.zap;
 import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,8 +15,13 @@ import androidx.annotation.NonNull;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -50,6 +56,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private static final String LOG_TAG = "Main Activity";
 
     private UserGuardian mUG;
+    private InputMethodManager mInputMethodManager;
     private ScheduledExecutorService mExchangeRateScheduler;
     private ScheduledExecutorService mLNDInfoScheduler;
     private NetworkChangeReceiver mNetworkChangeReceiver;
@@ -61,6 +68,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mInfoChangeListenerRegistered;
     private boolean mWalletLoadedListenerRegistered;
     private boolean mMainnetWarningShownOnce;
+    private boolean mIsFirstUnlockAttempt = true;
 
 
     @Override
@@ -69,6 +77,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         setContentView(R.layout.activity_main);
 
         mUG = new UserGuardian(this, this);
+        mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -135,7 +144,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mExchangeRateScheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            if(!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()) {
+                            if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()) {
                                 ZapLog.debug(LOG_TAG, "Fiat exchange rate request initiated");
                                 // Adding request to request queue
                                 HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
@@ -215,7 +224,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 ZapLog.debug(LOG_TAG, "Starting to establish connections...");
                 LndConnection.getInstance().restartBackgroundTasks();
 
-                Wallet.getInstance().isLNDReachable();
+                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
 
             }
         }
@@ -326,7 +335,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     @Override
-    public void onWalletLoadedUpdated(boolean success, String error) {
+    public void onWalletLoadedUpdated(boolean success, int error) {
         if (success) {
             // We managed to establish a connection to LND.
             // Now we can start to fetch all information needed from LND
@@ -344,10 +353,58 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             Wallet.getInstance().subscribeToTransactions();
             Wallet.getInstance().subscribeToInvoices();
-            Wallet.getInstance().subscribeToChannelEvents();
-            Wallet.getInstance().subscribeToChannelBackup();
+
+            // ToDo: subscribeToChannelEvents() causes LND to hang, if it is called short after unlocking.
+            //Wallet.getInstance().subscribeToChannelEvents();
+            //Wallet.getInstance().subscribeToChannelBackup();
 
             ZapLog.debug(LOG_TAG, "Wallet loaded");
+        } else {
+            if (error == Wallet.WalletLoadedListener.ERROR_LOCKED) {
+
+
+                // Show unlock dialog
+                AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                adb.setTitle(R.string.unlock_wallet);
+                adb.setCancelable(false);
+                View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_input_password, null, false);
+
+                final EditText input = viewInflated.findViewById(R.id.input);
+                input.setShowSoftInputOnFocus(true);
+                input.requestFocus();
+
+                mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+                adb.setView(viewInflated);
+
+                adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((WalletFragment) mCurrentFragment).showLoadingForWalletUnlock();
+                        Wallet.getInstance().unlockWallet(input.getText().toString());
+                        mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        mIsFirstUnlockAttempt = false;
+                        dialog.dismiss();
+                    }
+                });
+                adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        InputMethodManager inputMethodManager = (InputMethodManager) HomeActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        ((WalletFragment) mCurrentFragment).showErrorAfterNotUnlocked();
+                        mIsFirstUnlockAttempt = true;
+                        dialog.cancel();
+                    }
+                });
+
+                adb.show();
+                ((WalletFragment) mCurrentFragment).showBackgroundForWalletUnlock();
+
+                if(!mIsFirstUnlockAttempt) {
+                    Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 

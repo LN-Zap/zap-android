@@ -14,36 +14,24 @@ import android.widget.ImageButton;
 import android.content.ClipboardManager;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.common.io.BaseEncoding;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.btcPay.BTCPayConfiguration;
-import zapsolutions.zap.connection.btcPay.BTCPayConfigurationJson;
-import zapsolutions.zap.connection.HttpClient;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.connection.lndConnect.LndConnectStringParser;
+import zapsolutions.zap.connection.LndConnectionConfig;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
-import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.UtilFunctions;
-import zapsolutions.zap.util.ZapLog;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
@@ -52,7 +40,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;
-    private UserGuardian mUG;
+
 
     @Override
     public void onCreate(Bundle state) {
@@ -68,10 +56,16 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                String clipboardContent = "";
+                boolean isClipboardContentValid = false;
                 try {
-                    verifyDesiredConnection(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
+                    clipboardContent = clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+                    isClipboardContentValid = true;
                 } catch (NullPointerException e) {
                     showError(getResources().getString(R.string.error_emptyClipboardConnect), 4000);
+                }
+                if (isClipboardContentValid) {
+                    verifyDesiredConnection(clipboardContent);
                 }
             }
         });
@@ -116,111 +110,45 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     }
 
     private void verifyDesiredConnection(String connectString) {
-        if(connectString.startsWith("lndconnect:")) {
-            connectLndConnect(connectString);
-        } else if(connectString.startsWith("config=")) {
-            // URL to BTCPayConfigurationJson
-            String configUrl = connectString.replace("config=", "");
-            StringRequest btcPayConfigRequest = new StringRequest(Request.Method.GET, configUrl,
-                    response -> connectToBtcPay(response),
-                    error -> showError(getResources().getString(R.string.error_unableToFetchBTCPayConfig), 4000));
 
-            ZapLog.debug(LOG_TAG, "Fetching BTCPay config...");
-            HttpClient.getInstance().addToRequestQueue(btcPayConfigRequest, "BTCPayConfigRequest");
+        if (connectString.toLowerCase().startsWith("lndconnect")) {
+            connectLndConnect(connectString);
         } else {
-            // Either plain BTCPayConfigurationJson or invalid
-            connectToBtcPay(connectString);
+            showError(getResources().getString(R.string.error_connection_unsupported_format), 7000);
         }
+
     }
 
     private void connectLndConnect(String connectString) {
-        try {
-            URI connectURI = new URI(connectString);
 
-            String cert = null;
-            String macaroon = null;
+        LndConnectStringParser parser = new LndConnectStringParser(connectString).parse();
 
-            // Fetch params
-            if (connectURI.getQuery() != null) {
-                String[] valuePairs = connectURI.getQuery().split("&");
-
-                boolean validParams = true;
-
-                for (String pair : valuePairs) {
-                    String[] param = pair.split("=");
-                    if (param.length > 0) {
-                        if (param[0].equals("cert")) {
-                            cert = param[1];
-                        }
-                        if (param[0].equals("macaroon")) {
-                            macaroon = param[1];
-                        }
-                    } else {
-                        validParams = false;
-                    }
-                }
-
-
-                // validate params
-                if (cert == null || macaroon == null) {
-                    validParams = false;
-                } else {
-                    try {
-                        BaseEncoding.base64Url().decode(cert);
-                    } catch (IllegalArgumentException e) {
-                        validParams = false;
-                    }
-
-                    try {
-                        BaseEncoding.base64Url().decode(macaroon);
-                    } catch (IllegalArgumentException e) {
-                        validParams = false;
-                    }
-                }
-
-                if (validParams) {
-                    // Everything is ok, initiate connection
-                    connect(connectURI.getHost(), connectURI.getPort(), cert, macaroon);
-                } else {
-                    throw new IllegalArgumentException("Connect URI has invalid parameters (certificate or macaroon)");
-                }
-            } else {
-                throw new IllegalArgumentException("Connect URI has no parameters");
+        if (parser.hasError()) {
+            switch (parser.getError()) {
+                case LndConnectStringParser.ERROR_INVALID_CONNECT_STRING:
+                    showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
+                    break;
+                case LndConnectStringParser.ERROR_NO_MACAROON:
+                    showError(getResources().getString(R.string.error_connection_no_macaroon), 5000);
+                    break;
+                case LndConnectStringParser.ERROR_INVALID_CERTIFICATE:
+                    showError(getResources().getString(R.string.error_connection_invalid_certificate), 5000);
+                    break;
+                case LndConnectStringParser.ERROR_INVALID_MACAROON:
+                    showError(getResources().getString(R.string.error_connection_invalid_macaroon), 5000);
+                    break;
+                case LndConnectStringParser.ERROR_INVALID_HOST_OR_PORT:
+                    showError(getResources().getString(R.string.error_connection_invalid_host_or_port), 5000);
+                    break;
             }
-        } catch (URISyntaxException e) {
-            ZapLog.debug(LOG_TAG, "URI could not be parsed");
-            showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
-        } catch (IllegalArgumentException e) {
-            ZapLog.debug(LOG_TAG, e.getMessage());
-            showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
+        } else {
+            // Connect using the supplied configuration
+            connect(parser.getConnectionConfig());
         }
+
     }
 
-    private void connectToBtcPay(String btcPayConfigurationJson) {
-        try {
-            // parse config
-            BTCPayConfigurationJson btcPayConfigurations = new Gson().fromJson(btcPayConfigurationJson, BTCPayConfigurationJson.class);
-            BTCPayConfiguration btcPayConfiguration = btcPayConfigurations.getConfiguration("grpc", "BTC");
-
-            // connect
-            if (btcPayConfiguration != null) {
-                mUG = new UserGuardian(this, DialogName -> {
-                    if (UserGuardian.BTC_PAY_CONNECT.equals(DialogName)) {
-                        connect(btcPayConfiguration.getHost(), btcPayConfiguration.getPort(), null, btcPayConfiguration.getMacaroon());
-                    }
-                });
-                mUG.securityConnectToBtcPay(btcPayConfiguration.getHost());
-            } else {
-                ZapLog.debug(LOG_TAG, "BTCPay Configuration does not contain BTC gRPC config");
-                showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
-            }
-        } catch (JsonSyntaxException ex) {
-            ZapLog.debug(LOG_TAG, "BTCPay Configuration json syntax is invalid");
-            showError(getResources().getString(R.string.error_invalidRemoteConnectionString), 4000);
-        }
-    }
-
-    private void connect(String host, int port, String cert, String macaroon) {
+    private void connect(LndConnectionConfig config) {
         App ctx = App.getAppContext();
         SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
                 .encryptionFingerprint(ctx)
@@ -236,7 +164,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         prefsRemote.edit()
                 // The following string contains host,port,cert and macaroon in one string separated with ";"
                 // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-                .putString(PrefsUtil.REMOTE_COMBINED, host + ";" + port + ";" + cert + ";" + macaroon)
+                .putString(PrefsUtil.REMOTE_COMBINED, config.getHost() + ";" + config.getPort() + ";" + config.getCert() + ";" + config.getMacaroon())
                 .commit();
 
         // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
@@ -275,10 +203,17 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     @Override
     public void handleResult(Result rawResult) {
 
+        String qrCodeContent = "";
+        boolean isQrCodeContentValid = false;
         try {
-            verifyDesiredConnection(rawResult.getContents());
+            qrCodeContent = rawResult.getContents();
+            isQrCodeContentValid = true;
         } catch (NullPointerException e) {
             showError(getResources().getString(R.string.error_qr_code_result_null), 4000);
+        }
+
+        if (isQrCodeContentValid) {
+            verifyDesiredConnection(qrCodeContent);
         }
 
 
@@ -313,4 +248,5 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             }
         }
     }
+
 }
