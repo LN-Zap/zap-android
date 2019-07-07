@@ -166,7 +166,7 @@
     <string name="guardian_oldExchangeRate">You requested an amount as fiat value, but your exchange rate data is old (retrieved %1$s hours ago).\nMake sure you have an internet connection or consider requesting directly in Bitcoin.\n\nDo you want to continue anyway?</string>
     <string name="guardian_tooMuchMoney">Congratulations, you seem to have a nice stack of Bitcoin!\nPlease keep in mind that Zap is a Hot Wallet.\nWe do our best to keep this wallet secure, but for your own security sake, we recommend you consider Cold Wallets or Hardware Wallets to store your major savings.</string>
     <string name="guardian_notReadyForMainnet">You are on MAINNET with real Bitcoin!\nZap Android is in early development phase. You might lose funds!\n\nIf you don\'t want to take that risk, switch to testnet in the meantime.</string>
-    <string name="guardian_btcPayConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
+    <string name="guardian_remoteConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
 
 
     <string name="settings_category_general">General</string>
@@ -240,6 +240,8 @@
     <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND deamon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
     <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
+    <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
+    <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_wrong_password">Wrong password</string>
 
     <plurals name="duration_minute">

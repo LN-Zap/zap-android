@@ -1,5 +1,6 @@
 package zapsolutions.zap.setup;
 
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,36 +12,41 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.content.ClipboardManager;
 import android.widget.TextView;
-
-import com.google.android.material.snackbar.Snackbar;
-
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
-
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
-import zapsolutions.zap.HomeActivity;
-import zapsolutions.zap.R;
-import zapsolutions.zap.connection.lndConnect.LndConnectStringParser;
-import zapsolutions.zap.connection.LndConnectionConfig;
-import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.baseClasses.BaseScannerActivity;
-import zapsolutions.zap.util.PermissionsUtil;
-import zapsolutions.zap.util.TimeOutUtil;
-import zapsolutions.zap.util.UtilFunctions;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.snackbar.Snackbar;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import zapsolutions.zap.HomeActivity;
+import zapsolutions.zap.R;
+import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.baseClasses.BaseScannerActivity;
+import zapsolutions.zap.connection.HttpClient;
+import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.btcPay.BTCPayConfig;
+import zapsolutions.zap.connection.btcPay.BTCPayConfigParser;
+import zapsolutions.zap.connection.lndConnect.LndConnectConfig;
+import zapsolutions.zap.connection.lndConnect.LndConnectStringParser;
+import zapsolutions.zap.util.PermissionsUtil;
+import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.TimeOutUtil;
+import zapsolutions.zap.util.UserGuardian;
+import zapsolutions.zap.util.UtilFunctions;
+import zapsolutions.zap.util.ZapLog;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
     private static final String LOG_TAG = "Connect to remote node activity";
 
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;
-
+    private UserGuardian mUG;
 
     @Override
     public void onCreate(Bundle state) {
@@ -113,10 +119,21 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
         if (connectString.toLowerCase().startsWith("lndconnect")) {
             connectLndConnect(connectString);
+        } else if (connectString.startsWith("config=")) {
+            // URL to BTCPayConfigJson
+            String configUrl = connectString.replace("config=", "");
+            StringRequest btcPayConfigRequest = new StringRequest(Request.Method.GET, configUrl,
+                    response -> connectBtcPay(response),
+                    error -> showError(getResources().getString(R.string.error_unableToFetchBTCPayConfig), 4000));
+
+            ZapLog.debug(LOG_TAG, "Fetching BTCPay config...");
+            HttpClient.getInstance().addToRequestQueue(btcPayConfigRequest, "BTCPayConfigRequest");
+        } else if (BTCPayConfigParser.isValidJson(connectString)) {
+            // Valid BTCPay JSON
+            connectBtcPay(connectString);
         } else {
             showError(getResources().getString(R.string.error_connection_unsupported_format), 7000);
         }
-
     }
 
     private void connectLndConnect(String connectString) {
@@ -142,13 +159,44 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                     break;
             }
         } else {
-            // Connect using the supplied configuration
-            connect(parser.getConnectionConfig());
+            // Parsing was successful
+            connectIfUserConfirms(parser.getConnectionConfig());
         }
-
     }
 
-    private void connect(LndConnectionConfig config) {
+    private void connectBtcPay(@NonNull String btcPayConfigurationJson) {
+        BTCPayConfigParser btcPayConfigParser = new BTCPayConfigParser(btcPayConfigurationJson).parse();
+
+        if (btcPayConfigParser.hasError()) {
+            switch (btcPayConfigParser.getError()) {
+                case BTCPayConfigParser.ERROR_INVALID_JSON:
+                    showError(getResources().getString(R.string.error_connection_btcpay_invalid_json), 4000);
+                    break;
+                case BTCPayConfigParser.ERROR_MISSING_BTC_GRPC_CONFIG:
+                    showError(getResources().getString(R.string.error_connection_btcpay_invalid_config), 4000);
+                    break;
+                case BTCPayConfigParser.ERROR_NO_MACAROON:
+                    showError(getResources().getString(R.string.error_connection_no_macaroon), 4000);
+                    break;
+            }
+        } else {
+            // Parsing was successful
+            connectIfUserConfirms(btcPayConfigParser.getConnectionConfig());
+        }
+    }
+
+    private void connectIfUserConfirms(RemoteConfiguration remoteConfiguration) {
+        // Ask user to confirm the connection to remote host
+        mUG = new UserGuardian(this, DialogName -> {
+            if (UserGuardian.REMOTE_CONNECT.equals(DialogName)) {
+                // Connect using the supplied configuration
+                connect(remoteConfiguration);
+            }
+        });
+        mUG.securityConnectToRemoteServer(remoteConfiguration.getHost());
+    }
+
+    private void connect(RemoteConfiguration config) {
         App ctx = App.getAppContext();
         SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
                 .encryptionFingerprint(ctx)
@@ -161,11 +209,19 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         TimeOutUtil.getInstance().restartTimer();
 
         // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
-        prefsRemote.edit()
-                // The following string contains host,port,cert and macaroon in one string separated with ";"
-                // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-                .putString(PrefsUtil.REMOTE_COMBINED, config.getHost() + ";" + config.getPort() + ";" + config.getCert() + ";" + config.getMacaroon())
-                .commit();
+        if (config instanceof LndConnectConfig) {
+            LndConnectConfig lndConfig = (LndConnectConfig) config;
+            // The following string contains host,port,cert and macaroon in one string separated with ";"
+            // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
+            prefsRemote.edit()
+                    .putString(PrefsUtil.REMOTE_COMBINED, lndConfig.getHost() + ";" + lndConfig.getPort() + ";" + lndConfig.getCert() + ";" + lndConfig.getMacaroon())
+                    .commit();
+        } else if (config instanceof BTCPayConfig) {
+            BTCPayConfig btcPayConfig = (BTCPayConfig) config;
+            prefsRemote.edit()
+                    .putString(PrefsUtil.REMOTE_COMBINED, btcPayConfig.getHost() + ";" + btcPayConfig.getPort() + ";" + BTCPayConfig.NO_CERT + ";" + btcPayConfig.getMacaroon())
+                    .commit();
+        }
 
         // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
