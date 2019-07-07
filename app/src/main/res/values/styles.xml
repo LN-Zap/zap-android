@@ -33,7 +33,7 @@
 
 
     <!-- Theme for the QR-Code scanner activity. -->
-    <style name="AppOverlayTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="AppOverlayTheme" parent="@style/Theme.AppCompat">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>

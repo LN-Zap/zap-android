@@ -1,13 +1,12 @@
 package zapsolutions.zap.connection.lndConnect;
 
 import com.google.common.io.BaseEncoding;
+import zapsolutions.zap.connection.BaseConnectionParser;
+import zapsolutions.zap.connection.CustomSSLSocketFactory;
+import zapsolutions.zap.util.ZapLog;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import zapsolutions.zap.connection.CustomSSLSocketFactory;
-import zapsolutions.zap.connection.LndConnectionConfig;
-import zapsolutions.zap.util.ZapLog;
 
 /**
  * This class parses a lndconnect which is defined in this project:
@@ -16,47 +15,40 @@ import zapsolutions.zap.util.ZapLog;
  * A lndconnect string consists of the following parts:
  * lndconnect://<HOST>:<PORT>?cert=<certificate_encoded_as_base64url>&macaroon=<macaroon_encoded_as_base64url>
  * <p>
- * Note: The certificate is not mandatory. For cases like BTCPay server where another certificate is used, this can be omitted.
+ * Note: For lndconnect a certificate is not mandatory.
  * <p>
  * The parser returns an object containing the desired data or an descriptive error.
  */
-public class LndConnectStringParser {
-
-    private static final String LOG_TAG = "LND connect string parser";
+public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfig> {
 
     public static final int ERROR_INVALID_CONNECT_STRING = 0;
     public static final int ERROR_NO_MACAROON = 1;
     public static final int ERROR_INVALID_CERTIFICATE = 2;
     public static final int ERROR_INVALID_MACAROON = 3;
     public static final int ERROR_INVALID_HOST_OR_PORT = 4;
+    private static final String LOG_TAG = "LND connect string parser";
 
-    private int mError = -1;
-    private String mConnectString;
-
-    private LndConnectionConfig mConnectionConfig;
-
-    public LndConnectStringParser(String connectString){
-        mConnectString = connectString;
-        mConnectionConfig = new LndConnectionConfig();
+    public LndConnectStringParser(String connectString) {
+        super(connectString);
     }
 
     public LndConnectStringParser parse() {
 
         // validate not null
-        if (mConnectString == null) {
+        if (mConnectionString == null) {
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
         }
 
         // validate scheme
-        if (!mConnectString.toLowerCase().startsWith("lndconnect://")) {
+        if (!mConnectionString.toLowerCase().startsWith("lndconnect://")) {
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
         }
 
         URI connectURI = null;
         try {
-            connectURI = new URI(mConnectString);
+            connectURI = new URI(mConnectionString);
 
             // validate host and port
             if (connectURI.getPort() == -1) {
@@ -83,7 +75,7 @@ public class LndConnectStringParser {
                     }
                 }
 
-                // validate cert (Certificate is not mandatory for BTCPay server for example, therefore null is valid)
+                // validate cert (Certificate is not mandatory)
                 if (cert != null) {
                     try {
                         byte[] certificateBytes = BaseEncoding.base64Url().decode(cert);
@@ -119,11 +111,12 @@ public class LndConnectStringParser {
                 }
 
                 // everything is ok, initiate connection
-                mConnectionConfig.setHost(connectURI.getHost());
-                mConnectionConfig.setPort(connectURI.getPort());
-                mConnectionConfig.setCert(cert);
-                mConnectionConfig.setMacaroon(macaroon);
-
+                LndConnectConfig lndConnectConfig = new LndConnectConfig();
+                lndConnectConfig.setHost(connectURI.getHost());
+                lndConnectConfig.setPort(connectURI.getPort());
+                lndConnectConfig.setCert(cert);
+                lndConnectConfig.setMacaroon(macaroon);
+                setConnectionConfig(lndConnectConfig);
                 return this;
 
             } else {
@@ -137,21 +130,5 @@ public class LndConnectStringParser {
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
         }
-    }
-
-    public boolean hasError() {
-        if (mError > -1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public int getError(){
-        return mError;
-    }
-
-    public LndConnectionConfig getConnectionConfig() {
-        return mConnectionConfig;
     }
 }

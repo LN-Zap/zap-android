@@ -37,6 +37,7 @@ public class UserGuardian {
     public static final String OLD_EXCHANGE_RATE = "guardianOldExchangeRate";
     public static final String TOO_MUCH_MONEY = "guardianTooMuchMoney";
     public static final String MAINNET_NOT_READY = "guardianMainnetNotReady";
+    public static final String REMOTE_CONNECT = "guardianRemoteConnect";
 
     private final Context mContext;
     private final UserGuardianInterface mAction;
@@ -166,6 +167,17 @@ public class UserGuardian {
         showGuardianDialog(adb);
     }
 
+    /**
+     * Warn the user if he is trying to connect to a remote server.
+     */
+    public void securityConnectToRemoteServer(String host) {
+        mCurrentDialogName = REMOTE_CONNECT;
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_remoteConnect, host);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
 
     /**
      * Reset all "do not show again" selections.
@@ -180,6 +192,7 @@ public class UserGuardian {
                 .putBoolean(OLD_EXCHANGE_RATE, true)
                 .putBoolean(TOO_MUCH_MONEY, true)
                 .putBoolean(MAINNET_NOT_READY, true)
+                .putBoolean(REMOTE_CONNECT, true)
                 .apply();
     }
 

@@ -27,7 +27,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 **Lightning**
 - [ ] Channel Management
 - [x] Connect to remote Lnd node
-- [ ] Connect to BTCPay Server
+- [x] Connect to BTCPay Server
 - [x] Connect to lndconnect QR code
 - [ ] Run lnd on your android phone
 

@@ -1,12 +1,15 @@
 package zapsolutions.zap.connection;
 
-public class LndConnectionConfig {
+/**
+ * Base class meant to be extended for more specific remote configurations like
+ * - BTCPay Configuration
+ * - LNConnect Configuration
+ */
+public abstract class RemoteConfiguration {
 
     private String host;
     private int port;
-    private String cert;
     private String macaroon;
-
 
     public String getHost() {
         return host;
@@ -22,14 +25,6 @@ public class LndConnectionConfig {
 
     public void setPort(int port) {
         this.port = port;
-    }
-
-    public String getCert() {
-        return cert;
-    }
-
-    public void setCert(String cert) {
-        this.cert = cert;
     }
 
     public String getMacaroon() {

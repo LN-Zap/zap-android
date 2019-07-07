@@ -2,23 +2,21 @@ package zapsolutions.zap.connection;
 
 
 import android.content.SharedPreferences;
-
-import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
-import com.google.common.io.BaseEncoding;
-
-import java.util.concurrent.ExecutorService;
-
-import javax.net.ssl.SSLSocketFactory;
-
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
+import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
+import com.google.common.io.BaseEncoding;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
-import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.connection.btcPay.BTCPayConfig;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.ZapLog;
+
+import javax.net.ssl.SSLSocketFactory;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Singleton to handle the connection to lnd
@@ -42,6 +40,13 @@ public class LndConnection {
         readSavedConnectionInfo();
     }
 
+    public static synchronized LndConnection getInstance() {
+        if (mLndConnectionInstance == null) {
+            mLndConnectionInstance = new LndConnection();
+        }
+        return mLndConnectionInstance;
+    }
+
     private void readSavedConnectionInfo() {
 
         App ctx = App.getAppContext();
@@ -59,21 +64,30 @@ public class LndConnection {
         mConnectionInfo = connectionInfo.split(";");
         ZapLog.debug(LOG_TAG, connectionInfo);
 
+        if (mConnectionInfo[2].equals(BTCPayConfig.NO_CERT)) {
+            // BTCPay (no cert, hex encoded macaroon)
+            mMacaroon = new MacaroonCallCredential(mConnectionInfo[3]);
+        } else {
+            // LND Connect
+            String macaroonString = mConnectionInfo[3];
 
-        // Macaroon
-        String macaroonBase64UrlString = mConnectionInfo[3];
-        byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroonBase64UrlString);
-        String macaroon = BaseEncoding.base16().encode(macaroonBytes);
-        mMacaroon = new MacaroonCallCredential(macaroon);
+            if (mConnectionInfo[2].equals("null")) {
+                // BTCPay connection created from LND Connect Config
+                mMacaroon = new MacaroonCallCredential(macaroonString);
+            } else {
+                byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroonString);
+                String macaroon = BaseEncoding.base16().encode(macaroonBytes);
+                mMacaroon = new MacaroonCallCredential(macaroon);
 
-        // SSL
-        String certificateBase64UrlString = mConnectionInfo[2];
-        byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
+                String certificateBase64UrlString = mConnectionInfo[2];
+                byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
-        try {
-            mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
-        } catch (RuntimeException e) {
-            ZapLog.debug(LOG_TAG, "Error on Certificate");
+                try {
+                    mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
+                } catch (RuntimeException e) {
+                    ZapLog.debug(LOG_TAG, "Error on Certificate");
+                }
+            }
         }
 
         generateChannelAndStubs();
@@ -89,23 +103,25 @@ public class LndConnection {
         String host = mConnectionInfo[0];
         int port = Integer.parseInt(mConnectionInfo[1]);
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
-        mSecureChannel = OkHttpChannelBuilder
-                .forAddress(host, port)
-                .sslSocketFactory(mSSLFactory)
-                .build();
+
+        if (mSSLFactory == null) {
+            // BTCPay
+            mSecureChannel = OkHttpChannelBuilder
+                    .forAddress(host, port)
+                    .build();
+
+        } else {
+            mSecureChannel = OkHttpChannelBuilder
+                    .forAddress(host, port)
+                    .sslSocketFactory(mSSLFactory)
+                    .build();
+        }
 
         // Blocking client to for sync gRPC calls
         mBlockingClient = LightningGrpc
                 .newBlockingStub(mSecureChannel)
                 .withCallCredentials(mMacaroon);
 
-    }
-
-    public static synchronized LndConnection getInstance() {
-        if (mLndConnectionInstance == null) {
-            mLndConnectionInstance = new LndConnection();
-        }
-        return mLndConnectionInstance;
     }
 
     public void stopBackgroundTasks() {
