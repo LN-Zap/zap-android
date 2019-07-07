@@ -239,8 +239,8 @@
     <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
     <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND deamon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)\n\n- Stelle sicher, dass das Zertifikat gültig ist.</string>
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
-    <string name="error_connection_btcpay_invalid_json">Die BTCPay Server Konfiguration hat eine ungültige JSON syntax.</string>
-    <string name="error_connection_btcpay_invalid_config">Die BTCPay Server Konfiguration enthält keine Konfiguration für BTC GRPC.</string>
+    <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
+    <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
 
     <plurals name="duration_minute">

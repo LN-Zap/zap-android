@@ -29,7 +29,7 @@ public class BtcPayConfigurationParserTest {
 
     @Test
     public void givenValidRestJson_WhenParse_ThenReturnMissingConfig() {
-        String btcPayConfigJson = readStringFromFile("btcpayconfig_grpc_ltc.json");
+        String btcPayConfigJson = readStringFromFile("btcpayconfig_rest_btc.json");
         BTCPayConfigParser payConfigParser = new BTCPayConfigParser(btcPayConfigJson).parse();
 
         assertTrue(payConfigParser.hasError());
