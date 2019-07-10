@@ -201,6 +201,10 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
             @Override
             public void onClick(View v) {
 
+                mBtnNext.setEnabled(false);
+                mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                mEtAmount.setHint(getResources().getString(R.string.amount));
+
                 mOnChain = false;
                 mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_lightning));
                 mTvTitle.setText(R.string.receive_lightning_request);
@@ -387,7 +391,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mEtAmount.getText().toString().equals(".")){
+                if (mEtAmount.getText().toString().equals(".")) {
                     mEtAmount.setText("");
                 }
                 String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
@@ -420,7 +424,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                     } else {
                         maxReceivable = 500000000000L;
                     }
-                    if(!mEtAmount.getText().toString().equals(".")) {
+                    if (!mEtAmount.getText().toString().equals(".")) {
                         long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
                         if (currentValue > maxReceivable) {
                             mEtAmount.setTextColor(getResources().getColor(R.color.superRed));
@@ -428,10 +432,15 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                        } else if (currentValue == 0) {
+                            // Disable 0 sat ln invoices
+                            mBtnNext.setEnabled(false);
+                            mBtnNext.setTextColor(getResources().getColor(R.color.gray));
                         } else {
                             mEtAmount.setTextColor(getResources().getColor(R.color.white));
                             mBtnNext.setEnabled(true);
                             mBtnNext.setTextColor(getResources().getColor(R.color.lightningOrange));
+
                         }
                     }
                 }
@@ -576,7 +585,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
                             intent.putExtra("lnInvoice", invoiceResponse.getPaymentRequest());
-                            intent.putExtra("lnInvoiceAddIndex",invoiceResponse.getAddIndex());
+                            intent.putExtra("lnInvoiceAddIndex", invoiceResponse.getAddIndex());
                             startActivity(intent);
                             dismiss();
 
@@ -593,7 +602,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
             }
         } else {
             // The wallet is not setup. Show setup wallet message.
-            Toast.makeText(getActivity(), R.string.demo_setupWalletFirst,Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
         }
     }
 

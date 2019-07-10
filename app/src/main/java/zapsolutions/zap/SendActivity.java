@@ -304,6 +304,9 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
             if (Wallet.getInstance().mPaymentRequest.getTimestamp() + Wallet.getInstance().mPaymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
                 // Show error: payment request expired.
                 showError(getResources().getString(R.string.error_paymentRequestExpired), 3000);
+            } else if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0){
+                // Disable 0 sat invoices
+                showError(getResources().getString(R.string.error_notAPaymentRequest), 7000);
             } else {
                 // Decoded successfully, go to send page.
                 Intent intent = new Intent();
