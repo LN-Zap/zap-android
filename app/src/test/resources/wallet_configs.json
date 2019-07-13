@@ -1,0 +1,20 @@
+{
+  "connections": [
+    {
+      "alias": "FirstWalletName",
+      "type": "remote",
+      "host": "TestHost",
+      "port": 10009,
+      "cert": "TestCert",
+      "macaroon": "TestMacaroon"
+    },
+    {
+      "alias": "SecondWalletName",
+      "type": "local",
+      "host": "host",
+      "port": 0,
+      "cert": "cert",
+      "macaroon": "macaroon"
+    }
+  ]
+}

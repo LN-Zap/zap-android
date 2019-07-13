@@ -10,6 +10,7 @@ import androidx.preference.PreferenceManager;
 import at.favre.lib.armadillo.Armadillo;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.connection.manageWalletConfigs.EncryptedPrefs;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
@@ -21,6 +22,8 @@ public class LandingActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        EncryptedPrefs encryptedPrefs = new EncryptedPrefs();
 
 
         // get the data from the URI Scheme
@@ -44,7 +47,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             prefs.edit().clear().commit();
             // Reset connection settings
             App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
+            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_ENCRYPTED)
                     .encryptionFingerprint(ctx)
                     .build();
             prefsRemote.edit().clear().commit();
@@ -63,7 +66,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             // Clear connection data if something is there
 
             App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
+            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_ENCRYPTED)
                     .encryptionFingerprint(ctx)
                     .build();
             prefsRemote.edit().clear().commit();

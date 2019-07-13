@@ -166,8 +166,7 @@ public class PinFragment extends Fragment {
 
 
         // Make biometrics Button visible if supported.
-        // ToDO: Check if supported.
-        if (mMode == ENTER_MODE && PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled()) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -196,13 +195,6 @@ public class PinFragment extends Fragment {
                     ((SetupActivity) getActivity()).correctPinEntered();
                 }
 
-                // This has to happen on the UI thread. Only this thread can change the recycler view.
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
             }
 
             @Override
@@ -224,7 +216,7 @@ public class PinFragment extends Fragment {
 
 
         // Show biometric prompt if preferred
-        if (mMode == ENTER_MODE && PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled()) {
             if (PrefsUtil.isBiometricPreferred()) {
                 initBiometricPrompt();
             }
@@ -511,7 +503,7 @@ public class PinFragment extends Fragment {
             public void run() {
                 mBiometricPrompt.authenticate(mPromptInfo);
             }
-        }, 100);
+        }, 200);
     }
 
 }

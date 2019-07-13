@@ -9,28 +9,26 @@ import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.ZapLog;
 
 /**
- * This class is used to read and save the configurations for wallets.
+ * This class is used to getString and save the configurations for wallets.
  * Multiple wallets can exist simultaneously, but each alias (wallet name) is only allowed to exist once.
  * <p>
  * The wallet configurations are stored encrypted in the default shared preferences.
  */
 public class WalletConfigsManager {
 
-    private static final String LOG_TAG = "WalletConfigsManager";
+    private static final String LOG_TAG = WalletConfigsManager.class.getName();
+
+    public static final String DEFAULT_WALLET_NAME = "DefaultWallet";
 
     private String mWalletConfigsJsonString;
 
     public WalletConfigsManager() {
-        String encryptedWalletConfigs = PrefsUtil.getPrefs().getString(PrefsUtil.WALLET_CONFIGS, null);
-
-        //ZapLog.debug(LOG_TAG, encryptedConnectionConfigs);
-
-        // ToDo: Decrypt encrypted configs
-
+        EncryptedPrefs encryptedPrefs = new EncryptedPrefs();
+        String encryptedWalletConfigs = encryptedPrefs.getString(PrefsUtil.WALLET_CONFIGS, "");
         mWalletConfigsJsonString = encryptedWalletConfigs;
     }
 
-
+    // used for unit tests
     public WalletConfigsManager(String walletConfigsJson) {
         mWalletConfigsJsonString = walletConfigsJson;
     }
@@ -53,17 +51,26 @@ public class WalletConfigsManager {
 
 
     /**
-     * Checks if a wallet configuration under this alias/name already exists.
+     * Checks if a wallet configuration with the given alias/name already exists.
      *
      * @param alias The name of the wallet
      * @return
      */
     public boolean doesWalletConfigExist(String alias) {
-        if (alias == null) {
+
+        if (alias == null) { return false; }
+
+        WalletConfigsJson walletConfigs;
+
+        try {
+            walletConfigs = new Gson().fromJson(mWalletConfigsJsonString, WalletConfigsJson.class);
+        } catch (JsonSyntaxException ex) {
             return false;
         }
-        WalletConfigsJson walletConfigs = new Gson().fromJson(mWalletConfigsJsonString, WalletConfigsJson.class);
-        return walletConfigs.getConnection(alias) != null;
+
+        if (walletConfigs == null){ return false; }
+
+        return walletConfigs.getConnection(alias.toLowerCase()) != null;
     }
 
 
@@ -72,7 +79,7 @@ public class WalletConfigsManager {
      * If an configuration exist with this alias, it will be overridden.
      *
      * @param alias    Name of the wallet/configuration
-     * @param type     One of the following types: remote, onDevice
+     * @param type     One of the following types: remote, local
      * @param host     The host
      * @param port     The port
      * @param cert     The certificate. This is optional and can be null
@@ -81,9 +88,35 @@ public class WalletConfigsManager {
     public void saveWalletConfig(String alias, String type, String host,
                                  int port, @Nullable String cert, String macaroon) {
 
+        String jsonString = createWalletConfigJsonString(alias, type, host, port, cert, macaroon);
+
+        // Save the new WalletConfigurations in encrypted prefs
+        EncryptedPrefs encryptedPrefs = new EncryptedPrefs();
+        encryptedPrefs.putString(jsonString, PrefsUtil.WALLET_CONFIGS);
+
+        ZapLog.debug(LOG_TAG, jsonString);
+    }
+
+    /**
+     * Creates a wallet configuration json-string, that contains all already existing wallet configurations plus the new one.
+     * If an configuration exist with this alias, it will be overridden.
+     *
+     * @param alias    Name of the wallet/configuration
+     * @param type     One of the following types: remote, local
+     * @param host     The host
+     * @param port     The port
+     * @param cert     The certificate. This is optional and can be null
+     * @param macaroon The Macaroon. Encoded as base16 (hex)
+     */
+    public String createWalletConfigJsonString(String alias, String type, String host,
+                                 int port, @Nullable String cert, String macaroon) {
+
         WalletConfigsJson walletConfigs;
 
         if (mWalletConfigsJsonString == null) {
+            // No wallet connection configurations exists yet. Create the json array that will contain our first connection configuration.
+            walletConfigs = new Gson().fromJson("{\"connections\":[]}", WalletConfigsJson.class);
+        } else if (mWalletConfigsJsonString.isEmpty()) {
             // No wallet connection configurations exists yet. Create the json array that will contain our first connection configuration.
             walletConfigs = new Gson().fromJson("{\"connections\":[]}", WalletConfigsJson.class);
         } else {
@@ -91,12 +124,10 @@ public class WalletConfigsManager {
             walletConfigs = new Gson().fromJson(mWalletConfigsJsonString, WalletConfigsJson.class);
         }
 
-        //ZapLog.debug(LOG_TAG, mWalletConfigsJsonString);
-
 
         // Create the config
         WalletConfig config = new WalletConfig();
-        config.setAlias(alias);
+        config.setAlias(alias.toLowerCase());
         config.setType(type);
         config.setHost(host);
         config.setPort(port);
@@ -110,29 +141,27 @@ public class WalletConfigsManager {
         if (doesWalletConfigExist(alias)) {
             int tempIndex = -1;
             for (WalletConfig tempConfig : walletConfigs.mConnections) {
-                if (tempConfig.getAlias().equals(alias)) {
+                if (tempConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
                     tempIndex = walletConfigs.mConnections.indexOf(tempConfig);
                     break;
                 }
             }
+            // It exists, replace it.
             walletConfigs.mConnections.set(tempIndex, config);
         } else {
             // Nothing exist yet, create a new one.
             walletConfigs.mConnections.add(config);
         }
 
+        // Convert JSON object to string
         String jsonString = new Gson().toJson(walletConfigs);
 
-        // ToDo: Encrypt the connection information.
-
-        // Save the new WalletConfigurations in the default prefs
-        PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, jsonString).apply();
-
-        ZapLog.debug(LOG_TAG, jsonString);
+        return jsonString;
     }
 
     /**
      * Returns the wallet config of the currently active wallet.
+     *
      * @return
      */
     public WalletConfig loadCurrentWalletConfig() {
@@ -163,6 +192,7 @@ public class WalletConfigsManager {
         WalletConfig config = new WalletConfig();
 
         config.setAlias(walletConfigsJson.getConnection(alias).getAlias().toLowerCase());
+        config.setType(walletConfigsJson.getConnection(alias).getType());
         config.setHost(walletConfigsJson.getConnection(alias).getHost());
         config.setPort(walletConfigsJson.getConnection(alias).getPort());
         config.setCert(walletConfigsJson.getConnection(alias).getCert());

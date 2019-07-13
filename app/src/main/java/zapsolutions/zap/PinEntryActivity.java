@@ -117,8 +117,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
 
         // Make biometrics Button visible if supported.
-        // ToDO: Check if supported.
-        if (PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+        if (PrefsUtil.isBiometricEnabled()) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -140,12 +139,13 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
                 PrefsUtil.edit().putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
 
-                // This has to happen on the UI thread. Only this thread can change the recycler view.
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(PinEntryActivity.this, "success", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                TimeOutUtil.getInstance().restartTimer();
+
+                PrefsUtil.edit().putInt("numPINFails", 0).apply();
+
+                Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
             }
 

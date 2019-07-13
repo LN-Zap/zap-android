@@ -14,7 +14,7 @@ public class RefConstants {
     public static final int PIN_MIN_LENGTH = 4;
     public static final int PIN_MAX_LENGTH = 10;
     public static final int PIN_MAX_FAILS = 3;
-    public static final int PIN_DELAY_TIME = 10;
+    public static final int PIN_DELAY_TIME = 30;
 
     public static final int VIBRATE_SHORT = 50;
     public static final int VIBRATE_LONG = 200;

@@ -93,8 +93,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BottomNavigationView navigation = findViewById(R.id.mainNavigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        new WalletConfigsManager().saveWalletConfig("blub","typeXY", "host",0,"null","macaroon");
-
     }
 
 

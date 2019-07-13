@@ -7,29 +7,39 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.assertFalse;
 
 public class ConnectionManagerTest {
 
     @Test
-    public void doesWalletExist_NullInput() {
-        String connectionJson = readStringFromFile("connection_config.json");
-        WalletConfigsManager manager = new WalletConfigsManager("blüb");
+    public void givenNoConfigs_whenDoesWalletExist_thenReturnFalse() {
+        WalletConfigsManager manager = new WalletConfigsManager(null);
 
-        boolean result = manager.doesWalletConfigExist("bla");
+        boolean result = manager.doesWalletConfigExist("test");
 
         assertFalse(result);
     }
 
     @Test
-    public void doesWalletExist() {
-        String connectionJson = readStringFromFile("connection_config.json");
-        WalletConfigsManager manager = new WalletConfigsManager(connectionJson);
+    public void givenAliasNull_whenDoesWalletExist_thenReturnFalse() {
+        String configJson = readStringFromFile("wallet_configs.json");
+        WalletConfigsManager manager = new WalletConfigsManager(configJson);
+
+        boolean result = manager.doesWalletConfigExist(null);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void givenExistingAlias_whenDoesWalletExist_thenReturnTrue() {
+        String configJson = readStringFromFile("wallet_configs.json");
+        WalletConfigsManager manager = new WalletConfigsManager(configJson);
 
         boolean result = manager.doesWalletConfigExist("firstwalletname");
 
@@ -37,13 +47,73 @@ public class ConnectionManagerTest {
     }
 
     @Test
-    public void loadConnection() {
-        String connectionJson = readStringFromFile("connection_config.json");
-        WalletConfigsManager manager = new WalletConfigsManager(connectionJson);
+    public void givenNoConfigs_whenLoadWalletConfig_thenReturnNull() {
 
-        RemoteConfiguration result = manager.loadWalletConfig("firstwalletname");
+        WalletConfigsManager manager = new WalletConfigsManager(null);
+        WalletConfig result = manager.loadWalletConfig("firstwalletname");
 
-        assertTrue(result.getHost().equals("firstwalletname"));
+        assertNull(result);
+    }
+
+    @Test
+    public void givenAliasNull_whenLoadWalletConfig_thenReturnNull() {
+        String configJson = readStringFromFile("wallet_configs.json");
+
+        WalletConfigsManager manager = new WalletConfigsManager(configJson);
+
+        WalletConfig result = manager.loadWalletConfig(null);
+
+        assertNull(result);
+    }
+
+    @Test
+    public void givenNonExistingAlias_whenLoadWalletConfig_thenReturnNull() {
+        String configJson = readStringFromFile("wallet_configs.json");
+
+        WalletConfigsManager manager = new WalletConfigsManager(configJson);
+
+        WalletConfig result = manager.loadWalletConfig("test");
+
+        assertNull(result);
+    }
+
+    @Test
+    public void givenExistingAlias_whenLoadWalletConfig_thenReceiveCorrectWalletConfig() {
+        String configJson = readStringFromFile("wallet_configs.json");
+
+        WalletConfigsManager manager = new WalletConfigsManager(configJson);
+
+        WalletConfig result = manager.loadWalletConfig("firstwalletname");
+
+        assertEquals("firstwalletname", result.getAlias());
+        assertEquals("remote", result.getType());
+        assertEquals("TestHost", result.getHost());
+        assertEquals(10009, result.getPort());
+        assertEquals("TestCert", result.getCert());
+        assertEquals("TestMacaroon", result.getMacaroon());
+    }
+
+    @Test
+    public void givenNewAliasAnd_whenCreateWalletConfigJsonString_thenReceiveCorrectWalletConfigString() {
+        String expected = readStringFromFile("wallet_configs_create.json");
+
+        WalletConfigsManager manager = new WalletConfigsManager(null);
+
+        String result = manager.createWalletConfigJsonString("TestName", "remote", "TestHost", 10009, "TestCert", "TestMacaroon");
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void givenExistingAlias_whenCreateWalletConfigJsonString_thenReceiveUpdatedWalletConfig() {
+        String expected = readStringFromFile("wallet_configs_modify.json");
+        String configJson = readStringFromFile("wallet_configs_create.json");
+
+        WalletConfigsManager manager = new WalletConfigsManager(configJson);
+
+        String result = manager.createWalletConfigJsonString("TestName", "remote", "ModifiedHost", 10009, "TestCert", "TestMacaroon");
+
+        assertEquals(expected, result);
     }
 
     private String readStringFromFile(String filename) {

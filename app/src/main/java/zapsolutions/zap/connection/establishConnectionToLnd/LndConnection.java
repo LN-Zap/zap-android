@@ -13,6 +13,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -55,34 +56,15 @@ public class LndConnection {
 
     private void readSavedConnectionInfo() {
 
-        App ctx = App.getAppContext();
-
-        mPrefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
-                .encryptionFingerprint(ctx)
-                .keyStretchingFunction(new PBKDF2KeyStretcher(RefConstants.NUM_HASH_ITERATIONS, null))
-                .password(ctx.inMemoryPin.toCharArray())
-                .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
-                .build();
-
-        // The following string contains host,port,cert and macaroon in one string separated with ";"
-        // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-        String connectionInfo = mPrefsRemote.getString(PrefsUtil.REMOTE_COMBINED, "");
-        mConnectionInfo = connectionInfo.split(";");
-
-        mConnectionConfig = new WalletConfig();
-
-        mConnectionConfig.setHost(mConnectionInfo[0]);
-        mConnectionConfig.setPort(Integer.parseInt(mConnectionInfo[1]));
-        mConnectionConfig.setCert(mConnectionInfo[2]);
-        mConnectionConfig.setMacaroon(mConnectionInfo[3]);
-
-        ZapLog.debug(LOG_TAG, connectionInfo);
+        // Load current wallet connection config
+        mConnectionConfig = new WalletConfigsManager().loadCurrentWalletConfig();
 
         // Generate Macaroon
         mMacaroon = new MacaroonCallCredential(mConnectionConfig.getMacaroon());
 
+        mSSLFactory = null;
         // Generate certificate if one was supplied
-        if (!mConnectionConfig.getCert().equals(BTCPayConfig.NO_CERT) || mConnectionConfig.getCert().equals("null")) {
+        if (mConnectionConfig.getCert() != null) {
             // We have a certificate, try to load it.
 
             String certificateBase64UrlString = mConnectionConfig.getCert();

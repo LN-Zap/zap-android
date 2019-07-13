@@ -26,7 +26,7 @@ public class WalletConfig extends RemoteConfiguration {
     }
 
     public String getCert() {
-        return cert;
+        return this.cert;
     }
 
     public void setCert(String cert) {
