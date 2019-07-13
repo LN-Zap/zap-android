@@ -499,9 +499,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     if (error == Wallet.WalletLoadedListener.ERROR_AUTHENTICATION) {
                         mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
                     } else if (error == Wallet.WalletLoadedListener.ERROR_TIMEOUT) {
-                        mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionInfo()[0]));
+                        mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionConfig().getHost()));
                     } else if (error == Wallet.WalletLoadedListener.ERROR_UNAVAILABLE) {
-                        mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, LndConnection.getInstance().getConnectionInfo()[1]));
+                        mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(LndConnection.getInstance().getConnectionConfig().getPort())));
                     }
                 }
             } else {

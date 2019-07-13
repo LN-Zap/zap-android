@@ -38,8 +38,6 @@ public class LndConnection {
     private ExecutorService mLndThreads;
     private boolean mIsShutdown = false;
     private LightningGrpc.LightningBlockingStub mBlockingClient;
-    private String[] mConnectionInfo;
-    private SharedPreferences mPrefsRemote;
     private WalletConfig mConnectionConfig;
 
 
@@ -146,8 +144,9 @@ public class LndConnection {
         return mBlockingClient;
     }
 
-    public String[] getConnectionInfo() {
-        return mConnectionInfo;
+    public WalletConfig getConnectionConfig() {
+        return mConnectionConfig;
     }
+
 
 }

@@ -350,7 +350,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         super.onResume();
 
         // Show biometric prompt if preferred
-        if (PrefsUtil.isBiometricPreferred()) {
+        if (PrefsUtil.isBiometricPreferred() && PrefsUtil.isBiometricEnabled()) {
             mBiometricPrompt.authenticate(mPromptInfo);
         }
     }
