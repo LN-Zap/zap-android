@@ -47,7 +47,7 @@ import java.util.concurrent.ExecutionException;
 import zapsolutions.zap.GeneratedRequestActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
-import zapsolutions.zap.connection.LndConnection;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;

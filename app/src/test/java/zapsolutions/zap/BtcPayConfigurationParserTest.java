@@ -2,8 +2,8 @@ package zapsolutions.zap;
 
 import com.google.gson.Gson;
 import org.junit.Test;
-import zapsolutions.zap.connection.btcPay.BTCPayConfigJson;
-import zapsolutions.zap.connection.btcPay.BTCPayConfigParser;
+import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigJson;
+import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

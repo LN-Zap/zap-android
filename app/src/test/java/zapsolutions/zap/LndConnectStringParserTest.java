@@ -2,7 +2,7 @@ package zapsolutions.zap;
 
 import org.junit.Test;
 
-import zapsolutions.zap.connection.lndConnect.LndConnectStringParser;
+import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 
 import static junit.framework.TestCase.assertEquals;
 

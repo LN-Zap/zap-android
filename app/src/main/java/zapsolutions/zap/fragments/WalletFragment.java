@@ -29,8 +29,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.LndConnection;
-import zapsolutions.zap.connection.NetworkUtil;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.SendActivity;

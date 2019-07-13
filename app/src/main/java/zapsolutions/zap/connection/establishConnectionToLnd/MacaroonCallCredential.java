@@ -1,4 +1,4 @@
-package zapsolutions.zap.connection;
+package zapsolutions.zap.connection.establishConnectionToLnd;
 
 import java.util.concurrent.Executor;
 

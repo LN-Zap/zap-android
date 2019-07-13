@@ -1,21 +1,26 @@
-package zapsolutions.zap.connection;
+package zapsolutions.zap.connection.establishConnectionToLnd;
 
 
 import android.content.SharedPreferences;
+
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
+
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.google.common.io.BaseEncoding;
+
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.btcPay.BTCPayConfig;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
+import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.ZapLog;
 
 import javax.net.ssl.SSLSocketFactory;
+
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -34,6 +39,7 @@ public class LndConnection {
     private LightningGrpc.LightningBlockingStub mBlockingClient;
     private String[] mConnectionInfo;
     private SharedPreferences mPrefsRemote;
+    private WalletConfig mConnectionConfig;
 
 
     private LndConnection() {
@@ -62,32 +68,32 @@ public class LndConnection {
         // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
         String connectionInfo = mPrefsRemote.getString(PrefsUtil.REMOTE_COMBINED, "");
         mConnectionInfo = connectionInfo.split(";");
+
+        mConnectionConfig = new WalletConfig();
+
+        mConnectionConfig.setHost(mConnectionInfo[0]);
+        mConnectionConfig.setPort(Integer.parseInt(mConnectionInfo[1]));
+        mConnectionConfig.setCert(mConnectionInfo[2]);
+        mConnectionConfig.setMacaroon(mConnectionInfo[3]);
+
         ZapLog.debug(LOG_TAG, connectionInfo);
 
-        if (mConnectionInfo[2].equals(BTCPayConfig.NO_CERT)) {
-            // BTCPay (no cert, hex encoded macaroon)
-            mMacaroon = new MacaroonCallCredential(mConnectionInfo[3]);
-        } else {
-            // LND Connect
-            String macaroonString = mConnectionInfo[3];
+        // Generate Macaroon
+        mMacaroon = new MacaroonCallCredential(mConnectionConfig.getMacaroon());
 
-            if (mConnectionInfo[2].equals("null")) {
-                // BTCPay connection created from LND Connect Config
-                mMacaroon = new MacaroonCallCredential(macaroonString);
-            } else {
-                byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroonString);
-                String macaroon = BaseEncoding.base16().encode(macaroonBytes);
-                mMacaroon = new MacaroonCallCredential(macaroon);
+        // Generate certificate if one was supplied
+        if (!mConnectionConfig.getCert().equals(BTCPayConfig.NO_CERT) || mConnectionConfig.getCert().equals("null")) {
+            // We have a certificate, try to load it.
 
-                String certificateBase64UrlString = mConnectionInfo[2];
-                byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
+            String certificateBase64UrlString = mConnectionConfig.getCert();
+            byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
-                try {
-                    mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
-                } catch (RuntimeException e) {
-                    ZapLog.debug(LOG_TAG, "Error on Certificate");
-                }
+            try {
+                mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
+            } catch (RuntimeException e) {
+                ZapLog.debug(LOG_TAG, "Error on Certificate");
             }
+
         }
 
         generateChannelAndStubs();
@@ -100,8 +106,8 @@ public class LndConnection {
 
     private void generateChannelAndStubs() {
 
-        String host = mConnectionInfo[0];
-        int port = Integer.parseInt(mConnectionInfo[1]);
+        String host = mConnectionConfig.getHost();
+        int port = mConnectionConfig.getPort();
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
 
         if (mSSLFactory == null) {

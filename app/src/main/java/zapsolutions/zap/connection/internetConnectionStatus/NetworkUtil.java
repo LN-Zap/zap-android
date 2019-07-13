@@ -1,4 +1,4 @@
-package zapsolutions.zap.connection;
+package zapsolutions.zap.connection.internetConnectionStatus;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

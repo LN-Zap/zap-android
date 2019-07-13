@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat;
 import io.grpc.StatusRuntimeException;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
-import zapsolutions.zap.connection.LndConnection;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;

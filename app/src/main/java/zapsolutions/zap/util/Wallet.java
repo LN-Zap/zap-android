@@ -30,7 +30,6 @@ import com.github.lightningnetwork.lnd.lnrpc.NodeInfo;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.github.lightningnetwork.lnd.lnrpc.PaymentHash;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
@@ -57,7 +56,7 @@ import javax.annotation.Nullable;
 import io.grpc.stub.ClientCallStreamObserver;
 import zapsolutions.zap.R;
 
-import zapsolutions.zap.connection.LndConnection;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 
 
 public class Wallet {
@@ -207,6 +206,11 @@ public class Wallet {
                         } else if (e.getMessage().toLowerCase().contains("verification failed")) {
                             // This is the case if:
                             // - The macaroon is invalid
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
+                            ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
+                        } else if (e.getMessage().contains("UNKNOWN")) {
+                            // This is the case if:
+                            // - The macaroon has wrong encoding
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
                             ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
                         }

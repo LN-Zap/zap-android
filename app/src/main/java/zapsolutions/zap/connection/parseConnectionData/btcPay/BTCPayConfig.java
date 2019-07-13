@@ -1,4 +1,4 @@
-package zapsolutions.zap.connection.btcPay;
+package zapsolutions.zap.connection.parseConnectionData.btcPay;
 
 import zapsolutions.zap.connection.RemoteConfiguration;
 

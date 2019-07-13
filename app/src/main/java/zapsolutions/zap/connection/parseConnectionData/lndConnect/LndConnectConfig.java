@@ -1,4 +1,4 @@
-package zapsolutions.zap.connection.lndConnect;
+package zapsolutions.zap.connection.parseConnectionData.lndConnect;
 
 import zapsolutions.zap.connection.RemoteConfiguration;
 

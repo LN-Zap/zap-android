@@ -35,8 +35,9 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.LndConnection;
-import zapsolutions.zap.connection.NetworkChangeReceiver;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.fragments.HistoryFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
@@ -91,6 +92,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         // Setup Listener
         BottomNavigationView navigation = findViewById(R.id.mainNavigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        new WalletConfigsManager().saveWalletConfig("blub","typeXY", "host",0,"null","macaroon");
 
     }
 
