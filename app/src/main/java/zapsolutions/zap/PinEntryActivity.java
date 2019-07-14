@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.biometric.BiometricPrompt;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +18,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
@@ -32,8 +37,12 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
     private ImageButton mBtnPinConfirm;
     private ImageButton mBtnPinBack;
+    private ImageButton mBtnBiometrics;
     private ImageView[] mPinHints = new ImageView[10];
     private Button[] mBtnNumpad = new Button[10];
+
+    private BiometricPrompt mBiometricPrompt;
+    private BiometricPrompt.PromptInfo mPromptInfo;
 
     private TextView mTvPrompt;
     private ScrambledNumpad mNumpad;
@@ -87,6 +96,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         mBtnPinConfirm = findViewById(R.id.pinConfirm);
         mBtnPinBack = findViewById(R.id.pinBack);
+        mBtnBiometrics = findViewById(R.id.pinBiometrics);
 
 
         // Get pin hints
@@ -104,6 +114,66 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         // Set all layout element states to the current user input (empty right now)
         displayUserInput();
+
+
+        // Make biometrics Button visible if supported.
+        // ToDO: Check if supported.
+        if (PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+            mBtnBiometrics.setVisibility(View.VISIBLE);
+        } else {
+            mBtnBiometrics.setVisibility(View.GONE);
+        }
+
+        Executor executor = Executors.newSingleThreadExecutor();
+
+        mPromptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(getResources().getString(R.string.biometricPrompt_title))
+                .setNegativeButtonText(getResources().getString(R.string.cancel))
+                .build();
+
+
+        mBiometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+
+                PrefsUtil.edit().putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
+
+                // This has to happen on the UI thread. Only this thread can change the recycler view.
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(PinEntryActivity.this, "success", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+
+                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
+                } else {
+                    // This has to happen on the UI thread. Only this thread can change the recycler view.
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(PinEntryActivity.this, errString, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+        });
+
+
+        // Call BiometricsPrompt on click on fingerprint symbol
+        mBtnBiometrics.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBiometricPrompt.authenticate(mPromptInfo);
+            }
+        });
 
 
         mBtnPinBack.setOnClickListener(new OnClickListener() {
@@ -224,7 +294,8 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             App.getAppContext().inMemoryPin = userEnteredPin;
             TimeOutUtil.getInstance().restartTimer();
 
-            PrefsUtil.edit().putInt("numPINFails", 0).apply();
+            PrefsUtil.edit().putInt("numPINFails", 0)
+                    .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
             Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -274,4 +345,13 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Show biometric prompt if preferred
+        if (PrefsUtil.isBiometricPreferred()) {
+            mBiometricPrompt.authenticate(mPromptInfo);
+        }
+    }
 }

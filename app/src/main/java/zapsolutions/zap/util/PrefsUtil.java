@@ -20,6 +20,7 @@ public class PrefsUtil {
     public static final String PIN_LENGTH = "pin_length";
     public static final String SETTINGS_VER = "settings_ver";
     public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
+    public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
 
     // remote node preferences references
     public static final String PREFS_REMOTE = "prefs_remote";
@@ -52,4 +53,8 @@ public class PrefsUtil {
     }
 
     public static String getOnChainFeeTier() { return getPrefs().getString(ON_CHAIN_FEE_TIER, OnChainFeeView.OnChainFeeTier.FAST.name()); }
+
+    public static boolean isBiometricPreferred(){
+        return getPrefs().getBoolean(BIOMETRICS_PREFERRED, false);
+    }
 }

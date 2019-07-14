@@ -50,9 +50,9 @@
                 android:id="@+id/pinHint1"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -60,9 +60,9 @@
                 android:id="@+id/pinHint2"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -70,9 +70,9 @@
                 android:id="@+id/pinHint3"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -80,9 +80,9 @@
                 android:id="@+id/pinHint4"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -90,9 +90,9 @@
                 android:id="@+id/pinHint5"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -100,9 +100,9 @@
                 android:id="@+id/pinHint6"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -110,9 +110,9 @@
                 android:id="@+id/pinHint7"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -120,9 +120,9 @@
                 android:id="@+id/pinHint8"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -130,9 +130,9 @@
                 android:id="@+id/pinHint9"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
 
@@ -140,15 +140,16 @@
                 android:id="@+id/pinHint10"
                 android:layout_width="18dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
                 android:tint="@color/invisibleGray" />
         </LinearLayout>
     </LinearLayout>
 
     <GridLayout
+        android:id="@+id/pinGridLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/pinHintLayout"
@@ -300,7 +301,7 @@
             android:typeface="sans" />
 
         <ImageButton
-            android:id="@+id/pinBack"
+            android:id="@+id/pinBiometrics"
             android:layout_width="80dp"
             android:layout_height="70dp"
             android:layout_row="3"
@@ -310,7 +311,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@color/deepSeaBlue"
-            android:src="@drawable/ic_backspace_black_36dp"
+            android:src="@drawable/ic_fingerprint_black_48dp"
             android:tint="@color/white" />
 
         <Button
@@ -330,7 +331,7 @@
             android:typeface="sans" />
 
         <ImageButton
-            android:id="@+id/pinConfirm"
+            android:id="@+id/pinBack"
             android:layout_width="80dp"
             android:layout_height="70dp"
             android:layout_row="3"
@@ -339,10 +340,23 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/rounded_rectangle_green"
-            android:src="@drawable/ic_done_black_36dp"
+            android:background="@color/deepSeaBlue"
+            android:src="@drawable/ic_backspace_black_36dp"
             android:tint="@color/white" />
+
 
     </GridLayout>
 
+    <ImageButton
+        android:id="@+id/pinConfirm"
+        android:layout_width="310dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/pinGridLayout"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded_rectangle_green"
+        android:src="@drawable/ic_done_black_36dp"
+        android:tint="@color/white" />
 </RelativeLayout>

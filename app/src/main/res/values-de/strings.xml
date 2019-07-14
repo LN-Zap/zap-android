@@ -195,6 +195,7 @@
     <string name="settings_about">Über Zap</string>
     <string name="settings_advanced_settings">Erweiterte Einstellungen</string>
     <string name="settings_restartRequired">Zap wird neugestartet, um diese Änderung vorzunehmen. Fortfahren?</string>
+    <string name="settings_enableBiometrics">Biometrische Authentifizierung</string>
 
 
     <string name="settings_blockExplorer">Block-Explorer</string>
@@ -267,5 +268,8 @@
     <string name="fee_not_available">n/A</string>
 
     <string name="unlock_wallet">Wallet entsperren</string>
+
+    
+    <string name="biometricPrompt_title">Biometrische Authentifizierung</string>
 
 </resources>

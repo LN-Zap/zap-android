@@ -16,8 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.PrefsUtil;
@@ -42,8 +47,12 @@ public class PinFragment extends Fragment {
 
     private ImageButton mBtnPinConfirm;
     private ImageButton mBtnPinBack;
+    private ImageButton mBtnBiometrics;
     private ImageView[] mPinHints = new ImageView[10];
     private Button[] mBtnNumpad = new Button[10];
+
+    private BiometricPrompt mBiometricPrompt;
+    private BiometricPrompt.PromptInfo mPromptInfo;
 
     private TextView mTvPrompt;
     private String mPromptString;
@@ -138,6 +147,7 @@ public class PinFragment extends Fragment {
 
         mBtnPinConfirm = view.findViewById(R.id.pinConfirm);
         mBtnPinBack = view.findViewById(R.id.pinBack);
+        mBtnBiometrics = view.findViewById(R.id.pinBiometrics);
 
         // Get PIN hints
         mPinHints[0] = view.findViewById(R.id.pinHint1);
@@ -153,6 +163,80 @@ public class PinFragment extends Fragment {
 
         // Set all layout element states to the current user input (empty right now)
         displayUserInput();
+
+
+        // Make biometrics Button visible if supported.
+        // ToDO: Check if supported.
+        if (mMode == ENTER_MODE && PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+            mBtnBiometrics.setVisibility(View.VISIBLE);
+        } else {
+            mBtnBiometrics.setVisibility(View.GONE);
+        }
+
+        Executor executor = Executors.newSingleThreadExecutor();
+
+        mPromptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(getResources().getString(R.string.biometricPrompt_title))
+                .setNegativeButtonText(getResources().getString(R.string.cancel))
+                .build();
+
+
+        mBiometricPrompt = new BiometricPrompt(getActivity(), executor, new BiometricPrompt.AuthenticationCallback() {
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+
+                // Go to next step
+                if (mMode == ENTER_MODE) {
+
+                    PrefsUtil.edit().putInt("numPINFails", 0)
+                            .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
+
+                    ((SetupActivity) getActivity()).correctPinEntered();
+                }
+
+                // This has to happen on the UI thread. Only this thread can change the recycler view.
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+
+                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
+                } else {
+                    // This has to happen on the UI thread. Only this thread can change the recycler view.
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getActivity(), errString, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+        });
+
+
+        // Show biometric prompt if preferred
+        if (mMode == ENTER_MODE && PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+            if (PrefsUtil.isBiometricPreferred()) {
+                initBiometricPrompt();
+            }
+        }
+
+        // Call BiometricsPrompt on click on fingerprint symbol
+        mBtnBiometrics.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBiometricPrompt.authenticate(mPromptInfo);
+            }
+        });
 
 
         // Set action for numpad buttons
@@ -338,7 +422,8 @@ public class PinFragment extends Fragment {
             // Go to next step
             if (mMode == ENTER_MODE) {
 
-                PrefsUtil.edit().putInt("numPINFails", 0).apply();
+                PrefsUtil.edit().putInt("numPINFails", 0)
+                        .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
                 ((SetupActivity) getActivity()).correctPinEntered();
             } else if (mMode == CONFIRM_MODE) {
@@ -348,7 +433,8 @@ public class PinFragment extends Fragment {
             if (mMode == ENTER_MODE) {
                 mNumFails++;
 
-                PrefsUtil.edit().putInt("numPINFails", mNumFails).apply();
+                PrefsUtil.edit().putInt("numPINFails", mNumFails)
+                        .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
                 final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
                 View view = getActivity().findViewById(R.id.pinInputLayout);
@@ -410,6 +496,22 @@ public class PinFragment extends Fragment {
     public void createPin() {
         // Go to next step
         ((SetupActivity) getActivity()).pinCreated(mUserInput.toString(), mUserInput.toString().length());
+    }
+
+    private void initBiometricPrompt() {
+
+        // This has to be executed delayed in a fragment due to a bug that is already reported and fixed.
+        // With the next version this should be no problem anymore.
+        // See: https://issuetracker.google.com/issues/131980596
+
+        mBiometricPrompt.cancelAuthentication();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBiometricPrompt.authenticate(mPromptInfo);
+            }
+        }, 100);
     }
 
 }
