@@ -1004,7 +1004,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                     // ZapLog.debug(LOG_TAG, "Exception in query routes request task.");
                     ZapLog.debug(LOG_TAG, e.getMessage());
                     setFeeFailure();
-                } catch (NullPointerException e){
+                } catch (ArrayIndexOutOfBoundsException e){
                     ZapLog.debug(LOG_TAG, "No route found.");
                     setFeeFailure();
                 }
