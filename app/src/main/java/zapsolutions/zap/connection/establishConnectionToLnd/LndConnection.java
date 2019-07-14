@@ -55,7 +55,7 @@ public class LndConnection {
     private void readSavedConnectionInfo() {
 
         // Load current wallet connection config
-        mConnectionConfig = new WalletConfigsManager().loadCurrentWalletConfig();
+        mConnectionConfig = WalletConfigsManager.getInstance().loadCurrentWalletConfig();
 
         // Generate Macaroon
         mMacaroon = new MacaroonCallCredential(mConnectionConfig.getMacaroon());

@@ -23,7 +23,7 @@ import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.ZapLog;
 
 /**
- * This class is used to load and save configurations for wallets.
+ * This SINGLETON class is used to load and save configurations for wallets.
  * Multiple wallets can exist simultaneously, but each alias (wallet name) is only allowed to exist once.
  * <p>
  * The wallet configurations are stored encrypted in the default shared preferences.
@@ -34,12 +34,13 @@ public class WalletConfigsManager {
 
     public static final String DEFAULT_WALLET_NAME = "DefaultWallet";
 
+    private static WalletConfigsManager mInstance;
     private String mWalletConfigsJsonString;
 
-    public WalletConfigsManager() {
+    private WalletConfigsManager() {
 
         String encrypted = PrefsUtil.getPrefs().getString(PrefsUtil.WALLET_CONFIGS, "");
-        ZapLog.debug(LOG_TAG, "Encrypted: " + encrypted);
+
         // Save the new WalletConfigurations in encrypted prefs
         String decrypted = null;
         try {
@@ -67,7 +68,6 @@ public class WalletConfigsManager {
         } catch (IllegalBlockSizeException e) {
             e.printStackTrace();
         }
-        ZapLog.debug(LOG_TAG, "Decrypted: " + decrypted);
 
         mWalletConfigsJsonString = decrypted;
     }
@@ -75,6 +75,14 @@ public class WalletConfigsManager {
     // used for unit tests
     public WalletConfigsManager(String walletConfigsJson) {
         mWalletConfigsJsonString = walletConfigsJson;
+    }
+
+    public static WalletConfigsManager getInstance() {
+        if (mInstance == null) {
+            mInstance = new WalletConfigsManager();
+        }
+
+        return mInstance;
     }
 
 

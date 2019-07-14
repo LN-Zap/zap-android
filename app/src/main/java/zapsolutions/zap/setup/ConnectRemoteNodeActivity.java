@@ -218,7 +218,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
         boolean success = false;
 
-        WalletConfigsManager walletConfigsManager = new WalletConfigsManager();
+        WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
 
         try {
             if (config instanceof LndConnectConfig) {
