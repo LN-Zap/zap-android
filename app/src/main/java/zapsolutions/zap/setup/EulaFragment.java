@@ -1,17 +1,14 @@
 package zapsolutions.zap.setup;
 
 import android.os.Bundle;
-
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.PrefsUtil;
 

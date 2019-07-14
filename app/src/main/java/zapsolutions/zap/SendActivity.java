@@ -11,17 +11,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
+import androidx.core.content.ContextCompat;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
-
-import androidx.core.content.ContextCompat;
-
 import io.grpc.StatusRuntimeException;
+import me.dm7.barcodescanner.zbar.Result;
+import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.LndConnection;
@@ -29,8 +24,10 @@ import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-import me.dm7.barcodescanner.zbar.Result;
-import me.dm7.barcodescanner.zbar.ZBarScannerView;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 public class SendActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
     private static final String LOG_TAG = "QR-Code Activity";
@@ -304,7 +301,7 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
             if (Wallet.getInstance().mPaymentRequest.getTimestamp() + Wallet.getInstance().mPaymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
                 // Show error: payment request expired.
                 showError(getResources().getString(R.string.error_paymentRequestExpired), 3000);
-            } else if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0){
+            } else if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
                 // Disable 0 sat invoices
                 showError(getResources().getString(R.string.error_notAPaymentRequest), 7000);
             } else {

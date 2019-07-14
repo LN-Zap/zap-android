@@ -2,7 +2,6 @@ package zapsolutions.zap.nonClippingText;
 
 import android.content.Context;
 import android.util.AttributeSet;
-
 import androidx.appcompat.widget.AppCompatTextView;
 
 /**
@@ -24,12 +23,11 @@ public class NonClippingTextView extends AppCompatTextView {
     }
 
 
-
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         final int measuredWidth = getMeasuredWidth();
-        final int extendAmount = (int) (getTextSize()/10);
+        final int extendAmount = (int) (getTextSize() / 10);
         final int newWidth = measuredWidth + extendAmount;
 
         setMeasuredDimension(newWidth, getMeasuredHeight());

@@ -1,7 +1,5 @@
 package zapsolutions.zap;
 
-import androidx.fragment.app.Fragment;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,12 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,25 +14,23 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
-
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.LndConnection;
 import zapsolutions.zap.connection.NetworkChangeReceiver;
 import zapsolutions.zap.fragments.HistoryFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
-import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -48,6 +38,10 @@ import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
@@ -69,32 +63,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mWalletLoadedListenerRegistered;
     private boolean mMainnetWarningShownOnce;
     private boolean mIsFirstUnlockAttempt = true;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mUG = new UserGuardian(this, this);
-        mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        // Register observer to detect if app goes to background
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-
-        // Set wallet fragment as beginning fragment
-        mFt = getSupportFragmentManager().beginTransaction();
-        mCurrentFragment = new WalletFragment();
-        mFt.replace(R.id.mainContent, mCurrentFragment);
-        mFt.commit();
-
-        // Setup Listener
-        BottomNavigationView navigation = findViewById(R.id.mainNavigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-    }
-
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -130,6 +98,28 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
     };
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mUG = new UserGuardian(this, this);
+        mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        // Register observer to detect if app goes to background
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+
+        // Set wallet fragment as beginning fragment
+        mFt = getSupportFragmentManager().beginTransaction();
+        mCurrentFragment = new WalletFragment();
+        mFt.replace(R.id.mainContent, mCurrentFragment);
+        mFt.commit();
+
+        // Setup Listener
+        BottomNavigationView navigation = findViewById(R.id.mainNavigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+    }
 
     // This schedule keeps us up to date on exchange rates
     private void setupExchangeRateSchedule() {
@@ -401,7 +391,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 adb.show();
                 ((WalletFragment) mCurrentFragment).showBackgroundForWalletUnlock();
 
-                if(!mIsFirstUnlockAttempt) {
+                if (!mIsFirstUnlockAttempt) {
                     Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
                 }
             }

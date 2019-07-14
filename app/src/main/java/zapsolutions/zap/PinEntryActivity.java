@@ -4,11 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.biometric.BiometricPrompt;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -18,10 +13,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.PrefsUtil;
@@ -29,6 +23,9 @@ import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ScrambledNumpad;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UtilFunctions;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 public class PinEntryActivity extends BaseAppCompatActivity {
@@ -118,7 +115,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         // Make biometrics Button visible if supported.
         // ToDO: Check if supported.
-        if (PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+        if (PrefsUtil.getPrefs().getBoolean("biometricsEnabled", false)) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);

@@ -9,36 +9,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import androidx.preference.Preference;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import zapsolutions.zap.AdvancedSettingsActivity;
 import zapsolutions.zap.BuildConfig;
+import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.setup.SetupActivity;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
-import zapsolutions.zap.R;
 import zapsolutions.zap.util.AppUtil;
-
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class SettingsFragment extends PreferenceFragmentCompat{
+
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     private static final String LOG_TAG = "Settings";
 
@@ -143,18 +139,17 @@ public class SettingsFragment extends PreferenceFragmentCompat{
         });
 
 
-
         // Action when clicked on "reset connection settings"
         final Preference prefResetConfig = findPreference("resetConfig");
         prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (PrefsUtil.isWalletSetup()){
+                if (PrefsUtil.isWalletSetup()) {
                     Intent intent = new Intent(getActivity(), SetupActivity.class);
                     intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
                 }
                 return true;
             }

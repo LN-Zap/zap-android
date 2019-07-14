@@ -1,9 +1,9 @@
 package zapsolutions.zap.util;
 
 import java.security.SecureRandom;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.AbstractMap.SimpleImmutableEntry;
 
 /**
  * This class helps to defend against some attack vectors.

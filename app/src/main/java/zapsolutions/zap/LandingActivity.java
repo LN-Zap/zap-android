@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.preference.PreferenceManager;
-
 import at.favre.lib.armadillo.Armadillo;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
@@ -30,7 +28,6 @@ public class LandingActivity extends BaseAppCompatActivity {
             App.getAppContext().setUriSchemeData(uri.toString());
             ZapLog.debug(LOG_TAG, "URI was detected: " + uri.toString());
         }
-
 
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

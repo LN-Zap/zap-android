@@ -1,28 +1,26 @@
 package zapsolutions.zap.historyList;
 
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.View;
-
-import java.util.List;
-
+import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import zapsolutions.zap.R;
+
+import java.util.List;
 
 
 public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<HistoryListItem> mItems;
-
-    @Override
-    public int getItemViewType(int position) {
-        return mItems.get(position).getType();
-    }
 
     // Construct the adapter with a data list
     public HistoryItemAdapter(List<HistoryListItem> dataset) {
         mItems = dataset;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return mItems.get(position).getType();
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

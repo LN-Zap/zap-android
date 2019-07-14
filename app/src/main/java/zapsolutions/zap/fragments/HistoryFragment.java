@@ -4,9 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,24 +13,13 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
+import com.github.lightningnetwork.lnd.lnrpc.Invoice;
+import com.github.lightningnetwork.lnd.lnrpc.Payment;
+import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import zapsolutions.zap.R;
 import zapsolutions.zap.historyList.DateItem;
 import zapsolutions.zap.historyList.HistoryItemAdapter;
@@ -44,6 +30,14 @@ import zapsolutions.zap.historyList.TransactionItem;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.

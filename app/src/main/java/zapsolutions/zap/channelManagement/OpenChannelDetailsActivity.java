@@ -1,9 +1,8 @@
 package zapsolutions.zap.channelManagement;
 
+import android.os.Bundle;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-
-import android.os.Bundle;
 
 public class OpenChannelDetailsActivity extends BaseAppCompatActivity {
 

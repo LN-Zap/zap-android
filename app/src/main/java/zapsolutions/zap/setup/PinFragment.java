@@ -15,31 +15,27 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import zapsolutions.zap.R;
+import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.ScrambledNumpad;
+import zapsolutions.zap.util.UtilFunctions;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import zapsolutions.zap.R;
-import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.UtilFunctions;
-import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.util.ScrambledNumpad;
-
 
 public class PinFragment extends Fragment {
-
-    private static final String LOG_TAG = "PIN Fragment";
 
     public static final int CREATE_MODE = 0;
     public static final int CONFIRM_MODE = 1;
     public static final int ENTER_MODE = 2;
-
+    private static final String LOG_TAG = "PIN Fragment";
     private static final String ARG_MODE = "pinMode";
     private static final String ARG_PROMPT = "promptString";
 
@@ -167,7 +163,7 @@ public class PinFragment extends Fragment {
 
         // Make biometrics Button visible if supported.
         // ToDO: Check if supported.
-        if (mMode == ENTER_MODE && PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+        if (mMode == ENTER_MODE && PrefsUtil.getPrefs().getBoolean("biometricsEnabled", false)) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -224,7 +220,7 @@ public class PinFragment extends Fragment {
 
 
         // Show biometric prompt if preferred
-        if (mMode == ENTER_MODE && PrefsUtil.getPrefs().getBoolean("biometricsEnabled",false)) {
+        if (mMode == ENTER_MODE && PrefsUtil.getPrefs().getBoolean("biometricsEnabled", false)) {
             if (PrefsUtil.isBiometricPreferred()) {
                 initBiometricPrompt();
             }

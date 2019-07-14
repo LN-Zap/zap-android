@@ -11,12 +11,10 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-
 import android.view.animation.AlphaAnimation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -28,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -37,8 +34,6 @@ import androidx.core.content.ContextCompat;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
-
-
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeResponse;
 import com.github.lightningnetwork.lnd.lnrpc.FeeLimit;
@@ -53,13 +48,9 @@ import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.concurrent.ExecutionException;
-
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.LndConnection;
-
 import zapsolutions.zap.customView.LightningFeeView;
 import zapsolutions.zap.customView.OnChainFeeView;
 import zapsolutions.zap.util.ExecuteOnCaller;
@@ -68,6 +59,8 @@ import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
+
+import java.util.concurrent.ExecutionException;
 
 
 public class SendBSDFragment extends BottomSheetDialogFragment {
@@ -972,7 +965,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 try {
                     QueryRoutesResponse queryRoutesResponse = queryRoutesFuture.get();
 
-                    if (queryRoutesResponse.getRoutesCount() == 0){
+                    if (queryRoutesResponse.getRoutesCount() == 0) {
                         ZapLog.debug(LOG_TAG, "No route found.");
                         setFeeFailure();
                     } else {
