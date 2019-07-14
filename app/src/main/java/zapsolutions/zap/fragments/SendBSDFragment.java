@@ -972,40 +972,42 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 try {
                     QueryRoutesResponse queryRoutesResponse = queryRoutesFuture.get();
 
-                    Route firstRoute = queryRoutesResponse.getRoutes(0);
-                    Route lastRoute = queryRoutesResponse.getRoutes(queryRoutesResponse.getRoutesCount() - 1);
-
-                    long feeLowerBoundSat = firstRoute.getTotalFeesMsat() / 1000;
-                    // For the upper bound we have to add one sat as the value gets truncated.
-                    // Example: If the fee was actually 700 Msat it would result in 0 sat (= 0 Msat)
-                    //          and could lead to "no route" error when applied as fee limit.
-                    long feeUpperBoundSat = (lastRoute.getTotalFeesMsat() / 1000) + 1;
-
-                    String feeLowerBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(feeLowerBoundSat);
-                    String feeUpperBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(feeUpperBoundSat);
-
-                    String feeString;
-
-                    mMaxLightningFee = feeUpperBoundSat;
-
-                    if (feeLowerBound.equals(feeUpperBound)) {
-                        feeString = feeLowerBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                    if (queryRoutesResponse.getRoutesCount() == 0){
+                        ZapLog.debug(LOG_TAG, "No route found.");
+                        setFeeFailure();
                     } else {
-                        feeString = feeLowerBound + "-" + feeUpperBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+
+                        Route firstRoute = queryRoutesResponse.getRoutes(0);
+                        Route lastRoute = queryRoutesResponse.getRoutes(queryRoutesResponse.getRoutesCount() - 1);
+
+                        long feeLowerBoundSat = firstRoute.getTotalFeesMsat() / 1000;
+                        // For the upper bound we have to add one sat as the value gets truncated.
+                        // Example: If the fee was actually 700 Msat it would result in 0 sat (= 0 Msat)
+                        //          and could lead to "no route" error when applied as fee limit.
+                        long feeUpperBoundSat = (lastRoute.getTotalFeesMsat() / 1000) + 1;
+
+                        String feeLowerBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(feeLowerBoundSat);
+                        String feeUpperBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(feeUpperBoundSat);
+
+                        String feeString;
+
+                        mMaxLightningFee = feeUpperBoundSat;
+
+                        if (feeLowerBound.equals(feeUpperBound)) {
+                            feeString = feeLowerBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                        } else {
+                            feeString = feeLowerBound + "-" + feeUpperBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                        }
+
+                        setCalculatedFeeAmount(feeString);
                     }
 
-                    setCalculatedFeeAmount(feeString);
-
-                    //ZapLog.debug(LOG_TAG, queryRoutesResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Query routes request interrupted.");
                     setFeeFailure();
                 } catch (ExecutionException e) {
                     // ZapLog.debug(LOG_TAG, "Exception in query routes request task.");
                     ZapLog.debug(LOG_TAG, e.getMessage());
-                    setFeeFailure();
-                } catch (ArrayIndexOutOfBoundsException e){
-                    ZapLog.debug(LOG_TAG, "No route found.");
                     setFeeFailure();
                 }
             }
