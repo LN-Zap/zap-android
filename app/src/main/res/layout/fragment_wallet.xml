@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.WalletFragment">
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:id="@+id/frameLayout"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   tools:context=".fragments.WalletFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -23,7 +23,7 @@
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_cloudlightning"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
             android:id="@+id/walletName"
@@ -37,7 +37,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/zapLogo"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/btcRate"
@@ -50,7 +50,7 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -77,7 +77,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -100,7 +100,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.36" />
+            app:layout_constraintVertical_bias="0.36"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/BalanceLayout"
@@ -137,7 +137,7 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <zapsolutions.zap.nonClippingText.NonClippingTextView
                     android:id="@+id/BalancePrimaryUnit"
@@ -148,7 +148,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"/>
 
             </LinearLayout>
 
@@ -171,7 +171,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/gray"
                     android:textSize="15sp"
-                    app:layout_constraintTop_toBottomOf="@id/BalancePrimary" />
+                    app:layout_constraintTop_toBottomOf="@id/BalancePrimary"/>
 
                 <zapsolutions.zap.nonClippingText.NonClippingTextView
                     android:id="@+id/BalanceSecondaryUnit"
@@ -182,7 +182,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/gray"
                     android:textSize="15sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"/>
             </LinearLayout>
 
 
@@ -203,7 +203,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/receiveButton"
             app:layout_constraintHorizontal_bias="0.29"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
             android:id="@+id/receiveButton"
@@ -220,7 +220,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.74"
-            app:layout_constraintStart_toEndOf="@+id/sendButton" />
+            app:layout_constraintStart_toEndOf="@+id/sendButton"/>
 
         <ImageView
             android:id="@+id/switchButtonImage"
@@ -234,7 +234,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/BalanceLayout"
             app:layout_constraintStart_toEndOf="@+id/BalanceLayout"
             app:layout_constraintTop_toTopOf="@+id/BalanceLayout"
-            app:layout_constraintVertical_bias="0.6" />
+            app:layout_constraintVertical_bias="0.6"/>
 
         <Button
             android:id="@+id/setupWallet"
@@ -252,7 +252,7 @@
             app:layout_constraintBottom_toTopOf="@+id/receiveButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/BalanceLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/BalanceLayout"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -276,7 +276,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <Button
             android:id="@+id/reconnectBtn"
@@ -295,7 +295,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/connectError" />
+            app:layout_constraintTop_toBottomOf="@id/connectError"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -316,7 +316,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ProgressBar
             android:id="@+id/sendFeeLightningProgressBar"
@@ -326,7 +326,7 @@
             android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toTopOf="@+id/loadingText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

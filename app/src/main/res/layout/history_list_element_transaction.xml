@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/transactionRootView"
-    android:layout_width="match_parent"
-    android:layout_height="65dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginEnd="10dp"
-    android:layout_marginBottom="5dp"
-    android:background="@drawable/bg_clickable_item"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingStart="5dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="10dp">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/transactionRootView"
+              android:layout_width="match_parent"
+              android:layout_height="65dp"
+              android:layout_marginStart="10dp"
+              android:layout_marginTop="5dp"
+              android:layout_marginEnd="10dp"
+              android:layout_marginBottom="5dp"
+              android:background="@drawable/bg_clickable_item"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              android:paddingStart="5dp"
+              android:paddingTop="10dp"
+              android:paddingEnd="10dp"
+              android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
             android:layout_gravity="center"
             android:layout_weight="0"
             android:tint="@color/lightningOrange"
-            app:srcCompat="@drawable/ic_onchain_black_24dp" />
+            app:srcCompat="@drawable/ic_onchain_black_24dp"/>
 
         <TextView
             android:id="@+id/timeOfDay"
@@ -41,7 +41,7 @@
             android:text="12:23"
             android:textAlignment="center"
             android:textColor="@color/gray"
-            android:textSize="10sp" />
+            android:textSize="10sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +59,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="State"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/transactionDescription"
@@ -71,7 +71,7 @@
             android:text="Description"
             android:textColor="@color/gray"
             android:textSize="12sp"
-            android:visibility="visible" />
+            android:visibility="visible"/>
     </LinearLayout>
 
     <LinearLayout
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="+ 157 sat"
             android:textAlignment="textEnd"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/transactionFeeAmount"
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:text="Fee: 0 sat"
             android:textAlignment="textEnd"
-            android:textSize="10sp" />
+            android:textSize="10sp"/>
     </LinearLayout>
 
 </LinearLayout>

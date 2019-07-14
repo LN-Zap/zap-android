@@ -29,30 +29,65 @@
     <string name="details">Detalles</string>
     <string name="error">Error</string>
     <!-- Los parámetros para las siguientes strings son:  %1$s: Nombre del explorador de bloques, %2$s: "mainnet" o "testnet" -->
-    <string name="error_blockExplorer_message">El explorador de bloques que tienes actualmente seleccionado (%1$s) no soporta %2$s.\nPor favor ve a las configuraciones y elige otro explorador para continuar.</string>
+    <string name="error_blockExplorer_message">El explorador de bloques que tienes actualmente seleccionado (%1$s) no
+        soporta %2$s.\nPor favor ve a las configuraciones y elige otro explorador para continuar.
+    </string>
     <string name="error_blockExplorer_title">Explorador de Bloques</string>
-    <string name="error_cameraPermissionRequired">Para escanear códigos QR debes permitir que Zap acceda a la cámara.</string>
+    <string name="error_cameraPermissionRequired">Para escanear códigos QR debes permitir que Zap acceda a la cámara.
+    </string>
     <string name="error_emptyClipboardConnect">Su portapapeles no contiene ningún dato de conexión.</string>
     <string name="error_emptyClipboardPayment">Su portapapeles no contiene ningún dato de pago.</string>
-    <string name="error_notAPaymentRequest">Datos de pago inválidos.\nUtilice una dirección Bitcoin o una solicitud de pago para Lightning para iniciar la transferencia.</string>
+    <string name="error_notAPaymentRequest">Datos de pago inválidos.\nUtilice una dirección Bitcoin o una solicitud de
+        pago para Lightning para iniciar la transferencia.
+    </string>
     <string name="error_paymentRequestExpired">Esta solicitud de pago ha expirado.</string>
-    <string name="error_useMainnetRequest">Estás conectado a la MAINNET. Por favor usa direcciones o solicitudes de pago para MAINNET.</string>
-    <string name="error_useTestnetRequest">Estás conectado a la TESTNET. Por favor usa direcciones y solicitudes de pago para TESTNET.</string>
+    <string name="error_useMainnetRequest">Estás conectado a la MAINNET. Por favor usa direcciones o solicitudes de pago
+        para MAINNET.
+    </string>
+    <string name="error_useTestnetRequest">Estás conectado a la TESTNET. Por favor usa direcciones y solicitudes de pago
+        para TESTNET.
+    </string>
     <string name="expired_requests">Solicitud vencida</string>
     <string name="fee">Tarifa</string>
     <string name="filter_transactions">Filtrar transacciones</string>
-    <string name="guardian_copyToClipboard_onChain">Si copias esta información a tu portapapeles, otras aplicaciones (incluyendo maliciosas) podrian acceder a ella y alterarla.\n\nPara asegurarte que nada ha sido cambiado al pegar, puedes comparar el comienzo con:\n\n%1$s\n</string>
-    <string name="guardian_copyToClipboard_lightning">Si copias esta información a tu portapapeles, otras aplicaciones (incluyendo maliciosas) podrian acceder a ella y alterarla.\n\nPara asegurarte que nada ha sido cambiado al pegar, puedes comparar el final con:\n\n%1$s\n</string>
-    <string name="guardian_disableScrambledPin">Sin el mezclado puede resultar mas fácil para un tercero adivinar el PIN solo con observar los movimientos de sus dedos.</string>
-    <string name="guardian_disableScreenProtection">Si activas el grabado de pantalla, algún programa malicioso podria grabar un video o tomar capturas de la pantalla mientras usas Zap. Recomendamos que mantengas esto desactivado solo mientras vayas a capturar la pantalla.</string>
+    <string name="guardian_copyToClipboard_onChain">Si copias esta información a tu portapapeles, otras aplicaciones
+        (incluyendo maliciosas) podrian acceder a ella y alterarla.\n\nPara asegurarte que nada ha sido cambiado al
+        pegar, puedes comparar el comienzo con:\n\n%1$s\n
+    </string>
+    <string name="guardian_copyToClipboard_lightning">Si copias esta información a tu portapapeles, otras aplicaciones
+        (incluyendo maliciosas) podrian acceder a ella y alterarla.\n\nPara asegurarte que nada ha sido cambiado al
+        pegar, puedes comparar el final con:\n\n%1$s\n
+    </string>
+    <string name="guardian_disableScrambledPin">Sin el mezclado puede resultar mas fácil para un tercero adivinar el PIN
+        solo con observar los movimientos de sus dedos.
+    </string>
+    <string name="guardian_disableScreenProtection">Si activas el grabado de pantalla, algún programa malicioso podria
+        grabar un video o tomar capturas de la pantalla mientras usas Zap. Recomendamos que mantengas esto desactivado
+        solo mientras vayas a capturar la pantalla.
+    </string>
     <string name="guardian_doNotShowAgain">No me muestres de nuevo.</string>
-    <string name="guardian_highOnChainFee">Estás a punto de pagar %1$s%% en tarifa de red.\n\nPosibles soluciones:\n- trata de enviar un pago vía lightning\n- selecciona una tarifa menor, espera mas\n- inténtalo mas tarde \n- transacciona con un monto mayor\n\nDeseas continuar de todos modos?</string>
-    <string name="guardian_notReadyForMainnet">Estas en la MAINNET con Bitcoin de verdad! Zap Android está en una fase muy temprana de desarrollo. Podrias perder fondos! Si no deseas asumir este riesgo, cámbiate a la testnet por mientras.</string>
-    <string name="guardian_oldExchangeRate">Has solicitado un monto en fíat, pero tu tasa de cambio es antigua (obtenida hace %1$s horas atras).\nAsegúrate de tener conexión a internet o considera la opción de solicitar un monto directamente en Bitcoin.\n\nDeseas continuar de todos modos?</string>
-    <string name="guardian_pasteFromClipboard">Siempre verifica los últimos 3 a 5 dígitos cuando pegas una dirección del portapapeles. Un app malicioso pudo haber cambiado la dirección en el fondo sin que lo notaras.</string>
+    <string name="guardian_highOnChainFee">Estás a punto de pagar %1$s%% en tarifa de red.\n\nPosibles soluciones:\n-
+        trata de enviar un pago vía lightning\n- selecciona una tarifa menor, espera mas\n- inténtalo mas tarde \n-
+        transacciona con un monto mayor\n\nDeseas continuar de todos modos?
+    </string>
+    <string name="guardian_notReadyForMainnet">Estas en la MAINNET con Bitcoin de verdad! Zap Android está en una fase
+        muy temprana de desarrollo. Podrias perder fondos! Si no deseas asumir este riesgo, cámbiate a la testnet por
+        mientras.
+    </string>
+    <string name="guardian_oldExchangeRate">Has solicitado un monto en fíat, pero tu tasa de cambio es antigua (obtenida
+        hace %1$s horas atras).\nAsegúrate de tener conexión a internet o considera la opción de solicitar un monto
+        directamente en Bitcoin.\n\nDeseas continuar de todos modos?
+    </string>
+    <string name="guardian_pasteFromClipboard">Siempre verifica los últimos 3 a 5 dígitos cuando pegas una dirección del
+        portapapeles. Un app malicioso pudo haber cambiado la dirección en el fondo sin que lo notaras.
+    </string>
     <string name="guardian_reset">Todos los avisos de seguridad están activados de nuevo.</string>
     <string name="guardian_Title">Atención</string>
-    <string name="guardian_tooMuchMoney">Felicidades, parece que tienes una buena cantidad de Bitcoin! Por favor recuerda que Zap es una \\\"Billetera Caliente\\\". Hacemos lo mejor para mantener a la billetera segura, pero por tu propia seguridad, te recomendamos que consideres el uso de Billeteras Frias o en Hardware para almacenar montos considerables.</string>
+    <string name="guardian_tooMuchMoney">Felicidades, parece que tienes una buena cantidad de Bitcoin! Por favor
+        recuerda que Zap es una \\\"Billetera Caliente\\\". Hacemos lo mejor para mantener a la billetera segura, pero
+        por tu propia seguridad, te recomendamos que consideres el uso de Billeteras Frias o en Hardware para almacenar
+        montos considerables.
+    </string>
     <string name="internal">Interno</string>
     <string name="lightning">Lightning</string>
     <string name="max_amount">Monto Máximo:</string>
@@ -85,8 +120,13 @@
     <string name="receive_generateRequest">Generar Solicitud</string>
     <string name="receive_generateRequest_failed">La solicitud no pudo ser generada.</string>
     <string name="receive_lightning_request">Solicitud Lightning</string>
-    <string name="receive_noActiveChannels">Para recibir Bitcoin por la red relámpago, debes primero abrir canales.</string>
-    <string name="receive_noIncomeBalance">Para recibir Bitcoin por la red relámpago, por lo menos uno de tus canales necesita algún balance en su contraperte.\n\nPara lograrlo, primero tiene que gastar algo en la red relámpago.\n\nEn el área de administración de canales puedes siempre ver cuanto puedes enviar o recibir por la red relámpago en el presente.</string>
+    <string name="receive_noActiveChannels">Para recibir Bitcoin por la red relámpago, debes primero abrir canales.
+    </string>
+    <string name="receive_noIncomeBalance">Para recibir Bitcoin por la red relámpago, por lo menos uno de tus canales
+        necesita algún balance en su contraperte.\n\nPara lograrlo, primero tiene que gastar algo en la red
+        relámpago.\n\nEn el área de administración de canales puedes siempre ver cuanto puedes enviar o recibir por la
+        red relámpago en el presente.
+    </string>
     <string name="receive_on_chain_request">Solicitud en cadena</string>
     <string name="receive_requestFullfilled">Solicitud\npagada</string>
     <string name="received">Recibido</string>
@@ -114,7 +154,8 @@
     <string name="settings_hapticPin">Respuesta táctil</string>
     <string name="settings_help">Necesita Ayuda?</string>
     <string name="settings_hideTotalBalance">Esconder el balance total</string>
-    <string name="settings_hideTotalBalance_explanation">Cuando activado, un toque al logo de Zap revelará su balance.</string>
+    <string name="settings_hideTotalBalance_explanation">Cuando activado, un toque al logo de Zap revelará su balance.
+    </string>
     <string name="settings_language">Idioma</string>
     <string name="settings_manageChannels">Administrar Canales de Pago</string>
     <string name="settings_preventScreenRecording">Prevenir la Grabación de la Pantalla</string>
@@ -128,7 +169,9 @@
     <string name="setup_connect_local_description">Crear una billetera en este dispositivo.</string>
     <string name="setup_connect_remote_button">Conectarse a un Nodo Remoto.</string>
     <string name="setup_connect_remote_description">Control remoto a su propio nodo.</string>
-    <string name="setup_eula_explanation">Zap es completamente gratis. Sin embargo, para usarlo, tienes que aceptar nuestros términos:</string>
+    <string name="setup_eula_explanation">Zap es completamente gratis. Sin embargo, para usarlo, tienes que aceptar
+        nuestros términos:
+    </string>
     <string name="setup_eula_heading">Condiciones</string>
     <string name="setup_eula_iAccept">Acepto</string>
     <string name="share">Compartir</string>

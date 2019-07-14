@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_root"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal"
-    android:paddingStart="20dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="0dp">
+              android:id="@+id/layout_root"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="horizontal"
+              android:paddingStart="20dp"
+              android:paddingTop="10dp"
+              android:paddingEnd="10dp"
+              android:paddingBottom="0dp">
 
     <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/skip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/guardian_doNotShowAgain" />
+              android:id="@+id/skip"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/guardian_doNotShowAgain"/>
 </LinearLayout>

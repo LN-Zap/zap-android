@@ -19,38 +19,38 @@
         app:layout_constraintHorizontal_weight="2"/>
 
     <ProgressBar
-            android:id="@+id/sendFeeLightningProgressBar"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/sendFeeLightningLabel"
-            app:layout_constraintBottom_toBottomOf="@+id/sendFeeLightningLabel"
-            android:visibility="gone"/>
+        android:id="@+id/sendFeeLightningProgressBar"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sendFeeLightningLabel"
+        app:layout_constraintBottom_toBottomOf="@+id/sendFeeLightningLabel"
+        android:visibility="gone"/>
 
     <TextView
-            android:id="@+id/sendFeeLightningAmount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:ems="10"
-            android:maxLength="50"
-            android:textAlignment="textEnd"
-            android:textSize="20sp"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/sendFeeLightningLabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+        android:id="@+id/sendFeeLightningAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:ems="10"
+        android:maxLength="50"
+        android:textAlignment="textEnd"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/sendFeeLightningLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
-            android:id="@+id/sendFeeLightningLineBottom"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintTop_toBottomOf="@id/sendFeeLightningLabel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@color/gray"/>
+        android:id="@+id/sendFeeLightningLineBottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintTop_toBottomOf="@id/sendFeeLightningLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@color/gray"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

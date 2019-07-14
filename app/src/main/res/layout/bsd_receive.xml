@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:id="@+id/rootLayout"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/backgroundLayout"
@@ -26,7 +25,7 @@
             android:tint="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_close_black_24dp" />
+            app:srcCompat="@drawable/ic_close_black_24dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
@@ -37,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_icon_modal_lightning" />
+        app:srcCompat="@drawable/ic_icon_modal_lightning"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/anchor"
@@ -71,7 +70,7 @@
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -113,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tint="@color/lightningOrange"
-                    app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+                    app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"/>
 
                 <TextView
                     android:id="@+id/lnBtnText"
@@ -122,7 +121,7 @@
                     android:paddingStart="10dp"
                     android:text="@string/lightning"
                     android:textColor="@color/lightningOrange"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
             </LinearLayout>
 
 
@@ -140,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_weight="1"
-                app:srcCompat="@color/white" />
+                app:srcCompat="@color/white"/>
 
             <TextView
                 android:id="@+id/textView8"
@@ -148,14 +147,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="@string/or"
-                android:textAlignment="center" />
+                android:textAlignment="center"/>
 
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_weight="1"
-                app:srcCompat="@color/white" />
+                app:srcCompat="@color/white"/>
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -182,7 +181,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tint="@color/lightningOrange"
-                    app:srcCompat="@drawable/ic_onchain_black_24dp" />
+                    app:srcCompat="@drawable/ic_onchain_black_24dp"/>
 
                 <TextView
                     android:id="@+id/onChainBtnText"
@@ -191,7 +190,7 @@
                     android:paddingStart="10dp"
                     android:text="@string/onChain"
                     android:textColor="@color/lightningOrange"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
             </LinearLayout>
 
 
@@ -220,7 +219,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/gray" />
+            app:srcCompat="@color/gray"/>
 
         <TextView
             android:id="@+id/noIncomingChannelBalanceText"
@@ -233,7 +232,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -241,7 +240,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@color/gray" />
+            app:srcCompat="@color/gray"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -263,7 +262,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noIncomingChannelBalanceView" />
+        app:layout_constraintTop_toBottomOf="@id/noIncomingChannelBalanceView"/>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -286,7 +285,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/gray" />
+            app:srcCompat="@color/gray"/>
 
         <!-- Dummy item to prevent EditText from receiving focus -->
         <LinearLayout
@@ -312,7 +311,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/receiveUnitLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:id="@+id/receiveUnitLayout"
@@ -334,7 +333,7 @@
                 android:text="UNIT"
                 android:textAlignment="center"
                 android:textSize="30sp"
-                android:textStyle="italic" />
+                android:textStyle="italic"/>
 
             <ImageView
                 android:id="@+id/receiveSwitchUnitImage"
@@ -344,7 +343,7 @@
                 android:paddingStart="4dp"
                 android:paddingTop="5dp"
                 android:tint="@color/lightningOrange"
-                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
+                app:srcCompat="@drawable/ic_swap_vert_black_24dp"/>
         </LinearLayout>
 
         <!-- If we want to show the maximum amount, we could enable it here
@@ -384,7 +383,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@color/gray" />
+            app:srcCompat="@color/gray"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -401,7 +400,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/receiveInputsView" />
+        app:layout_constraintTop_toBottomOf="@id/receiveInputsView"/>
 
     <Button
         android:id="@+id/nextButton"
@@ -420,7 +419,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Numpad" />
+        app:layout_constraintTop_toBottomOf="@id/Numpad"/>
 
     <Button
         android:id="@+id/generateRequestButton"
@@ -439,7 +438,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/receiveMemoTopLayout" />
+        app:layout_constraintTop_toBottomOf="@id/receiveMemoTopLayout"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/receiveMemoTopLayout"
@@ -468,7 +467,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

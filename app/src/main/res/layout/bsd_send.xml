@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:id="@+id/rootLayout"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/backgroundLayout"
@@ -26,7 +26,7 @@
             android:tint="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_close_black_24dp" />
+            app:srcCompat="@drawable/ic_close_black_24dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_icon_modal_lightning" />
+        app:srcCompat="@drawable/ic_icon_modal_lightning"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/anchor"
@@ -70,7 +70,7 @@
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -96,7 +96,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/gray" />
+            app:srcCompat="@color/gray"/>
 
         <TextView
             android:id="@+id/noOutgoingChannelBalanceText"
@@ -109,7 +109,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -117,7 +117,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@color/gray" />
+            app:srcCompat="@color/gray"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -139,7 +139,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noOutgoingChannelBalanceView" />
+        app:layout_constraintTop_toBottomOf="@id/noOutgoingChannelBalanceView"/>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -160,7 +160,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/gray" />
+            app:srcCompat="@color/gray"/>
 
         <!-- Dummy item to prevent EditText from receiving focus -->
         <LinearLayout
@@ -183,7 +183,7 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <EditText
             android:id="@+id/sendAmount"
@@ -200,7 +200,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sendUnitLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:id="@+id/sendUnitLayout"
@@ -222,7 +222,7 @@
                 android:text="UNIT"
                 android:textAlignment="center"
                 android:textSize="30sp"
-                android:textStyle="italic" />
+                android:textStyle="italic"/>
 
             <ImageView
                 android:id="@+id/sendSwitchUnitImage"
@@ -232,7 +232,7 @@
                 android:paddingStart="4dp"
                 android:paddingTop="5dp"
                 android:tint="@color/lightningOrange"
-                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
+                app:srcCompat="@drawable/ic_swap_vert_black_24dp"/>
         </LinearLayout>
 
         <ImageView
@@ -242,26 +242,26 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@color/gray" />
+            app:srcCompat="@color/gray"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
-            android:id="@+id/sendFeeTopLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sendInputsView">
+        android:id="@+id/sendFeeTopLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendInputsView">
 
         <zapsolutions.zap.customView.LightningFeeView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:visibility="gone"
-                android:id="@+id/sendFeeLightningLayout"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:visibility="gone"
+            android:id="@+id/sendFeeLightningLayout"/>
 
         <zapsolutions.zap.customView.OnChainFeeView
             android:layout_width="match_parent"
@@ -302,7 +302,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -320,7 +320,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sendMemoTopLayout" />
+        app:layout_constraintTop_toBottomOf="@id/sendMemoTopLayout"/>
 
     <Button
         android:id="@+id/sendButton"
@@ -338,7 +338,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Numpad" />
+        app:layout_constraintTop_toBottomOf="@id/Numpad"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/paymentProgressLayout"
@@ -360,7 +360,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -371,7 +371,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
             android:id="@+id/progressFinishedIcon"
@@ -381,7 +381,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_check_circle_black_60dp" />
+            app:srcCompat="@drawable/ic_check_circle_black_60dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -413,7 +413,7 @@
                 android:text="@string/send_success"
                 android:textAlignment="center"
                 android:textColor="@color/superGreen"
-                android:textSize="36sp" />
+                android:textSize="36sp"/>
 
             <ImageView
                 android:id="@+id/finishedPaymentTypeIcon"
@@ -422,14 +422,14 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:tint="@color/white"
-                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"/>
 
             <TextView
                 android:id="@+id/finishedText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textAlignment="center" />
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <Button
@@ -448,7 +448,7 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,5 +4,5 @@
         android:fromXDelta="-1%"
         android:repeatCount="3"
         android:repeatMode="reverse"
-        android:toXDelta="1%" />
+        android:toXDelta="1%"/>
 </set>

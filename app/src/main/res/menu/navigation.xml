@@ -4,16 +4,16 @@
     <item
         android:id="@+id/navigation_wallet"
         android:icon="@drawable/ic_nav_wallet_balck_24dp"
-        android:title="@string/navigation_wallet" />
+        android:title="@string/navigation_wallet"/>
 
     <item
         android:id="@+id/navigation_history"
         android:icon="@drawable/ic_nav_history_black_24dp"
-        android:title="@string/navigation_history" />
+        android:title="@string/navigation_history"/>
 
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_nav_settings_black_24dp"
-        android:title="@string/navigation_settings" />
+        android:title="@string/navigation_settings"/>
 
 </menu>

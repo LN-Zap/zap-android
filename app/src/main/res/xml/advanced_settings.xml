@@ -1,5 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:title="@string/settings_category_general"
@@ -13,7 +13,7 @@
             android:key="blockExplorer"
             android:summary="%s"
             android:title="@string/settings_blockExplorer"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"/>
 
         <ListPreference
             android:defaultValue="bech32"
@@ -23,7 +23,7 @@
             android:key="btcAddressType"
             android:summary="%s"
             android:title="@string/settings_addressType"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"/>
 
     </PreferenceCategory>
 
@@ -37,7 +37,7 @@
             android:key="lightning_expiry"
             android:summary="%s"
             android:title="@string/settings_lnRequestExpiryTitle"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"/>
 
     </PreferenceCategory>
 
@@ -49,19 +49,19 @@
             android:defaultValue="true"
             android:key="biometricsEnabled"
             android:title="@string/settings_enableBiometrics"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"/>
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="scramblePin"
             android:title="@string/settings_scramblePin"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"/>
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="preventScreenRecording"
             android:title="@string/settings_preventScreenRecording"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"/>
 
     </PreferenceCategory>
 
