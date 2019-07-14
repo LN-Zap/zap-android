@@ -886,7 +886,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
      * Show progress while calculating fee
      */
     private void setCalculatingFee() {
-        if(mOnChain) {
+        if (mOnChain) {
             // On chain fee calculation is very fast, no need for progress indication
         } else {
             mLightningFeeView.onCalculating();
@@ -897,7 +897,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
      * Show the calculated fee
      */
     private void setCalculatedFeeAmount(String amount) {
-        if(mOnChain) {
+        if (mOnChain) {
             mOnChainFeeView.onFeeSuccess(amount);
         } else {
             mLightningFeeView.setAmount(amount);
@@ -908,7 +908,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
      * Show fee calculation failure
      */
     private void setFeeFailure() {
-        if(mOnChain) {
+        if (mOnChain) {
             mOnChainFeeView.onFeeFailure();
         } else {
             mLightningFeeView.onFeeFailure();
@@ -972,25 +972,36 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 try {
                     QueryRoutesResponse queryRoutesResponse = queryRoutesFuture.get();
 
-                    Route firstRoute = queryRoutesResponse.getRoutes(0);
-                    Route lastRoute = queryRoutesResponse.getRoutes(queryRoutesResponse.getRoutesCount() - 1);
-
-                    String feeLowerBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(firstRoute.getTotalFeesMsat() / 1000);
-                    String feeUpperBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(lastRoute.getTotalFeesMsat() / 1000);
-
-                    String feeString;
-
-                    mMaxLightningFee = lastRoute.getTotalFeesMsat() / 1000;
-
-                    if (feeLowerBound.equals(feeUpperBound)) {
-                        feeString = feeLowerBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                    if (queryRoutesResponse.getRoutesCount() == 0){
+                        ZapLog.debug(LOG_TAG, "No route found.");
+                        setFeeFailure();
                     } else {
-                        feeString = feeLowerBound + "-" + feeUpperBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+
+                        Route firstRoute = queryRoutesResponse.getRoutes(0);
+                        Route lastRoute = queryRoutesResponse.getRoutes(queryRoutesResponse.getRoutesCount() - 1);
+
+                        long feeLowerBoundSat = firstRoute.getTotalFeesMsat() / 1000;
+                        // For the upper bound we have to add one sat as the value gets truncated.
+                        // Example: If the fee was actually 700 Msat it would result in 0 sat (= 0 Msat)
+                        //          and could lead to "no route" error when applied as fee limit.
+                        long feeUpperBoundSat = (lastRoute.getTotalFeesMsat() / 1000) + 1;
+
+                        String feeLowerBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(feeLowerBoundSat);
+                        String feeUpperBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(feeUpperBoundSat);
+
+                        String feeString;
+
+                        mMaxLightningFee = feeUpperBoundSat;
+
+                        if (feeLowerBound.equals(feeUpperBound)) {
+                            feeString = feeLowerBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                        } else {
+                            feeString = feeLowerBound + "-" + feeUpperBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                        }
+
+                        setCalculatedFeeAmount(feeString);
                     }
 
-                    setCalculatedFeeAmount(feeString);
-
-                    //ZapLog.debug(LOG_TAG, queryRoutesResponse.toString());
                 } catch (InterruptedException e) {
                     ZapLog.debug(LOG_TAG, "Query routes request interrupted.");
                     setFeeFailure();
