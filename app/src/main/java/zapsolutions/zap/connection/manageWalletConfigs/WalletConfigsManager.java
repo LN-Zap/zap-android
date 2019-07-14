@@ -5,11 +5,25 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.ZapLog;
 
 /**
- * This class is used to getString and save the configurations for wallets.
+ * This class is used to load and save configurations for wallets.
  * Multiple wallets can exist simultaneously, but each alias (wallet name) is only allowed to exist once.
  * <p>
  * The wallet configurations are stored encrypted in the default shared preferences.
@@ -23,9 +37,39 @@ public class WalletConfigsManager {
     private String mWalletConfigsJsonString;
 
     public WalletConfigsManager() {
-        EncryptedPrefs encryptedPrefs = new EncryptedPrefs();
-        String encryptedWalletConfigs = encryptedPrefs.getString(PrefsUtil.WALLET_CONFIGS, "");
-        mWalletConfigsJsonString = encryptedWalletConfigs;
+
+        String encrypted = PrefsUtil.getPrefs().getString(PrefsUtil.WALLET_CONFIGS, "");
+        ZapLog.debug(LOG_TAG, "Encrypted: " + encrypted);
+        // Save the new WalletConfigurations in encrypted prefs
+        String decrypted = null;
+        try {
+            decrypted = new Cryptography(App.getAppContext()).decryptData(encrypted);
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        ZapLog.debug(LOG_TAG, "Decrypted: " + decrypted);
+
+        mWalletConfigsJsonString = decrypted;
     }
 
     // used for unit tests
@@ -58,7 +102,9 @@ public class WalletConfigsManager {
      */
     public boolean doesWalletConfigExist(String alias) {
 
-        if (alias == null) { return false; }
+        if (alias == null) {
+            return false;
+        }
 
         WalletConfigsJson walletConfigs;
 
@@ -68,7 +114,9 @@ public class WalletConfigsManager {
             return false;
         }
 
-        if (walletConfigs == null){ return false; }
+        if (walletConfigs == null) {
+            return false;
+        }
 
         return walletConfigs.getConnection(alias.toLowerCase()) != null;
     }
@@ -76,7 +124,7 @@ public class WalletConfigsManager {
 
     /**
      * Saves a wallet configuration encrypted in the default shared preferences.
-     * If an configuration exist with this alias, it will be overridden.
+     * If a configuration exist with this alias, it will be overridden.
      *
      * @param alias    Name of the wallet/configuration
      * @param type     One of the following types: remote, local
@@ -86,20 +134,24 @@ public class WalletConfigsManager {
      * @param macaroon The Macaroon. Encoded as base16 (hex)
      */
     public void saveWalletConfig(String alias, String type, String host,
-                                 int port, @Nullable String cert, String macaroon) {
+                                 int port, @Nullable String cert, String macaroon) throws IOException,
+            CertificateException, NoSuchAlgorithmException, InvalidKeyException, UnrecoverableEntryException,
+            InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchProviderException, BadPaddingException,
+            KeyStoreException, IllegalBlockSizeException {
 
         String jsonString = createWalletConfigJsonString(alias, type, host, port, cert, macaroon);
 
         // Save the new WalletConfigurations in encrypted prefs
-        EncryptedPrefs encryptedPrefs = new EncryptedPrefs();
-        encryptedPrefs.putString(jsonString, PrefsUtil.WALLET_CONFIGS);
+        String encrypted = new Cryptography(App.getAppContext()).encryptData(jsonString);
+        PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, encrypted).commit();
 
-        ZapLog.debug(LOG_TAG, jsonString);
+        // Update ConfigsJsonString
+        mWalletConfigsJsonString = jsonString;
     }
 
     /**
      * Creates a wallet configuration json-string, that contains all already existing wallet configurations plus the new one.
-     * If an configuration exist with this alias, it will be overridden.
+     * If a configuration exist with this alias, it will be overridden.
      *
      * @param alias    Name of the wallet/configuration
      * @param type     One of the following types: remote, local
@@ -109,7 +161,7 @@ public class WalletConfigsManager {
      * @param macaroon The Macaroon. Encoded as base16 (hex)
      */
     public String createWalletConfigJsonString(String alias, String type, String host,
-                                 int port, @Nullable String cert, String macaroon) {
+                                               int port, @Nullable String cert, String macaroon) {
 
         WalletConfigsJson walletConfigs;
 
@@ -207,7 +259,10 @@ public class WalletConfigsManager {
      *
      * @param alias
      */
-    public void deleteWalletConfig(String alias) {
+    public void deleteWalletConfig(String alias) throws IOException, CertificateException, NoSuchAlgorithmException,
+            InvalidKeyException, UnrecoverableEntryException, InvalidAlgorithmParameterException,
+            NoSuchPaddingException, NoSuchProviderException, BadPaddingException, KeyStoreException, IllegalBlockSizeException {
+
         WalletConfigsJson walletConfigs;
 
         if (mWalletConfigsJsonString == null) {
@@ -220,13 +275,25 @@ public class WalletConfigsManager {
         if (doesWalletConfigExist(alias)) {
             int tempIndex = -1;
             for (WalletConfig tempConfig : walletConfigs.mConnections) {
-                if (tempConfig.getAlias().equals(alias)) {
+                if (tempConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
                     tempIndex = walletConfigs.mConnections.indexOf(tempConfig);
                     break;
                 }
             }
             walletConfigs.mConnections.remove(tempIndex);
         }
+
+
+        // Convert JSON object to string
+        String jsonString = new Gson().toJson(walletConfigs);
+
+        // Save the new WalletConfigurations encrypted in prefs
+        String encrypted = new Cryptography(App.getAppContext()).encryptData(jsonString);
+        PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, encrypted).commit();
+
+        // Update ConfigsJsonString
+        mWalletConfigsJsonString = jsonString;
+
     }
 
 }

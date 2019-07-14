@@ -70,12 +70,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 
-public class Encryption {
+/*
+Found here:
+https://gist.github.com/Diederikjh/36ae22d5fde9d8f671a70b5d8cada90e
+ */
+
+public class Cryptography {
 
     private static final String ANDROID_KEY_STORE_NAME = "AndroidKeyStore";
     private static final String AES_MODE_M_OR_GREATER = "AES/GCM/NoPadding";
     private static final String AES_MODE_LESS_THAN_M = "AES/ECB/PKCS7Padding";
-    private static final String KEY_ALIAS = "YOUR-KeyAliasForEncryption";
+    private static final String KEY_ALIAS = "ZapKeyForEncryption";
     // TODO update these bytes to be random for IV of encryption
     private static final byte[] FIXED_IV = new byte[]{ 55, 54, 53, 52, 51, 50,
             49, 48, 47,
@@ -85,15 +90,15 @@ public class Encryption {
     private static final String RSA_MODE =  "RSA/ECB/PKCS1Padding";
     private static final String CIPHER_PROVIDER_NAME_ENCRYPTION_DECRYPTION_RSA = "AndroidOpenSSL";
     private static final String CIPHER_PROVIDER_NAME_ENCRYPTION_DECRYPTION_AES = "BC";
-    private static final String SHARED_PREFERENCE_NAME = "YOUR-EncryptedKeysSharedPreferences";
-    private static final String ENCRYPTED_KEY_NAME = "YOUR-EncryptedKeysKeyName";
-    private static final String LOG_TAG = Encryption.class.getName();
+    private static final String SHARED_PREFERENCE_NAME = "EncryptedKeysSharedPrefs";
+    private static final String ENCRYPTED_KEY_NAME = "EncryptedKey";
+    private static final String LOG_TAG = Cryptography.class.getName();
 
     private final Context mContext;
 
     private final static Object s_keyInitLock = new Object();
 
-    public Encryption(Context context) {
+    public Cryptography(Context context) {
         mContext = context;
     }
 

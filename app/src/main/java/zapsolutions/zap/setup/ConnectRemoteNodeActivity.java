@@ -25,6 +25,19 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import zapsolutions.zap.HomeActivity;
@@ -203,33 +216,80 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     private void connect(RemoteConfiguration config) {
 
+        boolean success = false;
+
         WalletConfigsManager walletConfigsManager = new WalletConfigsManager();
 
-        if (config instanceof LndConnectConfig) {
-            LndConnectConfig lndConfig = (LndConnectConfig) config;
-            walletConfigsManager.saveWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
-                    "remote", lndConfig.getHost(), lndConfig.getPort(),
-                    lndConfig.getCert(), lndConfig.getMacaroon());
-        } else if (config instanceof BTCPayConfig) {
-            BTCPayConfig btcPayConfig = (BTCPayConfig) config;
-            walletConfigsManager.saveWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
-                    "remote", btcPayConfig.getHost(), btcPayConfig.getPort(),
-                    null, btcPayConfig.getMacaroon());
+        try {
+            if (config instanceof LndConnectConfig) {
+                LndConnectConfig lndConfig = (LndConnectConfig) config;
+
+                walletConfigsManager.saveWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
+                        "remote", lndConfig.getHost(), lndConfig.getPort(),
+                        lndConfig.getCert(), lndConfig.getMacaroon());
+
+                success = true;
+
+            } else if (config instanceof BTCPayConfig) {
+                BTCPayConfig btcPayConfig = (BTCPayConfig) config;
+
+                walletConfigsManager.saveWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
+                        "remote", btcPayConfig.getHost(), btcPayConfig.getPort(),
+                        null, btcPayConfig.getMacaroon());
+
+                success = true;
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (CertificateException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
         }
 
-        // Do not ask for pin again...
-        TimeOutUtil.getInstance().restartTimer();
+        if (success) {
+            // Do not ask for pin again...
+            TimeOutUtil.getInstance().restartTimer();
 
-        // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit()
-                .putBoolean("isWalletSetup", true)
-                .commit();
+            // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.edit()
+                    .putBoolean("isWalletSetup", true)
+                    .commit();
 
-        // Show home screen, remove history stack
-        Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+            // Show home screen, remove history stack
+            Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
 
     }
 

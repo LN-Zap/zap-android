@@ -10,7 +10,6 @@ import androidx.preference.PreferenceManager;
 import at.favre.lib.armadillo.Armadillo;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.manageWalletConfigs.EncryptedPrefs;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
@@ -23,9 +22,6 @@ public class LandingActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EncryptedPrefs encryptedPrefs = new EncryptedPrefs();
-
-
         // get the data from the URI Scheme
         Intent intent = getIntent();
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -33,8 +29,6 @@ public class LandingActivity extends BaseAppCompatActivity {
             App.getAppContext().setUriSchemeData(uri.toString());
             ZapLog.debug(LOG_TAG, "URI was detected: " + uri.toString());
         }
-
-
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         int ver = prefs.getInt(PrefsUtil.SETTINGS_VER, 0);
