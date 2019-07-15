@@ -341,7 +341,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
 
                 // Save the old configuration in the new format
-                String macaroon = "";
+                String macaroon = connectionInfo[3];
                 if (!(connectionInfo[2].equals("NO_CERT") || connectionInfo[2].equals("null"))) {
                     // No BTC pay, we now have to encode the macaroon in base16
                     byte[] macaroonBytes = BaseEncoding.base64Url().decode(connectionInfo[3]);
