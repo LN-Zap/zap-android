@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/pinInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/deepSeaBlue"
-                android:gravity="center">
+    android:id="@+id/pinInputLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/deepSeaBlue"
+    android:gravity="center">
 
     <LinearLayout
         android:id="@+id/pinPromptLayout"
@@ -20,7 +20,7 @@
             android:text="Enter PIN code"
             android:textAlignment="gravity"
             android:textColor="@color/white"
-            android:textSize="26sp"/>
+            android:textSize="26sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,7 +53,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint2"
@@ -63,7 +63,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint3"
@@ -73,7 +73,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint4"
@@ -83,7 +83,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint5"
@@ -93,7 +93,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint6"
@@ -103,7 +103,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint7"
@@ -113,7 +113,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint8"
@@ -123,7 +123,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint9"
@@ -133,7 +133,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
 
             <ImageView
                 android:id="@+id/pinHint10"
@@ -143,7 +143,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                android:tint="@color/invisibleGray"/>
+                android:tint="@color/invisibleGray" />
         </LinearLayout>
     </LinearLayout>
 
@@ -169,7 +169,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <Button
             android:id="@+id/pinNumpad2"
@@ -185,7 +185,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <Button
             android:id="@+id/pinNumpad3"
@@ -201,7 +201,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <Button
             android:id="@+id/pinNumpad4"
@@ -217,7 +217,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <Button
             android:id="@+id/pinNumpad5"
@@ -233,7 +233,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <Button
             android:id="@+id/pinNumpad6"
@@ -249,7 +249,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <Button
             android:id="@+id/pinNumpad7"
@@ -265,7 +265,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <Button
             android:id="@+id/pinNumpad8"
@@ -281,7 +281,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <Button
             android:id="@+id/pinNumpad9"
@@ -297,7 +297,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <ImageButton
             android:id="@+id/pinBiometrics"
@@ -311,7 +311,7 @@
             android:layout_marginBottom="10dp"
             android:background="@color/deepSeaBlue"
             android:src="@drawable/ic_fingerprint_black_48dp"
-            android:tint="@color/white"/>
+            android:tint="@color/white" />
 
         <Button
             android:id="@+id/pinNumpad0"
@@ -327,7 +327,7 @@
             android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
-            android:typeface="sans"/>
+            android:typeface="sans" />
 
         <ImageButton
             android:id="@+id/pinBack"
@@ -341,7 +341,7 @@
             android:layout_marginBottom="10dp"
             android:background="@color/deepSeaBlue"
             android:src="@drawable/ic_backspace_black_36dp"
-            android:tint="@color/white"/>
+            android:tint="@color/white" />
 
 
     </GridLayout>
@@ -357,5 +357,5 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/rounded_rectangle_green"
         android:src="@drawable/ic_done_black_36dp"
-        android:tint="@color/white"/>
+        android:tint="@color/white" />
 </RelativeLayout>

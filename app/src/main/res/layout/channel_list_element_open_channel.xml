@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   android:id="@+id/transactionRootView"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="120dp"
-                                                   android:layout_marginStart="10dp"
-                                                   android:layout_marginTop="10dp"
-                                                   android:layout_marginEnd="10dp"
-                                                   android:layout_marginBottom="10dp"
-                                                   android:background="@drawable/bg_clickable_item"
-                                                   android:gravity="center_vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/transactionRootView"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_clickable_item"
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/remoteName"
@@ -23,7 +23,7 @@
         android:text="RemoteName"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/state"
@@ -34,7 +34,7 @@
         android:layout_weight="1"
         android:text="Status"
         app:layout_constraintEnd_toStartOf="@id/statusDot"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/statusDot"
@@ -42,9 +42,9 @@
         android:layout_height="10dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/state"
-        app:layout_constraintTop_toTopOf="@+id/state"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_status_dot_black_24dp"/>
+        app:layout_constraintTop_toTopOf="@+id/state"
+        app:srcCompat="@drawable/ic_status_dot_black_24dp" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/remoteName"
-        app:srcCompat="@color/gray"/>
+        app:srcCompat="@color/gray" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -82,7 +82,7 @@
                 android:text="@string/channel_local_balance"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/capacityTitle"
@@ -95,7 +95,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/remoteBalanceTitle"
@@ -104,7 +104,7 @@
                 android:text="@string/channel_remote_balance"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -122,7 +122,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/lightningIcon"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/lightningIcon"
@@ -135,7 +135,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/bolt_black_filled_24dp"/>
+                app:srcCompat="@drawable/bolt_black_filled_24dp" />
 
             <ProgressBar
                 android:id="@+id/remoteBar"
@@ -148,7 +148,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/lightningIcon"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -162,7 +162,7 @@
                 android:text="localBalance"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/capacity"
@@ -175,7 +175,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/remoteBalance"
@@ -184,7 +184,7 @@
                 android:text="remoteBalance"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
