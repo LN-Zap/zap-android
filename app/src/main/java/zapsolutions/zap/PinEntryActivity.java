@@ -133,9 +133,11 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         // Set all layout element states to the current user input (empty right now)
         displayUserInput();
 
+        // ToDo: Remove if nobody has the old version installed.
+        int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, 0);
 
-        // Make biometrics Button visible if supported.
-        if (PrefsUtil.isBiometricEnabled()) {
+        // Make biometrics Button visible if enabled.
+        if (PrefsUtil.isBiometricEnabled() && ver >= 16) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -342,8 +344,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                 String macaroon = "";
                 if (!(connectionInfo[2].equals("NO_CERT") || connectionInfo[2].equals("null"))) {
                     // No BTC pay, we now have to encode the macaroon in base16
-                    BaseEncoding.base64Url().decode(connectionInfo[3]);
-                    byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroon);
+                    byte[] macaroonBytes = BaseEncoding.base64Url().decode(connectionInfo[3]);
                     macaroon = BaseEncoding.base16().encode(macaroonBytes);
                 }
 
