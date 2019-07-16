@@ -20,7 +20,6 @@ import javax.crypto.NoSuchPaddingException;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.ZapLog;
 
 /**
  * This SINGLETON class is used to load and save configurations for wallets.
@@ -35,7 +34,8 @@ public class WalletConfigsManager {
     public static final String DEFAULT_WALLET_NAME = "DefaultWallet";
 
     private static WalletConfigsManager mInstance;
-    private String mWalletConfigsJsonString;
+    private WalletConfigsJson mWalletConfigsJson;
+    //private String mWalletConfigsJsonString;
 
     private WalletConfigsManager() {
 
@@ -69,12 +69,20 @@ public class WalletConfigsManager {
             e.printStackTrace();
         }
 
-        mWalletConfigsJsonString = decrypted;
+        try {
+            mWalletConfigsJson = new Gson().fromJson(decrypted, WalletConfigsJson.class);
+        } catch(JsonSyntaxException e) {
+            // mWalletConfigJson is null
+        }
     }
 
     // used for unit tests
     public WalletConfigsManager(String walletConfigsJson) {
-        mWalletConfigsJsonString = walletConfigsJson;
+        try {
+            mWalletConfigsJson = new Gson().fromJson(walletConfigsJson, WalletConfigsJson.class);
+        } catch(JsonSyntaxException e) {
+            // mWalletConfigJson is null
+        }
     }
 
     public static WalletConfigsManager getInstance() {
@@ -114,19 +122,11 @@ public class WalletConfigsManager {
             return false;
         }
 
-        WalletConfigsJson walletConfigs;
-
-        try {
-            walletConfigs = new Gson().fromJson(mWalletConfigsJsonString, WalletConfigsJson.class);
-        } catch (JsonSyntaxException ex) {
+        if (mWalletConfigsJson == null) {
             return false;
         }
 
-        if (walletConfigs == null) {
-            return false;
-        }
-
-        return walletConfigs.getConnection(alias.toLowerCase()) != null;
+        return mWalletConfigsJson.getConnection(alias.toLowerCase()) != null;
     }
 
 
@@ -147,14 +147,15 @@ public class WalletConfigsManager {
             InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchProviderException, BadPaddingException,
             KeyStoreException, IllegalBlockSizeException {
 
-        String jsonString = createWalletConfigJsonString(alias, type, host, port, cert, macaroon);
+        mWalletConfigsJson = createWalletConfigJson(alias, type, host, port, cert, macaroon);
+
+        // Convert JSON object to string
+        String jsonString = new Gson().toJson(mWalletConfigsJson);
 
         // Save the new WalletConfigurations in encrypted prefs
         String encrypted = new Cryptography(App.getAppContext()).encryptData(jsonString);
         PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, encrypted).commit();
 
-        // Update ConfigsJsonString
-        mWalletConfigsJsonString = jsonString;
     }
 
     /**
@@ -168,20 +169,17 @@ public class WalletConfigsManager {
      * @param cert     The certificate. This is optional and can be null
      * @param macaroon The Macaroon. Encoded as base16 (hex)
      */
-    public String createWalletConfigJsonString(String alias, String type, String host,
-                                               int port, @Nullable String cert, String macaroon) {
+    public WalletConfigsJson createWalletConfigJson(String alias, String type, String host,
+                                                    int port, @Nullable String cert, String macaroon) {
 
         WalletConfigsJson walletConfigs;
 
-        if (mWalletConfigsJsonString == null) {
-            // No wallet connection configurations exists yet. Create the json array that will contain our first connection configuration.
-            walletConfigs = new Gson().fromJson("{\"connections\":[]}", WalletConfigsJson.class);
-        } else if (mWalletConfigsJsonString.isEmpty()) {
+        if (mWalletConfigsJson == null) {
             // No wallet connection configurations exists yet. Create the json array that will contain our first connection configuration.
             walletConfigs = new Gson().fromJson("{\"connections\":[]}", WalletConfigsJson.class);
         } else {
             // Get current wallet connection configs
-            walletConfigs = new Gson().fromJson(mWalletConfigsJsonString, WalletConfigsJson.class);
+            walletConfigs = mWalletConfigsJson;
         }
 
 
@@ -213,10 +211,7 @@ public class WalletConfigsManager {
             walletConfigs.mConnections.add(config);
         }
 
-        // Convert JSON object to string
-        String jsonString = new Gson().toJson(walletConfigs);
-
-        return jsonString;
+        return walletConfigs;
     }
 
     /**
@@ -237,28 +232,11 @@ public class WalletConfigsManager {
      */
     public WalletConfig loadWalletConfig(String alias) {
 
-        WalletConfigsJson walletConfigsJson;
-
-        try {
-            walletConfigsJson = new Gson().fromJson(mWalletConfigsJsonString, WalletConfigsJson.class);
-        } catch (JsonSyntaxException ex) {
-            return null;
-        }
-
         if (!doesWalletConfigExist(alias)) {
             return null;
         }
 
-        WalletConfig config = new WalletConfig();
-
-        config.setAlias(walletConfigsJson.getConnection(alias).getAlias().toLowerCase());
-        config.setType(walletConfigsJson.getConnection(alias).getType());
-        config.setHost(walletConfigsJson.getConnection(alias).getHost());
-        config.setPort(walletConfigsJson.getConnection(alias).getPort());
-        config.setCert(walletConfigsJson.getConnection(alias).getCert());
-        config.setMacaroon(walletConfigsJson.getConnection(alias).getMacaroon());
-
-        return config;
+        return mWalletConfigsJson.getConnection(alias);
     }
 
 
@@ -271,37 +249,24 @@ public class WalletConfigsManager {
             InvalidKeyException, UnrecoverableEntryException, InvalidAlgorithmParameterException,
             NoSuchPaddingException, NoSuchProviderException, BadPaddingException, KeyStoreException, IllegalBlockSizeException {
 
-        WalletConfigsJson walletConfigs;
-
-        if (mWalletConfigsJsonString == null) {
-            return;
-        } else {
-            // Get current wallet connection configs
-            walletConfigs = new Gson().fromJson(mWalletConfigsJsonString, WalletConfigsJson.class);
-        }
 
         if (doesWalletConfigExist(alias)) {
             int tempIndex = -1;
-            for (WalletConfig tempConfig : walletConfigs.mConnections) {
+            for (WalletConfig tempConfig : mWalletConfigsJson.mConnections) {
                 if (tempConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
-                    tempIndex = walletConfigs.mConnections.indexOf(tempConfig);
+                    tempIndex = mWalletConfigsJson.mConnections.indexOf(tempConfig);
                     break;
                 }
             }
-            walletConfigs.mConnections.remove(tempIndex);
+            mWalletConfigsJson.mConnections.remove(tempIndex);
         }
 
 
         // Convert JSON object to string
-        String jsonString = new Gson().toJson(walletConfigs);
+        String jsonString = new Gson().toJson(mWalletConfigsJson);
 
         // Save the new WalletConfigurations encrypted in prefs
         String encrypted = new Cryptography(App.getAppContext()).encryptData(jsonString);
         PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, encrypted).commit();
-
-        // Update ConfigsJsonString
-        mWalletConfigsJsonString = jsonString;
-
     }
-
 }

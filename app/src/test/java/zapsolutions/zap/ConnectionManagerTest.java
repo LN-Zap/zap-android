@@ -1,5 +1,7 @@
 package zapsolutions.zap;
 
+import com.google.gson.Gson;
+
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -8,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsJson;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 
 import static junit.framework.TestCase.assertEquals;
@@ -85,7 +88,7 @@ public class ConnectionManagerTest {
 
         WalletConfig result = manager.loadWalletConfig("firstwalletname");
 
-        assertEquals("firstwalletname", result.getAlias());
+        assertEquals("firstwalletname", result.getAlias().toLowerCase());
         assertEquals("remote", result.getType());
         assertEquals("TestHost", result.getHost());
         assertEquals(10009, result.getPort());
@@ -99,7 +102,9 @@ public class ConnectionManagerTest {
 
         WalletConfigsManager manager = new WalletConfigsManager(null);
 
-        String result = manager.createWalletConfigJsonString("TestName", "remote", "TestHost", 10009, "TestCert", "TestMacaroon");
+        WalletConfigsJson resultJson = manager.createWalletConfigJson("TestName", "remote", "TestHost", 10009, "TestCert", "TestMacaroon");
+
+        String result = new Gson().toJson(resultJson);
 
         assertEquals(expected, result);
     }
@@ -111,7 +116,9 @@ public class ConnectionManagerTest {
 
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
 
-        String result = manager.createWalletConfigJsonString("TestName", "remote", "ModifiedHost", 10009, "TestCert", "TestMacaroon");
+        WalletConfigsJson resultJson = manager.createWalletConfigJson("TestName", "remote", "ModifiedHost", 10009, "TestCert", "TestMacaroon");
+
+        String result = new Gson().toJson(resultJson);
 
         assertEquals(expected, result);
     }
