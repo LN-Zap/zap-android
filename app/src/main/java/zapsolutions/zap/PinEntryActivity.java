@@ -134,7 +134,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         displayUserInput();
 
         // ToDo: Remove if nobody has the old version installed.
-        int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, 0);
+        int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER);
 
         // Make biometrics Button visible if enabled.
         if (PrefsUtil.isBiometricEnabled() && ver >= 16) {
@@ -320,7 +320,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
 
             // ToDo: Remove if nobody has the old version installed.
-            int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, 0);
+            int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER);
 
             // Switch the way how connection data is stored
             if (ver < 16){
@@ -391,6 +391,9 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                     // Set new settings version
                     PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
                 }
+            } else {
+                // Set new settings version
+                PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
             }
             // ToDo: End
 
