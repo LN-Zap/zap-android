@@ -1,0 +1,1 @@
+{"connections":[{"alias":"newwalletname","type":"remote","cert":"TestCert","host":"TestHost","port":10009,"macaroon":"TestMacaroon"}]}

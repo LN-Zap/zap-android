@@ -1,23 +1,13 @@
 package zapsolutions.zap.connection.establishConnectionToLnd;
 
 
-import android.content.SharedPreferences;
-
-import at.favre.lib.armadillo.Armadillo;
-import at.favre.lib.armadillo.PBKDF2KeyStretcher;
-
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.google.common.io.BaseEncoding;
 
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
-import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
-import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.ZapLog;
 
 import javax.net.ssl.SSLSocketFactory;
@@ -55,7 +45,7 @@ public class LndConnection {
     private void readSavedConnectionInfo() {
 
         // Load current wallet connection config
-        mConnectionConfig = WalletConfigsManager.getInstance().loadCurrentWalletConfig();
+        mConnectionConfig = WalletConfigsManager.getInstance().getCurrentWalletConfig();
 
         // Generate Macaroon
         mMacaroon = new MacaroonCallCredential(mConnectionConfig.getMacaroon());

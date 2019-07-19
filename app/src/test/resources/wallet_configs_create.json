@@ -1,1 +1,1 @@
-{"connections":[{"alias":"testname","type":"remote","cert":"TestCert","host":"TestHost","port":10009,"macaroon":"TestMacaroon"}]}
+{"connections":[{"alias":"firstwalletname","type":"remote","cert":"TestCert","host":"TestHost","port":10009,"macaroon":"TestMacaroon"}]}

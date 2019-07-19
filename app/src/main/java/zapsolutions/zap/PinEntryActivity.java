@@ -22,20 +22,8 @@ import android.widget.Toast;
 
 import com.google.common.io.BaseEncoding;
 
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
@@ -319,84 +307,8 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
 
 
-            // ToDo: Remove if nobody has the old version installed.
-            int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER);
-
-            // Switch the way how connection data is stored
-            if (ver < 16){
-
-                boolean success = false;
-                // Read the old connection settings
-                App ctx = App.getAppContext();
-
-                SharedPreferences prefsRemote = Armadillo.create(ctx, "prefs_remote")
-                        .encryptionFingerprint(ctx)
-                        .keyStretchingFunction(new PBKDF2KeyStretcher(RefConstants.NUM_HASH_ITERATIONS, null))
-                        .password(ctx.inMemoryPin.toCharArray())
-                        .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
-                        .build();
-
-                String connectionInfoCombined = prefsRemote.getString("remote_combined", "");
-                String[] connectionInfo = connectionInfoCombined.split(";");
-
-
-                // Save the old configuration in the new format
-                String macaroon = connectionInfo[3];
-                if (!(connectionInfo[2].equals("NO_CERT") || connectionInfo[2].equals("null"))) {
-                    // No BTC pay, we now have to encode the macaroon in base16
-                    byte[] macaroonBytes = BaseEncoding.base64Url().decode(connectionInfo[3]);
-                    macaroon = BaseEncoding.base16().encode(macaroonBytes);
-                }
-
-                WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
-                try {
-                    walletConfigsManager.saveWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,"remote", connectionInfo[0],
-                            Integer.parseInt(connectionInfo[1]),connectionInfo[2], macaroon);
-                    success = true;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (CertificateException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableEntryException e) {
-                    e.printStackTrace();
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                } catch (NoSuchProviderException e) {
-                    e.printStackTrace();
-                } catch (BadPaddingException e) {
-                    e.printStackTrace();
-                } catch (KeyStoreException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                }
-
-
-                // Cleanup and set new settings version
-                if (success) {
-                    // Clear the old settings
-                    prefsRemote.edit().clear().commit();
-                    // Set new settings version
-                    PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
-                } else {
-                    // Clear all
-                    PrefsUtil.edit().clear().commit();
-                    prefsRemote.edit().clear().commit();
-                    // Set new settings version
-                    PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
-                }
-            } else {
-                // Set new settings version
-                PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
-            }
-            // ToDo: End
-
+            // ToDo: Remove if nobody has the old version installed. (Build number < 9)
+            convertLegacyConnectionSettings();
 
 
             Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
@@ -454,6 +366,68 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         // Show biometric prompt if preferred
         if (PrefsUtil.isBiometricPreferred() && PrefsUtil.isBiometricEnabled()) {
             mBiometricPrompt.authenticate(mPromptInfo);
+        }
+    }
+
+
+    // ToDo: Remove if nobody has the old version installed. (Build number < 9)
+    private void convertLegacyConnectionSettings(){
+        int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER);
+
+        // Switch the way how connection data is stored
+        if (ver < 16){
+
+            boolean success = false;
+            // Read the old connection settings
+            App ctx = App.getAppContext();
+
+            SharedPreferences prefsRemote = Armadillo.create(ctx, "prefs_remote")
+                    .encryptionFingerprint(ctx)
+                    .keyStretchingFunction(new PBKDF2KeyStretcher(RefConstants.NUM_HASH_ITERATIONS, null))
+                    .password(ctx.inMemoryPin.toCharArray())
+                    .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
+                    .build();
+
+            String connectionInfoCombined = prefsRemote.getString("remote_combined", "");
+            String[] connectionInfo = connectionInfoCombined.split(";");
+
+
+            // Save the old configuration in the new format
+            String macaroon = connectionInfo[3];
+            if (!(connectionInfo[2].equals("NO_CERT") || connectionInfo[2].equals("null"))) {
+                // No BTC pay, we now have to encode the macaroon in base16
+                byte[] macaroonBytes = BaseEncoding.base64Url().decode(connectionInfo[3]);
+                macaroon = BaseEncoding.base16().encode(macaroonBytes);
+            }
+
+            WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
+            try {
+                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,"remote", connectionInfo[0],
+                        Integer.parseInt(connectionInfo[1]),connectionInfo[2], macaroon);
+
+                walletConfigsManager.apply();
+
+                success = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Cleanup and set new settings version
+            if (success) {
+                // Clear the old settings
+                prefsRemote.edit().clear().commit();
+                // Set new settings version
+                PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
+            } else {
+                // Clear all
+                PrefsUtil.edit().clear().commit();
+                prefsRemote.edit().clear().commit();
+                // Set new settings version
+                PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
+            }
+        } else {
+            // Set new settings version
+            PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
         }
     }
 }

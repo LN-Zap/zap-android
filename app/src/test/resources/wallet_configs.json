@@ -1,7 +1,7 @@
 {
   "connections": [
     {
-      "alias": "FirstWalletName",
+      "alias": "firstwalletname",
       "type": "remote",
       "host": "TestHost",
       "port": 10009,

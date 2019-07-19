@@ -18,31 +18,15 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
-import at.favre.lib.armadillo.Armadillo;
-import at.favre.lib.armadillo.PBKDF2KeyStretcher;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.RemoteConfiguration;
@@ -52,11 +36,8 @@ import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 import zapsolutions.zap.util.PermissionsUtil;
-import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
-import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.ZapLog;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
@@ -224,53 +205,27 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConfig = (LndConnectConfig) config;
 
-                walletConfigsManager.saveWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
+                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
                         "remote", lndConfig.getHost(), lndConfig.getPort(),
                         lndConfig.getCert(), lndConfig.getMacaroon());
+
+                walletConfigsManager.apply();
 
                 success = true;
 
             } else if (config instanceof BTCPayConfig) {
                 BTCPayConfig btcPayConfig = (BTCPayConfig) config;
 
-                walletConfigsManager.saveWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
+                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
                         "remote", btcPayConfig.getHost(), btcPayConfig.getPort(),
                         null, btcPayConfig.getMacaroon());
+
+                walletConfigsManager.apply();
 
                 success = true;
 
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (CertificateException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (UnrecoverableEntryException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-            showError(e.getMessage(), 3000);
-        } catch (IllegalBlockSizeException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             showError(e.getMessage(), 3000);
         }
