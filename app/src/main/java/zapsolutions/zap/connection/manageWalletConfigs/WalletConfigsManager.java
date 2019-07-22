@@ -48,11 +48,12 @@ public class WalletConfigsManager {
             e.printStackTrace();
         }
 
-        try {
+        if (isValidJson(decrypted)) {
             mWalletConfigsJson = new Gson().fromJson(decrypted, WalletConfigsJson.class);
-        } catch (JsonSyntaxException e) {
+        } else {
             createEmptyWalletConfigsJson();
         }
+
         if (mWalletConfigsJson == null) {
             createEmptyWalletConfigsJson();
         }
@@ -110,8 +111,7 @@ public class WalletConfigsManager {
      * @return
      */
     public boolean doesWalletConfigExist(@NonNull String alias) {
-
-        return mWalletConfigsJson.getConnection(alias.toLowerCase()) != null;
+        return mWalletConfigsJson.doesWalletConfigExist(alias.toLowerCase());
     }
 
 
@@ -163,11 +163,6 @@ public class WalletConfigsManager {
      * @return Returns null if no configuration is found for the given alias
      */
     public WalletConfig getWalletConfig(@NonNull String alias) {
-
-        if (!doesWalletConfigExist(alias)) {
-            return null;
-        }
-
         return mWalletConfigsJson.getConnection(alias);
     }
 
