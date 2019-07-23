@@ -1417,9 +1417,12 @@ public class Wallet {
         broadcastBalanceUpdate();
     }
 
-
-    // Event handling to notify all registered listeners when wallet initialization finished successfully.
-
+    /**
+     * Notify all listeners to finished wallet initialization.
+     *
+     * @param success true if successful
+     * @param error   one of WalletLoadedListener errors, -1 if successful
+     */
     private void broadcastWalletLoadedUpdate(boolean success, int error) {
         for (WalletLoadedListener listener : mWalletLoadedListeners) {
             listener.onWalletLoadedUpdated(success, error);
@@ -1434,14 +1437,14 @@ public class Wallet {
         mWalletLoadedListeners.remove(listener);
     }
 
+    /**
+     * Notify all listeners to balance updates.
+     */
     private void broadcastBalanceUpdate() {
         for (BalanceListener listener : mBalanceListeners) {
             listener.onBalanceUpdated();
         }
     }
-
-
-    // Event handling to notify all listeners registered to balance updates.
 
     public void registerBalanceListener(BalanceListener listener) {
         mBalanceListeners.add(listener);
@@ -1451,6 +1454,11 @@ public class Wallet {
         mBalanceListeners.remove(listener);
     }
 
+    /**
+     * Notify all listeners to info updates.
+     *
+     * @param connected true if connected to wallet
+     */
     private void broadcastInfoUpdate(boolean connected) {
         for (InfoListener listener : mInfoListeners) {
             listener.onInfoUpdated(connected);
@@ -1461,13 +1469,13 @@ public class Wallet {
         mInfoListeners.add(listener);
     }
 
-
-    // Event handling to notify all listeners registered to info updates.
-
     public void unregisterInfoListener(InfoListener listener) {
         mInfoListeners.remove(listener);
     }
 
+    /**
+     * Notify all listeners to history updates.
+     */
     private void broadcastHistoryUpdate() {
         for (HistoryListener listener : mHistoryListeners) {
             listener.onHistoryUpdated();
@@ -1483,14 +1491,22 @@ public class Wallet {
     }
 
 
-    // Event handling to notify all listeners registered to history updates.
-
+    /**
+     * Notify all listeners about new invoice.
+     *
+     * @param invoice the new invoice
+     */
     private void broadcastInvoiceAdded(Invoice invoice) {
         for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
             listener.onNewInvoiceAdded(invoice);
         }
     }
 
+    /**
+     * Notify all listeners about updated invoice.
+     *
+     * @param invoice the updated invoice
+     */
     private void broadcastInvoiceUpdated(Invoice invoice) {
         for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
             listener.onExistingInvoiceUpdated(invoice);
@@ -1505,9 +1521,11 @@ public class Wallet {
         mInvoiceSubscriptionListeners.remove(listener);
     }
 
-
-    // Event handling to notify all listeners registered to invoice updates.
-
+    /**
+     * Notify all listeners to transaction update.
+     *
+     * @param transactionDetails the details about the transaction update
+     */
     private void broadcastTransactionUpdate(TransactionDetails transactionDetails) {
         for (TransactionSubscriptionListener listener : mTransactionSubscriptionListeners) {
             listener.onTransactionEvent(transactionDetails);
@@ -1522,6 +1540,11 @@ public class Wallet {
         mTransactionSubscriptionListeners.remove(listener);
     }
 
+    /**
+     * Notify all listeners to channel event updates.
+     *
+     * @param channelEventUpdate the channel update
+     */
     private void broadcastChannelEvent(ChannelEventUpdate channelEventUpdate) {
         for (ChannelEventSubscriptionListener listener : mChannelEventSubscriptionListeners) {
             listener.onChannelEvent(channelEventUpdate);
@@ -1532,13 +1555,15 @@ public class Wallet {
         mChannelEventSubscriptionListeners.add(listener);
     }
 
-
-    // Event handling to notify all listeners registered to transaction update.
-
     public void unregisterChannelEventSubscriptionListener(ChannelEventSubscriptionListener listener) {
         mChannelEventSubscriptionListeners.remove(listener);
     }
 
+    /**
+     * Notify all listeners to channel backup updates.
+     *
+     * @param chanBackupSnapshot snapshot of channel backup
+     */
     private void broadcastChannelBackup(ChanBackupSnapshot chanBackupSnapshot) {
         for (ChannelBackupSubscriptionListener listener : mChannelBackupSubscriptionListeners) {
             listener.onChannelBackupEvent(chanBackupSnapshot);
@@ -1552,9 +1577,6 @@ public class Wallet {
     public void unregisterChannelBackuptSubscriptionListener(ChannelBackupSubscriptionListener listener) {
         mChannelBackupSubscriptionListeners.remove(listener);
     }
-
-
-    // Event handling to notify all listeners registered to channel event updates.
 
     public interface WalletLoadedListener {
 
@@ -1579,9 +1601,6 @@ public class Wallet {
         void onHistoryUpdated();
     }
 
-
-    // Event handling to notify all listeners registered to channel backups.
-
     public interface InvoiceSubscriptionListener {
         void onNewInvoiceAdded(Invoice invoice);
 
@@ -1601,7 +1620,3 @@ public class Wallet {
     }
 
 }
-
-
-
-
