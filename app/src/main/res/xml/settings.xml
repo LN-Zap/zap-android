@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto"
-                  android:icon="@null"
-                  android:key="topPrefScreen"
-                  android:title="@string/navigation_settings">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:icon="@null"
+    android:key="topPrefScreen"
+    android:title="@string/navigation_settings">
 
     <PreferenceCategory
         android:title="@string/settings_category_general"
@@ -17,7 +17,7 @@
             android:key="firstCurrency"
             android:summary="%s"
             android:title="@string/settings_btcUnit"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="USD"
@@ -27,7 +27,7 @@
             android:key="secondCurrency"
             android:summary="%s"
             android:title="@string/settings_currency"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
 
         <ListPreference
@@ -38,13 +38,13 @@
             android:key="language"
             android:summary="%s"
             android:title="@string/settings_language"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="hapticPin"
             android:title="@string/settings_hapticPin"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -63,13 +63,13 @@
         <Preference
             android:key="manageLightningChannels"
             android:title="@string/settings_manageChannels"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
 
         <Preference
             android:key="resetConfig"
             android:title="@string/settings_resetConnection"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
 
     </PreferenceCategory>
@@ -81,18 +81,18 @@
         <Preference
             android:key="changePIN"
             android:title="@string/settings_changePin"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="hideTotalBalance"
             android:title="@string/settings_hideTotalBalance"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="resetGuardian"
             android:title="@string/settings_resetSecurityWarnings"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -104,17 +104,17 @@
         <Preference
             android:key="help"
             android:title="@string/settings_help"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="reportIssue"
             android:title="@string/settings_reportIssue"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="about"
             android:title="@string/settings_about"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -125,19 +125,19 @@
         <Preference
             android:key="goToAdvanced"
             android:title="@string/settings_advanced_settings"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 
     <PreferenceCategory
-        android:title="Development"
         android:key="devCategory"
+        android:title="Development"
         app:iconSpaceReserved="false">
 
         <Preference
             android:key="resetAll"
             android:title="Reset APP"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -2,13 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- drawable for selected tab -->
-    <item
-        android:drawable="@drawable/rounded_rectangle_orange_gradient"
-        android:state_selected="true"/>
+    <item android:drawable="@drawable/rounded_rectangle_orange_gradient" android:state_selected="true" />
 
     <!-- drawable for unselected tab -->
-    <item
-        android:drawable="@drawable/transparent_dialog_background"
-        android:state_selected="false"/>
+    <item android:drawable="@drawable/transparent_dialog_background" android:state_selected="false" />
 
 </selector>

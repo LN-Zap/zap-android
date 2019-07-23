@@ -85,7 +85,7 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
-    <style name="ZapBottomSheetDialogTheme" parent="BaseZapBottomSheetDialog"/>
+    <style name="ZapBottomSheetDialogTheme" parent="BaseZapBottomSheetDialog" />
 
 
 </resources>

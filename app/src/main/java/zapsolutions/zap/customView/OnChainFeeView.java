@@ -24,10 +24,12 @@ public class OnChainFeeView extends ConstraintLayout {
     private ConstraintLayout mClSendFeeDurationLayout;
     private FeeTierChangedListener mFeeTierChangedListener;
     private OnChainFeeView.OnChainFeeTier mOnChainFeeTier;
+
     public OnChainFeeView(Context context) {
         super(context);
         init();
     }
+
     public OnChainFeeView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
