@@ -20,8 +20,8 @@
                 <corners
                     android:radius="3dip" />
                 <gradient
-                    android:startColor="@color/whiteGradient"
-                    android:endColor="@color/white"
+                    android:startColor="@color/lightningBlueGradient"
+                    android:endColor="@color/lightningBlue"
                     android:angle="180"
                     />
             </shape>
