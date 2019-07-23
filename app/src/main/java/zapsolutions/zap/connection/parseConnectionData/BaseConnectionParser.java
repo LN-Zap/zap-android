@@ -1,4 +1,4 @@
-package zapsolutions.zap.connection;
+package zapsolutions.zap.connection.parseConnectionData;
 
 /**
  * Base class meant to be extended for parsing various connection strings like

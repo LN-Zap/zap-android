@@ -1,4 +1,4 @@
-package zapsolutions.zap.connection;
+package zapsolutions.zap.connection.establishConnectionToLnd;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

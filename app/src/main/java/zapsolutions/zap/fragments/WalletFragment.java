@@ -29,8 +29,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.LndConnection;
-import zapsolutions.zap.connection.NetworkUtil;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.SendActivity;
@@ -499,9 +499,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     if (error == Wallet.WalletLoadedListener.ERROR_AUTHENTICATION) {
                         mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
                     } else if (error == Wallet.WalletLoadedListener.ERROR_TIMEOUT) {
-                        mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionInfo()[0]));
+                        mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionConfig().getHost()));
                     } else if (error == Wallet.WalletLoadedListener.ERROR_UNAVAILABLE) {
-                        mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, LndConnection.getInstance().getConnectionInfo()[1]));
+                        mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(LndConnection.getInstance().getConnectionConfig().getPort())));
                     }
                 }
             } else {

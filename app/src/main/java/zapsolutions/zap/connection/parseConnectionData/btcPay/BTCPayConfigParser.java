@@ -1,8 +1,8 @@
-package zapsolutions.zap.connection.btcPay;
+package zapsolutions.zap.connection.parseConnectionData.btcPay;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import zapsolutions.zap.connection.BaseConnectionParser;
+import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
 import zapsolutions.zap.util.ZapLog;
 
 /**

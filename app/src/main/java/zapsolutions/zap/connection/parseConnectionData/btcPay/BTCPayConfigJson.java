@@ -1,4 +1,4 @@
-package zapsolutions.zap.connection.btcPay;
+package zapsolutions.zap.connection.parseConnectionData.btcPay;
 
 import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;

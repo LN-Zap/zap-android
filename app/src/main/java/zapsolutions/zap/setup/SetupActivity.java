@@ -87,31 +87,6 @@ public class SetupActivity extends BaseAppCompatActivity {
             showConnectChoice();
         }
         if (mSetupMode == CHANGE_PIN) {
-
-            // Encrypt connection data with the new PIN
-            App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
-                    .encryptionFingerprint(ctx)
-                    .keyStretchingFunction(new PBKDF2KeyStretcher(RefConstants.NUM_HASH_ITERATIONS, null))
-                    .password(tempInMemoryPin.toCharArray())
-                    .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
-                    .build();
-
-            String connectionInfo = prefsRemote.getString(PrefsUtil.REMOTE_COMBINED, "");
-
-            SharedPreferences newPrefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
-                    .encryptionFingerprint(ctx)
-                    .keyStretchingFunction(new PBKDF2KeyStretcher(RefConstants.NUM_HASH_ITERATIONS, null))
-                    .password(ctx.inMemoryPin.toCharArray())
-                    .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
-                    .build();
-
-            newPrefsRemote.edit()
-                    // The following string contains host,port,cert and macaroon in one string separated with ";"
-                    // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-                    .putString(PrefsUtil.REMOTE_COMBINED, connectionInfo)
-                    .commit();
-
             // Show success message
             Toast.makeText(SetupActivity.this, "PIN changed!", Toast.LENGTH_SHORT).show();
 

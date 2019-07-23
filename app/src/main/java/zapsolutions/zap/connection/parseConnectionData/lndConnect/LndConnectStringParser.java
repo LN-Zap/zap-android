@@ -1,8 +1,8 @@
-package zapsolutions.zap.connection.lndConnect;
+package zapsolutions.zap.connection.parseConnectionData.lndConnect;
 
 import com.google.common.io.BaseEncoding;
-import zapsolutions.zap.connection.BaseConnectionParser;
-import zapsolutions.zap.connection.CustomSSLSocketFactory;
+import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
+import zapsolutions.zap.connection.establishConnectionToLnd.CustomSSLSocketFactory;
 import zapsolutions.zap.util.ZapLog;
 
 import java.net.URI;
@@ -102,6 +102,8 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                 } else {
                     try {
                         BaseEncoding.base64Url().decode(macaroon);
+                        byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroon);
+                        macaroon = BaseEncoding.base16().encode(macaroonBytes);
                     } catch (IllegalArgumentException e) {
                         ZapLog.debug(LOG_TAG, "macaroon decoding failed");
 

@@ -1,10 +1,9 @@
-package zapsolutions.zap.connection.btcPay;
+package zapsolutions.zap.connection.parseConnectionData.btcPay;
 
 import zapsolutions.zap.connection.RemoteConfiguration;
 
 public class BTCPayConfig extends RemoteConfiguration {
 
-    public static String NO_CERT = "NO_CERT";
     public static String TYPE_GRPC = "GRPC";
     public static String CRYPTO_TYPE_BTC = "BTC";
 

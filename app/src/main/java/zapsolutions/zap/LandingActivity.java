@@ -5,13 +5,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.preference.PreferenceManager;
 
 import at.favre.lib.armadillo.Armadillo;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
 
 public class LandingActivity extends BaseAppCompatActivity {
@@ -21,7 +19,6 @@ public class LandingActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         // get the data from the URI Scheme
         Intent intent = getIntent();
@@ -33,26 +30,6 @@ public class LandingActivity extends BaseAppCompatActivity {
 
 
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int ver = prefs.getInt(PrefsUtil.SETTINGS_VER, 0);
-
-        // support for clearing shared preferences,
-        // in v1 we are now upgrading to encrypted shared pref
-        // and thus need to reset all currently entered settings
-        if (ver < RefConstants.CURRENT_SETTINGS_VER) {
-            // Reset settings
-            prefs.edit().clear().commit();
-            // Reset connection settings
-            App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
-                    .encryptionFingerprint(ctx)
-                    .build();
-            prefsRemote.edit().clear().commit();
-            // Set new settings version
-            prefs.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
-        }
-
-
         if (PrefsUtil.isWalletSetup()) {
             // Go to PIN entry screen
             Intent pinIntent = new Intent(this, PinEntryActivity.class);
@@ -61,12 +38,15 @@ public class LandingActivity extends BaseAppCompatActivity {
         } else {
 
             // Clear connection data if something is there
+            PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, "").commit();
 
+            // ToDo: Remove this when nobody has the old version installed.
             App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
+            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_ENCRYPTED)
                     .encryptionFingerprint(ctx)
                     .build();
             prefsRemote.edit().clear().commit();
+            // ToDO End
 
 
             Intent homeIntent = new Intent(this, HomeActivity.class);

@@ -14,6 +14,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +29,9 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import zapsolutions.zap.AdvancedSettingsActivity;
 import zapsolutions.zap.BuildConfig;
+import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
+import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.R;
@@ -185,6 +191,17 @@ public class SettingsFragment extends PreferenceFragmentCompat{
             public boolean onPreferenceClick(Preference preference) {
                 // We have to use commit here, apply would not finish before the app is restarted.
                 PrefsUtil.edit().clear().commit();
+                try {
+                    new Cryptography(App.getAppContext()).removeKeys();
+                } catch (KeyStoreException e) {
+                    e.printStackTrace();
+                } catch (CertificateException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 AppUtil.getInstance(getActivity()).restartApp();
                 return true;
             }

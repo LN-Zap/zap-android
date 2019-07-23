@@ -13,32 +13,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
-import at.favre.lib.armadillo.Armadillo;
-import at.favre.lib.armadillo.PBKDF2KeyStretcher;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.snackbar.Snackbar;
+
+
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.RemoteConfiguration;
-import zapsolutions.zap.connection.btcPay.BTCPayConfig;
-import zapsolutions.zap.connection.btcPay.BTCPayConfigParser;
-import zapsolutions.zap.connection.lndConnect.LndConnectConfig;
-import zapsolutions.zap.connection.lndConnect.LndConnectStringParser;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
+import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser;
+import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
+import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 import zapsolutions.zap.util.PermissionsUtil;
-import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
-import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.ZapLog;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
@@ -197,42 +196,56 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     }
 
     private void connect(RemoteConfiguration config) {
-        App ctx = App.getAppContext();
-        SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_REMOTE)
-                .encryptionFingerprint(ctx)
-                .keyStretchingFunction(new PBKDF2KeyStretcher(RefConstants.NUM_HASH_ITERATIONS, null))
-                .password(ctx.inMemoryPin.toCharArray())
-                .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
-                .build();
 
-        // Do not ask for pin again...
-        TimeOutUtil.getInstance().restartTimer();
+        boolean success = false;
 
-        // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
-        if (config instanceof LndConnectConfig) {
-            LndConnectConfig lndConfig = (LndConnectConfig) config;
-            // The following string contains host,port,cert and macaroon in one string separated with ";"
-            // This way we can read all necessary data in one call and do not have to execute the key stretching function 4 times.
-            prefsRemote.edit()
-                    .putString(PrefsUtil.REMOTE_COMBINED, lndConfig.getHost() + ";" + lndConfig.getPort() + ";" + lndConfig.getCert() + ";" + lndConfig.getMacaroon())
-                    .commit();
-        } else if (config instanceof BTCPayConfig) {
-            BTCPayConfig btcPayConfig = (BTCPayConfig) config;
-            prefsRemote.edit()
-                    .putString(PrefsUtil.REMOTE_COMBINED, btcPayConfig.getHost() + ";" + btcPayConfig.getPort() + ";" + BTCPayConfig.NO_CERT + ";" + btcPayConfig.getMacaroon())
-                    .commit();
+        WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
+
+        try {
+            if (config instanceof LndConnectConfig) {
+                LndConnectConfig lndConfig = (LndConnectConfig) config;
+
+                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
+                        "remote", lndConfig.getHost(), lndConfig.getPort(),
+                        lndConfig.getCert(), lndConfig.getMacaroon());
+
+                walletConfigsManager.apply();
+
+                success = true;
+
+            } else if (config instanceof BTCPayConfig) {
+                BTCPayConfig btcPayConfig = (BTCPayConfig) config;
+
+                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
+                        "remote", btcPayConfig.getHost(), btcPayConfig.getPort(),
+                        null, btcPayConfig.getMacaroon());
+
+                walletConfigsManager.apply();
+
+                success = true;
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError(e.getMessage(), 3000);
         }
 
-        // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit()
-                .putBoolean("isWalletSetup", true)
-                .commit();
+        if (success) {
+            // Do not ask for pin again...
+            TimeOutUtil.getInstance().restartTimer();
 
-        // Show home screen, remove history stack
-        Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+            // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.edit()
+                    .putBoolean("isWalletSetup", true)
+                    .commit();
+
+            // Show home screen, remove history stack
+            Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
     }
 
     private void showError(String message, int duration) {

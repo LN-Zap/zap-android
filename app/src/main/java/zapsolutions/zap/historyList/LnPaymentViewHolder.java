@@ -20,7 +20,7 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.LndConnection;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;

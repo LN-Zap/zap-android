@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.OnChainFeeView;
 
 /**
@@ -21,10 +22,11 @@ public class PrefsUtil {
     public static final String SETTINGS_VER = "settings_ver";
     public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
+    public static final String CURRENT_WALLET_CONFIG = "current_wallet_config";
 
-    // remote node preferences references
-    public static final String PREFS_REMOTE = "prefs_remote";
-    public static final String REMOTE_COMBINED = "remote_combined";
+    // wallet config preferences references
+    public static final String PREFS_ENCRYPTED = "prefs_encrypted";
+    public static final String WALLET_CONFIGS = "wallet_configs";
 
 
     // Access to default shared prefs
@@ -56,5 +58,13 @@ public class PrefsUtil {
 
     public static boolean isBiometricPreferred(){
         return getPrefs().getBoolean(BIOMETRICS_PREFERRED, false);
+    }
+
+    public static boolean isBiometricEnabled(){
+        return getPrefs().getBoolean("biometricsEnabled", true);
+    }
+
+    public static String getCurrentWalletConfig (){
+        return getPrefs().getString(CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME);
     }
 }
