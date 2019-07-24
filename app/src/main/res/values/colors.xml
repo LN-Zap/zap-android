@@ -5,6 +5,8 @@
     <color name="seaBlueGradient">#353745</color>
     <color name="seaBlueGradient2">#414354</color>
     <color name="seaBlueGradient3">#585964</color>
+    <color name="lightningBlue">#005DFC</color>
+    <color name="lightningBlueGradient">#008DFD</color>
     <color name="lightningOrange">#FD9800</color>
     <color name="lightningOrangeGradient">#FFBD59</color>
     <color name="superGreen">#3EE673</color>
