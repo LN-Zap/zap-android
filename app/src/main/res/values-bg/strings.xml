@@ -121,39 +121,39 @@
     <string name="no_channels">Няма канали</string>
 
 
-    <string name="setup_connect_heading">How do you want to use ZAP?</string>
-    <string name="setup_connect_local_description">Create a wallet on this phone.</string>
-    <string name="setup_connect_local_button">Create Wallet</string>
-    <string name="setup_connect_remote_description">Remote control your own node.</string>
-    <string name="setup_connect_remote_button">Connect to Remote Node</string>
-    <string name="setup_eula_heading">Conditions</string>
-    <string name="setup_eula_explanation">Zap is completely free. However, to use it, you have to accept our terms:</string>
-    <string name="setup_eula_iAccept">I accept</string>
+    <string name="setup_connect_heading">Как искате да използвате Zap?</string>
+    <string name="setup_connect_local_description">Създаване на портфейл на този телефон</string>
+    <string name="setup_connect_local_button">Създаване на портфейл</string>
+    <string name="setup_connect_remote_description">Контролирайте дистанционно Вашия нод</string>
+    <string name="setup_connect_remote_button">Свързване към отдалечен нод</string>
+    <string name="setup_eula_heading">Условия</string>
+    <string name="setup_eula_explanation">Zap е безплатен, но за да го използвате, трябва да се съгласите с нашите условия:</string>
+    <string name="setup_eula_iAccept">Приемам</string>
 
 
-    <string name="demo_setupWalletBtn">Setup Wallet</string>
-    <string name="demo_setupWalletFirst">You first have to setup a wallet.</string>
+    <string name="demo_setupWalletBtn">Настрой портфейл</string>
+    <string name="demo_setupWalletFirst">Първо трябва да настроите портфейла си.</string>
 
 
-    <string name="send_lightningPayment">Send lightning payment</string>
-    <string name="send_onChainPayment">Send on-chain payment</string>
-    <string name="send_sendPayment">Send payment</string>
-    <string name="send_success">Payment\nsuccessful</string>
-    <string name="send_fail">Payment\nfailed</string>
+    <string name="send_lightningPayment">Изпрати lightning плащане</string>
+    <string name="send_onChainPayment">Изпрати on-chain плащане</string>
+    <string name="send_sendPayment">Изпращане на плащането</string>
+    <string name="send_success">Плащането\nуспешно</string>
+    <string name="send_fail">Плащането\nнеуспешно</string>
 
 
-    <string name="receive_generateRequest">Generate Request</string>
-    <string name="receive_generateRequest_failed">Request generation failed.</string>
-    <string name="receive_lightning_request">Lightning Request</string>
-    <string name="receive_on_chain_request">On-Chain Request</string>
-    <string name="receive_noActiveChannels">To receive Bitcoin over the lightning network, you first have to open channels.</string>
-    <string name="receive_noIncomeBalance">To receive Bitcoin over the lightning network, at least one of your channels needs some balance on your counterpartys side.\n\nTo achieve that, you have to spend something on lightning network first.\n\nIn the manage channels area you can always see how much you are able to send or receive over the lightning network right now.</string>
-    <string name="receive_requestFullfilled">Invoice\npaid</string>
+    <string name="receive_generateRequest">Създай заявка</string>
+    <string name="receive_generateRequest_failed">Създаването на заявка неуспешно.</string>
+    <string name="receive_lightning_request">Lightning Заявка</string>
+    <string name="receive_on_chain_request">On-Chain Заявка</string>
+    <string name="receive_noActiveChannels">За да получавате Биткойн чрез lightning network, първо трябва да отворите канали.</string>
+    <string name="receive_noIncomeBalance">За да получавате Биткойн чрез ightning network, поне един от каналите Ви трябва да има чужд баланс.\n\nЗа да постигнете това, първо трябва да изхарчите някакви средства чрез lightning network\n\nВ секцията "Управление на канали" винаги може да проверите колко точно можете да получите или изпратите на момента чрез lightning network.</string>
+    <string name="receive_requestFullfilled">Фактурата\nплатена</string>
 
 
-    <string name="guardian_doNotShowAgain">Don\'t show again.</string>
-    <string name="guardian_Title">Attention</string>
-    <string name="guardian_reset">All security warnings are enabled again.</string>
+    <string name="guardian_doNotShowAgain">Не показвай отново.</string>
+    <string name="guardian_Title">Внимание</string>
+    <string name="guardian_reset">Всички предупреждения за сигурността са отново активни.</string>
     <!-- Parameters for the following string are:  %1$s: compare string -->
     <string name="guardian_copyToClipboard_onChain">If you copy this data to your clipboard, other apps (also malicious ones) are able to access and modify it.\n\nTo be sure nothing has changed while pasting, compare the beginning to:\n\n%1$s\n</string>
     <string name="guardian_copyToClipboard_lightning">If you copy this data to your clipboard, other apps (also malicious ones) are able to access and modify it.\n\nTo be sure nothing has changed while pasting, compare the end to:\n\n%1$s\n</string>
