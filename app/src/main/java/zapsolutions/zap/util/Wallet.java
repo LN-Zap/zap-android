@@ -1421,7 +1421,7 @@ public class Wallet {
         mChannelBalancePending = pending;
         broadcastBalanceUpdate();
     }
-    
+
     /**
      * Notify all listeners to finished wallet initialization.
      *
