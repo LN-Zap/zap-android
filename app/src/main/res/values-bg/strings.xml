@@ -169,61 +169,61 @@
     <string name="guardian_remoteConnect">Сигурни ли сте, че искате да се свържете с\n\n%1$s\n\nМоля проверете адреса внимателно.</string>
 
 
-    <string name="settings_category_general">General</string>
-    <string name="settings_category_security">Security</string>
-    <string name="settings_category_help">Help</string>
-    <string name="settings_category_advanced">Advanced</string>
-    <string name="settings_btcUnit">Bitcoin Unit</string>
-    <string name="settings_currency">Second Unit</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_hapticPin">Haptic PIN Feedback</string>
+    <string name="settings_category_general">Общи</string>
+    <string name="settings_category_security">Сигурност</string>
+    <string name="settings_category_help">Помощ</string>
+    <string name="settings_category_advanced">Разширени</string>
+    <string name="settings_btcUnit">Биткойн единица</string>
+    <string name="settings_currency">Втора единица</string>
+    <string name="settings_language">Език</string>
+    <string name="settings_hapticPin">Осезаема ПИН обратна връзка</string>
 
     <string-array name="settings_language_displayValues">
-        <item>System Language</item>
-        <item>English</item>
+        <item>Системен Език</item>
+        <item>Английски</item>
     </string-array>
 
-    <string name="settings_manageChannels">Manage Lightning Channels</string>
-    <string name="settings_resetConnection">Reset Remote Node Configuration</string>
-    <string name="settings_changePin">Change PIN</string>
-    <string name="settings_scramblePin">Scramble PIN Screen</string>
-    <string name="settings_preventScreenRecording">Prevent Screen Recording</string>
-    <string name="settings_hideTotalBalance">Hide total balance</string>
-    <string name="settings_hideTotalBalance_explanation">When activated, tap the Zap logo on the home screen to reveal your balance.</string>
-    <string name="settings_resetSecurityWarnings">Reset Security Warnings</string>
-    <string name="settings_help">Need Help?</string>
-    <string name="settings_reportIssue">Report an Issue</string>
-    <string name="settings_about">About Zap</string>
-    <string name="settings_advanced_settings">Advanced Settings</string>
-    <string name="settings_restartRequired">Zap will be restarted to make this change. Do you want to continue?</string>
-    <string name="settings_enableBiometrics">Enable biometric authentication</string>
+    <string name="settings_manageChannels">Управление на lightning канали</string>
+    <string name="settings_resetConnection">Нулиране на конфигурацията на отдалечения нод</string>
+    <string name="settings_changePin">Смяна на ПИН</string>
+    <string name="settings_scramblePin">Разбъркване на ПИН Екрана</string>
+    <string name="settings_preventScreenRecording">Забраняване записването на екрана</string>
+    <string name="settings_hideTotalBalance">Скриване на баланса</string>
+    <string name="settings_hideTotalBalance_explanation">Когато е активирано, чукнете на логото на началния екран, за да видите баланса си.</string>
+    <string name="settings_resetSecurityWarnings">Нулиране на Предупрежденията за Сигурност</string>
+    <string name="settings_help">Нужда от помощ?</string>
+    <string name="settings_reportIssue">Докладване на проблем</string>
+    <string name="settings_about">За Zap</string>
+    <string name="settings_advanced_settings">Разширени настройки</string>
+    <string name="settings_restartRequired">Zap ще бъде рестартиран, за да направи тази промяна. Искате ли да продължите?</string>
+    <string name="settings_enableBiometrics">Включване на Биометрична Автентикация</string>
 
 
     <string name="settings_blockExplorer">Block Explorer</string>
-    <string name="settings_addressType">Bitcoin Address Type</string>
+    <string name="settings_addressType">Биткойн тип на адреса</string>
 
     <string-array name="settings_receiveAddressDisplayValues">
         <item>Compatibility (P2PSH)</item>
         <item>Native (Bech32)</item>
     </string-array>
 
-    <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
+    <string name="settings_lnRequestExpiryTitle">Срок за Lightning заявка</string>
 
     <string-array name="settings_lnRequestExpiryDisplayValues">
-        <item>10 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>6 hours</item>
-        <item>24 hours</item>
+        <item>10 минути</item>
+        <item>30 минути</item>
+        <item>1 час</item>
+        <item>6 часа</item>
+        <item>24 часа</item>
     </string-array>
 
 
-    <string name="error">Error</string>
+    <string name="error">Грешка</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <!-- Parameters for the following string are:  %1$s: Name of selected block explorer, %2$s: "mainnet" or "testnet" -->
-    <string name="error_blockExplorer_message">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
-    <string name="error_notAPaymentRequest">Invalid payment information.\n\nPlease use a Bitcoin address or Lightning payment request to initiate a payment.</string>
-    <string name="error_paymentRequestExpired">This payment request expired.</string>
+    <string name="error_blockExplorer_message">"Избраният от Вас block explorer (%1$s) не поддържа %2$s. \nМоля отидете в настройки и изберете друг, за да продължите."</string>
+    <string name="error_notAPaymentRequest">Невалидна информация за плащане.\n\nМоля използвайте Биткойн адрес или Lightning заявка, за да започнете плащане.</string>
+    <string name="error_paymentRequestExpired">Тази заявка за плащане е изтекла.</string>
     <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
     <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>
     <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
