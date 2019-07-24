@@ -246,31 +246,31 @@
     <string name="error_wrong_password">Грешна парола</string>
 
     <plurals name="duration_minute">
-        <item quantity="one">Minute</item>
-        <item quantity="other">Minutes</item>
+        <item quantity="one">Минута</item>
+        <item quantity="other">Минути</item>
     </plurals>
 
     <plurals name="duration_hour">
-        <item quantity="one">Hour</item>
-        <item quantity="other">Hours</item>
+        <item quantity="one">Час</item>
+        <item quantity="other">Часа</item>
     </plurals>
     <plurals name="duration_day">
-        <item quantity="one">Day</item>
-        <item quantity="other">Days</item>
+        <item quantity="one">Ден</item>
+        <item quantity="other">Дни</item>
     </plurals>
 
-    <string name="fee_tier_slow_title">Slow</string>
-    <string name="fee_tier_medium_title">Medium</string>
-    <string name="fee_tier_fast_title">Fast</string>
-    <string name="fee_tier_slow_description">Slow Transaction</string>
-    <string name="fee_tier_medium_description">Medium Transaction</string>
-    <string name="fee_tier_fast_description">Fast Transaction</string>
-    <string name="fee_estimated_duration">Estimated Delivery: %1$d %2$s</string>
-    <string name="fee_not_available">n/A</string>
+    <string name="fee_tier_slow_title">Бавно</string>
+    <string name="fee_tier_medium_title">Средно</string>
+    <string name="fee_tier_fast_title">Бързо</string>
+    <string name="fee_tier_slow_description">Бавна Транзакция</string>
+    <string name="fee_tier_medium_description">Средно-бърза транзакция</string>
+    <string name="fee_tier_fast_description">Бърза Транзакция</string>
+    <string name="fee_estimated_duration">Очаквано пристигане: %1$d %2$s</string>
+    <string name="fee_not_available">N/A</string>
 
-    <string name="unlock_wallet">Unlock Wallet</string>
+    <string name="unlock_wallet">Отключете портфейла</string>
 
     
-    <string name="biometricPrompt_title">Biometric Authentication</string>
+    <string name="biometricPrompt_title">Биометрична автентикация</string>
 
 </resources>
