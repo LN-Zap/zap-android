@@ -5,25 +5,22 @@
         <shape>
             <corners android:radius="3dip" />
             <gradient
-                android:startColor="@color/seaBlueGradient3"
+                android:angle="270"
                 android:centerColor="@color/seaBlueGradient3"
                 android:centerY="0.75"
                 android:endColor="@color/seaBlueGradient3"
-                android:angle="270"
-                />
+                android:startColor="@color/seaBlueGradient3" />
         </shape>
     </item>
 
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <corners
-                    android:radius="3dip" />
+                <corners android:radius="3dip" />
                 <gradient
-                    android:startColor="@color/lightningOrangeGradient"
-                    android:endColor="@color/lightningOrange"
                     android:angle="0"
-                    />
+                    android:endColor="@color/lightningOrange"
+                    android:startColor="@color/lightningOrangeGradient" />
             </shape>
         </clip>
     </item>

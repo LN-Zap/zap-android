@@ -2,10 +2,14 @@ package zapsolutions.zap.connection.manageWalletConfigs;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.util.PrefsUtil;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -15,13 +19,6 @@ import java.security.NoSuchProviderException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.util.PrefsUtil;
-
 /**
  * This SINGLETON class is used to load and save configurations for wallets.
  * Multiple wallets can exist simultaneously, but each alias (wallet name) is only allowed to exist once.
@@ -30,10 +27,8 @@ import zapsolutions.zap.util.PrefsUtil;
  */
 public class WalletConfigsManager {
 
-    private static final String LOG_TAG = WalletConfigsManager.class.getName();
-
     public static final String DEFAULT_WALLET_NAME = "DefaultWallet";
-
+    private static final String LOG_TAG = WalletConfigsManager.class.getName();
     private static WalletConfigsManager mInstance;
     private WalletConfigsJson mWalletConfigsJson;
 
@@ -71,10 +66,6 @@ public class WalletConfigsManager {
         }
     }
 
-    public WalletConfigsJson getWalletConfigsJson() {
-        return mWalletConfigsJson;
-    }
-
     public static WalletConfigsManager getInstance() {
         if (mInstance == null) {
             mInstance = new WalletConfigsManager();
@@ -82,11 +73,6 @@ public class WalletConfigsManager {
 
         return mInstance;
     }
-
-    private void createEmptyWalletConfigsJson() {
-        mWalletConfigsJson = new Gson().fromJson("{\"connections\":[]}", WalletConfigsJson.class);
-    }
-
 
     /**
      * Used to determine if the provided String is a valid walletConfigs JSON.
@@ -103,6 +89,13 @@ public class WalletConfigsManager {
         }
     }
 
+    public WalletConfigsJson getWalletConfigsJson() {
+        return mWalletConfigsJson;
+    }
+
+    private void createEmptyWalletConfigsJson() {
+        mWalletConfigsJson = new Gson().fromJson("{\"connections\":[]}", WalletConfigsJson.class);
+    }
 
     /**
      * Checks if a wallet configuration with the given alias/name already exists.

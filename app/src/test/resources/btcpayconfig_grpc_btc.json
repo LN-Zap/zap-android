@@ -1,17 +1,17 @@
 {
-    "configurations": [
-        {
-            "host": "btcpay.dorian.com",
-            "port": 443,
-            "ssl": true,
-            "chainType": "Mainnet",
-            "type": "grpc",
-            "cryptoCode": "BTC",
-            "certificateThumbprint": null,
-            "macaroon": "macaroon",
-            "adminMacaroon": "adminMacaroon",
-            "readonlyMacaroon": "readonlyMacaroon",
-            "invoiceMacaroon": "invoiceMacaroon"
-        }
-    ]
+  "configurations": [
+    {
+      "host": "btcpay.dorian.com",
+      "port": 443,
+      "ssl": true,
+      "chainType": "Mainnet",
+      "type": "grpc",
+      "cryptoCode": "BTC",
+      "certificateThumbprint": null,
+      "macaroon": "macaroon",
+      "adminMacaroon": "adminMacaroon",
+      "readonlyMacaroon": "readonlyMacaroon",
+      "invoiceMacaroon": "invoiceMacaroon"
+    }
+  ]
 }

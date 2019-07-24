@@ -4,7 +4,7 @@ package zapsolutions.zap.connection;
  * Base class meant to be extended for more specific remote configurations like
  * - BTCPay Configuration
  * - LndConnect Configuration
- *
+ * <p>
  * The macaroon should always be encoded as base16 string (hex)
  */
 public abstract class RemoteConfiguration {

@@ -1,19 +1,16 @@
 package zapsolutions.zap.baseClasses;
 
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-
 import android.os.Bundle;
 import android.view.MenuItem;
-
-import java.util.ArrayList;
-
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-
-import zapsolutions.zap.R;
 import me.dm7.barcodescanner.zbar.BarcodeFormat;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import zapsolutions.zap.R;
+
+import java.util.ArrayList;
 
 public class BaseScannerActivity extends BaseAppCompatActivity {
     protected ZBarScannerView mScannerView;

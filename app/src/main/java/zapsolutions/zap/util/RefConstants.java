@@ -10,7 +10,7 @@ public class RefConstants {
     // If any changes are done here, CURRENT_SETTINGS_VER has to be updated.
     public static final int NUM_HASH_ITERATIONS = 5000;
 
-    
+
     public static final int PIN_MIN_LENGTH = 4;
     public static final int PIN_MAX_LENGTH = 10;
     public static final int PIN_MAX_FAILS = 3;

@@ -3,26 +3,24 @@ package zapsolutions.zap.channelManagement;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.List;
-
 import androidx.recyclerview.widget.RecyclerView;
 import zapsolutions.zap.R;
+
+import java.util.List;
 
 
 public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<ChannelListItem> mItems;
-
-    @Override
-    public int getItemViewType(int position) {
-        return mItems.get(position).getType();
-    }
 
     // Construct the adapter with a data list
     public ChannelItemAdapter(List<ChannelListItem> dataset) {
         mItems = dataset;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return mItems.get(position).getType();
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

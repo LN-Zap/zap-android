@@ -1,21 +1,23 @@
 package zapsolutions.zap;
 
 import com.google.gson.Gson;
-
 import org.junit.Test;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsJson;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.stream.Collectors;
 
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
-
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.assertFalse;
 
 public class ConnectionManagerTest {
 
@@ -69,31 +71,38 @@ public class ConnectionManagerTest {
     }
 
     @Test
-    public void givenNewAlias_whenAddWalletConfig_thenReceiveUpdatedWalletConfigs() {
-        String expected = readStringFromFile("wallet_configs_create.json");
+    public void givenNewAlias_whenAddWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
+        WalletConfig expected = readFromFile("wallet_configs.json").getConnection("FirstWalletName");
+
         WalletConfigsManager manager = new WalletConfigsManager(null);
         manager.addWalletConfig("FirstWalletName", "remote", "TestHost", 10009, "TestCert", "TestMacaroon");
-        String result = new Gson().toJson(manager.getWalletConfigsJson());
+        WalletConfig actual = manager.getWalletConfig("FirstWalletName");
 
-        assertEquals(expected, result);
+        assertEquals(expected.getAlias(), actual.getAlias());
+        assertEquals(expected.getCert(), actual.getCert());
+        assertEquals(expected.getType(), actual.getType());
+        assertEquals(expected.getHost(), actual.getHost());
+        assertEquals(expected.getPort(), actual.getPort());
+        assertEquals(expected.getMacaroon(), actual.getMacaroon());
     }
 
     @Test
-    public void givenExistingAlias_whenAddWalletConfig_thenReceiveUpdatedWalletConfigs() {
-        String expected = readStringFromFile("wallet_configs_modify.json");
+    public void givenExistingAlias_whenAddWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
+        WalletConfig expected = readFromFile("wallet_configs_modify.json").getConnection("FirstWalletName");
+
         String configJson = readStringFromFile("wallet_configs_create.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         manager.addWalletConfig("FirstWalletName", "remote", "ModifiedHost", 10009, "TestCert", "TestMacaroon");
-        String result = new Gson().toJson(manager.getWalletConfigsJson());
+        WalletConfig actual = manager.getWalletConfig("FirstWalletName");
 
-        assertEquals(expected, result);
+        assertEquals(expected.getHost(), actual.getHost());
     }
 
     @Test
     public void givenNonExistingAlias_whenRemoveWalletConfig_thenReturnFalse() {
-
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
+
         String expected = new Gson().toJson(manager.getWalletConfigsJson());
         boolean removed = manager.removeWalletConfig("test");
         String result = new Gson().toJson(manager.getWalletConfigsJson());
@@ -104,19 +113,18 @@ public class ConnectionManagerTest {
 
     @Test
     public void givenExistingAlias_whenRemoveWalletConfig_thenReceiveUpdatedWalletConfigs() {
-        String expected = readStringFromFile("wallet_configs_create.json");
         String configJson = readStringFromFile("wallet_configs.json");
+
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         boolean removed = manager.removeWalletConfig("secondwalletname");
-        String result = new Gson().toJson(manager.getWalletConfigsJson());
 
         assertTrue(removed);
-        assertEquals(expected, result);
+        assertNull(manager.getWalletConfig("SecondWalletName"));
+        assertNotNull(manager.getWalletConfig("FirstWalletName"));
     }
 
     @Test
     public void givenNonExistingAlias_whenRenameWalletConfig_thenReturnFalse() {
-
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         String expected = new Gson().toJson(manager.getWalletConfigsJson());
@@ -128,15 +136,27 @@ public class ConnectionManagerTest {
     }
 
     @Test
-    public void givenExistingAlias_whenRenameWalletConfig_thenReceiveUpdatedWalletConfigs() {
-        String expected = readStringFromFile("wallet_configs_rename.json");
+    public void givenExistingAlias_whenRenameWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
+        WalletConfig expected = readFromFile("wallet_configs_rename.json").getConnection("NewWalletName");
         String configJson = readStringFromFile("wallet_configs_create.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         boolean renamed = manager.renameWalletConfig("FirstWalletName", "NewWalletName");
-        String result = new Gson().toJson(manager.getWalletConfigsJson());
+        WalletConfig actual = manager.getWalletConfig("newWalletName");
 
         assertTrue(renamed);
-        assertEquals(expected, result);
+        assertNotNull(manager.getWalletConfig("NewWalletName"));
+        assertEquals(expected.getAlias(), actual.getAlias());
+        assertEquals(expected.getCert(), actual.getCert());
+        assertEquals(expected.getType(), actual.getType());
+        assertEquals(expected.getHost(), actual.getHost());
+        assertEquals(expected.getPort(), actual.getPort());
+        assertEquals(expected.getMacaroon(), actual.getMacaroon());
+    }
+
+    private WalletConfigsJson readFromFile(String filename) throws UnsupportedEncodingException {
+        InputStream inputstream = this.getClass().getClassLoader().getResourceAsStream(filename);
+        Reader reader = new InputStreamReader(inputstream, "UTF-8");
+        return new Gson().fromJson(reader, WalletConfigsJson.class);
     }
 
     private String readStringFromFile(String filename) {

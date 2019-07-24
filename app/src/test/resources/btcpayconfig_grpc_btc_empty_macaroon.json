@@ -1,14 +1,14 @@
 {
-    "configurations": [
-        {
-            "host": "btcpay.dorian.com",
-            "port": 443,
-            "ssl": true,
-            "chainType": "Mainnet",
-            "type": "grpc",
-            "cryptoCode": "BTC",
-            "certificateThumbprint": null,
-            "macaroon": ""
-        }
-    ]
+  "configurations": [
+    {
+      "host": "btcpay.dorian.com",
+      "port": 443,
+      "ssl": true,
+      "chainType": "Mainnet",
+      "type": "grpc",
+      "cryptoCode": "BTC",
+      "certificateThumbprint": null,
+      "macaroon": ""
+    }
+  ]
 }

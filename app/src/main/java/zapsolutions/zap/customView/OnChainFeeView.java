@@ -15,55 +15,6 @@ import zapsolutions.zap.util.PrefsUtil;
 
 public class OnChainFeeView extends ConstraintLayout {
 
-    public interface FeeTierChangedListener {
-        void onFeeTierChanged(OnChainFeeTier onChainFeeTier);
-    }
-
-    public enum OnChainFeeTier {
-        FAST,
-        MEDIUM,
-        SLOW;
-
-        public int getTitle() {
-            switch (this) {
-                case FAST: return R.string.fee_tier_fast_title;
-                case MEDIUM: return R.string.fee_tier_medium_title;
-                case SLOW: return R.string.fee_tier_slow_title;
-                default: return R.string.fee_tier_fast_title;
-            }
-        }
-
-        public int getDescription() {
-            switch (this) {
-                case FAST: return R.string.fee_tier_fast_description;
-                case MEDIUM: return R.string.fee_tier_medium_description;
-                case SLOW: return R.string.fee_tier_slow_description;
-                default: return R.string.fee_tier_fast_description;
-            }
-        }
-
-        /**
-         * In the future a user should be able to set
-         * those values from the settings.
-         */
-        public int getConfirmationBlockTarget() {
-            switch (this) {
-                case FAST: return 1 ; // 10 Minutes
-                case MEDIUM: return 6 * 6; // 6 Hours
-                case SLOW: return 6 * 24; // 24 Hours
-                default: return 1 ; // 10 Minutes
-            }
-        }
-
-        public static OnChainFeeTier parseFromString(String enumAsString) {
-            try {
-                return valueOf(enumAsString);
-            } catch (Exception ex) {
-                return FAST;
-            }
-        }
-    }
-
     private TextView mTvSendFeeAmount;
     private TextView mTvSendFeeSpeed;
     private TabLayout mTabLayoutSendFeeSpeed;
@@ -73,12 +24,10 @@ public class OnChainFeeView extends ConstraintLayout {
     private ConstraintLayout mClSendFeeDurationLayout;
     private FeeTierChangedListener mFeeTierChangedListener;
     private OnChainFeeView.OnChainFeeTier mOnChainFeeTier;
-
     public OnChainFeeView(Context context) {
         super(context);
         init();
     }
-
     public OnChainFeeView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -103,7 +52,7 @@ public class OnChainFeeView extends ConstraintLayout {
 
         // Set tier from shared preferences
         setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
-        mTabLayoutSendFeeSpeed.getTabAt( mOnChainFeeTier.ordinal()).select();
+        mTabLayoutSendFeeSpeed.getTabAt(mOnChainFeeTier.ordinal()).select();
 
         // Toggle tier settings view on amount click
         mClSendFeeAmountLayout.setOnClickListener(new OnSingleClickListener() {
@@ -121,15 +70,15 @@ public class OnChainFeeView extends ConstraintLayout {
         mTabLayoutSendFeeSpeed.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-              if(tab.getText() != null) {
-                  if (tab.getText().equals(getResources().getString(OnChainFeeTier.SLOW.getTitle()))) {
-                      setFeeTier(OnChainFeeTier.SLOW);
-                  } else if (tab.getText().equals(getResources().getString(OnChainFeeTier.MEDIUM.getTitle()))) {
-                      setFeeTier(OnChainFeeTier.MEDIUM);
-                  } else if (tab.getText().equals(getResources().getString(OnChainFeeTier.FAST.getTitle()))) {
-                      setFeeTier(OnChainFeeTier.FAST);
-                  }
-              }
+                if (tab.getText() != null) {
+                    if (tab.getText().equals(getResources().getString(OnChainFeeTier.SLOW.getTitle()))) {
+                        setFeeTier(OnChainFeeTier.SLOW);
+                    } else if (tab.getText().equals(getResources().getString(OnChainFeeTier.MEDIUM.getTitle()))) {
+                        setFeeTier(OnChainFeeTier.MEDIUM);
+                    } else if (tab.getText().equals(getResources().getString(OnChainFeeTier.FAST.getTitle()))) {
+                        setFeeTier(OnChainFeeTier.FAST);
+                    }
+                }
             }
 
             @Override
@@ -148,18 +97,6 @@ public class OnChainFeeView extends ConstraintLayout {
         return mOnChainFeeTier;
     }
 
-    public void setFeeTierChangedListener(FeeTierChangedListener feeTierChangedListener) {
-        mFeeTierChangedListener = feeTierChangedListener;
-    }
-
-    public void onFeeSuccess(String amount) {
-        mTvSendFeeAmount.setText(amount);
-    }
-
-    public void onFeeFailure() {
-        mTvSendFeeAmount.setText(R.string.fee_not_available);
-    }
-
     /**
      * Set current fee tier and notify listeners
      */
@@ -174,7 +111,19 @@ public class OnChainFeeView extends ConstraintLayout {
         }
 
         // Update choice to shared preferences
-        PrefsUtil.edit().putString(PrefsUtil.ON_CHAIN_FEE_TIER,feeTier.name()).apply();
+        PrefsUtil.edit().putString(PrefsUtil.ON_CHAIN_FEE_TIER, feeTier.name()).apply();
+    }
+
+    public void setFeeTierChangedListener(FeeTierChangedListener feeTierChangedListener) {
+        mFeeTierChangedListener = feeTierChangedListener;
+    }
+
+    public void onFeeSuccess(String amount) {
+        mTvSendFeeAmount.setText(amount);
+    }
+
+    public void onFeeFailure() {
+        mTvSendFeeAmount.setText(R.string.fee_not_available);
     }
 
     /**
@@ -192,10 +141,10 @@ public class OnChainFeeView extends ConstraintLayout {
     private void setBlockTargetTime(int blockTarget) {
         int minutes = blockTarget * 10;
 
-        if(minutes < 60) {
+        if (minutes < 60) {
             String quantityString = getResources().getQuantityString(R.plurals.duration_minute, minutes);
-            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration,minutes, quantityString));
-        } else if( minutes < 60 * 24) {
+            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, minutes, quantityString));
+        } else if (minutes < 60 * 24) {
             int hours = minutes / 60;
             String quantityString = getResources().getQuantityString(R.plurals.duration_hour, hours);
             mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, hours, quantityString));
@@ -204,5 +153,66 @@ public class OnChainFeeView extends ConstraintLayout {
             String quantityString = getResources().getQuantityString(R.plurals.duration_day, days);
             mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, days, quantityString));
         }
+    }
+
+    public enum OnChainFeeTier {
+        FAST,
+        MEDIUM,
+        SLOW;
+
+        public static OnChainFeeTier parseFromString(String enumAsString) {
+            try {
+                return valueOf(enumAsString);
+            } catch (Exception ex) {
+                return FAST;
+            }
+        }
+
+        public int getTitle() {
+            switch (this) {
+                case FAST:
+                    return R.string.fee_tier_fast_title;
+                case MEDIUM:
+                    return R.string.fee_tier_medium_title;
+                case SLOW:
+                    return R.string.fee_tier_slow_title;
+                default:
+                    return R.string.fee_tier_fast_title;
+            }
+        }
+
+        public int getDescription() {
+            switch (this) {
+                case FAST:
+                    return R.string.fee_tier_fast_description;
+                case MEDIUM:
+                    return R.string.fee_tier_medium_description;
+                case SLOW:
+                    return R.string.fee_tier_slow_description;
+                default:
+                    return R.string.fee_tier_fast_description;
+            }
+        }
+
+        /**
+         * In the future a user should be able to set
+         * those values from the settings.
+         */
+        public int getConfirmationBlockTarget() {
+            switch (this) {
+                case FAST:
+                    return 1; // 10 Minutes
+                case MEDIUM:
+                    return 6 * 6; // 6 Hours
+                case SLOW:
+                    return 6 * 24; // 24 Hours
+                default:
+                    return 1; // 10 Minutes
+            }
+        }
+    }
+
+    public interface FeeTierChangedListener {
+        void onFeeTierChanged(OnChainFeeTier onChainFeeTier);
     }
 }

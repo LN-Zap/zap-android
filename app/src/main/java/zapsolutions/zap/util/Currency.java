@@ -56,7 +56,7 @@ public class Currency {
         mRate = rate;
     }
 
-    public Currency(String code, double rate, String symbol){
+    public Currency(String code, double rate, String symbol) {
         mIsBitcoin = true;
         mCode = code;
         mRate = rate;
