@@ -6,25 +6,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.concurrent.ExecutionException;
-
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.google.common.util.concurrent.ListenableFuture;
-
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.ZapLog;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
 

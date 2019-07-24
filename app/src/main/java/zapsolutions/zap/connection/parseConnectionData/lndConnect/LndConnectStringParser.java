@@ -1,8 +1,8 @@
 package zapsolutions.zap.connection.parseConnectionData.lndConnect;
 
 import com.google.common.io.BaseEncoding;
-import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
 import zapsolutions.zap.connection.establishConnectionToLnd.CustomSSLSocketFactory;
+import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
 import zapsolutions.zap.util.ZapLog;
 
 import java.net.URI;

@@ -3,17 +3,17 @@
     android:fromDegrees="0"
     android:pivotX="50%"
     android:pivotY="50%"
-    android:toDegrees="360" >
+    android:toDegrees="360">
 
     <shape
         android:innerRadiusRatio="3"
         android:shape="ring"
         android:thicknessRatio="5"
-        android:useLevel="false" >
+        android:useLevel="false">
 
         <size
-            android:height="76dip"
-            android:width="76dip" />
+            android:width="76dip"
+            android:height="76dip" />
 
         <gradient
             android:angle="0"

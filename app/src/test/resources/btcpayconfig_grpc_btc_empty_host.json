@@ -1,14 +1,14 @@
 {
-    "configurations": [
-        {
-            "host": "",
-            "port": 443,
-            "ssl": true,
-            "chainType": "Mainnet",
-            "type": "grpc",
-            "cryptoCode": "BTC",
-            "certificateThumbprint": null,
-            "macaroon": "macaroon"
-        }
-    ]
+  "configurations": [
+    {
+      "host": "",
+      "port": 443,
+      "ssl": true,
+      "chainType": "Mainnet",
+      "type": "grpc",
+      "cryptoCode": "BTC",
+      "certificateThumbprint": null,
+      "macaroon": "macaroon"
+    }
+  ]
 }

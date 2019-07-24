@@ -1,18 +1,15 @@
 package zapsolutions.zap.util;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Context;
-
-import zapsolutions.zap.interfaces.UserGuardianInterface;
-import zapsolutions.zap.R;
-
 import android.app.AlertDialog;
-
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import zapsolutions.zap.R;
+import zapsolutions.zap.interfaces.UserGuardianInterface;
 
 
 /**
@@ -50,6 +47,22 @@ public class UserGuardian {
         mAction = caller;
     }
 
+    /**
+     * Reset all "do not show again" selections.
+     */
+    public static void reenableAllSecurityWarnings(Context ctx) {
+        PrefsUtil.edit()
+                .putBoolean(COPY_TO_CLIPBOARD, true)
+                .putBoolean(PASTE_FROM_CLIPBOARD, true)
+                .putBoolean(DISABLE_SCRAMBLED_PIN, true)
+                .putBoolean(DISABLE_SCREEN_PROTECTION, true)
+                .putBoolean(HIGH_ONCHAIN_FEE, true)
+                .putBoolean(OLD_EXCHANGE_RATE, true)
+                .putBoolean(TOO_MUCH_MONEY, true)
+                .putBoolean(MAINNET_NOT_READY, true)
+                .putBoolean(REMOTE_CONNECT, true)
+                .apply();
+    }
 
     /**
      * Warn the user about security issues when copying stuff to clipboard.
@@ -82,7 +95,6 @@ public class UserGuardian {
         showGuardianDialog(adb);
     }
 
-
     /**
      * Warn the user about pasting a payment request from clipboard.
      */
@@ -103,7 +115,6 @@ public class UserGuardian {
         showGuardianDialog(adb);
     }
 
-
     /**
      * Warn the user to not disable scrambled pin input.
      */
@@ -114,7 +125,6 @@ public class UserGuardian {
         showGuardianDialog(adb);
     }
 
-
     /**
      * Warn the user to not disable screen protection.
      */
@@ -124,7 +134,6 @@ public class UserGuardian {
         adb.setMessage(R.string.guardian_disableScreenProtection);
         showGuardianDialog(adb);
     }
-
 
     /**
      * Warn the user about high On-Chain fees.
@@ -141,7 +150,6 @@ public class UserGuardian {
         showGuardianDialog(adb);
     }
 
-
     /**
      * Warn the user if he tries to request some Bitcoin while his primary currency is a
      * fiat currency and the exchange rate data has come of age.
@@ -155,7 +163,6 @@ public class UserGuardian {
         adb.setMessage(mContext.getResources().getString(R.string.guardian_oldExchangeRate, ageString));
         showGuardianDialog(adb);
     }
-
 
     /**
      * Warn the user if he stores large amounts of Bitcoin in his wallet.
@@ -177,25 +184,6 @@ public class UserGuardian {
         adb.setMessage(message);
         showGuardianDialog(adb);
     }
-
-
-    /**
-     * Reset all "do not show again" selections.
-     */
-    public static void reenableAllSecurityWarnings(Context ctx) {
-        PrefsUtil.edit()
-                .putBoolean(COPY_TO_CLIPBOARD, true)
-                .putBoolean(PASTE_FROM_CLIPBOARD, true)
-                .putBoolean(DISABLE_SCRAMBLED_PIN, true)
-                .putBoolean(DISABLE_SCREEN_PROTECTION, true)
-                .putBoolean(HIGH_ONCHAIN_FEE, true)
-                .putBoolean(OLD_EXCHANGE_RATE, true)
-                .putBoolean(TOO_MUCH_MONEY, true)
-                .putBoolean(MAINNET_NOT_READY, true)
-                .putBoolean(REMOTE_CONNECT, true)
-                .apply();
-    }
-
 
     /**
      * Create a dialog with a "do not show again" option that is already set up

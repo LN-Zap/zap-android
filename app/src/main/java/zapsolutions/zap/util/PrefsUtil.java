@@ -1,9 +1,7 @@
 package zapsolutions.zap.util;
 
 import android.content.SharedPreferences;
-
 import androidx.preference.PreferenceManager;
-
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.OnChainFeeView;
@@ -31,11 +29,11 @@ public class PrefsUtil {
 
     // Access to default shared prefs
 
-    public static SharedPreferences getPrefs(){
+    public static SharedPreferences getPrefs() {
         return PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
     }
 
-    public static SharedPreferences.Editor edit(){
+    public static SharedPreferences.Editor edit() {
         return PreferenceManager.getDefaultSharedPreferences(App.getAppContext()).edit();
     }
 
@@ -50,21 +48,23 @@ public class PrefsUtil {
         return getPrefs().getBoolean(PREVENT_SCREEN_RECORDING, true);
     }
 
-    public static boolean firstCurrencyIsPrimary(){
+    public static boolean firstCurrencyIsPrimary() {
         return getPrefs().getBoolean(FIRST_CURRENCY_IS_PRIMARY, true);
     }
 
-    public static String getOnChainFeeTier() { return getPrefs().getString(ON_CHAIN_FEE_TIER, OnChainFeeView.OnChainFeeTier.FAST.name()); }
+    public static String getOnChainFeeTier() {
+        return getPrefs().getString(ON_CHAIN_FEE_TIER, OnChainFeeView.OnChainFeeTier.FAST.name());
+    }
 
-    public static boolean isBiometricPreferred(){
+    public static boolean isBiometricPreferred() {
         return getPrefs().getBoolean(BIOMETRICS_PREFERRED, false);
     }
 
-    public static boolean isBiometricEnabled(){
+    public static boolean isBiometricEnabled() {
         return getPrefs().getBoolean("biometricsEnabled", true);
     }
 
-    public static String getCurrentWalletConfig (){
+    public static String getCurrentWalletConfig() {
         return getPrefs().getString(CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME);
     }
 }

@@ -1,19 +1,9 @@
 package zapsolutions.zap;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.preference.PreferenceManager;
-
-import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
-
-import zapsolutions.zap.util.MonetaryUtil;
-import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.UserGuardian;
-import zapsolutions.zap.util.Wallet;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,13 +15,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.ClipboardManager;
-
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.common.net.UrlEscapers;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-
 import net.glxn.qrgen.android.QRCode;
+import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.UserGuardian;
+import zapsolutions.zap.util.Wallet;
 
 
 public class GeneratedRequestActivity extends BaseAppCompatActivity implements UserGuardianInterface, Wallet.InvoiceSubscriptionListener {
@@ -246,9 +240,9 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         runOnUiThread(new Runnable() {
             public void run() {
                 // Check if the invoice was payed
-                if (Wallet.getInstance().isInvoicePayed(invoice)){
+                if (Wallet.getInstance().isInvoicePayed(invoice)) {
                     // The updated invoice is payed, now check if it is the invoice whe currently have opened.
-                    if (invoice.getAddIndex() == mLnInvoiceAddIndex){
+                    if (invoice.getAddIndex() == mLnInvoiceAddIndex) {
 
                         // It was payed, show success screen
 
