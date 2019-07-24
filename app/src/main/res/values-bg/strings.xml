@@ -184,7 +184,7 @@
     </string-array>
 
     <string name="settings_manageChannels">Управление на lightning канали</string>
-    <string name="settings_resetConnection">Нулиране на конфигурацията на отдалечения нод</string>
+    <string name="settings_resetConnection">Нулирай конфигурацията на отдалечения нод</string>
     <string name="settings_changePin">Смяна на ПИН</string>
     <string name="settings_scramblePin">Разбъркване на ПИН Екрана</string>
     <string name="settings_preventScreenRecording">Забраняване записването на екрана</string>
