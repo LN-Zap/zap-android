@@ -14,6 +14,7 @@
 
 ### Keeping a translation up to date
 
-New strings are always added at the end of the strings.xml file. To keep your translation up to date, you have to check the default strings.xml file from the values folder.
-If there are additional strings at the bottom of the file, just copy paste them into your languages strings.xml file and translate them.
-Finally, submit a pull request of your updated file.
+New strings are added constantly. To keep in sync, save a copy of the english version when you are done with your translation.
+The next time you want to update your translation, compare the current english version with your previously saved english version with a diff tool of your choice.
+This way you can immediatelly see what has changed since your last translation and adapt your translation accordingly.
+Finally, submit a pull request of your updated file and save a new copy of the current english version for your next update.
