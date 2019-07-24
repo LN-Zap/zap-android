@@ -48,7 +48,6 @@
     <string name="details">Details</string>
     <string name="amount">Amount</string>
     <string name="memo">Memo</string>
-    <string name="scanQRCode">Scan QR-Code</string>
     <string name="shareDialogTitle">Choose App</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
