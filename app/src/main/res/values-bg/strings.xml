@@ -147,7 +147,7 @@
     <string name="receive_lightning_request">Lightning Заявка</string>
     <string name="receive_on_chain_request">On-Chain Заявка</string>
     <string name="receive_noActiveChannels">За да получавате Биткойн чрез lightning network, първо трябва да отворите канали.</string>
-    <string name="receive_noIncomeBalance">За да получавате Биткойн чрез ightning network, поне един от каналите Ви трябва да има чужд баланс.\n\nЗа да постигнете това, първо трябва да изхарчите някакви средства чрез lightning network\n\nВ секцията "Управление на канали" винаги може да проверите колко точно можете да получите или изпратите на момента чрез lightning network.</string>
+    <string name="receive_noIncomeBalance">За да получавате Биткойн чрез ightning network, поне един от каналите Ви трябва да има чужд баланс.\n\nЗа да постигнете това, първо трябва да изхарчите някакви средства чрез lightning network\n\nВ секцията \"Управление на канали\" винаги може да проверите колко точно можете да получите или изпратите на момента чрез lightning network.</string>
     <string name="receive_requestFullfilled">Фактурата\nплатена</string>
 
 
@@ -224,26 +224,26 @@
     <string name="error_blockExplorer_message">"Избраният от Вас block explorer (%1$s) не поддържа %2$s. \nМоля отидете в настройки и изберете друг, за да продължите."</string>
     <string name="error_notAPaymentRequest">Невалидна информация за плащане.\n\nМоля използвайте Биткойн адрес или Lightning заявка, за да започнете плащане.</string>
     <string name="error_paymentRequestExpired">Тази заявка за плащане е изтекла.</string>
-    <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
-    <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>
-    <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
-    <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
-    <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
-    <string name="error_qr_code_result_null">Unable to read QR-Code, please try again.</string>
-    <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use one of the following formats:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
-    <string name="error_unableToFetchBTCPayConfig">Could not fetch configuration from BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
-    <string name="error_connection_invalid_certificate">The certificate is invalid.</string>
-    <string name="error_connection_no_macaroon">Your connection information does not contain a macaroon. This is mandatory.</string>
-    <string name="error_connection_invalid_macaroon">The macaroon is invalid.</string>
-    <string name="error_connection_invalid_host_or_port">The provided host or port is invalid.</string>
-    <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
-    <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND deamon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
-    <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
-    <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
-    <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
-    <string name="error_wrong_password">Wrong password</string>
+    <string name="error_useTestnetRequest">Свързани сте с TESTNET. Моля използвайте TESTNET адреси или заявки за плащания.</string>
+    <string name="error_useMainnetRequest">Свързани сте с MAINNET. Моля използвайте MAINNET адреси или заявки за плащания.</string>
+    <string name="error_cameraPermissionRequired">За да сканирате QR-кодове трябва да разрешите на Zap да използва камерата.</string>
+    <string name="error_emptyClipboardPayment">Клипбордът Ви не съдържа никакви данни за плащания.</string>
+    <string name="error_emptyClipboardConnect">Клипбордът Ви не съдържа никакви данни за свързване.</string>
+    <string name="error_qr_code_result_null">Неуспешно четене на QR-Код, моля опитайте отново.</string>
+    <string name="error_connection_unsupported_format">Неподдържан формат за свързване.\nМоля използвайте някой от следните формати:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Сървър връзка (config=...)\n- Пълното съдържание на Вашия BTCPay Сървър config файл</string>
+    <string name="error_unableToFetchBTCPayConfig">Неуспешно извеждане на конфигурация от BTCPay Сървър.</string>
+    <string name="error_connection_invalidLndConnectString">Невалиден lndconnect string.\nМоля уверете се, че използвате следния формат:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalid_certificate">Сертификатът е невалиден.</string>
+    <string name="error_connection_no_macaroon">Вашата информация за свързване не съдържа macaroon. Това е задължително.</string>
+    <string name="error_connection_invalid_macaroon">Мacaroon-ът е невалиден.</string>
+    <string name="error_connection_invalid_host_or_port">Избраният хост или порт е невалиден.</string>
+    <string name="error_connection_invalid_macaroon2">Достъп отказан!\n\nMacaroon-ът е невалиден.</string>
+    <string name="error_connection_server_unreachable">Таймаут.\nСървърът не отговаря.\n\n- Моля уверете се, че имате добра Интернет връзка.\n\n- Моля уверете се, че сървърът работи и все още има следното IP:\n\n%1$s</string>
+    <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.\n\n- Уверете се, че LND deamon-ът работи на сървъра Ви.\n\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)\n\n- Уверете се, че сертификатът Ви е валиден.</string>
+    <string name="error_connection_wallet_locked">Моля отключете портфейла.</string>
+    <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
+    <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
+    <string name="error_wrong_password">Грешна парола</string>
 
     <plurals name="duration_minute">
         <item quantity="one">Minute</item>
