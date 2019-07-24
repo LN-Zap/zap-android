@@ -164,12 +164,12 @@
 
         <!-- Dummy item to prevent EditText from receiving focus -->
         <LinearLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_width="0px"
             android:layout_height="0px"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/sendAmountLabel"
@@ -247,30 +247,31 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
-            android:id="@+id/sendFeeTopLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sendInputsView">
+        android:id="@+id/sendFeeTopLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendInputsView">
 
         <zapsolutions.zap.customView.LightningFeeView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:visibility="gone"
-                android:id="@+id/sendFeeLightningLayout"/>
-
-        <zapsolutions.zap.customView.OnChainFeeView
+            android:id="@+id/sendFeeLightningLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:visibility="gone" />
+
+        <zapsolutions.zap.customView.OnChainFeeView
+            android:id="@+id/sendFeeOnChainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="30dp"
             android:visibility="gone"
-            android:id="@+id/sendFeeOnChainLayout" tools:visibility="gone"/>
+            tools:visibility="gone" />
 
     </RelativeLayout>
 
@@ -294,11 +295,11 @@
             android:layout_marginEnd="15dp"
             android:background="#00000000"
             android:ems="10"
+            android:enabled="false"
             android:hint="@string/memo"
             android:inputType="text"
             android:maxLength="50"
             android:textSize="16sp"
-            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

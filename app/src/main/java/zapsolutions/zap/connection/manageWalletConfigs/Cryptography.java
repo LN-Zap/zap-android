@@ -10,9 +10,18 @@ import android.security.keystore.KeyProperties;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-
 import androidx.annotation.RequiresApi;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.security.auth.x500.X500Principal;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,17 +40,6 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.security.auth.x500.X500Principal;
 
 /*
 MIT License: https://opensource.org/licenses/MIT
@@ -82,21 +80,19 @@ public class Cryptography {
     private static final String AES_MODE_LESS_THAN_M = "AES/ECB/PKCS7Padding";
     private static final String KEY_ALIAS = "ZapKeyForEncryption";
     // TODO update these bytes to be random for IV of encryption
-    private static final byte[] FIXED_IV = new byte[]{ 55, 54, 53, 52, 51, 50,
+    private static final byte[] FIXED_IV = new byte[]{55, 54, 53, 52, 51, 50,
             49, 48, 47,
-            46, 45, 44 };
+            46, 45, 44};
     private static final String CHARSET_NAME = "UTF-8";
     private static final String RSA_ALGORITHM_NAME = "RSA";
-    private static final String RSA_MODE =  "RSA/ECB/PKCS1Padding";
+    private static final String RSA_MODE = "RSA/ECB/PKCS1Padding";
     private static final String CIPHER_PROVIDER_NAME_ENCRYPTION_DECRYPTION_RSA = "AndroidOpenSSL";
     private static final String CIPHER_PROVIDER_NAME_ENCRYPTION_DECRYPTION_AES = "BC";
     private static final String SHARED_PREFERENCE_NAME = "EncryptedKeysSharedPrefs";
     private static final String ENCRYPTED_KEY_NAME = "EncryptedKey";
     private static final String LOG_TAG = Cryptography.class.getName();
-
-    private final Context mContext;
-
     private final static Object s_keyInitLock = new Object();
+    private final Context mContext;
 
     public Cryptography(Context context) {
         mContext = context;
@@ -334,12 +330,12 @@ public class Cryptography {
         return encryptedKeyAsByteArray;
     }
 
-    private  byte[] rsaDecryptKey(byte[] encrypted) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, UnrecoverableEntryException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException {
+    private byte[] rsaDecryptKey(byte[] encrypted) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, UnrecoverableEntryException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException {
 
         KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
         keyStore.load(null);
 
-        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(KEY_ALIAS, null);
+        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(KEY_ALIAS, null);
         Cipher output = Cipher.getInstance(RSA_MODE, CIPHER_PROVIDER_NAME_ENCRYPTION_DECRYPTION_RSA);
         output.init(Cipher.DECRYPT_MODE, privateKeyEntry.getPrivateKey());
         CipherInputStream cipherInputStream = new CipherInputStream(
@@ -347,11 +343,11 @@ public class Cryptography {
         ArrayList<Byte> values = new ArrayList<>();
         int nextByte;
         while ((nextByte = cipherInputStream.read()) != -1) {
-            values.add((byte)nextByte);
+            values.add((byte) nextByte);
         }
 
         byte[] decryptedKeyAsBytes = new byte[values.size()];
-        for(int i = 0; i < decryptedKeyAsBytes.length; i++) {
+        for (int i = 0; i < decryptedKeyAsBytes.length; i++) {
             decryptedKeyAsBytes[i] = values.get(i);
         }
         return decryptedKeyAsBytes;

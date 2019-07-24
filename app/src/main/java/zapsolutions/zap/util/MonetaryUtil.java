@@ -3,26 +3,23 @@ package zapsolutions.zap.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-
-import zapsolutions.zap.baseClasses.App;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import zapsolutions.zap.baseClasses.App;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Set;
 
 
 /**
@@ -38,11 +35,10 @@ public class MonetaryUtil {
     private static final String LOG_TAG = "MonetaryUtil";
 
     private static MonetaryUtil mInstance;
+    private final Set<ExchangeRateListener> mExchangeRateListeners = new HashSet<>();
     private Context mContext;
     private Currency mFirstCurrency;
     private Currency mSecondCurrency;
-
-    private final Set<ExchangeRateListener> mExchangeRateListeners = new HashSet<>();
 
 
     private MonetaryUtil() {

@@ -23,11 +23,11 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/channelsList"
-            android:paddingBottom="70dp"
-            android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:clipToPadding="false"
+            android:paddingBottom="70dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

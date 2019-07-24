@@ -2,13 +2,14 @@ package zapsolutions.zap.util;
 
 import android.os.Build;
 import android.provider.Settings;
-
-import java.security.MessageDigest;
-
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import zapsolutions.zap.baseClasses.App;
 
+import java.security.MessageDigest;
+
 public class UtilFunctions {
+    private final static char[] hexArray = "0123456789abcdef".toCharArray();
+
     public static String sha256Hash(String data) {
         // TODO: Add keyStretching function to secure against brute force
         try {
@@ -25,13 +26,11 @@ public class UtilFunctions {
         return sha256Hash(data + getZapsalt());
     }
 
-
     public static String pinHash(String data) {
         //HmacSHA1 with PBKDF2 and ZapSalt
         PBKDF2KeyStretcher keyStretcher = new PBKDF2KeyStretcher(5000, null);
         return bytesToHex(keyStretcher.stretch((getZapsalt() + "pin").getBytes(), data.toCharArray(), 32));
     }
-
 
     public static String getZapsalt() {
         String androidID = Settings.Secure.getString(App.getAppContext().getContentResolver(),
@@ -41,8 +40,6 @@ public class UtilFunctions {
 
         return salt;
     }
-
-    private final static char[] hexArray = "0123456789abcdef".toCharArray();
 
     public static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];

@@ -3,7 +3,6 @@ package zapsolutions.zap.util;
 
 import android.content.Context;
 import android.os.Handler;
-
 import com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription;
@@ -42,7 +41,11 @@ import com.github.lightningnetwork.lnd.lnrpc.WalletUnlockerGrpc;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
+import io.grpc.stub.ClientCallStreamObserver;
+import zapsolutions.zap.R;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 
+import javax.annotation.Nullable;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,42 +54,38 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.Nullable;
-
-import io.grpc.stub.ClientCallStreamObserver;
-import zapsolutions.zap.R;
-
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
-
 
 public class Wallet {
 
     private static final String LOG_TAG = "Wallet Util";
 
     private static Wallet mInstance = null;
-
+    private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
+    private final Set<InfoListener> mInfoListeners = new HashSet<>();
+    private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
+    private final Set<WalletLoadedListener> mWalletLoadedListeners = new HashSet<>();
+    private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
+    private final Set<TransactionSubscriptionListener> mTransactionSubscriptionListeners = new HashSet<>();
+    private final Set<ChannelEventSubscriptionListener> mChannelEventSubscriptionListeners = new HashSet<>();
+    private final Set<ChannelBackupSubscriptionListener> mChannelBackupSubscriptionListeners = new HashSet<>();
     public PayReq mPaymentRequest = null;
     public String mPaymentRequestString = "";
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
     public List<Invoice> mTempInvoiceUpdateList;
     public List<Payment> mPaymentsList;
-
     public List<Channel> mOpenChannelsList;
     public List<PendingChannelsResponse.PendingOpenChannel> mPendingOpenChannelsList;
     public List<PendingChannelsResponse.ClosedChannel> mPendingClosedChannelsList;
     public List<PendingChannelsResponse.ForceClosedChannel> mPendingForceClosedChannelsList;
     public List<PendingChannelsResponse.WaitingCloseChannel> mPendingWaitingCloseChannelsList;
     public List<ChannelCloseSummary> mClosedChannelsList;
-
     public List<NodeInfo> mNodeInfos = new LinkedList<>();
-
     private long mOnChainBalanceTotal = 0;
     private long mOnChainBalanceConfirmed = 0;
     private long mOnChainBalanceUnconfirmed = 0;
     private long mChannelBalance = 0;
     private long mChannelBalancePending = 0;
-
     private boolean mConnectedToLND = false;
     private boolean mInfoFetched = false;
     private boolean mSyncedToChain = false;
@@ -97,20 +96,10 @@ public class Wallet {
     private boolean mTestnet = false;
     private boolean mConnectionCheckInProgress = false;
     private String mLNDVersion = "not connected";
-
     private ClientCallStreamObserver<Invoice> mInvoiceStreamObserver;
     private ClientCallStreamObserver<TransactionDetails> mTransactionStreamObserver;
     private ClientCallStreamObserver<ChannelEventUpdate> mChannelEventStreamObserver;
     private ClientCallStreamObserver<ChanBackupSnapshot> mChannelBackupStreamObserver;
-
-    private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
-    private final Set<InfoListener> mInfoListeners = new HashSet<>();
-    private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
-    private final Set<WalletLoadedListener> mWalletLoadedListeners = new HashSet<>();
-    private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
-    private final Set<TransactionSubscriptionListener> mTransactionSubscriptionListeners = new HashSet<>();
-    private final Set<ChannelEventSubscriptionListener> mChannelEventSubscriptionListeners = new HashSet<>();
-    private final Set<ChannelBackupSubscriptionListener> mChannelBackupSubscriptionListeners = new HashSet<>();
 
 
     private Wallet() {
@@ -1433,9 +1422,12 @@ public class Wallet {
         broadcastBalanceUpdate();
     }
 
-
-    // Event handling to notify all registered listeners when wallet initialization finished successfully.
-
+    /**
+     * Notify all listeners to finished wallet initialization.
+     *
+     * @param success true if successful
+     * @param error   one of WalletLoadedListener errors, -1 if successful
+     */
     private void broadcastWalletLoadedUpdate(boolean success, int error) {
         for (WalletLoadedListener listener : mWalletLoadedListeners) {
             listener.onWalletLoadedUpdated(success, error);
@@ -1450,20 +1442,9 @@ public class Wallet {
         mWalletLoadedListeners.remove(listener);
     }
 
-    public interface WalletLoadedListener {
-
-        int ERROR_LOCKED = 0;
-        int ERROR_INTERRUPTED = 1;
-        int ERROR_TIMEOUT = 2;
-        int ERROR_UNAVAILABLE = 3;
-        int ERROR_AUTHENTICATION = 4;
-
-        void onWalletLoadedUpdated(boolean success, int error);
-    }
-
-
-    // Event handling to notify all listeners registered to balance updates.
-
+    /**
+     * Notify all listeners to balance updates.
+     */
     private void broadcastBalanceUpdate() {
         for (BalanceListener listener : mBalanceListeners) {
             listener.onBalanceUpdated();
@@ -1478,13 +1459,11 @@ public class Wallet {
         mBalanceListeners.remove(listener);
     }
 
-    public interface BalanceListener {
-        void onBalanceUpdated();
-    }
-
-
-    // Event handling to notify all listeners registered to info updates.
-
+    /**
+     * Notify all listeners to info updates.
+     *
+     * @param connected true if connected to wallet
+     */
     private void broadcastInfoUpdate(boolean connected) {
         for (InfoListener listener : mInfoListeners) {
             listener.onInfoUpdated(connected);
@@ -1499,13 +1478,9 @@ public class Wallet {
         mInfoListeners.remove(listener);
     }
 
-    public interface InfoListener {
-        void onInfoUpdated(boolean connected);
-    }
-
-
-    // Event handling to notify all listeners registered to history updates.
-
+    /**
+     * Notify all listeners to history updates.
+     */
     private void broadcastHistoryUpdate() {
         for (HistoryListener listener : mHistoryListeners) {
             listener.onHistoryUpdated();
@@ -1520,19 +1495,23 @@ public class Wallet {
         mHistoryListeners.remove(listener);
     }
 
-    public interface HistoryListener {
-        void onHistoryUpdated();
-    }
 
-
-    // Event handling to notify all listeners registered to invoice updates.
-
+    /**
+     * Notify all listeners about new invoice.
+     *
+     * @param invoice the new invoice
+     */
     private void broadcastInvoiceAdded(Invoice invoice) {
         for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
             listener.onNewInvoiceAdded(invoice);
         }
     }
 
+    /**
+     * Notify all listeners about updated invoice.
+     *
+     * @param invoice the updated invoice
+     */
     private void broadcastInvoiceUpdated(Invoice invoice) {
         for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
             listener.onExistingInvoiceUpdated(invoice);
@@ -1547,21 +1526,17 @@ public class Wallet {
         mInvoiceSubscriptionListeners.remove(listener);
     }
 
-    public interface InvoiceSubscriptionListener {
-        void onNewInvoiceAdded(Invoice invoice);
 
-        void onExistingInvoiceUpdated(Invoice invoice);
-    }
-
-
-    // Event handling to notify all listeners registered to transaction update.
-
+    /**
+     * Notify all listeners to transaction update.
+     *
+     * @param transactionDetails the details about the transaction update
+     */
     private void broadcastTransactionUpdate(TransactionDetails transactionDetails) {
         for (TransactionSubscriptionListener listener : mTransactionSubscriptionListeners) {
             listener.onTransactionEvent(transactionDetails);
         }
     }
-
 
     public void registerTransactionSubscriptionListener(TransactionSubscriptionListener listener) {
         mTransactionSubscriptionListeners.add(listener);
@@ -1571,13 +1546,11 @@ public class Wallet {
         mTransactionSubscriptionListeners.remove(listener);
     }
 
-    public interface TransactionSubscriptionListener {
-        void onTransactionEvent(TransactionDetails transactionDetails);
-    }
-
-
-    // Event handling to notify all listeners registered to channel event updates.
-
+    /**
+     * Notify all listeners to channel event updates.
+     *
+     * @param channelEventUpdate the channel update
+     */
     private void broadcastChannelEvent(ChannelEventUpdate channelEventUpdate) {
         for (ChannelEventSubscriptionListener listener : mChannelEventSubscriptionListeners) {
             listener.onChannelEvent(channelEventUpdate);
@@ -1592,13 +1565,11 @@ public class Wallet {
         mChannelEventSubscriptionListeners.remove(listener);
     }
 
-    public interface ChannelEventSubscriptionListener {
-        void onChannelEvent(ChannelEventUpdate channelEventUpdate);
-    }
-
-
-    // Event handling to notify all listeners registered to channel backups.
-
+    /**
+     * Notify all listeners to channel backup updates.
+     *
+     * @param chanBackupSnapshot snapshot of channel backup
+     */
     private void broadcastChannelBackup(ChanBackupSnapshot chanBackupSnapshot) {
         for (ChannelBackupSubscriptionListener listener : mChannelBackupSubscriptionListeners) {
             listener.onChannelBackupEvent(chanBackupSnapshot);
@@ -1611,6 +1582,43 @@ public class Wallet {
 
     public void unregisterChannelBackuptSubscriptionListener(ChannelBackupSubscriptionListener listener) {
         mChannelBackupSubscriptionListeners.remove(listener);
+    }
+
+    public interface WalletLoadedListener {
+
+        int ERROR_LOCKED = 0;
+        int ERROR_INTERRUPTED = 1;
+        int ERROR_TIMEOUT = 2;
+        int ERROR_UNAVAILABLE = 3;
+        int ERROR_AUTHENTICATION = 4;
+
+        void onWalletLoadedUpdated(boolean success, int error);
+    }
+
+    public interface BalanceListener {
+        void onBalanceUpdated();
+    }
+
+    public interface InfoListener {
+        void onInfoUpdated(boolean connected);
+    }
+
+    public interface HistoryListener {
+        void onHistoryUpdated();
+    }
+
+    public interface InvoiceSubscriptionListener {
+        void onNewInvoiceAdded(Invoice invoice);
+
+        void onExistingInvoiceUpdated(Invoice invoice);
+    }
+
+    public interface TransactionSubscriptionListener {
+        void onTransactionEvent(TransactionDetails transactionDetails);
+    }
+
+    public interface ChannelEventSubscriptionListener {
+        void onChannelEvent(ChannelEventUpdate channelEventUpdate);
     }
 
     public interface ChannelBackupSubscriptionListener {

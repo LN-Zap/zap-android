@@ -43,6 +43,9 @@ The `master` branch will be used for all pull requests for the time being. This 
 
 This project has lint rules and pull requests should pass before being merged. The lint rules are not final by any means and can be changed if necessary.
 
+We also provide some code style rules within the project. Make sure your IDE is taking the provided files into consideration.
+If you are using IntelliJ or Android Studio, check out the following link for selecting the projects code style: [IntelliJ Code Style][codestyle]
 
 [issues]: https://github.com/LN-Zap/zap-android/issues
 [slack]: https://join.slack.com/t/zaphq/shared_invite/enQtMzgyNDA2NDI2Nzg0LTQwZWQ2ZWEzOWFhMjRiNWZkZWMwYTA4MzA5NzhjMDNhNTM5YzliNDA4MmZkZWZkZTFmODM4ODJkYzU3YmI3ZmI
+[codestyle]: https://www.jetbrains.com/help/idea/configuring-code-style.html

@@ -5,11 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.biometric.BiometricPrompt;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -19,14 +14,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.common.io.BaseEncoding;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import at.favre.lib.armadillo.Armadillo;
 import at.favre.lib.armadillo.PBKDF2KeyStretcher;
+import com.google.common.io.BaseEncoding;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
@@ -35,6 +28,9 @@ import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ScrambledNumpad;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UtilFunctions;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 public class PinEntryActivity extends BaseAppCompatActivity {
@@ -306,7 +302,6 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                     .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
 
-
             // ToDo: Remove if nobody has the old version installed. (Build number < 9)
             convertLegacyConnectionSettings();
 
@@ -371,11 +366,11 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
 
     // ToDo: Remove if nobody has the old version installed. (Build number < 9)
-    private void convertLegacyConnectionSettings(){
+    private void convertLegacyConnectionSettings() {
         int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER);
 
         // Switch the way how connection data is stored
-        if (ver < 16){
+        if (ver < 16) {
 
             boolean success = false;
             // Read the old connection settings
@@ -402,8 +397,8 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
             WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
             try {
-                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,"remote", connectionInfo[0],
-                        Integer.parseInt(connectionInfo[1]),connectionInfo[2], macaroon);
+                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME, "remote", connectionInfo[0],
+                        Integer.parseInt(connectionInfo[1]), connectionInfo[2], macaroon);
 
                 walletConfigsManager.apply();
 

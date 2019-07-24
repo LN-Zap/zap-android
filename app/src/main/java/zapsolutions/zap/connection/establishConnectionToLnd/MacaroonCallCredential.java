@@ -1,10 +1,10 @@
 package zapsolutions.zap.connection.establishConnectionToLnd;
 
-import java.util.concurrent.Executor;
-
 import io.grpc.CallCredentials;
 import io.grpc.Metadata;
 import io.grpc.Status;
+
+import java.util.concurrent.Executor;
 
 /**
  * This class is used to create macaroon CallCredentials for the gRPC calls.

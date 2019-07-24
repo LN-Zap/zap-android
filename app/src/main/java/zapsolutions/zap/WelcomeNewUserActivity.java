@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 
 public class WelcomeNewUserActivity extends BaseAppCompatActivity {

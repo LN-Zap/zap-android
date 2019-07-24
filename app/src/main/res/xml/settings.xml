@@ -69,8 +69,7 @@
         <Preference
             android:key="resetConfig"
             android:title="@string/settings_resetConnection"
-            app:iconSpaceReserved="false"/>
-
+            app:iconSpaceReserved="false" />
 
 
     </PreferenceCategory>
@@ -131,8 +130,8 @@
 
 
     <PreferenceCategory
-        android:title="Development"
         android:key="devCategory"
+        android:title="Development"
         app:iconSpaceReserved="false">
 
         <Preference

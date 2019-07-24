@@ -5,14 +5,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,18 +16,18 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import zapsolutions.zap.R;
+import zapsolutions.zap.SendActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
-import zapsolutions.zap.SendActivity;
 import zapsolutions.zap.util.Balances;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -510,7 +504,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
     }
 
-    public void showErrorAfterNotUnlocked(){
+    public void showErrorAfterNotUnlocked() {
         mWalletConnectedLayout.setVisibility(View.GONE);
         mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
         mLoadingWalletLayout.setVisibility(View.GONE);
@@ -518,13 +512,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvConnectError.setText(R.string.error_connection_wallet_locked);
     }
 
-    public void showBackgroundForWalletUnlock(){
+    public void showBackgroundForWalletUnlock() {
         mWalletConnectedLayout.setVisibility(View.GONE);
         mWalletNotConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.GONE);
     }
 
-    public void showLoadingForWalletUnlock(){
+    public void showLoadingForWalletUnlock() {
         mWalletConnectedLayout.setVisibility(View.GONE);
         mWalletNotConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.VISIBLE);
