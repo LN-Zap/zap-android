@@ -10,7 +10,7 @@ public class WalletConfigsJson {
     @SerializedName("connections")
     List<WalletConfig> mConnections;
 
-    WalletConfig getConnection(@NonNull String alias) {
+    public WalletConfig getConnection(@NonNull String alias) {
         for (WalletConfig walletConnectionConfig : mConnections) {
             if (walletConnectionConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
                 return walletConnectionConfig;
