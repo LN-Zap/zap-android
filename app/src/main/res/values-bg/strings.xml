@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- //////////////// Notice for translators ////////////////////
+
+    First of all, thanks for taking the time to translate this wallet!
+
+
+    Here are a few tips to help you while translating:
+
+    Parameters:
+    Some strings have parameters, which allows them to show different content.
+    Parameters look like this:   %1$s  ,  %2$d  ,  ...
+    Above every string with a parameter there is an explanation, what this parameter can be.
+    With this information you should be able to move the parameter to the correct place in your
+    translated string.
+
+
+    New line:
+    \n is used to make a new line.
+    Avoid putting a space before and after \n as this will lead to a space at the end and the
+    beginning of a line.
+    Correct example:  This is my first line.\nAnd this is my second.
+
+
+    Special Characters:
+    Escape every '  or  " you want to have in your text with a backslash.
+    Correct example:  I want to emphasize \"this\" and \'this\' word.
+
+    Escape every % with %
+    Correct example:   5 is 10%% of 50
+
+    &  =  &amp;
+    <  =  &lt;
+    >  =  &gt;
+
+    -->
+
+<resources>
+
+    <string name="ok">ОК</string>
+    <string name="cancel">Отказ</string>
+    <string name="lightning">Lightning</string>
+    <string name="onChain">On-Chain</string>
+    <string name="share">Сподели</string>
+    <string name="copy">Копирай</string>
+    <string name="paste">Постави</string>
+    <string name="showDetails">Покажи детайли</string>
+    <string name="details">Детайли</string>
+    <string name="amount">Количество</string>
+    <string name="memo">Бележка</string>
+    <string name="scanQRCode">Сканирай QR-код</string>
+    <string name="shareDialogTitle">Избери приложение</string>
+    <string name="yes">Да</string>
+    <string name="no">Не</string>
+    <string name="copied_to_clipboard">Копирано в клипборда</string>
+    <string name="send">Изпращане</string>
+    <string name="receive">Получаване</string>
+    <string name="optional">незадължително</string>
+    <string name="next">Напред</string>
+    <string name="coming_soon">Скоро...</string>
+    <string name="needHelp">Нужда от помощ?</string>
+    <string name="offline">офлайн</string>
+    <string name="sent">Изпратени</string>
+    <string name="received">Получени</string>
+    <string name="today">Днес</string>
+    <string name="yesterday">Вчера</string>
+    <string name="fee">Такса</string>
+    <string name="confirmExit">Наистина ли искате да излезете от Zap?</string>
+    <string name="or">или</string>
+    <string name="max_amount">Максимално Кол-во:</string>
+    <string name="retry">Нов опит</string>
+    <string name="loading">Зареждане</string>
+
+
+    <string name="activity_receive">Получаване</string>
+    <string name="activity_send">Изпращане</string>
+    <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
+    <string name="activity_manage_channels">Управление на Lightning канали</string>
+    <string name="activity_manage_wallets">Управление на портфейли</string>
+    <string name="activity_advanced_settings">Разширени настройки</string>
+    <string name="activity_channel_details">Детайли за канал</string>
+
+
+    <string name="navigation_wallet">Портфейл</string>
+    <string name="navigation_history">История</string>
+    <string name="navigation_settings">Настройки</string>
+
+
+    <string name="pin_create">Създайте ПИН</string>
+    <string name="pin_confirm">Потвърдете ПИН</string>
+    <string name="pin_enter">Въведете ПИН</string>
+    <string name="pin_enter_old">Въведете стария ПИН</string>
+    <string name="pin_enter_new">Въведете нов ПИН</string>
+    <string name="pin_confirm_new">Потвърдете новия ПИН</string>
+    <string name="pin_entered_wrong">Грешен ПИН</string>
+    <!-- Parameters for the following string are:  %1$s: Number of seconds to wait -->
+    <string name="pin_entered_wrong_wait">Изчакайте %1$s секунди.</string>
+
+
+    <string name="requested_payment">Заявено</string>
+    <string name="request_expired">Просрочено</string>
+    <string name="internal">Вътрешно</string>
+    <string name="opened_channel">Канал отворен</string>
+    <string name="closed_channel">Канал затворен</string>
+    <string name="filter_transactions">Филтриране на транзакции</string>
+    <string name="normal_payments">Нормални плащания</string>
+    <string name="expired_requests">Просрочени заявки</string>
+    <string name="no_transactions">Няма транзакции</string>
+
+
+    <string name="channel_capacity">Капацитет</string>
+    <string name="channel_local_balance">Вашият баланс</string>
+    <string name="channel_remote_balance">Чуждият баланс</string>
+    <string name="channel_no_alias">Без име</string>
+    <string name="channel_state_open">отворен</string>
+    <string name="channel_state_offline">офлайн</string>
+    <string name="channel_state_pending_open">отваря се</string>
+    <string name="channel_state_pending_closing">затваря се</string>
+    <string name="channel_state_pending_force_closing">форсирано се затваря</string>
+    <string name="channel_state_waiting_close">Изчакване за затваряне</string>
+    <string name="no_channels">Няма канали</string>
+
+
+    <string name="setup_connect_heading">Как искате да използвате Zap?</string>
+    <string name="setup_connect_local_description">Създаване на портфейл на този телефон</string>
+    <string name="setup_connect_local_button">Създаване на портфейл</string>
+    <string name="setup_connect_remote_description">Контролирайте дистанционно Вашия нод</string>
+    <string name="setup_connect_remote_button">Свързване към отдалечен нод</string>
+    <string name="setup_eula_heading">Условия</string>
+    <string name="setup_eula_explanation">Zap е безплатен, но за да го използвате, трябва да се съгласите с нашите условия:</string>
+    <string name="setup_eula_iAccept">Приемам</string>
+
+
+    <string name="demo_setupWalletBtn">Настрой портфейл</string>
+    <string name="demo_setupWalletFirst">Първо трябва да настроите портфейла си.</string>
+
+
+    <string name="send_lightningPayment">Изпрати lightning плащане</string>
+    <string name="send_onChainPayment">Изпрати on-chain плащане</string>
+    <string name="send_sendPayment">Изпращане на плащането</string>
+    <string name="send_success">Плащането\nуспешно</string>
+    <string name="send_fail">Плащането\nнеуспешно</string>
+
+
+    <string name="receive_generateRequest">Създай заявка</string>
+    <string name="receive_generateRequest_failed">Създаването на заявка неуспешно.</string>
+    <string name="receive_lightning_request">Lightning Заявка</string>
+    <string name="receive_on_chain_request">On-Chain Заявка</string>
+    <string name="receive_noActiveChannels">За да получавате Биткойн чрез lightning network, първо трябва да отворите канали.</string>
+    <string name="receive_noIncomeBalance">За да получавате Биткойн чрез ightning network, поне един от каналите Ви трябва да има чужд баланс.\n\nЗа да постигнете това, първо трябва да изхарчите някакви средства чрез lightning network\n\nВ секцията \"Управление на канали\" винаги може да проверите колко точно можете да получите или изпратите на момента чрез lightning network.</string>
+    <string name="receive_requestFullfilled">Фактурата\nплатена</string>
+
+
+    <string name="guardian_doNotShowAgain">Не показвай отново.</string>
+    <string name="guardian_Title">Внимание</string>
+    <string name="guardian_reset">Всички предупреждения за сигурността са отново активни.</string>
+    <!-- Parameters for the following string are:  %1$s: compare string -->
+    <string name="guardian_copyToClipboard_onChain">Ако копирате тези данни в клипборда, други приложения (включително злонамерени) ще могат да ги достигнат и модифицират.\n\nЗа да сте сигурни, че нищо не е променено при поставянето, сравнете началото с:\n\n%1$s\n</string>
+    <string name="guardian_copyToClipboard_lightning">Ако копирате тези данни в клипборда, други приложения (включително злонамерени) ще могат да ги достигнат и модифицират.\n\nЗа да сте сигурни, че нищо не е променено при поставянето, сравнете края с:\n\n%1$s\n</string>
+    <string name="guardian_pasteFromClipboard">Винаги проверявайте последните 3-5 знака, когато поставяте от клипборда. Злонамерено приложение може да е променило адреса без Вие да сте забелязали.</string>
+    <string name="guardian_disableScrambledPin"> Ако ПИН-ът Ви не е разбъркан е лесно той да бъде познат само като се наблюдават движенията на пръстите Ви.</string>
+    <string name="guardian_disableScreenProtection">Ако разрешите записване на екрана, злонамерен софтуер  би могъл да запише видео или да заснеме екрана Ви докато използвате Zap. Препоръчваме да деактивирате това само докато искате да запишете видео или да правите скрийншотове.</string>
+    <!-- Parameters for the following string are:  %1$s%%: % of transaction value. E.g: 13.2% -->
+    <string name="guardian_highOnChainFee">На път сте да платите %1$s%% в такси към копачите.\n\nВъзможни решения:\n- опитайте lightning плащане вместо това\n- изберете по-ниска такса и чакайте по-дълго\n- опитайте по-късно\n- транзактирайте с по-голямо кол-во\n\nИскате ли да продължите въпреки това?</string>
+    <!-- Parameters for the following string are:  %1$s: Number of hours. E.g: 7.5 -->
+    <string name="guardian_oldExchangeRate">Вие сте заявили кол-во във фиат, но данните за курса са стари (получени преди %1$s часа).\nУверете се, че имате Интернет връзка или обмислете възможността да заявите директно в Биткойн.\n\nИскате ли да продължите въпреки това?</string>
+    <string name="guardian_tooMuchMoney">Поздравления, изглежда имате голямо количество биткойни!\n Моля имайте предвид, че Zap е Hot Wallet.\n Правим всичко възможно, за да поддържаме този портфейл сигурен, но за всеки случай Ви препоръчваме да използвате Cold Wallets или хардуерни портфейли, за да съхранявате спестяванията си.</string>
+    <string name="guardian_notReadyForMainnet">Вие сте на MAINNET с истински Биткойн!\nZap Android е в ранна фаза на разработка. Може да загубите средства!\n\n Ако не искате да поемете този риск, превключете на testnet междувременно.</string>
+    <string name="guardian_remoteConnect">Сигурни ли сте, че искате да се свържете с\n\n%1$s\n\nМоля проверете адреса внимателно.</string>
+
+
+    <string name="settings_category_general">Общи</string>
+    <string name="settings_category_security">Сигурност</string>
+    <string name="settings_category_help">Помощ</string>
+    <string name="settings_category_advanced">Разширени</string>
+    <string name="settings_btcUnit">Биткойн единица</string>
+    <string name="settings_currency">Втора единица</string>
+    <string name="settings_language">Език</string>
+    <string name="settings_hapticPin">Осезаема ПИН обратна връзка</string>
+
+    <string-array name="settings_language_displayValues">
+        <item>Системен Език</item>
+        <item>Английски</item>
+    </string-array>
+
+    <string name="settings_manageChannels">Управление на lightning канали</string>
+    <string name="settings_resetConnection">Нулирай конфигурацията на отдалечения нод</string>
+    <string name="settings_changePin">Смяна на ПИН</string>
+    <string name="settings_scramblePin">Разбъркване на ПИН Екрана</string>
+    <string name="settings_preventScreenRecording">Забраняване записването на екрана</string>
+    <string name="settings_hideTotalBalance">Скриване на баланса</string>
+    <string name="settings_hideTotalBalance_explanation">Когато е активирано, чукнете на логото на началния екран, за да видите баланса си.</string>
+    <string name="settings_resetSecurityWarnings">Нулиране на Предупрежденията за Сигурност</string>
+    <string name="settings_help">Нужда от помощ?</string>
+    <string name="settings_reportIssue">Докладване на проблем</string>
+    <string name="settings_about">За Zap</string>
+    <string name="settings_advanced_settings">Разширени настройки</string>
+    <string name="settings_restartRequired">Zap ще бъде рестартиран, за да направи тази промяна. Искате ли да продължите?</string>
+    <string name="settings_enableBiometrics">Включване на Биометрична Автентикация</string>
+
+
+    <string name="settings_blockExplorer">Block Explorer</string>
+    <string name="settings_addressType">Биткойн тип на адреса</string>
+
+    <string-array name="settings_receiveAddressDisplayValues">
+        <item>Compatibility (P2PSH)</item>
+        <item>Native (Bech32)</item>
+    </string-array>
+
+    <string name="settings_lnRequestExpiryTitle">Срок за Lightning заявка</string>
+
+    <string-array name="settings_lnRequestExpiryDisplayValues">
+        <item>10 минути</item>
+        <item>30 минути</item>
+        <item>1 час</item>
+        <item>6 часа</item>
+        <item>24 часа</item>
+    </string-array>
+
+
+    <string name="error">Грешка</string>
+    <string name="error_blockExplorer_title">Block Explorer</string>
+    <!-- Parameters for the following string are:  %1$s: Name of selected block explorer, %2$s: "mainnet" or "testnet" -->
+    <string name="error_blockExplorer_message">"Избраният от Вас block explorer (%1$s) не поддържа %2$s. \nМоля отидете в настройки и изберете друг, за да продължите."</string>
+    <string name="error_notAPaymentRequest">Невалидна информация за плащане.\n\nМоля използвайте Биткойн адрес или Lightning заявка, за да започнете плащане.</string>
+    <string name="error_paymentRequestExpired">Тази заявка за плащане е изтекла.</string>
+    <string name="error_useTestnetRequest">Свързани сте с TESTNET. Моля използвайте TESTNET адреси или заявки за плащания.</string>
+    <string name="error_useMainnetRequest">Свързани сте с MAINNET. Моля използвайте MAINNET адреси или заявки за плащания.</string>
+    <string name="error_cameraPermissionRequired">За да сканирате QR-кодове трябва да разрешите на Zap да използва камерата.</string>
+    <string name="error_emptyClipboardPayment">Клипбордът Ви не съдържа никакви данни за плащания.</string>
+    <string name="error_emptyClipboardConnect">Клипбордът Ви не съдържа никакви данни за свързване.</string>
+    <string name="error_qr_code_result_null">Неуспешно четене на QR-Код, моля опитайте отново.</string>
+    <string name="error_connection_unsupported_format">Неподдържан формат за свързване.\nМоля използвайте някой от следните формати:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Сървър връзка (config=...)\n- Пълното съдържание на Вашия BTCPay Сървър config файл</string>
+    <string name="error_unableToFetchBTCPayConfig">Неуспешно извеждане на конфигурация от BTCPay Сървър.</string>
+    <string name="error_connection_invalidLndConnectString">Невалиден lndconnect string.\nМоля уверете се, че използвате следния формат:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalid_certificate">Сертификатът е невалиден.</string>
+    <string name="error_connection_no_macaroon">Вашата информация за свързване не съдържа macaroon. Това е задължително.</string>
+    <string name="error_connection_invalid_macaroon">Мacaroon-ът е невалиден.</string>
+    <string name="error_connection_invalid_host_or_port">Избраният хост или порт е невалиден.</string>
+    <string name="error_connection_invalid_macaroon2">Достъп отказан!\n\nMacaroon-ът е невалиден.</string>
+    <string name="error_connection_server_unreachable">Таймаут.\nСървърът не отговаря.\n\n- Моля уверете се, че имате добра Интернет връзка.\n\n- Моля уверете се, че сървърът работи и все още има следното IP:\n\n%1$s</string>
+    <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.\n\n- Уверете се, че LND deamon-ът работи на сървъра Ви.\n\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)\n\n- Уверете се, че сертификатът Ви е валиден.</string>
+    <string name="error_connection_wallet_locked">Моля отключете портфейла.</string>
+    <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
+    <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
+    <string name="error_wrong_password">Грешна парола</string>
+
+    <plurals name="duration_minute">
+        <item quantity="one">Минута</item>
+        <item quantity="other">Минути</item>
+    </plurals>
+
+    <plurals name="duration_hour">
+        <item quantity="one">Час</item>
+        <item quantity="other">Часа</item>
+    </plurals>
+    <plurals name="duration_day">
+        <item quantity="one">Ден</item>
+        <item quantity="other">Дни</item>
+    </plurals>
+
+    <string name="fee_tier_slow_title">Бавно</string>
+    <string name="fee_tier_medium_title">Средно</string>
+    <string name="fee_tier_fast_title">Бързо</string>
+    <string name="fee_tier_slow_description">Бавна Транзакция</string>
+    <string name="fee_tier_medium_description">Средно-бърза транзакция</string>
+    <string name="fee_tier_fast_description">Бърза Транзакция</string>
+    <string name="fee_estimated_duration">Очаквано пристигане: %1$d %2$s</string>
+    <string name="fee_not_available">N/A</string>
+
+    <string name="unlock_wallet">Отключете портфейла</string>
+
+    
+    <string name="biometricPrompt_title">Биометрична автентикация</string>
+
+</resources>
