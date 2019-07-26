@@ -16,5 +16,5 @@
 
 New strings are added constantly. To keep in sync, save a copy of the english version when you are done with your translation.
 The next time you want to update your translation, compare the current english version with your previously saved english version with a diff tool of your choice.
-This way you can immediatelly see what has changed since your last translation and adapt your translation accordingly.
+This way you can immediately see what has changed since your last translation and adapt your translation accordingly.
 Finally, submit a pull request of your updated file and save a new copy of the current english version for your next update.
