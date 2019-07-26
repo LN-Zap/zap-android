@@ -48,7 +48,6 @@
     <string name="details">Details</string>
     <string name="amount">Betrag</string>
     <string name="memo">Verwendungszweck</string>
-    <string name="scanQRCode">QR-Code scannen</string>
     <string name="shareDialogTitle">App auswählen</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
@@ -70,10 +69,11 @@
     <string name="max_amount">Maximaler Betrag:</string>
     <string name="retry">Nochmal versuchen</string>
     <string name="loading">Lädt</string>
+    <string name="pay">Bezahlen</string>
 
 
     <string name="activity_receive">Empfangen</string>
-    <string name="activity_send">Senden</string>
+    <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
     <string name="activity_manage_channels">Lightning-Kanäle verwalten</string>
     <string name="activity_manage_wallets">Wallets Verwalten</string>
@@ -126,6 +126,7 @@
     <string name="setup_connect_local_button">Wallet erstellen</string>
     <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
+    <string name="setup_connect_scan_connection_info">Verbindungsdaten scannen</string>
     <string name="setup_eula_heading">Bedingungen</string>
     <string name="setup_eula_explanation">Zap ist komplett kostenlos. Trotzdem musst du unseren Nutzungsbedingungen zustimmen:</string>
     <string name="setup_eula_iAccept">Ich akzeptiere</string>
@@ -140,6 +141,7 @@
     <string name="send_sendPayment">Zahlung senden</string>
     <string name="send_success">Zahlung\nerfolgreich</string>
     <string name="send_fail">Zahlung\nfehlgeschlagen</string>
+    <string name="send_scan_info">Zahlungsanfrage scannen</string>
 
 
     <string name="receive_generateRequest">Anfrage generieren</string>

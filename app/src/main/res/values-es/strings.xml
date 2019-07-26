@@ -92,7 +92,6 @@
     <string name="received">Recibido</string>
     <string name="request_expired">Vencido</string>
     <string name="requested_payment">Solicitado</string>
-    <string name="scanQRCode">Escanea el código QR</string>
     <string name="send">Enviar</string>
     <string name="send_fail">Pago fallido</string>
     <string name="send_lightningPayment">Enviar pago relámpago</string>
