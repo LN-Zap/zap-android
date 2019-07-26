@@ -305,10 +305,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
     private CharSequence[] joinCharSequenceArrays(CharSequence[] first, CharSequence[] second) {
-        List<CharSequence> both = new ArrayList<CharSequence>(first.length + second.length);
-        Collections.addAll(both, first);
-        Collections.addAll(both, second);
-        return both.toArray(new CharSequence[both.size()]);
+        try {
+            List<CharSequence> both = new ArrayList<CharSequence>(first.length + second.length);
+            Collections.addAll(both, first);
+            Collections.addAll(both, second);
+            return both.toArray(new CharSequence[both.size()]);
+        } catch (NullPointerException e) {
+            // No exchange rate has been fetched so far. This could happen if the app was started for the first time
+            // without internet. Or if the user blocks connection to blockchain.info for example.
+            return first;
+        }
     }
 
     private void createSecondCurrencyList() {
