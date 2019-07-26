@@ -1,6 +1,8 @@
 package zapsolutions.zap.setup;
 
 import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -8,12 +10,17 @@ import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import com.android.volley.Request;
@@ -32,6 +39,7 @@ import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 import zapsolutions.zap.util.PermissionsUtil;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.ZapLog;
@@ -42,6 +50,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;
     private UserGuardian mUG;
+    private InputMethodManager mInputMethodManager;
+    private String mWalletName = "";
 
     @Override
     public void onCreate(Bundle state) {
@@ -49,7 +59,14 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         setContentView(R.layout.activity_qr_code_connect);
         setupToolbar();
 
+        mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
+
+        // Receive data from last activity
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mWalletName = extras.getString("walletAlias", "");
+        }
 
         // Action when clicked on "paste"
         Button btnPaste = findViewById(R.id.scannerPaste);
@@ -185,10 +202,25 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         mUG = new UserGuardian(this, DialogName -> {
             if (UserGuardian.REMOTE_CONNECT.equals(DialogName)) {
                 // Connect using the supplied configuration
-                connect(remoteConfiguration);
+                checkWalletName(remoteConfiguration);
             }
         });
         mUG.securityConnectToRemoteServer(remoteConfiguration.getHost());
+    }
+
+    private void checkWalletName(RemoteConfiguration remoteConfiguration) {
+        if (WalletConfigsManager.getInstance().hasAtLeastOneConfig()) {
+            if (mWalletName.equals("")) {
+                showWalletNameInput(remoteConfiguration);
+            } else {
+                connect(remoteConfiguration);
+            }
+        } else {
+            // We don't want to show the wallet name input for the first wallet that is created.
+            mWalletName = WalletConfigsManager.DEFAULT_WALLET_NAME;
+            connect(remoteConfiguration);
+
+        }
     }
 
     private void connect(RemoteConfiguration config) {
@@ -201,22 +233,26 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConfig = (LndConnectConfig) config;
 
-                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
-                        "remote", lndConfig.getHost(), lndConfig.getPort(),
+                walletConfigsManager.addWalletConfig(mWalletName,
+                        WalletConfigsManager.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
                         lndConfig.getCert(), lndConfig.getMacaroon());
 
                 walletConfigsManager.apply();
+
+                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, mWalletName).commit();
 
                 success = true;
 
             } else if (config instanceof BTCPayConfig) {
                 BTCPayConfig btcPayConfig = (BTCPayConfig) config;
 
-                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
-                        "remote", btcPayConfig.getHost(), btcPayConfig.getPort(),
+                walletConfigsManager.addWalletConfig(mWalletName,
+                        WalletConfigsManager.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
                         null, btcPayConfig.getMacaroon());
 
                 walletConfigsManager.apply();
+
+                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, mWalletName).commit();
 
                 success = true;
 
@@ -312,6 +348,50 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
                 }
             }
         }
+    }
+
+    private void showWalletNameInput(RemoteConfiguration remoteConfiguration) {
+        // Show unlock dialog
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle("Wallet Name");
+        adb.setCancelable(false);
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_input_text, null, false);
+
+        final EditText input = viewInflated.findViewById(R.id.input);
+        input.setShowSoftInputOnFocus(true);
+        input.requestFocus();
+
+
+        mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        adb.setView(viewInflated);
+
+        adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (WalletConfigsManager.getInstance().doesWalletConfigExist(input.getText().toString())) {
+                    Toast.makeText(ConnectRemoteNodeActivity.this, "This name already exists.", Toast.LENGTH_LONG).show();
+                    mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    showWalletNameInput(remoteConfiguration);
+                } else {
+                    mWalletName = input.getText().toString();
+                    connect(remoteConfiguration);
+                    mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    dialog.dismiss();
+                }
+            }
+        });
+        adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                dialog.cancel();
+            }
+        });
+
+        adb.show();
+
     }
 
 }

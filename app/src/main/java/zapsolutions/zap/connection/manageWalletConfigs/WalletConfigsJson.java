@@ -12,12 +12,16 @@ public class WalletConfigsJson {
 
     public WalletConfig getConnection(@NonNull String alias) {
         for (WalletConfig walletConnectionConfig : mConnections) {
-            if (walletConnectionConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
+            if (walletConnectionConfig.getAlias().equals(alias)) {
                 return walletConnectionConfig;
             }
         }
 
         return null;
+    }
+
+    public List<WalletConfig> getConnections() {
+        return mConnections;
     }
 
     boolean doesWalletConfigExist(String alias) {
@@ -65,7 +69,7 @@ public class WalletConfigsJson {
     private int getWalletIndex(@NonNull String alias) {
         int tempIndex = -1;
         for (WalletConfig tempConfig : mConnections) {
-            if (tempConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
+            if (tempConfig.getAlias().equals(alias)) {
                 tempIndex = mConnections.indexOf(tempConfig);
                 break;
             }

@@ -19,6 +19,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This SINGLETON class is used to load and save configurations for wallets.
@@ -29,9 +32,13 @@ import java.security.cert.CertificateException;
 public class WalletConfigsManager {
 
     public static final String DEFAULT_WALLET_NAME = "Default Wallet";
+    public static final String WALLET_TYPE_LOCAL = "local";
+    public static final String WALLET_TYPE_REMOTE = "remote";
     private static final String LOG_TAG = WalletConfigsManager.class.getName();
     private static WalletConfigsManager mInstance;
     private WalletConfigsJson mWalletConfigsJson;
+
+    private String mConnectionToModify;
 
     private WalletConfigsManager() {
 
@@ -89,6 +96,7 @@ public class WalletConfigsManager {
             return false;
         }
     }
+
 
     public WalletConfigsJson getWalletConfigsJson() {
         return mWalletConfigsJson;
@@ -166,6 +174,39 @@ public class WalletConfigsManager {
         return mWalletConfigsJson.getConnection(alias);
     }
 
+    /**
+     * Returns a List of all wallet configs sorted alphabetically. The current wallet config
+     * is always on top though.
+     *
+     * @param activeOnTop if true the currently active wallet is on top, ignoring alphabetical order.
+     * @return
+     */
+    public List<WalletConfig> getAllWalletConfigs(boolean activeOnTop) {
+        List<WalletConfig> sortedList = new ArrayList<>();
+        sortedList.addAll(mWalletConfigsJson.getConnections());
+
+        if (sortedList.size() > 1) {
+            // Sort the list alphabetically
+            Collections.sort(sortedList);
+
+            // Move the current config to top
+            if (activeOnTop) {
+                int index = -1;
+                for (WalletConfig tempConfig : sortedList) {
+                    if (tempConfig.getAlias().equals(PrefsUtil.getCurrentWalletConfig())) {
+                        index = sortedList.indexOf(tempConfig);
+                        break;
+                    }
+                }
+
+                WalletConfig currentConfig = sortedList.get(index);
+                sortedList.remove(index);
+                sortedList.add(0, currentConfig);
+            }
+        }
+
+        return sortedList;
+    }
 
     /**
      * Renames the desired wallet config.
@@ -185,6 +226,18 @@ public class WalletConfigsManager {
      */
     public boolean removeWalletConfig(@NonNull String alias) {
         return mWalletConfigsJson.removeConnection(alias);
+    }
+
+    public boolean hasAtLeastOneConfig() {
+        return mWalletConfigsJson.getConnections().size() != 0;
+    }
+
+    public WalletConfig getConnectionToModify() {
+        return getWalletConfig(mConnectionToModify);
+    }
+
+    public void setConnectionToModify(String alias) {
+        mConnectionToModify = alias;
     }
 
     /**

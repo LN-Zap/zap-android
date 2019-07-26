@@ -2,7 +2,7 @@ package zapsolutions.zap.connection.manageWalletConfigs;
 
 import zapsolutions.zap.connection.RemoteConfiguration;
 
-public class WalletConfig extends RemoteConfiguration {
+public class WalletConfig extends RemoteConfiguration implements Comparable<WalletConfig> {
 
     private String alias;
     private String type;
@@ -33,4 +33,9 @@ public class WalletConfig extends RemoteConfiguration {
         this.cert = cert;
     }
 
+    @Override
+    public int compareTo(WalletConfig walletConfig) {
+        WalletConfig other = walletConfig;
+        return this.getAlias().compareTo(other.getAlias());
+    }
 }

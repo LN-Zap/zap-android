@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="zapsolutions.zap.walletManagement.WalletDetails">
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:id="@+id/detailsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show some detailed connection infos..." />
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@id/detailsText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/buttonActivate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch to wallet" />
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@id/buttonActivate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/buttonRename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rename" />
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@id/buttonRename"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/buttonChangeConnection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Connection" />
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@id/buttonChangeConnection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete" />
+</androidx.constraintlayout.widget.ConstraintLayout>

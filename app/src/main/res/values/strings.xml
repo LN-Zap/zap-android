@@ -79,6 +79,7 @@
     <string name="activity_manage_wallets">Manage Wallets</string>
     <string name="activity_advanced_settings">Advanced Settings</string>
     <string name="activity_channel_details">Channel Details</string>
+    <string name="activity_wallet_details">Wallet Details</string>
 
 
     <string name="navigation_wallet">Wallet</string>

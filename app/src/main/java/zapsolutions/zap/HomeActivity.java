@@ -63,6 +63,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mWalletLoadedListenerRegistered;
     private boolean mMainnetWarningShownOnce;
     private boolean mIsFirstUnlockAttempt = true;
+    private boolean mIsWalletSwitch = false;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -236,10 +237,25 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopListenersAndSchedules();
 
-        // Remove observer to detect if app goes to background
+        if (!mIsWalletSwitch) {
+            stopListenersAndSchedules();
+
+            // Remove observer to detect if app goes to background
+            ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
+        }
+        mIsWalletSwitch = false;
+    }
+
+    /**
+     * This function has to be called if a wallet switch is initiated from the home activity.
+     * Without this function the OnDestroy event is called AFTER the home activity was restarted, resulting in a closure of the
+     * LND connection and termination of all listeners.
+     */
+    public void prepareWalletSwitch() {
+        stopListenersAndSchedules();
         ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
+        mIsWalletSwitch = true;
     }
 
     private void stopListenersAndSchedules() {
@@ -381,8 +397,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        InputMethodManager inputMethodManager = (InputMethodManager) HomeActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                         ((WalletFragment) mCurrentFragment).showErrorAfterNotUnlocked();
                         mIsFirstUnlockAttempt = true;
                         dialog.cancel();

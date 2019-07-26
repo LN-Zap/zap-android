@@ -396,10 +396,10 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                     macaroon = BaseEncoding.base16().encode(macaroonBytes);
                 }
 
-                WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
-                try {
-                    walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME, "remote", connectionInfo[0],
-                            Integer.parseInt(connectionInfo[1]), connectionInfo[2], macaroon);
+            WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
+            try {
+                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME, WalletConfigsManager.WALLET_TYPE_REMOTE, connectionInfo[0],
+                        Integer.parseInt(connectionInfo[1]), connectionInfo[2], macaroon);
 
                     walletConfigsManager.apply();
                     PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME).commit();

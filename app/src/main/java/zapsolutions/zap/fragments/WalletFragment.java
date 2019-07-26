@@ -26,6 +26,7 @@ import zapsolutions.zap.SendActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
+import zapsolutions.zap.customView.WalletSpinner;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.Balances;
@@ -62,6 +63,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
     private TextView mTvConnectError;
+    private WalletSpinner mSpWallet;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -101,10 +103,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mWalletNotConnectedLayout = view.findViewById(R.id.ConnectionError);
         mLoadingWalletLayout = view.findViewById(R.id.loading);
         mTvConnectError = view.findViewById(R.id.connectError);
+        mSpWallet = view.findViewById(R.id.walletSpinner);
 
         // Show loading screen
         mWalletConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.VISIBLE);
+        mSpWallet.setVisibility(View.GONE);
 
         mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -430,6 +434,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         }
 
+
+        // Remove the comment to activate multi wallet support
+        //mSpWallet.setVisibility(View.VISIBLE);
     }
 
     @Override

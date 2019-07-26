@@ -117,16 +117,33 @@ public class Wallet {
     }
 
     /**
-     * Use this to reset the wallet information when the connection type was changed.
+     * Use this to reset the wallet information when the wallet was switched.
      */
     public void reset() {
         mPaymentRequest = null;
+        mPaymentRequestString = "";
         mOnChainBalanceTotal = 0;
         mOnChainBalanceConfirmed = 0;
         mOnChainBalanceUnconfirmed = 0;
         mChannelBalance = 0;
         mChannelBalancePendingOpen = 0;
         mChannelBalanceLimbo = 0;
+
+        mOnChainTransactionList = null;
+        mInvoiceList = null;
+        mTempInvoiceUpdateList = null;
+        mPaymentsList = null;
+        mOpenChannelsList = null;
+        mPendingOpenChannelsList = null;
+        mPendingClosedChannelsList = null;
+        mPendingForceClosedChannelsList = null;
+        mPendingWaitingCloseChannelsList = null;
+
+        mConnectionCheckInProgress = false;
+        mTransactionUpdated = false;
+        mInvoicesUpdated = false;
+        mPaymentsUpdated = false;
+        mUpdatingHistory = false;
 
         mInfoFetched = false;
         mSyncedToChain = false;

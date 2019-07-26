@@ -19,6 +19,7 @@ public class SetupActivity extends BaseAppCompatActivity {
     public static final int FULL_SETUP = 0;
     public static final int CHANGE_PIN = 1;
     public static final int CHANGE_CONNECTION = 2;
+    public static final int ADD_WALLET = 3;
 
     private static final String LOG_TAG = SetupActivity.class.getName();
 
@@ -50,6 +51,9 @@ public class SetupActivity extends BaseAppCompatActivity {
                 break;
             case CHANGE_CONNECTION:
                 showEnterPin();
+                break;
+            case ADD_WALLET:
+                showConnectChoice();
                 break;
         }
     }
@@ -128,7 +132,11 @@ public class SetupActivity extends BaseAppCompatActivity {
     }
 
     private void showConnectChoice() {
-        changeFragment(new ConnectFragment());
+        if (mSetupMode == CHANGE_CONNECTION){
+            changeFragment(ConnectFragment.newInstance(ConnectFragment.MODE_MODIFY));
+        } else {
+            changeFragment(ConnectFragment.newInstance(ConnectFragment.MODE_ADD));
+        }
     }
 
     private void changeFragment(Fragment fragment) {

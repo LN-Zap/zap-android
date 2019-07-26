@@ -23,6 +23,7 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -120,7 +121,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        /*
+        /* Uncomment this for multi wallet support
         // Action when clicked on "Manage wallets"
         final Preference prefManageWallets = findPreference("manageWallets");
         prefManageWallets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -144,13 +145,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-
+        /* Comment this out when multi wallet support is activated.*/
         // Action when clicked on "reset connection settings"
         final Preference prefResetConfig = findPreference("resetConfig");
         prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (PrefsUtil.isWalletSetup()) {
+                    WalletConfigsManager.getInstance().setConnectionToModify(PrefsUtil.getCurrentWalletConfig());
                     Intent intent = new Intent(getActivity(), SetupActivity.class);
                     intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
                     startActivity(intent);

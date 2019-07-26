@@ -87,6 +87,11 @@
             android:label="@string/activity_channel_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".walletManagement.WalletDetails"
+            android:label="@string/activity_wallet_details"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
     </application>
 
 </manifest>

@@ -76,9 +76,10 @@
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
     <string name="activity_manage_channels">Lightning-Kanäle verwalten</string>
-    <string name="activity_manage_wallets">Wallets Verwalten</string>
+    <string name="activity_manage_wallets">Wallets verwalten</string>
     <string name="activity_advanced_settings">Erweiterte Einstellungen</string>
     <string name="activity_channel_details">Kanal Details</string>
+    <string name="activity_wallet_details">Wallet Details</string>
 
 
     <string name="navigation_wallet">Wallet</string>
