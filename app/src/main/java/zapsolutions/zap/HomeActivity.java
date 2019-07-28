@@ -47,7 +47,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         SharedPreferences.OnSharedPreferenceChangeListener,
         Wallet.InfoListener, Wallet.WalletLoadedListener, UserGuardianInterface {
 
-    private static final String LOG_TAG = "Main Activity";
+    private static final String LOG_TAG = HomeActivity.class.getName();
 
     private UserGuardian mUG;
     private InputMethodManager mInputMethodManager;

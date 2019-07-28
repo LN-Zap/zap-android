@@ -42,7 +42,7 @@ import java.util.List;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private static final String LOG_TAG = "Settings";
+    private static final String LOG_TAG = SettingsFragment.class.getName();
 
     private SwitchPreference mSwHideTotalBalance;
     private ListPreference mListCurrency;

@@ -127,9 +127,6 @@
     <string name="setup_connect_remote_description">Remote control your own node.</string>
     <string name="setup_connect_remote_button">Connect to Remote Node</string>
     <string name="setup_connect_scan_connection_info">Scan connection data</string>
-    <string name="setup_eula_heading">Conditions</string>
-    <string name="setup_eula_explanation">Zap is completely free. However, to use it, you have to accept our terms:</string>
-    <string name="setup_eula_iAccept">I accept</string>
 
 
     <string name="demo_setupWalletBtn">Setup Wallet</string>

@@ -12,7 +12,7 @@ import zapsolutions.zap.util.UserGuardian;
 
 public class AdvancedSettingsFragment extends PreferenceFragmentCompat implements UserGuardianInterface {
 
-    private static final String LOG_TAG = "Advanced Settings";
+    private static final String LOG_TAG = AdvancedSettingsFragment.class.getName();
     private UserGuardian mUG;
     private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwScreenProtection;

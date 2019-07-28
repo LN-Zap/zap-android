@@ -30,7 +30,7 @@ import zapsolutions.zap.util.Wallet;
 
 public class GeneratedRequestActivity extends BaseAppCompatActivity implements UserGuardianInterface, Wallet.InvoiceSubscriptionListener {
 
-    private static final String LOG_TAG = "Generated Request Activity";
+    private static final String LOG_TAG = GeneratedRequestActivity.class.getName();
 
     private UserGuardian mUG;
     private String mDataToEncode;

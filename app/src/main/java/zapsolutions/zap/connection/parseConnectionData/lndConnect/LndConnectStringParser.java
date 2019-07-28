@@ -26,7 +26,7 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
     public static final int ERROR_INVALID_CERTIFICATE = 2;
     public static final int ERROR_INVALID_MACAROON = 3;
     public static final int ERROR_INVALID_HOST_OR_PORT = 4;
-    private static final String LOG_TAG = "LND connect string parser";
+    private static final String LOG_TAG = LndConnectStringParser.class.getName();
 
     public LndConnectStringParser(String connectString) {
         super(connectString);

@@ -57,7 +57,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ReceiveBSDFragment extends BottomSheetDialogFragment implements UserGuardianInterface {
 
-    private static final String LOG_TAG = "Receive Activity";
+    private static final String LOG_TAG = ReceiveBSDFragment.class.getName();
 
     private View mBtnLn;
     private View mBtnOnChain;

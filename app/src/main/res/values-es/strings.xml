@@ -127,9 +127,6 @@
     <string name="setup_connect_local_description">Crear una billetera en este dispositivo.</string>
     <string name="setup_connect_remote_button">Conectarse a un Nodo Remoto.</string>
     <string name="setup_connect_remote_description">Control remoto a su propio nodo.</string>
-    <string name="setup_eula_explanation">Zap es completamente gratis. Sin embargo, para usarlo, tienes que aceptar nuestros términos:</string>
-    <string name="setup_eula_heading">Condiciones</string>
-    <string name="setup_eula_iAccept">Acepto</string>
     <string name="share">Compartir</string>
     <string name="shareDialogTitle">Elegir App</string>
     <string name="showDetails">Mostrar detalles</string>

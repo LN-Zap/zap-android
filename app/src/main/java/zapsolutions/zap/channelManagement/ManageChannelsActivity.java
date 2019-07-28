@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ManageChannelsActivity extends BaseAppCompatActivity {
 
-    private static final String LOG_TAG = "Manage Channels Activity";
+    private static final String LOG_TAG = ManageChannelsActivity.class.getName();
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;

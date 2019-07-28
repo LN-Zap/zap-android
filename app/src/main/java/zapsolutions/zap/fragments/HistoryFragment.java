@@ -44,7 +44,7 @@ import java.util.Locale;
  */
 public class HistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String LOG_TAG = "History Fragment";
+    private static final String LOG_TAG = HistoryFragment.class.getName();
 
     private ImageView mListOptions;
     private RecyclerView mRecyclerView;

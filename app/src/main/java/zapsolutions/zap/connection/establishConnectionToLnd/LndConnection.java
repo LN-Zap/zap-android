@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
  */
 public class LndConnection {
 
-    private static final String LOG_TAG = "LND Connection";
+    private static final String LOG_TAG = LndConnection.class.getName();
 
     private static LndConnection mLndConnectionInstance;
     private SSLSocketFactory mSSLFactory;
