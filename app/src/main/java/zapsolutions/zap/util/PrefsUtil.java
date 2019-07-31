@@ -26,6 +26,9 @@ public class PrefsUtil {
     public static final String PREFS_ENCRYPTED = "prefs_encrypted";
     public static final String WALLET_CONFIGS = "wallet_configs";
 
+    // default values
+    public static final String DEFAULT_FIAT_UNITS = "[]";
+
 
     // Access to default shared prefs
 

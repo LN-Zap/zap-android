@@ -305,15 +305,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
     private CharSequence[] joinCharSequenceArrays(CharSequence[] first, CharSequence[] second) {
-        try {
+        if (first == null && second == null) {
+            return null;
+        } else if (first == null) {
+            return second;
+        } else if (second == null) {
+            // No exchange rate has been fetched so far. This could happen if the app was started for the first time
+            // without internet. Or if the user blocks connection to the exchange rate provider for example.
+            return first;
+        } else {
             List<CharSequence> both = new ArrayList<CharSequence>(first.length + second.length);
             Collections.addAll(both, first);
             Collections.addAll(both, second);
             return both.toArray(new CharSequence[both.size()]);
-        } catch (NullPointerException e) {
-            // No exchange rate has been fetched so far. This could happen if the app was started for the first time
-            // without internet. Or if the user blocks connection to blockchain.info for example.
-            return first;
         }
     }
 
@@ -325,7 +329,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         CharSequence[] fiatEntryDisplayValue = null;
 
         try {
-            JSONObject jsonAvailableCurrencies = new JSONObject(PrefsUtil.getPrefs().getString("fiat_available", "[]"));
+            JSONObject jsonAvailableCurrencies = new JSONObject(PrefsUtil.getPrefs().getString("fiat_available", PrefsUtil.DEFAULT_FIAT_UNITS));
 
             JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
             fiatEntryValues = new CharSequence[currencies.length()];

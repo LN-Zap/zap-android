@@ -135,7 +135,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     (new Runnable() {
                         public void run() {
                             if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin() ||
-                                    PrefsUtil.getPrefs().getString("fiat_available", "[]").equals("[]")) {
+                                    PrefsUtil.getPrefs().getString("fiat_available", PrefsUtil.DEFAULT_FIAT_UNITS)
+                                            .equals(PrefsUtil.DEFAULT_FIAT_UNITS)) {
                                 ZapLog.debug(LOG_TAG, "Fiat exchange rate request initiated");
                                 // Adding request to request queue
                                 HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
