@@ -329,7 +329,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         CharSequence[] fiatEntryDisplayValue = null;
 
         try {
-            JSONObject jsonAvailableCurrencies = new JSONObject(PrefsUtil.getPrefs().getString("fiat_available", PrefsUtil.DEFAULT_FIAT_UNITS));
+            JSONObject jsonAvailableCurrencies = new JSONObject(PrefsUtil.getPrefs().getString(PrefsUtil.AVAILABLE_FIAT_CURRENCIES, PrefsUtil.DEFAULT_FIAT_CURRENCIES));
 
             JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
             fiatEntryValues = new CharSequence[currencies.length()];
