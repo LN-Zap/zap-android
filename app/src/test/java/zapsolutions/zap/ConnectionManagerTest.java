@@ -62,7 +62,7 @@ public class ConnectionManagerTest {
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         WalletConfig result = manager.getWalletConfig("firstwalletname");
 
-        assertEquals("firstwalletname", result.getAlias().toLowerCase());
+        assertEquals("FirstWalletName", result.getAlias());
         assertEquals("remote", result.getType());
         assertEquals("TestHost", result.getHost());
         assertEquals(10009, result.getPort());
