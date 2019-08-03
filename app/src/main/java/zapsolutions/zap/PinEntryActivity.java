@@ -22,6 +22,7 @@ import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import com.google.common.io.BaseEncoding;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -401,6 +402,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                         Integer.parseInt(connectionInfo[1]), connectionInfo[2], macaroon);
 
                 walletConfigsManager.apply();
+                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME).commit();
 
                 success = true;
             } catch (Exception e) {

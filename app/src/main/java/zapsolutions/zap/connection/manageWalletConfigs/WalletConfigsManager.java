@@ -27,7 +27,7 @@ import java.security.cert.CertificateException;
  */
 public class WalletConfigsManager {
 
-    public static final String DEFAULT_WALLET_NAME = "DefaultWallet";
+    public static final String DEFAULT_WALLET_NAME = "Default Wallet";
     private static final String LOG_TAG = WalletConfigsManager.class.getName();
     private static WalletConfigsManager mInstance;
     private WalletConfigsJson mWalletConfigsJson;
@@ -104,7 +104,7 @@ public class WalletConfigsManager {
      * @return
      */
     public boolean doesWalletConfigExist(@NonNull String alias) {
-        return mWalletConfigsJson.doesWalletConfigExist(alias.toLowerCase());
+        return mWalletConfigsJson.doesWalletConfigExist(alias);
     }
 
 
@@ -125,7 +125,7 @@ public class WalletConfigsManager {
 
         // Create the config
         WalletConfig config = new WalletConfig();
-        config.setAlias(alias.toLowerCase());
+        config.setAlias(alias);
         config.setType(type);
         config.setHost(host);
         config.setPort(port);
@@ -145,7 +145,13 @@ public class WalletConfigsManager {
      * @return
      */
     public WalletConfig getCurrentWalletConfig() {
-        return getWalletConfig(PrefsUtil.getCurrentWalletConfig());
+        WalletConfig config = getWalletConfig(PrefsUtil.getCurrentWalletConfig());
+        if (config == null && mWalletConfigsJson.mConnections.size() > 0) {
+            PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, mWalletConfigsJson.mConnections.get(0).getAlias()).commit();
+            return mWalletConfigsJson.mConnections.get(0);
+        }
+        
+        return config;
     }
 
 

@@ -62,7 +62,7 @@ public class ConnectionManagerTest {
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         WalletConfig result = manager.getWalletConfig("firstwalletname");
 
-        assertEquals("firstwalletname", result.getAlias().toLowerCase());
+        assertEquals("FirstWalletName", result.getAlias());
         assertEquals("remote", result.getType());
         assertEquals("TestHost", result.getHost());
         assertEquals(10009, result.getPort());
@@ -129,6 +129,18 @@ public class ConnectionManagerTest {
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         String expected = new Gson().toJson(manager.getWalletConfigsJson());
         boolean renamed = manager.renameWalletConfig("test", "test2");
+        String result = new Gson().toJson(manager.getWalletConfigsJson());
+
+        assertFalse(renamed);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void givenExistingAlias_whenRenameToExitingWalletConfig_thenReturnFalse() {
+        String configJson = readStringFromFile("wallet_configs.json");
+        WalletConfigsManager manager = new WalletConfigsManager(configJson);
+        String expected = new Gson().toJson(manager.getWalletConfigsJson());
+        boolean renamed = manager.renameWalletConfig("FirstWalletName", "SecondWalletName");
         String result = new Gson().toJson(manager.getWalletConfigsJson());
 
         assertFalse(renamed);
