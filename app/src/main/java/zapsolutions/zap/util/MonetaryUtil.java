@@ -32,7 +32,7 @@ public class MonetaryUtil {
     private static final String BIT_UNIT = "bit";
     private static final String SATOSHI_UNIT = "sat";
 
-    private static final String LOG_TAG = "MonetaryUtil";
+    private static final String LOG_TAG = MonetaryUtil.class.getName();
 
     private static MonetaryUtil mInstance;
     private final Set<ExchangeRateListener> mExchangeRateListeners = new HashSet<>();

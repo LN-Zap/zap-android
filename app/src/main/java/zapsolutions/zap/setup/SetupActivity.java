@@ -20,7 +20,7 @@ public class SetupActivity extends BaseAppCompatActivity {
     public static final int CHANGE_PIN = 1;
     public static final int CHANGE_CONNECTION = 2;
 
-    private static final String LOG_TAG = "Setup Activity";
+    private static final String LOG_TAG = SetupActivity.class.getName();
 
     private Fragment mCurrentFragment = null;
     private FragmentTransaction mFt;
@@ -129,10 +129,6 @@ public class SetupActivity extends BaseAppCompatActivity {
 
     private void showConnectChoice() {
         changeFragment(new ConnectFragment());
-    }
-
-    private void showEula() {
-        changeFragment(new EulaFragment());
     }
 
     private void changeFragment(Fragment fragment) {

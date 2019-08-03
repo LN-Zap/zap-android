@@ -125,9 +125,6 @@
     <string name="setup_connect_local_button">Създаване на портфейл</string>
     <string name="setup_connect_remote_description">Контролирайте дистанционно Вашия нод</string>
     <string name="setup_connect_remote_button">Свързване към отдалечен нод</string>
-    <string name="setup_eula_heading">Условия</string>
-    <string name="setup_eula_explanation">Zap е безплатен, но за да го използвате, трябва да се съгласите с нашите условия:</string>
-    <string name="setup_eula_iAccept">Приемам</string>
 
 
     <string name="demo_setupWalletBtn">Настрой портфейл</string>

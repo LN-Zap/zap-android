@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 public class AppUtil {
 
-    private static final String LOG_TAG = "AppUtil";
+    private static final String LOG_TAG = AppUtil.class.getName();
 
     private static AppUtil mInstance = null;
     private static Context mContext = null;

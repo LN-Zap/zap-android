@@ -43,7 +43,7 @@ import zapsolutions.zap.util.ZapLog;
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
         Wallet.BalanceListener, Wallet.InfoListener, Wallet.WalletLoadedListener, MonetaryUtil.ExchangeRateListener, UserGuardianInterface {
 
-    private static final String LOG_TAG = "Wallet Fragment";
+    private static final String LOG_TAG = WalletFragment.class.getName();
 
     private UserGuardian mUG;
     private TextView mTvPrimaryBalance;

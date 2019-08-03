@@ -127,9 +127,6 @@
     <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
     <string name="setup_connect_scan_connection_info">Verbindungsdaten scannen</string>
-    <string name="setup_eula_heading">Bedingungen</string>
-    <string name="setup_eula_explanation">Zap ist komplett kostenlos. Trotzdem musst du unseren Nutzungsbedingungen zustimmen:</string>
-    <string name="setup_eula_iAccept">Ich akzeptiere</string>
 
 
     <string name="demo_setupWalletBtn">Wallet einrichten</string>

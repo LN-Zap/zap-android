@@ -57,7 +57,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Wallet {
 
-    private static final String LOG_TAG = "Wallet Util";
+    private static final String LOG_TAG = Wallet.class.getName();
 
     private static Wallet mInstance = null;
     private final Set<BalanceListener> mBalanceListeners = new HashSet<>();

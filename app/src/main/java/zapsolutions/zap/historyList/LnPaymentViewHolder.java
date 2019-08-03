@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 public class LnPaymentViewHolder extends RecyclerView.ViewHolder {
 
-    private static final String LOG_TAG = "LnPaymentViewHolder";
+    private static final String LOG_TAG = LnPaymentViewHolder.class.getName();
 
     private ImageView mIcon;
     private TextView mTimeOfDay;

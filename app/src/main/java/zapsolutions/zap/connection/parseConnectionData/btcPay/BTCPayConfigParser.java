@@ -20,7 +20,7 @@ public class BTCPayConfigParser extends BaseConnectionParser<BTCPayConfig> {
     public static final int ERROR_NO_MACAROON = 2;
     public static final int ERROR_INVALID_HOST_OR_PORT = 3;
 
-    private static final String LOG_TAG = "BTCPayConfigParser";
+    private static final String LOG_TAG = BTCPayConfigParser.class.getName();
 
     public BTCPayConfigParser(String connectString) {
         super(connectString);

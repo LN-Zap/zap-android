@@ -65,7 +65,7 @@ import java.util.concurrent.ExecutionException;
 
 public class SendBSDFragment extends BottomSheetDialogFragment {
 
-    private static final String LOG_TAG = "Send Activity";
+    private static final String LOG_TAG = SendBSDFragment.class.getName();
 
     private ConstraintLayout mRootLayout;
     private ImageView mIvBsdIcon;

@@ -30,7 +30,7 @@ import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
 public class SendActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
-    private static final String LOG_TAG = "QR-Code Activity";
+    private static final String LOG_TAG = SendActivity.class.getName();
 
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;

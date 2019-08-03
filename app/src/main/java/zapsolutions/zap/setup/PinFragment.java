@@ -35,7 +35,7 @@ public class PinFragment extends Fragment {
     public static final int CREATE_MODE = 0;
     public static final int CONFIRM_MODE = 1;
     public static final int ENTER_MODE = 2;
-    private static final String LOG_TAG = "PIN Fragment";
+    private static final String LOG_TAG = PinFragment.class.getName();
     private static final String ARG_MODE = "pinMode";
     private static final String ARG_PROMPT = "promptString";
 

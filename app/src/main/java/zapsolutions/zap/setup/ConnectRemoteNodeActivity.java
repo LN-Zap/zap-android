@@ -37,7 +37,7 @@ import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.ZapLog;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
-    private static final String LOG_TAG = "Connect to remote node activity";
+    private static final String LOG_TAG = ConnectRemoteNodeActivity.class.getName();
 
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;

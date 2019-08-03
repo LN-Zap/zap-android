@@ -12,7 +12,7 @@ import zapsolutions.zap.util.ZapLog;
 
 public class LandingActivity extends BaseAppCompatActivity {
 
-    private static final String LOG_TAG = "Landing Activity";
+    private static final String LOG_TAG = LandingActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
