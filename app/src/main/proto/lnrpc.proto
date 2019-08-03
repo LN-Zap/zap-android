@@ -37,6 +37,7 @@ service WalletUnlocker {
     instance. This method allows a caller to generate a new aezeed cipher seed
     given an optional passphrase. If provided, the passphrase will be necessary
     to decrypt the cipherseed to expose the internal wallet seed.
+
     Once the cipherseed is obtained and verified by the user, the InitWallet
     method should be used to commit the newly generated seed, and create the
     wallet.
@@ -52,9 +53,11 @@ service WalletUnlocker {
     initialize the daemon and its internal wallet. At the very least a wallet
     password must be provided. This will be used to encrypt sensitive material
     on disk.
+
     In the case of a recovery scenario, the user can also specify their aezeed
     mnemonic and passphrase. If set, then the daemon will use this prior state
     to initialize its internal wallet.
+
     Alternatively, this can be used along with the GenSeed RPC to obtain a
     seed, then present it to the user. Once it has been verified by the user,
     the seed can be fed into this RPC in order to commit the new wallet.
@@ -689,6 +692,7 @@ service Lightning {
     all HTLCs forwarded within the target time range, and integer offset
     within that time range. If no time-range is specified, then the first chunk
     of the past 24 hrs of forwarding history are returned.
+
     A list of forwarding events are returned. The size of each forwarding event
     is 40 bytes, and the max message size able to be returned in gRPC is 4 MiB.
     As a result each message can only contain 50k entries.  Each response has
@@ -1004,6 +1008,7 @@ message ListUnspentResponse {
 
 /** 
 `AddressType` has to be one of:
+
 - `p2wkh`: Pay to witness key hash (`WITNESS_PUBKEY_HASH` = 0)
 - `np2wkh`: Pay to nested witness key hash (`NESTED_PUBKEY_HASH` = 1)
 */
@@ -1157,6 +1162,14 @@ message Channel {
 
     /// A set of flags showing the current state of the channel.
     string chan_status_flags = 19 [json_name = "chan_status_flags"];
+
+    /// The minimum satoshis this node is required to reserve in its balance.
+    int64 local_chan_reserve_sat = 20 [json_name = "local_chan_reserve_sat"];
+
+    /**
+    The minimum satoshis the other node is required to reserve in its balance.
+    */
+    int64 remote_chan_reserve_sat = 21 [json_name = "remote_chan_reserve_sat"];
 }
 
 
@@ -1464,6 +1477,15 @@ message PendingChannelsResponse {
 
         int64 local_balance = 4 [ json_name = "local_balance" ];
         int64 remote_balance = 5 [ json_name = "remote_balance" ];
+       
+        /// The minimum satoshis this node is required to reserve in its balance.
+        int64 local_chan_reserve_sat = 6 [json_name = "local_chan_reserve_sat"];
+
+        /**
+        The minimum satoshis the other node is required to reserve in its
+        balance.
+        */
+        int64 remote_chan_reserve_sat = 7 [json_name = "remote_chan_reserve_sat"];
     }
 
     message PendingOpenChannel {
@@ -1630,6 +1652,12 @@ message QueryRoutesRequest {
     self is assumed.
     */
     string source_pub_key = 8;
+
+    /**
+    If set to true, edge probabilities from mission control will be used to get
+    the optimal route.
+    */
+    bool use_mission_control = 9;
 }
 
 message EdgeLocator {
@@ -1773,6 +1801,7 @@ message RoutingPolicy {
     int64 fee_rate_milli_msat = 4 [json_name = "fee_rate_milli_msat"];
     bool disabled = 5 [json_name = "disabled"];
     uint64 max_htlc_msat = 6 [json_name = "max_htlc_msat"];
+    uint32 last_update = 7 [json_name = "last_update"];
 }
 
 /**
@@ -1792,7 +1821,7 @@ message ChannelEdge {
     uint64 channel_id = 1 [json_name = "channel_id"];
     string chan_point = 2 [json_name = "chan_point"];
 
-    uint32 last_update = 3 [json_name = "last_update"];
+    uint32 last_update = 3 [json_name = "last_update", deprecated = true];
 
     string node1_pub = 4 [json_name = "node1_pub"];
     string node2_pub = 5 [json_name = "node2_pub"];
@@ -1846,6 +1875,9 @@ message NetworkInfo {
     int64 min_channel_size = 8 [json_name = "min_channel_size"];
     int64 max_channel_size = 9 [json_name = "max_channel_size"];
     int64 median_channel_size_sat = 10 [json_name = "median_channel_size_sat"];
+
+    // The number of edges marked as zombies.
+    uint64 num_zombie_chans = 11 [json_name = "num_zombie_chans"];
 
     // TODO(roasbeef): fee rate info, expiry
     //  * also additional RPC for tracking fee info once in
@@ -2143,8 +2175,8 @@ message Payment {
     /// The path this payment took
     repeated string path = 4 [ json_name = "path" ];
 
-    /// The fee paid for this payment in satoshis
-    int64 fee = 5 [json_name = "fee"];
+    /// Deprecated, use fee_sat or fee_msat.
+    int64 fee = 5 [json_name = "fee", deprecated = true];
 
     /// The payment preimage
     string payment_preimage = 6 [json_name = "payment_preimage"];
@@ -2167,6 +2199,12 @@ message Payment {
 
     // The status of the payment.
     PaymentStatus status = 10 [json_name = "status"];
+
+    ///  The fee paid for this payment in satoshis
+    int64 fee_sat = 11 [json_name = "fee_sat"];
+
+    ///  The fee paid for this payment in milli-satoshis
+    int64 fee_msat = 12 [json_name = "fee_msat"];
 }
 
 message ListPaymentsRequest {
