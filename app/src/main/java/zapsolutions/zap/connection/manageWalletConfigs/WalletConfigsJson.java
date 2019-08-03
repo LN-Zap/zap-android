@@ -28,7 +28,7 @@ public class WalletConfigsJson {
 
         // Test if it already exist
         if (doesWalletConfigExist(walletConfig.getAlias())) {
-            int tempIndex = getWalletIndex(walletConfig.getAlias().toLowerCase());
+            int tempIndex = getWalletIndex(walletConfig.getAlias());
             // It exists, replace it.
             mConnections.set(tempIndex, walletConfig);
         } else {
@@ -53,7 +53,7 @@ public class WalletConfigsJson {
 
         if (doesWalletConfigExist(oldAlias)) {
             int tempIndex = getWalletIndex(oldAlias);
-            mConnections.get(tempIndex).setAlias(newAlias.toLowerCase());
+            mConnections.get(tempIndex).setAlias(newAlias);
             return true;
         }
         return false;

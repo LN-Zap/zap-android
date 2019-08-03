@@ -27,7 +27,7 @@ import java.security.cert.CertificateException;
  */
 public class WalletConfigsManager {
 
-    public static final String DEFAULT_WALLET_NAME = "DefaultWallet";
+    public static final String DEFAULT_WALLET_NAME = "Default Wallet";
     private static final String LOG_TAG = WalletConfigsManager.class.getName();
     private static WalletConfigsManager mInstance;
     private WalletConfigsJson mWalletConfigsJson;
@@ -104,7 +104,7 @@ public class WalletConfigsManager {
      * @return
      */
     public boolean doesWalletConfigExist(@NonNull String alias) {
-        return mWalletConfigsJson.doesWalletConfigExist(alias.toLowerCase());
+        return mWalletConfigsJson.doesWalletConfigExist(alias);
     }
 
 
@@ -125,7 +125,7 @@ public class WalletConfigsManager {
 
         // Create the config
         WalletConfig config = new WalletConfig();
-        config.setAlias(alias.toLowerCase());
+        config.setAlias(alias);
         config.setType(type);
         config.setHost(host);
         config.setPort(port);

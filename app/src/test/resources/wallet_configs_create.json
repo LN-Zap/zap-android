@@ -1,7 +1,7 @@
 {
   "connections": [
     {
-      "alias": "firstwalletname",
+      "alias": "FirstWalletName",
       "type": "remote",
       "cert": "TestCert",
       "host": "TestHost",
