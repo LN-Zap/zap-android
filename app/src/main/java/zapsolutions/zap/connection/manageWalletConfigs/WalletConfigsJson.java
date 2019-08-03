@@ -50,8 +50,11 @@ public class WalletConfigsJson {
     }
 
     public boolean renameConnection(String oldAlias, String newAlias) {
-
         if (doesWalletConfigExist(oldAlias)) {
+            if (doesWalletConfigExist(newAlias) && !newAlias.toLowerCase().equals(oldAlias.toLowerCase())) {
+                // We cannot rename it to an already existing wallet.
+                return false;
+            }
             int tempIndex = getWalletIndex(oldAlias);
             mConnections.get(tempIndex).setAlias(newAlias);
             return true;
