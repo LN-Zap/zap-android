@@ -21,10 +21,14 @@ public class PrefsUtil {
     public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
     public static final String CURRENT_WALLET_CONFIG = "current_wallet_config";
+    public static final String AVAILABLE_FIAT_CURRENCIES = "fiat_available";
 
     // wallet config preferences references
     public static final String PREFS_ENCRYPTED = "prefs_encrypted";
     public static final String WALLET_CONFIGS = "wallet_configs";
+
+    // default values
+    public static final String DEFAULT_FIAT_CURRENCIES = "[]";
 
 
     // Access to default shared prefs
