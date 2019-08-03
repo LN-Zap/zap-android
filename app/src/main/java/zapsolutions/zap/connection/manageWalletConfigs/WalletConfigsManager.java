@@ -145,7 +145,13 @@ public class WalletConfigsManager {
      * @return
      */
     public WalletConfig getCurrentWalletConfig() {
-        return getWalletConfig(PrefsUtil.getCurrentWalletConfig());
+        WalletConfig config = getWalletConfig(PrefsUtil.getCurrentWalletConfig());
+        if (config == null && mWalletConfigsJson.mConnections.size() > 0) {
+            PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, mWalletConfigsJson.mConnections.get(0).getAlias()).commit();
+            return mWalletConfigsJson.mConnections.get(0);
+        }
+        
+        return config;
     }
 
 

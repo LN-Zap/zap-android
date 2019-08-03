@@ -136,6 +136,18 @@ public class ConnectionManagerTest {
     }
 
     @Test
+    public void givenExistingAlias_whenRenameToExitingWalletConfig_thenReturnFalse() {
+        String configJson = readStringFromFile("wallet_configs.json");
+        WalletConfigsManager manager = new WalletConfigsManager(configJson);
+        String expected = new Gson().toJson(manager.getWalletConfigsJson());
+        boolean renamed = manager.renameWalletConfig("FirstWalletName", "SecondWalletName");
+        String result = new Gson().toJson(manager.getWalletConfigsJson());
+
+        assertFalse(renamed);
+        assertEquals(expected, result);
+    }
+
+    @Test
     public void givenExistingAlias_whenRenameWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
         WalletConfig expected = readFromFile("wallet_configs_rename.json").getConnection("NewWalletName");
         String configJson = readStringFromFile("wallet_configs_create.json");
