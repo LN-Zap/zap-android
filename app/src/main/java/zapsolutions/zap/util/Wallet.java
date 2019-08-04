@@ -85,7 +85,8 @@ public class Wallet {
     private long mOnChainBalanceConfirmed = 0;
     private long mOnChainBalanceUnconfirmed = 0;
     private long mChannelBalance = 0;
-    private long mChannelBalancePending = 0;
+    private long mChannelBalancePendingOpen = 0;
+    private long mChannelBalanceLimbo = 0;
     private boolean mConnectedToLND = false;
     private boolean mInfoFetched = false;
     private boolean mSyncedToChain = false;
@@ -124,7 +125,8 @@ public class Wallet {
         mOnChainBalanceConfirmed = 0;
         mOnChainBalanceUnconfirmed = 0;
         mChannelBalance = 0;
-        mChannelBalancePending = 0;
+        mChannelBalancePendingOpen = 0;
+        mChannelBalanceLimbo = 0;
 
         mInfoFetched = false;
         mSyncedToChain = false;
@@ -288,7 +290,7 @@ public class Wallet {
      */
     public Balances getBalances() {
         return new Balances(mOnChainBalanceTotal, mOnChainBalanceConfirmed,
-                mOnChainBalanceUnconfirmed, mChannelBalance, mChannelBalancePending);
+                mOnChainBalanceUnconfirmed, mChannelBalance, mChannelBalancePendingOpen, mChannelBalanceLimbo);
     }
 
     /**
@@ -300,7 +302,7 @@ public class Wallet {
      */
     public Balances getDemoBalances() {
         return new Balances(0, 0,
-                0, 0, 0);
+                0, 0, 0, 0);
     }
 
     /**
@@ -675,6 +677,10 @@ public class Wallet {
                     mPendingClosedChannelsList = pendingChannelsResponse.getPendingClosingChannelsList();
                     mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
                     mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
+
+                    /* Update balance to include limbo channels. The limbo balance does not account for open pending channels.
+                    Those are handled via the `channelbalance` request. */
+                    setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance());
 
                     // Load NodeInfos for all involved nodes. This allows us to display aliases later.
                     for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
@@ -1416,9 +1422,14 @@ public class Wallet {
         broadcastBalanceUpdate();
     }
 
-    private void setChannelBalance(long balance, long pending) {
+    private void setChannelBalance(long balance, long pendingOpen) {
         mChannelBalance = balance;
-        mChannelBalancePending = pending;
+        mChannelBalancePendingOpen = pendingOpen;
+        broadcastBalanceUpdate();
+    }
+
+    private void setChannelBalanceLimbo(long balanceLimbo) {
+        mChannelBalanceLimbo = balanceLimbo;
         broadcastBalanceUpdate();
     }
 

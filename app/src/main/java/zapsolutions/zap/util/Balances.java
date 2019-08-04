@@ -4,24 +4,26 @@ package zapsolutions.zap.util;
  * This class helps to organize the various types of balances.
  */
 public class Balances {
-    private long mOnChainBalanceTotal = 0;
-    private long mOnChainBalanceConfirmed = 0;
-    private long mOnChainBalanceUnconfirmed = 0;
-    private long mChannelBalance = 0;
-    private long mChannelBalancePending = 0;
+    private long mOnChainBalanceTotal;
+    private long mOnChainBalanceConfirmed;
+    private long mOnChainBalanceUnconfirmed;
+    private long mChannelBalance;
+    private long mChannelBalancePendingOpen;
+    private long mChannelBalanceLimbo;
 
     public Balances(long onChainTotal, long onChainConfirmed,
                     long onChainUnconfirmed, long channelBalance,
-                    long channelBalancePending) {
+                    long channelBalancePendingOpen, long channelBalanceLimbo) {
         mOnChainBalanceTotal = onChainTotal;
         mOnChainBalanceConfirmed = onChainConfirmed;
         mOnChainBalanceUnconfirmed = onChainUnconfirmed;
         mChannelBalance = channelBalance;
-        mChannelBalancePending = channelBalancePending;
+        mChannelBalancePendingOpen = channelBalancePendingOpen;
+        mChannelBalanceLimbo = channelBalanceLimbo;
     }
 
     public long total() {
-        return mOnChainBalanceTotal + mChannelBalance + mChannelBalancePending;
+        return mOnChainBalanceTotal + mChannelBalance + mChannelBalancePendingOpen + mChannelBalanceLimbo;
     }
 
     public long onChainTotal() {
@@ -41,6 +43,10 @@ public class Balances {
     }
 
     public long channelBalancePending() {
-        return mChannelBalancePending;
+        return mChannelBalancePendingOpen;
+    }
+
+    public long channelBalanceLimbo() {
+        return mChannelBalanceLimbo;
     }
 }
