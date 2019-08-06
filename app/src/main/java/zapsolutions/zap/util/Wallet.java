@@ -706,10 +706,6 @@ public class Wallet {
                     mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
                     mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
 
-                    /* Update balance to include limbo channels. The limbo balance does not account for open pending channels.
-                    Those are handled via the `channelbalance` request. */
-                    setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance());
-
                     // Load NodeInfos for all involved nodes. This allows us to display aliases later.
                     for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
                         fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
