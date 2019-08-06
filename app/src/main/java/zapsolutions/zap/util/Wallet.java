@@ -370,6 +370,34 @@ public class Wallet {
                 }
             }
         }, new ExecuteOnCaller());
+
+        // fetch pending channels balance
+        LightningGrpc.LightningFutureStub asyncPendingChannelsClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        PendingChannelsRequest asyncPendingChannelsRequest = PendingChannelsRequest.newBuilder().build();
+        final ListenableFuture<PendingChannelsResponse> pendingChannelsFuture = asyncPendingChannelsClient.pendingChannels(asyncPendingChannelsRequest);
+
+        pendingChannelsFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PendingChannelsResponse pendingChannelsResponse = pendingChannelsFuture.get();
+
+                    /* Update balance to include limbo channels. The limbo balance does not account for open pending channels.
+                    Those are handled via the `channelbalance` request. */
+                    setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance());
+
+                    // ZapLog.debug(LOG_TAG, pendingChannelsResponse.getTotalLimboBalance());
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "List pending channels request interrupted.");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in list pending channels request task.");
+                }
+            }
+        }, new ExecuteOnCaller());
+
     }
 
 
