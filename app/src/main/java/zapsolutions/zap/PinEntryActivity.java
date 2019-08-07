@@ -22,7 +22,6 @@ import at.favre.lib.armadillo.PBKDF2KeyStretcher;
 import com.google.common.io.BaseEncoding;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -387,39 +386,43 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             String connectionInfoCombined = prefsRemote.getString("remote_combined", "");
             String[] connectionInfo = connectionInfoCombined.split(";");
 
+            if (connectionInfo.length > 1) {
 
-            // Save the old configuration in the new format
-            String macaroon = connectionInfo[3];
-            if (!(connectionInfo[2].equals("NO_CERT") || connectionInfo[2].equals("null"))) {
-                // No BTC pay, we now have to encode the macaroon in base16
-                byte[] macaroonBytes = BaseEncoding.base64Url().decode(connectionInfo[3]);
-                macaroon = BaseEncoding.base16().encode(macaroonBytes);
-            }
+                // Save the old configuration in the new format
+                String macaroon = connectionInfo[3];
+                if (!(connectionInfo[2].equals("NO_CERT") || connectionInfo[2].equals("null"))) {
+                    // No BTC pay, we now have to encode the macaroon in base16
+                    byte[] macaroonBytes = BaseEncoding.base64Url().decode(connectionInfo[3]);
+                    macaroon = BaseEncoding.base16().encode(macaroonBytes);
+                }
 
-            WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
-            try {
-                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME, "remote", connectionInfo[0],
-                        Integer.parseInt(connectionInfo[1]), connectionInfo[2], macaroon);
+                WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
+                try {
+                    walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME, "remote", connectionInfo[0],
+                            Integer.parseInt(connectionInfo[1]), connectionInfo[2], macaroon);
 
-                walletConfigsManager.apply();
-                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME).commit();
+                    walletConfigsManager.apply();
+                    PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME).commit();
 
-                success = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                    success = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-            // Cleanup and set new settings version
-            if (success) {
-                // Clear the old settings
-                prefsRemote.edit().clear().commit();
-                // Set new settings version
-                PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
+                // Cleanup and set new settings version
+                if (success) {
+                    // Clear the old settings
+                    prefsRemote.edit().clear().commit();
+                    // Set new settings version
+                    PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
+                } else {
+                    // Clear all
+                    PrefsUtil.edit().clear().commit();
+                    prefsRemote.edit().clear().commit();
+                    // Set new settings version
+                    PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
+                }
             } else {
-                // Clear all
-                PrefsUtil.edit().clear().commit();
-                prefsRemote.edit().clear().commit();
-                // Set new settings version
                 PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
             }
         } else {
