@@ -434,9 +434,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         }
 
-
-        // Remove the comment to activate multi wallet support
-        //mSpWallet.setVisibility(View.VISIBLE);
+        mSpWallet.setVisibility(View.VISIBLE);
     }
 
     @Override

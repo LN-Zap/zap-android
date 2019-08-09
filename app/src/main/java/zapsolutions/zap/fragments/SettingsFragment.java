@@ -23,7 +23,6 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -31,6 +30,7 @@ import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
+import zapsolutions.zap.walletManagement.ManageWalletsActivity;
 
 import java.io.IOException;
 import java.security.KeyStoreException;
@@ -121,7 +121,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        /* Uncomment this for multi wallet support
+
         // Action when clicked on "Manage wallets"
         final Preference prefManageWallets = findPreference("manageWallets");
         prefManageWallets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -132,7 +132,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-        */
 
         // Action when clicked on "Manage channels"
         final Preference prefManageChannels = findPreference("manageLightningChannels");
@@ -144,25 +143,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-
-        /* Comment this out when multi wallet support is activated.*/
-        // Action when clicked on "reset connection settings"
-        final Preference prefResetConfig = findPreference("resetConfig");
-        prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (PrefsUtil.isWalletSetup()) {
-                    WalletConfigsManager.getInstance().setConnectionToModify(PrefsUtil.getCurrentWalletConfig());
-                    Intent intent = new Intent(getActivity(), SetupActivity.class);
-                    intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
-                }
-                return true;
-            }
-        });
-
 
         // Action when clicked on "change pin"
         final Preference prefChangePin = findPreference("changePIN");

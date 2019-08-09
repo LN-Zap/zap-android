@@ -12,7 +12,7 @@ public class WalletConfigsJson {
 
     public WalletConfig getConnection(@NonNull String alias) {
         for (WalletConfig walletConnectionConfig : mConnections) {
-            if (walletConnectionConfig.getAlias().equals(alias)) {
+            if (walletConnectionConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
                 return walletConnectionConfig;
             }
         }
@@ -69,7 +69,7 @@ public class WalletConfigsJson {
     private int getWalletIndex(@NonNull String alias) {
         int tempIndex = -1;
         for (WalletConfig tempConfig : mConnections) {
-            if (tempConfig.getAlias().equals(alias)) {
+            if (tempConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
                 tempIndex = mConnections.indexOf(tempConfig);
                 break;
             }

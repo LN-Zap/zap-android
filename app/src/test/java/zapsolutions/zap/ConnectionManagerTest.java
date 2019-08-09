@@ -34,7 +34,7 @@ public class ConnectionManagerTest {
     public void givenExistingAlias_whenDoesWalletExist_thenReturnTrue() {
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        boolean result = manager.doesWalletConfigExist("FirstWalletName");
+        boolean result = manager.doesWalletConfigExist("firstwalletname");
 
         assertTrue(result);
     }
@@ -42,7 +42,7 @@ public class ConnectionManagerTest {
     @Test
     public void givenNoConfigs_whenLoadWalletConfig_thenReturnNull() {
         WalletConfigsManager manager = new WalletConfigsManager(null);
-        WalletConfig result = manager.getWalletConfig("FirstWalletName");
+        WalletConfig result = manager.getWalletConfig("firstwalletname");
 
         assertNull(result);
     }
@@ -60,7 +60,7 @@ public class ConnectionManagerTest {
     public void givenExistingAlias_whenLoadWalletConfig_thenReceiveCorrectWalletConfig() {
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        WalletConfig result = manager.getWalletConfig("FirstWalletName");
+        WalletConfig result = manager.getWalletConfig("firstwalletname");
 
         assertEquals("FirstWalletName", result.getAlias());
         assertEquals("remote", result.getType());
@@ -116,7 +116,7 @@ public class ConnectionManagerTest {
         String configJson = readStringFromFile("wallet_configs.json");
 
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        boolean removed = manager.removeWalletConfig("SecondWalletName");
+        boolean removed = manager.removeWalletConfig("secondwalletname");
 
         assertTrue(removed);
         assertNull(manager.getWalletConfig("SecondWalletName"));
@@ -153,7 +153,7 @@ public class ConnectionManagerTest {
         String configJson = readStringFromFile("wallet_configs_create.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         boolean renamed = manager.renameWalletConfig("FirstWalletName", "NewWalletName");
-        WalletConfig actual = manager.getWalletConfig("NewWalletName");
+        WalletConfig actual = manager.getWalletConfig("newWalletName");
 
         assertTrue(renamed);
         assertNotNull(manager.getWalletConfig("NewWalletName"));
