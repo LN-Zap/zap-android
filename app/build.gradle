@@ -13,7 +13,7 @@ android {
         versionCode 10
         versionName "0.2.4-alpha"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        setProperty("archivesBaseName", "zap-android-" + versionName)
+        setProperty("archivesBaseName", "zap-android-" + versionName + "(" + versionCode + ")")
     }
     buildTypes {
         debug {
