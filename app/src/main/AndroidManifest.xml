@@ -83,7 +83,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.channelManagement.OpenChannelDetailsActivity"
+            android:name="zapsolutions.zap.channelManagement.ChannelDetailsActivity"
             android:label="@string/activity_channel_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
