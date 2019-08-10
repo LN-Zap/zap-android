@@ -69,7 +69,7 @@
     <string name="max_amount">Максимално Кол-во:</string>
     <string name="retry">Нов опит</string>
     <string name="loading">Зареждане</string>
-
+    <string name="pay">Плащане</string>
 
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
