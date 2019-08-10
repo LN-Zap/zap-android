@@ -21,6 +21,7 @@ public class SetupActivity extends BaseAppCompatActivity {
     public static final int CHANGE_CONNECTION = 2;
     public static final int ADD_WALLET = 3;
 
+    public static final String SETUP_MODE = "setupMode";
     private static final String LOG_TAG = SetupActivity.class.getName();
 
     private Fragment mCurrentFragment = null;
@@ -35,7 +36,7 @@ public class SetupActivity extends BaseAppCompatActivity {
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mSetupMode = extras.getInt("setupMode", 0);
+            mSetupMode = extras.getInt(SETUP_MODE, 0);
         }
 
 

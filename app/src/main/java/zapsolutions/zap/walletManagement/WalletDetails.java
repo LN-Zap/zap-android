@@ -24,6 +24,7 @@ import zapsolutions.zap.util.Wallet;
 
 public class WalletDetails extends BaseAppCompatActivity {
 
+
     private String mAlias;
     private InputMethodManager mInputMethodManager;
 
@@ -38,7 +39,7 @@ public class WalletDetails extends BaseAppCompatActivity {
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mAlias = extras.getString("walletAlias");
+            mAlias = extras.getString(ManageWalletsActivity.WALLET_ALIAS);
         }
 
         Button switchBtn = findViewById(R.id.buttonActivate);
@@ -72,7 +73,7 @@ public class WalletDetails extends BaseAppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(WalletDetails.this, ConnectRemoteNodeActivity.class);
-                intent.putExtra("walletAlias", mAlias);
+                intent.putExtra(ManageWalletsActivity.WALLET_ALIAS, mAlias);
                 startActivity(intent);
             }
         });
@@ -120,6 +121,10 @@ public class WalletDetails extends BaseAppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (WalletConfigsManager.getInstance().doesWalletConfigExist(input.getText().toString())) {
                     Toast.makeText(WalletDetails.this, "This name already exists.", Toast.LENGTH_LONG).show();
+                    mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    showWalletNameInput();
+                } else if (input.getText().toString().isEmpty()) {
+                    Toast.makeText(WalletDetails.this, "An empty name is not allowed.", Toast.LENGTH_LONG).show();
                     mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     showWalletNameInput();
                 } else {

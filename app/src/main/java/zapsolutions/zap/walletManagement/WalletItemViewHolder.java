@@ -9,11 +9,12 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import zapsolutions.zap.R;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.util.OnSingleClickListener;
 
 public class WalletItemViewHolder extends RecyclerView.ViewHolder {
 
-    private static final String LOG_TAG = "LnPaymentViewHolder";
+    private static final String LOG_TAG = WalletItemViewHolder.class.getName();
 
     private ImageView mIcon;
     private TextView mWalletTypDescription;
@@ -34,7 +35,7 @@ public class WalletItemViewHolder extends RecyclerView.ViewHolder {
         mContext = v.getContext();
     }
 
-    public void bindRemoteWalletItem(WalletItem remoteWalletItem) {
+    public void bindRemoteWalletItem(WalletConfig walletConfig) {
 
 
         // Set Icon
@@ -43,17 +44,17 @@ public class WalletItemViewHolder extends RecyclerView.ViewHolder {
 
         // Set Wallet Type description
 
-        mWalletTypDescription.setText(remoteWalletItem.getWalletConfig().getType());
+        mWalletTypDescription.setText(walletConfig.getType());
 
         // Set wallet Name
-        mWalletName.setText(remoteWalletItem.getWalletConfig().getAlias());
+        mWalletName.setText(walletConfig.getAlias());
 
         // Set on click listener
         mRootView.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
                 Intent intent = new Intent(mContext, WalletDetails.class);
-                intent.putExtra("walletAlias", remoteWalletItem.getWalletConfig().getAlias());
+                intent.putExtra(ManageWalletsActivity.WALLET_ALIAS, walletConfig.getAlias());
                 mContext.startActivity(intent);
             }
         });

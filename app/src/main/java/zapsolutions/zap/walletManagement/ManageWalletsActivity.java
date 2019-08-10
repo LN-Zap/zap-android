@@ -3,6 +3,7 @@ package zapsolutions.zap.walletManagement;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,11 +19,14 @@ import java.util.List;
 
 public class ManageWalletsActivity extends BaseAppCompatActivity {
 
+    public static final String WALLET_ALIAS = "walletAlias";
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<WalletItem> mWalletItems;
+    private List<WalletConfig> mWalletItems;
+    private TextView mEmptyListText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class ManageWalletsActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_manage_wallets);
 
         mRecyclerView = findViewById(R.id.historyList);
+        mEmptyListText = findViewById(R.id.listEmpty);
 
         mWalletItems = new ArrayList<>();
 
@@ -76,16 +81,15 @@ public class ManageWalletsActivity extends BaseAppCompatActivity {
 
 
         for (WalletConfig config : walletConfigsManager.getAllWalletConfigs(false)) {
-            WalletItem walletListItem = new WalletItem(config);
-            mWalletItems.add(walletListItem);
+            mWalletItems.add(config);
         }
 
 
         // Show "No wallets" if the list is empty
         if (mWalletItems.size() == 0) {
-            // mEmptyListText.setVisibility(View.VISIBLE);
+             mEmptyListText.setVisibility(View.VISIBLE);
         } else {
-            // mEmptyListText.setVisibility(View.GONE);
+             mEmptyListText.setVisibility(View.GONE);
         }
 
         // Update the list view

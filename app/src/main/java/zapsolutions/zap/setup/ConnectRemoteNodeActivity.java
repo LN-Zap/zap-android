@@ -43,6 +43,7 @@ import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.ZapLog;
+import zapsolutions.zap.walletManagement.ManageWalletsActivity;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
     private static final String LOG_TAG = ConnectRemoteNodeActivity.class.getName();
@@ -65,7 +66,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mWalletName = extras.getString("walletAlias", "");
+            mWalletName = extras.getString(ManageWalletsActivity.WALLET_ALIAS, "");
         }
 
         // Action when clicked on "paste"
@@ -210,7 +211,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
 
     private void checkWalletName(RemoteConfiguration remoteConfiguration) {
         if (WalletConfigsManager.getInstance().hasAtLeastOneConfig()) {
-            if (mWalletName.equals("")) {
+            if (mWalletName.isEmpty()) {
                 showWalletNameInput(remoteConfiguration);
             } else {
                 connect(remoteConfiguration);
@@ -371,6 +372,10 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             public void onClick(DialogInterface dialog, int which) {
                 if (WalletConfigsManager.getInstance().doesWalletConfigExist(input.getText().toString())) {
                     Toast.makeText(ConnectRemoteNodeActivity.this, "This name already exists.", Toast.LENGTH_LONG).show();
+                    mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    showWalletNameInput(remoteConfiguration);
+                } else if (input.getText().toString().isEmpty()) {
+                    Toast.makeText(ConnectRemoteNodeActivity.this, "An empty name is not allowed.", Toast.LENGTH_LONG).show();
                     mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     showWalletNameInput(remoteConfiguration);
                 } else {

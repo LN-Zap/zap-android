@@ -5,15 +5,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import zapsolutions.zap.R;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 
 import java.util.List;
 
 
 public class WalletItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<WalletItem> mItems;
+    private List<WalletConfig> mItems;
 
     // Construct the adapter with a data list
-    public WalletItemAdapter(List<WalletItem> dataset) {
+    public WalletItemAdapter(List<WalletConfig> dataset) {
         mItems = dataset;
     }
 
@@ -27,9 +28,9 @@ public class WalletItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        WalletItemViewHolder remoteWalletViewHolder = (WalletItemViewHolder) holder;
-        WalletItem remoteWalletItem = mItems.get(position);
-        remoteWalletViewHolder.bindRemoteWalletItem(remoteWalletItem);
+        WalletItemViewHolder walletViewHolder = (WalletItemViewHolder) holder;
+        WalletConfig remoteWalletItem = mItems.get(position);
+        walletViewHolder.bindRemoteWalletItem(remoteWalletItem);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

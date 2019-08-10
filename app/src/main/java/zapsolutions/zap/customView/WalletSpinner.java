@@ -85,12 +85,12 @@ public class WalletSpinner extends AppCompatSpinner {
                     if (PrefsUtil.isWalletSetup()) {
                         // Open the create wallet ui
                         Intent intent = new Intent(getContext(), SetupActivity.class);
-                        intent.putExtra("setupMode", SetupActivity.ADD_WALLET);
+                        intent.putExtra(SetupActivity.SETUP_MODE, SetupActivity.ADD_WALLET);
                         getContext().startActivity(intent);
                     } else {
                         // Initiate wallet setup
                         Intent intent = new Intent(getContext(), SetupActivity.class);
-                        intent.putExtra("setupMode", SetupActivity.FULL_SETUP);
+                        intent.putExtra(SetupActivity.SETUP_MODE, SetupActivity.FULL_SETUP);
                         getContext().startActivity(intent);
                     }
                     // If going back we don't want to have "Add new..." selected
