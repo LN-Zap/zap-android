@@ -1,5 +1,7 @@
 package zapsolutions.zap.channelManagement;
 
+import com.google.protobuf.ByteString;
+
 public abstract class ChannelListItem {
 
     public static final int TYPE_OPEN_CHANNEL = 0;
@@ -10,4 +12,6 @@ public abstract class ChannelListItem {
     public static final int TYPE_CLOSED_CHANNEL = 5;
 
     abstract public int getType();
+
+    abstract public ByteString getByteString();
 }

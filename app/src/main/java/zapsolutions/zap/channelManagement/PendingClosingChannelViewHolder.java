@@ -19,4 +19,11 @@ public class PendingClosingChannelViewHolder extends PendingChannelViewHolder {
     int getStatusText() {
         return R.string.channel_state_pending_closing;
     }
+
+    void bindPendingClosingChannelItem(PendingClosingChannelItem pendingClosingChannelItem) {
+        bindPendingChannelItem(pendingClosingChannelItem.getChannel().getChannel());
+
+        setOnRootViewClickListener(pendingClosingChannelItem, ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL);
+    }
+
 }

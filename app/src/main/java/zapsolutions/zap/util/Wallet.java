@@ -1336,6 +1336,17 @@ public class Wallet {
      */
     public String getNodeAliasFromChannelTransaction(Transaction transaction, Context mContext) {
         String pubKey = getNodePubKeyFromChannelTransaction(transaction);
+        return getNodeAliasFromPubKey(pubKey,mContext);
+    }
+
+    /**
+     * Returns the alias of the node based on the provided pubKey.
+     * If no alias is found, `Unnamed` is returned.
+     * @param pubKey the pubKey of the node
+     * @param mContext context to get translation
+     * @return alias
+     */
+    public String getNodeAliasFromPubKey(String pubKey, Context mContext) {
         String alias = "";
         for (NodeInfo i : Wallet.getInstance().mNodeInfos) {
             if (i.getNode().getPubKey().equals(pubKey)) {
@@ -1354,7 +1365,6 @@ public class Wallet {
         } else {
             return alias;
         }
-
     }
 
     /**

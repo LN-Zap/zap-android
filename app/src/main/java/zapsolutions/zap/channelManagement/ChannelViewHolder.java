@@ -7,9 +7,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.github.lightningnetwork.lnd.lnrpc.NodeInfo;
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.Wallet;
 
 public class ChannelViewHolder extends RecyclerView.ViewHolder {
@@ -18,7 +18,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     ImageView mStatusDot;
     View mRootView;
     Context mContext;
-
+    private ChannelSelectListener mChannelSelectListener;
     private TextView mRemoteName;
     private TextView mLocalBalance;
     private TextView mRemoteBalance;
@@ -42,20 +42,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setName(String channelRemotePubKey) {
-        // Set name
-        for (NodeInfo i : Wallet.getInstance().mNodeInfos) {
-            if (i.getNode().getPubKey().equals(channelRemotePubKey)) {
-                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0, 8))) {
-                    String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
-                    mRemoteName.setText(unnamed + " (" + i.getNode().getPubKey().substring(0, 5) + "...)");
-                } else {
-                    mRemoteName.setText(i.getNode().getAlias());
-                }
-                break;
-            } else {
-                mRemoteName.setText(channelRemotePubKey);
-            }
-        }
+        mRemoteName.setText(Wallet.getInstance().getNodeAliasFromPubKey(channelRemotePubKey, mContext));
     }
 
     void setBalances(long local, long remote, long capacity) {
@@ -69,5 +56,20 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         mRemoteBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(remote));
 
         mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(capacity));
+    }
+
+    void addOnChannelSelectListener(ChannelSelectListener channelSelectListener) {
+        mChannelSelectListener = channelSelectListener;
+    }
+
+    void setOnRootViewClickListener(@NonNull ChannelListItem item, int type) {
+        mRootView.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if (mChannelSelectListener != null) {
+                    mChannelSelectListener.onChannelSelect(item.getByteString(), type);
+                }
+            }
+        });
     }
 }

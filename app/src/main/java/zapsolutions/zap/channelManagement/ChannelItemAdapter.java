@@ -9,13 +9,16 @@ import zapsolutions.zap.R;
 
 import java.util.List;
 
+
 public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<ChannelListItem> mItems;
+    private ChannelSelectListener mChannelSelectListener;
 
     // Construct the adapter with a data list
-    public ChannelItemAdapter(List<ChannelListItem> dataset) {
+    public ChannelItemAdapter(List<ChannelListItem> dataset, ChannelSelectListener channelSelectListener) {
         mItems = dataset;
+        mChannelSelectListener = channelSelectListener;
     }
 
     @Override
@@ -55,26 +58,31 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 OpenChannelViewHolder openChannelHolder = (OpenChannelViewHolder) holder;
                 OpenChannelItem openChannelItem = (OpenChannelItem) mItems.get(position);
                 openChannelHolder.bindOpenChannelItem(openChannelItem);
+                openChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
                 PendingOpenChannelViewHolder pendingOpenChannelHolder = (PendingOpenChannelViewHolder) holder;
                 PendingOpenChannelItem pendingOpenChannelItem = (PendingOpenChannelItem) mItems.get(position);
-                pendingOpenChannelHolder.bindChannelItem(pendingOpenChannelItem.getChannel().getChannel());
+                pendingOpenChannelHolder.bindPendingOpenChannelItem(pendingOpenChannelItem);
+                pendingOpenChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
                 PendingClosingChannelViewHolder pendingClosingChannelHolder = (PendingClosingChannelViewHolder) holder;
                 PendingClosingChannelItem pendingClosingChannelItem = (PendingClosingChannelItem) mItems.get(position);
-                pendingClosingChannelHolder.bindChannelItem(pendingClosingChannelItem.getChannel().getChannel());
+                pendingClosingChannelHolder.bindPendingClosingChannelItem(pendingClosingChannelItem);
+                pendingClosingChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
                 PendingForceClosingChannelViewHolder pendingForceClosingChannelHolder = (PendingForceClosingChannelViewHolder) holder;
                 PendingForceClosingChannelItem pendingForceClosingChannelItem = (PendingForceClosingChannelItem) mItems.get(position);
-                pendingForceClosingChannelHolder.bindChannelItem(pendingForceClosingChannelItem.getChannel().getChannel());
+                pendingForceClosingChannelHolder.bindPendingForceClosingChannelItem(pendingForceClosingChannelItem);
+                pendingForceClosingChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
                 WaitingCloseChannelViewHolder waitingCloseChannelHolder = (WaitingCloseChannelViewHolder) holder;
                 WaitingCloseChannelItem waitingCloseChannelItem = (WaitingCloseChannelItem) mItems.get(position);
-                waitingCloseChannelHolder.bindChannelItem(waitingCloseChannelItem.getChannel().getChannel());
+                waitingCloseChannelHolder.bindWaitingClosedChannelItem(waitingCloseChannelItem);
+                waitingCloseChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             default:
                 throw new IllegalStateException("Unknown channel type: " + type);
