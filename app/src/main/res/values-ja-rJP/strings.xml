@@ -206,13 +206,13 @@
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_wrong_password">Wrong password</string>
     <plurals name="duration_minute">
-        <item quantity="other">Minutes</item>
+        <item quantity="other">%d Minutes</item>
     </plurals>
     <plurals name="duration_hour">
-        <item quantity="other">Hours</item>
+        <item quantity="other">%d Hours</item>
     </plurals>
     <plurals name="duration_day">
-        <item quantity="other">Days</item>
+        <item quantity="other">%d Days</item>
     </plurals>
     <string name="fee_tier_slow_title">Slow</string>
     <string name="fee_tier_medium_title">Medium</string>
@@ -220,7 +220,7 @@
     <string name="fee_tier_slow_description">Slow Transaction</string>
     <string name="fee_tier_medium_description">Medium Transaction</string>
     <string name="fee_tier_fast_description">Fast Transaction</string>
-    <string name="fee_estimated_duration">Estimated Delivery: %1$d %2$s</string>
+    <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
     <string name="fee_not_available">n/A</string>
     <string name="unlock_wallet">Unlock Wallet</string>
     <string name="biometricPrompt_title">Biometric Authentication</string>

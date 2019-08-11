@@ -67,7 +67,7 @@
     <string name="max_amount">Максимално Кол-во:</string>
     <string name="retry">Нов опит</string>
     <string name="loading">Зареждане</string>
-    <string name="pay">Pay</string>
+    <string name="pay">Плащане</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -111,7 +111,7 @@
     <string name="setup_connect_local_button">Създаване на портфейл</string>
     <string name="setup_connect_remote_description">Контролирайте дистанционно Вашия нод</string>
     <string name="setup_connect_remote_button">Свързване към отдалечен нод</string>
-    <string name="setup_connect_scan_connection_info">Scan connection data</string>
+    <string name="setup_connect_scan_connection_info">Сканиране на данните за свързване</string>
     <string name="demo_setupWalletBtn">Настрой портфейл</string>
     <string name="demo_setupWalletFirst">Първо трябва да настроите портфейла си.</string>
     <string name="send_lightningPayment">Изпрати lightning плащане</string>
@@ -119,7 +119,7 @@
     <string name="send_sendPayment">Изпращане на плащането</string>
     <string name="send_success">Плащането\nуспешно</string>
     <string name="send_fail">Плащането\nнеуспешно</string>
-    <string name="send_scan_info">Scan payment request</string>
+    <string name="send_scan_info">Сканирай заявка за плащане</string>
     <string name="receive_generateRequest">Създай заявка</string>
     <string name="receive_generateRequest_failed">Създаването на заявка неуспешно.</string>
     <string name="receive_lightning_request">Lightning Заявка</string>
@@ -169,7 +169,7 @@
     <string name="settings_blockExplorer">Block Explorer</string>
     <string name="settings_addressType">Биткойн тип на адреса</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibility (P2PSH)</item>
+        <item>Compatibility (P2SH)</item>
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Срок за Lightning заявка</string>
@@ -206,16 +206,16 @@
     <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
     <string name="error_wrong_password">Грешна парола</string>
     <plurals name="duration_minute">
-        <item quantity="one">Минута</item>
-        <item quantity="other">Минути</item>
+        <item quantity="one">%d Minute</item>
+        <item quantity="other">%d Minutes</item>
     </plurals>
     <plurals name="duration_hour">
-        <item quantity="one">Час</item>
-        <item quantity="other">Часа</item>
+        <item quantity="one">%d Hour</item>
+        <item quantity="other">%d Hours</item>
     </plurals>
     <plurals name="duration_day">
-        <item quantity="one">Ден</item>
-        <item quantity="other">Дни</item>
+        <item quantity="one">%d Day</item>
+        <item quantity="other">%d Days</item>
     </plurals>
     <string name="fee_tier_slow_title">Бавно</string>
     <string name="fee_tier_medium_title">Средно</string>
@@ -223,7 +223,7 @@
     <string name="fee_tier_slow_description">Бавна Транзакция</string>
     <string name="fee_tier_medium_description">Средно-бърза транзакция</string>
     <string name="fee_tier_fast_description">Бърза Транзакция</string>
-    <string name="fee_estimated_duration">Очаквано пристигане: %1$d %2$s</string>
+    <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
     <string name="fee_not_available">N/A</string>
     <string name="unlock_wallet">Отключете портфейла</string>
     <string name="biometricPrompt_title">Биометрична автентикация</string>

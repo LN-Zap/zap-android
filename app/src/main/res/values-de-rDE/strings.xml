@@ -206,16 +206,16 @@
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
     <plurals name="duration_minute">
-        <item quantity="one">Minute</item>
-        <item quantity="other">Minuten</item>
+        <item quantity="one">%d Minute</item>
+        <item quantity="other">%d Minutes</item>
     </plurals>
     <plurals name="duration_hour">
-        <item quantity="one">Stunde</item>
-        <item quantity="other">Stunden</item>
+        <item quantity="one">%d Hour</item>
+        <item quantity="other">%d Hours</item>
     </plurals>
     <plurals name="duration_day">
-        <item quantity="one">Tag</item>
-        <item quantity="other">Tage</item>
+        <item quantity="one">%d Day</item>
+        <item quantity="other">%d Days</item>
     </plurals>
     <string name="fee_tier_slow_title">Langsam</string>
     <string name="fee_tier_medium_title">Mittel</string>
@@ -223,7 +223,7 @@
     <string name="fee_tier_slow_description">Langsame Transaktion</string>
     <string name="fee_tier_medium_description">Mittlere Transaktion</string>
     <string name="fee_tier_fast_description">Schnelle Transaktion</string>
-    <string name="fee_estimated_duration">Geschätzte Dauer: %1$d %2$s</string>
+    <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
     <string name="fee_not_available">n/A</string>
     <string name="unlock_wallet">Wallet entsperren</string>
     <string name="biometricPrompt_title">Biometrische Authentifizierung</string>

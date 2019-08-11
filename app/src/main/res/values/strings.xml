@@ -240,17 +240,17 @@
     <string name="error_wrong_password">Wrong password</string>
 
     <plurals name="duration_minute">
-        <item quantity="one">Minute</item>
-        <item quantity="other">Minutes</item>
+        <item quantity="one">%d Minute</item>
+        <item quantity="other">%d Minutes</item>
     </plurals>
 
     <plurals name="duration_hour">
-        <item quantity="one">Hour</item>
-        <item quantity="other">Hours</item>
+        <item quantity="one">%d Hour</item>
+        <item quantity="other">%d Hours</item>
     </plurals>
     <plurals name="duration_day">
-        <item quantity="one">Day</item>
-        <item quantity="other">Days</item>
+        <item quantity="one">%d Day</item>
+        <item quantity="other">%d Days</item>
     </plurals>
 
     <string name="fee_tier_slow_title">Slow</string>
@@ -259,7 +259,7 @@
     <string name="fee_tier_slow_description">Slow Transaction</string>
     <string name="fee_tier_medium_description">Medium Transaction</string>
     <string name="fee_tier_fast_description">Fast Transaction</string>
-    <string name="fee_estimated_duration">Estimated Delivery: %1$d %2$s</string>
+    <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
     <string name="fee_not_available">n/A</string>
 
     <string name="unlock_wallet">Unlock Wallet</string>

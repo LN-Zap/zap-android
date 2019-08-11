@@ -142,16 +142,16 @@ public class OnChainFeeView extends ConstraintLayout {
         int minutes = blockTarget * 10;
 
         if (minutes < 60) {
-            String quantityString = getResources().getQuantityString(R.plurals.duration_minute, minutes);
-            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, minutes, quantityString));
+            String quantityString = getResources().getQuantityString(R.plurals.duration_minute, minutes, minutes);
+            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, quantityString));
         } else if (minutes < 60 * 24) {
             int hours = minutes / 60;
-            String quantityString = getResources().getQuantityString(R.plurals.duration_hour, hours);
-            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, hours, quantityString));
+            String quantityString = getResources().getQuantityString(R.plurals.duration_hour, hours, hours);
+            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, quantityString));
         } else {
             int days = minutes / 60 / 24;
-            String quantityString = getResources().getQuantityString(R.plurals.duration_day, days);
-            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, days, quantityString));
+            String quantityString = getResources().getQuantityString(R.plurals.duration_day, days, days);
+            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, quantityString));
         }
     }
 
