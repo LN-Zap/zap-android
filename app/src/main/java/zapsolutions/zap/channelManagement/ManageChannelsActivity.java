@@ -9,6 +9,7 @@ import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.protobuf.ByteString;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.Wallet;
@@ -16,9 +17,7 @@ import zapsolutions.zap.util.Wallet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageChannelsActivity extends BaseAppCompatActivity {
-
-    private static final String LOG_TAG = ManageChannelsActivity.class.getName();
+public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -114,8 +113,12 @@ public class ManageChannelsActivity extends BaseAppCompatActivity {
 
         // Show the list
 
-        mAdapter = new ChannelItemAdapter(mChannelItems);
+        mAdapter = new ChannelItemAdapter(mChannelItems, this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    public void onChannelSelect(ByteString channel, int type) {
+        //TODO open channel detail bottom sheet
+    }
 }

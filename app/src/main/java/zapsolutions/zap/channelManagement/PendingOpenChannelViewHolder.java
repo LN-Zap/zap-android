@@ -18,4 +18,10 @@ public class PendingOpenChannelViewHolder extends PendingChannelViewHolder {
     int getStatusText() {
         return R.string.channel_state_pending_open;
     }
+
+    void bindPendingOpenChannelItem(PendingOpenChannelItem pendingOpenChannelItem) {
+        bindPendingChannelItem(pendingOpenChannelItem.getChannel().getChannel());
+
+        setOnRootViewClickListener(pendingOpenChannelItem, ChannelListItem.TYPE_PENDING_OPEN_CHANNEL);
+    }
 }
