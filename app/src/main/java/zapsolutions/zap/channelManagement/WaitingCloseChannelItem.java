@@ -2,7 +2,6 @@ package zapsolutions.zap.channelManagement;
 
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.protobuf.ByteString;
-import zapsolutions.zap.util.ChannelUtil;
 
 public class WaitingCloseChannelItem extends ChannelListItem {
     private PendingChannelsResponse.WaitingCloseChannel mChannel;
@@ -17,8 +16,8 @@ public class WaitingCloseChannelItem extends ChannelListItem {
     }
 
     @Override
-    public ByteString getByteString() {
-        return ChannelUtil.serialize(mChannel);
+    public ByteString getChannelByteString() {
+        return mChannel.toByteString();
     }
 
     public PendingChannelsResponse.WaitingCloseChannel getChannel() {

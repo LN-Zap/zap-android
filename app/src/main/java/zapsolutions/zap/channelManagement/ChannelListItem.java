@@ -13,5 +13,5 @@ public abstract class ChannelListItem {
 
     abstract public int getType();
 
-    abstract public ByteString getByteString();
+    abstract public ByteString getChannelByteString();
 }

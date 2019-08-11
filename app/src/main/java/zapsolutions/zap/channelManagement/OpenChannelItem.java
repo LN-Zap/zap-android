@@ -2,7 +2,6 @@ package zapsolutions.zap.channelManagement;
 
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.google.protobuf.ByteString;
-import zapsolutions.zap.util.ChannelUtil;
 
 public class OpenChannelItem extends ChannelListItem {
     private Channel mChannel;
@@ -17,8 +16,8 @@ public class OpenChannelItem extends ChannelListItem {
     }
 
     @Override
-    public ByteString getByteString() {
-        return ChannelUtil.serialize(mChannel);
+    public ByteString getChannelByteString() {
+        return mChannel.toByteString();
     }
 
     public Channel getChannel() {

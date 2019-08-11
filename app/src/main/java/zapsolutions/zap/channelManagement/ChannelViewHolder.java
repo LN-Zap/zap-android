@@ -67,7 +67,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onSingleClick(View v) {
                 if (mChannelSelectListener != null) {
-                    mChannelSelectListener.onChannelSelect(item.getByteString(), type);
+                    mChannelSelectListener.onChannelSelect(item.getChannelByteString(), type);
                 }
             }
         });

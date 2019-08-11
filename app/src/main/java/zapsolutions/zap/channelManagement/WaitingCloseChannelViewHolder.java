@@ -19,9 +19,9 @@ public class WaitingCloseChannelViewHolder extends PendingChannelViewHolder {
         return R.string.channel_state_waiting_close;
     }
 
-    void bindWaitingClosedChannelItem(WaitingCloseChannelItem pendingWaitingClosedChannelItem) {
-        bindPendingChannelItem(pendingWaitingClosedChannelItem.getChannel().getChannel());
+    void bindWaitingCloseChannelItem(WaitingCloseChannelItem pendingWaitingCloseChannelItem) {
+        bindPendingChannelItem(pendingWaitingCloseChannelItem.getChannel().getChannel());
 
-        setOnRootViewClickListener(pendingWaitingClosedChannelItem, ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL);
+        setOnRootViewClickListener(pendingWaitingCloseChannelItem, ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL);
     }
 }

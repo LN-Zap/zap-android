@@ -81,7 +81,7 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
                 WaitingCloseChannelViewHolder waitingCloseChannelHolder = (WaitingCloseChannelViewHolder) holder;
                 WaitingCloseChannelItem waitingCloseChannelItem = (WaitingCloseChannelItem) mItems.get(position);
-                waitingCloseChannelHolder.bindWaitingClosedChannelItem(waitingCloseChannelItem);
+                waitingCloseChannelHolder.bindWaitingCloseChannelItem(waitingCloseChannelItem);
                 waitingCloseChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             default:
