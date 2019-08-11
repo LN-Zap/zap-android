@@ -82,11 +82,6 @@
             android:label="@string/activity_advanced_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
-        <activity
-            android:name="zapsolutions.zap.channelManagement.ChannelDetailsActivity"
-            android:label="@string/activity_channel_details"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeWithActionBar" />
     </application>
 
 </manifest>
