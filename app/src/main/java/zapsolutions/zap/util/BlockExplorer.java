@@ -38,7 +38,7 @@ public class BlockExplorer {
                 break;
             case "Blockstream (v3 Tor)":
                 networkID = mainnet ? "" : "testnet/";
-                url = "http://explorerzydxu5ecjrkwceayqybizmpjjznk5izmitf2modhcusuqlid.onion" + networkID + "tx/" + transactionID;
+                url = "http://explorerzydxu5ecjrkwceayqybizmpjjznk5izmitf2modhcusuqlid.onion/" + networkID + "tx/" + transactionID;
                 break;
             case "Smartbit":
                 networkID = mainnet ? "www" : "testnet";
@@ -88,7 +88,7 @@ public class BlockExplorer {
                 break;
             case "Blockstream (v3 Tor)":
                 networkID = mainnet ? "" : "testnet/";
-                url = "http://explorerzydxu5ecjrkwceayqybizmpjjznk5izmitf2modhcusuqlid.onion" + networkID + "address/" + address;
+                url = "http://explorerzydxu5ecjrkwceayqybizmpjjznk5izmitf2modhcusuqlid.onion/" + networkID + "address/" + address;
                 break;
             case "Smartbit":
                 networkID = mainnet ? "www" : "testnet";
