@@ -1,20 +1,16 @@
-## How to create or update a translation
+## How to translate:
 
-1. If you don't have a github account yet, create one.
-2. Fork the zap-android repository.
-3. Download your forked repository.
-4. Navigate to the res folder in your project. (.../app/src/main/res/)
-5. Check if your res folder contains a folder named "values-XX" where "XX" stands for your country code. For example "values-fr" for france.
-6. If the folder does not exist, create it and copy the strings.xml file from the default values folder (.../app/src/main/res/values/) into this newly created folder.
-   If it already exists, open the contained strings.xml file.
-7. Translate all untranslated strings using a text editor of your choice. The "strings.xml" file contains detailed explanations for any special cases occuring while doing the translation.
-8. Make a commit with your translations to your forked project.
-9. Make a pull request.
-10. Celebrate yourself for supporting a free open source project! This step is MANDATORY!
+1. Go to [this crowdin project][crowdin]
+2. Select your language
+3. Select "app texts"
+4. If you don't have a crowdin account, you have to create one now.
+5. Translate the missing strings.
+6. Celebrate yourself for supporting a free open source project! This step is MANDATORY!
 
-### Keeping a translation up to date
 
-New strings are added constantly. To keep in sync, save a copy of the english version when you are done with your translation.
-The next time you want to update your translation, compare the current english version with your previously saved english version with a diff tool of your choice.
-This way you can immediately see what has changed since your last translation and adapt your translation accordingly.
-Finally, submit a pull request of your updated file and save a new copy of the current english version for your next update.
+## When will my translation be visible in the app?
+
+Your translation will only be visible in the app after the next update will be published on Google Play Store. There is no fixed schedule when updates are happening.
+So this might take a few days or a few weeks.
+
+[crowdin]: https://crowdin.com/project/zap-android
