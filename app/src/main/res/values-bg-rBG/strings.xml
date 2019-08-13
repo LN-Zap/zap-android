@@ -99,8 +99,6 @@
     <string name="channel_local_balance">Вашият баланс</string>
     <string name="channel_remote_balance">Чуждият баланс</string>
     <string name="channel_no_alias">Без име</string>
-    <string name="channel_remote_public_key">Remote Public Key</string>
-    <string name="channel_funding_transaction">Funding Transaction</string>
     <string name="channel_state_open">отворен</string>
     <string name="channel_state_offline">офлайн</string>
     <string name="channel_state_pending_open">отваря се</string>
