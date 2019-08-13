@@ -99,6 +99,8 @@
     <string name="channel_local_balance">Tu Balance</string>
     <string name="channel_remote_balance">Balance Remoto</string>
     <string name="channel_no_alias">Sin Nombre</string>
+    <string name="channel_remote_public_key">Remote Public Key</string>
+    <string name="channel_funding_transaction">Funding Transaction</string>
     <string name="channel_state_open">Abierto</string>
     <string name="channel_state_offline">Desconectado</string>
     <string name="channel_state_pending_open">Abriendo</string>

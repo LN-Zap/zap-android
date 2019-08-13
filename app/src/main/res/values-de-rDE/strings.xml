@@ -99,6 +99,8 @@
     <string name="channel_local_balance">Dein Kontostand</string>
     <string name="channel_remote_balance">Remote Kontostand</string>
     <string name="channel_no_alias">Unbenannt</string>
+    <string name="channel_remote_public_key">Remote Public Key</string>
+    <string name="channel_funding_transaction">Funding Transaction</string>
     <string name="channel_state_open">Offen</string>
     <string name="channel_state_offline">Offline</string>
     <string name="channel_state_pending_open">Wird geöffnet</string>
