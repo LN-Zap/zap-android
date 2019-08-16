@@ -1,9 +1,11 @@
-package zapsolutions.zap.historyList;
+package zapsolutions.zap.transactionHistory.listItems;
+
+import com.google.protobuf.ByteString;
 
 /**
  * This class can be used to generate imaginary transactions for demonstration purposes.
  */
-public class DemoItem extends HistoryListItem {
+public class DemoItem extends TransactionItem {
 
 
     private int mTransactionType; // 1 - on-chain tx, 2 - lnInvoice, 3 - lnPayment
@@ -51,5 +53,10 @@ public class DemoItem extends HistoryListItem {
 
     public boolean isExpired() {
         return mExpired;
+    }
+
+    @Override
+    public ByteString getTransactionByteString() {
+        return null;
     }
 }

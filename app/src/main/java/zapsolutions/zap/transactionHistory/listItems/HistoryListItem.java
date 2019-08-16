@@ -1,9 +1,9 @@
-package zapsolutions.zap.historyList;
+package zapsolutions.zap.transactionHistory.listItems;
 
 public abstract class HistoryListItem implements Comparable<HistoryListItem> {
 
     public static final int TYPE_DATE = 0;
-    public static final int TYPE_TRANSACTION = 1;
+    public static final int TYPE_ON_CHAIN_TRANSACTION = 1;
     public static final int TYPE_LN_INVOICE = 2;
     public static final int TYPE_LN_PAYMENT = 3;
     public static final int TYPE_DEMO = 4;

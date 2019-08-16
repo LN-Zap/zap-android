@@ -1,4 +1,4 @@
-package zapsolutions.zap.fragments;
+package zapsolutions.zap.transactionHistory;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,13 +21,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
+import com.google.protobuf.ByteString;
 import zapsolutions.zap.R;
-import zapsolutions.zap.historyList.DateItem;
-import zapsolutions.zap.historyList.HistoryItemAdapter;
-import zapsolutions.zap.historyList.HistoryListItem;
-import zapsolutions.zap.historyList.LnInvoiceItem;
-import zapsolutions.zap.historyList.LnPaymentItem;
-import zapsolutions.zap.historyList.TransactionItem;
+import zapsolutions.zap.transactionHistory.listItems.DateItem;
+import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
+import zapsolutions.zap.transactionHistory.listItems.LnInvoiceItem;
+import zapsolutions.zap.transactionHistory.listItems.LnPaymentItem;
+import zapsolutions.zap.transactionHistory.listItems.OnChainTransactionItem;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -42,9 +43,9 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener{
 
-    private static final String LOG_TAG = HistoryFragment.class.getName();
+    private static final String LOG_TAG = TransactionHistoryFragment.class.getName();
 
     private ImageView mListOptions;
     private RecyclerView mRecyclerView;
@@ -58,7 +59,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
     private List<HistoryListItem> mHistoryItems;
 
 
-    public HistoryFragment() {
+    public TransactionHistoryFragment() {
         // Required empty public constructor
     }
 
@@ -86,7 +87,7 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create and set adapter
-        mAdapter = new HistoryItemAdapter(mHistoryItems);
+        mAdapter = new HistoryItemAdapter(mHistoryItems, this);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -173,12 +174,12 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
 
             if (Wallet.getInstance().mOnChainTransactionList != null) {
                 for (Transaction t : Wallet.getInstance().mOnChainTransactionList) {
-                    TransactionItem transactionItem = new TransactionItem(t);
+                    OnChainTransactionItem onChainTransactionItem = new OnChainTransactionItem(t);
 
                     if (Wallet.getInstance().isTransactionInternal(t)) {
-                        internalTransactions.add(transactionItem);
+                        internalTransactions.add(onChainTransactionItem);
                     } else {
-                        normalPayments.add(transactionItem);
+                        normalPayments.add(onChainTransactionItem);
                     }
                 }
             }
@@ -334,5 +335,10 @@ public class HistoryFragment extends Fragment implements Wallet.HistoryListener,
             }
         });
 
+    }
+
+    @Override
+    public void onTransactionSelect(ByteString transaction, int type) {
+        Toast.makeText(getActivity(), R.string.coming_soon, Toast.LENGTH_SHORT).show();
     }
 }
