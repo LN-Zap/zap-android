@@ -2,9 +2,6 @@ package zapsolutions.zap;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,7 +11,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.common.net.UrlEscapers;
@@ -22,6 +18,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.android.QRCode;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UserGuardian;
@@ -208,16 +205,9 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
     public void guardianDialogConfirmed(String DialogName) {
         switch (DialogName) {
             case UserGuardian.COPY_TO_CLIPBOARD:
-                copyToClipboard();
+                ClipBoardUtil.copyToClipboard(getApplicationContext(), "Address", mDataToEncode);
                 break;
         }
-    }
-
-    private void copyToClipboard() {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Address", mDataToEncode);
-        clipboard.setPrimaryClip(clip);
-        Toast.makeText(this, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 
     @Override

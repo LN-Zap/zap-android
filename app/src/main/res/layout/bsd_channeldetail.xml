@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheets"
+    android:padding="10dp">
+
+    <ImageButton
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:tint="@color/gray"
+        app:layout_constraintBottom_toTopOf="@+id/separator_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/nodeAlias"
+        app:srcCompat="@drawable/ic_close_black_24dp" />
+
+    <TextView
+        android:id="@+id/nodeAlias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLength="25"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Remote name" />
+
+    <ImageView
+        android:id="@+id/statusDot"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/separator_1"
+        app:layout_constraintEnd_toStartOf="@+id/nodeAlias"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_status_dot_black_24dp" />
+
+    <ImageView
+        android:id="@+id/separator_1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nodeAlias"
+        app:srcCompat="@color/gray" />
+
+    <TextView
+        android:id="@+id/remotePubKeyLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="@string/channel_remote_public_key"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_1" />
+
+    <TextView
+        android:id="@+id/remotePubKeyText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/remotePubKeyCopyIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remotePubKeyLabel"
+        tools:text="0279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+    <ImageView
+        android:id="@+id/remotePubKeyCopyIcon"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="@null"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/remotePubKeyText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/remotePubKeyText"
+        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+
+    <ImageView
+        android:id="@+id/separator_2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/remotePubKeyCopyIcon"
+        app:srcCompat="@color/gray" />
+
+    <TextView
+        android:id="@+id/localBalanceTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/channel_local_balance"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separator_2" />
+
+    <ProgressBar
+        android:id="@+id/balanceBarLocal"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="8dp"
+        android:progressDrawable="@drawable/channel_local_balance_progress_bar"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/localBalanceTitle" />
+
+    <TextView
+        android:id="@+id/remoteBalanceTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/channel_remote_balance"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separator_2" />
+
+    <ProgressBar
+        android:id="@+id/balanceBarRemote"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layoutDirection="rtl"
+        android:progressDrawable="@drawable/channel_remote_balance_progress_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_50"
+        app:layout_constraintTop_toBottomOf="@+id/remoteBalanceTitle" />
+
+    <TextView
+        android:id="@+id/localBalance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="localBalance"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balanceBarLocal" />
+
+    <TextView
+        android:id="@+id/remoteBalance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/balanceBarRemote"
+        tools:text="remoteBalance" />
+
+    <ImageView
+        android:id="@+id/separator_3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/localBalance"
+        app:srcCompat="@color/gray" />
+
+    <TextView
+        android:id="@+id/fundingTxLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="@string/channel_funding_transaction"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_3" />
+
+    <TextView
+        android:id="@+id/fundingTxText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/remotePubKeyCopyIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fundingTxLabel"
+        tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+    <ImageView
+        android:id="@+id/fundingTxCopyIcon"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="@null"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/fundingTxText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fundingTxText"
+        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+
+    <View
+        android:id="@+id/spacer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fundingTxText">
+
+    </View>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+</androidx.constraintlayout.widget.ConstraintLayout>

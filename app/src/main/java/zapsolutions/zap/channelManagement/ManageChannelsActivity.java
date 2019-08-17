@@ -119,6 +119,13 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     public void onChannelSelect(ByteString channel, int type) {
-        //TODO open channel detail bottom sheet
+        if (channel != null) {
+            ChannelDetailBSDFragment channelDetailBSDFragment = new ChannelDetailBSDFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL, channel);
+            bundle.putInt(ChannelDetailBSDFragment.ARGS_TYPE, type);
+            channelDetailBSDFragment.setArguments(bundle);
+            channelDetailBSDFragment.show(getSupportFragmentManager(), ChannelDetailBSDFragment.TAG);
+        }
     }
 }

@@ -1,6 +1,5 @@
 package zapsolutions.zap;
 
-import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -20,6 +19,7 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
@@ -79,9 +79,8 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
         btnPaste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 try {
-                    validateInvoice(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
+                    validateInvoice(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
                 } catch (NullPointerException e) {
                     showError(getResources().getString(R.string.error_emptyClipboardPayment), 4000);
                 }

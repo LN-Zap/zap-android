@@ -111,6 +111,8 @@
     <string name="channel_local_balance">Your Balance</string>
     <string name="channel_remote_balance">Remote Balance</string>
     <string name="channel_no_alias">Unnamed</string>
+    <string name="channel_remote_public_key">Remote Public Key</string>
+    <string name="channel_funding_transaction">Funding Transaction</string>
     <string name="channel_state_open">open</string>
     <string name="channel_state_offline">offline</string>
     <string name="channel_state_pending_open">pending open</string>
@@ -266,5 +268,4 @@
 
 
     <string name="biometricPrompt_title">Biometric Authentication</string>
-
 </resources>

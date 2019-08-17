@@ -1,6 +1,5 @@
 package zapsolutions.zap.setup;
 
-import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -31,6 +30,7 @@ import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
 import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
+import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
@@ -56,11 +56,10 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
         btnPaste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 String clipboardContent = "";
                 boolean isClipboardContentValid = false;
                 try {
-                    clipboardContent = clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+                    clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext());
                     isClipboardContentValid = true;
                 } catch (NullPointerException e) {
                     showError(getResources().getString(R.string.error_emptyClipboardConnect), 4000);
