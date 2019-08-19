@@ -2,6 +2,8 @@ package zapsolutions.zap.fragments;
 
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Toast;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
@@ -16,6 +18,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
     private UserGuardian mUG;
     private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwScreenProtection;
+    private ListPreference mSwBlockExplorer;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -24,6 +27,19 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
 
         mUG = new UserGuardian(getActivity(), this);
 
+        // On change block explorer option
+        mSwBlockExplorer = findPreference("blockExplorer");
+        mSwBlockExplorer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (newValue != null && newValue.toString().equalsIgnoreCase("Blockstream (v3 Tor)")) {
+                    Toast.makeText(getActivity(), R.string.settings_blockExplorer_tor_toast, Toast.LENGTH_LONG).show();
+                    return true;
+                } else {
+                    return true;
+                }
+            }
+        });
 
         // On change scramble pin option
         mSwScrambledPin = findPreference("scramblePin");
