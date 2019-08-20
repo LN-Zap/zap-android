@@ -34,10 +34,8 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (newValue != null && newValue.toString().equalsIgnoreCase("Blockstream (v3 Tor)")) {
                     Toast.makeText(getActivity(), R.string.settings_blockExplorer_tor_toast, Toast.LENGTH_LONG).show();
-                    return true;
-                } else {
-                    return true;
                 }
+                return true;
             }
         });
 
