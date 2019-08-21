@@ -36,6 +36,10 @@ public class BlockExplorer {
                 networkID = mainnet ? "" : "testnet/";
                 url = "https://blockstream.info/" + networkID + "tx/" + transactionID;
                 break;
+            case "Blockstream (v3 Tor)":
+                networkID = mainnet ? "" : "testnet/";
+                url = "http://explorerzydxu5ecjrkwceayqybizmpjjznk5izmitf2modhcusuqlid.onion/" + networkID + "tx/" + transactionID;
+                break;
             case "Smartbit":
                 networkID = mainnet ? "www" : "testnet";
                 url = "https://" + networkID + ".smartbit.com.au/tx/" + transactionID;
@@ -81,6 +85,10 @@ public class BlockExplorer {
             case "Blockstream":
                 networkID = mainnet ? "" : "testnet/";
                 url = "https://blockstream.info/" + networkID + "address/" + address;
+                break;
+            case "Blockstream (v3 Tor)":
+                networkID = mainnet ? "" : "testnet/";
+                url = "http://explorerzydxu5ecjrkwceayqybizmpjjznk5izmitf2modhcusuqlid.onion/" + networkID + "address/" + address;
                 break;
             case "Smartbit":
                 networkID = mainnet ? "www" : "testnet";

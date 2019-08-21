@@ -197,6 +197,7 @@
 
 
     <string name="settings_blockExplorer">Block Explorer</string>
+    <string name="settings_blockExplorer_tor_toast">Tor Browser for Android is required.</string>
     <string name="settings_addressType">Bitcoin Address Type</string>
 
     <string-array name="settings_receiveAddressDisplayValues">

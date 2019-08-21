@@ -27,6 +27,7 @@
     <string-array name="blockExplorer">
         <item>BlockCypher</item>
         <item>Blockstream</item>
+        <item>Blockstream (v3 Tor)</item>
         <item>Smartbit</item>
         <item>Blockchain Reader (Yogh)</item>
         <item>OXT</item>
