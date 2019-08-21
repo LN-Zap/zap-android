@@ -1,7 +1,6 @@
 package zapsolutions.zap;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,22 +35,13 @@ public class LandingActivity extends BaseAppCompatActivity {
                 // Reset settings
                 PrefsUtil.edit().clear().commit();
 
-                // ToDo: Show popup
                 new AlertDialog.Builder(LandingActivity.this)
-                        .setTitle(R.string.app_resetted_title)
-                        .setMessage(R.string.app_resetted_message)
+                        .setTitle(R.string.app_reset_title)
+                        .setMessage(R.string.app_reset_message)
                         .setCancelable(true)
-                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                enterWallet();
-                            }
-                        })
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                enterWallet();
-                            }
-                        }).show();
+                        .setOnCancelListener(dialogInterface -> enterWallet())
+                        .setPositiveButton(R.string.ok, (dialog, whichButton) -> enterWallet())
+                        .show();
 
                 // Set new settings version
                 PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
