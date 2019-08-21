@@ -31,25 +31,26 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
             int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
 
-            if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
-                // Reset settings
-                PrefsUtil.edit().clear().commit();
+            if (PrefsUtil.isWalletSetup()) {
+                if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
+                    // Reset settings
+                    PrefsUtil.edit().clear().commit();
 
-                new AlertDialog.Builder(LandingActivity.this)
-                        .setTitle(R.string.app_reset_title)
-                        .setMessage(R.string.app_reset_message)
-                        .setCancelable(true)
-                        .setOnCancelListener(dialogInterface -> enterWallet())
-                        .setPositiveButton(R.string.ok, (dialog, whichButton) -> enterWallet())
-                        .show();
+                    new AlertDialog.Builder(LandingActivity.this)
+                            .setTitle(R.string.app_reset_title)
+                            .setMessage(R.string.app_reset_message)
+                            .setCancelable(true)
+                            .setOnCancelListener(dialogInterface -> enterWallet())
+                            .setPositiveButton(R.string.ok, (dialog, whichButton) -> enterWallet())
+                            .show();
 
-                // Set new settings version
-                PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
+                }
             }
-        } else {
-            // Set new settings version
-            PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
+
         }
+
+        // Set new settings version
+        PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
 
 
     }
