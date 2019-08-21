@@ -268,4 +268,7 @@
 
 
     <string name="biometricPrompt_title">Biometric Authentication</string>
+
+    <string name="app_resetted_title">Please note</string>
+    <string name="app_resetted_message">The last update included some breaking changes.\nThe app has been reset and you will have to redo the setup process.</string>
 </resources>

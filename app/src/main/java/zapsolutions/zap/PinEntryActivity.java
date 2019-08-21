@@ -1,7 +1,6 @@
 package zapsolutions.zap;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -17,12 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
-import at.favre.lib.armadillo.Armadillo;
-import at.favre.lib.armadillo.PBKDF2KeyStretcher;
-import com.google.common.io.BaseEncoding;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ScrambledNumpad;
@@ -118,7 +113,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         displayUserInput();
 
         // ToDo: Remove if nobody has the old version installed.
-        int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER);
+        int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
 
         // Make biometrics Button visible if enabled.
         if (PrefsUtil.isBiometricEnabled() && ver >= 16) {
@@ -302,10 +297,6 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                     .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
 
-            // ToDo: Remove if nobody has the old version installed. (Build number < 9)
-            convertLegacyConnectionSettings();
-
-
             Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -364,70 +355,4 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         }
     }
 
-
-    // ToDo: Remove if nobody has the old version installed. (Build number < 9)
-    private void convertLegacyConnectionSettings() {
-        int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER);
-
-        // Switch the way how connection data is stored
-        if (ver < 16) {
-
-            boolean success = false;
-            // Read the old connection settings
-            App ctx = App.getAppContext();
-
-            SharedPreferences prefsRemote = Armadillo.create(ctx, "prefs_remote")
-                    .encryptionFingerprint(ctx)
-                    .keyStretchingFunction(new PBKDF2KeyStretcher(RefConstants.NUM_HASH_ITERATIONS, null))
-                    .password(ctx.inMemoryPin.toCharArray())
-                    .contentKeyDigest(UtilFunctions.getZapsalt().getBytes())
-                    .build();
-
-            String connectionInfoCombined = prefsRemote.getString("remote_combined", "");
-            String[] connectionInfo = connectionInfoCombined.split(";");
-
-            if (connectionInfo.length > 1) {
-
-                // Save the old configuration in the new format
-                String macaroon = connectionInfo[3];
-                if (!(connectionInfo[2].equals("NO_CERT") || connectionInfo[2].equals("null"))) {
-                    // No BTC pay, we now have to encode the macaroon in base16
-                    byte[] macaroonBytes = BaseEncoding.base64Url().decode(connectionInfo[3]);
-                    macaroon = BaseEncoding.base16().encode(macaroonBytes);
-                }
-
-                WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
-                try {
-                    walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME, "remote", connectionInfo[0],
-                            Integer.parseInt(connectionInfo[1]), connectionInfo[2], macaroon);
-
-                    walletConfigsManager.apply();
-                    PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME).commit();
-
-                    success = true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                // Cleanup and set new settings version
-                if (success) {
-                    // Clear the old settings
-                    prefsRemote.edit().clear().commit();
-                    // Set new settings version
-                    PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
-                } else {
-                    // Clear all
-                    PrefsUtil.edit().clear().commit();
-                    prefsRemote.edit().clear().commit();
-                    // Set new settings version
-                    PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
-                }
-            } else {
-                PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
-            }
-        } else {
-            // Set new settings version
-            PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
-        }
-    }
 }
