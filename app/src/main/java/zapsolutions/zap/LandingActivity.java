@@ -30,32 +30,40 @@ public class LandingActivity extends BaseAppCompatActivity {
         // support for clearing shared preferences, on breaking changes
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
             int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
-
-            if (PrefsUtil.isWalletSetup()) {
-                if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
-                    // Reset settings
-                    PrefsUtil.edit().clear().commit();
-
-                    new AlertDialog.Builder(LandingActivity.this)
-                            .setTitle(R.string.app_reset_title)
-                            .setMessage(R.string.app_reset_message)
-                            .setCancelable(true)
-                            .setOnCancelListener(dialogInterface -> enterWallet())
-                            .setPositiveButton(R.string.ok, (dialog, whichButton) -> enterWallet())
-                            .show();
-
-                }
+            if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
+                resetApp();
+            } else {
+                enterWallet();
             }
-
+        } else {
+            // Make sure settings get reset for versions that don't expose settings version
+            resetApp();
         }
+
+    }
+
+    private void resetApp() {
+        if (PrefsUtil.isWalletSetup()) {
+            // Reset settings
+            PrefsUtil.edit().clear().commit();
+
+            new AlertDialog.Builder(LandingActivity.this)
+                    .setTitle(R.string.app_reset_title)
+                    .setMessage(R.string.app_reset_message)
+                    .setCancelable(true)
+                    .setOnCancelListener(dialogInterface -> enterWallet())
+                    .setPositiveButton(R.string.ok, (dialog, whichButton) -> enterWallet())
+                    .show();
+        } else {
+            enterWallet();
+        }
+    }
+
+    private void enterWallet() {
 
         // Set new settings version
         PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
 
-
-    }
-
-    private void enterWallet() {
         if (PrefsUtil.isWalletSetup()) {
             // Go to PIN entry screen
             Intent pinIntent = new Intent(this, PinEntryActivity.class);
