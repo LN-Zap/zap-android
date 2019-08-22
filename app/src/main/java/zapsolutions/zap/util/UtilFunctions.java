@@ -34,7 +34,7 @@ public class UtilFunctions {
         //HmacSHA1 with PBKDF2 and ZapSalt
         byte[] hash = new byte[0];
         try {
-            hash = pbkdf2(data.toCharArray(), getZapsalt().getBytes(), RefConstants.NUM_HASH_ITERATIONS, 32);
+            hash = encodePbkdf2(data.toCharArray(), getZapsalt().getBytes(), RefConstants.NUM_HASH_ITERATIONS, 32);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (InvalidKeySpecException e) {
@@ -60,7 +60,6 @@ public class UtilFunctions {
     }
 
     public static void createRandomSource() {
-        // Save the new WalletConfigurations in encrypted prefs
         try {
             SecureRandom random = new SecureRandom();
             int randomNumber = random.nextInt();
@@ -82,7 +81,7 @@ public class UtilFunctions {
         return new String(hexChars);
     }
 
-    private static byte[] pbkdf2(char[] password, byte[] salt, int iterations, int bytes)
+    private static byte[] encodePbkdf2(char[] password, byte[] salt, int iterations, int bytes)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
