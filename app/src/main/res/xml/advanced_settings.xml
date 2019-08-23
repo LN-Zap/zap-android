@@ -6,7 +6,7 @@
         app:iconSpaceReserved="false">
 
         <ListPreference
-            android:defaultValue="BlockCypher"
+            android:defaultValue="Blockstream"
             android:dialogTitle="@string/settings_blockExplorer"
             android:entries="@array/blockExplorer"
             android:entryValues="@array/blockExplorer"
