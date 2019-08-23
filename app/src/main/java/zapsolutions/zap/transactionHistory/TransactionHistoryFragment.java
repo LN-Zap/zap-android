@@ -179,7 +179,9 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                     if (Wallet.getInstance().isTransactionInternal(t)) {
                         internalTransactions.add(onChainTransactionItem);
                     } else {
-                        normalPayments.add(onChainTransactionItem);
+                        if (t.getAmount() != 0) {
+                            normalPayments.add(onChainTransactionItem);
+                        }
                     }
                 }
             }

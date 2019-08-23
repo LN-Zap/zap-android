@@ -1251,10 +1251,6 @@ public class Wallet {
             }
         }
 
-        if (transaction.getAmount() == 0) {
-            return true;
-        }
-
         return false;
     }
 
