@@ -21,7 +21,6 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         setSuccessState(true);
 
-        // Set time of Day
         setTimeOfDay(onChainTransactionItem.mCreationDate);
 
         // is internal?
@@ -54,10 +53,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     setSecondaryDescription(aliasOpened, true);
                     break;
             }
-
-
         } else {
-
             // It is a normal transaction
             setIcon(TransactionIcon.ONCHAIN);
             setAmount(amount, true);
@@ -80,7 +76,6 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     setPrimaryDescription(mContext.getString(R.string.sent));
                     break;
             }
-
         }
 
         // Set on click listener

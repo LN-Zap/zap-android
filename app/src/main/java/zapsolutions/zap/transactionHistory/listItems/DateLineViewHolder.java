@@ -36,7 +36,6 @@ public class DateLineViewHolder extends RecyclerView.ViewHolder {
                 mTvDate.setText(formattedDate);
             }
         }
-
     }
 
     private Date getYesterday() {

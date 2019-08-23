@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import zapsolutions.zap.R;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.DateLineViewHolder;
-import zapsolutions.zap.transactionHistory.listItems.DemoItem;
-import zapsolutions.zap.transactionHistory.listItems.DemoViewHolder;
 import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
 import zapsolutions.zap.transactionHistory.listItems.LnInvoiceItem;
 import zapsolutions.zap.transactionHistory.listItems.LnInvoiceViewHolder;
@@ -52,9 +50,6 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case HistoryListItem.TYPE_LN_PAYMENT:
                 View lnPaymentView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);
                 return new LnPaymentViewHolder(lnPaymentView);
-            case HistoryListItem.TYPE_DEMO:
-                View demoView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);
-                return new DemoViewHolder(demoView);
             default:
                 throw new IllegalStateException("Unknown history list item type: " + viewType);
         }
@@ -88,12 +83,8 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 lnPaymentHolder.bindLnPaymentItem(lnPaymentItem);
                 lnPaymentHolder.addOnTransactionSelectListener(mTransactionSelectListener);
                 break;
-            case HistoryListItem.TYPE_DEMO:
-                DemoViewHolder demoHolder = (DemoViewHolder) holder;
-                DemoItem demoItem = (DemoItem) mItems.get(position);
-                demoHolder.bindDemoItem(demoItem);
-                demoHolder.addOnTransactionSelectListener(mTransactionSelectListener);
-                break;
+            default:
+                throw new IllegalStateException("Unknown history list item type: " + type);
         }
     }
 

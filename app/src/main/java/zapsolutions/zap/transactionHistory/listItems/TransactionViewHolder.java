@@ -97,6 +97,32 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    void setAmount(Long amount, int color, boolean fixedValue, boolean visible) {
+        mAmount.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+        if (fixedValue) {
+            // compare the amount with 0
+            int result = amount.compareTo(0L);
+            mAmount.setTextColor(ContextCompat.getColor(mContext, color));
+            switch (result) {
+                case 0:
+                    // amount = 0
+                    mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
+                    break;
+                case 1:
+                    // amount > 0
+                    mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
+                    break;
+                case -1:
+                    // amount < 0
+                    mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount).replace("-", "- "));
+                    break;
+            }
+        } else {
+            mAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        }
+    }
+
     void setFee(long amount, boolean visible) {
         mTransactionFee.setVisibility(visible ? View.VISIBLE : View.GONE);
 
