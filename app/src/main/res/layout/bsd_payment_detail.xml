@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheets"
+    android:padding="10dp">
+
+    <ImageButton
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:tint="@color/gray"
+        app:layout_constraintBottom_toTopOf="@+id/separator_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/transactionDescription"
+        app:srcCompat="@drawable/ic_close_black_24dp" />
+
+    <TextView
+        android:id="@+id/transactionDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLength="25"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Transaction Description" />
+
+
+    <ImageView
+        android:id="@+id/separator_1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transactionDescription"
+        app:srcCompat="@color/gray" />
+
+
+    <TextView
+        android:id="@+id/amountLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_1"
+        tools:text="Amount:" />
+
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:textAlignment="viewEnd"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/amountLabel"
+        app:layout_constraintTop_toBottomOf="@id/separator_1"
+        tools:text="10 sat" />
+
+    <TextView
+        android:id="@+id/memoLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amount"
+        tools:text="Verwendungszweck:" />
+
+    <TextView
+        android:id="@+id/memo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:textAlignment="viewEnd"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/memoLabel"
+        app:layout_constraintTop_toBottomOf="@+id/amount"
+        tools:text="Some description!" />
+
+    <TextView
+        android:id="@+id/feeLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/memo"
+        tools:text="Fee:" />
+
+    <TextView
+        android:id="@+id/fee"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:textAlignment="viewEnd"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/dateLabel"
+        app:layout_constraintTop_toBottomOf="@+id/memo"
+        tools:text="1 sat" />
+
+    <TextView
+        android:id="@+id/dateLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fee"
+        tools:text="Date:" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:textAlignment="viewEnd"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/dateLabel"
+        app:layout_constraintTop_toBottomOf="@+id/fee"
+        tools:text="Yesterday" />
+
+
+    <TextView
+        android:id="@+id/preimageLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date"
+        tools:text="Transaction ID:" />
+
+    <TextView
+        android:id="@+id/preimage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:singleLine="true"
+        android:textAlignment="viewEnd"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/preimageCopyIcon"
+        app:layout_constraintStart_toEndOf="@id/preimageLabel"
+        app:layout_constraintTop_toBottomOf="@+id/date"
+        tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+    <ImageView
+        android:id="@+id/preimageCopyIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:background="@null"
+        android:paddingStart="20dp"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/preimage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/preimage"
+        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+
+
+    <View
+        android:id="@+id/spacer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/preimage">
+
+    </View>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+</androidx.constraintlayout.widget.ConstraintLayout>

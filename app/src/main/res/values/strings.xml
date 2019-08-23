@@ -70,6 +70,16 @@
     <string name="retry">Retry</string>
     <string name="loading">Loading</string>
     <string name="pay">Pay</string>
+    <string name="date">Date</string>
+    <string name="expiry">Expiry</string>
+    <string name="expired">Expired</string>
+    <string name="remaining">remaining</string>
+    <string name="address">Address</string>
+    <string name="transactionID">TransactionID</string>
+    <string name="channel">Channel</string>
+    <string name="event">Event</string>
+    <string name="preimage" translatable="false">Preimage</string>
+    <string name="channel_event">Channel Event</string>
 
 
     <string name="activity_receive">Receive</string>
@@ -101,6 +111,7 @@
     <string name="internal">Internal</string>
     <string name="opened_channel">Channel opened</string>
     <string name="closed_channel">Channel closed</string>
+    <string name="force_closed_channel">Channel force closed</string>
     <string name="filter_transactions">Filter transactions</string>
     <string name="normal_payments">Normal Payments</string>
     <string name="expired_requests">Expired Requests</string>
@@ -242,11 +253,14 @@
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_wrong_password">Wrong password</string>
 
+    <plurals name="duration_second">
+        <item quantity="one">%d Second</item>
+        <item quantity="other">%d Seconds></item>
+    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minutes</item>
     </plurals>
-
     <plurals name="duration_hour">
         <item quantity="one">%d Hour</item>
         <item quantity="other">%d Hours</item>
@@ -255,6 +269,12 @@
         <item quantity="one">%d Day</item>
         <item quantity="other">%d Days</item>
     </plurals>
+
+    <string name="duration_second_short">sec</string>
+    <string name="duration_minute_short">min</string>
+    <string name="duration_hour_short">hr</string>
+    <string name="duration_day_short">d</string>
+
 
     <string name="fee_tier_slow_title">Slow</string>
     <string name="fee_tier_medium_title">Medium</string>
@@ -267,9 +287,10 @@
 
     <string name="unlock_wallet">Unlock Wallet</string>
 
-
     <string name="biometricPrompt_title">Biometric Authentication</string>
 
+    <string name="invoice_detail">Invoice Detail</string>
+    <string name="transaction_detail">Transaction Detail</string>
     <string name="app_reset_title">Please note</string>
     <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
 </resources>
