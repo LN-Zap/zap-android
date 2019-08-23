@@ -28,7 +28,7 @@ import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
-import zapsolutions.zap.fragments.HistoryFragment;
+import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
@@ -80,7 +80,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 case R.id.navigation_history:
                     // Display the fragment as main content.
                     mFt = getSupportFragmentManager().beginTransaction();
-                    mCurrentFragment = new HistoryFragment();
+                    mCurrentFragment = new TransactionHistoryFragment();
                     mFt.replace(R.id.mainContent, mCurrentFragment);
                     //mFt.addToBackStack(null);
                     mFt.commit();

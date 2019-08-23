@@ -1,4 +1,4 @@
-package zapsolutions.zap.historyList;
+package zapsolutions.zap.transactionHistory.listItems;
 
 import android.content.Context;
 import android.view.View;
@@ -36,7 +36,6 @@ public class DateLineViewHolder extends RecyclerView.ViewHolder {
                 mTvDate.setText(formattedDate);
             }
         }
-
     }
 
     private Date getYesterday() {

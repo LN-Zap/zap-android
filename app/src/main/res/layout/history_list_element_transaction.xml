@@ -52,7 +52,7 @@
         android:paddingStart="5dp">
 
         <TextView
-            android:id="@+id/transactionState"
+            android:id="@+id/primaryTransactionDescription"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -62,7 +62,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/transactionDescription"
+            android:id="@+id/secondaryTransactionDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

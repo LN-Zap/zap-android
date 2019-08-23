@@ -1,8 +1,9 @@
-package zapsolutions.zap.historyList;
+package zapsolutions.zap.transactionHistory.listItems;
 
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
+import com.google.protobuf.ByteString;
 
-public class LnPaymentItem extends HistoryListItem {
+public class LnPaymentItem extends TransactionItem {
     private Payment mPayment;
 
     public LnPaymentItem(Payment payment) {
@@ -17,5 +18,10 @@ public class LnPaymentItem extends HistoryListItem {
 
     public Payment getPayment() {
         return mPayment;
+    }
+
+    @Override
+    public ByteString getTransactionByteString() {
+        return mPayment.toByteString();
     }
 }

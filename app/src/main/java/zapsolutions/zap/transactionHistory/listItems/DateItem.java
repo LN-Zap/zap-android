@@ -1,4 +1,4 @@
-package zapsolutions.zap.historyList;
+package zapsolutions.zap.transactionHistory.listItems;
 
 public class DateItem extends HistoryListItem {
 
