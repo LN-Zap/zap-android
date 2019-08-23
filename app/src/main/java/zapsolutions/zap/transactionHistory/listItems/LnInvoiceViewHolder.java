@@ -1,6 +1,7 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
 import android.view.View;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.Wallet;
 
@@ -40,7 +41,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
             } else {
                 // The invoice has not been payed yet
                 setIcon(TransactionIcon.PENDING);
-                setAmount(0L, R.color.gray, false, true);
+                setAmountPending(0L, false, true);
 
                 if (Wallet.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
                     // The invoice has expired
@@ -61,7 +62,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
             } else {
                 // The invoice has not been payed yet
                 setIcon(TransactionIcon.PENDING);
-                setAmount(amt, R.color.gray, true, true);
+                setAmountPending(amt, true, true);
 
                 if (Wallet.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
                     // The invoice has expired

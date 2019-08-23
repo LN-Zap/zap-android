@@ -5,16 +5,18 @@ import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.DateFormat;
+import java.util.Date;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.transactionHistory.TransactionSelectListener;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
-
-import java.text.DateFormat;
-import java.util.Date;
 
 public class TransactionViewHolder extends RecyclerView.ViewHolder {
 
@@ -74,6 +76,18 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
     }
 
     void setAmount(Long amount, boolean visible) {
+        setAmount(amount, visible, false);
+    }
+
+    void setAmountPending(Long amount, boolean fixedValue, boolean visible) {
+        if (fixedValue) {
+            setAmount(amount, visible, true);
+        } else {
+            mAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        }
+    }
+
+    private void setAmount(Long amount, boolean visible, boolean pending) {
         mAmount.setVisibility(visible ? View.VISIBLE : View.GONE);
 
         // compare the amount with 0
@@ -82,44 +96,18 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
             case 0:
                 // amount = 0
                 mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
-                mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.white));
                 break;
             case 1:
                 // amount > 0
                 mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
-                mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superGreen));
+                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.superGreen));
                 break;
             case -1:
                 // amount < 0
                 mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount).replace("-", "- "));
-                mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.superRed));
+                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.superRed));
                 break;
-        }
-    }
-
-    void setAmount(Long amount, int color, boolean fixedValue, boolean visible) {
-        mAmount.setVisibility(visible ? View.VISIBLE : View.GONE);
-
-        if (fixedValue) {
-            // compare the amount with 0
-            int result = amount.compareTo(0L);
-            mAmount.setTextColor(ContextCompat.getColor(mContext, color));
-            switch (result) {
-                case 0:
-                    // amount = 0
-                    mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
-                    break;
-                case 1:
-                    // amount > 0
-                    mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
-                    break;
-                case -1:
-                    // amount < 0
-                    mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount).replace("-", "- "));
-                    break;
-            }
-        } else {
-            mAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
         }
     }
 
