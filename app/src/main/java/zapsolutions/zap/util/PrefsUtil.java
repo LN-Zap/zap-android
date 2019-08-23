@@ -17,7 +17,7 @@ public class PrefsUtil {
     public static final String FIRST_CURRENCY_IS_PRIMARY = "firstCurrencyIsPrimary";
     public static final String PIN_HASH = "pin_hash";
     public static final String PIN_LENGTH = "pin_length";
-    public static final String SETTINGS_VER = "settings_ver";
+    public static final String SETTINGS_VERSION = "settings_ver";
     public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
     public static final String CURRENT_WALLET_CONFIG = "current_wallet_config";
@@ -26,6 +26,7 @@ public class PrefsUtil {
     // wallet config preferences references
     public static final String PREFS_ENCRYPTED = "prefs_encrypted";
     public static final String WALLET_CONFIGS = "wallet_configs";
+    public static final String RANDOM_SOURCE = "random_source";
 
     // default values
     public static final String DEFAULT_FIAT_CURRENCIES = "[]";

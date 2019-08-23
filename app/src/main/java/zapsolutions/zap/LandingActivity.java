@@ -1,13 +1,13 @@
 package zapsolutions.zap;
 
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import at.favre.lib.armadillo.Armadillo;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
 
 public class LandingActivity extends BaseAppCompatActivity {
@@ -27,6 +27,43 @@ public class LandingActivity extends BaseAppCompatActivity {
         }
 
 
+        // support for clearing shared preferences, on breaking changes
+        if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
+            int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
+            if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
+                resetApp();
+            } else {
+                enterWallet();
+            }
+        } else {
+            // Make sure settings get reset for versions that don't expose settings version
+            resetApp();
+        }
+
+    }
+
+    private void resetApp() {
+        if (PrefsUtil.isWalletSetup()) {
+            // Reset settings
+            PrefsUtil.edit().clear().commit();
+
+            new AlertDialog.Builder(LandingActivity.this)
+                    .setTitle(R.string.app_reset_title)
+                    .setMessage(R.string.app_reset_message)
+                    .setCancelable(true)
+                    .setOnCancelListener(dialogInterface -> enterWallet())
+                    .setPositiveButton(R.string.ok, (dialog, whichButton) -> enterWallet())
+                    .show();
+        } else {
+            enterWallet();
+        }
+    }
+
+    private void enterWallet() {
+
+        // Set new settings version
+        PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
+
         if (PrefsUtil.isWalletSetup()) {
             // Go to PIN entry screen
             Intent pinIntent = new Intent(this, PinEntryActivity.class);
@@ -36,14 +73,6 @@ public class LandingActivity extends BaseAppCompatActivity {
 
             // Clear connection data if something is there
             PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, "").commit();
-
-            // ToDo: Remove this when nobody has the old version installed.
-            App ctx = App.getAppContext();
-            SharedPreferences prefsRemote = Armadillo.create(ctx, PrefsUtil.PREFS_ENCRYPTED)
-                    .encryptionFingerprint(ctx)
-                    .build();
-            prefsRemote.edit().clear().commit();
-            // ToDO End
 
 
             Intent homeIntent = new Intent(this, HomeActivity.class);

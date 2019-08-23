@@ -85,9 +85,6 @@ protobuf {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // encrypted SharedSettings
-    implementation 'at.favre.lib:armadillo:0.7.0'
-
     // QR-Code scanner: ToDo: check if this is secure
     implementation 'me.dm7.barcodescanner:zbar:1.9.8'
 

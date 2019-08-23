@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.RefConstants;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -210,8 +209,5 @@ public class WalletConfigsManager {
         // Save the new WalletConfigurations in encrypted prefs
         String encrypted = new Cryptography(App.getAppContext()).encryptData(jsonString);
         PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, encrypted).commit();
-
-        // Set current settings version
-        PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VER, RefConstants.CURRENT_SETTINGS_VER).apply();
     }
 }
