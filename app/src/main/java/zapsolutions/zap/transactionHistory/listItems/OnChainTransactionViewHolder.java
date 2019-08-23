@@ -32,9 +32,10 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
             switch (amount.compareTo(0L)) {
                 case 0:
                     // amount = 0
-                    setAmount(amount, true);
-                    setPrimaryDescription(mContext.getString(R.string.internal));
-                    setSecondaryDescription("", false);
+                    setAmount(amount, false);
+                    setPrimaryDescription(mContext.getString(R.string.force_closed_channel));
+                    String aliasForceClose = Wallet.getInstance().getNodeAliasFromChannelTransaction(onChainTransactionItem.getOnChainTransaction(), mContext);
+                    setSecondaryDescription(aliasForceClose, true);
                     break;
                 case 1:
                     // amount > 0 (Channel closed)

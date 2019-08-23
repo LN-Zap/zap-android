@@ -101,6 +101,7 @@
     <string name="internal">Internal</string>
     <string name="opened_channel">Channel opened</string>
     <string name="closed_channel">Channel closed</string>
+    <string name="force_closed_channel">Channel force closed</string>
     <string name="filter_transactions">Filter transactions</string>
     <string name="normal_payments">Normal Payments</string>
     <string name="expired_requests">Expired Requests</string>
