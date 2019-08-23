@@ -1,14 +1,15 @@
 package zapsolutions.zap.util;
 
-import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
+import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 
 public class UtilFunctions {
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
@@ -35,11 +36,10 @@ public class UtilFunctions {
         byte[] hash = new byte[0];
         try {
             hash = encodePbkdf2(data.toCharArray(), getZapsalt().getBytes(), RefConstants.NUM_HASH_ITERATIONS, 32);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException("Couldn't encode pin with PBKDF2", e);
         }
+
         return bytesToHex(hash);
     }
 
