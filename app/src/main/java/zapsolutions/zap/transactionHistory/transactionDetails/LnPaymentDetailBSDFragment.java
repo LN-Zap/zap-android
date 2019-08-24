@@ -23,10 +23,9 @@ import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.ZapLog;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
@@ -72,15 +71,11 @@ public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
             ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_TRANSACTION);
             try {
                 bindPayment(transactionString);
-            } catch (InvalidProtocolBufferException exception) {
+            } catch (InvalidProtocolBufferException | NullPointerException exception) {
                 Log.e(TAG, "Failed to parse payment.", exception);
-                dismiss();
-            } catch (NullPointerException npException) {
-                Log.e(TAG, "Failed to parse payment.", npException);
                 dismiss();
             }
         }
-
         return view;
     }
 
@@ -89,16 +84,15 @@ public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
 
         Payment payment = Payment.parseFrom(transactionString);
 
-
-        String amountLabel = getActivity().getResources().getString(R.string.amount) + ":";
+        String amountLabel = getString(R.string.amount) + ":";
         mAmountLabel.setText(amountLabel);
-        String memoLabel = getActivity().getResources().getString(R.string.memo) + ":";
+        String memoLabel = getString(R.string.memo) + ":";
         mMemoLabel.setText(memoLabel);
-        String feeLabel = getActivity().getResources().getString(R.string.fee);
+        String feeLabel = getString(R.string.fee);
         mFeeLabel.setText(feeLabel);
-        String dateLabel = getActivity().getResources().getString(R.string.date) + ":";
+        String dateLabel = getString(R.string.date) + ":";
         mDateLabel.setText(dateLabel);
-        String preimageLabel = getActivity().getResources().getString(R.string.preimage) + ":";
+        String preimageLabel = getString(R.string.preimage) + ":";
         mPreimageLabel.setText(preimageLabel);
 
         mTransactionDescription.setText(R.string.transaction_detail);
@@ -106,17 +100,9 @@ public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
         mAmount.setText("- " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getValue()));
         mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getFee()));
         mPreimage.setText(payment.getPaymentPreimage());
-
         mPreimageCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payment Preimage", payment.getPaymentPreimage()));
 
-
-        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, getActivity().getResources().getConfiguration().locale);
-        String formattedDate = df.format(new Date(payment.getCreationDate() * 1000L));
-
-        DateFormat tf = DateFormat.getTimeInstance(DateFormat.MEDIUM, getActivity().getResources().getConfiguration().locale);
-        String formattedTime = tf.format(new Date(payment.getCreationDate() * 1000L));
-        mDate.setText(formattedDate + ", " + formattedTime);
-
+        mDate.setText(TimeFormatUtil.formatTimeAndDateLong(payment.getCreationDate(), getActivity()));
 
         if (!payment.getPaymentRequest().isEmpty()) {
             // This will only be true for payments done with LND 0.7.0-beta and later
@@ -125,7 +111,6 @@ public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
             mMemo.setVisibility(View.GONE);
             mMemoLabel.setVisibility(View.GONE);
         }
-
     }
 
     private void decodeLightningInvoice(String invoice) {

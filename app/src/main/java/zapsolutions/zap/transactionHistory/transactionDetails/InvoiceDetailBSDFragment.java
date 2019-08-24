@@ -18,6 +18,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.android.QRCode;
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -66,11 +67,8 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
             ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_TRANSACTION);
             try {
                 bindInvoice(transactionString);
-            } catch (InvalidProtocolBufferException exception) {
-                ZapLog.debug(TAG, "Failed to parse channel.");
-                dismiss();
-            } catch (NullPointerException npException) {
-                ZapLog.debug(TAG, "Failed to parse channel.");
+            } catch (InvalidProtocolBufferException | NullPointerException exception) {
+                ZapLog.debug(TAG, "Failed to parse invoice.");
                 dismiss();
             }
         }
@@ -83,22 +81,16 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
 
         Invoice invoice = Invoice.parseFrom(transactionString);
 
-
-        String amountLabel = getActivity().getResources().getString(R.string.amount) + ":";
+        String amountLabel = getString(R.string.amount) + ":";
         mAmountLabel.setText(amountLabel);
-        String memoLabel = getActivity().getResources().getString(R.string.memo) + ":";
+        String memoLabel = getString(R.string.memo) + ":";
         mMemoLabel.setText(memoLabel);
-        String dateLabel = getActivity().getResources().getString(R.string.date) + ":";
+        String dateLabel = getString(R.string.date) + ":";
         mDateLabel.setText(dateLabel);
-        String expiryLabel = getActivity().getResources().getString(R.string.expiry) + ":";
+        String expiryLabel = getString(R.string.expiry) + ":";
         mExpiryLabel.setText(expiryLabel);
 
-        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, getActivity().getResources().getConfiguration().locale);
-        String formattedDate = df.format(new Date(invoice.getCreationDate() * 1000L));
-
-        DateFormat tf = DateFormat.getTimeInstance(DateFormat.MEDIUM, getActivity().getResources().getConfiguration().locale);
-        String formattedTime = tf.format(new Date(invoice.getCreationDate() * 1000L));
-        mDate.setText(formattedDate + ", " + formattedTime);
+        mDate.setText(TimeFormatUtil.formatTimeAndDateLong(invoice.getCreationDate(), getActivity()));
 
         if (invoice.getMemo().isEmpty()) {
             mMemo.setVisibility(View.GONE);
@@ -107,13 +99,12 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
             mMemo.setText(invoice.getMemo());
         }
 
+        Long invoiceAmount = invoice.getValue();
+        Long amountPayed = invoice.getAmtPaidSat();
 
-        Long amt = invoice.getValue();
-        Long amtPayed = invoice.getAmtPaidSat();
-
-        if (amt.equals(0L)) {
+        if (invoiceAmount.equals(0L)) {
             // if no specific value was requested
-            if (!amtPayed.equals(0L)) {
+            if (!amountPayed.equals(0L)) {
                 // The invoice has been payed
                 bindPayedInvoice(invoice);
             } else {
@@ -127,7 +118,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
             }
         } else {
             // if a specific value was requested
-            if (amtPayed.equals(amt)) {
+            if (amountPayed.equals(invoiceAmount)) {
                 // The invoice has been payed
                 bindPayedInvoice(invoice);
             } else {
@@ -163,7 +154,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
                 (new Runnable() {
                     public void run() {
                         long timeLeft = (invoice.getCreationDate() + invoice.getExpiry()) - (System.currentTimeMillis() / 1000);
-                        String expiryText = formattedDuration(timeLeft) + " " + getActivity().getResources().getString(R.string.remaining);
+                        String expiryText = TimeFormatUtil.formattedDuration(timeLeft, getActivity()) + " " + getActivity().getResources().getString(R.string.remaining);
 
                         mExpiry.setText(expiryText);
                     }
@@ -183,35 +174,6 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getValue()));
         mExpiry.setText(R.string.expired);
         mQRCodeView.setVisibility(View.GONE);
-    }
-
-    /**
-     * Returns a nicely formatted duration.
-     *
-     * @param duration in seconds
-     * @return
-     */
-    private String formattedDuration(long duration) {
-        String formattedString = "";
-
-        int hours = (int) duration / 3600;
-        String hoursString = getActivity().getResources().getQuantityString(R.plurals.duration_hour, hours, hours);
-        int days = (int) duration / 86400;
-        String daysString = getActivity().getResources().getQuantityString(R.plurals.duration_day, days, days);
-        int minutes = (int) (duration % 3600) / 60;
-        String minutesUnit = getActivity().getResources().getString(R.string.duration_minute_short);
-        String secondsUnit = getActivity().getResources().getString(R.string.duration_second_short);
-
-
-        if (duration < 3600) {
-            formattedString = String.format("%02d %s, %02d %s", (duration % 3600) / 60, minutesUnit, (duration % 60), secondsUnit);
-        } else if (duration < 86400) {
-            formattedString = hoursString;
-        } else {
-            formattedString = daysString;
-        }
-
-        return formattedString;
     }
 
     @Override

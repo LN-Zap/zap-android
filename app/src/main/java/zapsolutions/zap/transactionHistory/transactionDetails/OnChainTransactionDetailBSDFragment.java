@@ -17,11 +17,9 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.util.BlockExplorer;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-
-import java.text.DateFormat;
-import java.util.Date;
 
 public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragment {
 
@@ -80,10 +78,7 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
             try {
                 bindOnChainTransaction(transactionString);
 
-            } catch (InvalidProtocolBufferException exception) {
-                ZapLog.debug(TAG, "Failed to parse transaction.");
-                dismiss();
-            } catch (NullPointerException npException) {
+            } catch (InvalidProtocolBufferException | NullPointerException exception) {
                 ZapLog.debug(TAG, "Failed to parse transaction.");
                 dismiss();
             }
@@ -96,28 +91,22 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
     private void bindOnChainTransaction(ByteString transactionString) throws InvalidProtocolBufferException {
         mTransaction = Transaction.parseFrom(transactionString);
 
-        String channelLabel = getActivity().getResources().getString(R.string.channel) + ":";
+        String channelLabel = getString(R.string.channel) + ":";
         mChannelLabel.setText(channelLabel);
-        String eventLabel = getActivity().getResources().getString(R.string.event) + ":";
+        String eventLabel = getString(R.string.event) + ":";
         mEventLabel.setText(eventLabel);
-        String amountLabel = getActivity().getResources().getString(R.string.amount) + ":";
+        String amountLabel = getString(R.string.amount) + ":";
         mAmountLabel.setText(amountLabel);
-        String feeLabel = getActivity().getResources().getString(R.string.fee) + ":";
+        String feeLabel = getString(R.string.fee) + ":";
         mFeeLabel.setText(feeLabel);
-        String dateLabel = getActivity().getResources().getString(R.string.date) + ":";
+        String dateLabel = getString(R.string.date) + ":";
         mDateLabel.setText(dateLabel);
-        String transactionIDLabel = getActivity().getResources().getString(R.string.transactionID) + ":";
+        String transactionIDLabel = getString(R.string.transactionID) + ":";
         mTransactionIDLabel.setText(transactionIDLabel);
-        String addressLabel = getActivity().getResources().getString(R.string.address) + ":";
+        String addressLabel = getString(R.string.address) + ":";
         mAddressLabel.setText(addressLabel);
 
-        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, getActivity().getResources().getConfiguration().locale);
-        String formattedDate = df.format(new Date(mTransaction.getTimeStamp() * 1000L));
-
-        DateFormat tf = DateFormat.getTimeInstance(DateFormat.MEDIUM, getActivity().getResources().getConfiguration().locale);
-        String formattedTime = tf.format(new Date(mTransaction.getTimeStamp() * 1000L));
-        mDate.setText(formattedDate + ", " + formattedTime);
-
+        mDate.setText(TimeFormatUtil.formatTimeAndDateLong(mTransaction.getTimeStamp(), getActivity()));
 
         mAddress.setText(mTransaction.getDestAddresses(0));
         mTransactionID.setText(mTransaction.getTxHash());
@@ -126,7 +115,6 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
         mAddress.setOnClickListener(view -> BlockExplorer.showAddress(mTransaction.getDestAddresses(0), getActivity()));
         mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mTransaction.getTxHash()));
         mAddressCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Address", mTransaction.getDestAddresses(0)));
-
 
         // is internal?
         if (Wallet.getInstance().isTransactionInternal(mTransaction)) {
@@ -158,23 +146,20 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
             mFeeLabel.setVisibility(View.GONE);
         }
 
+        String alias = Wallet.getInstance().getNodeAliasFromChannelTransaction(mTransaction, getActivity());
+        mChannel.setText(alias);
+
         switch (amount.compareTo(0L)) {
             case 0:
                 // amount = 0
-                String alias = Wallet.getInstance().getNodeAliasFromChannelTransaction(mTransaction, getActivity());
-                mChannel.setText(alias);
                 mEvent.setText(R.string.force_closed_channel);
                 break;
             case 1:
                 // amount > 0 (Channel closed)
-                String aliasClosed = Wallet.getInstance().getNodeAliasFromChannelTransaction(mTransaction, getActivity());
-                mChannel.setText(aliasClosed);
                 mEvent.setText(R.string.closed_channel);
                 break;
             case -1:
                 // amount < 0 (Channel opened)
-                String aliasOpened = Wallet.getInstance().getNodeAliasFromChannelTransaction(mTransaction, getActivity());
-                mChannel.setText(aliasOpened);
                 mEvent.setText(R.string.opened_channel);
                 break;
         }
