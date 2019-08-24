@@ -4,11 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+
+import java.util.concurrent.RejectedExecutionException;
+
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
+
+    private static final String LOG_TAG = NetworkChangeReceiver.class.getName();
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
@@ -24,11 +29,12 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 // It needs some time to establish the connection to LND.
                 // Therefore we check the connection after a delay.
                 Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                handler.postDelayed(() -> {
+                    try {
                         // The following command will find out, if we have a connection to LND
                         Wallet.getInstance().fetchInfoFromLND();
+                    } catch (RejectedExecutionException ex) {
+                        ZapLog.debug(LOG_TAG, "Execute of fetchFromLND() was rejected");
                     }
                 }, 5000);
             }
