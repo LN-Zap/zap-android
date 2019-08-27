@@ -28,6 +28,9 @@ import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
 import zapsolutions.zap.transactionHistory.listItems.LnInvoiceItem;
 import zapsolutions.zap.transactionHistory.listItems.LnPaymentItem;
 import zapsolutions.zap.transactionHistory.listItems.OnChainTransactionItem;
+import zapsolutions.zap.transactionHistory.transactionDetails.InvoiceDetailBSDFragment;
+import zapsolutions.zap.transactionHistory.transactionDetails.LnPaymentDetailBSDFragment;
+import zapsolutions.zap.transactionHistory.transactionDetails.OnChainTransactionDetailBSDFragment;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -43,7 +46,7 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener{
+public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getName();
 
@@ -341,6 +344,35 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
     @Override
     public void onTransactionSelect(ByteString transaction, int type) {
-        Toast.makeText(getActivity(), R.string.coming_soon, Toast.LENGTH_SHORT).show();
+        Bundle bundle = new Bundle();
+
+        if (transaction != null) {
+            switch (type) {
+                case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
+                    OnChainTransactionDetailBSDFragment transactionDetailBSDFragment = new OnChainTransactionDetailBSDFragment();
+                    bundle.putSerializable(OnChainTransactionDetailBSDFragment.ARGS_TRANSACTION, transaction);
+                    transactionDetailBSDFragment.setArguments(bundle);
+                    transactionDetailBSDFragment.show(getActivity().getSupportFragmentManager(), OnChainTransactionDetailBSDFragment.TAG);
+                    break;
+                case HistoryListItem.TYPE_LN_INVOICE:
+                    InvoiceDetailBSDFragment invoiceDetailBSDFragment = new InvoiceDetailBSDFragment();
+                    bundle.putSerializable(InvoiceDetailBSDFragment.ARGS_TRANSACTION, transaction);
+                    invoiceDetailBSDFragment.setArguments(bundle);
+                    invoiceDetailBSDFragment.show(getActivity().getSupportFragmentManager(), InvoiceDetailBSDFragment.TAG);
+                    break;
+                case HistoryListItem.TYPE_LN_PAYMENT:
+                    LnPaymentDetailBSDFragment lnPaymentDetailBSDFragment = new LnPaymentDetailBSDFragment();
+                    bundle.putSerializable(LnPaymentDetailBSDFragment.ARGS_TRANSACTION, transaction);
+                    lnPaymentDetailBSDFragment.setArguments(bundle);
+                    lnPaymentDetailBSDFragment.show(getActivity().getSupportFragmentManager(), LnPaymentDetailBSDFragment.TAG);
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown history list item type: " + type);
+            }
+
+        } else {
+            Toast.makeText(getActivity(), R.string.coming_soon, Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
