@@ -111,8 +111,8 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
         mAddress.setText(mTransaction.getDestAddresses(0));
         mTransactionID.setText(mTransaction.getTxHash());
 
-        mTransactionID.setOnClickListener(view -> BlockExplorer.showTransaction(mTransaction.getTxHash(), getActivity()));
-        mAddress.setOnClickListener(view -> BlockExplorer.showAddress(mTransaction.getDestAddresses(0), getActivity()));
+        mTransactionID.setOnClickListener(view -> new BlockExplorer().showTransaction(mTransaction.getTxHash(), getActivity()));
+        mAddress.setOnClickListener(view -> new BlockExplorer().showAddress(mTransaction.getDestAddresses(0), getActivity()));
         mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mTransaction.getTxHash()));
         mAddressCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Address", mTransaction.getDestAddresses(0)));
 

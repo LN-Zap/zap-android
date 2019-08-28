@@ -35,6 +35,7 @@ public class UserGuardian {
     public static final String TOO_MUCH_MONEY = "guardianTooMuchMoney";
     public static final String MAINNET_NOT_READY = "guardianMainnetNotReady";
     public static final String REMOTE_CONNECT = "guardianRemoteConnect";
+    public static final String BLOCK_EXPLORER = "guardianBlockExplorer";
 
     private final Context mContext;
     private final UserGuardianInterface mAction;
@@ -61,6 +62,7 @@ public class UserGuardian {
                 .putBoolean(TOO_MUCH_MONEY, true)
                 .putBoolean(MAINNET_NOT_READY, true)
                 .putBoolean(REMOTE_CONNECT, true)
+                .putBoolean(BLOCK_EXPLORER, true)
                 .apply();
     }
 
@@ -184,6 +186,17 @@ public class UserGuardian {
         adb.setMessage(message);
         showGuardianDialog(adb);
     }
+
+    /**
+     * Warn the user about accessing a transaction or address with a non tor block explorer.
+     */
+    public void privacyBlockExplorer() {
+        mCurrentDialogName = BLOCK_EXPLORER;
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        adb.setMessage(R.string.guardian_blockExplorer);
+        showGuardianDialog(adb);
+    }
+
 
     /**
      * Create a dialog with a "do not show again" option that is already set up
