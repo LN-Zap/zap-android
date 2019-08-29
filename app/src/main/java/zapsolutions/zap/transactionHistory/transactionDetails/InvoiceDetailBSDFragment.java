@@ -17,13 +17,12 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.android.QRCode;
 import zapsolutions.zap.R;
+import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -141,11 +140,14 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
 
         // Generate "QR-Code"
         Bitmap bmpQRCode = QRCode
-                .from(invoice.getPaymentRequest())
+                .from("lightning:" + invoice.getPaymentRequest())
                 .withSize(500, 500)
                 .withErrorCorrection(ErrorCorrectionLevel.L)
                 .bitmap();
         mQRCodeView.setImageBitmap(bmpQRCode);
+        mQRCodeView.setOnClickListener(view ->
+                ClipBoardUtil.copyToClipboard(getContext(), "Invoice", "lightning:" + invoice.getPaymentRequest())
+        );
 
         ScheduledExecutorService expiryUpdateSchedule =
                 Executors.newSingleThreadScheduledExecutor();
