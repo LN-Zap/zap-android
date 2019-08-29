@@ -17,6 +17,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.android.QRCode;
 import zapsolutions.zap.R;
+import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.Wallet;
@@ -144,6 +145,9 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
                 .withErrorCorrection(ErrorCorrectionLevel.L)
                 .bitmap();
         mQRCodeView.setImageBitmap(bmpQRCode);
+        mQRCodeView.setOnClickListener(view ->
+                ClipBoardUtil.copyToClipboard(getContext(), "Invoice", "lightning:" + invoice.getPaymentRequest())
+        );
 
         ScheduledExecutorService expiryUpdateSchedule =
                 Executors.newSingleThreadScheduledExecutor();
