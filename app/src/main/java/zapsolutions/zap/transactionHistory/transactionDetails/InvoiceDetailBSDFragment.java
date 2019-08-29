@@ -22,8 +22,6 @@ import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -141,7 +139,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
 
         // Generate "QR-Code"
         Bitmap bmpQRCode = QRCode
-                .from(invoice.getPaymentRequest())
+                .from("lightning:" + invoice.getPaymentRequest())
                 .withSize(500, 500)
                 .withErrorCorrection(ErrorCorrectionLevel.L)
                 .bitmap();
