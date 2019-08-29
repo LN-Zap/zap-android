@@ -75,7 +75,7 @@
     <string name="expired">Expired</string>
     <string name="remaining">remaining</string>
     <string name="address">Address</string>
-    <string name="transactionID">TransactionID</string>
+    <string name="transactionID">Transaction ID</string>
     <string name="channel">Channel</string>
     <string name="event">Event</string>
     <string name="preimage" translatable="false">Preimage</string>
@@ -256,7 +256,7 @@
 
     <plurals name="duration_second">
         <item quantity="one">%d Second</item>
-        <item quantity="other">%d Seconds></item>
+        <item quantity="other">%d Seconds</item>
     </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
@@ -271,10 +271,10 @@
         <item quantity="other">%d Days</item>
     </plurals>
 
-    <string name="duration_second_short">sec</string>
-    <string name="duration_minute_short">min</string>
-    <string name="duration_hour_short">hr</string>
-    <string name="duration_day_short">d</string>
+    <string name="duration_second_short" translatable="false">sec</string>
+    <string name="duration_minute_short" translatable="false">min</string>
+    <string name="duration_hour_short" translatable="false">h</string>
+    <string name="duration_day_short" translatable="false">d</string>
 
 
     <string name="fee_tier_slow_title">Slow</string>
