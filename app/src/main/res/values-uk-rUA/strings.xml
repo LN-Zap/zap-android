@@ -68,6 +68,15 @@
     <string name="retry">Retry</string>
     <string name="loading">Loading</string>
     <string name="pay">Pay</string>
+    <string name="date">Date</string>
+    <string name="expiry">Expiry</string>
+    <string name="expired">Expired</string>
+    <string name="remaining">remaining</string>
+    <string name="address">Address</string>
+    <string name="transactionID">Transaction ID</string>
+    <string name="channel">Channel</string>
+    <string name="event">Event</string>
+    <string name="channel_event">Channel Event</string>
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>
@@ -91,6 +100,7 @@
     <string name="internal">Internal</string>
     <string name="opened_channel">Channel opened</string>
     <string name="closed_channel">Channel closed</string>
+    <string name="force_closed_channel">Channel force closed</string>
     <string name="filter_transactions">Filter transactions</string>
     <string name="normal_payments">Normal Payments</string>
     <string name="expired_requests">Expired Requests</string>
@@ -99,6 +109,8 @@
     <string name="channel_local_balance">Your Balance</string>
     <string name="channel_remote_balance">Remote Balance</string>
     <string name="channel_no_alias">Unnamed</string>
+    <string name="channel_remote_public_key">Remote Public Key</string>
+    <string name="channel_funding_transaction">Funding Transaction</string>
     <string name="channel_state_open">open</string>
     <string name="channel_state_offline">offline</string>
     <string name="channel_state_pending_open">pending open</string>
@@ -140,6 +152,7 @@
     <string name="guardian_tooMuchMoney">Congratulations, you seem to have a nice stack of Bitcoin!\nPlease keep in mind that Zap is a Hot Wallet.\nWe do our best to keep this wallet secure, but for your own security sake, we recommend you consider Cold Wallets or Hardware Wallets to store your major savings.</string>
     <string name="guardian_notReadyForMainnet">You are on MAINNET with real Bitcoin!\nZap Android is in early development phase. You might lose funds!\n\nIf you don\'t want to take that risk, switch to testnet in the meantime.</string>
     <string name="guardian_remoteConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
+    <string name="guardian_blockExplorer">By looking up information with a Block Explorer your IP-Address gets exposed. If you want to increase your anonymity, you should either not use it or go to the settings and choose a Block Explorer that supports Tor.</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_security">Security</string>
     <string name="settings_category_help">Help</string>
@@ -167,6 +180,7 @@
     <string name="settings_restartRequired">Zap will be restarted to make this change. Do you want to continue?</string>
     <string name="settings_enableBiometrics">Enable biometric authentication</string>
     <string name="settings_blockExplorer">Block Explorer</string>
+    <string name="settings_blockExplorer_tor_toast">Tor Browser for Android is required.</string>
     <string name="settings_addressType">Bitcoin Address Type</string>
     <string-array name="settings_receiveAddressDisplayValues">
         <item>Compatibility (P2PSH)</item>
@@ -205,6 +219,12 @@
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_wrong_password">Wrong password</string>
+    <plurals name="duration_second">
+        <item quantity="one">%d Second</item>
+        <item quantity="few">%d Seconds</item>
+        <item quantity="many">%d Seconds</item>
+        <item quantity="other">%d Seconds</item>
+    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="few">%d Minutes</item>
@@ -233,4 +253,8 @@
     <string name="fee_not_available">n/A</string>
     <string name="unlock_wallet">Unlock Wallet</string>
     <string name="biometricPrompt_title">Biometric Authentication</string>
+    <string name="invoice_detail">Invoice Detail</string>
+    <string name="transaction_detail">Transaction Detail</string>
+    <string name="app_reset_title">Please note</string>
+    <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
 </resources>

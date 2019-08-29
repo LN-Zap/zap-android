@@ -68,6 +68,15 @@
     <string name="retry">Nochmal versuchen</string>
     <string name="loading">Lädt</string>
     <string name="pay">Bezahlen</string>
+    <string name="date">Datum</string>
+    <string name="expiry">Ablauf</string>
+    <string name="expired">Abgelaufen</string>
+    <string name="remaining">übrig</string>
+    <string name="address">Adresse</string>
+    <string name="transactionID">Transaktions ID</string>
+    <string name="channel">Kanal</string>
+    <string name="event">Ereignis</string>
+    <string name="channel_event">Kanalereignis</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -91,6 +100,7 @@
     <string name="internal">Intern</string>
     <string name="opened_channel">Kanal geöffnet</string>
     <string name="closed_channel">Kanal geschlossen</string>
+    <string name="force_closed_channel">Kanalschließung erzwungen</string>
     <string name="filter_transactions">Transaktionen filtern</string>
     <string name="normal_payments">Normale Zahlungen</string>
     <string name="expired_requests">Abgelaufene Anfragen</string>
@@ -99,6 +109,8 @@
     <string name="channel_local_balance">Dein Kontostand</string>
     <string name="channel_remote_balance">Remote Kontostand</string>
     <string name="channel_no_alias">Unbenannt</string>
+    <string name="channel_remote_public_key">Remote Public Key</string>
+    <string name="channel_funding_transaction">Finanzierungstransaktion</string>
     <string name="channel_state_open">Offen</string>
     <string name="channel_state_offline">Offline</string>
     <string name="channel_state_pending_open">Wird geöffnet</string>
@@ -140,6 +152,7 @@
     <string name="guardian_tooMuchMoney">Glückwunsch, du scheinst eine menge Bitcoin zu haben!\nBitte denk daran, dass Zap eine Hot-Wallet ist.\nWir geben unser Bestes, diese Wallet sicher zu halten.\nTrotzdem empfehlen wir für den Großteil deines Vermögens Cold-Wallets oder Hardware-Wallets in Betracht zu ziehen.</string>
     <string name="guardian_notReadyForMainnet">Du bist mit dem MAINNET verbunden!\nZap Android is noch in einer frühen Entwicklungsphase. Du könntest echtes Geld verlieren!\n\nFalls du dieses Risiko nicht auf dich nehmen willst, wechsle solange ins Testnet.</string>
     <string name="guardian_remoteConnect">Willst du eine Verbindung mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
+    <string name="guardian_blockExplorer">Durch die Verwendung eines Block-Explorers wird deine IP-Adresse für die Betreiber sichtbar. Wenn du deine Anonymität erhöhen möchtest, solltest du dieses Funktion entweder nicht nutzen, oder in den Einstellungen einen Block-Explorer auswählen, der Tor unterstütz.</string>
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_security">Sicherheit</string>
     <string name="settings_category_help">Hilfe</string>
@@ -167,6 +180,7 @@
     <string name="settings_restartRequired">Zap wird neugestartet, um diese Änderung vorzunehmen. Fortfahren?</string>
     <string name="settings_enableBiometrics">Biometrische Authentifizierung</string>
     <string name="settings_blockExplorer">Block-Explorer</string>
+    <string name="settings_blockExplorer_tor_toast">Tor Browser für Android wird benötigt.</string>
     <string name="settings_addressType">Bitcoin Adresstyp</string>
     <string-array name="settings_receiveAddressDisplayValues">
         <item>Kompatibilität (P2PSH)</item>
@@ -205,6 +219,10 @@
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
+    <plurals name="duration_second">
+        <item quantity="one">%d Sekunde</item>
+        <item quantity="other">%d Sekunden</item>
+    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>
@@ -227,4 +245,8 @@
     <string name="fee_not_available">n/A</string>
     <string name="unlock_wallet">Wallet entsperren</string>
     <string name="biometricPrompt_title">Biometrische Authentifizierung</string>
+    <string name="invoice_detail">Rechnungsdetails</string>
+    <string name="transaction_detail">Transaktionsdetails</string>
+    <string name="app_reset_title">Hinweis</string>
+    <string name="app_reset_message">Die App wurde zurückgesetzt, da die letzte Aktualisierung strukturelle Änderungen vorgenommen hat.\nLeider musst du die Wallet deshalb erneut einrichten.</string>
 </resources>

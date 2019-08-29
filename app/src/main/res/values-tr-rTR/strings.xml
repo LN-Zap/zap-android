@@ -35,90 +35,102 @@
 
     -->
 <resources>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
+    <string name="ok">Tamam</string>
+    <string name="cancel">İptal et</string>
     <string name="lightning">Lightning</string>
-    <string name="onChain">On-Chain</string>
-    <string name="share">Share</string>
-    <string name="copy">Copy</string>
-    <string name="paste">Paste</string>
-    <string name="showDetails">Show details</string>
-    <string name="details">Details</string>
-    <string name="amount">Amount</string>
-    <string name="memo">Memo</string>
-    <string name="shareDialogTitle">Choose App</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="send">Send</string>
-    <string name="receive">Receive</string>
-    <string name="optional">optional</string>
-    <string name="next">Next</string>
-    <string name="coming_soon">Coming soon...</string>
-    <string name="needHelp">Need help?</string>
-    <string name="offline">offline</string>
-    <string name="sent">Sent</string>
-    <string name="received">Received</string>
-    <string name="today">Today</string>
-    <string name="yesterday">Yesterday</string>
-    <string name="fee">Fee</string>
-    <string name="confirmExit">Do you really want to quit Zap?</string>
-    <string name="or">or</string>
-    <string name="max_amount">Maximum Amount:</string>
-    <string name="retry">Retry</string>
-    <string name="loading">Loading</string>
-    <string name="pay">Pay</string>
-    <string name="activity_receive">Receive</string>
-    <string name="activity_send">Pay</string>
+    <string name="onChain">Zincir üzerinde</string>
+    <string name="share">Paylaş</string>
+    <string name="copy">Kopyala</string>
+    <string name="paste">Yapıştır</string>
+    <string name="showDetails">Detayları göster</string>
+    <string name="details">Detaylar</string>
+    <string name="amount">Miktar</string>
+    <string name="memo">Kısa Not</string>
+    <string name="shareDialogTitle">Uygulama seç</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="copied_to_clipboard">Panoya kopyalandı</string>
+    <string name="send">Gönder</string>
+    <string name="receive">Al</string>
+    <string name="optional">isteğe bağlı</string>
+    <string name="next">Sonraki</string>
+    <string name="coming_soon">Çok yakında...</string>
+    <string name="needHelp">Yardım ister misin?</string>
+    <string name="offline">çevrimdışı</string>
+    <string name="sent">Gönderilen</string>
+    <string name="received">Alındı</string>
+    <string name="today">Bugün</string>
+    <string name="yesterday">Dün</string>
+    <string name="fee">Ücret</string>
+    <string name="confirmExit">Gerçekten Zap den çıkmak istiyor musun?</string>
+    <string name="or">veya</string>
+    <string name="max_amount">Maksimum ücret:</string>
+    <string name="retry">Yeniden dene</string>
+    <string name="loading">Yükleniyor</string>
+    <string name="pay">Öde</string>
+    <string name="date">Date</string>
+    <string name="expiry">Expiry</string>
+    <string name="expired">Expired</string>
+    <string name="remaining">remaining</string>
+    <string name="address">Address</string>
+    <string name="transactionID">Transaction ID</string>
+    <string name="channel">Channel</string>
+    <string name="event">Event</string>
+    <string name="channel_event">Channel Event</string>
+    <string name="activity_receive">Al</string>
+    <string name="activity_send">Öde</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>
     <string name="activity_manage_channels">Manage Lightning Channels</string>
-    <string name="activity_manage_wallets">Manage Wallets</string>
-    <string name="activity_advanced_settings">Advanced Settings</string>
-    <string name="activity_channel_details">Channel Details</string>
-    <string name="navigation_wallet">Wallet</string>
-    <string name="navigation_history">History</string>
-    <string name="navigation_settings">Settings</string>
-    <string name="pin_create">Create PIN</string>
-    <string name="pin_confirm">Confirm PIN</string>
-    <string name="pin_enter">Enter PIN</string>
-    <string name="pin_enter_old">Enter old PIN</string>
-    <string name="pin_enter_new">Enter new PIN</string>
-    <string name="pin_confirm_new">Confirm new PIN</string>
-    <string name="pin_entered_wrong">Wrong PIN</string>
-    <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Wait %1$s seconds.</string>
-    <string name="requested_payment">Requested</string>
-    <string name="request_expired">Expired</string>
-    <string name="internal">Internal</string>
-    <string name="opened_channel">Channel opened</string>
-    <string name="closed_channel">Channel closed</string>
-    <string name="filter_transactions">Filter transactions</string>
-    <string name="normal_payments">Normal Payments</string>
-    <string name="expired_requests">Expired Requests</string>
-    <string name="no_transactions">No transactions</string>
-    <string name="channel_capacity">Capacity</string>
-    <string name="channel_local_balance">Your Balance</string>
-    <string name="channel_remote_balance">Remote Balance</string>
-    <string name="channel_no_alias">Unnamed</string>
-    <string name="channel_state_open">open</string>
-    <string name="channel_state_offline">offline</string>
-    <string name="channel_state_pending_open">pending open</string>
-    <string name="channel_state_pending_closing">pending close</string>
+    <string name="activity_manage_wallets">Cüzdanı yönet</string>
+    <string name="activity_advanced_settings">Gelişmiş ayarlar</string>
+    <string name="activity_channel_details">Kanal detayları</string>
+    <string name="navigation_wallet">Cüzdan</string>
+    <string name="navigation_history">Geçmiş</string>
+    <string name="navigation_settings">Ayarlar</string>
+    <string name="pin_create">PIN oluştur</string>
+    <string name="pin_confirm">PIN onayla</string>
+    <string name="pin_enter">PIN gir</string>
+    <string name="pin_enter_old">Eski PIN\'i GİR</string>
+    <string name="pin_enter_new">Yeni PIN\'i Gir</string>
+    <string name="pin_confirm_new">Yeni PIN\'i onayla</string>
+    <string name="pin_entered_wrong">Yanlış PIN</string>
+    <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">%1$s saniye bekle.</string>
+    <string name="requested_payment">İstenen</string>
+    <string name="request_expired">Süresi Bitmiş</string>
+    <string name="internal">Dahili</string>
+    <string name="opened_channel">Kanal açıldı</string>
+    <string name="closed_channel">Kanal kapandı</string>
+    <string name="force_closed_channel">Channel force closed</string>
+    <string name="filter_transactions">İşlemleri filtrele</string>
+    <string name="normal_payments">Normal Ödemeler</string>
+    <string name="expired_requests">Süresi Dolmuş İstekler</string>
+    <string name="no_transactions">İşlem yok</string>
+    <string name="channel_capacity">Kapasite</string>
+    <string name="channel_local_balance">Bakiyeniz</string>
+    <string name="channel_remote_balance">Bakiyeni uzaktan kontrol et</string>
+    <string name="channel_no_alias">Adsız</string>
+    <string name="channel_remote_public_key">Remote Public Key</string>
+    <string name="channel_funding_transaction">Finansman İşlemi</string>
+    <string name="channel_state_open">açık</string>
+    <string name="channel_state_offline">çevrimdışı</string>
+    <string name="channel_state_pending_open">açılmayı bekleyen</string>
+    <string name="channel_state_pending_closing">kapanmayı bekleyen</string>
     <string name="channel_state_pending_force_closing">pending force close</string>
-    <string name="channel_state_waiting_close">waiting close</string>
-    <string name="no_channels">No channels</string>
-    <string name="setup_connect_heading">How do you want to use ZAP?</string>
-    <string name="setup_connect_local_description">Create a wallet on this phone.</string>
-    <string name="setup_connect_local_button">Create Wallet</string>
+    <string name="channel_state_waiting_close">kapanmaya yakın</string>
+    <string name="no_channels">Kanallar yok</string>
+    <string name="setup_connect_heading">ZAP\'ı nasıl kullanmak istiyorsunuz?</string>
+    <string name="setup_connect_local_description">Bu telefonda bir cüzdan oluşturun.</string>
+    <string name="setup_connect_local_button">Cüzdan oluştur</string>
     <string name="setup_connect_remote_description">Remote control your own node.</string>
     <string name="setup_connect_remote_button">Connect to Remote Node</string>
-    <string name="setup_connect_scan_connection_info">Scan connection data</string>
-    <string name="demo_setupWalletBtn">Setup Wallet</string>
-    <string name="demo_setupWalletFirst">You first have to setup a wallet.</string>
+    <string name="setup_connect_scan_connection_info">Bağlantı verilerini tara</string>
+    <string name="demo_setupWalletBtn">Cüzdan kur</string>
+    <string name="demo_setupWalletFirst">Önce bir cüzdan kurmalısın.</string>
     <string name="send_lightningPayment">Send lightning payment</string>
     <string name="send_onChainPayment">Send on-chain payment</string>
-    <string name="send_sendPayment">Send payment</string>
-    <string name="send_success">Payment\nsuccessful</string>
-    <string name="send_fail">Payment\nfailed</string>
+    <string name="send_sendPayment">Ödeme gönder</string>
+    <string name="send_success">Ödemeler başarılı \n</string>
+    <string name="send_fail">Ödemeler başarısız \n</string>
     <string name="send_scan_info">Scan payment request</string>
     <string name="receive_generateRequest">Generate Request</string>
     <string name="receive_generateRequest_failed">Request generation failed.</string>
@@ -126,10 +138,10 @@
     <string name="receive_on_chain_request">On-Chain Request</string>
     <string name="receive_noActiveChannels">To receive Bitcoin over the lightning network, you first have to open channels.</string>
     <string name="receive_noIncomeBalance">To receive Bitcoin over the lightning network, at least one of your channels needs some balance on your counterpartys side.\n\nTo achieve that, you have to spend something on lightning network first.\n\nIn the manage channels area you can always see how much you are able to send or receive over the lightning network right now.</string>
-    <string name="receive_requestFullfilled">Invoice\npaid</string>
-    <string name="guardian_doNotShowAgain">Don\'t show again.</string>
-    <string name="guardian_Title">Attention</string>
-    <string name="guardian_reset">All security warnings are enabled again.</string>
+    <string name="receive_requestFullfilled">Ödenen faturalar \n</string>
+    <string name="guardian_doNotShowAgain">Bir daha gösterme.</string>
+    <string name="guardian_Title">Dikkat</string>
+    <string name="guardian_reset">Tüm güvenlik uyarıları yeniden etkinleştirildi.</string>
     <string name="guardian_copyToClipboard_onChain" comment="Parameters are:  %1$s: compare string">If you copy this data to your clipboard, other apps (also malicious ones) are able to access and modify it.\n\nTo be sure nothing has changed while pasting, compare the beginning to:\n\n%1$s\n</string>
     <string name="guardian_copyToClipboard_lightning">If you copy this data to your clipboard, other apps (also malicious ones) are able to access and modify it.\n\nTo be sure nothing has changed while pasting, compare the end to:\n\n%1$s\n</string>
     <string name="guardian_pasteFromClipboard">Always double check the last 3 to 5 digits when pasting from clipboard. A malicious App might have changed the address in the background without you noticing it.</string>
@@ -140,57 +152,59 @@
     <string name="guardian_tooMuchMoney">Congratulations, you seem to have a nice stack of Bitcoin!\nPlease keep in mind that Zap is a Hot Wallet.\nWe do our best to keep this wallet secure, but for your own security sake, we recommend you consider Cold Wallets or Hardware Wallets to store your major savings.</string>
     <string name="guardian_notReadyForMainnet">You are on MAINNET with real Bitcoin!\nZap Android is in early development phase. You might lose funds!\n\nIf you don\'t want to take that risk, switch to testnet in the meantime.</string>
     <string name="guardian_remoteConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
-    <string name="settings_category_general">General</string>
-    <string name="settings_category_security">Security</string>
-    <string name="settings_category_help">Help</string>
-    <string name="settings_category_advanced">Advanced</string>
-    <string name="settings_btcUnit">Bitcoin Unit</string>
-    <string name="settings_currency">Second Unit</string>
-    <string name="settings_language">Language</string>
+    <string name="guardian_blockExplorer">By looking up information with a Block Explorer your IP-Address gets exposed. If you want to increase your anonymity, you should either not use it or go to the settings and choose a Block Explorer that supports Tor.</string>
+    <string name="settings_category_general">Genel</string>
+    <string name="settings_category_security">Güvenlik</string>
+    <string name="settings_category_help">Yardım</string>
+    <string name="settings_category_advanced">Gelişmiş</string>
+    <string name="settings_btcUnit">Bitcoin Birimi</string>
+    <string name="settings_currency">İkinci birim</string>
+    <string name="settings_language">Dil</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
     <string-array name="settings_language_displayValues">
-        <item>System Language</item>
-        <item>English</item>
+        <item>Sistem dili</item>
+        <item>İngilizce</item>
     </string-array>
     <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
-    <string name="settings_changePin">Change PIN</string>
+    <string name="settings_changePin">PIN değiştir</string>
     <string name="settings_scramblePin">Scramble PIN Screen</string>
     <string name="settings_preventScreenRecording">Prevent Screen Recording</string>
-    <string name="settings_hideTotalBalance">Hide total balance</string>
+    <string name="settings_hideTotalBalance">Toplam bakiyeyi gizle</string>
     <string name="settings_hideTotalBalance_explanation">When activated, tap the Zap logo on the home screen to reveal your balance.</string>
-    <string name="settings_resetSecurityWarnings">Reset Security Warnings</string>
-    <string name="settings_help">Need Help?</string>
-    <string name="settings_reportIssue">Report an Issue</string>
-    <string name="settings_about">About Zap</string>
-    <string name="settings_advanced_settings">Advanced Settings</string>
+    <string name="settings_resetSecurityWarnings">Güvenlik ayarlarını sıfırla</string>
+    <string name="settings_help">Yardım ister misin?</string>
+    <string name="settings_reportIssue">Bir Sorunu Bildirin</string>
+    <string name="settings_about">Zap hakkında</string>
+    <string name="settings_advanced_settings">Gelişmiş ayarlar</string>
     <string name="settings_restartRequired">Zap will be restarted to make this change. Do you want to continue?</string>
-    <string name="settings_enableBiometrics">Enable biometric authentication</string>
-    <string name="settings_blockExplorer">Block Explorer</string>
-    <string name="settings_addressType">Bitcoin Address Type</string>
+    <string name="settings_enableBiometrics">Biyometrik kimlik doğrulamayı etkinleştirme</string>
+    <string name="settings_blockExplorer">Blok Gezgini</string>
+    <string name="settings_blockExplorer_tor_toast">Tor Browser for Android is required.</string>
+    <string name="settings_addressType">Bitcoin adres tipi</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibility (P2PSH)</item>
+        <item>Compatibility (P2SH)</item>
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
     <string-array name="settings_lnRequestExpiryDisplayValues">
-        <item>10 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>6 hours</item>
-        <item>24 hours</item>
+        <item>10 dakika</item>
+        <item>30 dakika</item>
+        <item>1 saat</item>
+        <item>6 saat</item>
+        <item>24 saat</item>
     </string-array>
-    <string name="error">Error</string>
-    <string name="error_blockExplorer_title">Block Explorer</string>
+    <string name="error">Hata</string>
+    <string name="error_blockExplorer_title">Blok Gezgini</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
     <string name="error_notAPaymentRequest">Invalid payment information.\n\nPlease use a Bitcoin address or Lightning payment request to initiate a payment.</string>
-    <string name="error_paymentRequestExpired">This payment request expired.</string>
-    <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
-    <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>
-    <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
-    <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
-    <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
-    <string name="error_qr_code_result_null">Unable to read QR-Code, please try again.</string>
+    <string name="error_paymentRequestExpired">Bu ödeme isteğinin süresi doldu.</string>
+    <string name="error_useTestnetRequest">TESTNET\'e bağlısınız. Lütfen TESTNET adreslerini veya ödeme isteklerini kullanın.</string>
+    <string name="error_useMainnetRequest">MAINNET\'e bağlısınız. Lütfen MAINNET adreslerini veya ödeme isteklerini kullanın.</string>
+    <string name="error_cameraPermissionRequired">QR-Codes\'u taratmak için Zap\'e kamerayı kullanmasına izin vermelisin.</string>
+    <string name="error_emptyClipboardPayment">Panonuz herhangi bir ödeme verisi içermez.</string>
+    <string name="error_emptyClipboardConnect">Panonuz herhangi bir bağlantı verisi içermez.</string>
+    <string name="error_qr_code_result_null">QR-Code\'u okuyamıyor, lütfen yeniden deneyin.</string>
     <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use one of the following formats:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="error_unableToFetchBTCPayConfig">Could not fetch configuration from BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
@@ -201,10 +215,14 @@
     <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
     <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND deamon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
-    <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
+    <string name="error_connection_wallet_locked">Lütfen cüzdanın kilidini aç.</string>
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
-    <string name="error_wrong_password">Wrong password</string>
+    <string name="error_wrong_password">Yanlış parola</string>
+    <plurals name="duration_second">
+        <item quantity="one">%d Second</item>
+        <item quantity="other">%d Seconds</item>
+    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minutes</item>
@@ -217,14 +235,18 @@
         <item quantity="one">%d Day</item>
         <item quantity="other">%d Days</item>
     </plurals>
-    <string name="fee_tier_slow_title">Slow</string>
-    <string name="fee_tier_medium_title">Medium</string>
-    <string name="fee_tier_fast_title">Fast</string>
-    <string name="fee_tier_slow_description">Slow Transaction</string>
-    <string name="fee_tier_medium_description">Medium Transaction</string>
-    <string name="fee_tier_fast_description">Fast Transaction</string>
-    <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
+    <string name="fee_tier_slow_title">Yavaş</string>
+    <string name="fee_tier_medium_title">Orta</string>
+    <string name="fee_tier_fast_title">Hızlı</string>
+    <string name="fee_tier_slow_description">Yavaş işlem</string>
+    <string name="fee_tier_medium_description">Orta işlem</string>
+    <string name="fee_tier_fast_description">Hızlı işlem</string>
+    <string name="fee_estimated_duration">Tahmini teslim:%1$s</string>
     <string name="fee_not_available">n/A</string>
-    <string name="unlock_wallet">Unlock Wallet</string>
-    <string name="biometricPrompt_title">Biometric Authentication</string>
+    <string name="unlock_wallet">Cüzdanın Kilidini Aç</string>
+    <string name="biometricPrompt_title">Biyometrik Kimlik Doğrulama</string>
+    <string name="invoice_detail">Invoice Detail</string>
+    <string name="transaction_detail">Transaction Detail</string>
+    <string name="app_reset_title">Please note</string>
+    <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
 </resources>

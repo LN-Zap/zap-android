@@ -68,6 +68,15 @@
     <string name="retry">Нов опит</string>
     <string name="loading">Зареждане</string>
     <string name="pay">Плащане</string>
+    <string name="date">Date</string>
+    <string name="expiry">Expiry</string>
+    <string name="expired">Expired</string>
+    <string name="remaining">remaining</string>
+    <string name="address">Address</string>
+    <string name="transactionID">Transaction ID</string>
+    <string name="channel">Channel</string>
+    <string name="event">Event</string>
+    <string name="channel_event">Channel Event</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -91,6 +100,7 @@
     <string name="internal">Вътрешно</string>
     <string name="opened_channel">Канал отворен</string>
     <string name="closed_channel">Канал затворен</string>
+    <string name="force_closed_channel">Channel force closed</string>
     <string name="filter_transactions">Филтриране на транзакции</string>
     <string name="normal_payments">Нормални плащания</string>
     <string name="expired_requests">Просрочени заявки</string>
@@ -99,6 +109,8 @@
     <string name="channel_local_balance">Вашият баланс</string>
     <string name="channel_remote_balance">Чуждият баланс</string>
     <string name="channel_no_alias">Без име</string>
+    <string name="channel_remote_public_key">Чуждият Публичен Ключ</string>
+    <string name="channel_funding_transaction">Финансираща Транзакция</string>
     <string name="channel_state_open">отворен</string>
     <string name="channel_state_offline">офлайн</string>
     <string name="channel_state_pending_open">отваря се</string>
@@ -136,16 +148,17 @@
     <string name="guardian_disableScrambledPin"> Ако ПИН-ът Ви не е разбъркан е лесно той да бъде познат само като се наблюдават движенията на пръстите Ви.</string>
     <string name="guardian_disableScreenProtection">Ако разрешите записване на екрана, злонамерен софтуер  би могъл да запише видео или да заснеме екрана Ви докато използвате Zap. Препоръчваме да деактивирате това само докато искате да запишете видео или да правите скрийншотове.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">На път сте да платите %1$s%% в такси към копачите.\n\nВъзможни решения:\n- опитайте lightning плащане вместо това\n- изберете по-ниска такса и чакайте по-дълго\n- опитайте по-късно\n- транзактирайте с по-голямо кол-во\n\nИскате ли да продължите въпреки това?</string>
-    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Вие сте заявили кол-во във фиат, но данните за курса са стари (получени преди %1$s часа).\nУверете се, че имате Интернет връзка или обмислете възможността да заявите директно в Биткойн.\n\nИскате ли да продължите въпреки това?</string>
+    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Вие сте заявили кол-во във фиат, но данните за курса са стари (получени преди %1$s часа).\nУверете се, че имате Интернет връзка или обмислете възможността да заявите сумата директно в Биткойн.\n\nИскате ли да продължите въпреки това?</string>
     <string name="guardian_tooMuchMoney">Поздравления, изглежда имате голямо количество биткойни!\n Моля имайте предвид, че Zap е Hot Wallet.\n Правим всичко възможно, за да поддържаме този портфейл сигурен, но за всеки случай Ви препоръчваме да използвате Cold Wallets или хардуерни портфейли, за да съхранявате спестяванията си.</string>
     <string name="guardian_notReadyForMainnet">Вие сте на MAINNET с истински Биткойн!\nZap Android е в ранна фаза на разработка. Може да загубите средства!\n\n Ако не искате да поемете този риск, превключете на testnet междувременно.</string>
     <string name="guardian_remoteConnect">Сигурни ли сте, че искате да се свържете с\n\n%1$s\n\nМоля проверете адреса внимателно.</string>
+    <string name="guardian_blockExplorer">By looking up information with a Block Explorer your IP-Address gets exposed. If you want to increase your anonymity, you should either not use it or go to the settings and choose a Block Explorer that supports Tor.</string>
     <string name="settings_category_general">Общи</string>
     <string name="settings_category_security">Сигурност</string>
     <string name="settings_category_help">Помощ</string>
     <string name="settings_category_advanced">Разширени</string>
     <string name="settings_btcUnit">Биткойн единица</string>
-    <string name="settings_currency">Втора единица</string>
+    <string name="settings_currency">Вторична единица</string>
     <string name="settings_language">Език</string>
     <string name="settings_hapticPin">Осезаема ПИН обратна връзка</string>
     <string-array name="settings_language_displayValues">
@@ -167,6 +180,7 @@
     <string name="settings_restartRequired">Zap ще бъде рестартиран, за да направи тази промяна. Искате ли да продължите?</string>
     <string name="settings_enableBiometrics">Включване на Биометрична Автентикация</string>
     <string name="settings_blockExplorer">Block Explorer</string>
+    <string name="settings_blockExplorer_tor_toast">Tor Browser for Android is required.</string>
     <string name="settings_addressType">Биткойн тип на адреса</string>
     <string-array name="settings_receiveAddressDisplayValues">
         <item>Compatibility (P2SH)</item>
@@ -205,6 +219,10 @@
     <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
     <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
     <string name="error_wrong_password">Грешна парола</string>
+    <plurals name="duration_second">
+        <item quantity="one">%d Second</item>
+        <item quantity="other">%d Seconds</item>
+    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Минута</item>
         <item quantity="other">%d Минути</item>
@@ -227,4 +245,8 @@
     <string name="fee_not_available">N/A</string>
     <string name="unlock_wallet">Отключете портфейла</string>
     <string name="biometricPrompt_title">Биометрична автентикация</string>
+    <string name="invoice_detail">Invoice Detail</string>
+    <string name="transaction_detail">Transaction Detail</string>
+    <string name="app_reset_title">Please note</string>
+    <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
 </resources>
