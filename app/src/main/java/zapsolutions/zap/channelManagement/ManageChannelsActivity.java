@@ -3,24 +3,27 @@ package zapsolutions.zap.channelManagement;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.protobuf.ByteString;
-import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.util.Wallet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener {
+import zapsolutions.zap.R;
+import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.util.Wallet;
+
+public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, Wallet.ChannelsUpdatedSubscriptionListener {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ChannelItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView mEmptyListText;
 
@@ -31,41 +34,40 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_channels);
 
+        Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
 
         mRecyclerView = findViewById(R.id.channelsList);
         mEmptyListText = findViewById(R.id.listEmpty);
 
-        // Use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
         mChannelItems = new ArrayList<>();
 
-
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, R.string.coming_soon, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> Snackbar.make(view, R.string.coming_soon, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
 
+        mAdapter = new ChannelItemAdapter(mChannelItems, this);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         updateChannelsDisplayList();
     }
 
     private void updateChannelsDisplayList() {
         mChannelItems.clear();
 
+        List<ChannelListItem> offlineChannels = new ArrayList<>();
+
         // Add all open channel items
 
         if (Wallet.getInstance().mOpenChannelsList != null) {
             for (Channel c : Wallet.getInstance().mOpenChannelsList) {
                 OpenChannelItem openChannelItem = new OpenChannelItem(c);
-                mChannelItems.add(openChannelItem);
+                if (c.getActive()) {
+                    mChannelItems.add(openChannelItem);
+                } else {
+                    offlineChannels.add(openChannelItem);
+                }
             }
         }
-
 
         // Add all pending channel items
 
@@ -101,20 +103,18 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             }
         }
 
+        // Show offline channels at the bottom
+        mChannelItems.addAll(offlineChannels);
 
         // Show "No channels" if the list is empty
-
         if (mChannelItems.size() == 0) {
             mEmptyListText.setVisibility(View.VISIBLE);
         } else {
             mEmptyListText.setVisibility(View.GONE);
         }
 
-
-        // Show the list
-
-        mAdapter = new ChannelItemAdapter(mChannelItems, this);
-        mRecyclerView.setAdapter(mAdapter);
+        // Update the view
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -127,5 +127,17 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             channelDetailBSDFragment.setArguments(bundle);
             channelDetailBSDFragment.show(getSupportFragmentManager(), ChannelDetailBSDFragment.TAG);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        Wallet.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onChannelsUpdated() {
+        runOnUiThread(this::updateChannelsDisplayList);
     }
 }

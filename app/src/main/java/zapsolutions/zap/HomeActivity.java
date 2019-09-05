@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +29,10 @@ import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
-import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
@@ -48,7 +49,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.InfoListener, Wallet.WalletLoadedListener, UserGuardianInterface {
 
     private static final String LOG_TAG = HomeActivity.class.getName();
-
+    private Handler mHandler;
     private UserGuardian mUG;
     private InputMethodManager mInputMethodManager;
     private ScheduledExecutorService mExchangeRateScheduler;
@@ -105,6 +106,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         mUG = new UserGuardian(this, this);
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mHandler = new Handler();
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -146,7 +148,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     }
 
-
     // This scheduled LND info request lets us know
     // if we have a working connection to LND and if we are still in sync with the network
     private void setupLNDInfoSchedule() {
@@ -178,7 +179,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
 
     }
-
 
     // This function gets called when app is moved to foreground.
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -249,11 +249,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
         TimeOutUtil.getInstance().setCanBeRestarted(false);
 
-        // Unregister Wallet Loaded & Info Listener
+        // Unregister Handler, Wallet Loaded & Info Listener
         Wallet.getInstance().unregisterWalletLoadedListener(this);
         mWalletLoadedListenerRegistered = false;
         Wallet.getInstance().unregisterInfoListener(this);
         mInfoChangeListenerRegistered = false;
+        mHandler.removeCallbacksAndMessages(null);
 
         PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
 
@@ -337,16 +338,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             // Fetch the transaction history
             Wallet.getInstance().fetchLNDTransactionHistory();
 
-            // Fetch the channels from LND
-            Wallet.getInstance().fetchOpenChannelsFromLND();
-            Wallet.getInstance().fetchPendingChannelsFromLND();
-            Wallet.getInstance().fetchClosedChannelsFromLND();
+            Wallet.getInstance().fetchChannelsFromLND();
 
             Wallet.getInstance().subscribeToTransactions();
             Wallet.getInstance().subscribeToInvoices();
 
-            // ToDo: subscribeToChannelEvents() causes LND to hang, if it is called short after unlocking.
-            //Wallet.getInstance().subscribeToChannelEvents();
+            if (mHandler != null) {
+                mHandler.postDelayed(() -> Wallet.getInstance().subscribeToChannelEvents(), 3000);
+            }
             //Wallet.getInstance().subscribeToChannelBackup();
 
             ZapLog.debug(LOG_TAG, "Wallet loaded");
