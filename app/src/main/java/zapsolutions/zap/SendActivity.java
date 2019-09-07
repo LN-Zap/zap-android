@@ -68,24 +68,21 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
                 PermissionsUtil.requestCameraPermission(SendActivity.this, true);
             }
         }
+
+        // Action when clicked on "paste"
+        Button btnPaste = findViewById(R.id.scannerPaste);
+        btnPaste.setOnClickListener(v -> {
+            try {
+                validateInvoice(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
+            } catch (NullPointerException e) {
+                showError(getResources().getString(R.string.error_emptyClipboardPayment), 4000);
+            }
+        });
     }
 
     private void showCameraView() {
         ViewGroup contentFrame = findViewById(R.id.content_frame);
         contentFrame.addView(mScannerView);
-
-        // Action when clicked on "paste"
-        Button btnPaste = findViewById(R.id.scannerPaste);
-        btnPaste.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    validateInvoice(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
-                } catch (NullPointerException e) {
-                    showError(getResources().getString(R.string.error_emptyClipboardPayment), 4000);
-                }
-            }
-        });
 
         // Action when clicked on "flash button"
         mBtnFlashlight = findViewById(R.id.scannerFlashButton);
