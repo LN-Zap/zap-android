@@ -126,7 +126,7 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         Wallet.getInstance().registerChannelCloseUpdateListener(this);
         mChannelPoint = channel.getChannelPoint();
 
-        showClosingButton(channel.getRemotePubkey(), !channel.getActive());
+        showClosingButton(!channel.getActive());
 
         if (channel.getActive()) {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.superGreen)));
@@ -210,16 +210,16 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         mClosingTxCopyIcon.setOnClickListener(view1 -> ClipBoardUtil.copyToClipboard(getContext(), "closingTransaction", closingTransaction));
     }
 
-    private void showClosingButton(String remotePubKey, boolean forceClose) {
+    private void showClosingButton(boolean forceClose) {
         mCloseChannelButton.setVisibility(View.VISIBLE);
         mCloseChannelButton.setText(forceClose ? getText(R.string.channel_close_force) : getText(R.string.channel_close));
-        mCloseChannelButton.setOnClickListener(view1 -> closeChannel(remotePubKey, forceClose));
+        mCloseChannelButton.setOnClickListener(view1 -> closeChannel(forceClose));
     }
 
-    private void closeChannel(String remotePubKey, boolean force) {
+    private void closeChannel(boolean force) {
         new AlertDialog.Builder(getContext())
                 .setTitle(force ? R.string.channel_close_force : R.string.channel_close)
-                .setMessage(getString(force ? R.string.channel_close_force_confirmation : R.string.channel_close_confirmation, remotePubKey))
+                .setMessage(getString(force ? R.string.channel_close_force_confirmation : R.string.channel_close_confirmation, mNodeAlias.getText()))
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
                     mCloseChannelButton.setVisibility(View.VISIBLE);

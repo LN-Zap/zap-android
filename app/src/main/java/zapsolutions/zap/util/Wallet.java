@@ -1305,7 +1305,7 @@ public class Wallet {
         String alias = "";
         for (NodeInfo i : Wallet.getInstance().mNodeInfos) {
             if (i.getNode().getPubKey().equals(pubKey)) {
-                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0, 8))) {
+                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0, 8)) || i.getNode().getAlias().isEmpty()) {
                     String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
                     alias = unnamed + " (" + i.getNode().getPubKey().substring(0, 5) + "...)";
                 } else {
