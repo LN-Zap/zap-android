@@ -9,11 +9,14 @@ import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
 import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
 import com.github.lightningnetwork.lnd.lnrpc.CloseStatusUpdate;
+import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
@@ -87,6 +90,7 @@ public class Wallet {
     public List<PendingChannelsResponse.ClosedChannel> mPendingClosedChannelsList;
     public List<PendingChannelsResponse.ForceClosedChannel> mPendingForceClosedChannelsList;
     public List<PendingChannelsResponse.WaitingCloseChannel> mPendingWaitingCloseChannelsList;
+    public List<ChannelCloseSummary> mClosedChannelsList;
     public List<NodeInfo> mNodeInfos = new LinkedList<>();
 
     private long mOnChainBalanceTotal = 0;
@@ -679,11 +683,15 @@ public class Wallet {
         PendingChannelsRequest asyncPendingChannelsRequest = PendingChannelsRequest.newBuilder().build();
         final ListenableFuture<PendingChannelsResponse> pendingChannelsFuture = client.pendingChannels(asyncPendingChannelsRequest);
 
-        Futures.whenAllSucceed(openChannelsFuture, pendingChannelsFuture).run(() -> {
+        ClosedChannelsRequest asyncClosedChannelsRequest = ClosedChannelsRequest.newBuilder().build();
+        final ListenableFuture<ClosedChannelsResponse> closedChannelsFuture = client.closedChannels(asyncClosedChannelsRequest);
+
+        Futures.whenAllSucceed(openChannelsFuture, pendingChannelsFuture, closedChannelsFuture).run(() -> {
             try {
                 ZapLog.debug(LOG_TAG, "Fetch channels from LND.");
-                ListChannelsResponse openChannelsResponse = openChannelsFuture.get();
 
+                // open channels
+                ListChannelsResponse openChannelsResponse = openChannelsFuture.get();
                 mOpenChannelsList = openChannelsResponse.getChannelsList();
 
                 // Load NodeInfos for all involved nodes. This allows us to display aliases later.
@@ -691,6 +699,15 @@ public class Wallet {
                     fetchNodeInfoFromLND(c.getRemotePubkey());
                 }
 
+                // closed channels
+                ClosedChannelsResponse closedChannelsResponse = closedChannelsFuture.get();
+                mClosedChannelsList = closedChannelsResponse.getChannelsList();
+                // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+                for (ChannelCloseSummary c : mClosedChannelsList) {
+                    fetchNodeInfoFromLND(c.getRemotePubkey());
+                }
+
+                // pending channels
                 PendingChannelsResponse pendingChannelsResponse = pendingChannelsFuture.get();
 
                 mPendingOpenChannelsList = pendingChannelsResponse.getPendingOpenChannelsList();
@@ -1218,6 +1235,15 @@ public class Wallet {
             }
         }
 
+        // closed channels
+        if (mClosedChannelsList != null) {
+            for (ChannelCloseSummary c : mClosedChannelsList) {
+                String[] parts = c.getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0]) || transaction.getTxHash().equals(c.getClosingTxHash())) {
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -1279,6 +1305,15 @@ public class Wallet {
             }
         }
 
+        // closed channels
+        if (mClosedChannelsList != null) {
+            for (ChannelCloseSummary c : mClosedChannelsList) {
+                String[] parts = c.getChannelPoint().split(":");
+                if (transaction.getTxHash().equals(parts[0]) || transaction.getTxHash().equals(c.getClosingTxHash())) {
+                    return c.getRemotePubkey();
+                }
+            }
+        }
 
         return "";
     }
