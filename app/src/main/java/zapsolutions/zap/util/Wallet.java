@@ -114,6 +114,7 @@ public class Wallet {
     private ClientCallStreamObserver<ChannelEventUpdate> mChannelEventStreamObserver;
     private ClientCallStreamObserver<ChanBackupSnapshot> mChannelBackupStreamObserver;
     private Handler mHandler = new Handler();
+    private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
 
     private Wallet() {
         ;
@@ -145,6 +146,7 @@ public class Wallet {
         mTestnet = false;
         mLNDVersion = "not connected";
         mHandler.removeCallbacksAndMessages(null);
+        mChannelsUpdateDebounceHandler.shutdown();
     }
 
     /**
@@ -673,6 +675,7 @@ public class Wallet {
     }
 
     public void fetchChannelsFromLND() {
+        ZapLog.debug(LOG_TAG, "Fetch channels from LND.");
         LightningGrpc.LightningFutureStub client = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
                 .withCallCredentials(LndConnection.getInstance().getMacaroon());
@@ -688,7 +691,7 @@ public class Wallet {
 
         Futures.whenAllSucceed(openChannelsFuture, pendingChannelsFuture, closedChannelsFuture).run(() -> {
             try {
-                ZapLog.debug(LOG_TAG, "Fetch channels from LND.");
+                ZapLog.debug(LOG_TAG, "Fetched channels from LND.");
 
                 // open channels
                 ListChannelsResponse openChannelsResponse = openChannelsFuture.get();
@@ -1042,11 +1045,7 @@ public class Wallet {
                         break;
                 }
 
-                // open and active come together after channel went open, no need to fetch two times
-                if (channelEventUpdate.getChannelCase() != ChannelEventUpdate.ChannelCase.OPEN_CHANNEL) {
-                    // delay fetching a little to give lnd time for processing
-                    mHandler.postDelayed(() -> fetchChannelsFromLND(), 500);
-                }
+                updateLNDChannelsWithDebounce();
 
                 broadcastChannelEvent(channelEventUpdate);
             }
@@ -1063,6 +1062,12 @@ public class Wallet {
         };
 
         streamingChannelEventClient.subscribeChannelEvents(streamingChannelEventRequest, mChannelEventStreamObserver);
+    }
+
+    public void updateLNDChannelsWithDebounce() {
+        ZapLog.debug(LOG_TAG, "Fetch channels from LND. (debounce)");
+
+        mChannelsUpdateDebounceHandler.attempt(this::fetchChannelsFromLND, DebounceHandler.DEBOUNCE_1_SECOND);
     }
 
     public void cancelChannelEventSubscription() {

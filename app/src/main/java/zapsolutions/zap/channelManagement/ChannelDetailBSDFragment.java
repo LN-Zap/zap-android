@@ -247,6 +247,10 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         ZapLog.debug(TAG, "Channel close: " + channelPoint + " success=(" + success + ")");
 
         if (getActivity() != null && mChannelPoint.equals(channelPoint)) {
+
+            // fetch channels after closing finished
+            Wallet.getInstance().updateLNDChannelsWithDebounce();
+
             getActivity().runOnUiThread(() -> {
                 if (!success) {
                     Toast.makeText(getContext(), R.string.channel_close_error, Toast.LENGTH_LONG).show();
