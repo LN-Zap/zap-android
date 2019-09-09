@@ -8,6 +8,7 @@ public class InvoiceUtil {
     public static String URI_PREFIX_BITCOIN = "bitcoin:";
     public static String INVOICE_PREFIX_LIGHTNING_TESTNET = "lntb";
     public static String INVOICE_PREFIX_LIGHTNING_MAINNET = "lnbc";
+    private static int INVOICE_LIGHTNING_MIN_LENGTH = 4;
 
     public static String generateLightningUri(@NonNull String data) {
         if (isLightningUri(data)) {
@@ -34,7 +35,7 @@ public class InvoiceUtil {
     }
 
     public static boolean isLightningInvoice(@NonNull String data) {
-        if (data.isEmpty() || data.length() < 4) {
+        if (data.isEmpty() || data.length() < INVOICE_LIGHTNING_MIN_LENGTH) {
             return false;
         }
 
