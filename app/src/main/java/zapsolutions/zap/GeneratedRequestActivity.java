@@ -11,16 +11,21 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.common.net.UrlEscapers;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 import net.glxn.qrgen.android.QRCode;
+
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 
@@ -83,7 +88,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
 
             // Generate on-chain request data to encode
 
-            mDataToEncode = "bitcoin:" + mAddress;
+            mDataToEncode = InvoiceUtil.generateBitcoinUri(mAddress);
             mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
 
             // Convert the value to the expected format for onChain invoices.
@@ -98,7 +103,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
                     mDataToEncode = appendParameter(mDataToEncode, "message", mMemo);
         } else {
             // Generate lightning request data to encode
-            mDataToEncode = "lightning:" + mLnInvoice;
+            mDataToEncode = InvoiceUtil.generateLightningUri(mLnInvoice);
         }
 
 

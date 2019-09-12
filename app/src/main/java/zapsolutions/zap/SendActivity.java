@@ -10,9 +10,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.core.content.ContextCompat;
+
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
+
 import io.grpc.StatusRuntimeException;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
@@ -22,12 +29,9 @@ import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
 
 public class SendActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
     private static final String LOG_TAG = SendActivity.class.getName();
@@ -152,26 +156,26 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
             String lnInvoice = invoice.toLowerCase();
 
             // Remove the "lightning:" uri scheme if it is present, LND needs it without uri scheme
-            if (lnInvoice.substring(0, 10).equalsIgnoreCase("lightning:")) {
-                lnInvoice = lnInvoice.substring(10);
+            if (InvoiceUtil.isLightningUri(lnInvoice)) {
+                lnInvoice = lnInvoice.substring(InvoiceUtil.URI_PREFIX_LIGHTNING.length());
             }
 
             // Check if the invoice is a lightning invoice
-            if (lnInvoice.substring(0, 4).equals("lntb") || lnInvoice.substring(0, 4).equals("lnbc")) {
+            if (InvoiceUtil.isLightningInvoice(lnInvoice)) {
 
                 // We have a lightning invoice
 
                 // Check if the invoice is for the same network the app is connected to
                 String lnInvoiceType = lnInvoice.substring(0, 4);
                 if (Wallet.getInstance().isTestnet()) {
-                    if (lnInvoiceType.equals("lntb")) {
+                    if (lnInvoiceType.equals(InvoiceUtil.INVOICE_PREFIX_LIGHTNING_TESTNET)) {
                         decodeLightningInvoice(lnInvoice);
                     } else {
                         // Show error. Please use a TESTNET invoice.
                         showError(getResources().getString(R.string.error_useTestnetRequest), 5000);
                     }
                 } else {
-                    if (lnInvoiceType.equals("lnbc")) {
+                    if (lnInvoiceType.equals(InvoiceUtil.INVOICE_PREFIX_LIGHTNING_MAINNET)) {
                         decodeLightningInvoice(lnInvoice);
                     } else {
                         // Show error. Please use a MAINNET invoice.
@@ -183,11 +187,11 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
                 // We do not have a lightning invoice... check if it is a valid bitcoin address / invoice
 
                 // Check if we have a bitcoin invoice with the "bitcoin:" uri scheme
-                if (invoice.substring(0, 8).equalsIgnoreCase("bitcoin:")) {
+                if (InvoiceUtil.isBitcoinUri(invoice)) {
 
                     // Add "//" to make it parsable for the java URI class if it is not present
-                    if (!invoice.substring(0, 10).equalsIgnoreCase("bitcoin://")) {
-                        invoice = "bitcoin://" + invoice.substring(8);
+                    if (!invoice.substring(0, 10).equalsIgnoreCase(InvoiceUtil.URI_PREFIX_BITCOIN + "//")) {
+                        invoice = InvoiceUtil.URI_PREFIX_BITCOIN + "//" + invoice.substring(8);
                     }
 
                     URI bitcoinURI = null;
@@ -195,6 +199,7 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
                         bitcoinURI = new URI(invoice);
 
                         mOnChainAddress = bitcoinURI.getHost();
+
 
                         String message = null;
 
