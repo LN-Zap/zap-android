@@ -735,10 +735,9 @@ public class Wallet {
                 broadcastChannelsUpdated();
 
             } catch (InterruptedException e) {
-                ZapLog.debug(LOG_TAG, "Get node info request interrupted.");
+                ZapLog.debug(LOG_TAG, "Get channels request interrupted.");
             } catch (ExecutionException e) {
-                ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
-                // ZapLog.debug(LOG_TAG, e.getMessage());
+                ZapLog.debug(LOG_TAG, "Exception in get channels info request task.");
             }
         }, Executors.newSingleThreadExecutor());
     }

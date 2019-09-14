@@ -135,8 +135,8 @@
     <string name="channel_close">Close Channel</string>
     <string name="channel_close_force">Force Close Channel</string>
     <string name="channel_close_error">Error occurred while closing channel</string>
-    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s</string>
-    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s</string>
+    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
+    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
 
     <string name="setup_connect_heading">How do you want to use ZAP?</string>
     <string name="setup_connect_local_description">Create a wallet on this phone.</string>

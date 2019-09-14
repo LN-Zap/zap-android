@@ -307,6 +307,7 @@
         android:background="@drawable/bg_clickable_item"
         android:textColor="@color/lightningOrange"
         android:visibility="gone"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spacer"
