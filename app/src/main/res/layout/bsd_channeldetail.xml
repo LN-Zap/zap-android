@@ -7,6 +7,28 @@
     android:background="@drawable/bg_bottom_sheets"
     android:padding="10dp">
 
+    <ImageView
+        android:id="@+id/fundingTxCopyIcon"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="@null"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/fundingTxText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fundingTxText"
+        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+
+    <View
+        android:id="@+id/spacer2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/channelCloseButton">
+
+    </View>
+
     <ImageButton
         android:id="@+id/closeButton"
         android:layout_width="wrap_content"
@@ -200,16 +222,63 @@
         app:layout_constraintTop_toBottomOf="@+id/fundingTxLabel"
         tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
 
-    <ImageView
-        android:id="@+id/fundingTxCopyIcon"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/closingTxLayout"
         android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:background="@null"
-        android:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/fundingTxText"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fundingTxText"
-        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fundingTxText"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/separator_4"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/gray" />
+
+        <TextView
+            android:id="@+id/closingTxLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/channel_closing_transaction"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator_4" />
+
+        <TextView
+            android:id="@+id/closingTxText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@color/lightningOrange"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@+id/closingTxCopyIcon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/closingTxLabel"
+            tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+        <ImageView
+            android:id="@+id/closingTxCopyIcon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:background="@null"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/closingTxText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/closingTxText"
+            app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/spacer"
@@ -218,7 +287,7 @@
         android:layout_margin="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fundingTxText">
+        app:layout_constraintTop_toBottomOf="@id/closingTxLayout">
 
     </View>
 
@@ -228,4 +297,44 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.50" />
+
+    <Button
+        android:id="@+id/channelCloseButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_clickable_item"
+        android:textColor="@color/lightningOrange"
+        android:visibility="gone"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spacer"
+        tools:text="Close Channel"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/progressBarLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_rectangle_spinner"
+        android:elevation="2dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nodeAlias"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/closingChannelprogressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

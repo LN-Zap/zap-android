@@ -17,4 +17,5 @@
     <color name="whiteGradient">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="blackAlpha">#11555555</color>
 </resources>

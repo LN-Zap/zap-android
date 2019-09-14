@@ -3,6 +3,7 @@ package zapsolutions.zap.util;
 
 import android.content.Context;
 import android.os.Handler;
+
 import com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription;
@@ -11,6 +12,9 @@ import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventUpdate;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
+import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
+import com.github.lightningnetwork.lnd.lnrpc.CloseStatusUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
@@ -39,20 +43,25 @@ import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.WalletUnlockerGrpc;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
-import io.grpc.stub.ClientCallStreamObserver;
-import zapsolutions.zap.R;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 
-import javax.annotation.Nullable;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nullable;
+
+import io.grpc.stub.ClientCallStreamObserver;
+import io.grpc.stub.StreamObserver;
+import zapsolutions.zap.R;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 
 
 public class Wallet {
@@ -67,7 +76,9 @@ public class Wallet {
     private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
     private final Set<TransactionSubscriptionListener> mTransactionSubscriptionListeners = new HashSet<>();
     private final Set<ChannelEventSubscriptionListener> mChannelEventSubscriptionListeners = new HashSet<>();
+    private final Set<ChannelsUpdatedSubscriptionListener> mChannelsUpdatedSubscriptionListeners = new HashSet<>();
     private final Set<ChannelBackupSubscriptionListener> mChannelBackupSubscriptionListeners = new HashSet<>();
+    private final Set<ChannelCloseUpdateListener> mChannelCloseUpdateListeners = new HashSet<>();
     public PayReq mPaymentRequest = null;
     public String mPaymentRequestString = "";
     public List<Transaction> mOnChainTransactionList;
@@ -81,6 +92,7 @@ public class Wallet {
     public List<PendingChannelsResponse.WaitingCloseChannel> mPendingWaitingCloseChannelsList;
     public List<ChannelCloseSummary> mClosedChannelsList;
     public List<NodeInfo> mNodeInfos = new LinkedList<>();
+
     private long mOnChainBalanceTotal = 0;
     private long mOnChainBalanceConfirmed = 0;
     private long mOnChainBalanceUnconfirmed = 0;
@@ -101,7 +113,8 @@ public class Wallet {
     private ClientCallStreamObserver<TransactionDetails> mTransactionStreamObserver;
     private ClientCallStreamObserver<ChannelEventUpdate> mChannelEventStreamObserver;
     private ClientCallStreamObserver<ChanBackupSnapshot> mChannelBackupStreamObserver;
-
+    private Handler mHandler = new Handler();
+    private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
 
     private Wallet() {
         ;
@@ -132,8 +145,9 @@ public class Wallet {
         mSyncedToChain = false;
         mTestnet = false;
         mLNDVersion = "not connected";
+        mHandler.removeCallbacksAndMessages(null);
+        mChannelsUpdateDebounceHandler.shutdown();
     }
-
 
     /**
      * This will be used on loading. If this request finishes without an error, our connection to LND is established.
@@ -241,28 +255,17 @@ public class Wallet {
                     }
                     LndConnection.getInstance().restartBackgroundTasks();
 
-
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
-                            // ToDo: Create a routine that retries this until successful
-                            checkIfLndIsReachableAndTriggerWalletLoadedInterface();
-                        }
+                    mHandler.postDelayed(() -> {
+                        // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
+                        // ToDo: Create a routine that retries this until successful
+                        checkIfLndIsReachableAndTriggerWalletLoadedInterface();
                     }, 10000);
 
-                    Handler handler2 = new Handler();
-                    handler2.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
-                            // That's why we update it again 10 seconds later.
-                            // ToDo: Create a routine that retries this until successful
-                            Wallet.getInstance().fetchOpenChannelsFromLND();
-                            Wallet.getInstance().fetchPendingChannelsFromLND();
-                            Wallet.getInstance().fetchClosedChannelsFromLND();
-                        }
+                    mHandler.postDelayed(() -> {
+                        // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
+                        // That's why we update it again 10 seconds later.
+                        // ToDo: Create a routine that retries this until successful
+                        Wallet.getInstance().fetchChannelsFromLND();
                     }, 12000);
 
 
@@ -400,7 +403,6 @@ public class Wallet {
 
     }
 
-
     /**
      * This will fetch the current info from LND.
      * All Listeners registered to InfoListener will be informed about any changes.
@@ -514,7 +516,6 @@ public class Wallet {
         }
     }
 
-
     /**
      * This will fetch all On-Chain transactions involved with the current wallet from LND.
      */
@@ -547,7 +548,6 @@ public class Wallet {
             }
         }, new ExecuteOnCaller());
     }
-
 
     /**
      * This will fetch all lightning invoices from LND.
@@ -602,7 +602,6 @@ public class Wallet {
         }, new ExecuteOnCaller());
     }
 
-
     /**
      * This will fetch lightning payments from LND.
      */
@@ -646,127 +645,102 @@ public class Wallet {
         }, new ExecuteOnCaller());
     }
 
+    public void closeChannel(String channelPoint, boolean force) {
+        ChannelPoint point = ChannelPoint.newBuilder()
+                .setFundingTxidStr(channelPoint.substring(0, channelPoint.indexOf(':')))
+                .setOutputIndex(Character.getNumericValue(channelPoint.charAt(channelPoint.length() - 1))).build();
 
-    /**
-     * This will fetch all open channels for the current wallet from LND.
-     */
-    public void fetchOpenChannelsFromLND() {
-        // fetch open channels
-        LightningGrpc.LightningFutureStub asyncOpenChannelsClient = LightningGrpc
+        CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder().setChannelPoint(point).setForce(force).build();
+
+        LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon())
+                .closeChannel(closeChannelRequest, new StreamObserver<CloseStatusUpdate>() {
+                    @Override
+                    public void onNext(CloseStatusUpdate value) {
+                        ZapLog.debug(LOG_TAG, "Closing channel update: " + value.getUpdateCase().getNumber());
+                        broadcastChannelCloseUpdate(channelPoint, true);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        ZapLog.debug(LOG_TAG, "Error closing channel");
+                        broadcastChannelCloseUpdate(channelPoint, false);
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
+    }
+
+    public void fetchChannelsFromLND() {
+        ZapLog.debug(LOG_TAG, "Fetch channels from LND.");
+        LightningGrpc.LightningFutureStub client = LightningGrpc
                 .newFutureStub(LndConnection.getInstance().getSecureChannel())
                 .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
         ListChannelsRequest asyncOpenChannelsRequest = ListChannelsRequest.newBuilder().build();
-        final ListenableFuture<ListChannelsResponse> openChannelsFuture = asyncOpenChannelsClient.listChannels(asyncOpenChannelsRequest);
-
-        openChannelsFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ListChannelsResponse openChannelsResponse = openChannelsFuture.get();
-
-                    mOpenChannelsList = openChannelsResponse.getChannelsList();
-
-                    // Load NodeInfos for all involved nodes. This allows us to display aliases later.
-                    for (Channel c : mOpenChannelsList) {
-                        fetchNodeInfoFromLND(c.getRemotePubkey());
-                    }
-
-                    // ZapLog.debug(LOG_TAG, openChannelsResponse.toString());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "List open channels request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in list open channels request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
-    }
-
-
-    /**
-     * This will fetch all pending channels for the current wallet from LND.
-     */
-    public void fetchPendingChannelsFromLND() {
-        // fetch pending channels
-        LightningGrpc.LightningFutureStub asyncPendingChannelsClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+        final ListenableFuture<ListChannelsResponse> openChannelsFuture = client.listChannels(asyncOpenChannelsRequest);
 
         PendingChannelsRequest asyncPendingChannelsRequest = PendingChannelsRequest.newBuilder().build();
-        final ListenableFuture<PendingChannelsResponse> pendingChannelsFuture = asyncPendingChannelsClient.pendingChannels(asyncPendingChannelsRequest);
-
-        pendingChannelsFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    PendingChannelsResponse pendingChannelsResponse = pendingChannelsFuture.get();
-
-                    mPendingOpenChannelsList = pendingChannelsResponse.getPendingOpenChannelsList();
-                    mPendingClosedChannelsList = pendingChannelsResponse.getPendingClosingChannelsList();
-                    mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
-                    mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
-
-                    // Load NodeInfos for all involved nodes. This allows us to display aliases later.
-                    for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
-                        fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
-                    }
-                    for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
-                        fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
-                    }
-                    for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
-                        fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
-                    }
-                    for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
-                        fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
-                    }
-
-
-                    // ZapLog.debug(LOG_TAG, pendingChannelsResponse.toString());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "List pending channels request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in list pending channels request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
-    }
-
-
-    /**
-     * This will fetch all closed channels for the current wallet from LND.
-     */
-    public void fetchClosedChannelsFromLND() {
-        // fetch closed channels
-        LightningGrpc.LightningFutureStub asyncClosedChannelsClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+        final ListenableFuture<PendingChannelsResponse> pendingChannelsFuture = client.pendingChannels(asyncPendingChannelsRequest);
 
         ClosedChannelsRequest asyncClosedChannelsRequest = ClosedChannelsRequest.newBuilder().build();
-        final ListenableFuture<ClosedChannelsResponse> closedChannelsFuture = asyncClosedChannelsClient.closedChannels(asyncClosedChannelsRequest);
+        final ListenableFuture<ClosedChannelsResponse> closedChannelsFuture = client.closedChannels(asyncClosedChannelsRequest);
 
-        closedChannelsFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ClosedChannelsResponse closedChannelsResponse = closedChannelsFuture.get();
+        Futures.whenAllSucceed(openChannelsFuture, pendingChannelsFuture, closedChannelsFuture).run(() -> {
+            try {
+                ZapLog.debug(LOG_TAG, "Fetched channels from LND.");
 
-                    mClosedChannelsList = closedChannelsResponse.getChannelsList();
+                // open channels
+                ListChannelsResponse openChannelsResponse = openChannelsFuture.get();
+                mOpenChannelsList = openChannelsResponse.getChannelsList();
 
-                    // Load NodeInfos for all involved nodes. This allows us to display aliases later.
-                    for (ChannelCloseSummary c : mClosedChannelsList) {
-                        fetchNodeInfoFromLND(c.getRemotePubkey());
-                    }
-
-                    // ZapLog.debug(LOG_TAG, closedChannelsResponse.toString());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "List closed channels request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in list closed channels request task.");
+                // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+                for (Channel c : mOpenChannelsList) {
+                    fetchNodeInfoFromLND(c.getRemotePubkey());
                 }
-            }
-        }, new ExecuteOnCaller());
-    }
 
+                // closed channels
+                ClosedChannelsResponse closedChannelsResponse = closedChannelsFuture.get();
+                mClosedChannelsList = closedChannelsResponse.getChannelsList();
+                // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+                for (ChannelCloseSummary c : mClosedChannelsList) {
+                    fetchNodeInfoFromLND(c.getRemotePubkey());
+                }
+
+                // pending channels
+                PendingChannelsResponse pendingChannelsResponse = pendingChannelsFuture.get();
+
+                mPendingOpenChannelsList = pendingChannelsResponse.getPendingOpenChannelsList();
+                mPendingClosedChannelsList = pendingChannelsResponse.getPendingClosingChannelsList();
+                mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
+                mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
+
+                // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+                for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
+                    fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
+                }
+                for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
+                    fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
+                }
+                for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
+                    fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
+                }
+                for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
+                    fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
+                }
+
+                broadcastChannelsUpdated();
+
+            } catch (InterruptedException e) {
+                ZapLog.debug(LOG_TAG, "Get channels request interrupted.");
+            } catch (ExecutionException e) {
+                ZapLog.debug(LOG_TAG, "Exception in get channels info request task.");
+            }
+        }, Executors.newSingleThreadExecutor());
+    }
 
     /**
      * This will fetch the NodeInfo according to the supplied pubkey.
@@ -1048,11 +1022,31 @@ public class Wallet {
 
             @Override
             public void onNext(ChannelEventUpdate channelEventUpdate) {
+                ZapLog.debug(LOG_TAG, "Received channel update event");
+                switch (channelEventUpdate.getChannelCase()) {
+                    case OPEN_CHANNEL:
+                        ZapLog.debug(LOG_TAG, "Channel has been opened");
+                        break;
+                    case CLOSED_CHANNEL:
+                        ZapLog.debug(LOG_TAG, "Channel has been closed");
+                        break;
+                    case ACTIVE_CHANNEL:
+                        ZapLog.debug(LOG_TAG, "Channel went active");
+                        break;
+                    case INACTIVE_CHANNEL:
+                        ZapLog.debug(LOG_TAG, "Open channel went to inactive");
+                        break;
+                    case CHANNEL_NOT_SET:
+                        ZapLog.debug(LOG_TAG, "Received channel event update case: not set Channel");
+                        break;
+                    default:
+                        ZapLog.debug(LOG_TAG, "Unknown channel event: " + channelEventUpdate.getChannelCase());
+                        break;
+                }
 
-                ZapLog.debug(LOG_TAG, "Received channel event update.");
+                updateLNDChannelsWithDebounce();
 
                 broadcastChannelEvent(channelEventUpdate);
-
             }
 
             @Override
@@ -1067,7 +1061,12 @@ public class Wallet {
         };
 
         streamingChannelEventClient.subscribeChannelEvents(streamingChannelEventRequest, mChannelEventStreamObserver);
+    }
 
+    public void updateLNDChannelsWithDebounce() {
+        ZapLog.debug(LOG_TAG, "Fetch channels from LND. (debounce)");
+
+        mChannelsUpdateDebounceHandler.attempt(this::fetchChannelsFromLND, DebounceHandler.DEBOUNCE_1_SECOND);
     }
 
     public void cancelChannelEventSubscription() {
@@ -1240,7 +1239,6 @@ public class Wallet {
             }
         }
 
-
         // closed channels
         if (mClosedChannelsList != null) {
             for (ChannelCloseSummary c : mClosedChannelsList) {
@@ -1311,7 +1309,6 @@ public class Wallet {
             }
         }
 
-
         // closed channels
         if (mClosedChannelsList != null) {
             for (ChannelCloseSummary c : mClosedChannelsList) {
@@ -1332,13 +1329,14 @@ public class Wallet {
      */
     public String getNodeAliasFromChannelTransaction(Transaction transaction, Context mContext) {
         String pubKey = getNodePubKeyFromChannelTransaction(transaction);
-        return getNodeAliasFromPubKey(pubKey,mContext);
+        return getNodeAliasFromPubKey(pubKey, mContext);
     }
 
     /**
      * Returns the alias of the node based on the provided pubKey.
      * If no alias is found, `Unnamed` is returned.
-     * @param pubKey the pubKey of the node
+     *
+     * @param pubKey   the pubKey of the node
      * @param mContext context to get translation
      * @return alias
      */
@@ -1346,7 +1344,7 @@ public class Wallet {
         String alias = "";
         for (NodeInfo i : Wallet.getInstance().mNodeInfos) {
             if (i.getNode().getPubKey().equals(pubKey)) {
-                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0, 8))) {
+                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0, 8)) || i.getNode().getAlias().isEmpty()) {
                     String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
                     alias = unnamed + " (" + i.getNode().getPubKey().substring(0, 5) + "...)";
                 } else {
@@ -1606,6 +1604,24 @@ public class Wallet {
         mChannelEventSubscriptionListeners.remove(listener);
     }
 
+
+    /**
+     * Notify all listeners that channels have been updated.
+     */
+    private void broadcastChannelsUpdated() {
+        for (ChannelsUpdatedSubscriptionListener listener : mChannelsUpdatedSubscriptionListeners) {
+            listener.onChannelsUpdated();
+        }
+    }
+
+    public void registerChannelsUpdatedSubscriptionListener(ChannelsUpdatedSubscriptionListener listener) {
+        mChannelsUpdatedSubscriptionListeners.add(listener);
+    }
+
+    public void unregisterChannelsUpdatedSubscriptionListener(ChannelsUpdatedSubscriptionListener listener) {
+        mChannelsUpdatedSubscriptionListeners.remove(listener);
+    }
+
     /**
      * Notify all listeners to channel backup updates.
      *
@@ -1623,6 +1639,23 @@ public class Wallet {
 
     public void unregisterChannelBackuptSubscriptionListener(ChannelBackupSubscriptionListener listener) {
         mChannelBackupSubscriptionListeners.remove(listener);
+    }
+
+    /**
+     * Notify all listeners to channel close updates
+     */
+    private void broadcastChannelCloseUpdate(String channelPoint, boolean success) {
+        for (ChannelCloseUpdateListener listener : mChannelCloseUpdateListeners) {
+            listener.onChannelCloseUpdate(channelPoint, success);
+        }
+    }
+
+    public void registerChannelCloseUpdateListener(ChannelCloseUpdateListener listener) {
+        mChannelCloseUpdateListeners.add(listener);
+    }
+
+    public void unregisterChannelCloseUpdateListener(ChannelCloseUpdateListener listener) {
+        mChannelCloseUpdateListeners.remove(listener);
     }
 
     public interface WalletLoadedListener {
@@ -1662,10 +1695,17 @@ public class Wallet {
         void onChannelEvent(ChannelEventUpdate channelEventUpdate);
     }
 
+    public interface ChannelCloseUpdateListener {
+        void onChannelCloseUpdate(String channelPoint, boolean success);
+    }
+
     public interface ChannelBackupSubscriptionListener {
         void onChannelBackupEvent(ChanBackupSnapshot chanBackupSnapshot);
     }
 
+    public interface ChannelsUpdatedSubscriptionListener {
+        void onChannelsUpdated();
+    }
 }
 
 
