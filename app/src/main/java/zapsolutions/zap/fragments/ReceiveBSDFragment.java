@@ -84,6 +84,8 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     private Button mBtnManageChannels;
     private View mViewNoIncomingBalance;
     private UserGuardian mUG;
+    private String mValueBeforeUnitSwitch;
+    private boolean mUseValueBeforeUnitSwitch = true;
     private boolean mAmountValid = true;
 
 
@@ -391,10 +393,22 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                 if (mEtAmount.getText().toString().equals(".")) {
                     mEtAmount.setText("");
                 }
+
+                if (!mUseValueBeforeUnitSwitch) {
+                    mValueBeforeUnitSwitch = mEtAmount.getText().toString();
+                }
+
                 String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
                 MonetaryUtil.getInstance().switchCurrencies();
-                mEtAmount.setText(convertedAmount);
+                if (mUseValueBeforeUnitSwitch) {
+                    mEtAmount.setText(mValueBeforeUnitSwitch);
+                    mUseValueBeforeUnitSwitch = false;
+                } else {
+                    mEtAmount.setText(convertedAmount);
+                    mUseValueBeforeUnitSwitch = true;
+                }
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+
             }
         });
 
@@ -414,8 +428,10 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                 if (mOnChain) {
                     // always make it white, we have no limit for on-chain
                     mEtAmount.setTextColor(getResources().getColor(R.color.white));
+                    mUseValueBeforeUnitSwitch = false;
                 } else {
                     long maxReceivable;
+                    mUseValueBeforeUnitSwitch = false;
                     if (PrefsUtil.isWalletSetup()) {
                         maxReceivable = Wallet.getInstance().getMaxChannelRemoteBalance();
                     } else {
@@ -437,7 +453,6 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                             mEtAmount.setTextColor(getResources().getColor(R.color.white));
                             mBtnNext.setEnabled(true);
                             mBtnNext.setTextColor(getResources().getColor(R.color.lightningOrange));
-
                         }
                     }
                 }
