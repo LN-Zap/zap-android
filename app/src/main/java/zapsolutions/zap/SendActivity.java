@@ -1,54 +1,39 @@
 package zapsolutions.zap;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import androidx.core.content.ContextCompat;
+
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
-import com.google.android.material.snackbar.Snackbar;
-import io.grpc.StatusRuntimeException;
-import me.dm7.barcodescanner.zbar.Result;
-import me.dm7.barcodescanner.zbar.ZBarScannerView;
-import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.baseClasses.BaseScannerActivity;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
-import zapsolutions.zap.util.ClipBoardUtil;
-import zapsolutions.zap.util.PermissionsUtil;
-import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.Wallet;
-import zapsolutions.zap.util.ZapLog;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
-public class SendActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
+import io.grpc.StatusRuntimeException;
+import me.dm7.barcodescanner.zbar.Result;
+import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.baseClasses.BaseScannerActivity;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.InvoiceUtil;
+import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.Wallet;
+import zapsolutions.zap.util.ZapLog;
+
+public class SendActivity extends BaseScannerActivity {
     private static final String LOG_TAG = SendActivity.class.getName();
 
-    private ImageButton mBtnFlashlight;
-    private TextView mTvPermissionRequired;
-
     private boolean mFromURIScheme = false;
-
     private String mOnChainAddress;
     private long mOnChainInvoiceAmount;
     private String mOnChainInvoiceMessage;
 
-
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        setContentView(R.layout.activity_send);
-        setupToolbar();
 
-        mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
+        mScannerInstructions.setText(R.string.send_scan_info);
 
         if (App.getAppContext().getUriSchemeData() != null) {
 
@@ -58,64 +43,25 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
             App.getAppContext().setUriSchemeData(null);
             mFromURIScheme = true;
             validateInvoice(invoice);
-
         } else {
-
-            // Check for camera permission
-            if (PermissionsUtil.hasCameraPermission(SendActivity.this)) {
-                showCameraView();
-            } else {
-                PermissionsUtil.requestCameraPermission(SendActivity.this, true);
-            }
+            showCameraWithPermissionRequest();
         }
-
-        // Action when clicked on "paste"
-        Button btnPaste = findViewById(R.id.scannerPaste);
-        btnPaste.setOnClickListener(v -> {
-            try {
-                validateInvoice(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
-            } catch (NullPointerException e) {
-                showError(getResources().getString(R.string.error_emptyClipboardPayment), 4000);
-            }
-        });
-    }
-
-    private void showCameraView() {
-        ViewGroup contentFrame = findViewById(R.id.content_frame);
-        contentFrame.addView(mScannerView);
-
-        // Action when clicked on "flash button"
-        mBtnFlashlight = findViewById(R.id.scannerFlashButton);
-        mBtnFlashlight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mScannerView.getFlash()) {
-                    mScannerView.setFlash(false);
-                    mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mGrayColor));
-                } else {
-                    mScannerView.setFlash(true);
-                    mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mHighlightColor));
-                }
-            }
-        });
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mScannerView.setResultHandler(this);
-        mScannerView.startCamera();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mScannerView.stopCamera();
+    public void onButtonPasteClick() {
+        super.onButtonPasteClick();
+
+        try {
+            validateInvoice(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
+        } catch (NullPointerException e) {
+            showError(getResources().getString(R.string.error_emptyClipboardPayment), 4000);
+        }
     }
 
     @Override
-    public void handleResult(Result rawResult) {
+    public void handleCameraResult(Result rawResult) {
+        super.handleCameraResult(rawResult);
 
         validateInvoice(rawResult.getContents());
 
@@ -130,6 +76,19 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
                 mScannerView.resumeCameraPreview(SendActivity.this);
             }
         }, 2000);
+    }
+
+    @Override
+    protected void showError(String message, int duration) {
+        if (mFromURIScheme) {
+            Intent intent = new Intent();
+            intent.putExtra("error", message);
+            intent.putExtra("error_duration", duration);
+            setResult(1, intent);
+            finish();
+        } else {
+            super.showError(message, duration);
+        }
     }
 
     private void validateInvoice(String invoice) {
@@ -152,26 +111,26 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
             String lnInvoice = invoice.toLowerCase();
 
             // Remove the "lightning:" uri scheme if it is present, LND needs it without uri scheme
-            if (lnInvoice.substring(0, 10).equalsIgnoreCase("lightning:")) {
-                lnInvoice = lnInvoice.substring(10);
+            if (InvoiceUtil.isLightningUri(lnInvoice)) {
+                lnInvoice = lnInvoice.substring(InvoiceUtil.URI_PREFIX_LIGHTNING.length());
             }
 
             // Check if the invoice is a lightning invoice
-            if (lnInvoice.substring(0, 4).equals("lntb") || lnInvoice.substring(0, 4).equals("lnbc")) {
+            if (InvoiceUtil.isLightningInvoice(lnInvoice)) {
 
                 // We have a lightning invoice
 
                 // Check if the invoice is for the same network the app is connected to
                 String lnInvoiceType = lnInvoice.substring(0, 4);
                 if (Wallet.getInstance().isTestnet()) {
-                    if (lnInvoiceType.equals("lntb")) {
+                    if (lnInvoiceType.equals(InvoiceUtil.INVOICE_PREFIX_LIGHTNING_TESTNET)) {
                         decodeLightningInvoice(lnInvoice);
                     } else {
                         // Show error. Please use a TESTNET invoice.
                         showError(getResources().getString(R.string.error_useTestnetRequest), 5000);
                     }
                 } else {
-                    if (lnInvoiceType.equals("lnbc")) {
+                    if (lnInvoiceType.equals(InvoiceUtil.INVOICE_PREFIX_LIGHTNING_MAINNET)) {
                         decodeLightningInvoice(lnInvoice);
                     } else {
                         // Show error. Please use a MAINNET invoice.
@@ -183,11 +142,11 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
                 // We do not have a lightning invoice... check if it is a valid bitcoin address / invoice
 
                 // Check if we have a bitcoin invoice with the "bitcoin:" uri scheme
-                if (invoice.substring(0, 8).equalsIgnoreCase("bitcoin:")) {
+                if (InvoiceUtil.isBitcoinUri(invoice)) {
 
                     // Add "//" to make it parsable for the java URI class if it is not present
-                    if (!invoice.substring(0, 10).equalsIgnoreCase("bitcoin://")) {
-                        invoice = "bitcoin://" + invoice.substring(8);
+                    if (!invoice.substring(0, 10).equalsIgnoreCase(InvoiceUtil.URI_PREFIX_BITCOIN + "//")) {
+                        invoice = InvoiceUtil.URI_PREFIX_BITCOIN + "//" + invoice.substring(8);
                     }
 
                     URI bitcoinURI = null;
@@ -195,6 +154,7 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
                         bitcoinURI = new URI(invoice);
 
                         mOnChainAddress = bitcoinURI.getHost();
+
 
                         String message = null;
 
@@ -314,40 +274,6 @@ public class SendActivity extends BaseScannerActivity implements ZBarScannerView
             Wallet.getInstance().mPaymentRequest = null;
             Wallet.getInstance().mPaymentRequestString = "";
             e.printStackTrace();
-        }
-    }
-
-    private void showError(String message, int duration) {
-        if (mFromURIScheme) {
-            Intent intent = new Intent();
-            intent.putExtra("error", message);
-            intent.putExtra("error_duration", duration);
-            setResult(1, intent);
-            finish();
-        } else {
-            Snackbar msg = Snackbar.make(findViewById(R.id.content_frame), message, Snackbar.LENGTH_LONG);
-            View sbView = msg.getView();
-            sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
-            msg.setDuration(duration);
-            msg.show();
-        }
-    }
-
-    // Handle users permission choice
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PermissionsUtil.CAMERA_PERMISSION_CODE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted, show the camera view.
-                    showCameraView();
-                } else {
-                    // Permission denied, show required permission message.
-                    mTvPermissionRequired.setVisibility(View.VISIBLE);
-                }
-            }
         }
     }
 

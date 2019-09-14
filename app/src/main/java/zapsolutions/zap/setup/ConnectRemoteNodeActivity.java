@@ -2,24 +2,17 @@ package zapsolutions.zap.setup;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.material.snackbar.Snackbar;
+
 import me.dm7.barcodescanner.zbar.Result;
-import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
@@ -31,82 +24,80 @@ import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 import zapsolutions.zap.util.ClipBoardUtil;
-import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.ZapLog;
 
-public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
+public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     private static final String LOG_TAG = ConnectRemoteNodeActivity.class.getName();
 
-    private ImageButton mBtnFlashlight;
-    private TextView mTvPermissionRequired;
     private UserGuardian mUG;
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        setContentView(R.layout.activity_qr_code_connect);
-        setupToolbar();
 
-        mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
+        mScannerInstructions.setText(R.string.setup_connect_scan_connection_info);
+        showButtonHelp();
 
-        // Action when clicked on "paste"
-        Button btnPaste = findViewById(R.id.scannerPaste);
-        btnPaste.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String clipboardContent = "";
-                boolean isClipboardContentValid = false;
-                try {
-                    clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext());
-                    isClipboardContentValid = true;
-                } catch (NullPointerException e) {
-                    showError(getResources().getString(R.string.error_emptyClipboardConnect), 4000);
-                }
-                if (isClipboardContentValid) {
-                    verifyDesiredConnection(clipboardContent);
-                }
-            }
-        });
+        showCameraWithPermissionRequest();
+    }
 
-        // Action when clicked on "help"
-        Button btnHelp = findViewById(R.id.scannerHelp);
-        btnHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://ln-zap.github.io/zap-tutorials/";
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
-            }
-        });
+    @Override
+    public void onButtonPasteClick() {
+        super.onButtonPasteClick();
 
-        // Check for camera permission
-        if (PermissionsUtil.hasCameraPermission(ConnectRemoteNodeActivity.this)) {
-            showCameraView();
-        } else {
-            PermissionsUtil.requestCameraPermission(ConnectRemoteNodeActivity.this, true);
+        String clipboardContent = "";
+        boolean isClipboardContentValid = false;
+        try {
+            clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext());
+            isClipboardContentValid = true;
+        } catch (NullPointerException e) {
+            showError(getResources().getString(R.string.error_emptyClipboardConnect), 4000);
+        }
+        if (isClipboardContentValid) {
+            verifyDesiredConnection(clipboardContent);
         }
     }
 
-    private void showCameraView() {
-        ViewGroup contentFrame = findViewById(R.id.content_frame);
-        contentFrame.addView(mScannerView);
+    @Override
+    public void handleCameraResult(Result rawResult) {
+        super.handleCameraResult(rawResult);
 
-        // Action when clicked on "flash button"
-        mBtnFlashlight = findViewById(R.id.scannerFlashButton);
-        mBtnFlashlight.setOnClickListener(new View.OnClickListener() {
+        String qrCodeContent = "";
+        boolean isQrCodeContentValid = false;
+        try {
+            qrCodeContent = rawResult.getContents();
+            isQrCodeContentValid = true;
+        } catch (NullPointerException e) {
+            showError(getResources().getString(R.string.error_qr_code_result_null), 4000);
+        }
+
+        if (isQrCodeContentValid) {
+            verifyDesiredConnection(qrCodeContent);
+        }
+
+
+        // Note:
+        // * Wait 2 seconds to resume the preview.
+        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
+        // * I don't know why this is the case but I don't have the time to figure out.
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onClick(View v) {
-                if (mScannerView.getFlash()) {
-                    mScannerView.setFlash(false);
-                    mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mGrayColor));
-                } else {
-                    mScannerView.setFlash(true);
-                    mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mHighlightColor));
-                }
+            public void run() {
+                mScannerView.resumeCameraPreview(ConnectRemoteNodeActivity.this);
             }
-        });
+        }, 2000);
+    }
+
+    @Override
+    public void onButtonHelpClick() {
+        super.onButtonHelpClick();
+
+        String url = "https://docs.zaphq.io/";
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 
     private void verifyDesiredConnection(String connectString) {
@@ -241,76 +232,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity implements ZB
             startActivity(intent);
         }
 
-    }
-
-    private void showError(String message, int duration) {
-        Snackbar msg = Snackbar.make(findViewById(R.id.content_frame), message, Snackbar.LENGTH_LONG);
-        View sbView = msg.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
-        msg.setDuration(duration);
-        msg.show();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mScannerView.setResultHandler(this);
-        mScannerView.startCamera();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mScannerView.stopCamera();
-    }
-
-    @Override
-    public void handleResult(Result rawResult) {
-
-        String qrCodeContent = "";
-        boolean isQrCodeContentValid = false;
-        try {
-            qrCodeContent = rawResult.getContents();
-            isQrCodeContentValid = true;
-        } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_qr_code_result_null), 4000);
-        }
-
-        if (isQrCodeContentValid) {
-            verifyDesiredConnection(qrCodeContent);
-        }
-
-
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScannerView.resumeCameraPreview(ConnectRemoteNodeActivity.this);
-            }
-        }, 2000);
-    }
-
-
-    // Handle users permission choice
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PermissionsUtil.CAMERA_PERMISSION_CODE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted, show the camera view.
-                    showCameraView();
-                } else {
-                    // Permission denied, show required permission message.
-                    mTvPermissionRequired.setVisibility(View.VISIBLE);
-                }
-            }
-        }
     }
 
 }

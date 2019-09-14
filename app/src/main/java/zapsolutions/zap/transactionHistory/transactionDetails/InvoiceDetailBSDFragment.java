@@ -8,24 +8,29 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 import net.glxn.qrgen.android.QRCode;
-import zapsolutions.zap.R;
-import zapsolutions.zap.util.ClipBoardUtil;
-import zapsolutions.zap.util.MonetaryUtil;
-import zapsolutions.zap.util.TimeFormatUtil;
-import zapsolutions.zap.util.Wallet;
-import zapsolutions.zap.util.ZapLog;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import zapsolutions.zap.R;
+import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.TimeFormatUtil;
+import zapsolutions.zap.util.InvoiceUtil;
+import zapsolutions.zap.util.Wallet;
+import zapsolutions.zap.util.ZapLog;
 
 public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
 
@@ -138,15 +143,16 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
 
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getValue()));
 
+        String lightningUri = InvoiceUtil.generateLightningUri(invoice.getPaymentRequest());
         // Generate "QR-Code"
         Bitmap bmpQRCode = QRCode
-                .from("lightning:" + invoice.getPaymentRequest())
+                .from(lightningUri)
                 .withSize(500, 500)
                 .withErrorCorrection(ErrorCorrectionLevel.L)
                 .bitmap();
         mQRCodeView.setImageBitmap(bmpQRCode);
         mQRCodeView.setOnClickListener(view ->
-                ClipBoardUtil.copyToClipboard(getContext(), "Invoice", "lightning:" + invoice.getPaymentRequest())
+                ClipBoardUtil.copyToClipboard(getContext(), "Invoice", lightningUri)
         );
 
         ScheduledExecutorService expiryUpdateSchedule =
