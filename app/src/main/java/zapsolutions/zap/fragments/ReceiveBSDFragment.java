@@ -551,10 +551,17 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                             NewAddressResponse addressResponse = addressFuture.get();
                             ZapLog.debug(LOG_TAG, addressResponse.toString());
 
+                            String value;
+                            if (mUseValueBeforeUnitSwitch) {
+                                value = MonetaryUtil.getInstance().convertSecondaryToBitcoin(mValueBeforeUnitSwitch);
+                            } else {
+                                value = MonetaryUtil.getInstance().convertPrimaryToBitcoin(mEtAmount.getText().toString());
+                            }
+
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
                             intent.putExtra("address", addressResponse.getAddress());
-                            intent.putExtra("amount", mEtAmount.getText().toString());
+                            intent.putExtra("amount", value);
                             intent.putExtra("memo", mEtMemo.getText().toString());
                             startActivity(intent);
                             dismiss();
@@ -577,9 +584,15 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                         .newFutureStub(LndConnection.getInstance().getSecureChannel())
                         .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
+                long value;
+                if (mUseValueBeforeUnitSwitch) {
+                    value = Long.parseLong(MonetaryUtil.getInstance().convertSecondaryToSatoshi(mValueBeforeUnitSwitch));
+                } else {
+                    value = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                }
 
                 Invoice asyncInvoiceRequest = Invoice.newBuilder()
-                        .setValue(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())))
+                        .setValue(value)
                         .setMemo(mEtMemo.getText().toString())
                         .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
                         .build();

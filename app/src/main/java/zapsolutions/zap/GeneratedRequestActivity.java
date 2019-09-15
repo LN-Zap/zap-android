@@ -91,9 +91,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
             mDataToEncode = InvoiceUtil.generateBitcoinUri(mAddress);
             mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
 
-            // Convert the value to the expected format for onChain invoices.
-            mAmount = MonetaryUtil.getInstance().convertPrimaryToBitcoin(mAmount);
-
             // Append amount and memo to the invoice
             if (mAmount != null)
                 if (!(mAmount.isEmpty() || mAmount.equals("0")))
