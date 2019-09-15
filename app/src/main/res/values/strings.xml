@@ -294,6 +294,7 @@
     <string name="unlock_wallet">Unlock Wallet</string>
 
     <string name="biometricPrompt_title">Biometric Authentication</string>
+    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
 
     <string name="invoice_detail">Invoice Detail</string>
     <string name="transaction_detail">Transaction Detail</string>
