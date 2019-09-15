@@ -118,6 +118,12 @@
     <string name="channel_state_pending_force_closing">pending force close</string>
     <string name="channel_state_waiting_close">waiting close</string>
     <string name="no_channels">No channels</string>
+    <string name="channel_closing_transaction">Closing Transaction</string>
+    <string name="channel_close">Close Channel</string>
+    <string name="channel_close_force">Force Close Channel</string>
+    <string name="channel_close_error">Error occurred while closing channel</string>
+    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
+    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
     <string name="setup_connect_heading">How do you want to use ZAP?</string>
     <string name="setup_connect_local_description">Create a wallet on this phone.</string>
     <string name="setup_connect_local_button">Create Wallet</string>
@@ -187,13 +193,6 @@
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
-    <string-array name="settings_lnRequestExpiryDisplayValues">
-        <item>10 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>6 hours</item>
-        <item>24 hours</item>
-    </string-array>
     <string name="error">Error</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
@@ -235,6 +234,18 @@
         <item quantity="one">%d Day</item>
         <item quantity="other">%d Days</item>
     </plurals>
+    <plurals name="duration_week">
+        <item quantity="one">%d Week</item>
+        <item quantity="other">%d Weeks</item>
+    </plurals>
+    <plurals name="duration_month">
+        <item quantity="one">%d Month</item>
+        <item quantity="other">%d Months</item>
+    </plurals>
+    <plurals name="duration_year">
+        <item quantity="one">%d Year</item>
+        <item quantity="other">%d Years</item>
+    </plurals>
     <string name="fee_tier_slow_title">Slow</string>
     <string name="fee_tier_medium_title">Medium</string>
     <string name="fee_tier_fast_title">Fast</string>
@@ -245,6 +256,7 @@
     <string name="fee_not_available">n/A</string>
     <string name="unlock_wallet">Unlock Wallet</string>
     <string name="biometricPrompt_title">Biometric Authentication</string>
+    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
     <string name="invoice_detail">Invoice Detail</string>
     <string name="transaction_detail">Transaction Detail</string>
     <string name="app_reset_title">Please note</string>

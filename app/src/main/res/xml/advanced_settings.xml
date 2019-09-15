@@ -32,7 +32,6 @@
         app:iconSpaceReserved="false">
         <ListPreference
             android:defaultValue="86400"
-            android:entries="@array/settings_lnRequestExpiryDisplayValues"
             android:entryValues="@array/lnRequestExpiry"
             android:key="lightning_expiry"
             android:summary="%s"

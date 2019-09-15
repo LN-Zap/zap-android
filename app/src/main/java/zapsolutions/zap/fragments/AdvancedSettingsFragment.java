@@ -19,7 +19,8 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
     private UserGuardian mUG;
     private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwScreenProtection;
-    private ListPreference mSwBlockExplorer;
+    private ListPreference mListBlockExplorer;
+    private ListPreference mListLnExpiry;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -29,8 +30,8 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         mUG = new UserGuardian(getActivity(), this);
 
         // On change block explorer option
-        mSwBlockExplorer = findPreference("blockExplorer");
-        mSwBlockExplorer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mListBlockExplorer = findPreference("blockExplorer");
+        mListBlockExplorer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (newValue != null && newValue.toString().equalsIgnoreCase("Blockstream (v3 Tor)")) {
@@ -39,6 +40,10 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
                 return true;
             }
         });
+
+        // Create invoice expiry display entries. For the sake of plurals this has to be done by code.
+        mListLnExpiry = findPreference("lightning_expiry");
+        createLnExpiryDisplayEntries();
 
         // Remove Biometrics setting if it is not available anyway on the device.
         SwitchPreference swBiometrics = findPreference("biometricsEnabled");
@@ -93,4 +98,18 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         }
     }
 
+    private void createLnExpiryDisplayEntries() {
+        CharSequence[] lnExpiryDisplayEntries = new CharSequence[9];
+        lnExpiryDisplayEntries[0] = getActivity().getResources().getQuantityString(R.plurals.duration_minute, 1, 1);
+        lnExpiryDisplayEntries[1] = getActivity().getResources().getQuantityString(R.plurals.duration_minute, 10, 10);
+        lnExpiryDisplayEntries[2] = getActivity().getResources().getQuantityString(R.plurals.duration_minute, 30, 30);
+        lnExpiryDisplayEntries[3] = getActivity().getResources().getQuantityString(R.plurals.duration_hour, 1, 1);
+        lnExpiryDisplayEntries[4] = getActivity().getResources().getQuantityString(R.plurals.duration_hour, 6, 6);
+        lnExpiryDisplayEntries[5] = getActivity().getResources().getQuantityString(R.plurals.duration_day, 1, 1);
+        lnExpiryDisplayEntries[6] = getActivity().getResources().getQuantityString(R.plurals.duration_week, 1, 1);
+        lnExpiryDisplayEntries[7] = getActivity().getResources().getQuantityString(R.plurals.duration_month, 1, 1);
+        lnExpiryDisplayEntries[8] = getActivity().getResources().getQuantityString(R.plurals.duration_year, 1, 1);
+
+        mListLnExpiry.setEntries(lnExpiryDisplayEntries);
+    }
 }

@@ -118,6 +118,12 @@
     <string name="channel_state_pending_force_closing">pending force close</string>
     <string name="channel_state_waiting_close">kapanmaya yakın</string>
     <string name="no_channels">Kanallar yok</string>
+    <string name="channel_closing_transaction">Closing Transaction</string>
+    <string name="channel_close">Close Channel</string>
+    <string name="channel_close_force">Force Close Channel</string>
+    <string name="channel_close_error">Error occurred while closing channel</string>
+    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
+    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
     <string name="setup_connect_heading">ZAP\'ı nasıl kullanmak istiyorsunuz?</string>
     <string name="setup_connect_local_description">Bu telefonda bir cüzdan oluşturun.</string>
     <string name="setup_connect_local_button">Cüzdan oluştur</string>
@@ -187,13 +193,6 @@
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
-    <string-array name="settings_lnRequestExpiryDisplayValues">
-        <item>10 dakika</item>
-        <item>30 dakika</item>
-        <item>1 saat</item>
-        <item>6 saat</item>
-        <item>24 saat</item>
-    </string-array>
     <string name="error">Hata</string>
     <string name="error_blockExplorer_title">Blok Gezgini</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
@@ -235,6 +234,18 @@
         <item quantity="one">%d Day</item>
         <item quantity="other">%d Days</item>
     </plurals>
+    <plurals name="duration_week">
+        <item quantity="one">%d Week</item>
+        <item quantity="other">%d Weeks</item>
+    </plurals>
+    <plurals name="duration_month">
+        <item quantity="one">%d Month</item>
+        <item quantity="other">%d Months</item>
+    </plurals>
+    <plurals name="duration_year">
+        <item quantity="one">%d Year</item>
+        <item quantity="other">%d Years</item>
+    </plurals>
     <string name="fee_tier_slow_title">Yavaş</string>
     <string name="fee_tier_medium_title">Orta</string>
     <string name="fee_tier_fast_title">Hızlı</string>
@@ -245,6 +256,7 @@
     <string name="fee_not_available">n/A</string>
     <string name="unlock_wallet">Cüzdanın Kilidini Aç</string>
     <string name="biometricPrompt_title">Biyometrik Kimlik Doğrulama</string>
+    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
     <string name="invoice_detail">Invoice Detail</string>
     <string name="transaction_detail">Transaction Detail</string>
     <string name="app_reset_title">Please note</string>
