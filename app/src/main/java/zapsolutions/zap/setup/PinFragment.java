@@ -1,6 +1,9 @@
 package zapsolutions.zap.setup;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -8,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -21,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.util.BiometricUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ScrambledNumpad;
@@ -162,7 +167,7 @@ public class PinFragment extends Fragment {
 
 
         // Make biometrics Button visible if supported.
-        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled()) {
+        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -176,7 +181,7 @@ public class PinFragment extends Fragment {
                 .build();
 
 
-        mBiometricPrompt = new BiometricPrompt(getActivity(), executor, new BiometricPrompt.AuthenticationCallback() {
+        mBiometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
@@ -212,7 +217,7 @@ public class PinFragment extends Fragment {
 
 
         // Show biometric prompt if preferred
-        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled()) {
+        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
             if (PrefsUtil.isBiometricPreferred()) {
                 initBiometricPrompt();
             }
@@ -222,7 +227,24 @@ public class PinFragment extends Fragment {
         mBtnBiometrics.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBiometricPrompt.authenticate(mPromptInfo);
+                if (BiometricUtil.notSetup()){
+                    AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.biometricPrompt_title)
+                            .setMessage(R.string.biometricNotSetup)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            });
+                    Dialog dlg = adb.create();
+                    // Apply FLAG_SECURE to dialog to prevent screen recording
+                    if (PrefsUtil.preventScreenRecording()) {
+                        dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                    }
+                    dlg.show();
+                } else {
+                    mBiometricPrompt.authenticate(mPromptInfo);
+                }
             }
         });
 
@@ -487,19 +509,8 @@ public class PinFragment extends Fragment {
     }
 
     private void initBiometricPrompt() {
-
-        // This has to be executed delayed in a fragment due to a bug that is already reported and fixed.
-        // With the next version this should be no problem anymore.
-        // See: https://issuetracker.google.com/issues/131980596
-
         mBiometricPrompt.cancelAuthentication();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mBiometricPrompt.authenticate(mPromptInfo);
-            }
-        }, 200);
+        mBiometricPrompt.authenticate(mPromptInfo);
     }
 
 }

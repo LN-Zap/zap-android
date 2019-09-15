@@ -1,11 +1,15 @@
 package zapsolutions.zap;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -18,6 +22,7 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.util.BiometricUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ScrambledNumpad;
@@ -116,7 +121,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
 
         // Make biometrics Button visible if enabled.
-        if (PrefsUtil.isBiometricEnabled() && ver >= 16) {
+        if (PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable() && ver >= 16) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -170,7 +175,24 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         mBtnBiometrics.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBiometricPrompt.authenticate(mPromptInfo);
+                if (BiometricUtil.notSetup()){
+                    AlertDialog.Builder adb = new AlertDialog.Builder(PinEntryActivity.this)
+                            .setTitle(R.string.biometricPrompt_title)
+                            .setMessage(R.string.biometricNotSetup)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            });
+                    Dialog dlg = adb.create();
+                    // Apply FLAG_SECURE to dialog to prevent screen recording
+                    if (PrefsUtil.preventScreenRecording()) {
+                        dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                    }
+                    dlg.show();
+                } else {
+                    mBiometricPrompt.authenticate(mPromptInfo);
+                }
             }
         });
 
@@ -350,7 +372,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         super.onResume();
 
         // Show biometric prompt if preferred
-        if (PrefsUtil.isBiometricPreferred() && PrefsUtil.isBiometricEnabled()) {
+        if (PrefsUtil.isBiometricPreferred() && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
             mBiometricPrompt.authenticate(mPromptInfo);
         }
     }

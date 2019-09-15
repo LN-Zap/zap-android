@@ -9,6 +9,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import zapsolutions.zap.R;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.util.BiometricUtil;
 import zapsolutions.zap.util.UserGuardian;
 
 
@@ -44,6 +45,11 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         mListLnExpiry = findPreference("lightning_expiry");
         createLnExpiryDisplayEntries();
 
+        // Remove Biometrics setting if it is not available anyway on the device.
+        SwitchPreference swBiometrics = findPreference("biometricsEnabled");
+        if (!BiometricUtil.hardwareAvailable()){
+            swBiometrics.setVisible(false);
+        }
 
         // On change scramble pin option
         mSwScrambledPin = findPreference("scramblePin");
