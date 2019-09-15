@@ -68,15 +68,15 @@
     <string name="retry">Нов опит</string>
     <string name="loading">Зареждане</string>
     <string name="pay">Плащане</string>
-    <string name="date">Date</string>
-    <string name="expiry">Expiry</string>
-    <string name="expired">Expired</string>
-    <string name="remaining">remaining</string>
-    <string name="address">Address</string>
-    <string name="transactionID">Transaction ID</string>
-    <string name="channel">Channel</string>
-    <string name="event">Event</string>
-    <string name="channel_event">Channel Event</string>
+    <string name="date">Дата</string>
+    <string name="expiry">Срок</string>
+    <string name="expired">Просрочена</string>
+    <string name="remaining">остава(т)</string>
+    <string name="address">Адрес</string>
+    <string name="transactionID">ID на транзакцията</string>
+    <string name="channel">Канал</string>
+    <string name="event">Събитие</string>
+    <string name="channel_event">Канално Събитие</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -95,12 +95,12 @@
     <string name="pin_confirm_new">Потвърдете новия ПИН</string>
     <string name="pin_entered_wrong">Грешен ПИН</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Изчакайте %1$s секунди.</string>
-    <string name="requested_payment">Заявено</string>
-    <string name="request_expired">Просрочено</string>
-    <string name="internal">Вътрешно</string>
+    <string name="requested_payment">Заявени</string>
+    <string name="request_expired">Просрочена</string>
+    <string name="internal">Вътрешни</string>
     <string name="opened_channel">Канал отворен</string>
     <string name="closed_channel">Канал затворен</string>
-    <string name="force_closed_channel">Channel force closed</string>
+    <string name="force_closed_channel">Канал затворен принудително</string>
     <string name="filter_transactions">Филтриране на транзакции</string>
     <string name="normal_payments">Нормални плащания</string>
     <string name="expired_requests">Просрочени заявки</string>
@@ -118,6 +118,12 @@
     <string name="channel_state_pending_force_closing">форсирано се затваря</string>
     <string name="channel_state_waiting_close">Изчакване за затваряне</string>
     <string name="no_channels">Няма канали</string>
+    <string name="channel_closing_transaction">Closing Transaction</string>
+    <string name="channel_close">Close Channel</string>
+    <string name="channel_close_force">Force Close Channel</string>
+    <string name="channel_close_error">Error occurred while closing channel</string>
+    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
+    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
     <string name="setup_connect_heading">Как искате да използвате Zap?</string>
     <string name="setup_connect_local_description">Създаване на портфейл на този телефон</string>
     <string name="setup_connect_local_button">Създаване на портфейл</string>
@@ -152,7 +158,7 @@
     <string name="guardian_tooMuchMoney">Поздравления, изглежда имате голямо количество биткойни!\n Моля имайте предвид, че Zap е Hot Wallet.\n Правим всичко възможно, за да поддържаме този портфейл сигурен, но за всеки случай Ви препоръчваме да използвате Cold Wallets или хардуерни портфейли, за да съхранявате спестяванията си.</string>
     <string name="guardian_notReadyForMainnet">Вие сте на MAINNET с истински Биткойн!\nZap Android е в ранна фаза на разработка. Може да загубите средства!\n\n Ако не искате да поемете този риск, превключете на testnet междувременно.</string>
     <string name="guardian_remoteConnect">Сигурни ли сте, че искате да се свържете с\n\n%1$s\n\nМоля проверете адреса внимателно.</string>
-    <string name="guardian_blockExplorer">By looking up information with a Block Explorer your IP-Address gets exposed. If you want to increase your anonymity, you should either not use it or go to the settings and choose a Block Explorer that supports Tor.</string>
+    <string name="guardian_blockExplorer">Като преглеждате информация с Block Explorer, вашият IP адрес бива изложен. Ако желаете да увеличите анонимността си, не използвайте тази опция или отидите в настройки и изберете Block Explorer, който поддържа Tor.</string>
     <string name="settings_category_general">Общи</string>
     <string name="settings_category_security">Сигурност</string>
     <string name="settings_category_help">Помощ</string>
@@ -180,20 +186,13 @@
     <string name="settings_restartRequired">Zap ще бъде рестартиран, за да направи тази промяна. Искате ли да продължите?</string>
     <string name="settings_enableBiometrics">Включване на Биометрична Автентикация</string>
     <string name="settings_blockExplorer">Block Explorer</string>
-    <string name="settings_blockExplorer_tor_toast">Tor Browser for Android is required.</string>
+    <string name="settings_blockExplorer_tor_toast">Нужен е Tor Browser for Android.</string>
     <string name="settings_addressType">Биткойн тип на адреса</string>
     <string-array name="settings_receiveAddressDisplayValues">
         <item>Compatibility (P2SH)</item>
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Срок за Lightning заявка</string>
-    <string-array name="settings_lnRequestExpiryDisplayValues">
-        <item>10 минути</item>
-        <item>30 минути</item>
-        <item>1 час</item>
-        <item>6 часа</item>
-        <item>24 часа</item>
-    </string-array>
     <string name="error">Грешка</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Избраният от Вас block explorer (%1$s) не поддържа %2$s. \nМоля отидете в настройки и изберете друг, за да продължите."</string>
@@ -220,8 +219,10 @@
     <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
     <string name="error_wrong_password">Грешна парола</string>
     <plurals name="duration_second">
-        <item quantity="one">%d Second</item>
-        <item quantity="other">%d Seconds</item>
+        <item quantity="one">%d Секунда
+
+%d Секунди</item>
+        <item quantity="other">%d Секунди</item>
     </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Минута</item>
@@ -235,6 +236,18 @@
         <item quantity="one">%d Ден</item>
         <item quantity="other">%d Дни</item>
     </plurals>
+    <plurals name="duration_week">
+        <item quantity="one">%d Week</item>
+        <item quantity="other">%d Weeks</item>
+    </plurals>
+    <plurals name="duration_month">
+        <item quantity="one">%d Month</item>
+        <item quantity="other">%d Months</item>
+    </plurals>
+    <plurals name="duration_year">
+        <item quantity="one">%d Year</item>
+        <item quantity="other">%d Years</item>
+    </plurals>
     <string name="fee_tier_slow_title">Бавно</string>
     <string name="fee_tier_medium_title">Средно</string>
     <string name="fee_tier_fast_title">Бързо</string>
@@ -245,8 +258,9 @@
     <string name="fee_not_available">N/A</string>
     <string name="unlock_wallet">Отключете портфейла</string>
     <string name="biometricPrompt_title">Биометрична автентикация</string>
-    <string name="invoice_detail">Invoice Detail</string>
-    <string name="transaction_detail">Transaction Detail</string>
-    <string name="app_reset_title">Please note</string>
-    <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
+    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
+    <string name="invoice_detail">Детайли за фактурата</string>
+    <string name="transaction_detail">Детайли за Транзакцията</string>
+    <string name="app_reset_title">Имайте впредвид</string>
+    <string name="app_reset_message">Приложението бе нулирано, понеже последната актуализация включва някои структурни промени.\nЗа жалост ще трябва да преминете през процеса за настройване отново.</string>
 </resources>

@@ -52,7 +52,7 @@
     <string name="copied_to_clipboard">Copié dans le presse-papiers</string>
     <string name="send">Envoyer</string>
     <string name="receive">Recevoir</string>
-    <string name="optional">facultatif</string>
+    <string name="optional">optionnel</string>
     <string name="next">Continuer</string>
     <string name="coming_soon">Bientôt...</string>
     <string name="needHelp">Besoin d\'aide ?</string>
@@ -79,7 +79,7 @@
     <string name="channel_event">Événement de canal</string>
     <string name="activity_receive">Recevoir</string>
     <string name="activity_send">Payer</string>
-    <string name="activity_connectRemoteNode">Se connecter à un nœud distant</string>
+    <string name="activity_connectRemoteNode">Se connecter au nœud</string>
     <string name="activity_manage_channels">Gérer les canaux Lightning</string>
     <string name="activity_manage_wallets">Gérer les portefeuilles</string>
     <string name="activity_advanced_settings">Réglages avancés</string>
@@ -118,11 +118,17 @@
     <string name="channel_state_pending_force_closing">fermeture forcée en attente</string>
     <string name="channel_state_waiting_close">en attente de fermeture</string>
     <string name="no_channels">Aucun canal</string>
+    <string name="channel_closing_transaction">Closing Transaction</string>
+    <string name="channel_close">Close Channel</string>
+    <string name="channel_close_force">Force Close Channel</string>
+    <string name="channel_close_error">Error occurred while closing channel</string>
+    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
+    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
     <string name="setup_connect_heading">Comment souhaitez-vous utiliser Zap ?</string>
     <string name="setup_connect_local_description">Créer un portefeuille sur ce téléphone.</string>
     <string name="setup_connect_local_button">Créer un portefeuille</string>
-    <string name="setup_connect_remote_description">Contrôler un nœud distant.</string>
-    <string name="setup_connect_remote_button">Se connecter au nœud distant</string>
+    <string name="setup_connect_remote_description">Contrôlez à distance votre propre nœud.</string>
+    <string name="setup_connect_remote_button">Se connecter au nœud</string>
     <string name="setup_connect_scan_connection_info">Scannez les informations de connexion</string>
     <string name="demo_setupWalletBtn">Configurer le portefeuille</string>
     <string name="demo_setupWalletFirst">Vous devez d\'abord configurer un portefeuille.</string>
@@ -138,7 +144,7 @@
     <string name="receive_on_chain_request">Demande On-chain</string>
     <string name="receive_noActiveChannels">Pour recevoir des fonds sur le réseau Lightning, vous devez d\'abord ouvrir un canal.</string>
     <string name="receive_noIncomeBalance">Pour recevoir des fonds sur le réseau Lightning, vous devez détenir des fonds distants sur un canal.\n\nPour cela, vous devez dépenser des fonds en premier lieu.\n\nDans la partie de gestion des canaux, vous pouvez voir combien vous pouvez envoyer et recevoir sur le réseau Lightning.</string>
-    <string name="receive_requestFullfilled">Facture\npayée</string>
+    <string name="receive_requestFullfilled">Demande\npayée</string>
     <string name="guardian_doNotShowAgain">Ne plus m\'avertir.</string>
     <string name="guardian_Title">Attention</string>
     <string name="guardian_reset">Les mises en gardes de sécurité ont été réactivées.</string>
@@ -152,7 +158,7 @@
     <string name="guardian_tooMuchMoney">Félicitations, vous semblez avoir accumulé un bon pactole !\nGardez cependant en tête que Zap est un hot wallet.\nNous faisons de notre mieux pour garantir l\'intégrité de votre portefeuille, mais pour votre propre sécurité, nous vous recommandons d\'utiliser un hardware wallet pour stocker vos économies conséquentes.</string>
     <string name="guardian_notReadyForMainnet">Vous êtes sur le réseau Mainnet, avec de vrais bitcoin !\nZap Android est en phase de développement précoce, vous risquez de perdre des fonds !\n\nSi vous ne souhaitez pas prendre ce risque, basculez sur le réseau Testnet à la place.</string>
     <string name="guardian_remoteConnect">Êtes-vous sûr de vouloir vous connecter à \n\n%1$s\n\nVeuillez vérifier cet hôte avec prudence.</string>
-    <string name="guardian_blockExplorer">By looking up information with a Block Explorer your IP-Address gets exposed. If you want to increase your anonymity, you should either not use it or go to the settings and choose a Block Explorer that supports Tor.</string>
+    <string name="guardian_blockExplorer">En consultant des informations sur un explorateur de blocs, votre adresse IP est dévoilée. Si vous souhaitez préserver votre anonymat, vous ne devriez par en utiliser un, ou en utiliser un qui prend en charge Tor.</string>
     <string name="settings_category_general">Réglages généraux</string>
     <string name="settings_category_security">Sécurité</string>
     <string name="settings_category_help">Aide</string>
@@ -171,7 +177,7 @@
     <string name="settings_scramblePin">Mélanger l\'écran</string>
     <string name="settings_preventScreenRecording">Empêcher les captures d\'écran</string>
     <string name="settings_hideTotalBalance">Cacher le solde total</string>
-    <string name="settings_hideTotalBalance_explanation">Sur la page d\'accueil, tapez sur le logo Zap pour révéler votre solde.</string>
+    <string name="settings_hideTotalBalance_explanation">Sur la page d\'accueil, appuyez sur le logo Zap pour révéler votre solde.</string>
     <string name="settings_resetSecurityWarnings">Réinitialiser les avertissements de sécurité</string>
     <string name="settings_help">Besoin d\'aide ?</string>
     <string name="settings_reportIssue">Signaler un problème</string>
@@ -186,18 +192,11 @@
         <item>Compatibilité (P2PSH)</item>
         <item>Native (Bech32)</item>
     </string-array>
-    <string name="settings_lnRequestExpiryTitle">Expiration de la demande Lightning</string>
-    <string-array name="settings_lnRequestExpiryDisplayValues">
-        <item>10 minutes</item>
-        <item>30 minutes</item>
-        <item>1 heure</item>
-        <item>6 heures</item>
-        <item>24 heures</item>
-    </string-array>
+    <string name="settings_lnRequestExpiryTitle">Expiration des demandes de paiement Lightning</string>
     <string name="error">Erreur</string>
     <string name="error_blockExplorer_title">Explorateur de blocs</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"L'explorateur de blocs sélectionné (%1$s) ne supporte pas %2$s. \nVeuillez sélectionner un autre explorateur de blocs dans les Réglages pour continuer."</string>
-    <string name="error_notAPaymentRequest">Informations de paiement invalides.\n\nVeuillez utiliser une adresse Bitcoin ou une demande de paiement Lightning pour initier un paiement.</string>
+    <string name="error_notAPaymentRequest">Information de paiement invalide.\n\nVeuillez utiliser une adresse Bitcoin ou une demande de paiement Lightning pour initier un paiement.</string>
     <string name="error_paymentRequestExpired">Cette demande de paiement a expiré.</string>
     <string name="error_useTestnetRequest">Vous êtes connecté au réseau Testnet. Merci d\'utiliser des adresses et des demandes de paiement adaptées au réseau Testnet.</string>
     <string name="error_useMainnetRequest">Vous êtes connecté au réseau Mainnet. Merci d\'utiliser des adresses et des demandes de paiement adaptées au réseau Mainnet.</string>
@@ -235,8 +234,20 @@
         <item quantity="one">%d jour</item>
         <item quantity="other">%d jours</item>
     </plurals>
-    <string name="fee_tier_slow_title">Lent</string>
-    <string name="fee_tier_medium_title">Normal</string>
+    <plurals name="duration_week">
+        <item quantity="one">%d Week</item>
+        <item quantity="other">%d Weeks</item>
+    </plurals>
+    <plurals name="duration_month">
+        <item quantity="one">%d Month</item>
+        <item quantity="other">%d Months</item>
+    </plurals>
+    <plurals name="duration_year">
+        <item quantity="one">%d Year</item>
+        <item quantity="other">%d Years</item>
+    </plurals>
+    <string name="fee_tier_slow_title">Lente</string>
+    <string name="fee_tier_medium_title">Normale</string>
     <string name="fee_tier_fast_title">Rapide</string>
     <string name="fee_tier_slow_description">Transaction lente</string>
     <string name="fee_tier_medium_description">Transaction normale</string>
@@ -245,7 +256,8 @@
     <string name="fee_not_available">indisponible</string>
     <string name="unlock_wallet">Déverrouiller le portefeuille</string>
     <string name="biometricPrompt_title">Authentification biométrique</string>
-    <string name="invoice_detail">Détails de la facture</string>
+    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
+    <string name="invoice_detail">Détails de la demande</string>
     <string name="transaction_detail">Détails de la transaction</string>
     <string name="app_reset_title">Attention</string>
     <string name="app_reset_message">L\'application du être réinitialisée suite à une modification structurelle lors de la dernière mise à jour.\nHélas, vous allez devoir recommencer la phase de configuration.</string>
