@@ -45,7 +45,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-                    Intent intent = new Intent(ManageChannelsActivity.this, OpenChannelActivity.class);
+                    Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
                     startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
                 });
         mAdapter = new ChannelItemAdapter(mChannelItems, this);
@@ -138,7 +138,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         if (requestCode == REQUEST_CODE_OPEN_CHANNEL && resultCode == RESULT_OK) {
             if (data != null) {
-                LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(OpenChannelActivity.EXTRA_NODE_URI);
+                LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanNodePubKeyActivity.EXTRA_NODE_URI);
 
                 OpenChannelBSDFragment openChannelBSDFragment = new OpenChannelBSDFragment();
                 Bundle bundle = new Bundle();

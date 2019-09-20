@@ -11,7 +11,7 @@ import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
 import zapsolutions.zap.util.ClipBoardUtil;
 
-public class OpenChannelActivity extends BaseScannerActivity {
+public class ScanNodePubKeyActivity extends BaseScannerActivity {
 
     public static final String EXTRA_NODE_URI = "EXTRA_NODE_URI";
 
@@ -46,7 +46,7 @@ public class OpenChannelActivity extends BaseScannerActivity {
             // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
             // * I don't know why this is the case but I don't have the time to figure out.
             Handler handler = new Handler();
-            handler.postDelayed(() -> mScannerView.resumeCameraPreview(OpenChannelActivity.this), 2000);
+            handler.postDelayed(() -> mScannerView.resumeCameraPreview(ScanNodePubKeyActivity.this), 2000);
         }
     }
 
