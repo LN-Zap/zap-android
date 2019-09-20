@@ -1,16 +1,17 @@
 package zapsolutions.zap.channelManagement;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.protobuf.ByteString;
 
 import java.util.ArrayList;
@@ -18,15 +19,16 @@ import java.util.List;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.fragments.OpenChannelBSDFragment;
+import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.util.Wallet;
 
 public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, Wallet.ChannelsUpdatedSubscriptionListener {
 
+    private static int REQUEST_CODE_OPEN_CHANNEL = 100;
     private RecyclerView mRecyclerView;
     private ChannelItemAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private TextView mEmptyListText;
-
     private List<ChannelListItem> mChannelItems;
 
     @Override
@@ -42,9 +44,10 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         mChannelItems = new ArrayList<>();
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, R.string.coming_soon, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
-
+        fab.setOnClickListener(view -> {
+                    Intent intent = new Intent(ManageChannelsActivity.this, OpenChannelActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
+                });
         mAdapter = new ChannelItemAdapter(mChannelItems, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -126,6 +129,23 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             bundle.putInt(ChannelDetailBSDFragment.ARGS_TYPE, type);
             channelDetailBSDFragment.setArguments(bundle);
             channelDetailBSDFragment.show(getSupportFragmentManager(), ChannelDetailBSDFragment.TAG);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_OPEN_CHANNEL && resultCode == RESULT_OK) {
+            if (data != null) {
+                LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(OpenChannelActivity.EXTRA_NODE_URI);
+
+                OpenChannelBSDFragment openChannelBSDFragment = new OpenChannelBSDFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(OpenChannelBSDFragment.ARGS_NODE_URI, nodeUri);
+                openChannelBSDFragment.setArguments(bundle);
+                openChannelBSDFragment.show(getSupportFragmentManager(), OpenChannelBSDFragment.TAG);
+            }
         }
     }
 
