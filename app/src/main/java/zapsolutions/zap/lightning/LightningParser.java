@@ -21,11 +21,6 @@ public class LightningParser {
             return null;
         }
 
-        if (uri.indexOf(':') > -1) {
-            // remove port if contained
-            uri = uri.substring(0, uri.indexOf(':'));
-        }
-
         String[] parts = uri.split("@");
 
         if (parts.length != 2) {

@@ -50,7 +50,7 @@ public class LightningParserTest {
         LightningNodeUri parsedUri = LightningParser.parseNodeUri(uri);
 
         assertEquals("02a40ff73c1a2c6469b95e7cc544876e9a3b1d73737af8be10330652923b67db7f", parsedUri.getPubKey());
-        assertEquals("127.0.0.1", parsedUri.getHost());
+        assertEquals("127.0.0.1:1337", parsedUri.getHost());
     }
 
     @Test
