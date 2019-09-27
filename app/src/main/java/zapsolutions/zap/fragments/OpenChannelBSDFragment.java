@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,38 +21,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 import androidx.core.content.ContextCompat;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
-import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
-import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeResponse;
-import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
-import com.github.lightningnetwork.lnd.lnrpc.OpenStatusUpdate;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.concurrent.ExecutionException;
-
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
-import zapsolutions.zap.customView.OnChainFeeView;
 import zapsolutions.zap.lightning.LightningNodeUri;
-import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
-import zapsolutions.zap.util.ZapLog;
 
 public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements Wallet.ChannelOpenUpdateListener {
 
@@ -81,6 +66,8 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     private Button mOkButton;
     private ImageView mIvBsdIcon;
     private TextView mTvFinishedText;
+    private String mValueBeforeUnitSwitch;
+    private boolean mUseValueBeforeUnitSwitch = true;
 
     @Nullable
     @Override
@@ -183,6 +170,8 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                     deleteAmountInput();
                 }
 
+                mUseValueBeforeUnitSwitch = false;
+
                 if (!mEtAmount.getText().toString().equals(".")) {
                     // make text red if input is too large
                     long maxSendable;
@@ -191,7 +180,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                     if (PrefsUtil.isWalletSetup()) {
                         maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
                     } else {
-                        maxSendable = Wallet.getInstance().getDemoBalances().onChainConfirmed();
+                        maxSendable = maxSendableLnd;
                     }
 
                     long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
@@ -219,14 +208,6 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
             @Override
             public void onTextChanged(CharSequence arg0, int start, int before,
                                       int count) {
-                if (arg0.length() == 0) {
-                    // No entered text so will show hint
-                    mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                } else {
-                    mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-                }
-
-
                 // validate input
                 mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
             }
@@ -239,9 +220,20 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                 mEtAmount.setText("");
             }
 
+            if (!mUseValueBeforeUnitSwitch) {
+                mValueBeforeUnitSwitch = mEtAmount.getText().toString();
+            }
+
             String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
             MonetaryUtil.getInstance().switchCurrencies();
-            mEtAmount.setText(convertedAmount);
+
+            if (mUseValueBeforeUnitSwitch) {
+                mEtAmount.setText(mValueBeforeUnitSwitch);
+                mUseValueBeforeUnitSwitch = false;
+            } else {
+                mEtAmount.setText(convertedAmount);
+                mUseValueBeforeUnitSwitch = true;
+            }
 
             mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
 
@@ -256,7 +248,12 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         mOpenChannelButton.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                long sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                long sendAmount;
+                if (mUseValueBeforeUnitSwitch) {
+                    sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertSecondaryToSatoshi(mValueBeforeUnitSwitch));
+                } else {
+                    sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                }
                 Wallet.getInstance().openChannel(mLightningNodeUri, sendAmount);
                 switchToSendProgressScreen();
             }
@@ -481,7 +478,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     @Override
     public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success) {
 
-        if(mLightningNodeUri.getPubKey().equals(lightningNodeUri.getPubKey())) {
+        if (mLightningNodeUri.getPubKey().equals(lightningNodeUri.getPubKey())) {
             if (success) {
                 // fetch channels after open
                 Wallet.getInstance().updateLNDChannelsWithDebounce();
