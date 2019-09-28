@@ -14,22 +14,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.BlockExplorer;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -53,6 +51,8 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
     private ConstraintLayout mClosingTxLayout;
     private TextView mClosingTxText;
     private ImageView mClosingTxCopyIcon;
+    private TextView mForceClosingTxTimeLabel;
+    private TextView mForceClosingTxTimeText;
     private String mChannelPoint;
 
     @Nullable
@@ -75,6 +75,9 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         mClosingTxCopyIcon = view.findViewById(R.id.closingTxCopyIcon);
 
         mCloseChannelButton = view.findViewById(R.id.channelCloseButton);
+
+        mForceClosingTxTimeLabel = view.findViewById(R.id.closingTxTimeLabel);
+        mForceClosingTxTimeText = view.findViewById(R.id.closingTxTimeText);
 
         ImageView remotePublicKeyIcon = view.findViewById(R.id.remotePubKeyCopyIcon);
         ImageView fundingTxIcon = view.findViewById(R.id.fundingTxCopyIcon);
@@ -126,7 +129,7 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         Wallet.getInstance().registerChannelCloseUpdateListener(this);
         mChannelPoint = channel.getChannelPoint();
 
-        showClosingButton(!channel.getActive());
+        showClosingButton(!channel.getActive(), channel.getCsvDelay());
 
         if (channel.getActive()) {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.superGreen)));
@@ -182,6 +185,7 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
                 R.color.superRed,
                 forceClosedChannel.getChannel().getChannelPoint());
 
+        showForceClosingTime(forceClosedChannel.getBlocksTilMaturity());
         setBalances(forceClosedChannel.getChannel().getLocalBalance(), forceClosedChannel.getChannel().getRemoteBalance(), forceClosedChannel.getChannel().getCapacity());
     }
 
@@ -210,16 +214,24 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         mClosingTxCopyIcon.setOnClickListener(view1 -> ClipBoardUtil.copyToClipboard(getContext(), "closingTransaction", closingTransaction));
     }
 
-    private void showClosingButton(boolean forceClose) {
-        mCloseChannelButton.setVisibility(View.VISIBLE);
-        mCloseChannelButton.setText(forceClose ? getText(R.string.channel_close_force) : getText(R.string.channel_close));
-        mCloseChannelButton.setOnClickListener(view1 -> closeChannel(forceClose));
+    private void showForceClosingTime(int maturity) {
+        String expiryText = TimeFormatUtil.formattedDuration(maturity * 10 * 60, getContext()).toLowerCase();
+        mForceClosingTxTimeLabel.setVisibility(View.VISIBLE);
+        mForceClosingTxTimeText.setVisibility(View.VISIBLE);
+        mForceClosingTxTimeText.setText(expiryText);
     }
 
-    private void closeChannel(boolean force) {
+    private void showClosingButton(boolean forceClose, int csvDelay) {
+        mCloseChannelButton.setVisibility(View.VISIBLE);
+        mCloseChannelButton.setText(forceClose ? getText(R.string.channel_close_force) : getText(R.string.channel_close));
+        mCloseChannelButton.setOnClickListener(view1 -> closeChannel(forceClose, csvDelay));
+    }
+
+    private void closeChannel(boolean force, int csvDelay) {
+        String lockUpTime = TimeFormatUtil.formattedDuration(csvDelay * 10 * 60, getContext()).toLowerCase();
         new AlertDialog.Builder(getContext())
                 .setTitle(force ? R.string.channel_close_force : R.string.channel_close)
-                .setMessage(getString(force ? R.string.channel_close_force_confirmation : R.string.channel_close_confirmation, mNodeAlias.getText()))
+                .setMessage(getString(force ? R.string.channel_close_force_confirmation : R.string.channel_close_confirmation, mNodeAlias.getText(), lockUpTime))
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
                     mCloseChannelButton.setVisibility(View.VISIBLE);

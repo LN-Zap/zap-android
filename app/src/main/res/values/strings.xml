@@ -139,7 +139,8 @@
     <string name="channel_close_force">Force Close Channel</string>
     <string name="channel_close_error">Error occurred while closing channel</string>
     <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
-    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
+    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%1$s\n\nYour funds will be locked up for %2$s.</string>
+    <string name="channel_close_time">Closing Time Delay</string>
     <string name="channel_open">Open Channel</string>
     <string name="channel_open_successful">Channel opened successfully</string>
     <string name="channel_open_error">Error occurred while opening channel</string>
@@ -228,8 +229,6 @@
     </string-array>
 
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
-
-
 
 
     <string name="error">Error</string>
