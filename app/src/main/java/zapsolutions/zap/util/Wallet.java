@@ -661,7 +661,8 @@ public class Wallet {
 
     public void openChannel(LightningNodeUri nodeUri, long amount) {
         LightningGrpc.LightningStub lightningStub = LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+                .withCallCredentials(LndConnection.getInstance().getMacaroon())
+                .withDeadlineAfter(15, TimeUnit.SECONDS);
 
         ListPeersRequest listPeersRequest = ListPeersRequest.newBuilder().build();
         lightningStub.listPeers(listPeersRequest, new StreamObserver<ListPeersResponse>() {

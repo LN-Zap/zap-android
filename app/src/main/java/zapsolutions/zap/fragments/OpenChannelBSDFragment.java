@@ -33,6 +33,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
 import zapsolutions.zap.R;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -51,7 +52,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     private ImageButton mBtnNumpadBack;
     private EditText mEtAmount;
     private TextView mTvUnit;
-    private boolean mAmountValid = true;
+    private boolean mAmountValid = false;
     private Button mOpenChannelButton;
     private TextView mTvNodeAlias;
     private TextView mTvOnChainFunds;
@@ -171,38 +172,6 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                 }
 
                 mUseValueBeforeUnitSwitch = false;
-
-                if (!mEtAmount.getText().toString().equals(".")) {
-                    // make text red if input is too large
-                    long maxSendable;
-                    long minSendable = 20000;
-                    long maxSendableLnd = 17666215;
-                    if (PrefsUtil.isWalletSetup()) {
-                        maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
-                    } else {
-                        maxSendable = maxSendableLnd;
-                    }
-
-                    long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                    if (currentValue > maxSendable || currentValue > maxSendableLnd) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.superRed));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxSendable);
-                        Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
-                        mOpenChannelButton.setEnabled(false);
-                        mOpenChannelButton.setTextColor(getResources().getColor(R.color.gray));
-                    } else if (currentValue < minSendable) {
-                        mOpenChannelButton.setEnabled(false);
-                        mOpenChannelButton.setTextColor(getResources().getColor(R.color.gray));
-                    } else {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mOpenChannelButton.setEnabled(true);
-                        mOpenChannelButton.setTextColor(getResources().getColor(R.color.lightningOrange));
-                    }
-                    if (currentValue == 0) {
-                        mOpenChannelButton.setEnabled(false);
-                        mOpenChannelButton.setTextColor(getResources().getColor(R.color.gray));
-                    }
-                }
             }
 
             @Override
@@ -240,21 +209,56 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
             setAvailableFunds();
         });
 
-        // No specific amount was requested. Let User input an amount.
         mNumpad.setVisibility(View.VISIBLE);
-        mOpenChannelButton.setEnabled(false);
-        mOpenChannelButton.setTextColor(getResources().getColor(R.color.gray));
 
         mOpenChannelButton.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                long sendAmount;
-                if (mUseValueBeforeUnitSwitch) {
-                    sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertSecondaryToSatoshi(mValueBeforeUnitSwitch));
-                } else {
-                    sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                if (!mAmountValid || mEtAmount.getText().toString().equals(".")) {
+                    // no real amount
+                    showError(getResources().getString(R.string.amount_invalid), Snackbar.LENGTH_LONG);
+                    return;
                 }
-                Wallet.getInstance().openChannel(mLightningNodeUri, sendAmount);
+
+                long userInputAmount;
+                if (mUseValueBeforeUnitSwitch) {
+                    userInputAmount = Long.parseLong(MonetaryUtil.getInstance().convertSecondaryToSatoshi(mValueBeforeUnitSwitch));
+                } else {
+                    userInputAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                }
+
+                // values from LND
+                long minSendAmount = 20000;
+                long maxSendAmount = 17666215;
+
+                if (PrefsUtil.isWalletSetup()) {
+                    long onChainAvailable = Wallet.getInstance().getBalances().onChainConfirmed();
+
+                    if (onChainAvailable < maxSendAmount) {
+                        maxSendAmount = onChainAvailable;
+                    }
+
+                    if (userInputAmount < minSendAmount) {
+                        // amount is to small
+                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(minSendAmount);
+                        showError(message, Snackbar.LENGTH_LONG);
+                        return;
+                    }
+
+                    if (userInputAmount > maxSendAmount) {
+                        // amount is to big
+                        String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxSendAmount);
+                        showError(message, Snackbar.LENGTH_LONG);
+                        return;
+                    }
+
+                } else {
+                    // you need to setup wallet to open a channel
+                    showError(getResources().getString(R.string.channel_open_error_wallet_setup), Snackbar.LENGTH_LONG);
+                    return;
+                }
+
+                Wallet.getInstance().openChannel(mLightningNodeUri, userInputAmount);
                 switchToSendProgressScreen();
             }
         });
@@ -439,6 +443,13 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         long available = Wallet.getInstance().getBalances().onChainConfirmed();
         String availableFundsOnChain = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(available);
         mTvOnChainFunds.setText(getString(R.string.funds_available, availableFundsOnChain));
+    }
+
+    private void showError(String message, int duration) {
+        Snackbar msg = Snackbar.make(getView().findViewById(R.id.coordinator), message, duration);
+        View sbView = msg.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.superRed));
+        msg.show();
     }
 
     @Override
