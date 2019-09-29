@@ -20,4 +20,6 @@ public class RefConstants {
     public static final int VIBRATE_SHORT = 50;
     public static final int VIBRATE_LONG = 200;
 
+    public static final String URL_HELP = "https://docs.zaphq.io/";
+
 }

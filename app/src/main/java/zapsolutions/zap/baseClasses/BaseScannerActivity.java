@@ -4,6 +4,7 @@ package zapsolutions.zap.baseClasses;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,9 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         mScannerView.setSquareViewFinder(true);
         mScannerView.setLaserEnabled(false);
         mScannerView.setBorderColor(mHighlightColor);
-        mScannerView.setBorderStrokeWidth(20);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int strokeWidth = metrics.densityDpi / 25;
+        mScannerView.setBorderStrokeWidth(strokeWidth);
         mScannerView.setIsBorderCornerRounded(true);
 
         mButtonPaste = findViewById(R.id.scannerPaste);
