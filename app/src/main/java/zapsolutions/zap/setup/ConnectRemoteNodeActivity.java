@@ -24,6 +24,7 @@ import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.ZapLog;
@@ -95,7 +96,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     public void onButtonHelpClick() {
         super.onButtonHelpClick();
 
-        String url = "https://docs.zaphq.io/";
+        String url = RefConstants.URL_HELP;
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
     }
