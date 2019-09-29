@@ -56,7 +56,11 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         mHighlightColor = ContextCompat.getColor(this, R.color.lightningOrange);
         mGrayColor = ContextCompat.getColor(this, R.color.gray);
 
+        // Scanner settings
+        mScannerView.setAspectTolerance(0.5f);
+
         // Styling the scanner view
+        mScannerView.setSquareViewFinder(true);
         mScannerView.setLaserEnabled(false);
         mScannerView.setBorderColor(mHighlightColor);
         mScannerView.setBorderStrokeWidth(20);
