@@ -3,7 +3,6 @@ package zapsolutions.zap.util;
 
 import android.content.Context;
 import android.os.Handler;
-
 import com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription;
@@ -46,7 +45,12 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
+import io.grpc.stub.ClientCallStreamObserver;
+import io.grpc.stub.StreamObserver;
+import zapsolutions.zap.R;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 
+import javax.annotation.Nullable;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -55,13 +59,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Nullable;
-
-import io.grpc.stub.ClientCallStreamObserver;
-import io.grpc.stub.StreamObserver;
-import zapsolutions.zap.R;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 
 
 public class Wallet {
@@ -658,13 +655,13 @@ public class Wallet {
                     @Override
                     public void onNext(CloseStatusUpdate value) {
                         ZapLog.debug(LOG_TAG, "Closing channel update: " + value.getUpdateCase().getNumber());
-                        broadcastChannelCloseUpdate(channelPoint, true);
+                        broadcastChannelCloseUpdate(channelPoint, true, null);
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         ZapLog.debug(LOG_TAG, "Error closing channel");
-                        broadcastChannelCloseUpdate(channelPoint, false);
+                        broadcastChannelCloseUpdate(channelPoint, false, t.getLocalizedMessage());
                     }
 
                     @Override
@@ -1644,9 +1641,9 @@ public class Wallet {
     /**
      * Notify all listeners to channel close updates
      */
-    private void broadcastChannelCloseUpdate(String channelPoint, boolean success) {
+    private void broadcastChannelCloseUpdate(String channelPoint, boolean success, String errorMessage) {
         for (ChannelCloseUpdateListener listener : mChannelCloseUpdateListeners) {
-            listener.onChannelCloseUpdate(channelPoint, success);
+            listener.onChannelCloseUpdate(channelPoint, success, errorMessage);
         }
     }
 
@@ -1696,7 +1693,7 @@ public class Wallet {
     }
 
     public interface ChannelCloseUpdateListener {
-        void onChannelCloseUpdate(String channelPoint, boolean success);
+        void onChannelCloseUpdate(String channelPoint, boolean success, String errorMessage);
     }
 
     public interface ChannelBackupSubscriptionListener {

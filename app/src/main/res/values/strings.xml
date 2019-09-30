@@ -84,6 +84,7 @@
     <string name="scan_qr_code">Scan QR-Code</string>
     <string name="node">Node</string>
     <string name="funds_available">Available: %s</string>
+    <string name="success">Success</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -136,8 +137,9 @@
     <string name="no_channels">No channels</string>
     <string name="channel_closing_transaction">Closing Transaction</string>
     <string name="channel_close">Close Channel</string>
+    <string name="channel_close_success">Channel close successfully initiated</string>
     <string name="channel_close_force">Force Close Channel</string>
-    <string name="channel_close_error">Error occurred while closing channel</string>
+    <string name="channel_close_error">Channel close error</string>
     <string name="channel_close_confirmation">Do you really want to close the channel with:\n\n%s\n</string>
     <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
     <string name="channel_close_time">Closing Time Delay</string>
