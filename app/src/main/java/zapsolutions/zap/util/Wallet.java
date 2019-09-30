@@ -697,7 +697,7 @@ public class Wallet {
                         @Override
                         public void onError(Throwable t) {
                             ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getLocalizedMessage());
-                            broadcastChannelOpenUpdate(nodeUri, false);
+                            broadcastChannelOpenUpdate(nodeUri, false, t.getLocalizedMessage());
                         }
 
                         @Override
@@ -711,7 +711,7 @@ public class Wallet {
             @Override
             public void onError(Throwable t) {
                 ZapLog.debug(LOG_TAG, "Error connecting to peer:" + t.getLocalizedMessage());
-                broadcastChannelOpenUpdate(nodeUri, false);
+                broadcastChannelOpenUpdate(nodeUri, false, t.getLocalizedMessage());
             }
 
             @Override
@@ -734,13 +734,13 @@ public class Wallet {
             @Override
             public void onNext(OpenStatusUpdate value) {
                 ZapLog.debug(LOG_TAG, "Open channel update: " + value.getUpdateCase().getNumber());
-                broadcastChannelOpenUpdate(nodeUri, true);
+                broadcastChannelOpenUpdate(nodeUri, true, null);
             }
 
             @Override
             public void onError(Throwable t) {
                 ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getLocalizedMessage());
-                broadcastChannelOpenUpdate(nodeUri, false);
+                broadcastChannelOpenUpdate(nodeUri, false, t.getLocalizedMessage());
             }
 
             @Override
@@ -1763,9 +1763,9 @@ public class Wallet {
         mChannelCloseUpdateListeners.remove(listener);
     }
 
-    private void broadcastChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success) {
+    private void broadcastChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success, String message) {
         for (ChannelOpenUpdateListener listener : mChannelOpenUpdateListeners) {
-            listener.onChannelOpenUpdate(lightningNodeUri, success);
+            listener.onChannelOpenUpdate(lightningNodeUri, success, message);
         }
     }
 
@@ -1827,7 +1827,7 @@ public class Wallet {
     }
 
     public interface ChannelOpenUpdateListener {
-        void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success);
+        void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success, String message);
     }
 }
 

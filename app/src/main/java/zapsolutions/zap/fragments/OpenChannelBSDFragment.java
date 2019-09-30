@@ -20,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -67,6 +66,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     private Button mOkButton;
     private ImageView mIvBsdIcon;
     private TextView mTvFinishedText;
+    private TextView mTvFinishedTextDetail;
     private String mValueBeforeUnitSwitch;
     private boolean mUseValueBeforeUnitSwitch = true;
 
@@ -94,6 +94,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         mProgressScreen = view.findViewById(R.id.openChannelProgressLayout);
 
         mTvFinishedText = view.findViewById(R.id.finishedText);
+        mTvFinishedTextDetail = view.findViewById(R.id.finishedTextDetail);
 
         mFinishedScreen = view.findViewById(R.id.openChannelFinishedLayout);
         mProgressFinishedIcon = view.findViewById(R.id.progressFinishedIcon);
@@ -366,9 +367,10 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         scaleDownIcon.start();
 
         // Set failed states
-        mTvFinishedText.setText(error);
+        mTvFinishedText.setText(getString(R.string.channel_open_error));
         mTvFinishedText.setTextColor(getResources().getColor(R.color.superRed));
-
+        mTvFinishedTextDetail.setText(error);
+        
         // Animate in
         mFinishedScreen.setAlpha(1.0f);
         AlphaAnimation animateIn = new AlphaAnimation(0f, 1.0f);
@@ -487,7 +489,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     }
 
     @Override
-    public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success) {
+    public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success, String message) {
 
         if (mLightningNodeUri.getPubKey().equals(lightningNodeUri.getPubKey())) {
             if (success) {
@@ -495,7 +497,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                 Wallet.getInstance().updateLNDChannelsWithDebounce();
                 getActivity().runOnUiThread(this::switchToSuccessScreen);
             } else {
-                getActivity().runOnUiThread(() -> switchToFailedScreen(getString(R.string.channel_open_error)));
+                getActivity().runOnUiThread(() -> switchToFailedScreen(message));
             }
         }
     }
