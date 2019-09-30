@@ -137,7 +137,7 @@
     <string name="no_channels">No channels</string>
     <string name="channel_closing_transaction">Closing Transaction</string>
     <string name="channel_close">Close Channel</string>
-    <string name="channel_close_success">Channel close successfully initiated</string>
+    <string name="channel_close_success">Channel closing successfully initiated</string>
     <string name="channel_close_force">Force Close Channel</string>
     <string name="channel_close_error">Channel close error</string>
     <string name="channel_close_confirmation">Do you really want to close the channel with:\n\n%s\n</string>
