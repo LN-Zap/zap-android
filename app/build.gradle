@@ -63,7 +63,7 @@ protobuf {
     plugins {
         javalite { artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0" }
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.21.0'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.24.0'
         }
     }
 
@@ -104,9 +104,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha01'
 
     // gRPC implementation to communicate with lnd
-    implementation 'io.grpc:grpc-okhttp:1.21.0'
-    implementation 'io.grpc:grpc-protobuf-lite:1.21.0'
-    implementation 'io.grpc:grpc-stub:1.21.0'
+    implementation 'io.grpc:grpc-okhttp:1.24.0'
+    implementation 'io.grpc:grpc-protobuf-lite:1.24.0'
+    implementation 'io.grpc:grpc-stub:1.24.0'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     compileOnly 'com.google.api.grpc:googleapis-common-protos:0.0.3'
 
@@ -119,7 +119,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.1.0'
-    implementation 'androidx.biometric:biometric:1.0.0-beta01'
+    implementation 'androidx.biometric:biometric:1.0.0-beta02'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
