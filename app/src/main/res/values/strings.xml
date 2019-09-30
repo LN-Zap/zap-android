@@ -139,8 +139,9 @@
     <string name="channel_close">Close Channel</string>
     <string name="channel_close_force">Force Close Channel</string>
     <string name="channel_close_error">Error occurred while closing channel</string>
-    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
-    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
+    <string name="channel_close_confirmation">Do you really want to close the channel with:\n\n%s\n</string>
+    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
+    <string name="channel_close_time">Closing Time Delay</string>
     <string name="channel_open">Open Channel</string>
     <string name="channel_open_successful">Channel opened successfully</string>
     <string name="channel_open_error">Error occurred while opening channel</string>
@@ -233,8 +234,6 @@
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
 
 
-
-
     <string name="error">Error</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
@@ -260,7 +259,7 @@
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_wrong_password">Wrong password</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use on of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
 
     <plurals name="duration_second">
         <item quantity="one">%d Second</item>

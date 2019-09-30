@@ -27,6 +27,7 @@ import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -257,7 +258,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         prefHelp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                String url = "https://ln-zap.github.io/zap-tutorials/";
+                String url = RefConstants.URL_HELP;
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 getActivity().startActivity(browserIntent);
                 return true;
