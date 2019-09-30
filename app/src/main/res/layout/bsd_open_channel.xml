@@ -356,6 +356,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <TextView
+                    android:id="@+id/finishedText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/superGreen"
+                    android:textSize="36sp" />
+
                 <ImageView
                     android:id="@+id/finishedPaymentTypeIcon"
                     android:layout_width="match_parent"
@@ -364,15 +372,6 @@
                     android:paddingBottom="15dp"
                     android:tint="@color/white"
                     app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
-
-                <TextView
-                    android:id="@+id/finishedText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/channel_open_successful"
-                    android:textAlignment="center"
-                    android:textColor="@color/superGreen"
-                    android:textSize="36sp" />
 
                 <TextView
                     android:id="@+id/finishedTextDetail"

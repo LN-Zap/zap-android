@@ -425,6 +425,8 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         scaleDownIcon.play(scaleDownX).with(scaleDownY).with(scaleDownX2).with(scaleDownY2);
         scaleDownIcon.start();
 
+        mTvFinishedText.setText(R.string.success);
+        mTvFinishedTextDetail.setText(R.string.channel_open_success);
 
         // Animate in
 
