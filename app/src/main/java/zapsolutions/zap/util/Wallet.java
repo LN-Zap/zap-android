@@ -661,7 +661,7 @@ public class Wallet {
                     @Override
                     public void onError(Throwable t) {
                         ZapLog.debug(LOG_TAG, "Error closing channel");
-                        broadcastChannelCloseUpdate(channelPoint, false, t.getLocalizedMessage());
+                        broadcastChannelCloseUpdate(channelPoint, false, t.getMessage());
                     }
 
                     @Override
