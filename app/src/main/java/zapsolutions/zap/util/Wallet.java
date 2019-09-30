@@ -696,8 +696,8 @@ public class Wallet {
 
                         @Override
                         public void onError(Throwable t) {
-                            ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getLocalizedMessage());
-                            broadcastChannelOpenUpdate(nodeUri, false, t.getLocalizedMessage());
+                            ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getMessage());
+                            broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
                         }
 
                         @Override
@@ -710,8 +710,8 @@ public class Wallet {
 
             @Override
             public void onError(Throwable t) {
-                ZapLog.debug(LOG_TAG, "Error connecting to peer:" + t.getLocalizedMessage());
-                broadcastChannelOpenUpdate(nodeUri, false, t.getLocalizedMessage());
+                ZapLog.debug(LOG_TAG, "Error connecting to peer:" + t.getMessage());
+                broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
             }
 
             @Override
@@ -739,8 +739,8 @@ public class Wallet {
 
             @Override
             public void onError(Throwable t) {
-                ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getLocalizedMessage());
-                broadcastChannelOpenUpdate(nodeUri, false, t.getLocalizedMessage());
+                ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getMessage());
+                broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
             }
 
             @Override

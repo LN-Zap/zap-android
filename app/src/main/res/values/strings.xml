@@ -144,7 +144,7 @@
     <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
     <string name="channel_close_time">Closing Time Delay</string>
     <string name="channel_open">Open Channel</string>
-    <string name="channel_open_success">Channel open successfully initiated</string>
+    <string name="channel_open_success">Channel opening successfully initiated</string>
     <string name="channel_open_error">Channel open error</string>
     <string name="channel_open_error_wallet_setup">The wallet needs to be setup to open a channel.</string>
 
