@@ -17,11 +17,14 @@ import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
 import com.github.lightningnetwork.lnd.lnrpc.CloseStatusUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
+import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
+import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsResponse;
@@ -29,10 +32,15 @@ import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsResponse;
+import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ListPeersResponse;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfo;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
+import com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest;
+import com.github.lightningnetwork.lnd.lnrpc.OpenStatusUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
+import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
@@ -48,6 +56,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,6 +71,9 @@ import io.grpc.stub.ClientCallStreamObserver;
 import io.grpc.stub.StreamObserver;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.lightning.LightningNodeUri;
+
+import static zapsolutions.zap.util.UtilFunctions.hexStringToByteArray;
 
 
 public class Wallet {
@@ -79,6 +91,8 @@ public class Wallet {
     private final Set<ChannelsUpdatedSubscriptionListener> mChannelsUpdatedSubscriptionListeners = new HashSet<>();
     private final Set<ChannelBackupSubscriptionListener> mChannelBackupSubscriptionListeners = new HashSet<>();
     private final Set<ChannelCloseUpdateListener> mChannelCloseUpdateListeners = new HashSet<>();
+    private final Set<ChannelOpenUpdateListener> mChannelOpenUpdateListeners = new HashSet<>();
+
     public PayReq mPaymentRequest = null;
     public String mPaymentRequestString = "";
     public List<Transaction> mOnChainTransactionList;
@@ -643,6 +657,97 @@ public class Wallet {
                 }
             }
         }, new ExecuteOnCaller());
+    }
+
+    public void openChannel(LightningNodeUri nodeUri, long amount) {
+        LightningGrpc.LightningStub lightningStub = LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon())
+                .withDeadlineAfter(15, TimeUnit.SECONDS);
+
+        ListPeersRequest listPeersRequest = ListPeersRequest.newBuilder().build();
+        lightningStub.listPeers(listPeersRequest, new StreamObserver<ListPeersResponse>() {
+            @Override
+            public void onNext(ListPeersResponse value) {
+                boolean connected = false;
+                for (Peer node: value.getPeersList()) {
+                    if(node.getPubKey().equals(nodeUri.getPubKey())) {
+                        connected = true;
+                        break;
+                    }
+                }
+
+                if(connected) {
+                    ZapLog.debug(LOG_TAG, "Already connected to peer, trying to open channel...");
+                    openChannelConnected(nodeUri,amount);
+                } else {
+                    ZapLog.debug(LOG_TAG, "Not connected to peer, trying to connect...");
+
+                    LightningAddress lightningAddress = LightningAddress.newBuilder()
+                            .setHostBytes(ByteString.copyFrom(nodeUri.getHost().getBytes(StandardCharsets.UTF_8)))
+                            .setPubkeyBytes(ByteString.copyFrom(nodeUri.getPubKey().getBytes(StandardCharsets.UTF_8))).build();
+                    ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
+
+                    lightningStub.connectPeer(connectPeerRequest, new StreamObserver<ConnectPeerResponse>() {
+                        @Override
+                        public void onNext(ConnectPeerResponse value) {
+                            ZapLog.debug(LOG_TAG, "Successfully connected to peer, trying to open channel...");
+                            openChannelConnected(nodeUri,amount);
+                        }
+
+                        @Override
+                        public void onError(Throwable t) {
+                            ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getMessage());
+                            broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
+                        }
+
+                        @Override
+                        public void onCompleted() {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                ZapLog.debug(LOG_TAG, "Error connecting to peer:" + t.getMessage());
+                broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        });
+    }
+
+    private void openChannelConnected(LightningNodeUri nodeUri, long amount) {
+        LightningGrpc.LightningStub lightningStub = LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        byte[] nodeKeyBytes = hexStringToByteArray(nodeUri.getPubKey());
+        OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
+                .setNodePubkey(ByteString.copyFrom(nodeKeyBytes))
+                .setLocalFundingAmount(amount).build();
+
+        lightningStub.openChannel(openChannelRequest, new StreamObserver<OpenStatusUpdate>() {
+            @Override
+            public void onNext(OpenStatusUpdate value) {
+                ZapLog.debug(LOG_TAG, "Open channel update: " + value.getUpdateCase().getNumber());
+                broadcastChannelOpenUpdate(nodeUri, true, null);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getMessage());
+                broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        });
     }
 
     public void closeChannel(String channelPoint, boolean force) {
@@ -1658,6 +1763,20 @@ public class Wallet {
         mChannelCloseUpdateListeners.remove(listener);
     }
 
+    private void broadcastChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success, String message) {
+        for (ChannelOpenUpdateListener listener : mChannelOpenUpdateListeners) {
+            listener.onChannelOpenUpdate(lightningNodeUri, success, message);
+        }
+    }
+
+    public void registerChannelOpenUpdateListener(ChannelOpenUpdateListener listener) {
+        mChannelOpenUpdateListeners.add(listener);
+    }
+
+    public void unregisterChannelOpenUpdateListener(ChannelOpenUpdateListener listener) {
+        mChannelOpenUpdateListeners.remove(listener);
+    }
+
     public interface WalletLoadedListener {
 
         int ERROR_LOCKED = 0;
@@ -1705,6 +1824,10 @@ public class Wallet {
 
     public interface ChannelsUpdatedSubscriptionListener {
         void onChannelsUpdated();
+    }
+
+    public interface ChannelOpenUpdateListener {
+        void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success, String message);
     }
 }
 

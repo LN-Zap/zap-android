@@ -81,6 +81,16 @@ public class UtilFunctions {
         return new String(hexChars);
     }
 
+    public static byte[] hexStringToByteArray(String hex) {
+        int l = hex.length();
+        byte[] data = new byte[l / 2];
+        for (int i = 0; i < l; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                    + Character.digit(hex.charAt(i + 1), 16));
+        }
+        return data;
+    }
+
     private static byte[] encodePbkdf2(char[] password, byte[] salt, int iterations, int bytes)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);

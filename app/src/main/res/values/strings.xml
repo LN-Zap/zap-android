@@ -84,6 +84,8 @@
     <string name="scan_qr_code">Scan QR-Code</string>
     <string name="node">Node</string>
     <string name="funds_available">Available: %s</string>
+    <string name="amount_invalid">The amount is invalid.</string>
+    <string name="success">Success</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -142,8 +144,10 @@
     <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
     <string name="channel_close_time">Closing Time Delay</string>
     <string name="channel_open">Open Channel</string>
-    <string name="channel_open_successful">Channel opened successfully</string>
-    <string name="channel_open_error">Error occurred while opening channel</string>
+    <string name="channel_open_success">Channel opening successfully initiated</string>
+    <string name="channel_open_error">Channel open error</string>
+    <string name="channel_open_error_wallet_setup">The wallet needs to be setup to open a channel.</string>
+
     <string name="setup_connect_heading">How do you want to use ZAP?</string>
     <string name="setup_connect_local_description">Create a wallet on this phone.</string>
     <string name="setup_connect_local_button">Create Wallet</string>
