@@ -66,8 +66,8 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
     private View mProgressScreen;
     private View mFinishedScreen;
     private Button mOkButton;
-    private ImageView mProgressFinishedIcon;
-    private ImageView mIvProgressPaymentTypeIcon;
+    private ImageView mProgressResultIcon;
+    private ImageView mProgressThunderIcon;
     private TextView mTvFinishedText;
     private TextView mTvFinishedText2;
     private View mProgressBar;
@@ -101,8 +101,8 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         mProgressScreen = view.findViewById(R.id.closeChannelProgressLayout);
         mFinishedScreen = view.findViewById(R.id.closeChannelFinishedLayout);
         mOkButton = view.findViewById(R.id.okButton);
-        mProgressFinishedIcon = view.findViewById(R.id.progressFinishedIcon);
-        mIvProgressPaymentTypeIcon = view.findViewById(R.id.closeChannelProgressTypeIcon);
+        mProgressResultIcon = view.findViewById(R.id.progressResultIcon);
+        mProgressThunderIcon = view.findViewById(R.id.closeChannelProgressThunderIcon);
         mTvFinishedText = view.findViewById(R.id.finishedText);
         mTvFinishedText2 = view.findViewById(R.id.finishedText2);
         mProgressBar = view.findViewById(R.id.progressBar);
@@ -265,15 +265,22 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
                 .setMessage(getString(force ? R.string.channel_close_force_confirmation : R.string.channel_close_confirmation, mNodeAlias.getText(), lockUpTime))
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
-                    switchToSendProgressScreen();
-                    Wallet.getInstance().closeChannel(mChannelPoint, force);
+                    switchToProgressScreen();
+                    //Wallet.getInstance().closeChannel(mChannelPoint, force);
+                    mCloseChannelButton.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //switchToFinishScreen(true,null);
+                            switchToFinishScreen(false,"ohjee");
+                        }
+                    },1000);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                 })
                 .show();
     }
 
-    private void switchToSendProgressScreen() {
+    private void switchToProgressScreen() {
         mProgressScreen.setVisibility(View.VISIBLE);
         mCloseChannelButton.setEnabled(false);
 
@@ -285,12 +292,11 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         mContentLayout.startAnimation(animateOut);
         mIvBsdIcon.startAnimation(animateOut);
 
-        // Set size of progress finished icon to 0
-        mProgressFinishedIcon.setScaleX(0);
-        mProgressFinishedIcon.setScaleY(0);
+        // Set size of progress result icon to 0
+        mProgressResultIcon.setScaleX(0);
+        mProgressResultIcon.setScaleY(0);
 
         // Animate in
-
         mProgressScreen.setAlpha(1.0f);
         AlphaAnimation animateIn = new AlphaAnimation(0f, 1.0f);
         animateIn.setDuration(200);
@@ -315,14 +321,17 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         TransitionManager.beginDelayedTransition(mRootLayout, transition);
         csRoot.applyTo(mRootLayout);
 
-        // Animate finished Icon switch
+        // Animate result icon switch
         if (!success) {
-            mProgressFinishedIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_failed_circle_black_60dp));
-            mProgressFinishedIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
+            mProgressResultIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_failed_circle_black_60dp));
+            mProgressResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
+        } else{
+            mProgressResultIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_circle_black_60dp));
+            mProgressResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superGreen)));
         }
 
-        ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(mProgressFinishedIcon, "scaleX", 0f, 1f);
-        ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(mProgressFinishedIcon, "scaleY", 0f, 1f);
+        ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(mProgressResultIcon, "scaleX", 0f, 1f);
+        ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(mProgressResultIcon, "scaleY", 0f, 1f);
         scaleUpX.setDuration(500);
         scaleUpY.setDuration(500);
 
@@ -332,8 +341,8 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
 
         ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(mProgressBar, "scaleX", 1f, 0f);
         ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(mProgressBar, "scaleY", 1f, 0f);
-        ObjectAnimator scaleDownX2 = ObjectAnimator.ofFloat(mIvProgressPaymentTypeIcon, "scaleX", 1f, 0f);
-        ObjectAnimator scaleDownY2 = ObjectAnimator.ofFloat(mIvProgressPaymentTypeIcon, "scaleY", 1f, 0f);
+        ObjectAnimator scaleDownX2 = ObjectAnimator.ofFloat(mProgressThunderIcon, "scaleX", 1f, 0f);
+        ObjectAnimator scaleDownY2 = ObjectAnimator.ofFloat(mProgressThunderIcon, "scaleY", 1f, 0f);
         scaleDownX.setDuration(500);
         scaleDownY.setDuration(500);
         scaleDownX2.setDuration(500);
