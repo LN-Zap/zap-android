@@ -379,8 +379,8 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
     }
 
     @Override
-    public void onChannelCloseUpdate(String channelPoint, boolean success, String errorMessage) {
-        ZapLog.debug(TAG, "Channel close: " + channelPoint + " success=(" + success + ")");
+    public void onChannelCloseUpdate(String channelPoint, int status, String message) {
+        ZapLog.debug(TAG, "Channel close: " + channelPoint + " status=(" + status + ")");
 
         if (getActivity() != null && mChannelPoint.equals(channelPoint)) {
 
@@ -388,12 +388,22 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
             Wallet.getInstance().updateLNDChannelsWithDebounce();
 
             getActivity().runOnUiThread(() -> {
-                if (!success) {
-                    switchToFinishScreen(false, errorMessage);
-                } else {
+                if (status == Wallet.ChannelCloseUpdateListener.SUCCESS) {
                     switchToFinishScreen(true, null);
+                } else {
+                    switchToFinishScreen(false, getDetailedErrorString(status, message));
                 }
             });
+        }
+    }
+
+    private String getDetailedErrorString(int error, String message) {
+        switch (error) {
+            case ERROR_PEER_OFFLINE:
+                return getString(R.string.error_channel_close_offline);
+            case ERROR_CHANNEL_CLOSE:
+            default:
+                return getString(R.string.error_channel_open, message);
         }
     }
 }

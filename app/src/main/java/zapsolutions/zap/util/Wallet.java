@@ -780,13 +780,17 @@ public class Wallet {
                     @Override
                     public void onNext(CloseStatusUpdate value) {
                         ZapLog.debug(LOG_TAG, "Closing channel update: " + value.getUpdateCase().getNumber());
-                        broadcastChannelCloseUpdate(channelPoint, true, null);
+                        broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.SUCCESS, null);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        ZapLog.debug(LOG_TAG, "Error closing channel");
-                        broadcastChannelCloseUpdate(channelPoint, false, t.getMessage());
+                        ZapLog.debug(LOG_TAG, "Error closing channel:" + t.getMessage());
+                        if (t.getMessage().toLowerCase().contains("offline")) {
+                            broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_PEER_OFFLINE, t.getMessage());
+                        } else {
+                            broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_CLOSE, t.getMessage());
+                        }
                     }
 
                     @Override
@@ -1766,9 +1770,9 @@ public class Wallet {
     /**
      * Notify all listeners to channel close updates
      */
-    private void broadcastChannelCloseUpdate(String channelPoint, boolean success, String errorMessage) {
+    private void broadcastChannelCloseUpdate(String channelPoint, int status, String message) {
         for (ChannelCloseUpdateListener listener : mChannelCloseUpdateListeners) {
-            listener.onChannelCloseUpdate(channelPoint, success, errorMessage);
+            listener.onChannelCloseUpdate(channelPoint, status, message);
         }
     }
 
@@ -1832,7 +1836,12 @@ public class Wallet {
     }
 
     public interface ChannelCloseUpdateListener {
-        void onChannelCloseUpdate(String channelPoint, boolean success, String errorMessage);
+
+        int SUCCESS = -1;
+        int ERROR_PEER_OFFLINE = 0;
+        int ERROR_CHANNEL_CLOSE = 1;
+
+        void onChannelCloseUpdate(String channelPoint, int status, String message);
     }
 
     public interface ChannelBackupSubscriptionListener {
@@ -1846,15 +1855,15 @@ public class Wallet {
     public interface ChannelOpenUpdateListener {
 
         int SUCCESS = -1;
-        int ERROR_GET_PEERS_TIMEOUT = 1;
-        int ERROR_GET_PEERS = 2;
-        int ERROR_CONNECTION_TIMEOUT = 3;
-        int ERROR_CONNECTION_REFUSED= 4;
-        int ERROR_CONNECTION_SELF = 5;
-        int ERROR_CONNECTION = 6;
-        int ERROR_CHANNEL_TIMEOUT = 7;
-        int ERROR_CHANNEL_PENDING_MAX = 8;
-        int ERROR_CHANNEL_OPEN = 9;
+        int ERROR_GET_PEERS_TIMEOUT = 0;
+        int ERROR_GET_PEERS = 1;
+        int ERROR_CONNECTION_TIMEOUT = 2;
+        int ERROR_CONNECTION_REFUSED = 3;
+        int ERROR_CONNECTION_SELF = 4;
+        int ERROR_CONNECTION = 5;
+        int ERROR_CHANNEL_TIMEOUT = 6;
+        int ERROR_CHANNEL_PENDING_MAX = 7;
+        int ERROR_CHANNEL_OPEN = 8;
 
         void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message);
     }
