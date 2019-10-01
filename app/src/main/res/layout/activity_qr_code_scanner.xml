@@ -13,27 +13,30 @@
 
     </FrameLayout>
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:background="#33000000"
-        android:minHeight="?attr/actionBarSize"
-        app:theme="@style/TransparentToolbar" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="20dp">
+        android:paddingBottom="10dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="#33000000"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:theme="@style/TransparentToolbar" />
 
         <Button
             android:id="@+id/scannerPaste"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
+            android:layout_width="@dimen/qr_scanner_button_width"
+            android:layout_height="@dimen/qr_scanner_button_height"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/qr_scanner_paste_button_marginBottom"
             android:background="@drawable/bg_clickable_item"
             android:text="@string/paste"
             android:textAllCaps="false"
@@ -45,8 +48,8 @@
 
         <Button
             android:id="@+id/scannerHelp"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
+            android:layout_width="@dimen/qr_scanner_button_width"
+            android:layout_height="@dimen/qr_scanner_button_height"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/bg_clickable_item"
@@ -62,19 +65,14 @@
         <ImageButton
             android:id="@+id/scannerFlashButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_height="0dp"
             android:background="#00000000"
-            android:elevation="0dp"
+            android:padding="15dp"
+            android:scaleType="fitCenter"
             android:tint="@color/gray"
-            app:layout_constraintBottom_toTopOf="@+id/scannerHelp"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85"
+            app:layout_constraintTop_toTopOf="@id/toolbar"
             app:srcCompat="@drawable/ic_flashlight_black_36dp" />
 
         <TextView
@@ -106,8 +104,34 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25"
+            app:layout_constraintVertical_bias="0.20"
             tools:text="Scan data" />
+
+        <TextView
+            android:id="@+id/textViewPeers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/suggested_peers"
+            android:textColor="@color/white"
+            android:textSize="@dimen/peer_title_text_size"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/recyclerViewPeers"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.25" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewPeers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/scannerPaste"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

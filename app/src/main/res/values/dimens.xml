@@ -3,4 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="peer_title_text_size">12sp</dimen>
+    <dimen name="peer_name_text_size">10sp</dimen>
+    <dimen name="peer_logo_image_size">30dp</dimen>
+
+    <dimen name="qr_scanner_paste_button_marginBottom">5dp</dimen>
+    <dimen name="qr_scanner_button_width">150dp</dimen>
+    <dimen name="qr_scanner_button_height">35dp</dimen>
 </resources>
