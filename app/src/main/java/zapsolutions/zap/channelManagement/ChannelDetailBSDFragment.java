@@ -266,14 +266,7 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
                     switchToProgressScreen();
-                    //Wallet.getInstance().closeChannel(mChannelPoint, force);
-                    mCloseChannelButton.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //switchToFinishScreen(true,null);
-                            switchToFinishScreen(false,"ohjee");
-                        }
-                    },1000);
+                    Wallet.getInstance().closeChannel(mChannelPoint, force);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                 })
@@ -325,7 +318,7 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         if (!success) {
             mProgressResultIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_failed_circle_black_60dp));
             mProgressResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
-        } else{
+        } else {
             mProgressResultIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_circle_black_60dp));
             mProgressResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superGreen)));
         }
