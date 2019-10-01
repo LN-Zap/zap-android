@@ -255,7 +255,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
 
                 } else {
                     // you need to setup wallet to open a channel
-                    showError(getResources().getString(R.string.channel_open_error_wallet_setup), Snackbar.LENGTH_LONG);
+                    showError(getResources().getString(R.string.error_channel_open_wallet_setup), Snackbar.LENGTH_LONG);
                     return;
                 }
 
@@ -491,16 +491,40 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     }
 
     @Override
-    public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success, String message) {
+    public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message) {
 
         if (mLightningNodeUri.getPubKey().equals(lightningNodeUri.getPubKey())) {
-            if (success) {
+            if (status == Wallet.ChannelOpenUpdateListener.SUCCESS) {
                 // fetch channels after open
                 Wallet.getInstance().updateLNDChannelsWithDebounce();
                 getActivity().runOnUiThread(this::switchToSuccessScreen);
             } else {
-                getActivity().runOnUiThread(() -> switchToFailedScreen(message));
+                getActivity().runOnUiThread(() -> switchToFailedScreen(getDetailedErrorString(status, message)));
             }
+        }
+    }
+
+    private String getDetailedErrorString(int error, String message) {
+        switch (error) {
+            case ERROR_GET_PEERS_TIMEOUT:
+                return getString(R.string.error_get_peers_timeout);
+            case ERROR_GET_PEERS:
+                return getString(R.string.error_get_peers);
+            case ERROR_CONNECTION_TIMEOUT:
+                return getString(R.string.error_connect_peer_timeout);
+            case ERROR_CONNECTION_REFUSED:
+                return getString(R.string.error_connect_peer_refused);
+            case ERROR_CONNECTION_SELF:
+                return getString(R.string.error_connect_peer_self);
+            case ERROR_CONNECTION:
+                return getString(R.string.error_connect_peer);
+            case ERROR_CHANNEL_TIMEOUT:
+                return getString(R.string.error_channel_open_timeout);
+            case ERROR_CHANNEL_PENDING_MAX:
+                return getString(R.string.error_channel_open_pending_max);
+            case ERROR_CHANNEL_OPEN:
+            default:
+                return getString(R.string.error_channel_open, message);
         }
     }
 }

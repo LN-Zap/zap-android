@@ -57,6 +57,7 @@ import io.grpc.stub.ClientCallStreamObserver;
 import io.grpc.stub.StreamObserver;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.lightning.LightningNodeUri;
 
 import javax.annotation.Nullable;
 import java.nio.charset.Charset;
@@ -68,14 +69,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Nullable;
-
-import io.grpc.stub.ClientCallStreamObserver;
-import io.grpc.stub.StreamObserver;
-import zapsolutions.zap.R;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
-import zapsolutions.zap.lightning.LightningNodeUri;
 
 import static zapsolutions.zap.util.UtilFunctions.hexStringToByteArray;
 
@@ -672,16 +665,16 @@ public class Wallet {
             @Override
             public void onNext(ListPeersResponse value) {
                 boolean connected = false;
-                for (Peer node: value.getPeersList()) {
-                    if(node.getPubKey().equals(nodeUri.getPubKey())) {
+                for (Peer node : value.getPeersList()) {
+                    if (node.getPubKey().equals(nodeUri.getPubKey())) {
                         connected = true;
                         break;
                     }
                 }
 
-                if(connected) {
+                if (connected) {
                     ZapLog.debug(LOG_TAG, "Already connected to peer, trying to open channel...");
-                    openChannelConnected(nodeUri,amount);
+                    openChannelConnected(nodeUri, amount);
                 } else {
                     ZapLog.debug(LOG_TAG, "Not connected to peer, trying to connect...");
 
@@ -694,13 +687,22 @@ public class Wallet {
                         @Override
                         public void onNext(ConnectPeerResponse value) {
                             ZapLog.debug(LOG_TAG, "Successfully connected to peer, trying to open channel...");
-                            openChannelConnected(nodeUri,amount);
+                            openChannelConnected(nodeUri, amount);
                         }
 
                         @Override
                         public void onError(Throwable t) {
-                            ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getMessage());
-                            broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
+                            ZapLog.debug(LOG_TAG, "Error connecting to peer:" + t.getMessage());
+
+                            if (t.getMessage().toLowerCase().contains("connectex")) {
+                                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, t.getMessage());
+                            } else if (t.getMessage().toLowerCase().contains("self")) {
+                                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, t.getMessage());
+                            } else if (t.getMessage().toLowerCase().contains("deadline exceeded")) {
+                                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_TIMEOUT, t.getMessage());
+                            } else {
+                                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION, t.getMessage());
+                            }
                         }
 
                         @Override
@@ -713,8 +715,13 @@ public class Wallet {
 
             @Override
             public void onError(Throwable t) {
-                ZapLog.debug(LOG_TAG, "Error connecting to peer:" + t.getMessage());
-                broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
+                ZapLog.debug(LOG_TAG, "Error listing peers request:" + t.getMessage());
+
+                if (t.getMessage().toLowerCase().contains("deadline exceeded")) {
+                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS_TIMEOUT, t.getMessage());
+                } else {
+                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS, t.getMessage());
+                }
             }
 
             @Override
@@ -737,13 +744,20 @@ public class Wallet {
             @Override
             public void onNext(OpenStatusUpdate value) {
                 ZapLog.debug(LOG_TAG, "Open channel update: " + value.getUpdateCase().getNumber());
-                broadcastChannelOpenUpdate(nodeUri, true, null);
+                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.SUCCESS, null);
             }
 
             @Override
             public void onError(Throwable t) {
                 ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getMessage());
-                broadcastChannelOpenUpdate(nodeUri, false, t.getMessage());
+
+                if (t.getMessage().toLowerCase().contains("pending channels exceed maximum")) {
+                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_PENDING_MAX, t.getMessage());
+                } else if (t.getMessage().toLowerCase().contains("deadline exceeded")) {
+                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_TIMEOUT, t.getMessage());
+                } else {
+                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_OPEN, t.getMessage());
+                }
             }
 
             @Override
@@ -1766,9 +1780,9 @@ public class Wallet {
         mChannelCloseUpdateListeners.remove(listener);
     }
 
-    private void broadcastChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success, String message) {
+    private void broadcastChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message) {
         for (ChannelOpenUpdateListener listener : mChannelOpenUpdateListeners) {
-            listener.onChannelOpenUpdate(lightningNodeUri, success, message);
+            listener.onChannelOpenUpdate(lightningNodeUri, status, message);
         }
     }
 
@@ -1830,7 +1844,19 @@ public class Wallet {
     }
 
     public interface ChannelOpenUpdateListener {
-        void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, boolean success, String message);
+
+        int SUCCESS = -1;
+        int ERROR_GET_PEERS_TIMEOUT = 1;
+        int ERROR_GET_PEERS = 2;
+        int ERROR_CONNECTION_TIMEOUT = 3;
+        int ERROR_CONNECTION_REFUSED= 4;
+        int ERROR_CONNECTION_SELF = 5;
+        int ERROR_CONNECTION = 6;
+        int ERROR_CHANNEL_TIMEOUT = 7;
+        int ERROR_CHANNEL_PENDING_MAX = 8;
+        int ERROR_CHANNEL_OPEN = 9;
+
+        void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message);
     }
 }
 
