@@ -2,285 +2,252 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_bottom_sheets"
-    android:padding="10dp">
-
-    <ImageView
-        android:id="@+id/fundingTxCopyIcon"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:background="@null"
-        android:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/fundingTxText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fundingTxText"
-        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
-
-    <View
-        android:id="@+id/spacer2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/channelCloseButton">
-
-    </View>
-
-    <ImageButton
-        android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@null"
-        android:tint="@color/gray"
-        app:layout_constraintBottom_toTopOf="@+id/separator_1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nodeAlias"
-        app:srcCompat="@drawable/ic_close_black_24dp" />
-
-    <TextView
-        android:id="@+id/nodeAlias"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLength="25"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Remote name" />
-
-    <ImageView
-        android:id="@+id/statusDot"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/separator_1"
-        app:layout_constraintEnd_toStartOf="@+id/nodeAlias"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_status_dot_black_24dp" />
-
-    <ImageView
-        android:id="@+id/separator_1"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nodeAlias"
-        app:srcCompat="@color/gray" />
-
-    <TextView
-        android:id="@+id/remotePubKeyLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="@string/channel_remote_public_key"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separator_1" />
-
-    <TextView
-        android:id="@+id/remotePubKeyText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:ellipsize="middle"
-        android:singleLine="true"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@id/remotePubKeyCopyIcon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/remotePubKeyLabel"
-        tools:text="0279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
-
-    <ImageView
-        android:id="@+id/remotePubKeyCopyIcon"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:background="@null"
-        android:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/remotePubKeyText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/remotePubKeyText"
-        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
-
-    <ImageView
-        android:id="@+id/separator_2"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/remotePubKeyCopyIcon"
-        app:srcCompat="@color/gray" />
-
-    <TextView
-        android:id="@+id/localBalanceTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/channel_local_balance"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/separator_2" />
-
-    <ProgressBar
-        android:id="@+id/balanceBarLocal"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="8dp"
-        android:progressDrawable="@drawable/channel_local_balance_progress_bar"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/localBalanceTitle" />
-
-    <TextView
-        android:id="@+id/remoteBalanceTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/channel_remote_balance"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/separator_2" />
-
-    <ProgressBar
-        android:id="@+id/balanceBarRemote"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="5dp"
-        android:layoutDirection="rtl"
-        android:progressDrawable="@drawable/channel_remote_balance_progress_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline_50"
-        app:layout_constraintTop_toBottomOf="@+id/remoteBalanceTitle" />
-
-    <TextView
-        android:id="@+id/localBalance"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="localBalance"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/balanceBarLocal" />
-
-    <TextView
-        android:id="@+id/remoteBalance"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/balanceBarRemote"
-        tools:text="remoteBalance" />
-
-    <ImageView
-        android:id="@+id/separator_3"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/localBalance"
-        app:srcCompat="@color/gray" />
-
-    <TextView
-        android:id="@+id/fundingTxLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="@string/channel_funding_transaction"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separator_3" />
-
-    <TextView
-        android:id="@+id/fundingTxText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:ellipsize="middle"
-        android:singleLine="true"
-        android:textColor="@color/lightningOrange"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@id/remotePubKeyCopyIcon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fundingTxLabel"
-        tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
-
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/closingTxLayout"
+        android:background="@drawable/bg_bottom_sheets"
+        android:id="@+id/backgroundLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fundingTxText"
-        tools:visibility="visible">
+        app:layout_constraintTop_toBottomOf="@id/anchor">
 
-        <TextView
-            android:id="@+id/closingTxTimeText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/closingTxTimeLabel"
-            tools:visibility="visible"
-            tools:text="20 hr 35 min" />
-
-        <TextView
-            android:id="@+id/closingTxTimeLabel"
-            android:layout_width="0dp"
+        <ImageButton
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/channel_close_time"
-            android:textSize="15sp"
-            android:visibility="gone"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/closingTxText"
-            tools:text="Closing in"
-            tools:visibility="visible"/>
+            android:layout_marginBottom="8dp"
+            android:background="@null"
+            android:tint="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close_black_24dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/bsdIcon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_icon_modal_lightning" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/anchor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/bsdIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/bsdIcon"
+        app:layout_constraintVertical_bias="0.5"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bsdIcon">
 
         <ImageView
-            android:id="@+id/separator_4"
+            android:id="@+id/fundingTxCopyIcon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:background="@null"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/fundingTxText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fundingTxText"
+            app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+
+        <View
+            android:id="@+id/spacer2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/channelCloseButton"/>
+
+        <TextView
+            android:id="@+id/nodeAlias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="25"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Remote name" />
+
+        <ImageView
+            android:id="@+id/statusDot"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/nodeAlias"
+            app:layout_constraintEnd_toStartOf="@+id/nodeAlias"
+            app:layout_constraintTop_toTopOf="@id/nodeAlias"
+            app:srcCompat="@drawable/ic_status_dot_black_24dp" />
+
+        <ImageView
+            android:id="@+id/separator_1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nodeAlias"
+            app:srcCompat="@color/gray" />
+
+        <TextView
+            android:id="@+id/remotePubKeyLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/channel_remote_public_key"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator_1" />
+
+        <TextView
+            android:id="@+id/remotePubKeyText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@id/remotePubKeyCopyIcon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/remotePubKeyLabel"
+            tools:text="0279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+        <ImageView
+            android:id="@+id/remotePubKeyCopyIcon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:background="@null"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/remotePubKeyText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/remotePubKeyText"
+            app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+
+        <ImageView
+            android:id="@+id/separator_2"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/remotePubKeyCopyIcon"
             app:srcCompat="@color/gray" />
 
         <TextView
-            android:id="@+id/closingTxLabel"
+            android:id="@+id/localBalanceTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/channel_local_balance"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/separator_2" />
+
+        <ProgressBar
+            android:id="@+id/balanceBarLocal"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="8dp"
+            android:progressDrawable="@drawable/channel_local_balance_progress_bar"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/localBalanceTitle" />
+
+        <TextView
+            android:id="@+id/remoteBalanceTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/channel_remote_balance"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/separator_2" />
+
+        <ProgressBar
+            android:id="@+id/balanceBarRemote"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layoutDirection="rtl"
+            android:progressDrawable="@drawable/channel_remote_balance_progress_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_50"
+            app:layout_constraintTop_toBottomOf="@+id/remoteBalanceTitle" />
+
+        <TextView
+            android:id="@+id/localBalance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="localBalance"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balanceBarLocal" />
+
+        <TextView
+            android:id="@+id/remoteBalance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/balanceBarRemote"
+            tools:text="remoteBalance" />
+
+        <ImageView
+            android:id="@+id/separator_3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/localBalance"
+            app:srcCompat="@color/gray" />
+
+        <TextView
+            android:id="@+id/fundingTxLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:text="@string/channel_closing_transaction"
+            android:text="@string/channel_funding_transaction"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator_4" />
+            app:layout_constraintTop_toBottomOf="@id/separator_3" />
 
         <TextView
-            android:id="@+id/closingTxText"
+            android:id="@+id/fundingTxText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
@@ -288,78 +255,239 @@
             android:singleLine="true"
             android:textColor="@color/lightningOrange"
             android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@+id/closingTxCopyIcon"
+            app:layout_constraintEnd_toStartOf="@id/remotePubKeyCopyIcon"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/closingTxLabel"
+            app:layout_constraintTop_toBottomOf="@+id/fundingTxLabel"
             tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
 
-        <ImageView
-            android:id="@+id/closingTxCopyIcon"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/closingTxLayout"
             android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:background="@null"
-            android:tint="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/closingTxText"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/closingTxText"
-            app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fundingTxText"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/closingTxTimeText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/closingTxTimeLabel"
+                tools:visibility="visible"
+                tools:text="20 hr 35 min" />
+
+            <TextView
+                android:id="@+id/closingTxTimeLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/channel_close_time"
+                android:textSize="15sp"
+                android:visibility="gone"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/closingTxText"
+                tools:text="Closing in"
+                tools:visibility="visible"/>
+
+            <ImageView
+                android:id="@+id/separator_4"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@color/gray" />
+
+            <TextView
+                android:id="@+id/closingTxLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="@string/channel_closing_transaction"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator_4" />
+
+            <TextView
+                android:id="@+id/closingTxText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:textColor="@color/lightningOrange"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/closingTxCopyIcon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/closingTxLabel"
+                tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+            <ImageView
+                android:id="@+id/closingTxCopyIcon"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:background="@null"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/closingTxText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/closingTxText"
+                app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/spacer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/closingTxLayout">
+
+        </View>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <Button
+            android:id="@+id/channelCloseButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_clickable_item"
+            android:textAllCaps="false"
+            android:textColor="@color/lightningOrange"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spacer"
+            tools:text="Close Channel"
+            tools:visibility="visible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:id="@+id/spacer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/closingTxLayout">
-
-    </View>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
-
-    <Button
-        android:id="@+id/channelCloseButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/bg_clickable_item"
-        android:textAllCaps="false"
-        android:textColor="@color/lightningOrange"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spacer"
-        tools:text="Close Channel"
-        tools:visibility="visible" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/progressBarLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rounded_rectangle_spinner"
-        android:elevation="2dp"
+        android:id="@+id/closeChannelProgressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone"
+        android:alpha="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nodeAlias"
-        tools:visibility="visible">
+        app:layout_constraintTop_toTopOf="@id/anchor"
+        app:layout_constraintVertical_bias="0.5">
+
+        <ImageView
+            android:id="@+id/closeChannelProgressThunderIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
 
         <ProgressBar
-            android:id="@+id/closingChannelprogressBar"
-            style="?android:attr/progressBarStyle"
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.Holo.ProgressBar.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminateTint="@color/superGreen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/progressResultIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/closeChannelFinishedLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/finishedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/superGreen"
+                android:textSize="36sp" />
+
+            <ImageView
+                android:id="@+id/closeChannelFinishedTypeIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+
+            <TextView
+                android:id="@+id/finishedText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/bg_clickable_item"
+            android:enabled="false"
+            android:text="@string/ok"
+            android:textAllCaps="false"
+            android:textColor="@color/lightningOrange"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
