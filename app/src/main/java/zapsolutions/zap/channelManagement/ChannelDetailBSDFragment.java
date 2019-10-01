@@ -391,13 +391,13 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
                 if (status == Wallet.ChannelCloseUpdateListener.SUCCESS) {
                     switchToFinishScreen(true, null);
                 } else {
-                    switchToFinishScreen(false, getDetailedErrorString(status, message));
+                    switchToFinishScreen(false, getDetailedErrorMessage(status, message));
                 }
             });
         }
     }
 
-    private String getDetailedErrorString(int error, String message) {
+    private String getDetailedErrorMessage(int error, String message) {
         switch (error) {
             case ERROR_PEER_OFFLINE:
                 return getString(R.string.error_channel_close_offline);

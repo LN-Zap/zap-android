@@ -499,12 +499,12 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                 Wallet.getInstance().updateLNDChannelsWithDebounce();
                 getActivity().runOnUiThread(this::switchToSuccessScreen);
             } else {
-                getActivity().runOnUiThread(() -> switchToFailedScreen(getDetailedErrorString(status, message)));
+                getActivity().runOnUiThread(() -> switchToFailedScreen(getDetailedErrorMessage(status, message)));
             }
         }
     }
 
-    private String getDetailedErrorString(int error, String message) {
+    private String getDetailedErrorMessage(int error, String message) {
         switch (error) {
             case ERROR_GET_PEERS_TIMEOUT:
                 return getString(R.string.error_get_peers_timeout);
