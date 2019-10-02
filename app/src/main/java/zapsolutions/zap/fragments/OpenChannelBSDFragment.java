@@ -516,6 +516,8 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                 return getString(R.string.error_connect_peer_refused);
             case ERROR_CONNECTION_SELF:
                 return getString(R.string.error_connect_peer_self);
+            case ERROR_CONNECTION_NO_HOST:
+                return getString(R.string.error_connect_peer_no_host);
             case ERROR_CONNECTION:
                 return getString(R.string.error_connect_peer);
             case ERROR_CHANNEL_TIMEOUT:

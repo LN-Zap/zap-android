@@ -678,6 +678,11 @@ public class Wallet {
                 } else {
                     ZapLog.debug(LOG_TAG, "Not connected to peer, trying to connect...");
 
+                    if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
+                        return;
+                    }
+
                     LightningAddress lightningAddress = LightningAddress.newBuilder()
                             .setHostBytes(ByteString.copyFrom(nodeUri.getHost().getBytes(StandardCharsets.UTF_8)))
                             .setPubkeyBytes(ByteString.copyFrom(nodeUri.getPubKey().getBytes(StandardCharsets.UTF_8))).build();
@@ -694,7 +699,7 @@ public class Wallet {
                         public void onError(Throwable t) {
                             ZapLog.debug(LOG_TAG, "Error connecting to peer:" + t.getMessage());
 
-                            if (t.getMessage().toLowerCase().contains("connectex")) {
+                            if (t.getMessage().toLowerCase().contains("refused")) {
                                 broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, t.getMessage());
                             } else if (t.getMessage().toLowerCase().contains("self")) {
                                 broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, t.getMessage());
@@ -733,7 +738,8 @@ public class Wallet {
 
     private void openChannelConnected(LightningNodeUri nodeUri, long amount) {
         LightningGrpc.LightningStub lightningStub = LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+                .withCallCredentials(LndConnection.getInstance().getMacaroon())
+                .withDeadlineAfter(15, TimeUnit.SECONDS);
 
         byte[] nodeKeyBytes = hexStringToByteArray(nodeUri.getPubKey());
         OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
@@ -776,6 +782,7 @@ public class Wallet {
 
         LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
                 .withCallCredentials(LndConnection.getInstance().getMacaroon())
+                .withDeadlineAfter(15, TimeUnit.SECONDS)
                 .closeChannel(closeChannelRequest, new StreamObserver<CloseStatusUpdate>() {
                     @Override
                     public void onNext(CloseStatusUpdate value) {
@@ -788,6 +795,8 @@ public class Wallet {
                         ZapLog.debug(LOG_TAG, "Error closing channel:" + t.getMessage());
                         if (t.getMessage().toLowerCase().contains("offline")) {
                             broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_PEER_OFFLINE, t.getMessage());
+                        } else if (t.getMessage().toLowerCase().contains("deadline exceeded")) {
+                            broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_TIMEOUT, t.getMessage());
                         } else {
                             broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_CLOSE, t.getMessage());
                         }
@@ -1839,7 +1848,8 @@ public class Wallet {
 
         int SUCCESS = -1;
         int ERROR_PEER_OFFLINE = 0;
-        int ERROR_CHANNEL_CLOSE = 1;
+        int ERROR_CHANNEL_TIMEOUT = 1;
+        int ERROR_CHANNEL_CLOSE = 2;
 
         void onChannelCloseUpdate(String channelPoint, int status, String message);
     }
@@ -1860,10 +1870,11 @@ public class Wallet {
         int ERROR_CONNECTION_TIMEOUT = 2;
         int ERROR_CONNECTION_REFUSED = 3;
         int ERROR_CONNECTION_SELF = 4;
-        int ERROR_CONNECTION = 5;
-        int ERROR_CHANNEL_TIMEOUT = 6;
-        int ERROR_CHANNEL_PENDING_MAX = 7;
-        int ERROR_CHANNEL_OPEN = 8;
+        int ERROR_CONNECTION_NO_HOST = 5;
+        int ERROR_CONNECTION = 6;
+        int ERROR_CHANNEL_TIMEOUT = 7;
+        int ERROR_CHANNEL_PENDING_MAX = 8;
+        int ERROR_CHANNEL_OPEN = 9;
 
         void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message);
     }

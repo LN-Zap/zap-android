@@ -401,9 +401,11 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
         switch (error) {
             case ERROR_PEER_OFFLINE:
                 return getString(R.string.error_channel_close_offline);
+            case ERROR_CHANNEL_TIMEOUT:
+                return getString(R.string.error_channel_close_timeout);
             case ERROR_CHANNEL_CLOSE:
             default:
-                return getString(R.string.error_channel_open, message);
+                return getString(R.string.error_channel_close, message);
         }
     }
 }
