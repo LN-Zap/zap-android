@@ -11,7 +11,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 - [x] Support for Bech32 and P2SH addresses
 - [x] BTC, mBTC, bit & Satoshi units
 - [x] Open `lightning:` & `bitcoin:` urls
-- [ ] Available in many languages
+- [x] Available in many languages
 - [ ] Resend failed lightning transactions
 - [x] Transaction filter
 - [ ] BIP39 passphrase
@@ -25,7 +25,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 - [ ] Certificate pinning
 
 **Lightning**
-- [ ] Channel Management
+- [x] Channel Management
 - [x] Connect to remote Lnd node
 - [x] Connect to BTCPay Server
 - [x] Connect to lndconnect QR code
@@ -47,7 +47,7 @@ Hey! Do you like Zap? Awesome! We could actually really use your help!
 
 Open source isn't just writing code. Zap could use your help with any of the following:
 
-- [translating](docs/TRANSLATING.md) the app
+- [Translating](docs/TRANSLATING.md) the app
 - Finding (and reporting!) bugs
 - New feature suggestions
 - Answering questions on issues
@@ -64,6 +64,7 @@ And if you want to build the app yourself take a look at the [Installation Guide
 
 ## Maintainers
 - [Michael WÃ¼nsch](https://github.com/michaelWuensch)
+- [raph](https://github.com/maraph)
 
 ## License
 
