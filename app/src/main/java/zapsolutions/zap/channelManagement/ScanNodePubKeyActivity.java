@@ -56,7 +56,7 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
     }
 
     public void getSuggestedPeers() {
-        JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, RefConstants.URL_SUGGESTED_NODES, null,
+        JsonObjectRequest suggestedPeersRequest = new JsonObjectRequest(Request.Method.GET, RefConstants.URL_SUGGESTED_NODES, null,
                 response -> {
                     try {
                         JSONObject bitcoin = response.getJSONObject("bitcoin");
@@ -84,11 +84,11 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
 
                         updateSuggestedNodes();
                     } catch (JSONException e) {
-                        ZapLog.debug(LOG_TAG, "Could not parse connected peers: " + e.getMessage());
+                        ZapLog.debug(LOG_TAG, "Could not parse suggested peers: " + e.getMessage());
                     }
-                }, error -> ZapLog.debug(LOG_TAG, "Could not fetch connected peers: " + error.getMessage()));
+                }, error -> ZapLog.debug(LOG_TAG, "Could not fetch suggested peers: " + error.getMessage()));
 
-        HttpClient.getInstance().addToRequestQueue(rateRequest, "SuggestedPeers");
+        HttpClient.getInstance().addToRequestQueue(suggestedPeersRequest, "SuggestedPeers");
     }
 
     public void updateSuggestedNodes() {

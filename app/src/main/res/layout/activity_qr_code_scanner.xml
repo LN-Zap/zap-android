@@ -123,9 +123,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewPeers"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:padding="10dp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/scannerPaste"
             app:layout_constraintEnd_toEndOf="parent"
