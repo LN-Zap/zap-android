@@ -65,6 +65,7 @@
     <string name="confirmExit">Zap wirklich beenden?</string>
     <string name="or">oder</string>
     <string name="max_amount">Maximaler Betrag:</string>
+    <string name="min_amount">Minimaler Betrag:</string>
     <string name="retry">Nochmal versuchen</string>
     <string name="loading">Lädt</string>
     <string name="pay">Bezahlen</string>
@@ -77,6 +78,12 @@
     <string name="channel">Kanal</string>
     <string name="event">Ereignis</string>
     <string name="channel_event">Kanalereignis</string>
+    <string name="scan_qr_code">QR-Code scannen</string>
+    <string name="node">Knoten</string>
+    <string name="funds_available">Verfügbar: %s</string>
+    <string name="amount_invalid">Der Betrag ist ungültig.</string>
+    <string name="success">Erfolg</string>
+    <string name="suggested_peers">Vorgeschlagene Peers</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -118,12 +125,17 @@
     <string name="channel_state_pending_force_closing">Schließung wird erzwungen</string>
     <string name="channel_state_waiting_close">Wartet auf Schließung</string>
     <string name="no_channels">Keine Kanäle</string>
-    <string name="channel_closing_transaction">Closing Transaction</string>
-    <string name="channel_close">Close Channel</string>
-    <string name="channel_close_force">Force Close Channel</string>
-    <string name="channel_close_error">Error occurred while closing channel</string>
-    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
-    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
+    <string name="channel_closing_transaction">Schließungstransaktion</string>
+    <string name="channel_close">Kanal schließen</string>
+    <string name="channel_close_success">Kanalschließung erfolgreich eingeleitet</string>
+    <string name="channel_close_force">Kanalschließung erzwingen</string>
+    <string name="channel_close_error">Fehler beim Schließen</string>
+    <string name="channel_close_confirmation">Willst du wirklich den Kanal mit\n\n%s\n schließen?</string>
+    <string name="channel_close_force_confirmation">Willst du wirklich die Kanalschließung mit\n\n%1$s\n\n erzwingen?\nDein Geld wird für %2$s blockiert sein.</string>
+    <string name="channel_close_time">Zeit bis zur Schließung</string>
+    <string name="channel_open">Kanal öffnen</string>
+    <string name="channel_open_success">Öffnung des Kanals erfolgreich eingeleitet</string>
+    <string name="channel_open_error">Fehler beim Öffnen</string>
     <string name="setup_connect_heading">Wie möchtest du Zap verwenden?</string>
     <string name="setup_connect_local_description">Eine Wallet auf diesem Smartphone erstellen.</string>
     <string name="setup_connect_local_button">Wallet erstellen</string>
@@ -218,6 +230,21 @@
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
+    <string name="error_lightning_uri_invalid">Ungültiges Format.\nBitte verwende eines der folgenden Formate:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="error_channel_open_wallet_setup">Die Wallet muss eingerichtet sein, um einen Kanal zu öffnen.</string>
+    <string name="error_connect_peer">Es konnte keine Verbindung zum Peer aufgebaut werden.</string>
+    <string name="error_connect_peer_refused">Die Verbindung wurde vom Peer abgelehnt.</string>
+    <string name="error_connect_peer_self">Du kannst keine Verbindung zu dir selbst aufbauen.</string>
+    <string name="error_connect_peer_no_host">Es kann keine Verbindung zu einem Knoten ohne IP-Adresse oder Host aufgebaut werden.</string>
+    <string name="error_connect_peer_timeout">Zeitüberschreitung. Es konnte keine Verbindung hergestellt werden.</string>
+    <string name="error_channel_open_pending_max">Maximale Anzahl an Kanälen überschritten, die sich in Öffnung oder Schließung befinden.</string>
+    <string name="error_channel_open_timeout">Zeitüberschreitung. Der Kanal konnte nicht geöffnet werden.</string>
+    <string name="error_channel_open">Der Kanal konnte nicht geöffnet werden: %s</string>
+    <string name="error_get_peers">Die Peer Liste konnte nicht geladen werden.</string>
+    <string name="error_get_peers_timeout">Zeitüberschreitung. Peers konnten nicht geladen werden.</string>
+    <string name="error_channel_close_offline">Peer ist offline. Die Kanalschließung muss erzwungen werden.</string>
+    <string name="error_channel_close_timeout">Zeitüberschreitung. Der Kanal konnte nicht geschlossen werden.</string>
+    <string name="error_channel_close">Der Kanal konnte nicht geschlossen werden: %s</string>
     <plurals name="duration_second">
         <item quantity="one">%d Sekunde</item>
         <item quantity="other">%d Sekunden</item>
@@ -235,16 +262,16 @@
         <item quantity="other">%d Tage</item>
     </plurals>
     <plurals name="duration_week">
-        <item quantity="one">%d Week</item>
-        <item quantity="other">%d Weeks</item>
+        <item quantity="one">%d Woche</item>
+        <item quantity="other">%d Wochen</item>
     </plurals>
     <plurals name="duration_month">
-        <item quantity="one">%d Month</item>
-        <item quantity="other">%d Months</item>
+        <item quantity="one">%d Monat</item>
+        <item quantity="other">%d Monate</item>
     </plurals>
     <plurals name="duration_year">
-        <item quantity="one">%d Year</item>
-        <item quantity="other">%d Years</item>
+        <item quantity="one">%d Jahr</item>
+        <item quantity="other">%d Jahre</item>
     </plurals>
     <string name="fee_tier_slow_title">Langsam</string>
     <string name="fee_tier_medium_title">Mittel</string>
@@ -256,7 +283,7 @@
     <string name="fee_not_available">n/A</string>
     <string name="unlock_wallet">Wallet entsperren</string>
     <string name="biometricPrompt_title">Biometrische Authentifizierung</string>
-    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
+    <string name="biometricNotSetup">Um dieses Feature zu nutzen, musst du erst die biometrische Authentifizierung in den Android Einstellungen einrichten.</string>
     <string name="invoice_detail">Rechnungsdetails</string>
     <string name="transaction_detail">Transaktionsdetails</string>
     <string name="app_reset_title">Hinweis</string>
