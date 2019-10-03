@@ -8,10 +8,16 @@ public class LightningNodeUri implements Serializable {
 
     private String mPubKey;
     private String mHost;
+    private String mNickname;
+    private String mDescription;
+    private String mImage;
 
-    private LightningNodeUri(@NonNull String pubKey, String host) {
+    private LightningNodeUri(@NonNull String pubKey, String host, String nickname, String description, String image) {
         mPubKey = pubKey;
         mHost = host;
+        mNickname = nickname;
+        mDescription = description;
+        mImage = image;
     }
 
     @NonNull
@@ -23,9 +29,24 @@ public class LightningNodeUri implements Serializable {
         return mHost;
     }
 
+    public String getNickname() {
+        return mNickname;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public String getImage() {
+        return mImage;
+    }
+
     public static class Builder {
         private String mPubKey;
         private String mHost;
+        private String mNickname;
+        private String mDescription;
+        private String mImage;
 
         public Builder setPubKey(@NonNull String pubKey) {
             this.mPubKey = pubKey;
@@ -39,8 +60,26 @@ public class LightningNodeUri implements Serializable {
             return this;
         }
 
+        public Builder setNickname(String nickname) {
+            this.mNickname = nickname;
+
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.mDescription = description;
+
+            return this;
+        }
+
+        public Builder setImage(String image) {
+            this.mImage = image;
+
+            return this;
+        }
+
         public LightningNodeUri build() {
-            return new LightningNodeUri(mPubKey, mHost);
+            return new LightningNodeUri(mPubKey, mHost, mNickname, mDescription, mImage);
         }
     }
 }

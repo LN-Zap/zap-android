@@ -21,5 +21,6 @@ public class RefConstants {
     public static final int VIBRATE_LONG = 200;
 
     public static final String URL_HELP = "https://docs.zaphq.io/";
+    public static final String URL_SUGGESTED_NODES = "https://resources.zaphq.io/api/v1/suggested-nodes";
 
 }

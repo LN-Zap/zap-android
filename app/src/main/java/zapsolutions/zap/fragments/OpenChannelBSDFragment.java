@@ -89,11 +89,8 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
 
         if (getArguments() != null) {
             mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
-            if(mLightningNodeUri.getHost() != null) {
-                mTvNodeAlias.setText(mLightningNodeUri.getHost() + " (" + mLightningNodeUri.getPubKey() + ")");
-            } else {
-                mTvNodeAlias.setText(mLightningNodeUri.getPubKey());
-            }
+
+            setAlias(mLightningNodeUri);
         }
 
         mProgressScreen = view.findViewById(R.id.openChannelProgressLayout);
@@ -293,6 +290,25 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
             }
         });
         return view;
+    }
+
+    private void setAlias(LightningNodeUri lightningNodeUri) {
+        String alias;
+        if (lightningNodeUri.getNickname() != null) {
+            alias = lightningNodeUri.getNickname();
+        } else if (!Wallet.getInstance().getNodeAliasFromPubKey(lightningNodeUri.getPubKey(), getContext()).contains(getResources().getString(R.string.channel_no_alias))) {
+            // alias found in peers
+            alias = Wallet.getInstance().getNodeAliasFromPubKey(lightningNodeUri.getPubKey(), getContext());
+        } else {
+            alias = lightningNodeUri.getHost();
+        }
+
+        if (alias == null || alias.isEmpty()) {
+            // no alias - no host
+            mTvNodeAlias.setText(lightningNodeUri.getPubKey());
+        } else {
+            mTvNodeAlias.setText(alias + " (" + lightningNodeUri.getPubKey() + ")");
+        }
     }
 
     private void switchToSendProgressScreen() {
