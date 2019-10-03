@@ -89,8 +89,13 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
 
         if (getArguments() != null) {
             mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
-            mTvNodeAlias.setText(mLightningNodeUri.getHost() + " (" + mLightningNodeUri.getPubKey() + ")");
+            if(mLightningNodeUri.getHost() != null) {
+                mTvNodeAlias.setText(mLightningNodeUri.getHost() + " (" + mLightningNodeUri.getPubKey() + ")");
+            } else {
+                mTvNodeAlias.setText(mLightningNodeUri.getPubKey());
+            }
         }
+
         mProgressScreen = view.findViewById(R.id.openChannelProgressLayout);
 
         mTvFinishedText = view.findViewById(R.id.finishedText);

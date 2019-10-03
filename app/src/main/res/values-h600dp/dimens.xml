@@ -1,0 +1,9 @@
+<resources>
+    <dimen name="peer_title_text_size">16sp</dimen>
+    <dimen name="peer_name_text_size">14sp</dimen>
+    <dimen name="peer_logo_image_size">75dp</dimen>
+
+    <dimen name="qr_scanner_paste_button_marginBottom">10dp</dimen>
+    <dimen name="qr_scanner_button_width">250dp</dimen>
+    <dimen name="qr_scanner_button_height">55dp</dimen>
+</resources>
