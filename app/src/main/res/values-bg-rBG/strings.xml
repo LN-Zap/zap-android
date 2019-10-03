@@ -65,6 +65,7 @@
     <string name="confirmExit">Наистина ли искате да излезете от Zap?</string>
     <string name="or">или</string>
     <string name="max_amount">Максимално Кол-во:</string>
+    <string name="min_amount">Minimum Amount:</string>
     <string name="retry">Нов опит</string>
     <string name="loading">Зареждане</string>
     <string name="pay">Плащане</string>
@@ -77,6 +78,12 @@
     <string name="channel">Канал</string>
     <string name="event">Събитие</string>
     <string name="channel_event">Канално Събитие</string>
+    <string name="scan_qr_code">Scan QR-Code</string>
+    <string name="node">Node</string>
+    <string name="funds_available">Available: %s</string>
+    <string name="amount_invalid">The amount is invalid.</string>
+    <string name="success">Success</string>
+    <string name="suggested_peers">Suggested Peers</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -118,12 +125,17 @@
     <string name="channel_state_pending_force_closing">форсирано се затваря</string>
     <string name="channel_state_waiting_close">Изчакване за затваряне</string>
     <string name="no_channels">Няма канали</string>
-    <string name="channel_closing_transaction">Closing Transaction</string>
-    <string name="channel_close">Close Channel</string>
-    <string name="channel_close_force">Force Close Channel</string>
-    <string name="channel_close_error">Error occurred while closing channel</string>
-    <string name="channel_close_confirmation">Do you really want to close the channel with:\n%s\n</string>
-    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n%s\n</string>
+    <string name="channel_closing_transaction">Затваряща Транзакция</string>
+    <string name="channel_close">Затвори Канала</string>
+    <string name="channel_close_success">Channel closing successfully initiated</string>
+    <string name="channel_close_force">Затвори Канала Принудително</string>
+    <string name="channel_close_error">Channel close error</string>
+    <string name="channel_close_confirmation">Do you really want to close the channel with:\n\n%s\n</string>
+    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
+    <string name="channel_close_time">Closing Time Delay</string>
+    <string name="channel_open">Open Channel</string>
+    <string name="channel_open_success">Channel opening successfully initiated</string>
+    <string name="channel_open_error">Channel open error</string>
     <string name="setup_connect_heading">Как искате да използвате Zap?</string>
     <string name="setup_connect_local_description">Създаване на портфейл на този телефон</string>
     <string name="setup_connect_local_button">Създаване на портфейл</string>
@@ -218,6 +230,21 @@
     <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
     <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
     <string name="error_wrong_password">Грешна парола</string>
+    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="error_channel_open_wallet_setup">The wallet needs to be setup to open a channel.</string>
+    <string name="error_connect_peer">Could not establish connection to peer node.</string>
+    <string name="error_connect_peer_refused">Connection has been refused by peer.</string>
+    <string name="error_connect_peer_self">Cannot make connection to self.</string>
+    <string name="error_connect_peer_no_host">Cannot connect to node without IP-address or host.</string>
+    <string name="error_connect_peer_timeout">Could not connect to peer within deadline.</string>
+    <string name="error_channel_open_pending_max">Number of pending channels exceed maximum.</string>
+    <string name="error_channel_open_timeout">Channel could not be opened within deadline.</string>
+    <string name="error_channel_open">Could not open channel with connected node: %s</string>
+    <string name="error_get_peers">Could not fetch peers list.</string>
+    <string name="error_get_peers_timeout">Peers could not be fetched within deadline.</string>
+    <string name="error_channel_close_offline">Peer is offline. Only force close allowed.</string>
+    <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
+    <string name="error_channel_close">Could not close channel: %s</string>
     <plurals name="duration_second">
         <item quantity="one">%d Секунда
 
@@ -237,16 +264,16 @@
         <item quantity="other">%d Дни</item>
     </plurals>
     <plurals name="duration_week">
-        <item quantity="one">%d Week</item>
-        <item quantity="other">%d Weeks</item>
+        <item quantity="one">%d Седмица</item>
+        <item quantity="other">%d Седмици</item>
     </plurals>
     <plurals name="duration_month">
-        <item quantity="one">%d Month</item>
-        <item quantity="other">%d Months</item>
+        <item quantity="one">%d Месец</item>
+        <item quantity="other">%d Месеца</item>
     </plurals>
     <plurals name="duration_year">
-        <item quantity="one">%d Year</item>
-        <item quantity="other">%d Years</item>
+        <item quantity="one">%d Година</item>
+        <item quantity="other">%d Години</item>
     </plurals>
     <string name="fee_tier_slow_title">Бавно</string>
     <string name="fee_tier_medium_title">Средно</string>
@@ -258,7 +285,7 @@
     <string name="fee_not_available">N/A</string>
     <string name="unlock_wallet">Отключете портфейла</string>
     <string name="biometricPrompt_title">Биометрична автентикация</string>
-    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
+    <string name="biometricNotSetup">За да използвате тази функция трябва да настроите биометричната автентикация в системните настройки на Андроид.</string>
     <string name="invoice_detail">Детайли за фактурата</string>
     <string name="transaction_detail">Детайли за Транзакцията</string>
     <string name="app_reset_title">Имайте впредвид</string>
