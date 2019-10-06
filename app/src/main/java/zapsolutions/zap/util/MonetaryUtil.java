@@ -316,7 +316,7 @@ public class MonetaryUtil {
      * @return value string for the input field converted in the secondary currency
      */
     public String convertPrimaryToSecondaryCurrency(String primaryValue) {
-        if (primaryValue.equals("")) {
+        if (primaryValue == null || primaryValue.equals("")) {
             return "";
         } else {
             if (PrefsUtil.firstCurrencyIsPrimary()) {
@@ -345,7 +345,7 @@ public class MonetaryUtil {
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(0);
-        if (primaryValue.equals("")) {
+        if (primaryValue == null || primaryValue.equals("")) {
             return "0";
         } else {
             if (PrefsUtil.firstCurrencyIsPrimary()) {
@@ -371,7 +371,7 @@ public class MonetaryUtil {
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(0);
-        if (secondaryValue.equals("")) {
+        if (secondaryValue == null || secondaryValue.equals("")) {
             return "0";
         } else {
             if (PrefsUtil.firstCurrencyIsPrimary()) {
@@ -421,7 +421,7 @@ public class MonetaryUtil {
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(8);
 
-        if (primaryValue.equals("")) {
+        if (primaryValue == null || primaryValue.equals("")) {
             return "0";
         } else {
             if (PrefsUtil.firstCurrencyIsPrimary()) {
@@ -448,7 +448,7 @@ public class MonetaryUtil {
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(8);
 
-        if (secondaryValue.equals("")) {
+        if (secondaryValue == null || secondaryValue.equals("")) {
             return "0";
         } else {
             if (PrefsUtil.firstCurrencyIsPrimary()) {
