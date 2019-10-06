@@ -348,28 +348,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             // This gets executed if the a vaild payment request was scanned or pasted
             if (data != null) {
                 if (data.getExtras().getString("error") == null) {
-                    boolean onChain = data.getExtras().getBoolean("onChain");
-                    if (onChain) {
-                        long amount = data.getExtras().getLong("onChainAmount");
-                        String address = data.getExtras().getString("onChainAddress");
-                        String message = data.getExtras().getString("onChainMessage");
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("onChain", onChain);
-                        bundle.putLong("onChainAmount", amount);
-                        bundle.putString("onChainAddress", address);
-                        bundle.putString("onChainMessage", message);
-
-                        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                        sendBottomSheetDialog.setArguments(bundle);
-                        sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
-                    } else {
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("onChain", onChain);
-
-                        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                        sendBottomSheetDialog.setArguments(bundle);
-                        sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
-                    }
+                    // forward data to send fragment
+                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                    sendBottomSheetDialog.setArguments(data.getExtras());
+                    sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
                 } else {
                     ZapLog.debug(LOG_TAG, "Error arrived!");
                     showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));

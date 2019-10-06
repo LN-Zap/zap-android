@@ -38,6 +38,7 @@ import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeResponse;
 import com.github.lightningnetwork.lnd.lnrpc.FeeLimit;
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
+import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.QueryRoutesRequest;
 import com.github.lightningnetwork.lnd.lnrpc.QueryRoutesResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Route;
@@ -48,6 +49,7 @@ import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.InvalidProtocolBufferException;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
@@ -96,17 +98,17 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     private TextView mTvFinishedText2;
     private View mProgressBar;
 
-    private TextView mTvNoOutgoingBalance;
-    private View mViewNoOutgoingBalance;
     private Button mBtnManageChannels;
 
     private BottomSheetBehavior mBehavior;
-    private FrameLayout mBottomSheet;
 
     private String mMemo;
     private String mOnChainAddress;
     private boolean mOnChain;
     private long mFixedAmount;
+
+    private PayReq mLnPaymentRequest;
+    private String mLnInvoice;
 
     private boolean mAmountValid = true;
     private long mMaxLightningFee = 0;
@@ -118,9 +120,22 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
         Bundle args = getArguments();
         mOnChain = args.getBoolean("onChain");
-        mFixedAmount = args.getLong("onChainAmount");
-        mOnChainAddress = args.getString("onChainAddress");
-        mMemo = args.getString("onChainMessage");
+
+        if (mOnChain) {
+            mFixedAmount = args.getLong("onChainAmount");
+            mOnChainAddress = args.getString("onChainAddress");
+            mMemo = args.getString("onChainMessage");
+        } else {
+            PayReq paymentRequest;
+            try {
+                paymentRequest = PayReq.parseFrom(args.getByteArray("lnPaymentRequest"));
+
+                mLnPaymentRequest = paymentRequest;
+                mLnInvoice = args.getString("lnInvoice");
+            } catch (InvalidProtocolBufferException e) {
+                throw new RuntimeException("Invalid payment request forwarded." + e.getMessage());
+            }
+        }
 
         View view = inflater.inflate(R.layout.bsd_send, container);
 
@@ -155,8 +170,6 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         mTvFinishedText2 = view.findViewById(R.id.finishedText2);
         mProgressBar = view.findViewById(R.id.progressBar);
 
-        mTvNoOutgoingBalance = view.findViewById(R.id.noOutgoingChannelBalanceText);
-        mViewNoOutgoingBalance = view.findViewById(R.id.noOutgoingChannelBalanceView);
         mBtnManageChannels = view.findViewById(R.id.manageChannels);
 
 
@@ -452,17 +465,17 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
             mTvTitle.setText(R.string.send_lightningPayment);
 
 
-            if (Wallet.getInstance().mPaymentRequest.getDescription() == null) {
+            if (mLnPaymentRequest.getDescription() == null) {
                 mMemoView.setVisibility(View.VISIBLE);
             } else {
                 mMemoView.setVisibility(View.VISIBLE);
-                mEtMemo.setText(Wallet.getInstance().mPaymentRequest.getDescription());
+                mEtMemo.setText(mLnPaymentRequest.getDescription());
             }
 
 
-            if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() != 0) {
+            if (mLnPaymentRequest.getNumSatoshis() != 0) {
                 // A specific amount was requested. We are not allowed to change the amount
-                mFixedAmount = Wallet.getInstance().mPaymentRequest.getNumSatoshis();
+                mFixedAmount = mLnPaymentRequest.getNumSatoshis();
                 mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
                 mEtAmount.clearFocus();
                 mEtAmount.setFocusable(false);
@@ -497,16 +510,16 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
 
                         SendRequest.Builder srb = SendRequest.newBuilder();
-                        srb.setPaymentRequest(Wallet.getInstance().mPaymentRequestString);
+                        srb.setPaymentRequest(mLnInvoice);
                         srb.setFeeLimit(FeeLimit.newBuilder()
                                 .setFixed(mMaxLightningFee)
                                 .build());
 
-                        if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
+                        if (mLnPaymentRequest.getNumSatoshis() == 0) {
                             srb.setAmt(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())));
                             mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()))));
                         } else {
-                            mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().mPaymentRequest.getNumSatoshis()));
+                            mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mLnPaymentRequest.getNumSatoshis()));
                         }
 
                         SendRequest sendRequest = srb.build();
@@ -861,16 +874,16 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
             estimateOnChainFee(mOnChainAddress, sendAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
         } else {
-            if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
+            if (mLnPaymentRequest.getNumSatoshis() == 0) {
                 long sendAmount = 0L;
                 try {
                     sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
                 } catch (NumberFormatException e) {
 
                 }
-                queryRoutes(Wallet.getInstance().mPaymentRequest.getDestination(), sendAmount);
+                queryRoutes(mLnPaymentRequest.getDestination(), sendAmount);
             } else {
-                queryRoutes(Wallet.getInstance().mPaymentRequest.getDestination(), Wallet.getInstance().mPaymentRequest.getNumSatoshis());
+                queryRoutes(mLnPaymentRequest.getDestination(), mLnPaymentRequest.getNumSatoshis());
             }
         }
     }

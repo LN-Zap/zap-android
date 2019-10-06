@@ -37,7 +37,6 @@ import com.github.lightningnetwork.lnd.lnrpc.NodeInfo;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest;
 import com.github.lightningnetwork.lnd.lnrpc.OpenStatusUpdate;
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
@@ -89,8 +88,6 @@ public class Wallet {
     private final Set<ChannelCloseUpdateListener> mChannelCloseUpdateListeners = new HashSet<>();
     private final Set<ChannelOpenUpdateListener> mChannelOpenUpdateListeners = new HashSet<>();
 
-    public PayReq mPaymentRequest = null;
-    public String mPaymentRequestString = "";
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
     public List<Invoice> mTempInvoiceUpdateList;
@@ -143,7 +140,6 @@ public class Wallet {
      * Use this to reset the wallet information when the connection type was changed.
      */
     public void reset() {
-        mPaymentRequest = null;
         mOnChainBalanceTotal = 0;
         mOnChainBalanceConfirmed = 0;
         mOnChainBalanceUnconfirmed = 0;
