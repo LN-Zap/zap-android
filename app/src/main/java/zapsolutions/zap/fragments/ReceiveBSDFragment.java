@@ -84,7 +84,7 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     private Button mBtnManageChannels;
     private View mViewNoIncomingBalance;
     private UserGuardian mUG;
-    private String mValueBeforeUnitSwitch;
+    private String mValueBeforeUnitSwitch = "";
     private boolean mUseValueBeforeUnitSwitch = true;
     private boolean mAmountValid = true;
 
