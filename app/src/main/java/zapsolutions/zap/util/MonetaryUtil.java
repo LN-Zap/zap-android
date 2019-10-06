@@ -421,7 +421,7 @@ public class MonetaryUtil {
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(8);
 
-        if (primaryValue.equals("")) {
+        if (primaryValue == null || primaryValue.equals("")) {
             return "0";
         } else {
             if (PrefsUtil.firstCurrencyIsPrimary()) {
@@ -448,7 +448,7 @@ public class MonetaryUtil {
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(8);
 
-        if (secondaryValue.equals("")) {
+        if (secondaryValue == null || secondaryValue.equals("")) {
             return "0";
         } else {
             if (PrefsUtil.firstCurrencyIsPrimary()) {
