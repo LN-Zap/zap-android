@@ -61,6 +61,7 @@ import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -512,36 +513,47 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                     if (PrefsUtil.isWalletSetup()) {
                         SendRequest.Builder srb = SendRequest.newBuilder();
 
-                        // only check fee limit if user has enabled and payment above ignore limit
-                        int paymentIgnoreFeeLimit = 100;
-                        if (mLnFeePercentSettingLimit != 1 && mLnPaymentRequest.getNumSatoshis() > paymentIgnoreFeeLimit) {
-
-                            if (mLnFeePercentCalculated > mLnFeePercentSettingLimit) {
-                                // fee is higher than settings, ask user
-                                String feeLimitString = getString(R.string.fee_limit_exceeded, mLnFeePercentCalculated * 100, mLnFeePercentSettingLimit * 100);
-                                AlertDialog.Builder adb = new AlertDialog.Builder(getContext())
-                                        .setTitle(R.string.fee_limit_title)
-                                        .setMessage(feeLimitString)
-                                        .setCancelable(true)
-                                        .setPositiveButton(R.string.yes, (dialog, whichButton) -> sendPayment(srb))
-                                        .setNegativeButton(R.string.no, (dialog, whichButton) -> {
-                                        });
-
-                                Dialog dlg = adb.create();
-                                // Apply FLAG_SECURE to dialog to prevent screen recording
-                                if (PrefsUtil.preventScreenRecording()) {
-                                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                                }
-                                dlg.show();
+                        if (mLnPaymentRequest.getNumSatoshis() <= RefConstants.LN_PAYMENT_FEE_THRESHOLD) {
+                            // ignore setting if below threshold
+                            if (mLnFeePercentCalculated >= 1f) {
+                                // fee higher than payment
+                                int feeSats = (int) (mLnPaymentRequest.getNumSatoshis() * mLnFeePercentCalculated);
+                                String feeLimitString = getString(R.string.fee_limit_exceeded_payment, feeSats, mLnPaymentRequest.getNumSatoshis());
+                                showFeeAlertDialog(srb, feeLimitString);
                                 return;
                             } else {
-                                // could not calculate fee, or fee is below limit
-                                // set limit from settings and try payment
+                                // could not calculate fee, or fee is below payment
+                                // set sanity fee, no one pays more fees than the value of payment
                                 srb.setFeeLimit(FeeLimit.newBuilder()
-                                        .setPercent((long) (mLnFeePercentSettingLimit * 100)))
-                                        .build();
+                                        .setPercent(100)
+                                        .build());
+                            }
+                        } else {
+                            // check against fee setting
+                            if (mLnFeePercentSettingLimit != 1) {
+                                if (mLnFeePercentCalculated > mLnFeePercentSettingLimit) {
+                                    // fee is higher than settings, ask user
+                                    String feeLimitString = getString(R.string.fee_limit_exceeded, mLnFeePercentCalculated * 100, mLnFeePercentSettingLimit * 100);
+                                    showFeeAlertDialog(srb, feeLimitString);
+                                    return;
+                                } else {
+                                    // could not calculate fee, or fee is below limit
+                                    // set limit from settings and try payment
+                                    srb.setFeeLimit(FeeLimit.newBuilder()
+                                            .setPercent((long) (mLnFeePercentSettingLimit * 100)))
+                                            .build();
+                                }
+                            } else {
+                                // fee higher than payment
+                                if (mLnFeePercentCalculated >= 1f) {
+                                    int feeSats = (int) (mLnPaymentRequest.getNumSatoshis() * mLnFeePercentCalculated);
+                                    String feeLimitString = getString(R.string.fee_limit_exceeded_payment, feeSats, mLnPaymentRequest.getNumSatoshis());
+                                    showFeeAlertDialog(srb, feeLimitString);
+                                    return;
+                                }
                             }
                         }
+
                         sendPayment(srb);
                     } else {
                         // Demo Mode
@@ -591,6 +603,22 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         });
 
         return view;
+    }
+
+    private void showFeeAlertDialog(SendRequest.Builder paymentRequestBuilder, String message) {
+        AlertDialog.Builder adb = new AlertDialog.Builder(getContext())
+                .setTitle(R.string.fee_limit_title)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton(R.string.yes, (dialog, whichButton) -> sendPayment(paymentRequestBuilder))
+                .setNegativeButton(R.string.no, (dialog, whichButton) -> {
+                });
+        Dialog dlg = adb.create();
+        // Apply FLAG_SECURE to dialog to prevent screen recording
+        if (PrefsUtil.preventScreenRecording()) {
+            dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        }
+        dlg.show();
     }
 
     private void setLightningFeeLimit() {
