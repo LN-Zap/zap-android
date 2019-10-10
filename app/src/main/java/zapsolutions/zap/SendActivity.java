@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 
 import java.net.URI;
@@ -246,35 +247,39 @@ public class SendActivity extends BaseScannerActivity {
                 .setPayReq(invoice)
                 .build();
 
+        PayReq paymentRequest;
         try {
-            Wallet.getInstance().mPaymentRequest = LndConnection.getInstance()
+            paymentRequest = LndConnection.getInstance()
                     .getBlockingClient()
                     .withDeadlineAfter(3, TimeUnit.SECONDS)
                     .decodePayReq(decodePaymentRequest);
-            Wallet.getInstance().mPaymentRequestString = invoice;
-            ZapLog.debug(LOG_TAG, Wallet.getInstance().mPaymentRequest.toString());
 
-            if (Wallet.getInstance().mPaymentRequest.getTimestamp() + Wallet.getInstance().mPaymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
+            ZapLog.debug(LOG_TAG, paymentRequest.toString());
+
+            if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
                 // Show error: payment request expired.
                 showError(getResources().getString(R.string.error_paymentRequestExpired), 3000);
-            } else if (Wallet.getInstance().mPaymentRequest.getNumSatoshis() == 0) {
+            } else if (paymentRequest.getNumSatoshis() == 0) {
                 // Disable 0 sat invoices
                 showError(getResources().getString(R.string.error_notAPaymentRequest), 7000);
             } else {
                 // Decoded successfully, go to send page.
-                Intent intent = new Intent();
-                intent.putExtra("onChain", false);
-                setResult(1, intent);
-                finish();
+                goToLightningPaymentScreen(paymentRequest,invoice);
             }
-
         } catch (StatusRuntimeException e) {
             // If LND can't decode the payment request, show the error LND throws (always english)
             showError(e.getMessage(), 3000);
-            Wallet.getInstance().mPaymentRequest = null;
-            Wallet.getInstance().mPaymentRequestString = "";
             e.printStackTrace();
         }
+    }
+
+    private void goToLightningPaymentScreen(PayReq paymentRequest, String invoice) {
+        Intent intent = new Intent();
+        intent.putExtra("onChain", false);
+        intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
+        intent.putExtra("lnInvoice",invoice);
+        setResult(1, intent);
+        finish();
     }
 
 }
