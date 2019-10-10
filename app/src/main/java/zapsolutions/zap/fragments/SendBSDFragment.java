@@ -3,6 +3,7 @@ package zapsolutions.zap.fragments;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
@@ -111,7 +113,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     private String mLnInvoice;
 
     private boolean mAmountValid = true;
-    private long mMaxLightningFee = 0;
+
+    private float mLnFeePercentCalculated;
+    private float mLnFeePercentSettingLimit;
 
 
     @Nullable
@@ -143,6 +147,8 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         if (PrefsUtil.preventScreenRecording()) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
+
+        setLightningFeeLimit();
 
         mRootLayout = view.findViewById(R.id.rootLayout);
         mIvBsdIcon = view.findViewById(R.id.bsdIcon);
@@ -504,85 +510,39 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
                     // send lightning payment
                     if (PrefsUtil.isWalletSetup()) {
-
-                        switchToSendProgressScreen();
-
-                        ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
-
                         SendRequest.Builder srb = SendRequest.newBuilder();
-                        srb.setPaymentRequest(mLnInvoice);
-                        srb.setFeeLimit(FeeLimit.newBuilder()
-                                .setFixed(mMaxLightningFee)
-                                .build());
 
-                        if (mLnPaymentRequest.getNumSatoshis() == 0) {
-                            srb.setAmt(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())));
-                            mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()))));
-                        } else {
-                            mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mLnPaymentRequest.getNumSatoshis()));
-                        }
+                        // only check fee limit if user has enabled and payment above ignore limit
+                        int paymentIgnoreFeeLimit = 100;
+                        if (mLnFeePercentSettingLimit != 1 && mLnPaymentRequest.getNumSatoshis() > paymentIgnoreFeeLimit) {
 
-                        SendRequest sendRequest = srb.build();
+                            if (mLnFeePercentCalculated > mLnFeePercentSettingLimit) {
+                                // fee is higher than settings, ask user
+                                String feeLimitString = getString(R.string.fee_limit_exceeded, mLnFeePercentCalculated * 100, mLnFeePercentSettingLimit * 100);
+                                AlertDialog.Builder adb = new AlertDialog.Builder(getContext())
+                                        .setTitle(R.string.details)
+                                        .setMessage(feeLimitString)
+                                        .setCancelable(true)
+                                        .setPositiveButton(R.string.yes, (dialog, whichButton) -> sendPayment(srb))
+                                        .setNegativeButton(R.string.no, (dialog, whichButton) -> {
+                                        });
 
-
-                        LightningGrpc.LightningFutureStub asyncLightningSendClient = LightningGrpc
-                                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-                        final ListenableFuture<SendResponse> sendFuture = asyncLightningSendClient.sendPaymentSync(sendRequest);
-
-                        sendFuture.addListener(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    SendResponse sendResponse = sendFuture.get();
-
-                                    // updated the history, so it is shown the next time the user views it
-                                    Wallet.getInstance().updateLightningPaymentHistory();
-
-                                    ZapLog.debug(LOG_TAG, sendResponse.toString());
-
-                                    // show success animation
-                                    Handler handler = new Handler();
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (sendResponse.getPaymentError().equals("")) {
-                                                switchToSuccessScreen();
-                                            } else {
-                                                String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ": ";
-                                                String error = errorPrefix + sendResponse.getPaymentError();
-                                                switchToFailedScreen(error);
-                                            }
-
-                                        }
-                                    }, 300);
-
-                                } catch (InterruptedException e) {
-                                    ZapLog.debug(LOG_TAG, "send request interrupted.");
-                                    switchToFailedScreen("Request interrupted");
-                                } catch (ExecutionException e) {
-                                    ZapLog.debug(LOG_TAG, "Exception in send request task.");
-                                    ZapLog.debug(LOG_TAG, e.getMessage());
-
-                                    // possible error messages: checksum mismatch, decoded address is of unknown format
-
-                                    ZapLog.debug(LOG_TAG, "Error during payment!");
-                                    ZapLog.debug(LOG_TAG, e.getMessage());
-
-                                    Handler handler = new Handler();
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                                            switchToFailedScreen(e.getCause().getMessage().replace("UNKNOWN:", errorPrefix));
-                                        }
-                                    }, 300);
+                                Dialog dlg = adb.create();
+                                // Apply FLAG_SECURE to dialog to prevent screen recording
+                                if (PrefsUtil.preventScreenRecording()) {
+                                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                                 }
-
+                                dlg.show();
+                                return;
+                            } else {
+                                // could not calculate fee, or fee is below limit
+                                // set limit from settings and try payment
+                                srb.setFeeLimit(FeeLimit.newBuilder()
+                                        .setPercent((long) (mLnFeePercentSettingLimit * 100)))
+                                        .build();
                             }
-                        }, new ExecuteOnCaller());
-
+                        }
+                        sendPayment(srb);
                     } else {
                         // Demo Mode
                         Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
@@ -631,6 +591,92 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         });
 
         return view;
+    }
+
+    private void setLightningFeeLimit() {
+        String lightning_feeLimit = PrefsUtil.getPrefs().getString("lightning_feeLimit", "3%");
+        String feePercent = lightning_feeLimit.replace("%", "");
+
+        if (feePercent.equals("None")) {
+            mLnFeePercentSettingLimit = 1;
+        } else {
+            mLnFeePercentSettingLimit = Integer.parseInt(feePercent) / 100f;
+        }
+    }
+
+    private void sendPayment(SendRequest.Builder paymentRequestBuilder) {
+        switchToSendProgressScreen();
+
+        ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
+
+        paymentRequestBuilder.setPaymentRequest(mLnInvoice);
+
+        if (mLnPaymentRequest.getNumSatoshis() == 0) {
+            paymentRequestBuilder.setAmt(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString())));
+            mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()))));
+        } else {
+            mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mLnPaymentRequest.getNumSatoshis()));
+        }
+
+        SendRequest sendRequest = paymentRequestBuilder.build();
+
+        LightningGrpc.LightningFutureStub asyncLightningSendClient = LightningGrpc
+                .newFutureStub(LndConnection.getInstance().getSecureChannel())
+                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+
+        final ListenableFuture<SendResponse> sendFuture = asyncLightningSendClient.sendPaymentSync(sendRequest);
+
+        sendFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    SendResponse sendResponse = sendFuture.get();
+
+                    // updated the history, so it is shown the next time the user views it
+                    Wallet.getInstance().updateLightningPaymentHistory();
+
+                    ZapLog.debug(LOG_TAG, sendResponse.toString());
+
+                    // show success animation
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (sendResponse.getPaymentError().equals("")) {
+                                switchToSuccessScreen();
+                            } else {
+                                String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ": ";
+                                String error = errorPrefix + sendResponse.getPaymentError();
+                                switchToFailedScreen(error);
+                            }
+
+                        }
+                    }, 300);
+
+                } catch (InterruptedException e) {
+                    ZapLog.debug(LOG_TAG, "send request interrupted.");
+                    switchToFailedScreen("Request interrupted");
+                } catch (ExecutionException e) {
+                    ZapLog.debug(LOG_TAG, "Exception in send request task.");
+                    ZapLog.debug(LOG_TAG, e.getMessage());
+
+                    // possible error messages: checksum mismatch, decoded address is of unknown format
+
+                    ZapLog.debug(LOG_TAG, "Error during payment!");
+                    ZapLog.debug(LOG_TAG, e.getMessage());
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                            switchToFailedScreen(e.getCause().getMessage().replace("UNKNOWN:", errorPrefix));
+                        }
+                    }, 300);
+                }
+
+            }
+        }, new ExecuteOnCaller());
     }
 
     // This gets executed after onCreateView. We edit the bottomSheetBehavior to not react to swipes
@@ -969,7 +1015,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         QueryRoutesRequest asyncQueryRoutesRequest = QueryRoutesRequest.newBuilder()
                 .setPubKey(pubKey)
                 .setAmt(amount)
+                .setUseMissionControl(true)
                 .build();
+
         final ListenableFuture<QueryRoutesResponse> queryRoutesFuture = asyncQueryRoutesClient.queryRoutes(asyncQueryRoutesRequest);
 
         queryRoutesFuture.addListener(new Runnable() {
@@ -982,29 +1030,18 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         ZapLog.debug(LOG_TAG, "No route found.");
                         setFeeFailure();
                     } else {
+                        Route route = queryRoutesResponse.getRoutes(0);
 
-                        Route firstRoute = queryRoutesResponse.getRoutes(0);
-                        Route lastRoute = queryRoutesResponse.getRoutes(queryRoutesResponse.getRoutesCount() - 1);
-
-                        long feeLowerBoundSat = firstRoute.getTotalFeesMsat() / 1000;
-                        // For the upper bound we have to add one sat as the value gets truncated.
+                        // We have to add one sat as the value gets truncated.
                         // Example: If the fee was actually 700 Msat it would result in 0 sat (= 0 Msat)
                         //          and could lead to "no route" error when applied as fee limit.
-                        long feeUpperBoundSat = (lastRoute.getTotalFeesMsat() / 1000) + 1;
+                        long calculatedFeeSats = (route.getTotalFeesMsat() / 1000) + 1;
 
-                        String feeLowerBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(feeLowerBoundSat);
-                        String feeUpperBound = MonetaryUtil.getInstance().getPrimaryDisplayAmount(feeUpperBoundSat);
+                        mLnFeePercentCalculated = ((float) calculatedFeeSats / amount);
+                        String feePercentageString = " (" + String.format("%.1f", mLnFeePercentCalculated * 100) + "%)";
 
-                        String feeString;
-
-                        mMaxLightningFee = feeUpperBoundSat;
-
-                        if (feeLowerBound.equals(feeUpperBound)) {
-                            feeString = feeLowerBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
-                        } else {
-                            feeString = feeLowerBound + "-" + feeUpperBound + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
-                        }
-
+                        String feeString = MonetaryUtil.getInstance().getPrimaryDisplayAmount(calculatedFeeSats) + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
+                        feeString = feeString + feePercentageString;
                         setCalculatedFeeAmount(feeString);
                     }
 
