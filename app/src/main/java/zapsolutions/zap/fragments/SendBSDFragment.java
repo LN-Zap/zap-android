@@ -520,7 +520,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                                 // fee is higher than settings, ask user
                                 String feeLimitString = getString(R.string.fee_limit_exceeded, mLnFeePercentCalculated * 100, mLnFeePercentSettingLimit * 100);
                                 AlertDialog.Builder adb = new AlertDialog.Builder(getContext())
-                                        .setTitle(R.string.details)
+                                        .setTitle(R.string.fee_limit_title)
                                         .setMessage(feeLimitString)
                                         .setCancelable(true)
                                         .setPositiveButton(R.string.yes, (dialog, whichButton) -> sendPayment(srb))

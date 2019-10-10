@@ -322,7 +322,8 @@
     <string name="fee_tier_fast_description">Fast Transaction</string>
     <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
     <string name="fee_not_available">n/A</string>
-    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\n Do you really want to pay this invoice?</string>
+    <string name="fee_limit_title">Fee Limit Alert</string>
+    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
 
     <string name="unlock_wallet">Unlock Wallet</string>
 
