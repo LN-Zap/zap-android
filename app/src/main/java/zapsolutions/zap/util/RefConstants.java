@@ -20,6 +20,12 @@ public class RefConstants {
     public static final int VIBRATE_SHORT = 50;
     public static final int VIBRATE_LONG = 200;
 
+    /* This value is a threshold used to determine if the user specified fee limit should
+    be taken into consideration.
+    If the payment amount is below/equal to this threshold, the user setting is not used.
+    If the payment amount is above this threshold, the user setting will be considered. */
+    public static final int LN_PAYMENT_FEE_THRESHOLD = 100;
+
     public static final String URL_HELP = "https://docs.zaphq.io/";
     public static final String URL_SUGGESTED_NODES = "https://resources.zaphq.io/api/v1/suggested-nodes";
 

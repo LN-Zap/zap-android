@@ -38,6 +38,15 @@
             android:title="@string/settings_lnRequestExpiryTitle"
             app:iconSpaceReserved="false" />
 
+        <ListPreference
+            android:defaultValue="3%"
+            android:entries="@array/lnFeeLimit"
+            android:entryValues="@array/lnFeeLimit"
+            android:key="lightning_feeLimit"
+            android:summary="%s"
+            android:title="@string/settings_lnFeeLimitTitle"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

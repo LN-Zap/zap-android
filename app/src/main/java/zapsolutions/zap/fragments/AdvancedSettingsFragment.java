@@ -10,6 +10,7 @@ import androidx.preference.SwitchPreference;
 import zapsolutions.zap.R;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.BiometricUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UserGuardian;
 
 
@@ -21,6 +22,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
     private SwitchPreference mSwScreenProtection;
     private ListPreference mListBlockExplorer;
     private ListPreference mListLnExpiry;
+    private ListPreference mListFeeLimit;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -45,9 +47,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         mListLnExpiry = findPreference("lightning_expiry");
         createLnExpiryDisplayEntries();
 
+        mListFeeLimit = findPreference("lightning_feeLimit");
+        mListFeeLimit.setOnPreferenceChangeListener((preference, newValue) -> {
+            setFeeSummary(preference, newValue.toString());
+            return true;
+        });
+
+        setFeeSummary(mListFeeLimit, mListFeeLimit.getValue());
+
         // Remove Biometrics setting if it is not available anyway on the device.
         SwitchPreference swBiometrics = findPreference("biometricsEnabled");
-        if (!BiometricUtil.hardwareAvailable()){
+        if (!BiometricUtil.hardwareAvailable()) {
             swBiometrics.setVisible(false);
         }
 
@@ -84,6 +94,11 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
 
     }
 
+    private void setFeeSummary(Preference preference, String value) {
+        String s = value.replace("%", "%%");
+        String string = getString(R.string.fee_limit_threshold, RefConstants.LN_PAYMENT_FEE_THRESHOLD, s);
+        preference.setSummary(string);
+    }
 
     @Override
     public void guardianDialogConfirmed(String DialogName) {

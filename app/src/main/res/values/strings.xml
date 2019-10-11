@@ -235,6 +235,7 @@
     </string-array>
 
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
+    <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
 
 
     <string name="error">Error</string>
@@ -321,6 +322,11 @@
     <string name="fee_tier_fast_description">Fast Transaction</string>
     <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
     <string name="fee_not_available">n/A</string>
+
+    <string name="fee_limit_title">Fee Limit Alert</string>
+    <string name="fee_limit_threshold">Fee limit for payments above %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
+    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
 
     <string name="unlock_wallet">Unlock Wallet</string>
 
