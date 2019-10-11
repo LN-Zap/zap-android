@@ -84,6 +84,7 @@
     <string name="amount_invalid">The amount is invalid.</string>
     <string name="success">Success</string>
     <string name="suggested_peers">Suggested Peers</string>
+    <string name="none">None</string>
     <string name="activity_receive">Ricevi</string>
     <string name="activity_send">Paga</string>
     <string name="activity_connectRemoteNode">Connetti a nodo remoto</string>
@@ -205,6 +206,7 @@
         <item>Nativa (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Scadenza Richiesta Lightning</string>
+    <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
     <string name="error">Errore</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Hai selezionato un block explorer (%1$s) che non supporta %2$s. \nVa' in impostazioni e scegli un altro block explorer per continuare."</string>
@@ -281,6 +283,10 @@
     <string name="fee_tier_fast_description">Transazione Veloce</string>
     <string name="fee_estimated_duration">Consegna stimata: %1$s</string>
     <string name="fee_not_available">n/A</string>
+    <string name="fee_limit_title">Fee Limit Alert</string>
+    <string name="fee_limit_threshold">Fee limit for payments above %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
+    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
     <string name="unlock_wallet">Sblocca Wallet</string>
     <string name="biometricPrompt_title">Autenticazione Biometrica</string>
     <string name="biometricNotSetup">Per utilizzare questa funzione, devi configurare l\'autenticazione biometrica nelle impostazioni del tuo sistema Android.</string>

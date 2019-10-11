@@ -84,6 +84,7 @@
     <string name="amount_invalid">The amount is invalid.</string>
     <string name="success">Success</string>
     <string name="suggested_peers">Suggested Peers</string>
+    <string name="none">None</string>
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>
@@ -205,6 +206,7 @@
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
+    <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
     <string name="error">Error</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
@@ -288,6 +290,10 @@
     <string name="fee_tier_fast_description">Fast Transaction</string>
     <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
     <string name="fee_not_available">n/A</string>
+    <string name="fee_limit_title">Fee Limit Alert</string>
+    <string name="fee_limit_threshold">Fee limit for payments above %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
+    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
     <string name="unlock_wallet">Unlock Wallet</string>
     <string name="biometricPrompt_title">Biometric Authentication</string>
     <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>

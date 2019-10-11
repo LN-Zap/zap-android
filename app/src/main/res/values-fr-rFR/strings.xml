@@ -84,6 +84,7 @@
     <string name="amount_invalid">The amount is invalid.</string>
     <string name="success">Success</string>
     <string name="suggested_peers">Suggested Peers</string>
+    <string name="none">None</string>
     <string name="activity_receive">Recevoir</string>
     <string name="activity_send">Payer</string>
     <string name="activity_connectRemoteNode">Se connecter au nœud</string>
@@ -205,6 +206,7 @@
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Expiration des demandes de paiement Lightning</string>
+    <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
     <string name="error">Erreur</string>
     <string name="error_blockExplorer_title">Explorateur de blocs</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"L'explorateur de blocs sélectionné (%1$s) ne supporte pas %2$s. \nVeuillez sélectionner un autre explorateur de blocs dans les Réglages pour continuer."</string>
@@ -281,6 +283,10 @@
     <string name="fee_tier_fast_description">Transaction rapide</string>
     <string name="fee_estimated_duration">Temps estimé : %1$s</string>
     <string name="fee_not_available">indisponible</string>
+    <string name="fee_limit_title">Fee Limit Alert</string>
+    <string name="fee_limit_threshold">Fee limit for payments above %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
+    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
     <string name="unlock_wallet">Déverrouiller le portefeuille</string>
     <string name="biometricPrompt_title">Authentification biométrique</string>
     <string name="biometricNotSetup">Pour utiliser cette fonctionnalité, vous devez activer l\'authentification biométrique dans vos paramètres Android.</string>

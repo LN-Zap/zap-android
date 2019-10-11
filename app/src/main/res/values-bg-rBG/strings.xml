@@ -65,7 +65,7 @@
     <string name="confirmExit">Наистина ли искате да излезете от Zap?</string>
     <string name="or">или</string>
     <string name="max_amount">Максимално Кол-во:</string>
-    <string name="min_amount">Minimum Amount:</string>
+    <string name="min_amount">Минимално Кол-во:</string>
     <string name="retry">Нов опит</string>
     <string name="loading">Зареждане</string>
     <string name="pay">Плащане</string>
@@ -78,12 +78,13 @@
     <string name="channel">Канал</string>
     <string name="event">Събитие</string>
     <string name="channel_event">Канално Събитие</string>
-    <string name="scan_qr_code">Scan QR-Code</string>
+    <string name="scan_qr_code">Сканирай QR-Код</string>
     <string name="node">Node</string>
-    <string name="funds_available">Available: %s</string>
-    <string name="amount_invalid">The amount is invalid.</string>
-    <string name="success">Success</string>
-    <string name="suggested_peers">Suggested Peers</string>
+    <string name="funds_available">Налични: %s</string>
+    <string name="amount_invalid">Количеството е невалидно.</string>
+    <string name="success">Успех</string>
+    <string name="suggested_peers">Предложени Пийъри</string>
+    <string name="none">None</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -127,15 +128,15 @@
     <string name="no_channels">Няма канали</string>
     <string name="channel_closing_transaction">Затваряща Транзакция</string>
     <string name="channel_close">Затвори Канала</string>
-    <string name="channel_close_success">Channel closing successfully initiated</string>
+    <string name="channel_close_success">Затварянето на канала бе инициализирано успешно</string>
     <string name="channel_close_force">Затвори Канала Принудително</string>
-    <string name="channel_close_error">Channel close error</string>
-    <string name="channel_close_confirmation">Do you really want to close the channel with:\n\n%s\n</string>
-    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
-    <string name="channel_close_time">Closing Time Delay</string>
-    <string name="channel_open">Open Channel</string>
-    <string name="channel_open_success">Channel opening successfully initiated</string>
-    <string name="channel_open_error">Channel open error</string>
+    <string name="channel_close_error">Грешка при затварянето на канала</string>
+    <string name="channel_close_confirmation">Наистина ли искате да затворите канала с:\n\n%s\n</string>
+    <string name="channel_close_force_confirmation">Наистина ли искате принудително да затворите канала с:\n\n%1$s\n\nСредствата Ви ще останат заключени за %2$s.</string>
+    <string name="channel_close_time">Изчакване за Затваряне</string>
+    <string name="channel_open">Отвори Канал</string>
+    <string name="channel_open_success">Отварянето на канала бе инициализирано успешно</string>
+    <string name="channel_open_error">Грешка при отварянето на канала</string>
     <string name="setup_connect_heading">Как искате да използвате Zap?</string>
     <string name="setup_connect_local_description">Създаване на портфейл на този телефон</string>
     <string name="setup_connect_local_button">Създаване на портфейл</string>
@@ -205,6 +206,7 @@
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Срок за Lightning заявка</string>
+    <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
     <string name="error">Грешка</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Избраният от Вас block explorer (%1$s) не поддържа %2$s. \nМоля отидете в настройки и изберете друг, за да продължите."</string>
@@ -230,21 +232,21 @@
     <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
     <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
     <string name="error_wrong_password">Грешна парола</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="error_channel_open_wallet_setup">The wallet needs to be setup to open a channel.</string>
-    <string name="error_connect_peer">Could not establish connection to peer node.</string>
-    <string name="error_connect_peer_refused">Connection has been refused by peer.</string>
-    <string name="error_connect_peer_self">Cannot make connection to self.</string>
-    <string name="error_connect_peer_no_host">Cannot connect to node without IP-address or host.</string>
-    <string name="error_connect_peer_timeout">Could not connect to peer within deadline.</string>
-    <string name="error_channel_open_pending_max">Number of pending channels exceed maximum.</string>
-    <string name="error_channel_open_timeout">Channel could not be opened within deadline.</string>
-    <string name="error_channel_open">Could not open channel with connected node: %s</string>
-    <string name="error_get_peers">Could not fetch peers list.</string>
-    <string name="error_get_peers_timeout">Peers could not be fetched within deadline.</string>
-    <string name="error_channel_close_offline">Peer is offline. Only force close allowed.</string>
-    <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
-    <string name="error_channel_close">Could not close channel: %s</string>
+    <string name="error_lightning_uri_invalid">Невалиден формат.\nМоля използвайте едно от следните::\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="error_channel_open_wallet_setup">Портфейлът трябва да бъде настроен, за да отворите канал.</string>
+    <string name="error_connect_peer">Връзка не можа да бъде установена с пиър node-а.</string>
+    <string name="error_connect_peer_refused">Връзката бе отказана от пиъра.</string>
+    <string name="error_connect_peer_self">Не може да се свържете със себе си.</string>
+    <string name="error_connect_peer_no_host">Не може да се свържете с node без IP-адрес или хост.</string>
+    <string name="error_connect_peer_timeout">Връзка не можа да бъде установена в рамките на определения срок.</string>
+    <string name="error_channel_open_pending_max">Броят на изчакващите канали надвишава максимума.</string>
+    <string name="error_channel_open_timeout">Каналът не можа да бъде отворен в рамките на определения срок.</string>
+    <string name="error_channel_open">Не можахме да отворим канал със свързания node: %s</string>
+    <string name="error_get_peers">Списъкът с пиъри не можеше да бъде извлечен.</string>
+    <string name="error_get_peers_timeout">Пиъри не можаха да бъдат намерени в рамките на определения срок.</string>
+    <string name="error_channel_close_offline">Пиърът е офлайн. Можете единствено да затворите принудително.</string>
+    <string name="error_channel_close_timeout">Каналът не можа да бъде затворен в рамките на определения срок.</string>
+    <string name="error_channel_close">Каналът не можеше да бъде затворен: %s</string>
     <plurals name="duration_second">
         <item quantity="one">%d Секунда
 
@@ -283,6 +285,10 @@
     <string name="fee_tier_fast_description">Бърза Транзакция</string>
     <string name="fee_estimated_duration">Очаквано пристигане: %1$s</string>
     <string name="fee_not_available">N/A</string>
+    <string name="fee_limit_title">Fee Limit Alert</string>
+    <string name="fee_limit_threshold">Fee limit for payments above %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
+    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
     <string name="unlock_wallet">Отключете портфейла</string>
     <string name="biometricPrompt_title">Биометрична автентикация</string>
     <string name="biometricNotSetup">За да използвате тази функция трябва да настроите биометричната автентикация в системните настройки на Андроид.</string>
