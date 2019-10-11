@@ -74,7 +74,7 @@
     <string name="expired">Abgelaufen</string>
     <string name="remaining">übrig</string>
     <string name="address">Adresse</string>
-    <string name="transactionID">Transaktions ID</string>
+    <string name="transactionID">Transaktions-ID</string>
     <string name="channel">Kanal</string>
     <string name="event">Ereignis</string>
     <string name="channel_event">Kanalereignis</string>
@@ -205,6 +205,7 @@
         <item>Nativ (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Verfallzeit für Lightning Anfragen</string>
+    <string name="settings_lnFeeLimitTitle">Gebührenlimit für Lightning Zahlungen</string>
     <string name="error">Fehler</string>
     <string name="error_blockExplorer_title">Block-Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Der momentan ausgewählte Block-Explorer (%1$s) unterstützt das %2$s nicht. \nBitte wähle in den Einstellungen einen anderen Block-Explorer um fortzufahren."</string>
@@ -281,6 +282,10 @@
     <string name="fee_tier_fast_description">Schnelle Transaktion</string>
     <string name="fee_estimated_duration">Geschätzte Dauer: %1$s</string>
     <string name="fee_not_available">n/A</string>
+    <string name="fee_limit_title">Gebührenlimit Warnung</string>
+    <string name="fee_limit_threshold">Gebührenlimit für Zahlungen über %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">Die Gebühr für diese Zahlung (%1$.1f%%) übersteigt das eingestellte Limit (%2$.0f%%).\n\nWollen Sie diese Zahlung wirklich durchführen?</string>
+    <string name="fee_limit_exceeded_payment">Die Gebühr für diese Zahlung (%1$d sats) übersteigt den Zahlungsbetrag (%2$d sats).\n\nWollen Sie diese Zahlung wirklich durchführen?</string>
     <string name="unlock_wallet">Wallet entsperren</string>
     <string name="biometricPrompt_title">Biometrische Authentifizierung</string>
     <string name="biometricNotSetup">Um dieses Feature zu nutzen, musst du erst die biometrische Authentifizierung in den Android Einstellungen einrichten.</string>
