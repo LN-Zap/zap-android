@@ -625,7 +625,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         String lightning_feeLimit = PrefsUtil.getPrefs().getString("lightning_feeLimit", "3%");
         String feePercent = lightning_feeLimit.replace("%", "");
 
-        if (feePercent.equals("None")) {
+        if (feePercent.equals(getString(R.string.none))) {
             mLnFeePercentSettingLimit = 1;
         } else {
             mLnFeePercentSettingLimit = Integer.parseInt(feePercent) / 100f;
