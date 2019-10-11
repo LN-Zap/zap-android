@@ -84,6 +84,7 @@
     <string name="amount_invalid">The amount is invalid.</string>
     <string name="success">Success</string>
     <string name="suggested_peers">Suggested Peers</string>
+    <string name="none">None</string>
     <string name="activity_receive">Al</string>
     <string name="activity_send">Öde</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>

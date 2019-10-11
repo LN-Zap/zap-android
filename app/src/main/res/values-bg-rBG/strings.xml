@@ -84,6 +84,7 @@
     <string name="amount_invalid">Количеството е невалидно.</string>
     <string name="success">Успех</string>
     <string name="suggested_peers">Предложени Пийъри</string>
+    <string name="none">None</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>

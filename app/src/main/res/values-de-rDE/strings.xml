@@ -84,6 +84,7 @@
     <string name="amount_invalid">Der Betrag ist ungültig.</string>
     <string name="success">Erfolg</string>
     <string name="suggested_peers">Vorgeschlagene Peers</string>
+    <string name="none">Kein Limit</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
