@@ -87,6 +87,7 @@
     <string name="amount_invalid">The amount is invalid.</string>
     <string name="success">Success</string>
     <string name="suggested_peers">Suggested Peers</string>
+    <string name="none">None</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>

@@ -51,7 +51,7 @@
     </string-array>
 
     <string-array name="lnFeeLimit">
-        <item>None</item>
+        <item>@string/none</item>
         <item>1%</item>
         <item>3%</item>
         <item>5%</item>
