@@ -10,8 +10,8 @@ android {
         applicationId "zapsolutions.zap"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 13
-        versionName "0.2.7-alpha"
+        versionCode 14
+        versionName "0.2.8-alpha"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         setProperty("archivesBaseName", "zap-android-" + versionName + "(" + versionCode + ")")
     }
