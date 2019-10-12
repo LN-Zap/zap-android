@@ -11,4 +11,7 @@
     <dimen name="qr_scanner_paste_button_marginBottom">5dp</dimen>
     <dimen name="qr_scanner_button_width">150dp</dimen>
     <dimen name="qr_scanner_button_height">35dp</dimen>
+
+    <dimen name="numpad_button_height">35dp</dimen>
+    <dimen name="numpad_button_text_size">25sp</dimen>
 </resources>

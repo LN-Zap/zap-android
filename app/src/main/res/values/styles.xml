@@ -88,4 +88,12 @@
     <style name="ZapBottomSheetDialogTheme" parent="BaseZapBottomSheetDialog" />
 
 
+    <style name="NumpadButton" parent="Widget.AppCompat.Button">
+        <item name="android:layout_height">@dimen/numpad_button_height</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_clickable_item</item>
+        <item name="android:textSize">@dimen/numpad_button_text_size</item>
+        <item name="android:typeface">sans</item>
+    </style>
 </resources>

@@ -1,141 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/Numpad"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:columnCount="3"
-    android:rowCount="4">
+    android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/Numpad1"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
+        style="@style/NumpadButton"
         android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
         android:text="1"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toStartOf="@id/guideline33"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/Numpad2"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
+        style="@style/NumpadButton"
         android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
         android:text="2"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toStartOf="@id/guideline66"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/Numpad3"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
+        style="@style/NumpadButton"
         android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
         android:text="3"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline66"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/Numpad4"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="4"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toStartOf="@id/guideline33"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Numpad1" />
 
     <Button
         android:id="@+id/Numpad5"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="5"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toStartOf="@id/guideline66"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        app:layout_constraintTop_toBottomOf="@id/Numpad2" />
 
     <Button
         android:id="@+id/Numpad6"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="6"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline66"
+        app:layout_constraintTop_toBottomOf="@id/Numpad3" />
 
     <Button
         android:id="@+id/Numpad7"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="7"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toStartOf="@id/guideline33"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Numpad5" />
 
     <Button
         android:id="@+id/Numpad8"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="8"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toStartOf="@id/guideline66"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        app:layout_constraintTop_toBottomOf="@id/Numpad5" />
 
     <Button
         android:id="@+id/Numpad9"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="9"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline66"
+        app:layout_constraintTop_toBottomOf="@id/Numpad6" />
 
     <Button
         android:id="@+id/NumpadDot"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="."
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toStartOf="@id/guideline33"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Numpad7" />
 
     <Button
         android:id="@+id/Numpad0"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="0"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:typeface="sans" />
+        app:layout_constraintEnd_toStartOf="@id/guideline66"
+        app:layout_constraintStart_toEndOf="@id/guideline33"
+        app:layout_constraintTop_toBottomOf="@id/Numpad8" />
 
     <ImageButton
         android:id="@+id/NumpadBack"
-        android:layout_height="45dp"
-        android:layout_columnWeight="1"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_clickable_item"
+        style="@style/NumpadButton"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:src="@drawable/ic_delete_black_36dp"
-        android:tint="@color/white" />
+        android:tint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline66"
+        app:layout_constraintTop_toBottomOf="@id/Numpad9" />
 
-</GridLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline66"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

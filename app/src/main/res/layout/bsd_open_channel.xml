@@ -124,6 +124,15 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Dummy item to prevent EditText from receiving focus -->
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/localAmountInputsView"
             android:layout_width="match_parent"
@@ -214,15 +223,6 @@
                     tools:text="UNIT" />
             </LinearLayout>
 
-            <!-- Dummy item to prevent EditText from receiving focus -->
-            <LinearLayout
-                android:layout_width="0px"
-                android:layout_height="0px"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/localAmountLabel"
                 android:layout_width="wrap_content"
@@ -247,8 +247,6 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="15dp"
-            android:columnCount="3"
-            android:rowCount="4"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

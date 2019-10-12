@@ -316,8 +316,6 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="15dp"
-        android:columnCount="3"
-        android:rowCount="4"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
