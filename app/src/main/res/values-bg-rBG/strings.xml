@@ -84,7 +84,7 @@
     <string name="amount_invalid">Количеството е невалидно.</string>
     <string name="success">Успех</string>
     <string name="suggested_peers">Предложени Пийъри</string>
-    <string name="none">None</string>
+    <string name="none">Няма</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -206,7 +206,7 @@
         <item>Native (Bech32)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Срок за Lightning заявка</string>
-    <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
+    <string name="settings_lnFeeLimitTitle">Лимит на Таксите за Lightning плащания</string>
     <string name="error">Грешка</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Избраният от Вас block explorer (%1$s) не поддържа %2$s. \nМоля отидете в настройки и изберете друг, за да продължите."</string>
@@ -285,10 +285,10 @@
     <string name="fee_tier_fast_description">Бърза Транзакция</string>
     <string name="fee_estimated_duration">Очаквано пристигане: %1$s</string>
     <string name="fee_not_available">N/A</string>
-    <string name="fee_limit_title">Fee Limit Alert</string>
-    <string name="fee_limit_threshold">Fee limit for payments above %1$d sats: %2$s</string>
-    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
-    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
+    <string name="fee_limit_title">Предупреждение за Таксата</string>
+    <string name="fee_limit_threshold">Лимит на таксите за плащания над %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">Таксата за това плащане (%1$.1f%%) надвишава лимита, зададен в настройките (%2$.0f%%).\n\nНаистина ли искате да платите тази фактура?</string>
+    <string name="fee_limit_exceeded_payment">Таксата за това плащане (%1$d sats) ще бъде по-висока от самата сумата за плащане (%2$d sats).\n\nНаистина ли искате да платите тази фактура?</string>
     <string name="unlock_wallet">Отключете портфейла</string>
     <string name="biometricPrompt_title">Биометрична автентикация</string>
     <string name="biometricNotSetup">За да използвате тази функция трябва да настроите биометричната автентикация в системните настройки на Андроид.</string>
