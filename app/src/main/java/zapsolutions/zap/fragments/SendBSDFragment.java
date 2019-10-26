@@ -4,7 +4,6 @@ package zapsolutions.zap.fragments;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.DecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -105,6 +103,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
     private BottomSheetBehavior mBehavior;
 
+    private Handler mHandler;
     private String mMemo;
     private String mOnChainAddress;
     private boolean mOnChain;
@@ -122,6 +121,8 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mHandler = new Handler();
 
         Bundle args = getArguments();
         mOnChain = args.getBoolean("onChain");
@@ -359,13 +360,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 mBtnSend.setEnabled(false);
                 mBtnSend.setTextColor(getResources().getColor(R.color.gray));
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // We have to call this delayed, as otherwise it will still bring up the softKeyboard
-                        mEtAmount.requestFocus();
-                    }
+                mHandler.postDelayed(() -> {
+                    // We have to call this delayed, as otherwise it will still bring up the softKeyboard
+                    mEtAmount.requestFocus();
                 }, 200);
 
             }
@@ -420,13 +417,7 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                                     ZapLog.debug(LOG_TAG, sendResponse.toString());
 
                                     // show success animation
-                                    Handler handler = new Handler();
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            switchToSuccessScreen();
-                                        }
-                                    }, 300);
+                                    mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
 
                                 } catch (InterruptedException e) {
                                     ZapLog.debug(LOG_TAG, "send coins request interrupted.");
@@ -440,13 +431,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                                     ZapLog.debug(LOG_TAG, "Error during payment!");
                                     ZapLog.debug(LOG_TAG, e.getMessage());
 
-                                    Handler handler = new Handler();
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                                            switchToFailedScreen(e.getCause().getMessage().replace("UNKNOWN:", errorPrefix));
-                                        }
+                                    mHandler.postDelayed(() -> {
+                                        String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                                        switchToFailedScreen(e.getCause().getMessage().replace("UNKNOWN:", errorPrefix));
                                     }, 300);
                                 }
 
@@ -492,13 +479,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                 mBtnSend.setEnabled(false);
                 mBtnSend.setTextColor(getResources().getColor(R.color.gray));
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // We have to call this delayed, as otherwise it will still bring up the softKeyboard
-                        mEtAmount.requestFocus();
-                    }
+                mHandler.postDelayed(() -> {
+                    // We have to call this delayed, as otherwise it will still bring up the softKeyboard
+                    mEtAmount.requestFocus();
                 }, 200);
 
             }
@@ -605,6 +588,13 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        mHandler.removeCallbacksAndMessages(null);
+
+        super.onDestroyView();
+    }
+
     private void showFeeAlertDialog(SendRequest.Builder paymentRequestBuilder, String message) {
         AlertDialog.Builder adb = new AlertDialog.Builder(getContext())
                 .setTitle(R.string.fee_limit_title)
@@ -666,19 +656,15 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                     ZapLog.debug(LOG_TAG, sendResponse.toString());
 
                     // show success animation
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (sendResponse.getPaymentError().equals("")) {
-                                switchToSuccessScreen();
-                            } else {
-                                String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ": ";
-                                String error = errorPrefix + sendResponse.getPaymentError();
-                                switchToFailedScreen(error);
-                            }
-
+                    mHandler.postDelayed(() -> {
+                        if (sendResponse.getPaymentError().equals("")) {
+                            switchToSuccessScreen();
+                        } else {
+                            String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ": ";
+                            String error = errorPrefix + sendResponse.getPaymentError();
+                            switchToFailedScreen(error);
                         }
+
                     }, 300);
 
                 } catch (InterruptedException e) {
@@ -693,13 +679,9 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                     ZapLog.debug(LOG_TAG, "Error during payment!");
                     ZapLog.debug(LOG_TAG, e.getMessage());
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                            switchToFailedScreen(e.getCause().getMessage().replace("UNKNOWN:", errorPrefix));
-                        }
+                    mHandler.postDelayed(() -> {
+                        String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                        switchToFailedScreen(e.getCause().getMessage().replace("UNKNOWN:", errorPrefix));
                     }, 300);
                 }
 
@@ -924,11 +906,6 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
         // Enable Ok button
         mOkButton.setEnabled(true);
-    }
-
-    private void showKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
     private void calculateFee() {
