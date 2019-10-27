@@ -1,7 +1,9 @@
 package zapsolutions.zap.util;
 
 import android.content.SharedPreferences;
+
 import androidx.preference.PreferenceManager;
+
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.OnChainFeeView;

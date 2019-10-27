@@ -3,14 +3,16 @@ package zapsolutions.zap.connection.establishConnectionToLnd;
 
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.google.common.io.BaseEncoding;
+
+import java.util.concurrent.ExecutorService;
+
+import javax.net.ssl.SSLSocketFactory;
+
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.util.ZapLog;
-
-import javax.net.ssl.SSLSocketFactory;
-import java.util.concurrent.ExecutorService;
 
 /**
  * Singleton to handle the connection to lnd

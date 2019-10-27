@@ -8,8 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootLayout"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/backgroundLayout"
@@ -373,10 +373,10 @@
 
                 <TextView
                     android:id="@+id/finishedTextDetail"
-                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="20dp"
                     android:textAlignment="center" />
             </LinearLayout>

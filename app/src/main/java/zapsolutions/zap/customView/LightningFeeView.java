@@ -5,7 +5,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import zapsolutions.zap.R;
 
 public class LightningFeeView extends ConstraintLayout {

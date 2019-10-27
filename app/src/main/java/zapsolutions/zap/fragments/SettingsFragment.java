@@ -9,14 +9,25 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import zapsolutions.zap.AdvancedSettingsActivity;
 import zapsolutions.zap.BuildConfig;
 import zapsolutions.zap.R;
@@ -31,14 +42,6 @@ import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-
-import java.io.IOException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {

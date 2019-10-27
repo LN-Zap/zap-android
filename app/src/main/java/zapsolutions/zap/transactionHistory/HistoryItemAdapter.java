@@ -3,8 +3,12 @@ package zapsolutions.zap.transactionHistory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.DateLineViewHolder;
@@ -15,8 +19,6 @@ import zapsolutions.zap.transactionHistory.listItems.LnPaymentItem;
 import zapsolutions.zap.transactionHistory.listItems.LnPaymentViewHolder;
 import zapsolutions.zap.transactionHistory.listItems.OnChainTransactionItem;
 import zapsolutions.zap.transactionHistory.listItems.OnChainTransactionViewHolder;
-
-import java.util.List;
 
 
 public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

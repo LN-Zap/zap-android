@@ -5,17 +5,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import zapsolutions.zap.R;
-import zapsolutions.zap.lightning.LightningNodeUri;
-import zapsolutions.zap.util.DownloadImageTask;
-import zapsolutions.zap.util.OnSingleClickListener;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import zapsolutions.zap.R;
+import zapsolutions.zap.lightning.LightningNodeUri;
+import zapsolutions.zap.util.DownloadImageTask;
+import zapsolutions.zap.util.OnSingleClickListener;
 
 public class LightningNodeRecyclerAdapter extends RecyclerView.Adapter<LightningNodeRecyclerAdapter.ViewHolder> {
 

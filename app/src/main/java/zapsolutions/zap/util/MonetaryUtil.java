@@ -3,14 +3,15 @@ package zapsolutions.zap.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import zapsolutions.zap.baseClasses.App;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -20,6 +21,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import zapsolutions.zap.baseClasses.App;
 
 
 /**

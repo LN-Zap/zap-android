@@ -19,10 +19,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.util.BiometricUtil;
@@ -30,9 +35,6 @@ import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ScrambledNumpad;
 import zapsolutions.zap.util.UtilFunctions;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 
 public class PinFragment extends Fragment {
@@ -227,7 +229,7 @@ public class PinFragment extends Fragment {
         mBtnBiometrics.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BiometricUtil.notSetup()){
+                if (BiometricUtil.notSetup()) {
                     AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.biometricPrompt_title)
                             .setMessage(R.string.biometricNotSetup)

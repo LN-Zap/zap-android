@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -29,10 +30,12 @@ import androidx.core.content.ContextCompat;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -391,7 +394,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         mTvFinishedText.setText(getString(R.string.channel_open_error));
         mTvFinishedText.setTextColor(getResources().getColor(R.color.superRed));
         mTvFinishedTextDetail.setText(error);
-        
+
         // Animate in
         mFinishedScreen.setAlpha(1.0f);
         AlphaAnimation animateIn = new AlphaAnimation(0f, 1.0f);

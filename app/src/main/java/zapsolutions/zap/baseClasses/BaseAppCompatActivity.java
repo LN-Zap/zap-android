@@ -3,8 +3,10 @@ package zapsolutions.zap.baseClasses;
 import android.content.Context;
 import android.view.MenuItem;
 import android.view.WindowManager;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import zapsolutions.zap.util.LocaleUtil;
 import zapsolutions.zap.util.PrefsUtil;
 

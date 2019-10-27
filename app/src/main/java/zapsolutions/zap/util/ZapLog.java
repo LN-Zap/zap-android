@@ -1,6 +1,7 @@
 package zapsolutions.zap.util;
 
 import android.util.Log;
+
 import zapsolutions.zap.BuildConfig;
 
 /**

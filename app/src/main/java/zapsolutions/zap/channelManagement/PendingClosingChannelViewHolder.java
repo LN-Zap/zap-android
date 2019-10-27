@@ -1,7 +1,9 @@
 package zapsolutions.zap.channelManagement;
 
 import android.view.View;
+
 import androidx.annotation.NonNull;
+
 import zapsolutions.zap.R;
 
 public class PendingClosingChannelViewHolder extends PendingChannelViewHolder {

@@ -1,6 +1,7 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
 import android.view.View;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.Wallet;
 

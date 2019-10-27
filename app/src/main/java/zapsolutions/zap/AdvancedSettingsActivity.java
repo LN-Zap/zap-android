@@ -2,6 +2,7 @@ package zapsolutions.zap;
 
 
 import android.os.Bundle;
+
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.fragments.AdvancedSettingsFragment;
 

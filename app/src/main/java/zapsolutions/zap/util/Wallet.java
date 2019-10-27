@@ -3,6 +3,7 @@ package zapsolutions.zap.util;
 
 import android.content.Context;
 import android.os.Handler;
+
 import com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription;
@@ -52,13 +53,7 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
-import io.grpc.stub.ClientCallStreamObserver;
-import io.grpc.stub.StreamObserver;
-import zapsolutions.zap.R;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
-import zapsolutions.zap.lightning.LightningNodeUri;
 
-import javax.annotation.Nullable;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -68,6 +63,14 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nullable;
+
+import io.grpc.stub.ClientCallStreamObserver;
+import io.grpc.stub.StreamObserver;
+import zapsolutions.zap.R;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.lightning.LightningNodeUri;
 
 import static zapsolutions.zap.util.UtilFunctions.hexStringToByteArray;
 

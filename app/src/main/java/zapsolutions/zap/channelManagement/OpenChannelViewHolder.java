@@ -2,7 +2,9 @@ package zapsolutions.zap.channelManagement;
 
 import android.content.res.ColorStateList;
 import android.view.View;
+
 import androidx.core.content.ContextCompat;
+
 import zapsolutions.zap.R;
 
 public class OpenChannelViewHolder extends ChannelViewHolder {

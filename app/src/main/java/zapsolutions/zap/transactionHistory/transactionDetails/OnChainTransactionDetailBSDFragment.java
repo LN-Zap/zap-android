@@ -7,12 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.BlockExplorer;
 import zapsolutions.zap.util.ClipBoardUtil;

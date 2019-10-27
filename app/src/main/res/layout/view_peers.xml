@@ -23,12 +23,12 @@
 
     <TextView
         android:id="@+id/peersNameTextView"
-        android:textSize="@dimen/peer_name_text_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/peersLayoutCardView"
         android:layout_centerHorizontal="true"
         android:textColor="@color/white"
+        android:textSize="@dimen/peer_name_text_size"
         tools:text="Zap" />
 
 </RelativeLayout>

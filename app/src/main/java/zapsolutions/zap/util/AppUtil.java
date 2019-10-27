@@ -2,13 +2,16 @@ package zapsolutions.zap.util;
 
 import android.content.Context;
 import android.content.res.Resources;
+
 import com.jakewharton.processphoenix.ProcessPhoenix;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import zapsolutions.zap.R;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import zapsolutions.zap.R;
 
 
 public class AppUtil {

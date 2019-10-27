@@ -16,11 +16,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.google.android.material.snackbar.Snackbar;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.SendActivity;
 import zapsolutions.zap.baseClasses.App;

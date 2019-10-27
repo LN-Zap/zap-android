@@ -7,10 +7,10 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/bg_bottom_sheets"
         android:id="@+id/backgroundLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/bg_bottom_sheets"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/bsdIcon"
-        app:layout_constraintVertical_bias="0.5"/>
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/contentLayout"
@@ -56,8 +56,8 @@
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bsdIcon">
 
         <ImageView
@@ -78,7 +78,7 @@
             android:layout_margin="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/channelCloseButton"/>
+            app:layout_constraintTop_toBottomOf="@id/channelCloseButton" />
 
         <TextView
             android:id="@+id/nodeAlias"
@@ -279,8 +279,8 @@
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/closingTxTimeLabel"
-                tools:visibility="visible"
-                tools:text="20 hr 35 min" />
+                tools:text="20 hr 35 min"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/closingTxTimeLabel"
@@ -289,12 +289,12 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/channel_close_time"
                 android:textSize="15sp"
-                android:visibility="gone"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/closingTxText"
                 tools:text="Closing in"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/separator_4"
@@ -383,8 +383,8 @@
         android:id="@+id/closeChannelProgressLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         android:alpha="0"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -427,8 +427,8 @@
         android:id="@+id/closeChannelFinishedLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
         android:alpha="0"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

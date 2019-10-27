@@ -3,10 +3,12 @@ package zapsolutions.zap.fragments;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.BiometricUtil;
