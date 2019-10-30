@@ -14,7 +14,6 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 - [x] Available in many languages
 - [ ] Resend failed lightning transactions
 - [x] Transaction filter
-- [ ] BIP39 passphrase
 
 **Security**
 - [x] PIN protected access
