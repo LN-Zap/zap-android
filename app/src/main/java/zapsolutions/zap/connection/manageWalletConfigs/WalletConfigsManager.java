@@ -2,14 +2,10 @@ package zapsolutions.zap.connection.manageWalletConfigs;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.util.PrefsUtil;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -18,6 +14,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.util.PrefsUtil;
 
 /**
  * This SINGLETON class is used to load and save configurations for wallets.

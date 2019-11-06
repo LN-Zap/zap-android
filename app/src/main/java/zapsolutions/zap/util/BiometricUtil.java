@@ -2,6 +2,7 @@ package zapsolutions.zap.util;
 
 
 import androidx.biometric.BiometricManager;
+
 import zapsolutions.zap.baseClasses.App;
 
 public class BiometricUtil {

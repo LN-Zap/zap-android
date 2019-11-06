@@ -264,7 +264,7 @@ public class SendActivity extends BaseScannerActivity {
                 showError(getResources().getString(R.string.error_notAPaymentRequest), 7000);
             } else {
                 // Decoded successfully, go to send page.
-                goToLightningPaymentScreen(paymentRequest,invoice);
+                goToLightningPaymentScreen(paymentRequest, invoice);
             }
         } catch (StatusRuntimeException e) {
             // If LND can't decode the payment request, show the error LND throws (always english)
@@ -277,7 +277,7 @@ public class SendActivity extends BaseScannerActivity {
         Intent intent = new Intent();
         intent.putExtra("onChain", false);
         intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
-        intent.putExtra("lnInvoice",invoice);
+        intent.putExtra("lnInvoice", invoice);
         setResult(1, intent);
         finish();
     }

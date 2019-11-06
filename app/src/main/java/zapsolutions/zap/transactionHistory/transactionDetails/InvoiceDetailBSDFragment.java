@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.TimeFormatUtil;
-import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 

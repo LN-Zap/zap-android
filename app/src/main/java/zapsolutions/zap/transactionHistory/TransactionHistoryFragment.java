@@ -14,14 +14,25 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.google.protobuf.ByteString;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
@@ -34,14 +45,6 @@ import zapsolutions.zap.transactionHistory.transactionDetails.OnChainTransaction
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.

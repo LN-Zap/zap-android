@@ -2,10 +2,12 @@ package zapsolutions.zap.channelManagement;
 
 import android.content.res.ColorStateList;
 import android.view.View;
+
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
+
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 
 public abstract class PendingChannelViewHolder extends ChannelViewHolder {

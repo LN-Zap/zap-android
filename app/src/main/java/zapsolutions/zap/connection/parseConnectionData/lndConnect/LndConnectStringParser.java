@@ -1,12 +1,13 @@
 package zapsolutions.zap.connection.parseConnectionData.lndConnect;
 
 import com.google.common.io.BaseEncoding;
-import zapsolutions.zap.connection.establishConnectionToLnd.CustomSSLSocketFactory;
-import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
-import zapsolutions.zap.util.ZapLog;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import zapsolutions.zap.connection.establishConnectionToLnd.CustomSSLSocketFactory;
+import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
+import zapsolutions.zap.util.ZapLog;
 
 /**
  * This class parses a lndconnect which is defined in this project:

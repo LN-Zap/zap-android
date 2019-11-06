@@ -5,14 +5,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import me.dm7.barcodescanner.zbar.Result;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.HttpClient;
@@ -22,8 +28,6 @@ import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-
-import java.util.ArrayList;
 
 public class ScanNodePubKeyActivity extends BaseScannerActivity implements LightningNodeRecyclerAdapter.LightningNodeSelectedListener {
 

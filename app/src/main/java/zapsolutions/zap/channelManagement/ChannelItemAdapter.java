@@ -3,11 +3,13 @@ package zapsolutions.zap.channelManagement;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import zapsolutions.zap.R;
 
 import java.util.List;
+
+import zapsolutions.zap.R;
 
 
 public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

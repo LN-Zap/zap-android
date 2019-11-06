@@ -1,6 +1,7 @@
 package zapsolutions.zap.channelManagement;
 
 import android.view.View;
+
 import zapsolutions.zap.R;
 
 public class WaitingCloseChannelViewHolder extends PendingChannelViewHolder {

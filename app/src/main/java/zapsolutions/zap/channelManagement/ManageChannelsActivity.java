@@ -45,9 +45,9 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-                    Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
-                    startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
-                });
+            Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
+        });
         mAdapter = new ChannelItemAdapter(mChannelItems, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

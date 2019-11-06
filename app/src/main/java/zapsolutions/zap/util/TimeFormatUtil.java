@@ -1,10 +1,11 @@
 package zapsolutions.zap.util;
 
 import android.content.Context;
-import zapsolutions.zap.R;
 
 import java.text.DateFormat;
 import java.util.Date;
+
+import zapsolutions.zap.R;
 
 public class TimeFormatUtil {
 

@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,11 +26,13 @@ import androidx.core.content.ContextCompat;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
+
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.BlockExplorer;
 import zapsolutions.zap.util.ClipBoardUtil;

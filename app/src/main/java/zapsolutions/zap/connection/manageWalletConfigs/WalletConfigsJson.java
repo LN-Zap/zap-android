@@ -1,6 +1,7 @@
 package zapsolutions.zap.connection.manageWalletConfigs;
 
 import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

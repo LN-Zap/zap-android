@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -34,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
+
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeResponse;
 import com.github.lightningnetwork.lnd.lnrpc.FeeLimit;
@@ -50,6 +52,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.InvalidProtocolBufferException;
+
+import java.util.concurrent.ExecutionException;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
@@ -62,8 +67,6 @@ import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-
-import java.util.concurrent.ExecutionException;
 
 
 public class SendBSDFragment extends BottomSheetDialogFragment {

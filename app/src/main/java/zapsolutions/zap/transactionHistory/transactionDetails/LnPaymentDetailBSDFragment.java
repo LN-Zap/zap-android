@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
@@ -18,6 +20,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+
+import java.util.concurrent.ExecutionException;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.util.ClipBoardUtil;
@@ -25,8 +30,6 @@ import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.ZapLog;
-
-import java.util.concurrent.ExecutionException;
 
 public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
 

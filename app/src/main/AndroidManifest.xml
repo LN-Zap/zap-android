@@ -82,7 +82,8 @@
             android:label="@string/activity_advanced_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
-        <activity android:name=".channelManagement.ScanNodePubKeyActivity"
+        <activity
+            android:name=".channelManagement.ScanNodePubKeyActivity"
             android:label="@string/channel_open"
             android:screenOrientation="portrait" />
     </application>

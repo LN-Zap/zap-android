@@ -6,9 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
+
 import com.google.android.material.tabs.TabLayout;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
@@ -24,10 +27,12 @@ public class OnChainFeeView extends ConstraintLayout {
     private ConstraintLayout mClSendFeeDurationLayout;
     private FeeTierChangedListener mFeeTierChangedListener;
     private OnChainFeeView.OnChainFeeTier mOnChainFeeTier;
+
     public OnChainFeeView(Context context) {
         super(context);
         init();
     }
+
     public OnChainFeeView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();

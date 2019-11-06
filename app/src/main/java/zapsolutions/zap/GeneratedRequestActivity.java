@@ -23,9 +23,9 @@ import net.glxn.qrgen.android.QRCode;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
-import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 
