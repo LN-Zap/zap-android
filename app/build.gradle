@@ -170,6 +170,8 @@ dependencies {
     // Used for base encoding and URI escaping
     implementation 'com.google.guava:guava:28.0-android'
 
+    implementation "io.reactivex.rxjava3:rxjava:3.0.0-RC4"
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0-SNAPSHOT'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0-alpha07'
