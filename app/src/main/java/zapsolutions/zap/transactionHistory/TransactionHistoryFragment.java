@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
@@ -55,12 +56,12 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
     private ImageView mListOptions;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private HistoryItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView mEmptyListText;
     private TextView mTitle;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
+    private CompositeDisposable mCompositeDisposable;
 
     private List<HistoryListItem> mHistoryItems;
 
@@ -82,6 +83,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         mTitle = view.findViewById(R.id.heading);
 
         mHistoryItems = new ArrayList<>();
+        mCompositeDisposable = new CompositeDisposable();
 
         // Register listeners
         Wallet.getInstance().registerHistoryListener(this);
@@ -93,7 +95,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create and set adapter
-        mAdapter = new HistoryItemAdapter(mHistoryItems, this);
+        mAdapter = new HistoryItemAdapter(mHistoryItems, this, mCompositeDisposable);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -159,6 +161,13 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        mCompositeDisposable.dispose();
+
+        super.onDestroyView();
     }
 
     private void updateHistoryDisplayList() {

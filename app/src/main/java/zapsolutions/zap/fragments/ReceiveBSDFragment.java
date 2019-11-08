@@ -33,23 +33,15 @@ import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.AddInvoiceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
-import com.github.lightningnetwork.lnd.lnrpc.NewAddressResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.concurrent.ExecutionException;
 
 import zapsolutions.zap.GeneratedRequestActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
-import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
@@ -58,7 +50,7 @@ import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 
-public class ReceiveBSDFragment extends BottomSheetDialogFragment implements UserGuardianInterface {
+public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInterface {
 
     private static final String LOG_TAG = ReceiveBSDFragment.class.getName();
 
@@ -82,7 +74,6 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     private Button mBtnGenerateRequest;
     private boolean mOnChain;
     private BottomSheetBehavior mBehavior;
-    private FrameLayout mBottomSheet;
     private TextView mTvNoIncomingBalance;
     private Button mBtnManageChannels;
     private View mViewNoIncomingBalance;
@@ -90,7 +81,6 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
     private String mValueBeforeUnitSwitch;
     private boolean mUseValueBeforeUnitSwitch = true;
     private boolean mAmountValid = true;
-
 
     @Nullable
     @Override
@@ -534,26 +524,13 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                     addressType = 1;
                 }
 
-                // non blocking stub
-                LightningGrpc.LightningFutureStub asyncAddressClient = LightningGrpc
-                        .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                        .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
                 NewAddressRequest asyncNewAddressRequest = NewAddressRequest.newBuilder()
                         .setTypeValue(addressType) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
                         .build();
 
-                final ListenableFuture<NewAddressResponse> addressFuture = asyncAddressClient.newAddress(asyncNewAddressRequest);
-
                 ZapLog.debug(LOG_TAG, "OnChain generating...");
-
-                addressFuture.addListener(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            NewAddressResponse addressResponse = addressFuture.get();
-                            ZapLog.debug(LOG_TAG, addressResponse.toString());
-
+                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().newAddress(asyncNewAddressRequest)
+                        .subscribe(newAddressResponse -> {
                             String value;
                             if (mUseValueBeforeUnitSwitch) {
                                 value = MonetaryUtil.getInstance().convertSecondaryToBitcoin(mValueBeforeUnitSwitch);
@@ -563,29 +540,18 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
 
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
-                            intent.putExtra("address", addressResponse.getAddress());
+                            intent.putExtra("address", newAddressResponse.getAddress());
                             intent.putExtra("amount", value);
                             intent.putExtra("memo", mEtMemo.getText().toString());
                             startActivity(intent);
                             dismiss();
-
-                        } catch (InterruptedException e) {
-                            ZapLog.debug(LOG_TAG, "Interrupted");
+                        }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                        } catch (ExecutionException e) {
-                            ZapLog.debug(LOG_TAG, "Exception in task");
-                            Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new ExecuteOnCaller());
+                            ZapLog.debug(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
+                        }));
 
             } else {
                 // generate lightning request
-
-                // non blocking stub
-                LightningGrpc.LightningFutureStub asyncInvoiceClient = LightningGrpc
-                        .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                        .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
                 long value;
                 if (mUseValueBeforeUnitSwitch) {
@@ -600,33 +566,20 @@ public class ReceiveBSDFragment extends BottomSheetDialogFragment implements Use
                         .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
                         .build();
 
-                final ListenableFuture<AddInvoiceResponse> invoiceFuture = asyncInvoiceClient.addInvoice(asyncInvoiceRequest);
-
-
-                invoiceFuture.addListener(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            AddInvoiceResponse invoiceResponse = invoiceFuture.get();
-                            ZapLog.debug(LOG_TAG, invoiceResponse.toString());
+                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
+                        .subscribe(addInvoiceResponse -> {
+                            ZapLog.debug(LOG_TAG, addInvoiceResponse.toString());
 
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
-                            intent.putExtra("lnInvoice", invoiceResponse.getPaymentRequest());
-                            intent.putExtra("lnInvoiceAddIndex", invoiceResponse.getAddIndex());
+                            intent.putExtra("lnInvoice", addInvoiceResponse.getPaymentRequest());
+                            intent.putExtra("lnInvoiceAddIndex", addInvoiceResponse.getAddIndex());
                             startActivity(intent);
                             dismiss();
-
-                        } catch (InterruptedException e) {
-                            ZapLog.debug(LOG_TAG, "Interrupted");
+                        }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                        } catch (ExecutionException e) {
-                            ZapLog.debug(LOG_TAG, "Exception in task");
-                            Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new ExecuteOnCaller());
-
+                            ZapLog.debug(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
+                        }));
             }
         } else {
             // The wallet is not setup. Show setup wallet message.

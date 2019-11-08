@@ -11,7 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
-import io.grpc.StatusRuntimeException;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
@@ -23,8 +23,10 @@ import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 public class SendActivity extends BaseScannerActivity {
+
     private static final String LOG_TAG = SendActivity.class.getName();
 
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private boolean mFromURIScheme = false;
     private String mOnChainAddress;
     private long mOnChainInvoiceAmount;
@@ -90,6 +92,12 @@ public class SendActivity extends BaseScannerActivity {
         } else {
             super.showError(message, duration);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     private void validateInvoice(String invoice) {
@@ -241,36 +249,30 @@ public class SendActivity extends BaseScannerActivity {
     }
 
     private void decodeLightningInvoice(String invoice) {
-
-        // decode lightning invoice
         PayReqString decodePaymentRequest = PayReqString.newBuilder()
                 .setPayReq(invoice)
                 .build();
 
-        PayReq paymentRequest;
-        try {
-            paymentRequest = LndConnection.getInstance()
-                    .getBlockingClient()
-                    .withDeadlineAfter(3, TimeUnit.SECONDS)
-                    .decodePayReq(decodePaymentRequest);
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
+                .timeout(3, TimeUnit.SECONDS)
+                .subscribe(paymentRequest -> {
+                    ZapLog.debug(LOG_TAG, paymentRequest.toString());
 
-            ZapLog.debug(LOG_TAG, paymentRequest.toString());
-
-            if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
-                // Show error: payment request expired.
-                showError(getResources().getString(R.string.error_paymentRequestExpired), 3000);
-            } else if (paymentRequest.getNumSatoshis() == 0) {
-                // Disable 0 sat invoices
-                showError(getResources().getString(R.string.error_notAPaymentRequest), 7000);
-            } else {
-                // Decoded successfully, go to send page.
-                goToLightningPaymentScreen(paymentRequest, invoice);
-            }
-        } catch (StatusRuntimeException e) {
-            // If LND can't decode the payment request, show the error LND throws (always english)
-            showError(e.getMessage(), 3000);
-            e.printStackTrace();
-        }
+                    if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
+                        // Show error: payment request expired.
+                        showError(getResources().getString(R.string.error_paymentRequestExpired), 3000);
+                    } else if (paymentRequest.getNumSatoshis() == 0) {
+                        // Disable 0 sat invoices
+                        showError(getResources().getString(R.string.error_notAPaymentRequest), 7000);
+                    } else {
+                        // Decoded successfully, go to send page.
+                        goToLightningPaymentScreen(paymentRequest, invoice);
+                    }
+                }, throwable -> {
+                    // If LND can't decode the payment request, show the error LND throws (always english)
+                    showError(throwable.getMessage(), 3000);
+                    ZapLog.debug(LOG_TAG, throwable.getMessage());
+                }));
     }
 
     private void goToLightningPaymentScreen(PayReq paymentRequest, String invoice) {

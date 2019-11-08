@@ -3,7 +3,9 @@ package zapsolutions.zap.baseClasses;
 import android.app.Application;
 import android.content.Context;
 
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import zapsolutions.zap.util.LocaleUtil;
+import zapsolutions.zap.util.ZapLog;
 
 
 // This class is used as Application class for Zap.
@@ -21,6 +23,14 @@ public class App extends Application {
 
     public App() {
         mContext = this;
+
+        RxJavaPlugins.setErrorHandler(e -> {
+            if (e.getMessage() != null && e.getMessage().contains("shutdownNow")) {
+                // Is propagated from gRPC when shutting down channel
+            } else {
+                ZapLog.debug("RxJava", e.getMessage());
+            }
+        });
     }
 
     public static App getAppContext() {

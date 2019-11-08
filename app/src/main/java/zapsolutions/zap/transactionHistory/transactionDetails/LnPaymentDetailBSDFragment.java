@@ -12,26 +12,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import java.util.concurrent.ExecutionException;
-
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.fragments.RxBSDFragment;
 import zapsolutions.zap.util.ClipBoardUtil;
-import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.ZapLog;
 
-public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
+public class LnPaymentDetailBSDFragment extends RxBSDFragment {
 
     public static final String TAG = LnPaymentDetailBSDFragment.class.getName();
     public static final String ARGS_TRANSACTION = "TRANSACTION";
@@ -82,7 +76,6 @@ public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
         return view;
     }
 
-
     private void bindPayment(ByteString transactionString) throws InvalidProtocolBufferException {
 
         Payment payment = Payment.parseFrom(transactionString);
@@ -117,24 +110,12 @@ public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
     }
 
     private void decodeLightningInvoice(String invoice) {
-
-        // decode lightning invoice
-        LightningGrpc.LightningFutureStub asyncPayReqClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
         PayReqString decodePaymentRequest = PayReqString.newBuilder()
                 .setPayReq(invoice)
                 .build();
 
-        final ListenableFuture<PayReq> payReqFuture = asyncPayReqClient.decodePayReq(decodePaymentRequest);
-
-        payReqFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    PayReq paymentRequest = payReqFuture.get();
-
+        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
+                .subscribe(paymentRequest -> {
                     if (!paymentRequest.getDescription().isEmpty()) {
                         // Set description
                         mMemo.setText(paymentRequest.getDescription());
@@ -142,13 +123,7 @@ public class LnPaymentDetailBSDFragment extends BottomSheetDialogFragment {
                         mMemo.setVisibility(View.GONE);
                         mMemoLabel.setVisibility(View.GONE);
                     }
-                } catch (InterruptedException e) {
-                    ZapLog.debug(TAG, "Decode payment request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(TAG, "Exception in decode payment request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
+                }, throwable -> ZapLog.debug(TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
     }
 
     @Override
