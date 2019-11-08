@@ -223,6 +223,8 @@ public class Wallet {
                 .subscribe(unlockWalletResponse -> {
                     ZapLog.debug(LOG_TAG, "successfully unlocked");
 
+                    // We have to reset the connection, because until you unlock the wallet, there is no Lightning rpc service available.
+                    // Thus we could not connect to it with previous channel, so we reset the connection and connect to all services when unlocked.
                     LndConnection.getInstance().closeConnection();
                     LndConnection.getInstance().openConnection();
 
