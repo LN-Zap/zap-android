@@ -230,7 +230,7 @@ public class Wallet {
                         // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
                         // ToDo: Create a routine that retries this until successful
                         checkIfLndIsReachableAndTriggerWalletLoadedInterface();
-                    }, 1000);
+                    }, 10000);
 
                     mHandler.postDelayed(() -> {
                         // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
