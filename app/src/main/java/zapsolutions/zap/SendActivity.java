@@ -270,7 +270,7 @@ public class SendActivity extends BaseScannerActivity {
                     }
                 }, throwable -> {
                     // If LND can't decode the payment request, show the error LND throws (always english)
-                    showError(throwable.getMessage(), 3000);
+                    runOnUiThread(() -> showError(throwable.getMessage(), 3000));
                     ZapLog.debug(LOG_TAG, throwable.getMessage());
                 }));
     }

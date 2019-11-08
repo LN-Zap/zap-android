@@ -157,7 +157,7 @@ public class Wallet {
             ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
 
             compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                    .timeout(10, TimeUnit.SECONDS)
+                    .timeout(10, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                     .subscribe(infoResponse -> {
                         ZapLog.debug(LOG_TAG, "LND is reachable.");
                         // Save the received data.
@@ -223,11 +223,14 @@ public class Wallet {
                 .subscribe(unlockWalletResponse -> {
                     ZapLog.debug(LOG_TAG, "successfully unlocked");
 
+                    LndConnection.getInstance().closeConnection();
+                    LndConnection.getInstance().openConnection();
+
                     mHandler.postDelayed(() -> {
                         // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
                         // ToDo: Create a routine that retries this until successful
                         checkIfLndIsReachableAndTriggerWalletLoadedInterface();
-                    }, 10000);
+                    }, 1000);
 
                     mHandler.postDelayed(() -> {
                         // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
