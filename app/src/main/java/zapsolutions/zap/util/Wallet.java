@@ -168,42 +168,42 @@ public class Wallet {
                         mConnectedToLND = true;
                         mConnectionCheckInProgress = false;
                         broadcastWalletLoadedUpdate(true, -1);
-                    }, e -> {
+                    }, throwable -> {
                         mConnectionCheckInProgress = false;
 
-                        if (e.getMessage().toLowerCase().contains("unavailable")) {
+                        if (throwable.getMessage().toLowerCase().contains("unavailable")) {
                             // This is the case if:
                             // - LND deamon is not running
                             // - An incorrect port is used
                             // - A wrong certificate is used (When the certificate creation failed due to an error)
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
-                        } else if (e.getMessage().toLowerCase().contains("terminated")) {
+                        } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
                             // This is the case if:
                             // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
                             ZapLog.debug(LOG_TAG, "Cannot reach remote");
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TIMEOUT);
-                        } else if (e.getMessage().toLowerCase().contains("unimplemented")) {
+                        } else if (throwable.getMessage().toLowerCase().contains("unimplemented")) {
                             // This is the case if:
                             // - The wallet is locked
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
                             ZapLog.debug(LOG_TAG, "Wallet is locked!");
-                        } else if (e.getMessage().toLowerCase().contains("verification failed")) {
+                        } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
                             // This is the case if:
                             // - The macaroon is invalid
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
                             ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
-                        } else if (e.getMessage().contains("UNKNOWN")) {
+                        } else if (throwable.getMessage().contains("UNKNOWN")) {
                             // This is the case if:
                             // - The macaroon has wrong encoding
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
                             ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
-                        } else if (e.getMessage().toLowerCase().contains("interrupted")) {
+                        } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
                             ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_INTERRUPTED);
                         } else {
                             // Any other error, show unavailable message
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
-                            ZapLog.debug(LOG_TAG, e.getMessage());
+                            ZapLog.debug(LOG_TAG, throwable.getMessage());
                         }
                     }));
         }
@@ -289,7 +289,7 @@ public class Wallet {
 
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
-
+            // Zip executed without error
         }, throwable -> ZapLog.debug(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
     }
 
@@ -415,11 +415,11 @@ public class Wallet {
 
     private void fetchInvoicesFromLND(long lastIndex) {
         // Fetch lightning invoices
-        ListInvoiceRequest asyncInvoiceRequest = ListInvoiceRequest.newBuilder()
+        ListInvoiceRequest invoiceRequest = ListInvoiceRequest.newBuilder()
                 .setNumMaxInvoices(lastIndex)
                 .build();
 
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().listInvoices(asyncInvoiceRequest)
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().listInvoices(invoiceRequest)
                 .subscribe(listInvoiceResponse -> {
                     mTempInvoiceUpdateList.addAll(listInvoiceResponse.getInvoicesList());
 
@@ -619,7 +619,7 @@ public class Wallet {
                     .doOnComplete(this::broadcastChannelsUpdated).subscribe());
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
-
+            // Zip executed without error
         }, throwable -> ZapLog.debug(LOG_TAG, "Exception in get channels info request task: " + throwable.getMessage())));
     }
 
@@ -1188,11 +1188,11 @@ public class Wallet {
     /**
      * Notify all listeners to transaction update.
      *
-     * @param transactionDetails the details about the transaction update
+     * @param transaction the details about the transaction update
      */
-    private void broadcastTransactionUpdate(Transaction transactionDetails) {
+    private void broadcastTransactionUpdate(Transaction transaction) {
         for (TransactionSubscriptionListener listener : mTransactionSubscriptionListeners) {
-            listener.onTransactionEvent(transactionDetails);
+            listener.onTransactionEvent(transaction);
         }
     }
 
@@ -1321,7 +1321,7 @@ public class Wallet {
     }
 
     public interface TransactionSubscriptionListener {
-        void onTransactionEvent(Transaction transactionDetails);
+        void onTransactionEvent(Transaction transaction);
     }
 
     public interface ChannelEventSubscriptionListener {
