@@ -358,4 +358,18 @@
         android:background="@drawable/rounded_rectangle_green"
         android:src="@drawable/ic_done_black_36dp"
         android:tint="@color/white" />
+
+    <Button
+        android:id="@+id/pinRemove"
+        android:text="@string/settings_removePin"
+        android:layout_width="310dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/pinGridLayout"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded_rectangle_red"
+        android:src="@drawable/ic_done_black_36dp"
+        android:tint="@color/white" />
 </RelativeLayout>

@@ -214,7 +214,6 @@
 
     <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
-    <string name="settings_changePin">Change PIN</string>
     <string name="settings_scramblePin">Scramble PIN Screen</string>
     <string name="settings_preventScreenRecording">Prevent Screen Recording</string>
     <string name="settings_hideTotalBalance">Hide total balance</string>
@@ -226,6 +225,10 @@
     <string name="settings_advanced_settings">Advanced Settings</string>
     <string name="settings_restartRequired">Zap will be restarted to make this change. Do you want to continue?</string>
     <string name="settings_enableBiometrics">Enable biometric authentication</string>
+
+    <string name="settings_changePin">Change/Remove PIN</string>
+    <string name="settings_addPin">Add PIN</string>
+    <string name="settings_removePin">Remove PIN</string>
 
 
     <string name="settings_blockExplorer">Block Explorer</string>

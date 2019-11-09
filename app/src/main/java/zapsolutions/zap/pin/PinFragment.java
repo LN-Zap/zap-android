@@ -1,4 +1,4 @@
-package zapsolutions.zap.setup;
+package zapsolutions.zap.pin;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -49,6 +49,7 @@ public class PinFragment extends Fragment {
     private int mPinLength = 0;
 
     private ImageButton mBtnPinConfirm;
+    private Button mBtnPinRemove;
     private ImageButton mBtnPinBack;
     private ImageButton mBtnBiometrics;
     private ImageView[] mPinHints = new ImageView[10];
@@ -149,6 +150,7 @@ public class PinFragment extends Fragment {
         mBtnNumpad[9].setText(scramble ? Integer.toString(mNumpad.getNumpad().get(9).getValue()) : "0");
 
         mBtnPinConfirm = view.findViewById(R.id.pinConfirm);
+        mBtnPinRemove = view.findViewById(R.id.pinRemove);
         mBtnPinBack = view.findViewById(R.id.pinBack);
         mBtnBiometrics = view.findViewById(R.id.pinBiometrics);
 
@@ -195,7 +197,7 @@ public class PinFragment extends Fragment {
                     PrefsUtil.edit().putInt("numPINFails", 0)
                             .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
 
-                    ((SetupActivity) getActivity()).correctPinEntered();
+                    ((PinSetupActivity) getActivity()).correctPinEntered();
                 }
 
             }
@@ -283,6 +285,14 @@ public class PinFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 createPin();
+            }
+        });
+
+        mBtnPinRemove.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PrefsUtil.edit().putString(PrefsUtil.PIN_HASH, "").commit();
+                getActivity().finish();
             }
         });
 
@@ -398,11 +408,18 @@ public class PinFragment extends Fragment {
             // Show confirm button only if the PIN has a valid length.
             if (mUserInput.toString().length() >= RefConstants.PIN_MIN_LENGTH && mUserInput.toString().length() <= RefConstants.PIN_MAX_LENGTH) {
                 mBtnPinConfirm.setVisibility(View.VISIBLE);
+                mBtnPinRemove.setVisibility(View.INVISIBLE);
             } else {
                 mBtnPinConfirm.setVisibility(View.INVISIBLE);
+                if (PrefsUtil.isPinEnabled()) {
+                    mBtnPinRemove.setVisibility(View.VISIBLE);
+                } else {
+                    mBtnPinRemove.setVisibility(View.INVISIBLE);
+                }
             }
         } else {
             mBtnPinConfirm.setVisibility(View.INVISIBLE);
+            mBtnPinRemove.setVisibility(View.INVISIBLE);
         }
 
         // Disable back button if user input is empty.
@@ -437,9 +454,9 @@ public class PinFragment extends Fragment {
                 PrefsUtil.edit().putInt("numPINFails", 0)
                         .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
-                ((SetupActivity) getActivity()).correctPinEntered();
+                ((PinActivityInterface) getActivity()).correctPinEntered();
             } else if (mMode == CONFIRM_MODE) {
-                ((SetupActivity) getActivity()).pinConfirmed(mUserInput.toString(), mUserInput.toString().length());
+                ((PinSetupActivity) getActivity()).pinConfirmed(mUserInput.toString(), mUserInput.toString().length());
             }
         } else {
             if (mMode == ENTER_MODE) {
@@ -507,7 +524,7 @@ public class PinFragment extends Fragment {
 
     public void createPin() {
         // Go to next step
-        ((SetupActivity) getActivity()).pinCreated(mUserInput.toString(), mUserInput.toString().length());
+        ((PinSetupActivity) getActivity()).pinCreated(mUserInput.toString(), mUserInput.toString().length());
     }
 
     private void initBiometricPrompt() {

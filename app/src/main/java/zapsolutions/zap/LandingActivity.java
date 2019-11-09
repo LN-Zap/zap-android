@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.pin.PinEntryActivity;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
@@ -66,10 +67,18 @@ public class LandingActivity extends BaseAppCompatActivity {
         PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
 
         if (PrefsUtil.isWalletSetup()) {
-            // Go to PIN entry screen
-            Intent pinIntent = new Intent(this, PinEntryActivity.class);
-            pinIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(pinIntent);
+
+            if (PrefsUtil.isPinEnabled()){
+                // Go to PIN entry screen
+                Intent pinIntent = new Intent(this, PinEntryActivity.class);
+                pinIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(pinIntent);
+            } else {
+                // No Pin, go directly to the wallet
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(homeIntent);
+            }
         } else {
 
             // Clear connection data if something is there

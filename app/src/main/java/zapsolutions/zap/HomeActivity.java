@@ -39,6 +39,7 @@ import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceive
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.pin.PinEntryActivity;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -189,7 +190,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToForeground() {
         ZapLog.debug(LOG_TAG, "Zap moved to foreground");
 
-        if (PrefsUtil.isWalletSetup() && TimeOutUtil.getInstance().isTimedOut()) {
+        if (PrefsUtil.isWalletSetup() && TimeOutUtil.getInstance().isTimedOut() && PrefsUtil.isPinEnabled()) {
             // Go to PIN entry screen
             Intent intent = new Intent(this, PinEntryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
