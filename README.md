@@ -63,7 +63,7 @@ And if you want to build the app yourself take a look at the [Installation Guide
 
 ## Maintainers
 - [Michael Wünsch](https://github.com/michaelWuensch)
-- [raph](https://github.com/maraph)
+- [raph](https://github.com/raphBTC)
 
 ## License
 

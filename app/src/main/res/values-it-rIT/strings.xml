@@ -84,6 +84,8 @@
     <string name="success">Success</string>
     <string name="suggested_peers">Suggested Peers</string>
     <string name="none">None</string>
+    <string name="install">Install</string>
+    <string name="continue_string">Continue</string>
     <string name="activity_receive">Ricevi</string>
     <string name="activity_send">Paga</string>
     <string name="activity_connectRemoteNode">Connetti a nodo remoto</string>
@@ -226,7 +228,8 @@
     <string name="error_connection_invalid_host_or_port">L\'host o la porta forniti non sono validi.</string>
     <string name="error_connection_invalid_macaroon2">Accesso negato!\n\nMacaroon non valido.</string>
     <string name="error_connection_server_unreachable">Timeout.\nIl server non risponde.\n\n- Assicurati di disporre di una buona connessione Internet\n\n- Assicurati che il server sia in esecuzione e abbia ancora il seguente IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Impossibile connettersi a LND.\n\n- assicurarsi che il deamon LND sia in esecuzione sul server.\n\n- assicurarsi che il port forwarding sia attivo. (Porta: %1$s)\n\n- assicurati che il tuo certificato sia valido.</string>
+    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
+    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please make sure that:\n\n- Orbot is running\n\n- Orbot is in VPN Mode\n\n- Zap is in Orbot\'s list of activated apps.</string>
     <string name="error_connection_wallet_locked">Si prega di sbloccare il portafoglio.</string>
     <string name="error_connection_btcpay_invalid_json">La sintassi JSON della configurazione del server BTCPay non è valida.</string>
     <string name="error_connection_btcpay_invalid_config">La configurazione del server BTCPay non contiene una configurazione GRPC BTC.</string>
@@ -293,4 +296,8 @@
     <string name="transaction_detail">Dettagli Transazione</string>
     <string name="app_reset_title">Notare che</string>
     <string name="app_reset_message">L\'app è stata ripristinata poiché l\'ultimo aggiornamento ha incluso alcune modifiche strutturali.\nPurtroppo dovrai ripetere il processo di installazione.</string>
+    <string name="tor_install_orbot">You are trying to connect to a tor node. To use Zap with tor you have to install Orbot.\n\nDo you want to install Orbot now?</string>
+    <string name="tor_fdroid_info">If Zap fails to find Orbot in the next step, make sure you have added and enabled the Guardian Project repository in F-Droid and try again.</string>
+    <string name="tor_download_fdroid">You need an App Store to download Orbot. Please first download F-Droid.</string>
+    <string name="tor_add_repo">Add Repository</string>
 </resources>

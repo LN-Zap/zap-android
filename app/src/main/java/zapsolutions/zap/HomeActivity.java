@@ -218,7 +218,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
                 LndConnection.getInstance().openConnection();
 
-                if(TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(this)){
+                if (TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(this)) {
                     TorUtil.askToInstallOrbotIfMissing(this);
                 } else {
                     Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
