@@ -246,7 +246,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         btnReconnect.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if(TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(getActivity())){
+                if (TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(getActivity())) {
                     TorUtil.askToInstallOrbotIfMissing(getActivity());
                 } else {
                     mWalletConnectedLayout.setVisibility(View.GONE);

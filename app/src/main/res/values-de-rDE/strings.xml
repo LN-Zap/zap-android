@@ -84,6 +84,8 @@
     <string name="success">Erfolg</string>
     <string name="suggested_peers">Vorgeschlagene Peers</string>
     <string name="none">Kein Limit</string>
+    <string name="install">Install</string>
+    <string name="continue_string">Continue</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -226,7 +228,8 @@
     <string name="error_connection_invalid_host_or_port">Der angegebene Host oder Port is ungültig.</string>
     <string name="error_connection_invalid_macaroon2">Zugriff verweigert!\n\nDas Macaroon ist ungültig.</string>
     <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND deamon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)\n\n- Stelle sicher, dass das Zertifikat gültig ist.</string>
+    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
+    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please make sure that:\n\n- Orbot is running\n\n- Orbot is in VPN Mode\n\n- Zap is in Orbot\'s list of activated apps.</string>
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
@@ -293,4 +296,8 @@
     <string name="transaction_detail">Transaktionsdetails</string>
     <string name="app_reset_title">Hinweis</string>
     <string name="app_reset_message">Die App wurde zurückgesetzt, da die letzte Aktualisierung strukturelle Änderungen vorgenommen hat.\nLeider musst du die Wallet deshalb erneut einrichten.</string>
+    <string name="tor_install_orbot">You are trying to connect to a tor node. To use Zap with tor you have to install Orbot.\n\nDo you want to install Orbot now?</string>
+    <string name="tor_fdroid_info">If Zap fails to find Orbot in the next step, make sure you have added and enabled the Guardian Project repository in F-Droid and try again.</string>
+    <string name="tor_download_fdroid">You need an App Store to download Orbot. Please first download F-Droid.</string>
+    <string name="tor_add_repo">Add Repository</string>
 </resources>

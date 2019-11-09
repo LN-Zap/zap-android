@@ -84,6 +84,8 @@
     <string name="success">Успех</string>
     <string name="suggested_peers">Предложени Пийъри</string>
     <string name="none">Няма</string>
+    <string name="install">Install</string>
+    <string name="continue_string">Continue</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -226,7 +228,8 @@
     <string name="error_connection_invalid_host_or_port">Избраният хост или порт е невалиден.</string>
     <string name="error_connection_invalid_macaroon2">Достъп отказан!\n\nMacaroon-ът е невалиден.</string>
     <string name="error_connection_server_unreachable">Таймаут.\nСървърът не отговаря.\n\n- Моля уверете се, че имате добра Интернет връзка.\n\n- Моля уверете се, че сървърът работи и все още има следното IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.\n\n- Уверете се, че LND deamon-ът работи на сървъра Ви.\n\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)\n\n- Уверете се, че сертификатът Ви е валиден.</string>
+    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
+    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please make sure that:\n\n- Orbot is running\n\n- Orbot is in VPN Mode\n\n- Zap is in Orbot\'s list of activated apps.</string>
     <string name="error_connection_wallet_locked">Моля отключете портфейла.</string>
     <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
     <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
@@ -295,4 +298,8 @@
     <string name="transaction_detail">Детайли за Транзакцията</string>
     <string name="app_reset_title">Имайте впредвид</string>
     <string name="app_reset_message">Приложението бе нулирано, понеже последната актуализация включва някои структурни промени.\nЗа жалост ще трябва да преминете през процеса за настройване отново.</string>
+    <string name="tor_install_orbot">You are trying to connect to a tor node. To use Zap with tor you have to install Orbot.\n\nDo you want to install Orbot now?</string>
+    <string name="tor_fdroid_info">If Zap fails to find Orbot in the next step, make sure you have added and enabled the Guardian Project repository in F-Droid and try again.</string>
+    <string name="tor_download_fdroid">You need an App Store to download Orbot. Please first download F-Droid.</string>
+    <string name="tor_add_repo">Add Repository</string>
 </resources>
