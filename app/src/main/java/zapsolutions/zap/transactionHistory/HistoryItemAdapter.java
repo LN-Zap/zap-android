@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.DateLineViewHolder;
@@ -24,11 +25,13 @@ import zapsolutions.zap.transactionHistory.listItems.OnChainTransactionViewHolde
 public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<HistoryListItem> mItems;
     private TransactionSelectListener mTransactionSelectListener;
+    private CompositeDisposable mCompositeDisposable;
 
     // Construct the adapter with a data list
-    public HistoryItemAdapter(List<HistoryListItem> dataset, TransactionSelectListener transactionSelectListener) {
+    public HistoryItemAdapter(List<HistoryListItem> dataset, TransactionSelectListener transactionSelectListener, CompositeDisposable compositeDisposable) {
         mItems = dataset;
         mTransactionSelectListener = transactionSelectListener;
+        mCompositeDisposable = compositeDisposable;
     }
 
     @Override
@@ -82,6 +85,7 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case HistoryListItem.TYPE_LN_PAYMENT:
                 LnPaymentViewHolder lnPaymentHolder = (LnPaymentViewHolder) holder;
                 LnPaymentItem lnPaymentItem = (LnPaymentItem) mItems.get(position);
+                lnPaymentHolder.setCompositeDisposable(mCompositeDisposable);
                 lnPaymentHolder.bindLnPaymentItem(lnPaymentItem);
                 lnPaymentHolder.addOnTransactionSelectListener(mTransactionSelectListener);
                 break;

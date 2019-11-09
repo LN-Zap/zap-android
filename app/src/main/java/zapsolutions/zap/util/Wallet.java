@@ -14,60 +14,46 @@ import com.github.lightningnetwork.lnd.lnrpc.ChannelEventSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
 import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
-import com.github.lightningnetwork.lnd.lnrpc.CloseStatusUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
-import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
-import com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
-import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
-import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
-import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
-import com.github.lightningnetwork.lnd.lnrpc.ListPeersResponse;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfo;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest;
-import com.github.lightningnetwork.lnd.lnrpc.OpenStatusUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-import com.github.lightningnetwork.lnd.lnrpc.TransactionDetails;
 import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletRequest;
-import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletResponse;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
-import com.github.lightningnetwork.lnd.lnrpc.WalletUnlockerGrpc;
 import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.Nullable;
-
-import io.grpc.stub.ClientCallStreamObserver;
-import io.grpc.stub.StreamObserver;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.lightning.LightningNodeUri;
@@ -103,6 +89,8 @@ public class Wallet {
     public List<ChannelCloseSummary> mClosedChannelsList;
     public List<NodeInfo> mNodeInfos = new LinkedList<>();
 
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     private long mOnChainBalanceTotal = 0;
     private long mOnChainBalanceConfirmed = 0;
     private long mOnChainBalanceUnconfirmed = 0;
@@ -119,10 +107,6 @@ public class Wallet {
     private boolean mTestnet = false;
     private boolean mConnectionCheckInProgress = false;
     private String mLNDVersion = "not connected";
-    private ClientCallStreamObserver<Invoice> mInvoiceStreamObserver;
-    private ClientCallStreamObserver<TransactionDetails> mTransactionStreamObserver;
-    private ClientCallStreamObserver<ChannelEventUpdate> mChannelEventStreamObserver;
-    private ClientCallStreamObserver<ChanBackupSnapshot> mChannelBackupStreamObserver;
     private Handler mHandler = new Handler();
     private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
 
@@ -143,6 +127,7 @@ public class Wallet {
      * Use this to reset the wallet information when the connection type was changed.
      */
     public void reset() {
+        compositeDisposable.clear();
         mOnChainBalanceTotal = 0;
         mOnChainBalanceConfirmed = 0;
         mOnChainBalanceUnconfirmed = 0;
@@ -165,73 +150,62 @@ public class Wallet {
     public void checkIfLndIsReachableAndTriggerWalletLoadedInterface() {
         // Retrieve info from LND with gRPC (async)
 
-
         if (!mConnectionCheckInProgress) {
 
             mConnectionCheckInProgress = true;
 
-            LightningGrpc.LightningFutureStub asyncInfoClient = LightningGrpc
-                    .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                    .withDeadlineAfter(5, TimeUnit.SECONDS)
-                    .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-            GetInfoRequest asyncInfoRequest = GetInfoRequest.newBuilder().build();
-            final ListenableFuture<GetInfoResponse> infoFuture = asyncInfoClient.getInfo(asyncInfoRequest);
-
             ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
 
-            infoFuture.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        GetInfoResponse infoResponse = infoFuture.get();
-
+            compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
+                    .timeout(10, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                    .subscribe(infoResponse -> {
+                        ZapLog.debug(LOG_TAG, "LND is reachable.");
                         // Save the received data.
                         mSyncedToChain = infoResponse.getSyncedToChain();
                         mTestnet = infoResponse.getTestnet();
                         mLNDVersion = infoResponse.getVersion();
                         mInfoFetched = true;
                         mConnectedToLND = true;
-
                         mConnectionCheckInProgress = false;
                         broadcastWalletLoadedUpdate(true, -1);
-                    } catch (InterruptedException e) {
-                        ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
+                    }, throwable -> {
                         mConnectionCheckInProgress = false;
-                        broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_INTERRUPTED);
-                    } catch (ExecutionException e) {
-                        mConnectionCheckInProgress = false;
-                        if (e.getMessage().toLowerCase().contains("unavailable")) {
+
+                        if (throwable.getMessage().toLowerCase().contains("unavailable")) {
                             // This is the case if:
                             // - LND deamon is not running
                             // - An incorrect port is used
                             // - A wrong certificate is used (When the certificate creation failed due to an error)
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
-                        } else if (e.getMessage().toLowerCase().contains("deadline_exceeded")) {
+                        } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
                             // This is the case if:
                             // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
                             ZapLog.debug(LOG_TAG, "Cannot reach remote");
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TIMEOUT);
-                        } else if (e.getMessage().toLowerCase().contains("unimplemented")) {
+                        } else if (throwable.getMessage().toLowerCase().contains("unimplemented")) {
                             // This is the case if:
                             // - The wallet is locked
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
                             ZapLog.debug(LOG_TAG, "Wallet is locked!");
-                        } else if (e.getMessage().toLowerCase().contains("verification failed")) {
+                        } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
                             // This is the case if:
                             // - The macaroon is invalid
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
                             ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
-                        } else if (e.getMessage().contains("UNKNOWN")) {
+                        } else if (throwable.getMessage().contains("UNKNOWN")) {
                             // This is the case if:
                             // - The macaroon has wrong encoding
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
                             ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
+                        } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
+                            ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_INTERRUPTED);
+                        } else {
+                            // Any other error, show unavailable message
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
+                            ZapLog.debug(LOG_TAG, throwable.getMessage());
                         }
-                        ZapLog.debug(LOG_TAG, e.getMessage());
-                    }
-                }
-            }, new ExecuteOnCaller());
+                    }));
         }
     }
 
@@ -241,28 +215,18 @@ public class Wallet {
      * @param password
      */
     public void unlockWallet(String password) {
-        //UnlockWallet
-        WalletUnlockerGrpc.WalletUnlockerFutureStub asyncUnlockClient = WalletUnlockerGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        UnlockWalletRequest asyncUnlockRequest = UnlockWalletRequest.newBuilder()
-                .setWalletPassword(ByteString.copyFrom(password, Charset.defaultCharset()))
+        UnlockWalletRequest unlockRequest = UnlockWalletRequest.newBuilder()
+                .setWalletPassword(ByteString.copyFrom(password.getBytes()))
                 .build();
 
-        final ListenableFuture<UnlockWalletResponse> unlockFuture = asyncUnlockClient.unlockWallet(asyncUnlockRequest);
-
-        unlockFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UnlockWalletResponse unlockResponse = unlockFuture.get();
+        compositeDisposable.add(LndConnection.getInstance().getWalletUnlockerService().unlockWallet(unlockRequest)
+                .subscribe(unlockWalletResponse -> {
                     ZapLog.debug(LOG_TAG, "successfully unlocked");
 
-                    if (PrefsUtil.isWalletSetup()) {
-                        LndConnection.getInstance().stopBackgroundTasks();
-                    }
-                    LndConnection.getInstance().restartBackgroundTasks();
+                    // We have to reset the connection, because until you unlock the wallet, there is no Lightning rpc service available.
+                    // Thus we could not connect to it with previous channel, so we reset the connection and connect to all services when unlocked.
+                    LndConnection.getInstance().closeConnection();
+                    LndConnection.getInstance().openConnection();
 
                     mHandler.postDelayed(() -> {
                         // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
@@ -276,21 +240,11 @@ public class Wallet {
                         // ToDo: Create a routine that retries this until successful
                         Wallet.getInstance().fetchChannelsFromLND();
                     }, 12000);
-
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-
-                    ZapLog.debug(LOG_TAG, e.getMessage());
-
+                }, throwable -> {
+                    ZapLog.debug(LOG_TAG, throwable.getMessage());
                     // Show password prompt again after error
                     broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
-
-                }
-            }
-        }, new ExecuteOnCaller());
-
+                }));
     }
 
     /**
@@ -323,93 +277,20 @@ public class Wallet {
      */
     public void fetchBalanceFromLND() {
 
-        // Retrieve balance with gRPC (async)
+        Single<WalletBalanceResponse> walletBalance = LndConnection.getInstance().getLightningService().walletBalance(WalletBalanceRequest.newBuilder().build());
+        Single<ChannelBalanceResponse> channelBalance = LndConnection.getInstance().getLightningService().channelBalance(ChannelBalanceRequest.newBuilder().build());
+        Single<PendingChannelsResponse> pendingChannels = LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build());
 
-        // fetch on-chain balance
-        LightningGrpc.LightningFutureStub asyncBalanceClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+        compositeDisposable.add(Single.zip(walletBalance, channelBalance, pendingChannels, (walletBalanceResponse, channelBalanceResponse, pendingChannelsResponse) -> {
 
-        WalletBalanceRequest asyncBalanceRequest = WalletBalanceRequest.newBuilder().build();
-        final ListenableFuture<WalletBalanceResponse> balanceFuture = asyncBalanceClient.walletBalance(asyncBalanceRequest);
+            setOnChainBalance(walletBalanceResponse.getTotalBalance(), walletBalanceResponse.getConfirmedBalance(), walletBalanceResponse.getUnconfirmedBalance());
+            setChannelBalance(channelBalanceResponse.getBalance(), channelBalanceResponse.getPendingOpenBalance());
+            setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance());
 
-        balanceFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    WalletBalanceResponse balanceResponse = balanceFuture.get();
-
-                    // ZapLog.debug(LOG_TAG,balanceResponse.toString());
-
-                    // Update the on-chain balances of our wallet util to the fetched values
-                    setOnChainBalance(balanceResponse.getTotalBalance(),
-                            balanceResponse.getConfirmedBalance(),
-                            balanceResponse.getUnconfirmedBalance());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Wallet balance request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in wallet balance request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
-
-
-        // fetch channel balance
-        LightningGrpc.LightningFutureStub asyncChannelBalanceClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-
-        ChannelBalanceRequest asyncChannelBalanceRequest = ChannelBalanceRequest.newBuilder().build();
-        final ListenableFuture<ChannelBalanceResponse> channelBalanceFuture = asyncChannelBalanceClient.
-                channelBalance(asyncChannelBalanceRequest);
-
-        channelBalanceFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ChannelBalanceResponse channelBalanceResponse = channelBalanceFuture.get();
-
-                    // ZapLog.debug(LOG_TAG,channelBalanceResponse.toString());
-
-                    // Update the channel balances of our wallet util to the fetched values
-                    setChannelBalance(channelBalanceResponse.getBalance(),
-                            channelBalanceResponse.getPendingOpenBalance());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Channel balance request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in channel balance request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
-
-        // fetch pending channels balance
-        LightningGrpc.LightningFutureStub asyncPendingChannelsClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        PendingChannelsRequest asyncPendingChannelsRequest = PendingChannelsRequest.newBuilder().build();
-        final ListenableFuture<PendingChannelsResponse> pendingChannelsFuture = asyncPendingChannelsClient.pendingChannels(asyncPendingChannelsRequest);
-
-        pendingChannelsFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    PendingChannelsResponse pendingChannelsResponse = pendingChannelsFuture.get();
-
-                    /* Update balance to include limbo channels. The limbo balance does not account for open pending channels.
-                    Those are handled via the `channelbalance` request. */
-                    setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance());
-
-                    // ZapLog.debug(LOG_TAG, pendingChannelsResponse.getTotalLimboBalance());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "List pending channels request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in list pending channels request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
-
+            return true;
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+            // Zip executed without error
+        }, throwable -> ZapLog.debug(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
     }
 
     /**
@@ -418,19 +299,8 @@ public class Wallet {
      */
     public void fetchInfoFromLND() {
         // Retrieve info from LND with gRPC (async)
-
-        LightningGrpc.LightningFutureStub asyncInfoClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        GetInfoRequest asyncInfoRequest = GetInfoRequest.newBuilder().build();
-        final ListenableFuture<GetInfoResponse> infoFuture = asyncInfoClient.getInfo(asyncInfoRequest);
-
-        infoFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    GetInfoResponse infoResponse = infoFuture.get();
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
+                .subscribe(infoResponse -> {
 
                     // Save the received data.
                     mSyncedToChain = infoResponse.getSyncedToChain();
@@ -439,20 +309,14 @@ public class Wallet {
                     mInfoFetched = true;
                     mConnectedToLND = true;
 
-                    // ZapLog.debug(LOG_TAG,infoResponse.toString());
-
                     broadcastInfoUpdate(true);
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Info request interrupted.");
-                } catch (ExecutionException e) {
-                    if (e.getMessage().toLowerCase().contains("unavailable")) {
+                }, throwable -> {
+                    if (throwable.getMessage().toLowerCase().contains("unavailable")) {
                         mConnectedToLND = false;
                         broadcastInfoUpdate(false);
                     }
-                    ZapLog.debug(LOG_TAG, e.getMessage());
-                }
-            }
-        }, new ExecuteOnCaller());
+                    ZapLog.debug(LOG_TAG, "Exception in fetch info task: " + throwable.getMessage());
+                }));
     }
 
     public void simulateFetchInfoForDemo(boolean connected) {
@@ -530,32 +394,13 @@ public class Wallet {
      */
     public void fetchTransactionsFromLND() {
         // fetch on-chain transactions
-        LightningGrpc.LightningFutureStub asyncTransactionsClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        GetTransactionsRequest asyncTransactionRequest = GetTransactionsRequest.newBuilder().build();
-        final ListenableFuture<TransactionDetails> transactionFuture = asyncTransactionsClient.getTransactions(asyncTransactionRequest);
-
-        transactionFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    TransactionDetails transactionResponse = transactionFuture.get();
-
-                    mOnChainTransactionList = Lists.reverse(transactionResponse.getTransactionsList());
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().getTransactions(GetTransactionsRequest.newBuilder().build())
+                .subscribe(transactionDetails -> {
+                    mOnChainTransactionList = Lists.reverse(transactionDetails.getTransactionsList());
 
                     mTransactionUpdated = true;
                     isHistoryUpdateFinished();
-
-                    // ZapLog.debug(LOG_TAG, transactionResponse.toString());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Transaction request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in transaction request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
+                }, throwable -> ZapLog.debug(LOG_TAG, "Exception in transaction request task: " + throwable.getMessage())));
     }
 
     /**
@@ -568,28 +413,17 @@ public class Wallet {
         fetchInvoicesFromLND(100);
     }
 
-    public void fetchInvoicesFromLND(long lastIndex) {
+    private void fetchInvoicesFromLND(long lastIndex) {
         // Fetch lightning invoices
-        LightningGrpc.LightningFutureStub asyncInvoiceClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        ListInvoiceRequest asyncInvoiceRequest = ListInvoiceRequest.newBuilder()
-                //.setReversed(true)
-                //.setPendingOnly(true)
+        ListInvoiceRequest invoiceRequest = ListInvoiceRequest.newBuilder()
                 .setNumMaxInvoices(lastIndex)
                 .build();
-        final ListenableFuture<ListInvoiceResponse> invoiceFuture = asyncInvoiceClient.listInvoices(asyncInvoiceRequest);
 
-        invoiceFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ListInvoiceResponse invoiceResponse = invoiceFuture.get();
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().listInvoices(invoiceRequest)
+                .subscribe(listInvoiceResponse -> {
+                    mTempInvoiceUpdateList.addAll(listInvoiceResponse.getInvoicesList());
 
-                    mTempInvoiceUpdateList.addAll(invoiceResponse.getInvoicesList());
-
-                    if (invoiceResponse.getLastIndexOffset() < lastIndex) {
+                    if (listInvoiceResponse.getLastIndexOffset() < lastIndex) {
                         // we have fetched all available invoices!
                         mInvoiceList = Lists.reverse(mTempInvoiceUpdateList);
                         mTempInvoiceUpdateList = null;
@@ -599,16 +433,7 @@ public class Wallet {
                         // there are still invoices to fetch, get the next batch!
                         fetchInvoicesFromLND(lastIndex + 100);
                     }
-
-
-                    // ZapLog.debug(LOG_TAG, String.valueOf(invoiceResponse.toString()));
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Invoice request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in invoice request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
+                }, throwable -> ZapLog.debug(LOG_TAG, "Exception in invoice request task: " + throwable.getMessage())));
     }
 
     /**
@@ -616,160 +441,101 @@ public class Wallet {
      */
     public void fetchPaymentsFromLND() {
         // Fetch lightning payments
-        LightningGrpc.LightningFutureStub asyncPaymentsClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        ListPaymentsRequest asyncPaymentsRequest = ListPaymentsRequest.newBuilder()
+        ListPaymentsRequest paymentsRequest = ListPaymentsRequest.newBuilder()
                 .setIncludeIncomplete(false)
                 .build();
-        final ListenableFuture<ListPaymentsResponse> paymentsFuture = asyncPaymentsClient.listPayments(asyncPaymentsRequest);
 
-        paymentsFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ListPaymentsResponse paymentsResponse = paymentsFuture.get();
-
-                    mPaymentsList = Lists.reverse(paymentsResponse.getPaymentsList());
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().listPayments(paymentsRequest)
+                .subscribe(listPaymentsResponse -> {
+                    mPaymentsList = Lists.reverse(listPaymentsResponse.getPaymentsList());
                     mPaymentsUpdated = true;
                     isHistoryUpdateFinished();
-
-                    /*
-                    // Load invoices for all involved payments. This allows us to display memos later.
-                    if (mPaymentsList != null) {
-                        for (Payment p : mPaymentsList) {
-                            lookupInvoiceWithLND(p.getPaymentHashBytes());
-                        }
-                    }
-                    */
-
-                    // ZapLog.debug(LOG_TAG, String.valueOf(paymentsResponse.toString()));
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Payment request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in payment request task.");
-                }
-            }
-        }, new ExecuteOnCaller());
+                }, throwable -> ZapLog.debug(LOG_TAG, "Exception in payment request task: " + throwable.getMessage())));
     }
 
     public void openChannel(LightningNodeUri nodeUri, long amount) {
-        LightningGrpc.LightningStub lightningStub = LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon())
-                .withDeadlineAfter(15, TimeUnit.SECONDS);
-
-        ListPeersRequest listPeersRequest = ListPeersRequest.newBuilder().build();
-        lightningStub.listPeers(listPeersRequest, new StreamObserver<ListPeersResponse>() {
-            @Override
-            public void onNext(ListPeersResponse value) {
-                boolean connected = false;
-                for (Peer node : value.getPeersList()) {
-                    if (node.getPubKey().equals(nodeUri.getPubKey())) {
-                        connected = true;
-                        break;
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
+                .timeout(10, TimeUnit.SECONDS)
+                .subscribe(listPeersResponse -> {
+                    boolean connected = false;
+                    for (Peer node : listPeersResponse.getPeersList()) {
+                        if (node.getPubKey().equals(nodeUri.getPubKey())) {
+                            connected = true;
+                            break;
+                        }
                     }
-                }
 
-                if (connected) {
-                    ZapLog.debug(LOG_TAG, "Already connected to peer, trying to open channel...");
+                    if (connected) {
+                        ZapLog.debug(LOG_TAG, "Already connected to peer, trying to open channel...");
+                        openChannelConnected(nodeUri, amount);
+                    } else {
+                        ZapLog.debug(LOG_TAG, "Not connected to peer, trying to connect...");
+                        connectPeer(nodeUri, amount);
+                    }
+                }, throwable -> {
+                    ZapLog.debug(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
+                    if (throwable.getMessage().toLowerCase().contains("terminated")) {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS_TIMEOUT, throwable.getMessage());
+                    } else {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS, throwable.getMessage());
+                    }
+                }));
+    }
+
+    private void connectPeer(LightningNodeUri nodeUri, long amount) {
+        if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
+            broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
+            return;
+        }
+
+        LightningAddress lightningAddress = LightningAddress.newBuilder()
+                .setHostBytes(ByteString.copyFrom(nodeUri.getHost().getBytes(StandardCharsets.UTF_8)))
+                .setPubkeyBytes(ByteString.copyFrom(nodeUri.getPubKey().getBytes(StandardCharsets.UTF_8))).build();
+        ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
+
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
+                .timeout(15, TimeUnit.SECONDS)
+                .subscribe(connectPeerResponse -> {
+                    ZapLog.debug(LOG_TAG, "Successfully connected to peer, trying to open channel...");
                     openChannelConnected(nodeUri, amount);
-                } else {
-                    ZapLog.debug(LOG_TAG, "Not connected to peer, trying to connect...");
+                }, throwable -> {
+                    ZapLog.debug(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
 
-                    if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
-                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
-                        return;
+                    if (throwable.getMessage().toLowerCase().contains("refused")) {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, throwable.getMessage());
+                    } else if (throwable.getMessage().toLowerCase().contains("self")) {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, throwable.getMessage());
+                    } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_TIMEOUT, throwable.getMessage());
+                    } else {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION, throwable.getMessage());
                     }
-
-                    LightningAddress lightningAddress = LightningAddress.newBuilder()
-                            .setHostBytes(ByteString.copyFrom(nodeUri.getHost().getBytes(StandardCharsets.UTF_8)))
-                            .setPubkeyBytes(ByteString.copyFrom(nodeUri.getPubKey().getBytes(StandardCharsets.UTF_8))).build();
-                    ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
-
-                    lightningStub.connectPeer(connectPeerRequest, new StreamObserver<ConnectPeerResponse>() {
-                        @Override
-                        public void onNext(ConnectPeerResponse value) {
-                            ZapLog.debug(LOG_TAG, "Successfully connected to peer, trying to open channel...");
-                            openChannelConnected(nodeUri, amount);
-                        }
-
-                        @Override
-                        public void onError(Throwable t) {
-                            ZapLog.debug(LOG_TAG, "Error connecting to peer:" + t.getMessage());
-
-                            if (t.getMessage().toLowerCase().contains("refused")) {
-                                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, t.getMessage());
-                            } else if (t.getMessage().toLowerCase().contains("self")) {
-                                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, t.getMessage());
-                            } else if (t.getMessage().toLowerCase().contains("deadline exceeded")) {
-                                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_TIMEOUT, t.getMessage());
-                            } else {
-                                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION, t.getMessage());
-                            }
-                        }
-
-                        @Override
-                        public void onCompleted() {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                ZapLog.debug(LOG_TAG, "Error listing peers request:" + t.getMessage());
-
-                if (t.getMessage().toLowerCase().contains("deadline exceeded")) {
-                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS_TIMEOUT, t.getMessage());
-                } else {
-                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS, t.getMessage());
-                }
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        });
+                }));
     }
 
     private void openChannelConnected(LightningNodeUri nodeUri, long amount) {
-        LightningGrpc.LightningStub lightningStub = LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon())
-                .withDeadlineAfter(15, TimeUnit.SECONDS);
-
         byte[] nodeKeyBytes = hexStringToByteArray(nodeUri.getPubKey());
         OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
                 .setNodePubkey(ByteString.copyFrom(nodeKeyBytes))
                 .setLocalFundingAmount(amount).build();
 
-        lightningStub.openChannel(openChannelRequest, new StreamObserver<OpenStatusUpdate>() {
-            @Override
-            public void onNext(OpenStatusUpdate value) {
-                ZapLog.debug(LOG_TAG, "Open channel update: " + value.getUpdateCase().getNumber());
-                broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.SUCCESS, null);
-            }
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().openChannel(openChannelRequest)
+                .timeout(10, TimeUnit.SECONDS)
+                .firstOrError()
+                .subscribe(openStatusUpdate -> {
+                    ZapLog.debug(LOG_TAG, "Open channel update: " + openStatusUpdate.getUpdateCase().getNumber());
+                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.SUCCESS, null);
+                }, throwable -> {
+                    ZapLog.debug(LOG_TAG, "Error opening channel: " + throwable.getMessage());
 
-            @Override
-            public void onError(Throwable t) {
-                ZapLog.debug(LOG_TAG, "Error opening channel:" + t.getMessage());
-
-                if (t.getMessage().toLowerCase().contains("pending channels exceed maximum")) {
-                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_PENDING_MAX, t.getMessage());
-                } else if (t.getMessage().toLowerCase().contains("deadline exceeded")) {
-                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_TIMEOUT, t.getMessage());
-                } else {
-                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_OPEN, t.getMessage());
-                }
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        });
+                    if (throwable.getMessage().toLowerCase().contains("pending channels exceed maximum")) {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_PENDING_MAX, throwable.getMessage());
+                    } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_TIMEOUT, throwable.getMessage());
+                    } else {
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_OPEN, throwable.getMessage());
+                    }
+                }));
     }
 
     public void closeChannel(String channelPoint, boolean force) {
@@ -779,101 +545,82 @@ public class Wallet {
 
         CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder().setChannelPoint(point).setForce(force).build();
 
-        LightningGrpc.newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon())
-                .withDeadlineAfter(15, TimeUnit.SECONDS)
-                .closeChannel(closeChannelRequest, new StreamObserver<CloseStatusUpdate>() {
-                    @Override
-                    public void onNext(CloseStatusUpdate value) {
-                        ZapLog.debug(LOG_TAG, "Closing channel update: " + value.getUpdateCase().getNumber());
-                        broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.SUCCESS, null);
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().closeChannel(closeChannelRequest)
+                .timeout(10, TimeUnit.SECONDS)
+                .firstOrError()
+                .subscribe(closeStatusUpdate -> {
+                    ZapLog.debug(LOG_TAG, "Closing channel update: " + closeStatusUpdate.getUpdateCase().getNumber());
+                    broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.SUCCESS, null);
+                }, throwable -> {
+                    ZapLog.debug(LOG_TAG, "Error closing channel: " + throwable.getMessage());
+                    if (throwable.getMessage().toLowerCase().contains("offline")) {
+                        broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_PEER_OFFLINE, throwable.getMessage());
+                    } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
+                        broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_TIMEOUT, throwable.getMessage());
+                    } else {
+                        broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_CLOSE, throwable.getMessage());
                     }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        ZapLog.debug(LOG_TAG, "Error closing channel:" + t.getMessage());
-                        if (t.getMessage().toLowerCase().contains("offline")) {
-                            broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_PEER_OFFLINE, t.getMessage());
-                        } else if (t.getMessage().toLowerCase().contains("deadline exceeded")) {
-                            broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_TIMEOUT, t.getMessage());
-                        } else {
-                            broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_CLOSE, t.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-
-                    }
-                });
+                }));
     }
 
     public void fetchChannelsFromLND() {
         ZapLog.debug(LOG_TAG, "Fetch channels from LND.");
-        LightningGrpc.LightningFutureStub client = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
 
-        ListChannelsRequest asyncOpenChannelsRequest = ListChannelsRequest.newBuilder().build();
-        final ListenableFuture<ListChannelsResponse> openChannelsFuture = client.listChannels(asyncOpenChannelsRequest);
+        Single<ListChannelsResponse> listChannelsObservable = LndConnection.getInstance().getLightningService().listChannels(ListChannelsRequest.newBuilder().build());
+        Single<PendingChannelsResponse> pendingChannelsObservable = LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build());
+        Single<ClosedChannelsResponse> closedChannelsObservable = LndConnection.getInstance().getLightningService().closedChannels(ClosedChannelsRequest.newBuilder().build());
 
-        PendingChannelsRequest asyncPendingChannelsRequest = PendingChannelsRequest.newBuilder().build();
-        final ListenableFuture<PendingChannelsResponse> pendingChannelsFuture = client.pendingChannels(asyncPendingChannelsRequest);
+        compositeDisposable.add(Single.zip(listChannelsObservable, pendingChannelsObservable, closedChannelsObservable, (listChannelsResponse, pendingChannelsResponse, closedChannelsResponse) -> {
+            ZapLog.debug(LOG_TAG, "Fetched channels from LND.");
 
-        ClosedChannelsRequest asyncClosedChannelsRequest = ClosedChannelsRequest.newBuilder().build();
-        final ListenableFuture<ClosedChannelsResponse> closedChannelsFuture = client.closedChannels(asyncClosedChannelsRequest);
+            mOpenChannelsList = listChannelsResponse.getChannelsList();
 
-        Futures.whenAllSucceed(openChannelsFuture, pendingChannelsFuture, closedChannelsFuture).run(() -> {
-            try {
-                ZapLog.debug(LOG_TAG, "Fetched channels from LND.");
+            Set<String> channelNodes = new HashSet<>();
 
-                // open channels
-                ListChannelsResponse openChannelsResponse = openChannelsFuture.get();
-                mOpenChannelsList = openChannelsResponse.getChannelsList();
-
-                // Load NodeInfos for all involved nodes. This allows us to display aliases later.
-                for (Channel c : mOpenChannelsList) {
-                    fetchNodeInfoFromLND(c.getRemotePubkey());
-                }
-
-                // closed channels
-                ClosedChannelsResponse closedChannelsResponse = closedChannelsFuture.get();
-                mClosedChannelsList = closedChannelsResponse.getChannelsList();
-                // Load NodeInfos for all involved nodes. This allows us to display aliases later.
-                for (ChannelCloseSummary c : mClosedChannelsList) {
-                    fetchNodeInfoFromLND(c.getRemotePubkey());
-                }
-
-                // pending channels
-                PendingChannelsResponse pendingChannelsResponse = pendingChannelsFuture.get();
-
-                mPendingOpenChannelsList = pendingChannelsResponse.getPendingOpenChannelsList();
-                mPendingClosedChannelsList = pendingChannelsResponse.getPendingClosingChannelsList();
-                mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
-                mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
-
-                // Load NodeInfos for all involved nodes. This allows us to display aliases later.
-                for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
-                    fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
-                }
-                for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
-                    fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
-                }
-                for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
-                    fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
-                }
-                for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
-                    fetchNodeInfoFromLND(c.getChannel().getRemoteNodePub());
-                }
-
-                broadcastChannelsUpdated();
-
-            } catch (InterruptedException e) {
-                ZapLog.debug(LOG_TAG, "Get channels request interrupted.");
-            } catch (ExecutionException e) {
-                ZapLog.debug(LOG_TAG, "Exception in get channels info request task.");
+            // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+            for (Channel c : mOpenChannelsList) {
+                channelNodes.add(c.getRemotePubkey());
             }
-        }, Executors.newSingleThreadExecutor());
+
+            // closed channels
+            mClosedChannelsList = closedChannelsResponse.getChannelsList();
+            // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+            for (ChannelCloseSummary c : mClosedChannelsList) {
+                channelNodes.add(c.getRemotePubkey());
+            }
+
+            // pending channels
+            mPendingOpenChannelsList = pendingChannelsResponse.getPendingOpenChannelsList();
+            mPendingClosedChannelsList = pendingChannelsResponse.getPendingClosingChannelsList();
+            mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
+            mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
+
+            // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+            for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
+                channelNodes.add(c.getChannel().getRemoteNodePub());
+            }
+            for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
+                channelNodes.add(c.getChannel().getRemoteNodePub());
+            }
+            for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
+                channelNodes.add(c.getChannel().getRemoteNodePub());
+            }
+            for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
+                channelNodes.add(c.getChannel().getRemoteNodePub());
+            }
+
+            // Delay each request for 100ms to not stress LND
+            ArrayList<String> channelNodesList = new ArrayList<>(channelNodes);
+            ZapLog.debug(LOG_TAG, "Fetching node info for " + channelNodesList.size() + " nodes.");
+
+            compositeDisposable.add(Observable.range(0, channelNodesList.size())
+                    .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
+                    .doOnNext(integer -> fetchNodeInfoFromLND(channelNodesList.get(integer)))
+                    .doOnComplete(this::broadcastChannelsUpdated).subscribe());
+            return true;
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+            // Zip executed without error
+        }, throwable -> ZapLog.debug(LOG_TAG, "Exception in get channels info request task: " + throwable.getMessage())));
     }
 
     /**
@@ -884,42 +631,24 @@ public class Wallet {
      * @param pubkey
      */
     public void fetchNodeInfoFromLND(String pubkey) {
-        // fetch node info
-        LightningGrpc.LightningFutureStub asyncNodeInfoClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        NodeInfoRequest asyncNodeInfoRequest = NodeInfoRequest.newBuilder()
+        NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(pubkey)
                 .build();
-        final ListenableFuture<NodeInfo> nodeInfoFuture = asyncNodeInfoClient.getNodeInfo(asyncNodeInfoRequest);
 
-        nodeInfoFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    NodeInfo nodeInfoResponse = nodeInfoFuture.get();
-
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
+                .timeout(10, TimeUnit.SECONDS)
+                .subscribe(nodeInfo -> {
                     // Add the nodeInfo to our list, if it is not already a member of the list.
                     boolean nodeInfoAlreadyExists = false;
                     for (NodeInfo i : mNodeInfos) {
-                        if (i.getNode().getPubKey().equals(nodeInfoResponse.getNode().getPubKey())) {
+                        if (i.getNode().getPubKey().equals(nodeInfo.getNode().getPubKey())) {
                             nodeInfoAlreadyExists = true;
                         }
                     }
                     if (!nodeInfoAlreadyExists) {
-                        mNodeInfos.add(nodeInfoResponse);
+                        mNodeInfos.add(nodeInfo);
                     }
-
-                    // ZapLog.debug(LOG_TAG, nodeInfoResponse.toString());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Get node info request interrupted.");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in get node info request task.");
-                    // ZapLog.debug(LOG_TAG, e.getMessage());
-                }
-            }
-        }, new ExecuteOnCaller());
+                }, throwable -> ZapLog.debug(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage())));
     }
 
 
@@ -930,75 +659,16 @@ public class Wallet {
      * TransactionSubscriptionListener.
      */
     public void subscribeToTransactions() {
-
-        LightningGrpc.LightningStub streamingTransactionClient = LightningGrpc
-                .newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        GetTransactionsRequest streamingTransactionRequest = GetTransactionsRequest.newBuilder()
-                .build();
-
-        mTransactionStreamObserver = new ClientCallStreamObserver<TransactionDetails>() {
-            @Override
-            public boolean isReady() {
-                return false;
-            }
-
-            @Override
-            public void setOnReadyHandler(Runnable onReadyHandler) {
-
-            }
-
-            @Override
-            public void disableAutoInboundFlowControl() {
-
-            }
-
-            @Override
-            public void request(int count) {
-
-            }
-
-            @Override
-            public void setMessageCompression(boolean enable) {
-
-            }
-
-            @Override
-            public void cancel(@Nullable String message, @Nullable Throwable cause) {
-
-            }
-
-            @Override
-            public void onNext(TransactionDetails transactionDetails) {
-
-                ZapLog.debug(LOG_TAG, "Received transaction subscription event.");
-
-                broadcastTransactionUpdate(transactionDetails);
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        };
-
-        streamingTransactionClient.getTransactions(streamingTransactionRequest, mTransactionStreamObserver);
-
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeTransactions(GetTransactionsRequest.newBuilder().build())
+                .subscribe(transaction -> {
+                    ZapLog.debug(LOG_TAG, "Received transaction subscription event.");
+                    broadcastTransactionUpdate(transaction);
+                }));
     }
 
-    public void cancelTransactionSubscription() {
-        if (mTransactionStreamObserver != null) {
-            mTransactionStreamObserver.cancel(null, null);
-        }
+    public void cancelSubscriptions() {
+        compositeDisposable.clear();
     }
-
 
     /**
      * Use this to subscribe the wallet to invoice events that happen on LND.
@@ -1007,106 +677,44 @@ public class Wallet {
      * InvoiceSubscriptionListener.
      */
     public void subscribeToInvoices() {
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeInvoices(InvoiceSubscription.newBuilder().build())
+                .subscribe(invoice -> {
+                    ZapLog.debug(LOG_TAG, "Received invoice subscription event.");
 
-        LightningGrpc.LightningStub streamingInvoiceClient = LightningGrpc
-                .newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
+                    // is this a new invoice or is an old one updated?
+                    if (mInvoiceList != null) {
+                        if (invoice.getAddIndex() > mInvoiceList.get(0).getAddIndex()) {
+                            // this is a new one
+                            mInvoiceList.add(0, invoice);
+                            broadcastInvoiceAdded(invoice);
+                        } else {
+                            // this is an update
 
-        InvoiceSubscription streamingInvoiceRequest = InvoiceSubscription.newBuilder()
-                .build();
-
-        mInvoiceStreamObserver = new ClientCallStreamObserver<Invoice>() {
-            @Override
-            public boolean isReady() {
-                return false;
-            }
-
-            @Override
-            public void setOnReadyHandler(Runnable onReadyHandler) {
-
-            }
-
-            @Override
-            public void disableAutoInboundFlowControl() {
-
-            }
-
-            @Override
-            public void request(int count) {
-
-            }
-
-            @Override
-            public void setMessageCompression(boolean enable) {
-
-            }
-
-            @Override
-            public void cancel(@Nullable String message, @Nullable Throwable cause) {
-
-            }
-
-            @Override
-            public void onNext(Invoice invoice) {
-
-                ZapLog.debug(LOG_TAG, "Received invoice subscription event.");
-
-                // is this a new invoice or is an old one updated?
-                if (mInvoiceList != null) {
-                    if (invoice.getAddIndex() > mInvoiceList.get(0).getAddIndex()) {
-                        // this is a new one
-                        mInvoiceList.add(0, invoice);
-                        broadcastInvoiceAdded(invoice);
-                    } else {
-                        // this is an update
-
-                        // Find out which element has to be replaced
-                        int changeIndex = -1;
-                        for (int i = 0; i < mInvoiceList.size() - 1; i++) {
-                            if (mInvoiceList.get(i).getAddIndex() == invoice.getAddIndex()) {
-                                changeIndex = i;
-                                break;
+                            // Find out which element has to be replaced
+                            int changeIndex = -1;
+                            for (int i = 0; i < mInvoiceList.size() - 1; i++) {
+                                if (mInvoiceList.get(i).getAddIndex() == invoice.getAddIndex()) {
+                                    changeIndex = i;
+                                    break;
+                                }
                             }
-                        }
 
-                        // Replace it
-                        if (changeIndex >= 0) {
-                            mInvoiceList.set(changeIndex, invoice);
-                        }
+                            // Replace it
+                            if (changeIndex >= 0) {
+                                mInvoiceList.set(changeIndex, invoice);
+                            }
 
-                        // Inform all subscribers
-                        broadcastInvoiceUpdated(invoice);
+                            // Inform all subscribers
+                            broadcastInvoiceUpdated(invoice);
+                        }
+                    } else {
+                        // this is a new one
+                        mInvoiceList = new LinkedList<>();
+                        mInvoiceList.add(invoice);
+                        broadcastInvoiceAdded(invoice);
                     }
-                } else {
-                    // this is a new one
-                    mInvoiceList = new LinkedList<>();
-                    mInvoiceList.add(invoice);
-                    broadcastInvoiceAdded(invoice);
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        };
-
-        streamingInvoiceClient.subscribeInvoices(streamingInvoiceRequest, mInvoiceStreamObserver);
-
+                }));
     }
-
-    public void cancelInvoiceSubscription() {
-        if (mInvoiceStreamObserver != null) {
-            mInvoiceStreamObserver.cancel(null, null);
-        }
-    }
-
 
     /**
      * Use this to subscribe the wallet to channel events that happen on LND.
@@ -1115,86 +723,33 @@ public class Wallet {
      * ChannelEventSubscriptionListener.
      */
     public void subscribeToChannelEvents() {
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeChannelEvents(ChannelEventSubscription.newBuilder().build())
+                .subscribe(channelEventUpdate -> {
+                    ZapLog.debug(LOG_TAG, "Received channel update event");
+                    switch (channelEventUpdate.getChannelCase()) {
+                        case OPEN_CHANNEL:
+                            ZapLog.debug(LOG_TAG, "Channel has been opened");
+                            break;
+                        case CLOSED_CHANNEL:
+                            ZapLog.debug(LOG_TAG, "Channel has been closed");
+                            break;
+                        case ACTIVE_CHANNEL:
+                            ZapLog.debug(LOG_TAG, "Channel went active");
+                            break;
+                        case INACTIVE_CHANNEL:
+                            ZapLog.debug(LOG_TAG, "Open channel went to inactive");
+                            break;
+                        case CHANNEL_NOT_SET:
+                            ZapLog.debug(LOG_TAG, "Received channel event update case: not set Channel");
+                            break;
+                        default:
+                            ZapLog.debug(LOG_TAG, "Unknown channel event: " + channelEventUpdate.getChannelCase());
+                            break;
+                    }
 
-        LightningGrpc.LightningStub streamingChannelEventClient = LightningGrpc
-                .newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        ChannelEventSubscription streamingChannelEventRequest = ChannelEventSubscription.newBuilder()
-                .build();
-
-        mChannelEventStreamObserver = new ClientCallStreamObserver<ChannelEventUpdate>() {
-            @Override
-            public boolean isReady() {
-                return false;
-            }
-
-            @Override
-            public void setOnReadyHandler(Runnable onReadyHandler) {
-
-            }
-
-            @Override
-            public void disableAutoInboundFlowControl() {
-
-            }
-
-            @Override
-            public void request(int count) {
-
-            }
-
-            @Override
-            public void setMessageCompression(boolean enable) {
-
-            }
-
-            @Override
-            public void cancel(@Nullable String message, @Nullable Throwable cause) {
-
-            }
-
-            @Override
-            public void onNext(ChannelEventUpdate channelEventUpdate) {
-                ZapLog.debug(LOG_TAG, "Received channel update event");
-                switch (channelEventUpdate.getChannelCase()) {
-                    case OPEN_CHANNEL:
-                        ZapLog.debug(LOG_TAG, "Channel has been opened");
-                        break;
-                    case CLOSED_CHANNEL:
-                        ZapLog.debug(LOG_TAG, "Channel has been closed");
-                        break;
-                    case ACTIVE_CHANNEL:
-                        ZapLog.debug(LOG_TAG, "Channel went active");
-                        break;
-                    case INACTIVE_CHANNEL:
-                        ZapLog.debug(LOG_TAG, "Open channel went to inactive");
-                        break;
-                    case CHANNEL_NOT_SET:
-                        ZapLog.debug(LOG_TAG, "Received channel event update case: not set Channel");
-                        break;
-                    default:
-                        ZapLog.debug(LOG_TAG, "Unknown channel event: " + channelEventUpdate.getChannelCase());
-                        break;
-                }
-
-                updateLNDChannelsWithDebounce();
-
-                broadcastChannelEvent(channelEventUpdate);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        };
-
-        streamingChannelEventClient.subscribeChannelEvents(streamingChannelEventRequest, mChannelEventStreamObserver);
+                    updateLNDChannelsWithDebounce();
+                    broadcastChannelEvent(channelEventUpdate);
+                }));
     }
 
     public void updateLNDChannelsWithDebounce() {
@@ -1203,13 +758,6 @@ public class Wallet {
         mChannelsUpdateDebounceHandler.attempt(this::fetchChannelsFromLND, DebounceHandler.DEBOUNCE_1_SECOND);
     }
 
-    public void cancelChannelEventSubscription() {
-        if (mChannelEventStreamObserver != null) {
-            mChannelEventStreamObserver.cancel(null, null);
-        }
-    }
-
-
     /**
      * Use this to subscribe the wallet to channel backup events that happen on LND.
      * The events will be captured and forwarded to the ChannelBackupSubscriptionListener.
@@ -1217,75 +765,12 @@ public class Wallet {
      * ChannelBackupSubscriptionListener.
      */
     public void subscribeToChannelBackup() {
-
-        LightningGrpc.LightningStub streamingChannelBackupClient = LightningGrpc
-                .newStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        ChannelBackupSubscription streamingChannelBackupRequest = ChannelBackupSubscription.newBuilder()
-                .build();
-
-        mChannelBackupStreamObserver = new ClientCallStreamObserver<ChanBackupSnapshot>() {
-            @Override
-            public boolean isReady() {
-                return false;
-            }
-
-            @Override
-            public void setOnReadyHandler(Runnable onReadyHandler) {
-
-            }
-
-            @Override
-            public void disableAutoInboundFlowControl() {
-
-            }
-
-            @Override
-            public void request(int count) {
-
-            }
-
-            @Override
-            public void setMessageCompression(boolean enable) {
-
-            }
-
-            @Override
-            public void cancel(@Nullable String message, @Nullable Throwable cause) {
-
-            }
-
-            @Override
-            public void onNext(ChanBackupSnapshot chanBackupSnapshot) {
-
-                ZapLog.debug(LOG_TAG, "Received channel backup event.");
-
-                broadcastChannelBackup(chanBackupSnapshot);
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        };
-
-        streamingChannelBackupClient.subscribeChannelBackups(streamingChannelBackupRequest, mChannelBackupStreamObserver);
-
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeChannelBackups(ChannelBackupSubscription.newBuilder().build())
+                .subscribe(chanBackupSnapshot -> {
+                    ZapLog.debug(LOG_TAG, "Received channel backup event.");
+                    broadcastChannelBackup(chanBackupSnapshot);
+                }));
     }
-
-    public void cancelChannelBackupSubscription() {
-        if (mChannelBackupStreamObserver != null) {
-            mChannelBackupStreamObserver.cancel(null, null);
-        }
-    }
-
 
     /**
      * Returns if the invoice has been payed already.
@@ -1601,7 +1086,7 @@ public class Wallet {
      * @param success true if successful
      * @param error   one of WalletLoadedListener errors, -1 if successful
      */
-    private void broadcastWalletLoadedUpdate(boolean success, int error) {
+    public void broadcastWalletLoadedUpdate(boolean success, int error) {
         for (WalletLoadedListener listener : mWalletLoadedListeners) {
             listener.onWalletLoadedUpdated(success, error);
         }
@@ -1703,11 +1188,11 @@ public class Wallet {
     /**
      * Notify all listeners to transaction update.
      *
-     * @param transactionDetails the details about the transaction update
+     * @param transaction the details about the transaction update
      */
-    private void broadcastTransactionUpdate(TransactionDetails transactionDetails) {
+    private void broadcastTransactionUpdate(Transaction transaction) {
         for (TransactionSubscriptionListener listener : mTransactionSubscriptionListeners) {
-            listener.onTransactionEvent(transactionDetails);
+            listener.onTransactionEvent(transaction);
         }
     }
 
@@ -1836,7 +1321,7 @@ public class Wallet {
     }
 
     public interface TransactionSubscriptionListener {
-        void onTransactionEvent(TransactionDetails transactionDetails);
+        void onTransactionEvent(Transaction transaction);
     }
 
     public interface ChannelEventSubscriptionListener {

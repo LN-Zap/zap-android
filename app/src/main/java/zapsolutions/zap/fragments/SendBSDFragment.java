@@ -37,30 +37,20 @@ import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
-import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeResponse;
 import com.github.lightningnetwork.lnd.lnrpc.FeeLimit;
-import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.QueryRoutesRequest;
-import com.github.lightningnetwork.lnd.lnrpc.QueryRoutesResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Route;
 import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
-import com.github.lightningnetwork.lnd.lnrpc.SendCoinsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
-import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.InvalidProtocolBufferException;
-
-import java.util.concurrent.ExecutionException;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.customView.LightningFeeView;
 import zapsolutions.zap.customView.OnChainFeeView;
-import zapsolutions.zap.util.ExecuteOnCaller;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
@@ -69,7 +59,7 @@ import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 
-public class SendBSDFragment extends BottomSheetDialogFragment {
+public class SendBSDFragment extends RxBSDFragment {
 
     private static final String LOG_TAG = SendBSDFragment.class.getName();
 
@@ -119,7 +109,6 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
     private float mLnFeePercentCalculated;
     private float mLnFeePercentSettingLimit;
-
 
     @Nullable
     @Override
@@ -396,54 +385,29 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
                         switchToSendProgressScreen();
 
-                        LightningGrpc.LightningFutureStub asyncOnChainSendClient = LightningGrpc
-                                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
                         SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
                                 .setAddr(mOnChainAddress)
                                 .setAmount(sendAmount)
                                 .setTargetConf(mOnChainFeeView.getFeeTier().getConfirmationBlockTarget())
                                 .build();
 
-                        final ListenableFuture<SendCoinsResponse> sendFuture = asyncOnChainSendClient.sendCoins(sendRequest);
-
-                        sendFuture.addListener(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    SendCoinsResponse sendResponse = sendFuture.get();
-
+                        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().sendCoins(sendRequest)
+                                .subscribe(sendCoinsResponse -> {
                                     // updated the history, so it is shown the next time the user views it
                                     Wallet.getInstance().updateOnChainTransactionHistory();
 
-                                    ZapLog.debug(LOG_TAG, sendResponse.toString());
+                                    ZapLog.debug(LOG_TAG, sendCoinsResponse.toString());
 
                                     // show success animation
                                     mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
-
-                                } catch (InterruptedException e) {
-                                    ZapLog.debug(LOG_TAG, "send coins request interrupted.");
-                                    switchToFailedScreen("Request interrupted");
-                                } catch (ExecutionException e) {
+                                }, throwable -> {
                                     ZapLog.debug(LOG_TAG, "Exception in send coins request task.");
-                                    ZapLog.debug(LOG_TAG, e.getMessage());
+                                    ZapLog.debug(LOG_TAG, throwable.getMessage());
 
-                                    // possible error messages: checksum mismatch, decoded address is of unknown format
-
-                                    ZapLog.debug(LOG_TAG, "Error during payment!");
-                                    ZapLog.debug(LOG_TAG, e.getMessage());
-
-                                    mHandler.postDelayed(() -> {
-                                        String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                                        switchToFailedScreen(e.getCause().getMessage().replace("UNKNOWN:", errorPrefix));
-                                    }, 300);
-                                }
-
-                            }
-                        }, new ExecuteOnCaller());
-
-
+                                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                                    String errormessage = throwable.getCause().getMessage().replace("UNKNOWN:", errorPrefix);
+                                    mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
+                                }));
                     } else {
                         // Send amount == 0
                         Toast.makeText(getActivity(), "Send amount is to small.", Toast.LENGTH_SHORT).show();
@@ -641,18 +605,8 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
 
         SendRequest sendRequest = paymentRequestBuilder.build();
 
-        LightningGrpc.LightningFutureStub asyncLightningSendClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
-        final ListenableFuture<SendResponse> sendFuture = asyncLightningSendClient.sendPaymentSync(sendRequest);
-
-        sendFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    SendResponse sendResponse = sendFuture.get();
-
+        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().sendPaymentSync(sendRequest)
+                .subscribe(sendResponse -> {
                     // updated the history, so it is shown the next time the user views it
                     Wallet.getInstance().updateLightningPaymentHistory();
 
@@ -669,27 +623,15 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         }
 
                     }, 300);
+                }, throwable -> {
+                    ZapLog.debug(LOG_TAG, "Exception in send payment task.");
+                    ZapLog.debug(LOG_TAG, throwable.getMessage());
 
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "send request interrupted.");
-                    switchToFailedScreen("Request interrupted");
-                } catch (ExecutionException e) {
-                    ZapLog.debug(LOG_TAG, "Exception in send request task.");
-                    ZapLog.debug(LOG_TAG, e.getMessage());
+                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                    String errormessage = throwable.getCause().getMessage().replace("UNKNOWN:", errorPrefix);
+                    mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
 
-                    // possible error messages: checksum mismatch, decoded address is of unknown format
-
-                    ZapLog.debug(LOG_TAG, "Error during payment!");
-                    ZapLog.debug(LOG_TAG, e.getMessage());
-
-                    mHandler.postDelayed(() -> {
-                        String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                        switchToFailedScreen(e.getCause().getMessage().replace("UNKNOWN:", errorPrefix));
-                    }, 300);
-                }
-
-            }
-        }, new ExecuteOnCaller());
+                }));
     }
 
     // This gets executed after onCreateView. We edit the bottomSheetBehavior to not react to swipes
@@ -980,60 +922,32 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
      */
     private void estimateOnChainFee(String address, long amount, int targetConf) {
         // let LND estimate fee
-        LightningGrpc.LightningFutureStub asyncEstimateFeeClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
         EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
                 .putAddrToAmount(address, amount)
                 .setTargetConf(targetConf)
                 .build();
-        final ListenableFuture<EstimateFeeResponse> estimateFeeFuture = asyncEstimateFeeClient.estimateFee(asyncEstimateFeeRequest);
 
-
-        estimateFeeFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    EstimateFeeResponse estimateFeeResponse = estimateFeeFuture.get();
-
-                    setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat()));
-
-                    // ZapLog.debug(LOG_TAG, estimateFeeResponse.toString());
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Fee estimation request interrupted.");
-                    setFeeFailure();
-                } catch (ExecutionException e) {
-                    // ZapLog.debug(LOG_TAG, "Exception in fee estimation request task.");
-                    ZapLog.debug(LOG_TAG, e.getMessage());
-                    setFeeFailure();
-                }
-            }
-        }, new ExecuteOnCaller());
+        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
+                .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat())),
+                        throwable -> {
+                            ZapLog.debug(LOG_TAG, "Exception in fee estimation request task.");
+                            ZapLog.debug(LOG_TAG, throwable.getMessage());
+                            setFeeFailure();
+                        }));
     }
 
     /**
      * Query Routes. This is used to determine the expected fees for a lightning payment.
      */
     private void queryRoutes(String pubKey, long amount) {
-        LightningGrpc.LightningFutureStub asyncQueryRoutesClient = LightningGrpc
-                .newFutureStub(LndConnection.getInstance().getSecureChannel())
-                .withCallCredentials(LndConnection.getInstance().getMacaroon());
-
         QueryRoutesRequest asyncQueryRoutesRequest = QueryRoutesRequest.newBuilder()
                 .setPubKey(pubKey)
                 .setAmt(amount)
                 .setUseMissionControl(true)
                 .build();
 
-        final ListenableFuture<QueryRoutesResponse> queryRoutesFuture = asyncQueryRoutesClient.queryRoutes(asyncQueryRoutesRequest);
-
-        queryRoutesFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    QueryRoutesResponse queryRoutesResponse = queryRoutesFuture.get();
-
+        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().queryRoutes(asyncQueryRoutesRequest)
+                .subscribe(queryRoutesResponse -> {
                     if (queryRoutesResponse.getRoutesCount() == 0) {
                         ZapLog.debug(LOG_TAG, "No route found.");
                         setFeeFailure();
@@ -1052,17 +966,11 @@ public class SendBSDFragment extends BottomSheetDialogFragment {
                         feeString = feeString + feePercentageString;
                         setCalculatedFeeAmount(feeString);
                     }
-
-                } catch (InterruptedException e) {
-                    ZapLog.debug(LOG_TAG, "Query routes request interrupted.");
+                }, throwable -> {
+                    ZapLog.debug(LOG_TAG, "Exception in query routes request task.");
+                    ZapLog.debug(LOG_TAG, throwable.getMessage());
                     setFeeFailure();
-                } catch (ExecutionException e) {
-                    // ZapLog.debug(LOG_TAG, "Exception in query routes request task.");
-                    ZapLog.debug(LOG_TAG, e.getMessage());
-                    setFeeFailure();
-                }
-            }
-        }, new ExecuteOnCaller());
+                }));
     }
 
 }

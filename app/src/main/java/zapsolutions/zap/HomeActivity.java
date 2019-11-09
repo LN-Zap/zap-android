@@ -211,12 +211,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
-            // Restart lnd connection
+            // Start lnd connection
             if (PrefsUtil.isWalletSetup()) {
                 TimeOutUtil.getInstance().setCanBeRestarted(true);
 
-                ZapLog.debug(LOG_TAG, "Starting to establish connections...");
-                LndConnection.getInstance().restartBackgroundTasks();
+                LndConnection.getInstance().openConnection();
 
                 Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
 
@@ -240,7 +239,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     protected void onDestroy() {
         super.onDestroy();
         stopListenersAndSchedules();
-
         // Remove observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
     }
@@ -280,15 +278,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
 
         // Kill Server Streams
-        Wallet.getInstance().cancelTransactionSubscription();
-        Wallet.getInstance().cancelInvoiceSubscription();
-        Wallet.getInstance().cancelChannelEventSubscription();
-        Wallet.getInstance().cancelChannelBackupSubscription();
-
+        Wallet.getInstance().cancelSubscriptions();
 
         // Kill lnd connection
         if (PrefsUtil.isWalletSetup()) {
-            LndConnection.getInstance().stopBackgroundTasks();
+            LndConnection.getInstance().closeConnection();
         }
     }
 
@@ -349,7 +343,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             if (mHandler != null) {
                 mHandler.postDelayed(() -> Wallet.getInstance().subscribeToChannelEvents(), 3000);
             }
-            //Wallet.getInstance().subscribeToChannelBackup();
 
             ZapLog.debug(LOG_TAG, "Wallet loaded");
         } else {

@@ -1,10 +1,9 @@
 package zapsolutions.zap.connection.establishConnectionToLnd;
 
 
-import com.github.lightningnetwork.lnd.lnrpc.LightningGrpc;
 import com.google.common.io.BaseEncoding;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLSocketFactory;
 
@@ -12,6 +11,10 @@ import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.lnd.LndLightningService;
+import zapsolutions.zap.lnd.LndWalletUnlockerService;
+import zapsolutions.zap.lnd.RemoteLndLightningService;
+import zapsolutions.zap.lnd.RemoteLndWalletUnlockerService;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -22,17 +25,16 @@ public class LndConnection {
     private static final String LOG_TAG = LndConnection.class.getName();
 
     private static LndConnection mLndConnectionInstance;
+
     private SSLSocketFactory mSSLFactory;
     private MacaroonCallCredential mMacaroon;
     private ManagedChannel mSecureChannel;
-    private ExecutorService mLndThreads;
-    private boolean mIsShutdown = false;
-    private LightningGrpc.LightningBlockingStub mBlockingClient;
+    private LndLightningService mLndLightningService;
+    private LndWalletUnlockerService mLndWalletUnlockerService;
     private WalletConfig mConnectionConfig;
 
-
     private LndConnection() {
-        readSavedConnectionInfo();
+        ;
     }
 
     public static synchronized LndConnection getInstance() {
@@ -40,6 +42,14 @@ public class LndConnection {
             mLndConnectionInstance = new LndConnection();
         }
         return mLndConnectionInstance;
+    }
+
+    public LndLightningService getLightningService() {
+        return mLndLightningService;
+    }
+
+    public LndWalletUnlockerService getWalletUnlockerService() {
+        return mLndWalletUnlockerService;
     }
 
     private void readSavedConnectionInfo() {
@@ -51,6 +61,7 @@ public class LndConnection {
         mMacaroon = new MacaroonCallCredential(mConnectionConfig.getMacaroon());
 
         mSSLFactory = null;
+
         // Generate certificate if one was supplied
         if (mConnectionConfig.getCert() != null) {
             // We have a certificate, try to load it.
@@ -65,21 +76,13 @@ public class LndConnection {
             }
 
         }
-
-        generateChannelAndStubs();
-
-        /* Create threads for up to 5 concurrent LND requests. If more request than 5 Request want
-         to be executed they wait in a queue until one thread is available. These threads can not
-         modify the UI */
-        // mLndThreads = Executors.newFixedThreadPool(5);
     }
 
     private void generateChannelAndStubs() {
-
         String host = mConnectionConfig.getHost();
         int port = mConnectionConfig.getPort();
-        // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
 
+        // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
         if (mSSLFactory == null) {
             // BTCPay
             mSecureChannel = OkHttpChannelBuilder
@@ -93,50 +96,42 @@ public class LndConnection {
                     .build();
         }
 
-        // Blocking client to for sync gRPC calls
-        mBlockingClient = LightningGrpc
-                .newBlockingStub(mSecureChannel)
-                .withCallCredentials(mMacaroon);
-
+        mLndLightningService = new RemoteLndLightningService(mSecureChannel, mMacaroon);
+        mLndWalletUnlockerService = new RemoteLndWalletUnlockerService(mSecureChannel, mMacaroon);
     }
 
-    public void stopBackgroundTasks() {
-        // Close the OKHttpChannel
-        mSecureChannel.shutdownNow();
-        // Shutdown the thread pool for lnd requests
-        //mLndThreads.shutdownNow();
-        mIsShutdown = true;
-    }
-
-    public void restartBackgroundTasks() {
+    public void openConnection() {
+        ZapLog.debug(LOG_TAG, "Starting LND connection...(Open Http Channel)");
         readSavedConnectionInfo();
+        generateChannelAndStubs();
 
-        // Shutdown the thread pool for lnd requests
-        //if (mIsShutdown){
-        //   mLndThreads = Executors.newFixedThreadPool(5);
-        //}
     }
 
-
-    public MacaroonCallCredential getMacaroon() {
-        return mMacaroon;
+    public void closeConnection() {
+        if (mSecureChannel != null) {
+            ZapLog.debug(LOG_TAG, "Shutting down LND connection...(Closing Http Channel)");
+            shutdownChannel();
+        }
     }
 
-    public ManagedChannel getSecureChannel() {
-        return mSecureChannel;
-    }
-
-    public ExecutorService getLndThreads() {
-        return mLndThreads;
-    }
-
-    public LightningGrpc.LightningBlockingStub getBlockingClient() {
-        return mBlockingClient;
+    /**
+     * Will shutdown the channel and cancel all active calls.
+     * Waits for shutdown (blocking) and logs result.
+     */
+    private void shutdownChannel() {
+        try {
+            if (mSecureChannel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS)) {
+                ZapLog.debug(LOG_TAG, "LND channel shutdown successfully...");
+            } else {
+                ZapLog.debug(LOG_TAG, "LND channel shutdown failed...");
+            }
+        } catch (InterruptedException e) {
+            ZapLog.debug(LOG_TAG, "LND channel shutdown exception: " + e.getMessage());
+        }
     }
 
     public WalletConfig getConnectionConfig() {
         return mConnectionConfig;
     }
-
 
 }
