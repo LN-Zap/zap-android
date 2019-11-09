@@ -43,6 +43,7 @@ import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
+import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -217,8 +218,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
                 LndConnection.getInstance().openConnection();
 
-                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
-
+                if(TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(this)){
+                    TorUtil.askToInstallOrbotIfMissing(this);
+                } else {
+                    Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
+                }
             }
         }
     }

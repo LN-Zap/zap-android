@@ -2,9 +2,6 @@ package zapsolutions.zap.util;
 
 public class TimeOutUtil {
 
-    // 10 seconds time out
-    private static long TIMEOUT_DELAY = 1000 * 10;
-
     private static long appClosed = 0L;
     private static TimeOutUtil instance = null;
     private boolean canBeRestarted = true;
@@ -27,7 +24,7 @@ public class TimeOutUtil {
     }
 
     public boolean isTimedOut() {
-        boolean timedOut = (System.currentTimeMillis() - appClosed) > TIMEOUT_DELAY;
+        boolean timedOut = (System.currentTimeMillis() - appClosed) > RefConstants.ACCESS_TIMEOUT * 1000;
         // Do also not allow times prior to "appClosed".
         // This would allow to circumventing timeout check by setting the time of the device manually.
         boolean invalidTime = System.currentTimeMillis() < appClosed;

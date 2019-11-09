@@ -35,6 +35,7 @@ import zapsolutions.zap.util.Balances;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -245,10 +246,14 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         btnReconnect.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                mWalletConnectedLayout.setVisibility(View.GONE);
-                mWalletNotConnectedLayout.setVisibility(View.GONE);
-                mLoadingWalletLayout.setVisibility(View.VISIBLE);
-                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
+                if(TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(getActivity())){
+                    TorUtil.askToInstallOrbotIfMissing(getActivity());
+                } else {
+                    mWalletConnectedLayout.setVisibility(View.GONE);
+                    mWalletNotConnectedLayout.setVisibility(View.GONE);
+                    mLoadingWalletLayout.setVisibility(View.VISIBLE);
+                    Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
+                }
             }
         });
 
@@ -481,6 +486,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                         mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionConfig().getHost()));
                     } else if (error == Wallet.WalletLoadedListener.ERROR_UNAVAILABLE) {
                         mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(LndConnection.getInstance().getConnectionConfig().getPort())));
+                    } else if (error == Wallet.WalletLoadedListener.ERROR_TOR) {
+                        mTvConnectError.setText(R.string.error_connection_tor_unreachable);
                     }
                 }
             } else {

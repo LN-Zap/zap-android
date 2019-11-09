@@ -11,12 +11,25 @@ public class RefConstants {
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
     public static final int NUM_HASH_ITERATIONS = 5000;
 
-    // These settings do not require an update of the CURRENT_SETTINGS_VERSION
+    ///////////////////////////////////////////////////////////////////////////////////
+    // All settings below here do not require an update of the CURRENT_SETTINGS_VERSION
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    // PIN settings
     public static final int PIN_MIN_LENGTH = 4;
     public static final int PIN_MAX_LENGTH = 10;
     public static final int PIN_MAX_FAILS = 3;
     public static final int PIN_DELAY_TIME = 30;
 
+    // API request timeouts
+    public static final int TIMEOUT_SHORT = 5;
+    public static final int TIMEOUT_MEDIUM = 10;
+    public static final int TIMEOUT_LONG = 15;
+
+    // Number of seconds after moving the app to background until the app gets locked.
+    public static final int ACCESS_TIMEOUT = 10;
+
+    // Haptic vibration
     public static final int VIBRATE_SHORT = 50;
     public static final int VIBRATE_LONG = 200;
 
@@ -26,6 +39,7 @@ public class RefConstants {
     If the payment amount is above this threshold, the user setting will be considered. */
     public static final int LN_PAYMENT_FEE_THRESHOLD = 100;
 
+    // URLS
     public static final String URL_HELP = "https://docs.zaphq.io/";
     public static final String URL_SUGGESTED_NODES = "https://resources.zaphq.io/api/v1/suggested-nodes";
 
