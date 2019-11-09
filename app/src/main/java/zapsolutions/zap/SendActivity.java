@@ -19,6 +19,7 @@ import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -254,7 +255,7 @@ public class SendActivity extends BaseScannerActivity {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
-                .timeout(3, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_SHORT, TimeUnit.SECONDS)
                 .subscribe(paymentRequest -> {
                     ZapLog.debug(LOG_TAG, paymentRequest.toString());
 

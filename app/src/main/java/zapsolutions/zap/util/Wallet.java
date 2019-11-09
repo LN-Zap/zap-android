@@ -157,7 +157,7 @@ public class Wallet {
             ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
 
             compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                    .timeout(10, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                    .timeout(RefConstants.TIMEOUT_MEDIUM, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                     .subscribe(infoResponse -> {
                         ZapLog.debug(LOG_TAG, "LND is reachable.");
                         // Save the received data.
@@ -171,9 +171,9 @@ public class Wallet {
                     }, throwable -> {
                         mConnectionCheckInProgress = false;
 
-                        if (throwable.getMessage().toLowerCase().contains("unavailable")) {
+                        if (throwable.getMessage().toLowerCase().contains("unavailable") && !throwable.getMessage().toLowerCase().contains(".onion")) {
                             // This is the case if:
-                            // - LND deamon is not running
+                            // - LND daemon is not running
                             // - An incorrect port is used
                             // - A wrong certificate is used (When the certificate creation failed due to an error)
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
@@ -197,6 +197,11 @@ public class Wallet {
                             // - The macaroon has wrong encoding
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
                             ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
+                        } else if (throwable.getMessage().contains(".onion")) {
+                            // This is the case if:
+                            // - Orbot is not running or not in vpn mode and the user tries to connect to a tor node.
+                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TOR);
+                            ZapLog.debug(LOG_TAG, "Cannot resolve onion address!");
                         } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
                             ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_INTERRUPTED);
@@ -210,7 +215,7 @@ public class Wallet {
     }
 
     /**
-     * Call this if the deamon is running, but the wallet is not unlocked yet.
+     * Call this if the daemon is running, but the wallet is not unlocked yet.
      *
      * @param password
      */
@@ -455,7 +460,7 @@ public class Wallet {
 
     public void openChannel(LightningNodeUri nodeUri, long amount) {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
-                .timeout(10, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
                 .subscribe(listPeersResponse -> {
                     boolean connected = false;
                     for (Peer node : listPeersResponse.getPeersList()) {
@@ -494,7 +499,7 @@ public class Wallet {
         ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
-                .timeout(15, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
                 .subscribe(connectPeerResponse -> {
                     ZapLog.debug(LOG_TAG, "Successfully connected to peer, trying to open channel...");
                     openChannelConnected(nodeUri, amount);
@@ -520,7 +525,7 @@ public class Wallet {
                 .setLocalFundingAmount(amount).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().openChannel(openChannelRequest)
-                .timeout(10, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(openStatusUpdate -> {
                     ZapLog.debug(LOG_TAG, "Open channel update: " + openStatusUpdate.getUpdateCase().getNumber());
@@ -546,7 +551,7 @@ public class Wallet {
         CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder().setChannelPoint(point).setForce(force).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().closeChannel(closeChannelRequest)
-                .timeout(10, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(closeStatusUpdate -> {
                     ZapLog.debug(LOG_TAG, "Closing channel update: " + closeStatusUpdate.getUpdateCase().getNumber());
@@ -636,7 +641,7 @@ public class Wallet {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
-                .timeout(10, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
                 .subscribe(nodeInfo -> {
                     // Add the nodeInfo to our list, if it is not already a member of the list.
                     boolean nodeInfoAlreadyExists = false;
@@ -1298,6 +1303,7 @@ public class Wallet {
         int ERROR_TIMEOUT = 2;
         int ERROR_UNAVAILABLE = 3;
         int ERROR_AUTHENTICATION = 4;
+        int ERROR_TOR = 5;
 
         void onWalletLoadedUpdated(boolean success, int error);
     }
