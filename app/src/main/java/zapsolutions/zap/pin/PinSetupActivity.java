@@ -7,13 +7,11 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.zxing.client.result.AddressBookParsedResult;
-
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.setup.ConnectFragment;
+import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UtilFunctions;
@@ -55,14 +53,12 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
         }
     }
 
-    public void pinCreated(String value, Integer length) {
+    public void pinCreated(String value) {
         App.getAppContext().pinTemp = value;
         showConfirmPin();
     }
 
-    public void pinConfirmed(String value, Integer length) {
-
-        String tempInMemoryPin = App.getAppContext().inMemoryPin;
+    public void pinConfirmed(String value) {
 
         App.getAppContext().inMemoryPin = value;
         App.getAppContext().pinTemp = null;
@@ -75,6 +71,11 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
 
 
         if (mSetupMode == ADD_PIN) {
+            try {
+                new Cryptography(this).addPinActiveKey();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             finish();
         }
         if (mSetupMode == CHANGE_PIN) {

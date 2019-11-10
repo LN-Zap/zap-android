@@ -30,6 +30,7 @@ import java.util.concurrent.Executors;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.util.BiometricUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -292,6 +293,11 @@ public class PinFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 PrefsUtil.edit().putString(PrefsUtil.PIN_HASH, "").commit();
+                try {
+                    new Cryptography(getActivity()).removePinActiveKey();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 getActivity().finish();
             }
         });
@@ -456,7 +462,7 @@ public class PinFragment extends Fragment {
 
                 ((PinActivityInterface) getActivity()).correctPinEntered();
             } else if (mMode == CONFIRM_MODE) {
-                ((PinSetupActivity) getActivity()).pinConfirmed(mUserInput.toString(), mUserInput.toString().length());
+                ((PinSetupActivity) getActivity()).pinConfirmed(mUserInput.toString());
             }
         } else {
             if (mMode == ENTER_MODE) {
@@ -524,7 +530,7 @@ public class PinFragment extends Fragment {
 
     public void createPin() {
         // Go to next step
-        ((PinSetupActivity) getActivity()).pinCreated(mUserInput.toString(), mUserInput.toString().length());
+        ((PinSetupActivity) getActivity()).pinCreated(mUserInput.toString());
     }
 
     private void initBiometricPrompt() {

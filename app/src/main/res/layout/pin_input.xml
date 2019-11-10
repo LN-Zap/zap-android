@@ -369,6 +369,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
+        android:textAllCaps="false"
         android:background="@drawable/rounded_rectangle_red"
         android:src="@drawable/ic_done_black_36dp"
         android:tint="@color/white" />

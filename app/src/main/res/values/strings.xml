@@ -227,7 +227,7 @@
     <string name="settings_enableBiometrics">Enable biometric authentication</string>
 
     <string name="settings_changePin">Change/Remove PIN</string>
-    <string name="settings_addPin">Add PIN</string>
+    <string name="settings_addPin">Protect with PIN</string>
     <string name="settings_removePin">Remove PIN</string>
 
 
@@ -285,6 +285,7 @@
     <string name="error_channel_close_offline">Peer is offline. Only force close allowed.</string>
     <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
     <string name="error_channel_close">Could not close channel: %s</string>
+    <string name="error_pin_deactivation_attempt">It looks like someone tried to deactivate your PIN. The App will close now.\nYou can reinstall the app and use the recovery process to regain access to your funds.</string>
 
     <plurals name="duration_second">
         <item quantity="one">%d Second</item>
