@@ -41,7 +41,6 @@
     <string name="share">Sdílet</string>
     <string name="copy">Kopírovat</string>
     <string name="paste">Vložit</string>
-    <string name="showDetails">Zobrazit detaily</string>
     <string name="details">Detaily</string>
     <string name="amount">Částka</string>
     <string name="memo">Poznámka</string>
@@ -49,7 +48,6 @@
     <string name="yes">Ano</string>
     <string name="no">Ne</string>
     <string name="copied_to_clipboard">Zkopírováno do schránky</string>
-    <string name="send">Odeslat</string>
     <string name="receive">Příjmout</string>
     <string name="optional">volitelná</string>
     <string name="next">Další</string>
@@ -92,7 +90,6 @@
     <string name="activity_manage_channels">Správa Lightning kanálů</string>
     <string name="activity_manage_wallets">Správa peněženek</string>
     <string name="activity_advanced_settings">Pokročilé nastavení</string>
-    <string name="activity_channel_details">Detaily kanálu</string>
     <string name="navigation_wallet">Peněženka</string>
     <string name="navigation_history">Historie</string>
     <string name="navigation_settings">Nastavení</string>
@@ -249,12 +246,6 @@
     <string name="error_channel_close_offline">Peer je offline. Je povoleno pouze vynucené uzavření.</string>
     <string name="error_channel_close_timeout">Kanál nelze ve stanoveném termínu zavřít.</string>
     <string name="error_channel_close">Kanál nelze zavřít: %s</string>
-    <plurals name="duration_second">
-        <item quantity="one">%d Sekunda</item>
-        <item quantity="few">%d Sekundy</item>
-        <item quantity="many">%d Sekund</item>
-        <item quantity="other">%d Sekund</item>
-    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuta</item>
         <item quantity="few">%d Minuty</item>
