@@ -164,7 +164,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 if (PrefsUtil.isWalletSetup()) {
                     Intent intent = new Intent(getActivity(), SetupActivity.class);
-                    intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
+                    intent.putExtra(RefConstants.SETUP_MODE, SetupActivity.CHANGE_CONNECTION);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
@@ -179,7 +179,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 if (PrefsUtil.isWalletSetup()) {
                     Intent intent = new Intent(getActivity(), PinSetupActivity.class);
-                    intent.putExtra("setupMode", PinSetupActivity.ADD_PIN);
+                    intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.ADD_PIN);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
@@ -193,7 +193,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), PinSetupActivity.class);
-                intent.putExtra("setupMode", PinSetupActivity.CHANGE_PIN);
+                intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.CHANGE_PIN);
                 startActivity(intent);
                 return true;
             }

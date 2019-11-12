@@ -3,7 +3,6 @@ package zapsolutions.zap;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,13 +35,12 @@ import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
-import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
-import zapsolutions.zap.pin.PinEntryActivity;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.TorUtil;
@@ -191,41 +189,16 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToForeground() {
         ZapLog.debug(LOG_TAG, "Zap moved to foreground");
 
-        // Test if Lockscreen should be shown.
-        if (PrefsUtil.isWalletSetup() && TimeOutUtil.getInstance().isTimedOut()) {
-            if (PrefsUtil.isPinEnabled()) {
-                // Go to PIN entry screen
-                Intent intent = new Intent(this, PinEntryActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            } else {
-                // Check if pin is active according to key store
-                boolean isPinActive = false;
-                try {
-                    isPinActive =  new Cryptography(this).isPinActive();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (isPinActive){
-                    // According to the key store, the pin is still active. This happens if the pin got deleted from the prefs without also removing the keystore entry.
-                    new AlertDialog.Builder(this)
-                            .setMessage(R.string.error_pin_deactivation_attempt)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.continue_string, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    HomeActivity.this.finish();
-                                }
-                            }).show();
-                } else {
-                    continueMoveToForeground();
-                }
-            }
-        } else {
+
+        // Test if PIN screen should be shown.
+
+        PinScreenUtil.askForAccess(this, () -> {
             continueMoveToForeground();
-        }
+        });
+
     }
 
-    private void continueMoveToForeground(){
+    private void continueMoveToForeground() {
         // start listeners and schedules
         setupExchangeRateSchedule();
         registerNetworkStatusChangeListener();

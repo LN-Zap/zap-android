@@ -292,7 +292,7 @@ public class PinFragment extends Fragment {
         mBtnPinRemove.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrefsUtil.edit().putString(PrefsUtil.PIN_HASH, "").commit();
+                PrefsUtil.edit().remove(PrefsUtil.PIN_HASH).commit();
                 try {
                     new Cryptography(getActivity()).removePinActiveKey();
                 } catch (Exception e) {

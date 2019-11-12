@@ -13,6 +13,7 @@ import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UtilFunctions;
 
@@ -36,7 +37,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mSetupMode = extras.getInt("setupMode", 0);
+            mSetupMode = extras.getInt(RefConstants.SETUP_MODE, 0);
         }
 
 

@@ -11,6 +11,7 @@ import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.pin.PinActivityInterface;
 import zapsolutions.zap.pin.PinFragment;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UtilFunctions;
 
 
@@ -33,43 +34,17 @@ public class SetupActivity extends BaseAppCompatActivity implements PinActivityI
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mSetupMode = extras.getInt("setupMode", 0);
+            mSetupMode = extras.getInt(RefConstants.SETUP_MODE, 0);
         }
-
-
-        // Set connection choice as beginning fragment
-        showConnectChoice();
 
         switch (mSetupMode) {
             case FULL_SETUP:
                 showConnectChoice();
-                ;
                 break;
             case CHANGE_CONNECTION:
                 showEnterPin();
                 break;
         }
-    }
-
-
-    public void pinConfirmed(String value, Integer length) {
-
-        String tempInMemoryPin = App.getAppContext().inMemoryPin;
-
-        App.getAppContext().inMemoryPin = value;
-        App.getAppContext().pinTemp = null;
-
-        // save pin hash in preferences
-        PrefsUtil.edit()
-                .putString(PrefsUtil.PIN_HASH, UtilFunctions.pinHash(value))
-                .putInt(PrefsUtil.PIN_LENGTH, value.length())
-                .commit();
-
-
-        if (mSetupMode == FULL_SETUP) {
-            showConnectChoice();
-        }
-
     }
 
     public void correctPinEntered() {
