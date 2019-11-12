@@ -40,6 +40,7 @@ import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
+import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
@@ -132,7 +133,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         if (!mIsExchangeRateSchedulerRunning) {
             mIsExchangeRateSchedulerRunning = true;
-            final JsonObjectRequest request = MonetaryUtil.getInstance().getExchangeRates();
+            final JsonObjectRequest request = ExchangeRateUtil.getInstance().getExchangeRates();
 
             mExchangeRateScheduler =
                     Executors.newSingleThreadScheduledExecutor();

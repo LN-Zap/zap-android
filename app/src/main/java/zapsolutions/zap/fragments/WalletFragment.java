@@ -32,6 +32,7 @@ import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.Balances;
+import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
@@ -45,7 +46,7 @@ import zapsolutions.zap.util.ZapLog;
  * A simple {@link Fragment} subclass.
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.BalanceListener, Wallet.InfoListener, Wallet.WalletLoadedListener, MonetaryUtil.ExchangeRateListener, UserGuardianInterface {
+        Wallet.BalanceListener, Wallet.InfoListener, Wallet.WalletLoadedListener, ExchangeRateUtil.ExchangeRateListener, UserGuardianInterface {
 
     private static final String LOG_TAG = WalletFragment.class.getName();
 
@@ -444,7 +445,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mWalletLoadedListenerRegistered = true;
         }
         if (!mExchangeRateListenerRegistered) {
-            MonetaryUtil.getInstance().registerExchangeRateListener(this);
+            ExchangeRateUtil.getInstance().registerExchangeRateListener(this);
             mExchangeRateListenerRegistered = true;
         }
 
@@ -464,7 +465,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         Wallet.getInstance().unregisterBalanceListener(this);
         Wallet.getInstance().unregisterInfoListener(this);
         Wallet.getInstance().unregisterWalletLoadedListener(this);
-        MonetaryUtil.getInstance().unregisterExchangeRateListener(this);
+        ExchangeRateUtil.getInstance().unregisterExchangeRateListener(this);
     }
 
     @Override
