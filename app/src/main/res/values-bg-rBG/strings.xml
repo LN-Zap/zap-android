@@ -41,7 +41,6 @@
     <string name="share">Сподели</string>
     <string name="copy">Копирай</string>
     <string name="paste">Постави</string>
-    <string name="showDetails">Покажи детайли</string>
     <string name="details">Детайли</string>
     <string name="amount">Количество</string>
     <string name="memo">Бележка</string>
@@ -49,7 +48,6 @@
     <string name="yes">Да</string>
     <string name="no">Не</string>
     <string name="copied_to_clipboard">Копирано в клипборда</string>
-    <string name="send">Изпращане</string>
     <string name="receive">Получаване</string>
     <string name="optional">незадължително</string>
     <string name="next">Напред</string>
@@ -92,7 +90,6 @@
     <string name="activity_manage_channels">Управление на Lightning канали</string>
     <string name="activity_manage_wallets">Управление на портфейли</string>
     <string name="activity_advanced_settings">Разширени настройки</string>
-    <string name="activity_channel_details">Детайли за канал</string>
     <string name="navigation_wallet">Портфейл</string>
     <string name="navigation_history">История</string>
     <string name="navigation_settings">Настройки</string>
@@ -249,12 +246,6 @@
     <string name="error_channel_close_offline">Пиърът е офлайн. Можете единствено да затворите принудително.</string>
     <string name="error_channel_close_timeout">Каналът не можа да бъде затворен в рамките на определения срок.</string>
     <string name="error_channel_close">Каналът не можеше да бъде затворен: %s</string>
-    <plurals name="duration_second">
-        <item quantity="one">%d Секунда
-
-%d Секунди</item>
-        <item quantity="other">%d Секунди</item>
-    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Минута</item>
         <item quantity="other">%d Минути</item>

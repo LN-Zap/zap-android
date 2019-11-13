@@ -3,7 +3,6 @@
     <color name="deepSeaBlue">#232533</color>
     <color name="seaBlue">#313340</color>
     <color name="seaBlueGradient">#353745</color>
-    <color name="seaBlueGradient2">#414354</color>
     <color name="seaBlueGradient3">#585964</color>
     <color name="lightningBlue">#005DFC</color>
     <color name="lightningBlueGradient">#008DFD</color>
@@ -13,9 +12,6 @@
     <color name="superRed">#E63939</color>
     <color name="gray">#959595</color>
     <color name="invisibleGray">#555555</color>
-    <color name="purple">#7600FC</color>
-    <color name="whiteGradient">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="blackAlpha">#11555555</color>
 </resources>

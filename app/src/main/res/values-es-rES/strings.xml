@@ -41,7 +41,6 @@
     <string name="share">Compartir</string>
     <string name="copy">Copiar</string>
     <string name="paste">Pegar</string>
-    <string name="showDetails">Mostrar detalles</string>
     <string name="details">Detalles</string>
     <string name="amount">Monto</string>
     <string name="memo">Memorándum</string>
@@ -49,7 +48,6 @@
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="copied_to_clipboard">Copiado al portapapeles</string>
-    <string name="send">Enviar</string>
     <string name="receive">Recibir</string>
     <string name="optional">opcional</string>
     <string name="next">Siguiente</string>
@@ -92,7 +90,6 @@
     <string name="activity_manage_channels">Administrar Canales de Pago</string>
     <string name="activity_manage_wallets">Administrar Billeteras</string>
     <string name="activity_advanced_settings">Configuraciones Avanzadas</string>
-    <string name="activity_channel_details">Detalles del Canal</string>
     <string name="navigation_wallet">Billetera</string>
     <string name="navigation_history">Historia</string>
     <string name="navigation_settings">Configuración</string>
@@ -249,10 +246,6 @@
     <string name="error_channel_close_offline">Peer is offline. Only force close allowed.</string>
     <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
     <string name="error_channel_close">Could not close channel: %s</string>
-    <plurals name="duration_second">
-        <item quantity="one">%d Second</item>
-        <item quantity="other">%d Seconds</item>
-    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minutes</item>

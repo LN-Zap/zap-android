@@ -41,7 +41,6 @@
     <string name="share">Share</string>
     <string name="copy">Copy</string>
     <string name="paste">Paste</string>
-    <string name="showDetails">Show details</string>
     <string name="details">Details</string>
     <string name="amount">Amount</string>
     <string name="memo">Memo</string>
@@ -49,7 +48,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="send">Send</string>
     <string name="receive">Receive</string>
     <string name="optional">optional</string>
     <string name="next">Next</string>
@@ -92,7 +90,6 @@
     <string name="activity_manage_channels">Manage Lightning Channels</string>
     <string name="activity_manage_wallets">Manage Wallets</string>
     <string name="activity_advanced_settings">Advanced Settings</string>
-    <string name="activity_channel_details">Channel Details</string>
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">History</string>
     <string name="navigation_settings">Settings</string>
@@ -249,11 +246,6 @@
     <string name="error_channel_close_offline">Peer is offline. Only force close allowed.</string>
     <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
     <string name="error_channel_close">Could not close channel: %s</string>
-    <plurals name="duration_second">
-        <item quantity="one">%d Second</item>
-        <item quantity="few">%d Seconds</item>
-        <item quantity="other">%d Seconds</item>
-    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="few">%d Minutes</item>
