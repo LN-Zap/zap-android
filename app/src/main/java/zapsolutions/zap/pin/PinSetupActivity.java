@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.util.PrefsUtil;
@@ -55,14 +54,10 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
     }
 
     public void pinCreated(String value) {
-        App.getAppContext().pinTemp = value;
-        showConfirmPin();
+        showConfirmPin(value);
     }
 
     public void pinConfirmed(String value) {
-
-        App.getAppContext().inMemoryPin = value;
-        App.getAppContext().pinTemp = null;
 
         // save pin hash in preferences
         PrefsUtil.edit()
@@ -107,11 +102,11 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
         }
     }
 
-    private void showConfirmPin() {
+    private void showConfirmPin(String tempPin) {
         if (mSetupMode == CHANGE_PIN) {
-            changeFragment(PinFragment.newInstance(PinFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm_new)));
+            changeFragment(PinFragment.newInstance(PinFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm_new), tempPin));
         } else {
-            changeFragment(PinFragment.newInstance(PinFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm)));
+            changeFragment(PinFragment.newInstance(PinFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm), tempPin));
         }
     }
 

@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.BiometricUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -319,7 +318,6 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         String hashedInput = UtilFunctions.pinHash(userEnteredPin);
         boolean correct = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
         if (correct) {
-            App.getAppContext().inMemoryPin = userEnteredPin;
             TimeOutUtil.getInstance().restartTimer();
 
             PrefsUtil.edit().putInt("numPINFails", 0)

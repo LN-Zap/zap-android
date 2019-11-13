@@ -29,7 +29,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.util.BiometricUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -46,6 +45,7 @@ public class PinFragment extends Fragment {
     private static final String LOG_TAG = PinFragment.class.getName();
     private static final String ARG_MODE = "pinMode";
     private static final String ARG_PROMPT = "promptString";
+    private static final String ARG_TEMP_PIN = "tempPin";
 
     private int mPinLength = 0;
 
@@ -66,6 +66,7 @@ public class PinFragment extends Fragment {
     private Vibrator mVibrator;
     private int mMode;
     private int mNumFails;
+    private String mTempPin;
 
 
     /**
@@ -85,12 +86,32 @@ public class PinFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param mode    set the mode to either create, confirm or enter pin.
+     * @param prompt  Short text to describe what is happening.
+     * @param tempPin Temporary pin used to confirm during pin confirmation
+     * @return A new instance of fragment PinFragment.
+     */
+    public static PinFragment newInstance(int mode, String prompt, String tempPin) {
+        PinFragment fragment = new PinFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_MODE, mode);
+        args.putString(ARG_PROMPT, prompt);
+        args.putString(ARG_TEMP_PIN, tempPin);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mMode = getArguments().getInt(ARG_MODE);
             mPromptString = getArguments().getString(ARG_PROMPT);
+            mTempPin = getArguments().getString(ARG_TEMP_PIN);
         }
     }
 
@@ -105,9 +126,7 @@ public class PinFragment extends Fragment {
         // Get PIN length
         String pinString = null;
         if (mMode == CONFIRM_MODE) {
-            pinString = App.getAppContext().pinTemp;
-        } else {
-            pinString = App.getAppContext().inMemoryPin;
+            pinString = mTempPin;
         }
 
         mPinLength = pinString != null ? pinString.length() : RefConstants.PIN_MIN_LENGTH;
@@ -442,15 +461,15 @@ public class PinFragment extends Fragment {
     public void pinEntered() {
         // Check if PIN was correct
 
-        boolean correct;
+        boolean correct = false;
         if (mMode == ENTER_MODE) {
             String userEnteredPin = mUserInput.toString();
             String hashedInput = UtilFunctions.pinHash(userEnteredPin);
             correct = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
-        } else if (mMode == CONFIRM_MODE) {
-            correct = mUserInput.toString().equals(App.getAppContext().pinTemp);
-        } else {
-            correct = mUserInput.toString().equals(App.getAppContext().inMemoryPin);
+        }
+
+        if (mMode == CONFIRM_MODE) {
+            correct = mUserInput.toString().equals(mTempPin);
         }
 
         if (correct) {
