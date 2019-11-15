@@ -62,8 +62,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mAddPin = findPreference("addPIN");
         mChangePin = findPreference("changePIN");
 
-        pinOptionVisibility();
-
         // Update our current selected first currency in the MonetaryUtil
         final ListPreference listBtcUnit = findPreference("firstCurrency");
         listBtcUnit.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

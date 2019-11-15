@@ -35,6 +35,7 @@ import zapsolutions.zap.util.Balances;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
@@ -235,7 +236,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SetupActivity.class);
-                intent.putExtra("setupMode", SetupActivity.FULL_SETUP);
+                intent.putExtra(RefConstants.SETUP_MODE, SetupActivity.FULL_SETUP);
                 startActivity(intent);
             }
         });
