@@ -1,4 +1,4 @@
-package zapsolutions.zap;
+package zapsolutions.zap.pin;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,7 +25,8 @@ import androidx.core.content.ContextCompat;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.HomeActivity;
+import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.BiometricUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -40,6 +41,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
     private int mPinLength = 0;
 
     private ImageButton mBtnPinConfirm;
+    private Button mBtnPinRemove;
     private ImageButton mBtnPinBack;
     private ImageButton mBtnBiometrics;
     private ImageView[] mPinHints = new ImageView[10];
@@ -99,6 +101,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         mBtnNumpad[9].setText(mScramble ? Integer.toString(mNumpad.getNumpad().get(9).getValue()) : "0");
 
         mBtnPinConfirm = findViewById(R.id.pinConfirm);
+        mBtnPinRemove = findViewById(R.id.pinRemove);
         mBtnPinBack = findViewById(R.id.pinBack);
         mBtnBiometrics = findViewById(R.id.pinBiometrics);
 
@@ -294,8 +297,9 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             mPinHints[i].setVisibility(View.GONE);
         }
 
-        // Hide confirm button
+        // Hide confirm and remove buttons
         mBtnPinConfirm.setVisibility(View.INVISIBLE);
+        mBtnPinRemove.setVisibility(View.INVISIBLE);
 
         // Disable back button if user input is empty.
         if (mUserInput.toString().length() > 0) {
@@ -314,7 +318,6 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         String hashedInput = UtilFunctions.pinHash(userEnteredPin);
         boolean correct = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
         if (correct) {
-            App.getAppContext().inMemoryPin = userEnteredPin;
             TimeOutUtil.getInstance().restartTimer();
 
             PrefsUtil.edit().putInt("numPINFails", 0)

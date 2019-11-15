@@ -59,12 +59,16 @@
             android:label="Setup"
             android:screenOrientation="portrait" />
         <activity
+            android:name="zapsolutions.zap.pin.PinSetupActivity"
+            android:label="Setup"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="zapsolutions.zap.setup.ConnectRemoteNodeActivity"
             android:label="@string/activity_connectRemoteNode"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name="zapsolutions.zap.PinEntryActivity"
+            android:name="zapsolutions.zap.pin.PinEntryActivity"
             android:label="PIN"
             android:screenOrientation="portrait" />
         <activity

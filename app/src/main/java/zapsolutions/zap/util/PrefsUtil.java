@@ -74,4 +74,8 @@ public class PrefsUtil {
     public static String getCurrentWalletConfig() {
         return getPrefs().getString(CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME);
     }
+
+    public static boolean isPinEnabled(){
+        return !getPrefs().getString(PIN_HASH,"").isEmpty();
+    }
 }

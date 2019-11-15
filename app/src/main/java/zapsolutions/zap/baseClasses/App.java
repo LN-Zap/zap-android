@@ -12,14 +12,9 @@ import zapsolutions.zap.util.ZapLog;
 
 public class App extends Application {
     private static App mContext;
-    // keeping pin user entered in memory in order to encrypt other preferences/values
-    public String inMemoryPin;
-    // temporary variable when pin confirmation is needed
-    public String pinTemp;
     public boolean connectionToLNDEstablished = false;
     // keep the data from the URI Scheme in memory, so we can access it from anywhere.
     private String uriSchemeData;
-
 
     public App() {
         mContext = this;

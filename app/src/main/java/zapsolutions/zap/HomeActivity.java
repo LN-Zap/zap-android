@@ -3,7 +3,6 @@ package zapsolutions.zap;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,6 +40,7 @@ import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.TorUtil;
@@ -189,40 +189,42 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToForeground() {
         ZapLog.debug(LOG_TAG, "Zap moved to foreground");
 
-        if (PrefsUtil.isWalletSetup() && TimeOutUtil.getInstance().isTimedOut()) {
-            // Go to PIN entry screen
-            Intent intent = new Intent(this, PinEntryActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else {
 
-            // start listeners and schedules
-            setupExchangeRateSchedule();
-            registerNetworkStatusChangeListener();
+        // Test if PIN screen should be shown.
 
-            if (!mWalletLoadedListenerRegistered) {
-                Wallet.getInstance().registerWalletLoadedListener(this);
-                mWalletLoadedListenerRegistered = true;
-            }
+        PinScreenUtil.askForAccess(this, () -> {
+            continueMoveToForeground();
+        });
 
-            if (!mInfoChangeListenerRegistered) {
-                Wallet.getInstance().registerInfoListener(this);
-                mInfoChangeListenerRegistered = true;
-            }
+    }
 
-            PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
+    private void continueMoveToForeground() {
+        // start listeners and schedules
+        setupExchangeRateSchedule();
+        registerNetworkStatusChangeListener();
 
-            // Start lnd connection
-            if (PrefsUtil.isWalletSetup()) {
-                TimeOutUtil.getInstance().setCanBeRestarted(true);
+        if (!mWalletLoadedListenerRegistered) {
+            Wallet.getInstance().registerWalletLoadedListener(this);
+            mWalletLoadedListenerRegistered = true;
+        }
 
-                LndConnection.getInstance().openConnection();
+        if (!mInfoChangeListenerRegistered) {
+            Wallet.getInstance().registerInfoListener(this);
+            mInfoChangeListenerRegistered = true;
+        }
 
-                if (TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(this)) {
-                    TorUtil.askToInstallOrbotIfMissing(this);
-                } else {
-                    Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
-                }
+        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
+
+        // Start lnd connection
+        if (PrefsUtil.isWalletSetup()) {
+            TimeOutUtil.getInstance().setCanBeRestarted(true);
+
+            LndConnection.getInstance().openConnection();
+
+            if (TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(this)) {
+                TorUtil.askToInstallOrbotIfMissing(this);
+            } else {
+                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
             }
         }
     }

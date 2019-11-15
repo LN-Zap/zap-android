@@ -80,7 +80,8 @@ public class Cryptography {
     private static final String ANDROID_KEY_STORE_NAME = "AndroidKeyStore";
     private static final String AES_MODE_M_OR_GREATER = "AES/GCM/NoPadding";
     private static final String AES_MODE_LESS_THAN_M = "AES/ECB/PKCS7Padding";
-    private static final String KEY_ALIAS = "ZapKeyForEncryption";
+    private static final String KEY_ENCRYPTION = "ZapKeyForEncryption";
+    private static final String KEY_PIN_ACTIVE = "PinActiveKey";
     // TODO update these bytes to be random for IV of encryption
     private static final byte[] FIXED_IV = new byte[]{55, 54, 53, 52, 51, 50,
             49, 48, 47,
@@ -106,12 +107,12 @@ public class Cryptography {
         KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
         keyStore.load(null);
 
-        if (!keyStore.containsAlias(KEY_ALIAS)) {
-            initValidKeys();
+        if (!keyStore.containsAlias(KEY_ENCRYPTION)) {
+            initValidKeys(KEY_ENCRYPTION);
         } else {
             boolean keyValid = false;
             try {
-                KeyStore.Entry keyEntry = keyStore.getEntry(KEY_ALIAS, null);
+                KeyStore.Entry keyEntry = keyStore.getEntry(KEY_ENCRYPTION, null);
                 if (keyEntry instanceof KeyStore.SecretKeyEntry &&
                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     keyValid = true;
@@ -137,7 +138,7 @@ public class Cryptography {
                 synchronized (s_keyInitLock) {
                     // System upgrade or something made key invalid
                     removeKeys(keyStore);
-                    initValidKeys();
+                    initValidKeys(KEY_ENCRYPTION);
                 }
             }
 
@@ -146,17 +147,18 @@ public class Cryptography {
     }
 
     protected void removeKeys(KeyStore keyStore) throws KeyStoreException {
-        keyStore.deleteEntry(KEY_ALIAS);
+        keyStore.deleteEntry(KEY_ENCRYPTION);
+        keyStore.deleteEntry(KEY_PIN_ACTIVE);
         removeSavedSharedPreferences();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void initValidKeys() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, CertificateException, UnrecoverableEntryException, NoSuchPaddingException, KeyStoreException, InvalidKeyException, IOException {
+    private void initValidKeys(String keyAlias) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, CertificateException, UnrecoverableEntryException, NoSuchPaddingException, KeyStoreException, InvalidKeyException, IOException {
         synchronized (s_keyInitLock) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                generateKeysForAPIMOrGreater();
+                generateKeysForAPIMOrGreater(keyAlias);
             } else {
-                generateKeysForAPILessThanM();
+                generateKeysForAPILessThanM(keyAlias);
             }
         }
     }
@@ -169,14 +171,14 @@ public class Cryptography {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void generateKeysForAPILessThanM() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, CertificateException, UnrecoverableEntryException, NoSuchPaddingException, KeyStoreException, InvalidKeyException, IOException {
+    private void generateKeysForAPILessThanM(String keyAlias) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, CertificateException, UnrecoverableEntryException, NoSuchPaddingException, KeyStoreException, InvalidKeyException, IOException {
         // Generate a key pair for encryption
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         end.add(Calendar.YEAR, 30);
         KeyPairGeneratorSpec spec = new KeyPairGeneratorSpec.Builder(mContext)
-                .setAlias(KEY_ALIAS)
-                .setSubject(new X500Principal("CN=" + KEY_ALIAS))
+                .setAlias(keyAlias)
+                .setSubject(new X500Principal("CN=" + keyAlias))
                 .setSerialNumber(BigInteger.TEN)
                 .setStartDate(start.getTime())
                 .setEndDate(end.getTime())
@@ -227,11 +229,11 @@ public class Cryptography {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    protected void generateKeysForAPIMOrGreater() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+    protected void generateKeysForAPIMOrGreater(String keyAlias) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
         KeyGenerator keyGenerator;
         keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE_NAME);
         keyGenerator.init(
-                new KeyGenParameterSpec.Builder(KEY_ALIAS,
+                new KeyGenParameterSpec.Builder(keyAlias,
                         KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
                         .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
@@ -310,7 +312,7 @@ public class Cryptography {
     private Key getSecretKeyAPIMorGreater() throws CertificateException, NoSuchAlgorithmException, IOException, KeyStoreException, UnrecoverableKeyException {
         KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
         keyStore.load(null);
-        return keyStore.getKey(KEY_ALIAS, null);
+        return keyStore.getKey(KEY_ENCRYPTION, null);
 
     }
 
@@ -319,7 +321,7 @@ public class Cryptography {
         KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
         keyStore.load(null);
 
-        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(KEY_ALIAS, null);
+        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(KEY_ENCRYPTION, null);
         Cipher inputCipher = Cipher.getInstance(RSA_MODE, CIPHER_PROVIDER_NAME_ENCRYPTION_DECRYPTION_RSA);
         inputCipher.init(Cipher.ENCRYPT_MODE, privateKeyEntry.getCertificate().getPublicKey());
 
@@ -337,7 +339,7 @@ public class Cryptography {
         KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
         keyStore.load(null);
 
-        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(KEY_ALIAS, null);
+        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(KEY_ENCRYPTION, null);
         Cipher output = Cipher.getInstance(RSA_MODE, CIPHER_PROVIDER_NAME_ENCRYPTION_DECRYPTION_RSA);
         output.init(Cipher.DECRYPT_MODE, privateKeyEntry.getPrivateKey());
         CipherInputStream cipherInputStream = new CipherInputStream(
@@ -361,5 +363,28 @@ public class Cryptography {
             keyStore.load(null);
             removeKeys(keyStore);
         }
+    }
+
+    public void addPinActiveKey() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, InvalidAlgorithmParameterException, NoSuchProviderException, InvalidKeyException, NoSuchPaddingException, UnrecoverableEntryException {
+        KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
+        keyStore.load(null);
+
+        if (!keyStore.containsAlias(KEY_PIN_ACTIVE)) {
+            initValidKeys(KEY_PIN_ACTIVE);
+        }
+    }
+
+    public void removePinActiveKey() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+        synchronized (s_keyInitLock) {
+            KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
+            keyStore.load(null);
+            keyStore.deleteEntry(KEY_PIN_ACTIVE);
+        }
+    }
+
+    public boolean isPinActive() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+        KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
+        keyStore.load(null);
+        return keyStore.containsAlias(KEY_PIN_ACTIVE);
     }
 }
