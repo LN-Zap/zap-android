@@ -24,6 +24,10 @@ public class PrefsUtil {
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
     public static final String CURRENT_WALLET_CONFIG = "current_wallet_config";
     public static final String AVAILABLE_FIAT_CURRENCIES = "fiat_available";
+    public static final String EXCHANGE_RATE_PROVIDER = "exchangeRateProvider";
+    public static final String IS_DEFAULT_CURRENCY_SET = "isDefaultCurrencySet";
+    public static final String FIRST_CURRENCY = "firstCurrency";
+    public static final String SECOND_CURRENCY = "secondCurrency";
 
     // wallet config preferences references
     public static final String PREFS_ENCRYPTED = "prefs_encrypted";
@@ -75,7 +79,15 @@ public class PrefsUtil {
         return getPrefs().getString(CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME);
     }
 
-    public static boolean isPinEnabled(){
-        return !getPrefs().getString(PIN_HASH,"").isEmpty();
+    public static boolean isPinEnabled() {
+        return !getPrefs().getString(PIN_HASH, "").isEmpty();
+    }
+
+    public static String getFirstCurrency() {
+        return getPrefs().getString(FIRST_CURRENCY, MonetaryUtil.SATOSHI_UNIT);
+    }
+
+    public static String getSecondCurrency() {
+        return getPrefs().getString(SECOND_CURRENCY, "USD");
     }
 }

@@ -1,24 +1,14 @@
 package zapsolutions.zap.util;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,15 +20,14 @@ import zapsolutions.zap.baseClasses.App;
  */
 public class MonetaryUtil {
 
-    private static final String BTC_UNIT = "BTC";
-    private static final String MBTC_UNIT = "mBTC";
-    private static final String BIT_UNIT = "bit";
-    private static final String SATOSHI_UNIT = "sat";
+    public static final String BTC_UNIT = "BTC";
+    public static final String MBTC_UNIT = "mBTC";
+    public static final String BIT_UNIT = "bit";
+    public static final String SATOSHI_UNIT = "sat";
 
     private static final String LOG_TAG = MonetaryUtil.class.getName();
 
     private static MonetaryUtil mInstance;
-    private final Set<ExchangeRateListener> mExchangeRateListeners = new HashSet<>();
     private Context mContext;
     private Currency mFirstCurrency;
     private Currency mSecondCurrency;
@@ -47,10 +36,9 @@ public class MonetaryUtil {
     private MonetaryUtil() {
         mContext = App.getAppContext();
 
-        loadFirstCurrencyFromPrefs(PrefsUtil.getPrefs().getString("firstCurrency", "sat"));
+        loadFirstCurrencyFromPrefs(PrefsUtil.getFirstCurrency());
 
-
-        String SecondCurrency = PrefsUtil.getPrefs().getString("secondCurrency", "USD");
+        String SecondCurrency = PrefsUtil.getSecondCurrency();
         switch (SecondCurrency) {
             case BTC_UNIT:
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -74,10 +62,10 @@ public class MonetaryUtil {
                 break;
             default:
                 // Here we go if the user has selected a fiat currency as second currency.
-                if (PrefsUtil.getPrefs().getString("fiat_" + PrefsUtil.getPrefs().getString("secondCurrency", "USD"), "").equals("")) {
-                    mSecondCurrency = new Currency(PrefsUtil.getPrefs().getString("secondCurrency", "USD"), 0, 0);
+                if (PrefsUtil.getPrefs().getString("fiat_" + PrefsUtil.getSecondCurrency(), "").isEmpty()) {
+                    mSecondCurrency = new Currency(PrefsUtil.getSecondCurrency(), 0, 0);
                 } else {
-                    loadSecondCurrencyFromPrefs(PrefsUtil.getPrefs().getString("secondCurrency", "USD"));
+                    loadSecondCurrencyFromPrefs(PrefsUtil.getSecondCurrency());
                 }
         }
     }
@@ -193,6 +181,7 @@ public class MonetaryUtil {
      * @param currencyCode
      */
     public void loadFirstCurrencyFromPrefs(String currencyCode) {
+
         switch (currencyCode) {
             case BTC_UNIT:
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -279,9 +268,9 @@ public class MonetaryUtil {
      */
     public void switchCurrencies() {
         if (PrefsUtil.firstCurrencyIsPrimary()) {
-            PrefsUtil.edit().putBoolean("firstCurrencyIsPrimary", false).apply();
+            PrefsUtil.edit().putBoolean(PrefsUtil.FIRST_CURRENCY_IS_PRIMARY, false).apply();
         } else {
-            PrefsUtil.edit().putBoolean("firstCurrencyIsPrimary", true).apply();
+            PrefsUtil.edit().putBoolean(PrefsUtil.FIRST_CURRENCY_IS_PRIMARY, true).apply();
         }
     }
 
@@ -480,7 +469,7 @@ public class MonetaryUtil {
         // Bitcoin
         if (currency.isBitcoin()) {
 
-            String btcUnit = PrefsUtil.getPrefs().getString("firstCurrency", "sat");
+            String btcUnit = PrefsUtil.getFirstCurrency();
             switch (btcUnit) {
                 case BTC_UNIT:
                     numberOfDecimals = 8;
@@ -726,111 +715,6 @@ public class MonetaryUtil {
             df.setMaximumFractionDigits(2);
         }
         return df;
-    }
-
-
-    /**
-     * Creates a Request that fetches fiat exchange rate data from "blockchain.info".
-     * When executed this request saves the result in shared preferences and
-     * updates the currentCurrency of the MonetaryUtil Singleton.
-     *
-     * @return JsonObjectRequest
-     */
-    public JsonObjectRequest getExchangeRates() {
-
-        // Creating request
-        JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://blockchain.info/ticker", null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        final SharedPreferences.Editor editor = PrefsUtil.edit();
-
-                        // JSON Object that will hold all available currencies to later populate selection list.
-                        JSONObject availableCurrencies = new JSONObject();
-
-                        JSONArray availableCurrenciesArray = new JSONArray();
-
-                        // loop through all returned currencies
-                        Iterator<String> iter = response.keys();
-                        while (iter.hasNext()) {
-                            String fiatCode = iter.next();
-                            try {
-                                JSONObject ReceivedCurrency = response.getJSONObject(fiatCode);
-                                JSONObject FiatCurrency = new JSONObject();
-                                FiatCurrency.put("rate", ReceivedCurrency.getDouble("15m") / 1e8);
-                                FiatCurrency.put("symbol", ReceivedCurrency.getString("symbol"));
-                                FiatCurrency.put("timestamp", System.currentTimeMillis() / 1000);
-                                editor.putString("fiat_" + fiatCode, FiatCurrency.toString());
-                                availableCurrenciesArray.put(fiatCode);
-                                // Update the current fiat currency of the Monetary util
-                                if (fiatCode.equals(PrefsUtil.getPrefs().getString("secondCurrency", "USD"))) {
-                                    setSecondCurrency(fiatCode, ReceivedCurrency.getDouble("15m") / 1e8, System.currentTimeMillis() / 1000, ReceivedCurrency.getString("symbol"));
-                                }
-                            } catch (JSONException e) {
-                                ZapLog.debug(LOG_TAG, "Unable to decode currency from fiat exchange rate request");
-                            }
-                        }
-                        try {
-                            // Switch the order. Blockchain.info has USD first, we want to have it alphabetically.
-                            // ToDO: this is a quick fix, it only works as long as there is no currency alphabetically after USD
-                            availableCurrenciesArray.remove(0);
-                            availableCurrenciesArray.put("USD");
-
-                            // Save the codes of all found currencies in a JSON object, which will then be stored on shared preferences
-                            availableCurrencies.put("currencies", availableCurrenciesArray);
-                            editor.putString("fiat_available", availableCurrencies.toString());
-                        } catch (JSONException e) {
-                            ZapLog.debug(LOG_TAG, "unable to add array to object");
-                        }
-                        editor.apply();
-
-                        // If this was the first time executed since installation, automatically set the
-                        // currency to correct currency according to the systems locale. Only do this,
-                        // if this currency is included in the fetched data.
-                        if (!PrefsUtil.getPrefs().getBoolean("isDefaultCurrencySet", false)) {
-                            String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
-                            if (currencyCode != null) {
-                                if (!PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "").equals("")) {
-                                    loadSecondCurrencyFromPrefs(currencyCode);
-                                    editor.putBoolean("isDefaultCurrencySet", true);
-                                    editor.putString("secondCurrency", currencyCode);
-                                    editor.apply();
-                                }
-                            }
-                        }
-
-                        broadcastExchangeRateUpdate();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ZapLog.debug(LOG_TAG, "Fiat exchange rate request failed");
-            }
-        });
-
-        return rateRequest;
-    }
-
-
-    // Event handling to notify all registered listeners to an exchange rate change.
-
-    private void broadcastExchangeRateUpdate() {
-        for (ExchangeRateListener listener : mExchangeRateListeners) {
-            listener.onExchangeRatesUpdated();
-        }
-    }
-
-    public void registerExchangeRateListener(ExchangeRateListener listener) {
-        mExchangeRateListeners.add(listener);
-    }
-
-    public void unregisterExchangeRateListener(ExchangeRateListener listener) {
-        mExchangeRateListeners.remove(listener);
-    }
-
-    public interface ExchangeRateListener {
-        void onExchangeRatesUpdated();
     }
 
 }

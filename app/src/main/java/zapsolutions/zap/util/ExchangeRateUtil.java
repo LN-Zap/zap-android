@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.connection.HttpClient;
 
 public class ExchangeRateUtil {
 
@@ -43,19 +44,25 @@ public class ExchangeRateUtil {
         return mInstance;
     }
 
-    public JsonObjectRequest getExchangeRates() {
-        String provider = PrefsUtil.getPrefs().getString("exchangeRateProvider", BLOCKCHAIN_INFO);
-
-        ZapLog.debug(LOG_TAG, "Exchange rate request initiated");
+    public void getExchangeRates() {
+        String provider = PrefsUtil.getPrefs().getString(PrefsUtil.EXCHANGE_RATE_PROVIDER, BLOCKCHAIN_INFO);
+        JsonObjectRequest request;
 
         switch (provider) {
             case BLOCKCHAIN_INFO:
-                return fromBlockchainInfo();
+                request = getBlockchainInfoRequest();
+                break;
             case COINBASE:
-                return fromCoinbase();
+                request = getCoinbaseRequest();
+                break;
             default:
-                return fromBlockchainInfo();
+                request = getBlockchainInfoRequest();
+        }
 
+        if (request != null) {
+            // Adding request to request queue
+            HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
+            ZapLog.debug(LOG_TAG, "Exchange rate request initiated");
         }
 
     }
@@ -68,10 +75,10 @@ public class ExchangeRateUtil {
      *
      * @return JsonObjectRequest
      */
-    private JsonObjectRequest fromBlockchainInfo() {
+    private JsonObjectRequest getBlockchainInfoRequest() {
         JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://blockchain.info/ticker", null,
                 response -> {
-                    ZapLog.debug(LOG_TAG, "received exchange rates from blockchain.info");
+                    ZapLog.debug(LOG_TAG, "Received exchange rates from blockchain.info");
                     JSONObject responseRates = parseBlockchainInfoResponse(response);
                     applyExchangeRatesAndSaveInPreferences(responseRates);
                 }, error -> ZapLog.debug(LOG_TAG, "Fetching exchange rates from blockchain.info failed"));
@@ -86,45 +93,26 @@ public class ExchangeRateUtil {
      *
      * @return JsonObjectRequest
      */
-    private JsonObjectRequest fromCoinbase() {
+    private JsonObjectRequest getCoinbaseRequest() {
         JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://api.coinbase.com/v2/exchange-rates?currency=BTC", null,
                 response -> {
-                    ZapLog.debug(LOG_TAG, "received exchange rates from coinbase");
+                    ZapLog.debug(LOG_TAG, "Received exchange rates from coinbase");
                     JSONObject responseRates = parseCoinbaseResponse(response);
-                    applyExchangeRatesAndSaveInPreferences(responseRates);
+                    applyExchangeRatesAndSaveInPreferences(removeNonFiat(responseRates));
                 }, error -> ZapLog.debug(LOG_TAG, "Fetching exchange rates from coinbase failed"));
 
         return rateRequest;
     }
 
-
-    private void setDefaultCurrencyOnFirstStart() {
-        // If this was the first time executed since installation, automatically set the
-        // currency to correct currency according to the systems locale. Only do this,
-        // if this currency is included in the fetched data.
-        if (!PrefsUtil.getPrefs().getBoolean("isDefaultCurrencySet", false)) {
-            String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
-            if (currencyCode != null) {
-                if (!PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "").equals("")) {
-                    MonetaryUtil.getInstance().loadSecondCurrencyFromPrefs(currencyCode);
-                    final SharedPreferences.Editor editor = PrefsUtil.edit();
-                    editor.putBoolean("isDefaultCurrencySet", true);
-                    editor.putString("secondCurrency", currencyCode);
-                    editor.apply();
-                }
-            }
-        }
-    }
-
     /**
      * This function parses a blockchain.info exchange rate response.
      * All the response parser functions return a similar formatted JSON Object
-     * {USD:{rate=0.1231, timestamp=...},EUR:{...}}
+     * {"USD":{"rate":0.1231, "timestamp":...},"EUR":{...}}
      *
      * @param response a JSON response that comes from Blockchain.info
      * @return
      */
-    private JSONObject parseBlockchainInfoResponse(JSONObject response) {
+    public JSONObject parseBlockchainInfoResponse(JSONObject response) {
 
         JSONObject formattedRates = new JSONObject();
         // loop through all returned currencies
@@ -143,18 +131,27 @@ public class ExchangeRateUtil {
             }
         }
 
+        // Switch order as blockchain.info has USD first. We want to have it alphabetically.
+        try {
+            JSONObject tempCurrency = formattedRates.getJSONObject("USD");
+            formattedRates.remove("USD");
+            formattedRates.put("USD", tempCurrency);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return formattedRates;
     }
 
     /**
      * This function parses a coinbase exchange rate response.
      * All the response parser functions return a similar formatted JSON Object
-     * {USD:{rate=0.1231, timestamp=...},EUR:{...}}
+     * {"USD":{"rate":0.1231, "timestamp":...},"EUR":{...}}
      *
      * @param response a JSON response that comes from Coinbases API
      * @return
      */
-    private JSONObject parseCoinbaseResponse(JSONObject response) {
+    public JSONObject parseCoinbaseResponse(JSONObject response) {
 
         JSONObject responseRates = null;
         try {
@@ -168,6 +165,7 @@ public class ExchangeRateUtil {
             Iterator<String> iter = responseRates.keys();
             while (iter.hasNext()) {
                 String rateCode = iter.next();
+
                 try {
                     JSONObject currentCurrency = new JSONObject();
                     currentCurrency.put(RATE, responseRates.getDouble(rateCode) / 1e8);
@@ -177,17 +175,33 @@ public class ExchangeRateUtil {
                     ZapLog.debug(LOG_TAG, "Unable to read exchange rate from coinbase response.");
                 }
             }
-            return formattedRates;
         } else {
             return null;
         }
+
+        return formattedRates;
+    }
+
+    /**
+     * Some responses include exchange rates to other crypto currencies.
+     * This function removes them by checking if the currency code is in our fiat currency list.
+     */
+    private JSONObject removeNonFiat(JSONObject rates) {
+        Iterator<String> iter = rates.keys();
+        while (iter.hasNext()) {
+            String rateCode = iter.next();
+            if (AppUtil.getInstance(mContext).getCurrencyNameFromCurrencyCode(rateCode) == null) {
+                iter.remove();
+            }
+        }
+        return rates;
     }
 
 
     private void applyExchangeRatesAndSaveInPreferences(JSONObject exchangeRates) {
 
         final SharedPreferences.Editor editor = PrefsUtil.edit();
-        editor.remove("fiat_available");
+        editor.remove(PrefsUtil.AVAILABLE_FIAT_CURRENCIES);
         editor.commit();
 
         JSONArray availableCurrenciesArray = new JSONArray();
@@ -203,7 +217,7 @@ public class ExchangeRateUtil {
                 editor.putString("fiat_" + rateCode, tempRate.toString());
 
                 // Update the current fiat currency of the Monetary util
-                if (rateCode.equals(PrefsUtil.getPrefs().getString("secondCurrency", "USD"))) {
+                if (rateCode.equals(PrefsUtil.getSecondCurrency())) {
                     MonetaryUtil.getInstance().setSecondCurrency(rateCode, tempRate.getDouble(RATE), tempRate.getLong(TIMESTAMP), tempRate.getString(SYMBOL));
                 }
             } catch (JSONException e) {
@@ -214,25 +228,53 @@ public class ExchangeRateUtil {
         // JSON Object that will hold all available currencies to later populate selection list in the settings.
         JSONObject availableCurrencies = new JSONObject();
 
-        // Switch the order. Blockchain.info has USD first, we want to have it alphabetically.
-        if (PrefsUtil.getPrefs().getString("exchangeRateProvider", BLOCKCHAIN_INFO).equals(BLOCKCHAIN_INFO)) {
-            availableCurrenciesArray.remove(0);
-            availableCurrenciesArray.put("USD");
-        }
-
         try {
             // Save the codes of all found currencies in a JSON object, which will then be stored on shared preferences
             availableCurrencies.put("currencies", availableCurrenciesArray);
-            editor.putString("fiat_available", availableCurrencies.toString());
+            editor.putString(PrefsUtil.AVAILABLE_FIAT_CURRENCIES, availableCurrencies.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         editor.commit();
-        setDefaultCurrencyOnFirstStart();
+        setDefaultCurrency();
         broadcastExchangeRateUpdate();
     }
 
+    private void setDefaultCurrency() {
+        // If this was the first time executed since installation, automatically set the
+        // currency to correct currency according to the systems locale. Only do this,
+        // if this currency is included in the fetched data.
+        // The user might also have changed the provider and his currency is no longer available. Also switch to default in this case.
+        if (!PrefsUtil.getPrefs().getBoolean(PrefsUtil.IS_DEFAULT_CURRENCY_SET, false) || !isCurrencyAvailable(PrefsUtil.getSecondCurrency())) {
+            String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
+            if (currencyCode != null) {
+                if (!PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "").isEmpty()) {
+                    final SharedPreferences.Editor editor = PrefsUtil.edit();
+                    editor.putBoolean(PrefsUtil.IS_DEFAULT_CURRENCY_SET, true);
+                    editor.putString(PrefsUtil.SECOND_CURRENCY, currencyCode);
+                    editor.commit();
+                    MonetaryUtil.getInstance().loadSecondCurrencyFromPrefs(currencyCode);
+                }
+            }
+        }
+    }
+
+    private boolean isCurrencyAvailable(String currency) {
+        try {
+            JSONObject jsonAvailableCurrencies = new JSONObject(PrefsUtil.getPrefs().getString(PrefsUtil.AVAILABLE_FIAT_CURRENCIES, PrefsUtil.DEFAULT_FIAT_CURRENCIES));
+            JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
+
+            for (int i = 0, count = currencies.length(); i < count; i++) {
+                if (currencies.getString(i).equals(currency)) {
+                    return true;
+                }
+            }
+        } catch (JSONException e) {
+            ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+        }
+        return false;
+    }
 
     // Event handling to notify all registered listeners to an exchange rate change.
 
