@@ -34,6 +34,7 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
+import zapsolutions.zap.pin.PinSetupActivity;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -50,11 +51,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreference mSwHideTotalBalance;
     private ListPreference mListCurrency;
+    private Preference mAddPin;
+    private Preference mChangePin;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the settings from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey);
+
+        mAddPin = findPreference("addPIN");
+        mChangePin = findPreference("changePIN");
 
         // Update our current selected first currency in the MonetaryUtil
         final ListPreference listBtcUnit = findPreference("firstCurrency");
@@ -156,7 +162,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 if (PrefsUtil.isWalletSetup()) {
                     Intent intent = new Intent(getActivity(), SetupActivity.class);
-                    intent.putExtra("setupMode", SetupActivity.CHANGE_CONNECTION);
+                    intent.putExtra(RefConstants.SETUP_MODE, SetupActivity.CHANGE_CONNECTION);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
@@ -165,20 +171,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-
-        // Action when clicked on "change pin"
-        final Preference prefChangePin = findPreference("changePIN");
-        prefChangePin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        // Action when clicked on "add Pin"
+        mAddPin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-
                 if (PrefsUtil.isWalletSetup()) {
-                    Intent intent = new Intent(getActivity(), SetupActivity.class);
-                    intent.putExtra("setupMode", SetupActivity.CHANGE_PIN);
+                    Intent intent = new Intent(getActivity(), PinSetupActivity.class);
+                    intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.ADD_PIN);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
                 }
+                return true;
+            }
+        });
+
+        // Action when clicked on "change pin"
+        mChangePin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), PinSetupActivity.class);
+                intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.CHANGE_PIN);
+                startActivity(intent);
                 return true;
             }
         });
@@ -368,5 +382,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        pinOptionVisibility();
+    }
 
+    private void pinOptionVisibility(){
+        // Display add or change pin
+        if (PrefsUtil.isPinEnabled()) {
+            mAddPin.setVisible(false);
+            mChangePin.setVisible(true);
+        } else {
+            mAddPin.setVisible(true);
+            mChangePin.setVisible(false);
+        }
+    }
 }

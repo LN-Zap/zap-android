@@ -41,7 +41,6 @@
     <string name="share">مشاركة</string>
     <string name="copy">نسخ</string>
     <string name="paste">لصق</string>
-    <string name="showDetails">اظهر التفاصيل</string>
     <string name="details">تفاصيل</string>
     <string name="amount">المبلغ</string>
     <string name="memo">ملاحظة</string>
@@ -49,7 +48,6 @@
     <string name="yes">نعم</string>
     <string name="no">لا</string>
     <string name="copied_to_clipboard">نسخ إلى الحافظة</string>
-    <string name="send">إرسال</string>
     <string name="receive">استقبل</string>
     <string name="optional">اختياري</string>
     <string name="next">التالى</string>
@@ -92,7 +90,6 @@
     <string name="activity_manage_channels">إدارة قنوات Lightning</string>
     <string name="activity_manage_wallets">إدارة المحافظ</string>
     <string name="activity_advanced_settings">الإعدادات المتقدمة</string>
-    <string name="activity_channel_details">تفاصيل القناة</string>
     <string name="navigation_wallet">محفظة</string>
     <string name="navigation_history">سجل</string>
     <string name="navigation_settings">إعدادات</string>
@@ -249,14 +246,6 @@
     <string name="error_channel_close_offline">Peer is offline. Only force close allowed.</string>
     <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
     <string name="error_channel_close">Could not close channel: %s</string>
-    <plurals name="duration_second">
-        <item quantity="zero">%d Seconds</item>
-        <item quantity="one">%d Second</item>
-        <item quantity="two">%d Seconds</item>
-        <item quantity="few">%d Seconds</item>
-        <item quantity="many">%d Seconds</item>
-        <item quantity="other">%d Seconds</item>
-    </plurals>
     <plurals name="duration_minute">
         <item quantity="zero">%d Minutes</item>
         <item quantity="one">%d Minute</item>

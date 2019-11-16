@@ -43,4 +43,7 @@ public class RefConstants {
     public static final String URL_HELP = "https://docs.zaphq.io/";
     public static final String URL_SUGGESTED_NODES = "https://resources.zaphq.io/api/v1/suggested-nodes";
 
+    // Other
+    public static final String SETUP_MODE = "setupMode";
+
 }
