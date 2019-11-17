@@ -115,7 +115,7 @@
     <string name="channel_local_balance">Tu Balance</string>
     <string name="channel_remote_balance">Balance Remoto</string>
     <string name="channel_no_alias">Sin Nombre</string>
-    <string name="channel_remote_public_key">Public Key Remota</string>
+    <string name="channel_remote_public_key">Llave pública remota</string>
     <string name="channel_funding_transaction">Financiando Transacción</string>
     <string name="channel_state_open">Abierto</string>
     <string name="channel_state_offline">Desconectado</string>
@@ -124,37 +124,37 @@
     <string name="channel_state_pending_force_closing">Cerrando a fuerza</string>
     <string name="channel_state_waiting_close">Esperando cierre</string>
     <string name="no_channels">Sin canales</string>
-    <string name="channel_closing_transaction">Closing Transaction</string>
-    <string name="channel_close">Close Channel</string>
-    <string name="channel_close_success">Channel closing successfully initiated</string>
-    <string name="channel_close_force">Force Close Channel</string>
-    <string name="channel_close_error">Channel close error</string>
-    <string name="channel_close_confirmation">Do you really want to close the channel with:\n\n%s\n</string>
-    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
-    <string name="channel_close_time">Closing Time Delay</string>
-    <string name="channel_open">Open Channel</string>
-    <string name="channel_open_success">Channel opening successfully initiated</string>
-    <string name="channel_open_error">Channel open error</string>
+    <string name="channel_closing_transaction">Transacción de cierre</string>
+    <string name="channel_close">Cerrar canal</string>
+    <string name="channel_close_success">Cierre de canal iniciado con éxito</string>
+    <string name="channel_close_force">Forzar cierre de canal</string>
+    <string name="channel_close_error">Error de cierre de canal</string>
+    <string name="channel_close_confirmation">Realmente quieres cerrar el canal con:\n\n%s\n</string>
+    <string name="channel_close_force_confirmation">Realmente quieres forzar el cierre de canal con:\n\n%1$s\n\nLos fondos serán bloqueados por %2$s.</string>
+    <string name="channel_close_time">Retraso de tiempo de cierre</string>
+    <string name="channel_open">Abrir canal</string>
+    <string name="channel_open_success">Apertura de canal iniciada con éxito</string>
+    <string name="channel_open_error">Error de apertura de canal</string>
     <string name="setup_connect_heading">Como quieres usar ZAP?</string>
     <string name="setup_connect_local_description">Crear una billetera en este dispositivo.</string>
     <string name="setup_connect_local_button">Crear Billetera</string>
     <string name="setup_connect_remote_description">Control remoto a su propio nodo.</string>
     <string name="setup_connect_remote_button">Conectarse a un Nodo Remoto.</string>
-    <string name="setup_connect_scan_connection_info">Escanea información de conección</string>
+    <string name="setup_connect_scan_connection_info">Escanea información de conexión</string>
     <string name="demo_setupWalletBtn">Configurar Billetera</string>
     <string name="demo_setupWalletFirst">Primero debes configurar una billetera.</string>
-    <string name="send_lightningPayment">Enviar pago relámpago</string>
+    <string name="send_lightningPayment">Enviar pago lightning</string>
     <string name="send_onChainPayment">Enviar pago en cadena</string>
     <string name="send_sendPayment">Enviar pago</string>
     <string name="send_success">Pago\nexitoso</string>
     <string name="send_fail">Pago fallido</string>
-    <string name="send_scan_info">Escanea solicitud de pago</string>
+    <string name="send_scan_info">Escanear solicitud de pago</string>
     <string name="receive_generateRequest">Generar Solicitud</string>
     <string name="receive_generateRequest_failed">La solicitud no pudo ser generada.</string>
     <string name="receive_lightning_request">Solicitud Lightning</string>
     <string name="receive_on_chain_request">Solicitud en cadena</string>
-    <string name="receive_noActiveChannels">Para recibir Bitcoin por la red relámpago, debes primero abrir canales.</string>
-    <string name="receive_noIncomeBalance">Para recibir Bitcoin por la red relámpago, por lo menos uno de tus canales necesita algún balance en su contraperte.\n\nPara lograrlo, primero tiene que gastar algo en la red relámpago.\n\nEn el área de administración de canales puedes siempre ver cuanto puedes enviar o recibir por la red relámpago en el presente.</string>
+    <string name="receive_noActiveChannels">Para recibir Bitcoin por la red lightning, debes primero abrir canales.</string>
+    <string name="receive_noIncomeBalance">Para recibir Bitcoin por la red lightning, por lo menos uno de tus canales necesita algún balance en su contraperte.\n\nPara lograrlo, primero tiene que gastar algo en la red lightning.\n\nEn el área de administración de canales puedes siempre ver cuanto puedes enviar o recibir por la red lightning en el presente.</string>
     <string name="receive_requestFullfilled">Solicitud\npagada</string>
     <string name="guardian_doNotShowAgain">No me muestres de nuevo.</string>
     <string name="guardian_Title">Atención</string>
@@ -169,7 +169,7 @@
     <string name="guardian_tooMuchMoney">Felicidades, parece que tienes una buena cantidad de Bitcoin! Por favor recuerda que Zap es una \\"Billetera Caliente\\". Hacemos lo mejor para mantener a la billetera segura, pero por tu propia seguridad, te recomendamos que consideres el uso de Billeteras Frias o en Hardware para almacenar montos considerables.</string>
     <string name="guardian_notReadyForMainnet">Estas en la MAINNET con Bitcoin de verdad! Zap Android está en una fase muy temprana de desarrollo. Podrias perder fondos! Si no deseas asumir este riesgo, cámbiate a la testnet por mientras.</string>
     <string name="guardian_remoteConnect">Estás seguro que quieres conectarte con \n\n%1$s\n\n Por favor verifica la dirección con cuidado.</string>
-    <string name="guardian_blockExplorer">By looking up information with a Block Explorer your IP-Address gets exposed. If you want to increase your anonymity, you should either not use it or go to the settings and choose a Block Explorer that supports Tor.</string>
+    <string name="guardian_blockExplorer">Al buscar información con un explorador de bloques público, su dirección IP queda expuesta. Si desea aumentar su anonimato, debe evitar usarlo o como alternativa puede ir a la configuración y elegir un explorador de bloques que sea compatible con Tor.</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_security">Seguridad</string>
     <string name="settings_category_help">Ayuda</string>
@@ -179,7 +179,7 @@
     <string name="settings_language">Idioma</string>
     <string name="settings_hapticPin">Respuesta táctil</string>
     <string-array name="settings_language_displayValues">
-        <item>Lenguaje del sistema</item>
+        <item>Idioma del sistema</item>
         <item>Ingles</item>
     </string-array>
     <string name="settings_manageChannels">Administrar Canales de Pago</string>
@@ -197,14 +197,14 @@
     <string name="settings_restartRequired">Zap se reiniciará para hacer este cambio. ¿Quieres continuar?</string>
     <string name="settings_enableBiometrics">Autoriza verificación biométrica</string>
     <string name="settings_blockExplorer">Explorador de Bloques</string>
-    <string name="settings_blockExplorer_tor_toast">Tor Browser for Android is required.</string>
+    <string name="settings_blockExplorer_tor_toast">Se requiere el navegador Tor para Android.</string>
     <string name="settings_addressType">Tipo de dirección Bitcoin</string>
     <string-array name="settings_receiveAddressDisplayValues">
         <item>Compatible (P2PSH)</item>
         <item>Nativo (Bech32)</item>
     </string-array>
-    <string name="settings_lnRequestExpiryTitle">Vencimiento de Solicitud Relámpago</string>
-    <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
+    <string name="settings_lnRequestExpiryTitle">Vencimiento de Solicitud Lightning</string>
+    <string name="settings_lnFeeLimitTitle">Límite de la tarifa de pago</string>
     <string name="error">Error</string>
     <string name="error_blockExplorer_title">Explorador de Bloques</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"El explorador de bloques que tienes actualmente seleccionado (%1$s) no soporta %2$s.\nPor favor ve a las configuraciones y elige otro explorador para continuar."</string>
@@ -218,79 +218,79 @@
     <string name="error_qr_code_result_null">Ocurrió un error al leer Código de QR, por favor vuelve a intentar.</string>
     <string name="error_connection_unsupported_format">Formato de conexión no soportada. \n Por favor usa uno de los siguientes formatos:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="error_unableToFetchBTCPayConfig">Ocurrió un error al importar configuración de BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
-    <string name="error_connection_invalid_certificate">The certificate is invalid.</string>
-    <string name="error_connection_no_macaroon">Your connection information does not contain a macaroon. This is mandatory.</string>
-    <string name="error_connection_invalid_macaroon">The macaroon is invalid.</string>
-    <string name="error_connection_invalid_host_or_port">The provided host or port is invalid.</string>
-    <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
-    <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)\n\n- make sure your certificate is valid.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please make sure that:\n\n- Orbot is running\n\n- Orbot is in VPN Mode\n\n- Zap is in Orbot\'s list of activated apps.</string>
-    <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
-    <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
-    <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
-    <string name="error_wrong_password">Wrong password</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="error_channel_open_wallet_setup">The wallet needs to be setup to open a channel.</string>
-    <string name="error_connect_peer">Could not establish connection to peer node.</string>
-    <string name="error_connect_peer_refused">Connection has been refused by peer.</string>
-    <string name="error_connect_peer_self">Cannot make connection to self.</string>
-    <string name="error_connect_peer_no_host">Cannot connect to node without IP-address or host.</string>
-    <string name="error_connect_peer_timeout">Could not connect to peer within deadline.</string>
-    <string name="error_channel_open_pending_max">Number of pending channels exceed maximum.</string>
-    <string name="error_channel_open_timeout">Channel could not be opened within deadline.</string>
-    <string name="error_channel_open">Could not open channel with connected node: %s</string>
-    <string name="error_get_peers">Could not fetch peers list.</string>
-    <string name="error_get_peers_timeout">Peers could not be fetched within deadline.</string>
-    <string name="error_channel_close_offline">Peer is offline. Only force close allowed.</string>
-    <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
-    <string name="error_channel_close">Could not close channel: %s</string>
+    <string name="error_connection_invalidLndConnectString">Información de conexión inválida.\nPor favor asegúrate de usar el siguiente formato:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalid_certificate">El certificado es inválido.</string>
+    <string name="error_connection_no_macaroon">Su información de conexión no contiene un macaroon. Esto es obligatorio.</string>
+    <string name="error_connection_invalid_macaroon">El macaroon es inválido.</string>
+    <string name="error_connection_invalid_host_or_port">El host o puerto proporcionado no es válido.</string>
+    <string name="error_connection_invalid_macaroon2">Acceso denegado!\n\nEl macaroon es inválido.</string>
+    <string name="error_connection_server_unreachable">Tiempo de espera agotado.\nEl servidor no responde.\n\n- Por favor asegúrate de tener una buena conexión a internet.\n\n- Asegúrese de que el servidor se esté ejecutando y todavia tenga el siguiente IP:\n\n%1$s</string>
+    <string name="error_connection_lnd_unavailable">No se puede conectar a LND.\n\n- asegúrese que el servicio de LND se esté ejecutando en su servidor.\n\n- asegúrese de que su reenvío de puertos esté activo. (Puerto: %1$s)\n\n- asegúrese de que su certificado sea válido.</string>
+    <string name="error_connection_tor_unreachable">La conexión a Tor ha fallado.\n Por favor asegúrese que:\n\n- Orbot se está ejecutando\n\n- Orbot está en modo VPN\n\n- Zap está incluida en la lista de apps activas de Orbot.</string>
+    <string name="error_connection_wallet_locked">Por favor desbloquee la billetera.</string>
+    <string name="error_connection_btcpay_invalid_json">La sintaxis JSON de la configuración del servidor BTCPay no es válida.</string>
+    <string name="error_connection_btcpay_invalid_config">La configuración del servidor BTCPay no contiene una configuración para BTC GRPC.</string>
+    <string name="error_wrong_password">Contraseña incorrecta</string>
+    <string name="error_lightning_uri_invalid">Formato inválido.\nPor favor use una de las siguientes:\n- pubkey (llave pública)\n- pubkey@host\n- pubkey@host:puerto</string>
+    <string name="error_channel_open_wallet_setup">La billetera debe configurarse para abrir un canal.</string>
+    <string name="error_connect_peer">No se pudo establecer una conexión con el nodo par.</string>
+    <string name="error_connect_peer_refused">La conexión fue rechazada por el par.</string>
+    <string name="error_connect_peer_self">No se puede crear una conexión a uno mismo.</string>
+    <string name="error_connect_peer_no_host">No se puede conectar a un nodo sin dirección IP o host.</string>
+    <string name="error_connect_peer_timeout">No se pudo conectar al par dentro del plazo.</string>
+    <string name="error_channel_open_pending_max">El número de canales pendientes excede el máximo.</string>
+    <string name="error_channel_open_timeout">El canal no se pudo abrir dentro del plazo.</string>
+    <string name="error_channel_open">No se pudo abrir un canal con el nodo conectado: %s</string>
+    <string name="error_get_peers">No se pudo obtener la lista de pares.</string>
+    <string name="error_get_peers_timeout">No se pudo obtener la lista de pares dentro del plazo.</string>
+    <string name="error_channel_close_offline">Par se encuentra desconectado. Solo se permite un cierre forzado.</string>
+    <string name="error_channel_close_timeout">El canal no se pudo cerrar dentro del plazo.</string>
+    <string name="error_channel_close">No se pudo cerrar el canal: %s</string>
     <plurals name="duration_minute">
-        <item quantity="one">%d Minute</item>
-        <item quantity="other">%d Minutes</item>
+        <item quantity="one">%d Minuto</item>
+        <item quantity="other">%d Minutos</item>
     </plurals>
     <plurals name="duration_hour">
-        <item quantity="one">%d Hour</item>
-        <item quantity="other">%d Hours</item>
+        <item quantity="one">%d Hora</item>
+        <item quantity="other">%d Horas</item>
     </plurals>
     <plurals name="duration_day">
-        <item quantity="one">%d Day</item>
-        <item quantity="other">%d Days</item>
+        <item quantity="one">%d Día</item>
+        <item quantity="other">%d Días</item>
     </plurals>
     <plurals name="duration_week">
-        <item quantity="one">%d Week</item>
-        <item quantity="other">%d Weeks</item>
+        <item quantity="one">%d Semana</item>
+        <item quantity="other">%d Semanas</item>
     </plurals>
     <plurals name="duration_month">
-        <item quantity="one">%d Month</item>
-        <item quantity="other">%d Months</item>
+        <item quantity="one">%d Mes</item>
+        <item quantity="other">%d Meses</item>
     </plurals>
     <plurals name="duration_year">
-        <item quantity="one">%d Year</item>
-        <item quantity="other">%d Years</item>
+        <item quantity="one">%d Año</item>
+        <item quantity="other">%d Años</item>
     </plurals>
-    <string name="fee_tier_slow_title">Slow</string>
-    <string name="fee_tier_medium_title">Medium</string>
-    <string name="fee_tier_fast_title">Fast</string>
-    <string name="fee_tier_slow_description">Slow Transaction</string>
-    <string name="fee_tier_medium_description">Medium Transaction</string>
-    <string name="fee_tier_fast_description">Fast Transaction</string>
-    <string name="fee_estimated_duration">Estimated Delivery: %1$s</string>
+    <string name="fee_tier_slow_title">Lento</string>
+    <string name="fee_tier_medium_title">Normal</string>
+    <string name="fee_tier_fast_title">Rápido</string>
+    <string name="fee_tier_slow_description">Transferencia lenta</string>
+    <string name="fee_tier_medium_description">Transferencia normal</string>
+    <string name="fee_tier_fast_description">Transferencia rápida</string>
+    <string name="fee_estimated_duration">Entrega estimada: %1$s</string>
     <string name="fee_not_available">n/A</string>
-    <string name="fee_limit_title">Fee Limit Alert</string>
-    <string name="fee_limit_threshold">Fee limit for payments above %1$d sats: %2$s</string>
-    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
-    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
-    <string name="unlock_wallet">Unlock Wallet</string>
-    <string name="biometricPrompt_title">Biometric Authentication</string>
-    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
-    <string name="invoice_detail">Invoice Detail</string>
-    <string name="transaction_detail">Transaction Detail</string>
-    <string name="app_reset_title">Please note</string>
-    <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
-    <string name="tor_install_orbot">You are trying to connect to a tor node. To use Zap with tor you have to install Orbot.\n\nDo you want to install Orbot now?</string>
-    <string name="tor_fdroid_info">If Zap fails to find Orbot in the next step, make sure you have added and enabled the Guardian Project repository in F-Droid and try again.</string>
-    <string name="tor_download_fdroid">You need an App Store to download Orbot. Please first download F-Droid.</string>
-    <string name="tor_add_repo">Add Repository</string>
+    <string name="fee_limit_title">Alerta de límite de tarifa</string>
+    <string name="fee_limit_threshold">Tarifa límite para pagos por encima de %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">La tarifa para este pago (%1$.1f%%) excede el límite especificado en la configuración (%2$.0f%%).\n\n¿Realmente quieres pagar esta factura?</string>
+    <string name="fee_limit_exceeded_payment">La tarifa para este pago (%1$d sats) será mayor que el monto del pago (%2$d sats).\n\n¿Realmente quieres pagar esta factura?</string>
+    <string name="unlock_wallet">Desbloquear Billetera</string>
+    <string name="biometricPrompt_title">Autenticación Biométrica</string>
+    <string name="biometricNotSetup">Para poder acceder a esta función debes configurar la autenticación biométrica en la configuración de su sistema Android.</string>
+    <string name="invoice_detail">Detalle de factura</string>
+    <string name="transaction_detail">Detalles de la Transacción</string>
+    <string name="app_reset_title">Tenga en cuenta</string>
+    <string name="app_reset_message">La aplicación se ha restablecido ya que la última actualización incluyó algunos cambios estructurales.\nDesafortunadamente tendrá que realizar el proceso de configuración inicial nuevamente.</string>
+    <string name="tor_install_orbot">Estás intentando conectarte a un nodo Tor. Para usar Zap con Tor tienes que instalar Orbot.\n\n¿Desea instalar Orbot ahora?</string>
+    <string name="tor_fdroid_info">Si Zap no puede encontrar Orbot en el siguiente paso, asegúrese de haber agregado y habilitado el repositorio del Guardian Project en F-Droid e intente nuevamente.</string>
+    <string name="tor_download_fdroid">Necesita una tienda de aplicaciones para descargar Orbot. Por favor instale F-Droid primero.</string>
+    <string name="tor_add_repo">Agregar Repositorio</string>
 </resources>
