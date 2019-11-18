@@ -551,7 +551,7 @@ public class MonetaryUtil {
         mSecondCurrency = new Currency(currencyCode, rate, symbol);
     }
 
-    private void setSecondCurrency(String currencyCode, Double rate, Long timestamp) {
+    public void setSecondCurrency(String currencyCode, Double rate, Long timestamp) {
         mSecondCurrency = new Currency(currencyCode, rate, timestamp);
     }
 

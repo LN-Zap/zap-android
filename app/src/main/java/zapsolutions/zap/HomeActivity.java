@@ -38,7 +38,6 @@ import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.ExchangeRateUtil;
-import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -139,10 +138,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mExchangeRateScheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin() ||
-                                    !PrefsUtil.getPrefs().contains(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)) {
-                                ExchangeRateUtil.getInstance().getExchangeRates();
-                            }
+                            ExchangeRateUtil.getInstance().getExchangeRates();
                         }
                     }, 0, RefConstants.EXCHANGE_RATE_PERIOD, RefConstants.EXCHANGE_RATE_PERIOD_UNIT);
         }

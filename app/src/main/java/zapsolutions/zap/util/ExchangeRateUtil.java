@@ -45,26 +45,30 @@ public class ExchangeRateUtil {
     }
 
     public void getExchangeRates() {
-        String provider = PrefsUtil.getPrefs().getString(PrefsUtil.EXCHANGE_RATE_PROVIDER, BLOCKCHAIN_INFO);
-        JsonObjectRequest request;
 
-        switch (provider) {
-            case BLOCKCHAIN_INFO:
-                request = getBlockchainInfoRequest();
-                break;
-            case COINBASE:
-                request = getCoinbaseRequest();
-                break;
-            default:
-                request = getBlockchainInfoRequest();
+        if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin() ||
+                !PrefsUtil.getPrefs().contains(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)) {
+
+            String provider = PrefsUtil.getPrefs().getString(PrefsUtil.EXCHANGE_RATE_PROVIDER, BLOCKCHAIN_INFO);
+            JsonObjectRequest request;
+
+            switch (provider) {
+                case BLOCKCHAIN_INFO:
+                    request = getBlockchainInfoRequest();
+                    break;
+                case COINBASE:
+                    request = getCoinbaseRequest();
+                    break;
+                default:
+                    request = getBlockchainInfoRequest();
+            }
+
+            if (request != null) {
+                // Adding request to request queue
+                HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
+                ZapLog.debug(LOG_TAG, "Exchange rate request initiated");
+            }
         }
-
-        if (request != null) {
-            // Adding request to request queue
-            HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
-            ZapLog.debug(LOG_TAG, "Exchange rate request initiated");
-        }
-
     }
 
 
@@ -218,7 +222,11 @@ public class ExchangeRateUtil {
 
                 // Update the current fiat currency of the Monetary util
                 if (rateCode.equals(PrefsUtil.getSecondCurrency())) {
-                    MonetaryUtil.getInstance().setSecondCurrency(rateCode, tempRate.getDouble(RATE), tempRate.getLong(TIMESTAMP), tempRate.getString(SYMBOL));
+                    if (tempRate.has(SYMBOL)) {
+                        MonetaryUtil.getInstance().setSecondCurrency(rateCode, tempRate.getDouble(RATE), tempRate.getLong(TIMESTAMP), tempRate.getString(SYMBOL));
+                    } else {
+                        MonetaryUtil.getInstance().setSecondCurrency(rateCode, tempRate.getDouble(RATE), tempRate.getLong(TIMESTAMP));
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -239,6 +247,7 @@ public class ExchangeRateUtil {
         editor.commit();
         setDefaultCurrency();
         broadcastExchangeRateUpdate();
+        ZapLog.debug(LOG_TAG, "Exchange rate is: " + MonetaryUtil.getInstance().getSecondCurrency().getRate() * 1E8);
     }
 
     private void setDefaultCurrency() {
