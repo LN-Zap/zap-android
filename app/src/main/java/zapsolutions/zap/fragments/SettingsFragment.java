@@ -117,11 +117,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                                 }
 
-                             /*   if (listLanguage.getValue().equals("english")) {
-                                    editor.putString("language", "system");
-
-                                } */
-
                                 else {
 
                                     editor.putString("language", "bulgarian");
