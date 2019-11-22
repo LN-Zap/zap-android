@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.HttpClient;
 
@@ -191,11 +192,25 @@ public class ExchangeRateUtil {
      * This function removes them by checking if the currency code is in our fiat currency list.
      */
     private JSONObject removeNonFiat(JSONObject rates) {
-        Iterator<String> iter = rates.keys();
-        while (iter.hasNext()) {
-            String rateCode = iter.next();
-            if (AppUtil.getInstance(mContext).getCurrencyNameFromCurrencyCode(rateCode) == null) {
-                iter.remove();
+
+        // Load the currency list from JSON file.
+        JSONObject fiatList = null;
+        String currencies = AppUtil.getInstance(mContext).loadJSONFromResource(R.raw.currency_list);
+
+        try {
+            fiatList = new JSONObject(currencies);
+        } catch (JSONException e) {
+            ZapLog.debug(LOG_TAG, "Error reading currency_list JSON: " + e.getMessage());
+        }
+
+        // Remove all exchange rates that are not in the list
+        if (fiatList != null) {
+            Iterator<String> iter = rates.keys();
+            while (iter.hasNext()) {
+                String rateCode = iter.next();
+                if (!fiatList.has(rateCode)) {
+                    iter.remove();
+                }
             }
         }
         return rates;
