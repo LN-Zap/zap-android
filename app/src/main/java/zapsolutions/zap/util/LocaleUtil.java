@@ -22,7 +22,9 @@ public class LocaleUtil {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         if (prefs.getString("language", "system").equals("system")) {
             return Resources.getSystem().getConfiguration().locale.getLanguage();
-        } else {
+        }
+		if (prefs.getString("language", "system").equals("bulgarian")) return "bg";
+		else {
             return "en";
         }
     }
