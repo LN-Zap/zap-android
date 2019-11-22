@@ -207,6 +207,7 @@
     <string-array name="settings_language_displayValues">
         <item>System Language</item>
         <item>English</item>
+        <item>Bulgarian</item>
     </string-array>
 
     <string name="settings_manageChannels">Manage Lightning Channels</string>

@@ -110,15 +110,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 SharedPreferences.Editor editor = PrefsUtil.edit();
 
+
+
                                 if (listLanguage.getValue().equals("system")) {
-                                    editor.putString("language", "english");
+                                   editor.putString("language", "english");
+
                                 }
-                                else if (listLanguage.getValue().equals("bulgarian")) {
-                                    editor.putString("language", "bulgarian");
-                                }
-                                else {
+
+                             /*   if (listLanguage.getValue().equals("english")) {
                                     editor.putString("language", "system");
+
+                                } */
+
+                                else {
+
+                                    editor.putString("language", "bulgarian");
+
                                 }
+
                                 // We have to use commit here, apply would not finish before the app is restarted.
                                 editor.commit();
                                 AppUtil.getInstance(getActivity()).restartApp();
