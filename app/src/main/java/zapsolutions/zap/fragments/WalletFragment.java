@@ -266,6 +266,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             connectionToLNDEstablished();
         } else {
             if (PrefsUtil.isWalletSetup()) {
+                if (!LndConnection.getInstance().isConnected()) {
+                    LndConnection.getInstance().openConnection();
+                }
+
                 Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
             }
         }
