@@ -24,6 +24,8 @@ public class PrefsUtil {
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
     public static final String CURRENT_WALLET_CONFIG = "current_wallet_config";
     public static final String AVAILABLE_FIAT_CURRENCIES = "fiat_available";
+    public static final String LANGUAGE = "language";
+    public static final String LANGUAGE_SYSTEM_DEFAULT = "system";
 
     // wallet config preferences references
     public static final String PREFS_ENCRYPTED = "prefs_encrypted";
@@ -75,7 +77,7 @@ public class PrefsUtil {
         return getPrefs().getString(CURRENT_WALLET_CONFIG, WalletConfigsManager.DEFAULT_WALLET_NAME);
     }
 
-    public static boolean isPinEnabled(){
-        return !getPrefs().getString(PIN_HASH,"").isEmpty();
+    public static boolean isPinEnabled() {
+        return !getPrefs().getString(PIN_HASH, "").isEmpty();
     }
 }
