@@ -178,10 +178,6 @@
     <string name="settings_currency">İkinci birim</string>
     <string name="settings_language">Dil</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
-    <string-array name="settings_language_displayValues">
-        <item>Sistem dili</item>
-        <item>İngilizce</item>
-    </string-array>
     <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
     <string name="settings_changePin">PIN değiştir</string>

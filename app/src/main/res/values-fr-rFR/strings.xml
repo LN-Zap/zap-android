@@ -178,10 +178,6 @@
     <string name="settings_currency">Unité secondaire</string>
     <string name="settings_language">Langue</string>
     <string name="settings_hapticPin">Retour tactile du code PIN</string>
-    <string-array name="settings_language_displayValues">
-        <item>Langue</item>
-        <item>Anglais</item>
-    </string-array>
     <string name="settings_manageChannels">Gérer les canaux Lightning</string>
     <string name="settings_resetConnection">Réinitialiser la connexion au nœud distant</string>
     <string name="settings_changePin">Changer le code PIN</string>
