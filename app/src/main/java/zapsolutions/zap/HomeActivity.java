@@ -68,6 +68,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mWalletLoadedListenerRegistered;
     private boolean mMainnetWarningShownOnce;
     private boolean mIsFirstUnlockAttempt = true;
+    private AlertDialog mUnlockDialog;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -112,6 +114,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         mHandler = new Handler();
 
+        mUnlockDialog = buildUnlockDialog();
+
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
@@ -124,7 +128,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         // Setup Listener
         BottomNavigationView navigation = findViewById(R.id.mainNavigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
     }
 
     // This schedule keeps us up to date on exchange rates
@@ -354,43 +357,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         } else {
             if (error == Wallet.WalletLoadedListener.ERROR_LOCKED) {
 
-
-                // Show unlock dialog
-                AlertDialog.Builder adb = new AlertDialog.Builder(this);
-                adb.setTitle(R.string.unlock_wallet);
-                adb.setCancelable(false);
-                View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_input_password, null, false);
-
-                final EditText input = viewInflated.findViewById(R.id.input);
-                input.setShowSoftInputOnFocus(true);
-                input.requestFocus();
+                if (mUnlockDialog != null && !mUnlockDialog.isShowing()) {
+                    mUnlockDialog.show();
+                }
 
                 mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-                adb.setView(viewInflated);
-
-                adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((WalletFragment) mCurrentFragment).showLoadingForWalletUnlock();
-                        Wallet.getInstance().unlockWallet(input.getText().toString());
-                        mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                        mIsFirstUnlockAttempt = false;
-                        dialog.dismiss();
-                    }
-                });
-                adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        InputMethodManager inputMethodManager = (InputMethodManager) HomeActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                        ((WalletFragment) mCurrentFragment).showErrorAfterNotUnlocked();
-                        mIsFirstUnlockAttempt = true;
-                        dialog.cancel();
-                    }
-                });
-
-                adb.show();
                 ((WalletFragment) mCurrentFragment).showBackgroundForWalletUnlock();
 
                 if (!mIsFirstUnlockAttempt) {
@@ -398,6 +369,37 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 }
             }
         }
+    }
+
+    private AlertDialog buildUnlockDialog() {
+        // Show unlock dialog
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle(R.string.unlock_wallet);
+        adb.setCancelable(false);
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_input_password, null, false);
+
+        final EditText input = viewInflated.findViewById(R.id.input);
+        input.setShowSoftInputOnFocus(true);
+        input.requestFocus();
+
+        adb.setView(viewInflated);
+
+        adb.setPositiveButton(R.string.ok, (dialog, which) -> {
+            ((WalletFragment) mCurrentFragment).showLoadingForWalletUnlock();
+            Wallet.getInstance().unlockWallet(input.getText().toString());
+            mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            mIsFirstUnlockAttempt = false;
+            dialog.dismiss();
+        });
+        adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
+            InputMethodManager inputMethodManager = (InputMethodManager) HomeActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            ((WalletFragment) mCurrentFragment).showErrorAfterNotUnlocked();
+            mIsFirstUnlockAttempt = true;
+            dialog.cancel();
+        });
+
+        return adb.create();
     }
 
     @Override
