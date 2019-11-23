@@ -23,7 +23,6 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.Executors;
@@ -32,16 +31,16 @@ import java.util.concurrent.TimeUnit;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
-import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.UserGuardian;
@@ -132,7 +131,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         if (!mIsExchangeRateSchedulerRunning) {
             mIsExchangeRateSchedulerRunning = true;
-            final JsonObjectRequest request = MonetaryUtil.getInstance().getExchangeRates();
 
             mExchangeRateScheduler =
                     Executors.newSingleThreadScheduledExecutor();
@@ -140,14 +138,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mExchangeRateScheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin() ||
-                                    !PrefsUtil.getPrefs().contains(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)) {
-                                ZapLog.debug(LOG_TAG, "Fiat exchange rate request initiated");
-                                // Adding request to request queue
-                                HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
-                            }
+                            ExchangeRateUtil.getInstance().getExchangeRates();
                         }
-                    }, 0, 3, TimeUnit.MINUTES);
+                    }, 0, RefConstants.EXCHANGE_RATE_PERIOD, RefConstants.EXCHANGE_RATE_PERIOD_UNIT);
         }
 
     }
