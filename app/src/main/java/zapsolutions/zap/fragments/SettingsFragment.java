@@ -51,16 +51,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreference mSwHideTotalBalance;
     private ListPreference mListCurrency;
-    private Preference mAddPin;
-    private Preference mChangePin;
-
+    private Preference mPinPref;
+    
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the settings from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey);
 
-        mAddPin = findPreference("addPIN");
-        mChangePin = findPreference("changePIN");
+        mPinPref = findPreference("pinPref");
 
         // Update our current selected first currency in the MonetaryUtil
         final ListPreference listBtcUnit = findPreference("firstCurrency");
@@ -169,14 +167,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Action when clicked on "add Pin"
-        mAddPin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        // Action when clicked on the pin preference
+        mPinPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (PrefsUtil.isWalletSetup()) {
-                    Intent intent = new Intent(getActivity(), PinSetupActivity.class);
-                    intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.ADD_PIN);
-                    startActivity(intent);
+                    if (PrefsUtil.isPinEnabled()) {
+                        Intent intent = new Intent(getActivity(), PinSetupActivity.class);
+                        intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.CHANGE_PIN);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getActivity(), PinSetupActivity.class);
+                        intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.ADD_PIN);
+                        startActivity(intent);
+                    }
                 } else {
                     Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
                 }
@@ -184,16 +188,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Action when clicked on "change pin"
-        mChangePin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), PinSetupActivity.class);
-                intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.CHANGE_PIN);
-                startActivity(intent);
-                return true;
-            }
-        });
 
         // Action when clicked on "reset all"
         final Preference prefResetAll = findPreference("resetAll");
@@ -386,17 +380,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mListCurrency.setValue(PrefsUtil.getSecondCurrency());
         mListCurrency.setSummary(PrefsUtil.getSecondCurrency());
         createSecondCurrencyList();
-        pinOptionVisibility();
+        pinOptionText();
     }
 
-    private void pinOptionVisibility() {
+    private void pinOptionText() {
         // Display add or change pin
         if (PrefsUtil.isPinEnabled()) {
-            mAddPin.setVisible(false);
-            mChangePin.setVisible(true);
+            mPinPref.setTitle(R.string.settings_changePin);
         } else {
-            mAddPin.setVisible(true);
-            mChangePin.setVisible(false);
+            mPinPref.setTitle(R.string.settings_addPin);
         }
     }
 }
