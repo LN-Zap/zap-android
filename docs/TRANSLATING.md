@@ -12,6 +12,6 @@
 
 Your translation will only be visible in the app after the next update will be published on Google Play Store. There is no fixed schedule when updates are happening.
 So this might take a few days or a few weeks.
-If the language is translated to 100%, we will add it to the language selection list. If not, it is onyl accessible if you choose "System Language" and your smartphone is set to the corresponding language.
+If the language is translated to 100%, we will add it to the language selection list. If not, it is only accessible if you choose "System Language" and your smartphone is set to the corresponding language.
 
 [crowdin]: https://crowdin.com/project/zap-android
