@@ -12,6 +12,8 @@ import androidx.preference.SwitchPreference;
 import zapsolutions.zap.R;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.BiometricUtil;
+import zapsolutions.zap.util.ExchangeRateUtil;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UserGuardian;
 
@@ -41,6 +43,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
                 if (newValue != null && newValue.toString().equalsIgnoreCase("Blockstream (v3 Tor)")) {
                     Toast.makeText(getActivity(), R.string.settings_blockExplorer_tor_toast, Toast.LENGTH_LONG).show();
                 }
+                return true;
+            }
+        });
+
+        // Request exchange rates when the provider changed
+        ListPreference listExchangeRateProvider = findPreference("exchangeRateProvider");
+        listExchangeRateProvider.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                PrefsUtil.edit().putString(PrefsUtil.EXCHANGE_RATE_PROVIDER, newValue.toString()).commit();
+                ExchangeRateUtil.getInstance().getExchangeRates();
                 return true;
             }
         });

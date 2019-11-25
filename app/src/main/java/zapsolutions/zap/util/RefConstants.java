@@ -1,5 +1,7 @@
 package zapsolutions.zap.util;
 
+import java.util.concurrent.TimeUnit;
+
 public class RefConstants {
 
     /* This value has to be increased if any changes are made, that break the current implementation.
@@ -28,6 +30,10 @@ public class RefConstants {
 
     // Number of seconds after moving the app to background until the app gets locked.
     public static final int ACCESS_TIMEOUT = 10;
+
+    // Schedule intervals
+    public static final int EXCHANGE_RATE_PERIOD = 3;
+    public static final TimeUnit EXCHANGE_RATE_PERIOD_UNIT = TimeUnit.MINUTES;
 
     // Haptic vibration
     public static final int VIBRATE_SHORT = 50;

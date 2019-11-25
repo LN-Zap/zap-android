@@ -16,6 +16,16 @@
             app:iconSpaceReserved="false" />
 
         <ListPreference
+            android:defaultValue="Blockchain.info"
+            android:dialogTitle="@string/settings_exchangeRateProvider"
+            android:entries="@array/exchangeRateProvider"
+            android:entryValues="@array/exchangeRateProvider"
+            android:key="exchangeRateProvider"
+            android:summary="%s"
+            android:title="@string/settings_exchangeRateProvider"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
             android:defaultValue="bech32"
             android:dialogTitle="@string/settings_addressType"
             android:entries="@array/settings_receiveAddressDisplayValues"

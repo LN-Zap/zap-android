@@ -26,6 +26,10 @@ public class PrefsUtil {
     public static final String AVAILABLE_FIAT_CURRENCIES = "fiat_available";
     public static final String LANGUAGE = "language";
     public static final String LANGUAGE_SYSTEM_DEFAULT = "system";
+    public static final String EXCHANGE_RATE_PROVIDER = "exchangeRateProvider";
+    public static final String IS_DEFAULT_CURRENCY_SET = "isDefaultCurrencySet";
+    public static final String FIRST_CURRENCY = "firstCurrency";
+    public static final String SECOND_CURRENCY = "secondCurrency";
 
     // wallet config preferences references
     public static final String PREFS_ENCRYPTED = "prefs_encrypted";
@@ -79,5 +83,13 @@ public class PrefsUtil {
 
     public static boolean isPinEnabled() {
         return !getPrefs().getString(PIN_HASH, "").isEmpty();
+    }
+
+    public static String getFirstCurrency() {
+        return getPrefs().getString(FIRST_CURRENCY, MonetaryUtil.SATOSHI_UNIT);
+    }
+
+    public static String getSecondCurrency() {
+        return getPrefs().getString(SECOND_CURRENCY, "USD");
     }
 }

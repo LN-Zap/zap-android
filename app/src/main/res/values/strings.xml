@@ -228,6 +228,8 @@
     <string name="settings_blockExplorer_tor_toast">Tor Browser for Android is required.</string>
     <string name="settings_addressType">Bitcoin Address Type</string>
 
+    <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
+
     <string-array name="settings_receiveAddressDisplayValues">
         <item>Compatibility (P2PSH)</item>
         <item>Native (Bech32)</item>

@@ -79,12 +79,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // we received from our provider. Therefore when the provider adds new currencies,
         // they will automatically show up in Zap.
         mListCurrency = findPreference("secondCurrency");
-        createSecondCurrencyList();
         mListCurrency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 createSecondCurrencyList();
-
                 return true;
             }
         });
@@ -390,6 +388,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
+        mListCurrency.setValue(PrefsUtil.getSecondCurrency());
+        mListCurrency.setSummary(PrefsUtil.getSecondCurrency());
+        createSecondCurrencyList();
         pinOptionVisibility();
     }
 

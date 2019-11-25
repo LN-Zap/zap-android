@@ -33,6 +33,11 @@
         <item>OXT</item>
     </string-array>
 
+    <string-array name="exchangeRateProvider">
+        <item>Blockchain.info</item>
+        <item>Coinbase</item>
+    </string-array>
+
     <string-array name="languageValues">
         <item>system</item>
         <item>bg</item>
