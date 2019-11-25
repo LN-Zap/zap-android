@@ -24,6 +24,8 @@ public class PrefsUtil {
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
     public static final String CURRENT_WALLET_CONFIG = "current_wallet_config";
     public static final String AVAILABLE_FIAT_CURRENCIES = "fiat_available";
+    public static final String LANGUAGE = "language";
+    public static final String LANGUAGE_SYSTEM_DEFAULT = "system";
     public static final String EXCHANGE_RATE_PROVIDER = "exchangeRateProvider";
     public static final String IS_DEFAULT_CURRENCY_SET = "isDefaultCurrencySet";
     public static final String FIRST_CURRENCY = "firstCurrency";

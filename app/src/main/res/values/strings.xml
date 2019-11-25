@@ -203,11 +203,7 @@
     <string name="settings_currency">Second Unit</string>
     <string name="settings_language">Language</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
-
-    <string-array name="settings_language_displayValues">
-        <item>System Language</item>
-        <item>English</item>
-    </string-array>
+    <string name="settings_systemLanguage">System Language</string>
 
     <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>

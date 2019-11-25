@@ -40,7 +40,24 @@
 
     <string-array name="languageValues">
         <item>system</item>
-        <item>english</item>
+        <item>bg</item>
+        <item>cs</item>
+        <item>en</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>it</item>
+        <item>es</item>
+    </string-array>
+
+    <string-array name="languageDisplayValues">
+        <item>System Language</item>
+        <item>Bulgarian</item>
+        <item>Czech</item>
+        <item>English</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Italian</item>
+        <item>Spanish</item>
     </string-array>
 
     <string-array name="lnRequestExpiry">

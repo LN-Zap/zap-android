@@ -29,11 +29,10 @@
             android:title="@string/settings_currency"
             app:iconSpaceReserved="false" />
 
-
         <ListPreference
             android:defaultValue="system"
             android:dialogTitle="@string/settings_language"
-            android:entries="@array/settings_language_displayValues"
+            android:entries="@array/languageDisplayValues"
             android:entryValues="@array/languageValues"
             android:key="language"
             android:summary="%s"

@@ -20,10 +20,10 @@ public class LocaleUtil {
     // Get selected language code
     private static String getLanguageCode(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        if (prefs.getString("language", "system").equals("system")) {
+        if (prefs.getString(PrefsUtil.LANGUAGE, PrefsUtil.LANGUAGE_SYSTEM_DEFAULT).equals(PrefsUtil.LANGUAGE_SYSTEM_DEFAULT)) {
             return Resources.getSystem().getConfiguration().locale.getLanguage();
         } else {
-            return "en";
+            return prefs.getString(PrefsUtil.LANGUAGE, PrefsUtil.LANGUAGE_SYSTEM_DEFAULT);
         }
     }
 

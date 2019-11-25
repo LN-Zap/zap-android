@@ -178,10 +178,6 @@
     <string name="settings_currency">Segunda Unidad</string>
     <string name="settings_language">Idioma</string>
     <string name="settings_hapticPin">Respuesta táctil</string>
-    <string-array name="settings_language_displayValues">
-        <item>Lenguaje del sistema</item>
-        <item>Ingles</item>
-    </string-array>
     <string name="settings_manageChannels">Administrar Canales de Pago</string>
     <string name="settings_resetConnection">Restablecer Configuración del Nodo Remoto</string>
     <string name="settings_changePin">Cambiar PIN</string>

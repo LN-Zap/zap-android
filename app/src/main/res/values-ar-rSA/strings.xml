@@ -178,10 +178,6 @@
     <string name="settings_currency">الوحدة الثانية</string>
     <string name="settings_language">اللغة</string>
     <string name="settings_hapticPin">ردة فعل ملموسة للـ PIN</string>
-    <string-array name="settings_language_displayValues">
-        <item>لغة النظام</item>
-        <item>English</item>
-    </string-array>
     <string name="settings_manageChannels">إدارة قنوات Lightning</string>
     <string name="settings_resetConnection">Reset Remote Node Configuration</string>
     <string name="settings_changePin">تغيير الرمز السري</string>
