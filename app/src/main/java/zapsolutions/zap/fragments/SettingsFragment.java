@@ -52,7 +52,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private SwitchPreference mSwHideTotalBalance;
     private ListPreference mListCurrency;
     private Preference mPinPref;
-    
+    private ListPreference mListLanguage;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the settings from an XML resource
@@ -95,8 +96,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
         // Show warning on language change as a restart is required.
-        final ListPreference listLanguage = (ListPreference) findPreference("language");
-        listLanguage.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mListLanguage = findPreference("language");
+        createLanguagesList();
+        mListLanguage.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 new AlertDialog.Builder(getActivity())
@@ -105,12 +107,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 SharedPreferences.Editor editor = PrefsUtil.edit();
+                                editor.putString(PrefsUtil.LANGUAGE, newValue.toString());
 
-                                if (listLanguage.getValue().equals("system")) {
-                                    editor.putString("language", "english");
-                                } else {
-                                    editor.putString("language", "system");
-                                }
                                 // We have to use commit here, apply would not finish before the app is restarted.
                                 editor.commit();
                                 AppUtil.getInstance(getActivity()).restartApp();
@@ -372,6 +370,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mListCurrency.setEntryValues(entryValues);
         mListCurrency.setEntries(entryDisplayValues);
 
+    }
+
+    private void createLanguagesList() {
+        // This is necessary as we want to have "system language translatable, while the languages themselves will not be translatable
+        CharSequence[] languageDisplayValues = getActivity().getResources().getStringArray(R.array.languageDisplayValues);
+        languageDisplayValues[0] = getActivity().getResources().getString(R.string.settings_systemLanguage);
+        mListLanguage.setEntries(languageDisplayValues);
     }
 
     @Override

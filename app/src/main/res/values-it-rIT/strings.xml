@@ -178,10 +178,6 @@
     <string name="settings_currency">Unità Secondaria</string>
     <string name="settings_language">Lingua</string>
     <string name="settings_hapticPin">PIN con Feedback Aptico</string>
-    <string-array name="settings_language_displayValues">
-        <item>Lingua di Sistema</item>
-        <item>Inglese</item>
-    </string-array>
     <string name="settings_manageChannels">Gestisci Canali Lightning</string>
     <string name="settings_resetConnection">Ripristina Configurazione Nodo Remoto</string>
     <string name="settings_changePin">Cambia PIN</string>

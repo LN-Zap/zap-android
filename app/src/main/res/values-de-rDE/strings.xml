@@ -178,10 +178,6 @@
     <string name="settings_currency">Zweite Einheit</string>
     <string name="settings_language">Sprache</string>
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
-    <string-array name="settings_language_displayValues">
-        <item>Systemsprache</item>
-        <item>Englisch</item>
-    </string-array>
     <string name="settings_manageChannels">Lightning-Kanäle verwalten</string>
     <string name="settings_resetConnection">Verbindungseinstellungen zurücksetzen</string>
     <string name="settings_changePin">PIN ändern</string>

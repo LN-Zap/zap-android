@@ -178,10 +178,6 @@
     <string name="settings_currency">Sekundární jednotka</string>
     <string name="settings_language">Jazyk</string>
     <string name="settings_hapticPin">Hmatová zpětná vazba PIN</string>
-    <string-array name="settings_language_displayValues">
-        <item>Systémový jazyk</item>
-        <item>Angličtina</item>
-    </string-array>
     <string name="settings_manageChannels">Správa Lightning kanálů</string>
     <string name="settings_resetConnection">Reset konfigurace vzdáleného uzlu</string>
     <string name="settings_changePin">Změnit PIN</string>

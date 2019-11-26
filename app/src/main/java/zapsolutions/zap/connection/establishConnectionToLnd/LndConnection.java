@@ -32,6 +32,7 @@ public class LndConnection {
     private LndLightningService mLndLightningService;
     private LndWalletUnlockerService mLndWalletUnlockerService;
     private WalletConfig mConnectionConfig;
+    private boolean isConnected = false;
 
     private LndConnection() {
         ;
@@ -101,9 +102,12 @@ public class LndConnection {
     }
 
     public void openConnection() {
-        ZapLog.debug(LOG_TAG, "Starting LND connection...(Open Http Channel)");
-        readSavedConnectionInfo();
-        generateChannelAndStubs();
+        if (!isConnected) {
+            isConnected = true;
+            ZapLog.debug(LOG_TAG, "Starting LND connection...(Open Http Channel)");
+            readSavedConnectionInfo();
+            generateChannelAndStubs();
+        }
 
     }
 
@@ -112,6 +116,12 @@ public class LndConnection {
             ZapLog.debug(LOG_TAG, "Shutting down LND connection...(Closing Http Channel)");
             shutdownChannel();
         }
+
+        isConnected = false;
+    }
+
+    public boolean isConnected() {
+        return isConnected;
     }
 
     /**

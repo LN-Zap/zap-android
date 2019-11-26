@@ -178,10 +178,6 @@
     <string name="settings_currency">Вторична единица</string>
     <string name="settings_language">Език</string>
     <string name="settings_hapticPin">Осезаема ПИН обратна връзка</string>
-    <string-array name="settings_language_displayValues">
-        <item>Системен Език</item>
-        <item>Английски</item>
-    </string-array>
     <string name="settings_manageChannels">Управление на lightning канали</string>
     <string name="settings_resetConnection">Нулирай конфигурацията на отдалечения нод</string>
     <string name="settings_changePin">Смяна на ПИН</string>
