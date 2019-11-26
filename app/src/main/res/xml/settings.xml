@@ -78,13 +78,8 @@
         app:iconSpaceReserved="false">
 
         <Preference
-            android:key="addPIN"
+            android:key="pinPref"
             android:title="@string/settings_addPin"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="changePIN"
-            android:title="@string/settings_changePin"
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
