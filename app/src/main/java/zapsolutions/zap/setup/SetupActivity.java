@@ -6,13 +6,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.pin.PinActivityInterface;
 import zapsolutions.zap.pin.PinFragment;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.UtilFunctions;
 
 
 public class SetupActivity extends BaseAppCompatActivity implements PinActivityInterface {
@@ -42,7 +40,11 @@ public class SetupActivity extends BaseAppCompatActivity implements PinActivityI
                 showConnectChoice();
                 break;
             case CHANGE_CONNECTION:
-                showEnterPin();
+                if (PrefsUtil.isPinEnabled()) {
+                    showEnterPin();
+                } else {
+                    showConnectChoice();
+                }
                 break;
         }
     }

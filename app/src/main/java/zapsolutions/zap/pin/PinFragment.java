@@ -217,7 +217,7 @@ public class PinFragment extends Fragment {
                     PrefsUtil.edit().putInt("numPINFails", 0)
                             .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
 
-                    ((PinSetupActivity) getActivity()).correctPinEntered();
+                    ((PinActivityInterface) getActivity()).correctPinEntered();
                 }
 
             }
