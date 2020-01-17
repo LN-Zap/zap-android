@@ -1,10 +1,13 @@
 package zapsolutions.zap;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -16,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
@@ -23,21 +27,27 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
+import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.ExchangeRateUtil;
+import zapsolutions.zap.util.InvoiceUtil;
+import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -68,6 +78,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mMainnetWarningShownOnce;
     private boolean mIsFirstUnlockAttempt = true;
     private AlertDialog mUnlockDialog;
+    private NfcAdapter mNfcAdapter;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -108,6 +120,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //NFC
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         mUG = new UserGuardian(this, this);
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -346,6 +361,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 mHandler.postDelayed(() -> Wallet.getInstance().subscribeToChannelEvents(), 3000);
             }
 
+            // Check if Zap was started from an URI link or by NFC.
+            // If yes, forward the invoice.
+            if (App.getAppContext().getUriSchemeData() != null) {
+                readInvoice(App.getAppContext().getUriSchemeData());
+                App.getAppContext().setUriSchemeData(null);
+            }
+
             ZapLog.debug(LOG_TAG, "Wallet loaded");
         } else {
             if (error == Wallet.WalletLoadedListener.ERROR_LOCKED) {
@@ -405,5 +427,73 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        if (mNfcAdapter != null)
+            mNfcAdapter.enableForegroundDispatch(this, pendingIntent, NfcUtil.IntentFilters(), null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mNfcAdapter != null)
+            mNfcAdapter.disableForegroundDispatch(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        NfcUtil.readTag(this, intent, new NfcUtil.OnNfcResponseListener() {
+            @Override
+            public void onSuccess(String payload) {
+                readInvoice(payload);
+            }
+        });
+    }
+
+    private void readInvoice(String invoice) {
+        InvoiceUtil.readInvoice(HomeActivity.this, compositeDisposable, invoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
+            @Override
+            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+                Intent intent = new Intent();
+                intent.putExtra("onChain", false);
+                intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
+                intent.putExtra("lnInvoice", invoice);
+                SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                sendBottomSheetDialog.setArguments(intent.getExtras());
+                sendBottomSheetDialog.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+            }
+
+            @Override
+            public void onValidBitcoinInvoice(String address, long amount, String message) {
+                Intent intent = new Intent();
+                intent.putExtra("onChain", true);
+                intent.putExtra("onChainAddress", address);
+                intent.putExtra("onChainAmount", amount);
+                intent.putExtra("onChainMessage", message);
+                SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                sendBottomSheetDialog.setArguments(intent.getExtras());
+                sendBottomSheetDialog.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+            }
+
+            @Override
+            public void onError(String error, int duration) {
+                showError(error, duration);
+            }
+        });
+    }
+
+    private void showError(String message, int duration) {
+        Snackbar msg = Snackbar.make(HomeActivity.this.findViewById(R.id.mainContent), message, Snackbar.LENGTH_LONG);
+        View sbView = msg.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(HomeActivity.this, R.color.superRed));
+        msg.setDuration(duration);
+        msg.show();
     }
 }

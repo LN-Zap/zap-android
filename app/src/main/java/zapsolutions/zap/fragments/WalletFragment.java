@@ -275,17 +275,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         }
 
-        // if the wallet is not setup we still want to show the wallet and an error if a payment url was used.
-        if (!PrefsUtil.isWalletSetup()) {
-            mWalletConnectedLayout.setVisibility(View.VISIBLE);
-            mLoadingWalletLayout.setVisibility(View.GONE);
-            if (App.getAppContext().getUriSchemeData() != null) {
-                Intent intent = new Intent(getActivity(), SendActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivityForResult(intent, 1);
-            }
-        }
-
         return view;
     }
 
@@ -298,14 +287,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
             // Fetch the current balance and info from LND
             Wallet.getInstance().fetchBalanceFromLND();
-        }
-
-        // check if we have an URI Scheme present. If there is one, start the send activity,
-        // which will then immediately start to validate it.
-        if (App.getAppContext().getUriSchemeData() != null) {
-            Intent intent = new Intent(getActivity(), SendActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivityForResult(intent, 1);
         }
     }
 
