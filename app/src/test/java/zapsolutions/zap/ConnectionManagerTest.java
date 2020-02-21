@@ -23,20 +23,23 @@ import static junit.framework.TestCase.assertTrue;
 
 public class ConnectionManagerTest {
 
+    private static String WALLET_1_ID = "e4f2fcf7-82c7-46f4-8867-50c3f8a603f4";
+    private static String WALLET_2_ID = "a4f2fcf7-82c7-46f4-8867-50c3f8a603f4";
+
     @Test
     public void givenNoConfigs_whenDoesWalletExist_thenReturnFalse() {
         WalletConfigsManager manager = new WalletConfigsManager(null);
-        boolean result = manager.doesWalletConfigExist("test");
+        boolean result = manager.doesWalletConfigExist(WALLET_1_ID);
 
         assertFalse(result);
     }
 
 
     @Test
-    public void givenExistingAlias_whenDoesWalletExist_thenReturnTrue() {
+    public void givenExistingId_whenDoesWalletExist_thenReturnTrue() {
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        boolean result = manager.doesWalletConfigExist("firstwalletname");
+        boolean result = manager.doesWalletConfigExist(WALLET_1_ID);
 
         assertTrue(result);
     }
@@ -44,26 +47,27 @@ public class ConnectionManagerTest {
     @Test
     public void givenNoConfigs_whenLoadWalletConfig_thenReturnNull() {
         WalletConfigsManager manager = new WalletConfigsManager(null);
-        WalletConfig result = manager.getWalletConfig("firstwalletname");
+        WalletConfig result = manager.getWalletConfig(WALLET_1_ID);
 
         assertNull(result);
     }
 
     @Test
-    public void givenNonExistingAlias_whenLoadWalletConfig_thenReturnNull() {
+    public void givenNonExistingId_whenLoadWalletConfig_thenReturnNull() {
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        WalletConfig result = manager.getWalletConfig("test");
+        WalletConfig result = manager.getWalletConfig("000");
 
         assertNull(result);
     }
 
     @Test
-    public void givenExistingAlias_whenLoadWalletConfig_thenReceiveCorrectWalletConfig() {
+    public void givenExistingId_whenLoadWalletConfig_thenReceiveCorrectWalletConfig() {
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        WalletConfig result = manager.getWalletConfig("firstwalletname");
+        WalletConfig result = manager.getWalletConfig(WALLET_1_ID);
 
+        assertEquals(WALLET_1_ID, result.getId());
         assertEquals("FirstWalletName", result.getAlias());
         assertEquals("remote", result.getType());
         assertEquals("TestHost", result.getHost());
@@ -73,12 +77,12 @@ public class ConnectionManagerTest {
     }
 
     @Test
-    public void givenNewAlias_whenAddWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
-        WalletConfig expected = readFromFile("wallet_configs.json").getConnection("FirstWalletName");
+    public void givenNewId_whenAddWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
+        WalletConfig expected = readFromFile("wallet_configs.json").getConnection(WALLET_1_ID);
 
         WalletConfigsManager manager = new WalletConfigsManager(null);
         manager.addWalletConfig("FirstWalletName", "remote", "TestHost", 10009, "TestCert", "TestMacaroon");
-        WalletConfig actual = manager.getWalletConfig("FirstWalletName");
+        WalletConfig actual = manager.getWalletConfigsJson().getConnections().get(0);
 
         assertEquals(expected.getAlias(), actual.getAlias());
         assertEquals(expected.getCert(), actual.getCert());
@@ -89,24 +93,12 @@ public class ConnectionManagerTest {
     }
 
     @Test
-    public void givenExistingAlias_whenAddWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
-        WalletConfig expected = readFromFile("wallet_configs_modify.json").getConnection("FirstWalletName");
-
-        String configJson = readStringFromFile("wallet_configs_create.json");
-        WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        manager.addWalletConfig("FirstWalletName", "remote", "ModifiedHost", 10009, "TestCert", "TestMacaroon");
-        WalletConfig actual = manager.getWalletConfig("FirstWalletName");
-
-        assertEquals(expected.getHost(), actual.getHost());
-    }
-
-    @Test
-    public void givenNonExistingAlias_whenRemoveWalletConfig_thenReturnFalse() {
+    public void givenNonExistingId_whenRemoveWalletConfig_thenReturnFalse() {
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
 
         String expected = new Gson().toJson(manager.getWalletConfigsJson());
-        boolean removed = manager.removeWalletConfig("test");
+        boolean removed = manager.removeWalletConfig("000");
         String result = new Gson().toJson(manager.getWalletConfigsJson());
 
         assertFalse(removed);
@@ -114,51 +106,41 @@ public class ConnectionManagerTest {
     }
 
     @Test
-    public void givenExistingAlias_whenRemoveWalletConfig_thenReceiveUpdatedWalletConfigs() {
+    public void givenExistingId_whenRemoveWalletConfig_thenReceiveUpdatedWalletConfigs() {
         String configJson = readStringFromFile("wallet_configs.json");
 
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        boolean removed = manager.removeWalletConfig("secondwalletname");
+        boolean removed = manager.removeWalletConfig(WALLET_2_ID);
 
         assertTrue(removed);
-        assertNull(manager.getWalletConfig("SecondWalletName"));
-        assertNotNull(manager.getWalletConfig("FirstWalletName"));
+        assertNull(manager.getWalletConfig(WALLET_2_ID));
+        assertNotNull(manager.getWalletConfig(WALLET_1_ID));
     }
 
     @Test
-    public void givenNonExistingAlias_whenRenameWalletConfig_thenReturnFalse() {
+    public void givenNonExistingId_whenRenameWalletConfig_thenReturnFalse() {
         String configJson = readStringFromFile("wallet_configs.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
         String expected = new Gson().toJson(manager.getWalletConfigsJson());
-        boolean renamed = manager.renameWalletConfig("test", "test2");
+        boolean renamed = manager.renameWalletConfig("000", "test2");
         String result = new Gson().toJson(manager.getWalletConfigsJson());
 
         assertFalse(renamed);
         assertEquals(expected, result);
     }
 
-    @Test
-    public void givenExistingAlias_whenRenameToExitingWalletConfig_thenReturnFalse() {
-        String configJson = readStringFromFile("wallet_configs.json");
-        WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        String expected = new Gson().toJson(manager.getWalletConfigsJson());
-        boolean renamed = manager.renameWalletConfig("FirstWalletName", "SecondWalletName");
-        String result = new Gson().toJson(manager.getWalletConfigsJson());
-
-        assertFalse(renamed);
-        assertEquals(expected, result);
-    }
 
     @Test
-    public void givenExistingAlias_whenRenameWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
-        WalletConfig expected = readFromFile("wallet_configs_rename.json").getConnection("NewWalletName");
+    public void givenExistingId_whenRenameWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
+        WalletConfig expected = readFromFile("wallet_configs_rename.json").getConnection(WALLET_1_ID);
         String configJson = readStringFromFile("wallet_configs_create.json");
         WalletConfigsManager manager = new WalletConfigsManager(configJson);
-        boolean renamed = manager.renameWalletConfig("FirstWalletName", "NewWalletName");
-        WalletConfig actual = manager.getWalletConfig("newWalletName");
+        boolean renamed = manager.renameWalletConfig(WALLET_1_ID, "NewWalletName");
+        WalletConfig actual = manager.getWalletConfig(WALLET_1_ID);
 
         assertTrue(renamed);
-        assertNotNull(manager.getWalletConfig("NewWalletName"));
+        assertNotNull(manager.getWalletConfig(WALLET_1_ID));
+        assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getAlias(), actual.getAlias());
         assertEquals(expected.getCert(), actual.getCert());
         assertEquals(expected.getType(), actual.getType());
