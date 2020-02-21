@@ -518,7 +518,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
                 // generate onChain request
 
                 int addressType;
-                if (PrefsUtil.getPrefs().getString("btcAddressType", "p2psh").equals("bech32")) {
+                if (PrefsUtil.getPrefs().getString("btcAddressType", "bech32").equals("bech32")) {
                     addressType = 0;
                 } else {
                     addressType = 1;
