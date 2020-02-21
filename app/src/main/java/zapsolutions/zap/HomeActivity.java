@@ -435,15 +435,17 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        if (mNfcAdapter != null)
+        if (mNfcAdapter != null) {
             mNfcAdapter.enableForegroundDispatch(this, pendingIntent, NfcUtil.IntentFilters(), null);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mNfcAdapter != null)
+        if (mNfcAdapter != null) {
             mNfcAdapter.disableForegroundDispatch(this);
+        }
     }
 
     @Override

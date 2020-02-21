@@ -22,9 +22,6 @@ public class SendActivity extends BaseScannerActivity {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private boolean mFromURIScheme = false;
-    private String mOnChainAddress;
-    private long mOnChainInvoiceAmount;
-    private String mOnChainInvoiceMessage;
     private NfcAdapter mNfcAdapter;
 
     @Override
@@ -145,15 +142,17 @@ public class SendActivity extends BaseScannerActivity {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        if (mNfcAdapter != null)
+        if (mNfcAdapter != null) {
             mNfcAdapter.enableForegroundDispatch(this, pendingIntent, NfcUtil.IntentFilters(), null);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mNfcAdapter != null)
+        if (mNfcAdapter != null) {
             mNfcAdapter.disableForegroundDispatch(this);
+        }
     }
 
     @Override

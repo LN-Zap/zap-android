@@ -99,6 +99,8 @@
             android:name=".channelManagement.ScanNodePubKeyActivity"
             android:label="@string/channel_open"
             android:screenOrientation="portrait" />
+        <meta-data android:name="android.nfc.disable_beam_default"
+            android:value="true" />
     </application>
 
 </manifest>
