@@ -57,12 +57,7 @@ public class NfcUtil {
                             }
                             String payload = sb.toString();
                             ZapLog.debug(LOG_TAG, "Ndef payload: " + payload);
-                            if (PrefsUtil.isWalletSetup()) {
-                                listener.onSuccess(payload);
-                            } else {
-                                ZapLog.debug(LOG_TAG, "Wallet not setup.");
-                                Toast.makeText(ctx, R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
-                            }
+                            listener.onSuccess(payload);
                         } else {
                             ZapLog.debug(LOG_TAG, "This NdefRecord is not supported");
                             showNotSupportedToast(ctx);

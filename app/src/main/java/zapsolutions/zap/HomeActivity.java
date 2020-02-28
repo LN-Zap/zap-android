@@ -452,7 +452,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         NfcUtil.readTag(this, intent, new NfcUtil.OnNfcResponseListener() {
             @Override
             public void onSuccess(String payload) {
-                readInvoice(payload);
+                if (PrefsUtil.isWalletSetup()) {
+                    readInvoice(payload);
+                } else {
+                    ZapLog.debug(LOG_TAG, "Wallet not setup.");
+                    Toast.makeText(HomeActivity.this, R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
