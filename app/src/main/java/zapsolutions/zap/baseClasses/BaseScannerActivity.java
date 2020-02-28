@@ -16,8 +16,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 
 import me.dm7.barcodescanner.zbar.BarcodeFormat;
@@ -147,14 +145,6 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    protected void showError(String message, int duration) {
-        Snackbar msg = Snackbar.make(findViewById(R.id.content_frame), message, Snackbar.LENGTH_LONG);
-        View sbView = msg.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
-        msg.setDuration(duration);
-        msg.show();
     }
 
     protected void showCameraView() {

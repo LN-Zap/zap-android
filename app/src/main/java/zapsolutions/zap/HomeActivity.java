@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
@@ -29,7 +28,6 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -489,13 +487,5 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 showError(error, duration);
             }
         });
-    }
-
-    private void showError(String message, int duration) {
-        Snackbar msg = Snackbar.make(HomeActivity.this.findViewById(R.id.mainContent), message, Snackbar.LENGTH_LONG);
-        View sbView = msg.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(HomeActivity.this, R.color.superRed));
-        msg.setDuration(duration);
-        msg.show();
     }
 }

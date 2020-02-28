@@ -10,7 +10,6 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import me.dm7.barcodescanner.zbar.Result;
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.InvoiceUtil;
@@ -21,7 +20,6 @@ public class SendActivity extends BaseScannerActivity {
     private static final String LOG_TAG = SendActivity.class.getName();
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private boolean mFromURIScheme = false;
     private NfcAdapter mNfcAdapter;
 
     @Override
@@ -32,19 +30,9 @@ public class SendActivity extends BaseScannerActivity {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         mScannerInstructions.setText(R.string.send_scan_info);
-
-        if (App.getAppContext().getUriSchemeData() != null) {
-
-            // This activity was invoked because the app was started from an url (lightning: or bitcoin:)
-            // The url will be validated and the activity is finished before it will actually be shown.
-            String invoice = App.getAppContext().getUriSchemeData();
-            App.getAppContext().setUriSchemeData(null);
-            mFromURIScheme = true;
-            validateInvoice(invoice);
-        } else {
-            showCameraWithPermissionRequest();
-        }
+        showCameraWithPermissionRequest();
     }
+
 
     @Override
     public void onButtonPasteClick() {
@@ -74,19 +62,6 @@ public class SendActivity extends BaseScannerActivity {
                 mScannerView.resumeCameraPreview(SendActivity.this);
             }
         }, 2000);
-    }
-
-    @Override
-    protected void showError(String message, int duration) {
-        if (mFromURIScheme) {
-            Intent intent = new Intent();
-            intent.putExtra("error", message);
-            intent.putExtra("error_duration", duration);
-            setResult(1, intent);
-            finish();
-        } else {
-            super.showError(message, duration);
-        }
     }
 
     @Override
