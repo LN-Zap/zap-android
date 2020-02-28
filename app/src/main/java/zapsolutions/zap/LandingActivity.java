@@ -81,7 +81,6 @@ public class LandingActivity extends BaseAppCompatActivity {
             PinScreenUtil.askForAccess(this, () -> {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                finishAffinity();
                 startActivity(homeIntent);
             });
 

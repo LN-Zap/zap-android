@@ -431,9 +431,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     protected void onResume() {
         super.onResume();
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         if (mNfcAdapter != null) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
             mNfcAdapter.enableForegroundDispatch(this, pendingIntent, NfcUtil.IntentFilters(), null);
         }
     }
@@ -466,25 +466,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         InvoiceUtil.readInvoice(HomeActivity.this, compositeDisposable, invoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
             @Override
             public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                Intent intent = new Intent();
-                intent.putExtra("onChain", false);
-                intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
-                intent.putExtra("lnInvoice", invoice);
                 SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                sendBottomSheetDialog.setArguments(intent.getExtras());
-                sendBottomSheetDialog.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                sendBottomSheetDialog.createLightningDialog(HomeActivity.this, paymentRequest, invoice);
             }
 
             @Override
             public void onValidBitcoinInvoice(String address, long amount, String message) {
-                Intent intent = new Intent();
-                intent.putExtra("onChain", true);
-                intent.putExtra("onChainAddress", address);
-                intent.putExtra("onChainAmount", amount);
-                intent.putExtra("onChainMessage", message);
                 SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                sendBottomSheetDialog.setArguments(intent.getExtras());
-                sendBottomSheetDialog.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                sendBottomSheetDialog.createOnChainDialog(HomeActivity.this, address, amount, message);
             }
 
             @Override

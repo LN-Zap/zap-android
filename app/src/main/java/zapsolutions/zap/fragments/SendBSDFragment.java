@@ -47,6 +47,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.customView.LightningFeeView;
@@ -553,6 +554,25 @@ public class SendBSDFragment extends RxBSDFragment {
         });
 
         return view;
+    }
+
+    public void createLightningDialog(BaseAppCompatActivity activity, PayReq paymentRequest, String invoice) {
+        Intent intent = new Intent();
+        intent.putExtra("onChain", false);
+        intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
+        intent.putExtra("lnInvoice", invoice);
+        this.setArguments(intent.getExtras());
+        this.show(activity.getSupportFragmentManager(), "sendBottomSheetDialog");
+    }
+
+    public void createOnChainDialog(BaseAppCompatActivity activity, String address, long amount, String message) {
+        Intent intent = new Intent();
+        intent.putExtra("onChain", true);
+        intent.putExtra("onChainAddress", address);
+        intent.putExtra("onChainAmount", amount);
+        intent.putExtra("onChainMessage", message);
+        this.setArguments(intent.getExtras());
+        this.show(activity.getSupportFragmentManager(), "sendBottomSheetDialog");
     }
 
     @Override

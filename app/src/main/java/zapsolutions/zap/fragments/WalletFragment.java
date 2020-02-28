@@ -340,7 +340,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed. Here it is 1
         if (requestCode == 1) {
-            // This gets executed if the a vaild payment request was scanned or pasted
+            // This gets executed if a valid payment request was scanned or pasted
             if (data != null) {
                 if (data.getExtras().getString("error") == null) {
                     // forward data to send fragment
