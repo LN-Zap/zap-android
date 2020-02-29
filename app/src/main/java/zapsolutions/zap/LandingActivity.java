@@ -81,6 +81,10 @@ public class LandingActivity extends BaseAppCompatActivity {
             PinScreenUtil.askForAccess(this, () -> {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                // FinishAffinity is needed here as this forces the on destroy events from previous activities to be executed before continuing.
+                finishAffinity();
+
                 startActivity(homeIntent);
             });
 
