@@ -466,14 +466,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         InvoiceUtil.readInvoice(HomeActivity.this, compositeDisposable, invoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
             @Override
             public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                sendBottomSheetDialog.createLightningDialog(HomeActivity.this, paymentRequest, invoice);
+                SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice);
+                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
             }
 
             @Override
             public void onValidBitcoinInvoice(String address, long amount, String message) {
-                SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                sendBottomSheetDialog.createOnChainDialog(HomeActivity.this, address, amount, message);
+                SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
             }
 
             @Override
