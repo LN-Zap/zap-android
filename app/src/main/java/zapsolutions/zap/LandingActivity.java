@@ -3,10 +3,12 @@ package zapsolutions.zap;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -20,12 +22,21 @@ public class LandingActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // get the data from the URI Scheme
-        Intent intent = getIntent();
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            Uri uri = intent.getData();
-            App.getAppContext().setUriSchemeData(uri.toString());
-            ZapLog.debug(LOG_TAG, "URI was detected: " + uri.toString());
+        // Save data when App was started with a task.
+        if (PrefsUtil.isWalletSetup()) {
+
+            // Zap was started from an URI link.
+            Intent intent = getIntent();
+            if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+                Uri uri = intent.getData();
+                App.getAppContext().setUriSchemeData(uri.toString());
+                ZapLog.debug(LOG_TAG, "URI was detected: " + uri.toString());
+            }
+
+            // Zap was started using NFC.
+            if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+                NfcUtil.readTag(LandingActivity.this, intent, payload -> App.getAppContext().setUriSchemeData(payload));
+            }
         }
 
 
@@ -70,6 +81,10 @@ public class LandingActivity extends BaseAppCompatActivity {
             PinScreenUtil.askForAccess(this, () -> {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                // FinishAffinity is needed here as this forces the on destroy events from previous activities to be executed before continuing.
+                finishAffinity();
+
                 startActivity(homeIntent);
             });
 

@@ -2,11 +2,16 @@ package zapsolutions.zap.baseClasses;
 
 import android.content.Context;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import zapsolutions.zap.R;
 import zapsolutions.zap.util.LocaleUtil;
 import zapsolutions.zap.util.PrefsUtil;
 
@@ -54,5 +59,13 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void showError(String message, int duration) {
+        Snackbar msg = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
+        View sbView = msg.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));
+        msg.setDuration(duration);
+        msg.show();
     }
 }

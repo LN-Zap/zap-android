@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.NFC" />
 
     <application
         android:name="zapsolutions.zap.baseClasses.App"
@@ -38,6 +39,14 @@
                 <data android:scheme="bitcoin" />
                 <data android:scheme="lightning" />
 
+            </intent-filter>
+            <intent-filter>
+                <!-- Makes Zap startable from NFC Tags containing a bitcoin or lightning uri -->
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="bitcoin" />
+                <data android:scheme="lightning" />
             </intent-filter>
         </activity>
         <activity
@@ -90,6 +99,8 @@
             android:name=".channelManagement.ScanNodePubKeyActivity"
             android:label="@string/channel_open"
             android:screenOrientation="portrait" />
+        <meta-data android:name="android.nfc.disable_beam_default"
+            android:value="true" />
     </application>
 
 </manifest>

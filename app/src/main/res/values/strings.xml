@@ -339,4 +339,6 @@
     <string name="tor_fdroid_info">If Zap fails to find Orbot in the next step, make sure you have added and enabled the Guardian Project repository in F-Droid and try again.</string>
     <string name="tor_download_fdroid">You need an App Store to download Orbot. Please first download F-Droid.</string>
     <string name="tor_add_repo">Add Repository</string>
+
+    <string name="nfc_type_not_supported">Unsupported NFC type</string>
 </resources>

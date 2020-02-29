@@ -1,10 +1,13 @@
 package zapsolutions.zap;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -23,21 +26,26 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
+import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.ExchangeRateUtil;
+import zapsolutions.zap.util.InvoiceUtil;
+import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -68,6 +76,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mMainnetWarningShownOnce;
     private boolean mIsFirstUnlockAttempt = true;
     private AlertDialog mUnlockDialog;
+    private NfcAdapter mNfcAdapter;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -108,6 +118,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //NFC
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         mUG = new UserGuardian(this, this);
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -346,6 +359,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 mHandler.postDelayed(() -> Wallet.getInstance().subscribeToChannelEvents(), 3000);
             }
 
+            // Check if Zap was started from an URI link or by NFC.
+            // If yes, forward the invoice.
+            if (App.getAppContext().getUriSchemeData() != null) {
+                readInvoice(App.getAppContext().getUriSchemeData());
+                App.getAppContext().setUriSchemeData(null);
+            }
+
             ZapLog.debug(LOG_TAG, "Wallet loaded");
         } else {
             if (error == Wallet.WalletLoadedListener.ERROR_LOCKED) {
@@ -405,5 +425,61 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mNfcAdapter != null) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            mNfcAdapter.enableForegroundDispatch(this, pendingIntent, NfcUtil.IntentFilters(), null);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mNfcAdapter != null) {
+            mNfcAdapter.disableForegroundDispatch(this);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        NfcUtil.readTag(this, intent, new NfcUtil.OnNfcResponseListener() {
+            @Override
+            public void onSuccess(String payload) {
+                if (PrefsUtil.isWalletSetup()) {
+                    readInvoice(payload);
+                } else {
+                    ZapLog.debug(LOG_TAG, "Wallet not setup.");
+                    Toast.makeText(HomeActivity.this, R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void readInvoice(String invoice) {
+        InvoiceUtil.readInvoice(HomeActivity.this, compositeDisposable, invoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
+            @Override
+            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+                SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice);
+                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+            }
+
+            @Override
+            public void onValidBitcoinInvoice(String address, long amount, String message) {
+                SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+            }
+
+            @Override
+            public void onError(String error, int duration) {
+                showError(error, duration);
+            }
+        });
     }
 }

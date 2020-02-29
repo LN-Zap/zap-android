@@ -555,6 +555,27 @@ public class SendBSDFragment extends RxBSDFragment {
         return view;
     }
 
+    public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice) {
+        Intent intent = new Intent();
+        intent.putExtra("onChain", false);
+        intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
+        intent.putExtra("lnInvoice", invoice);
+        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+        sendBottomSheetDialog.setArguments(intent.getExtras());
+        return sendBottomSheetDialog;
+    }
+
+    public static SendBSDFragment createOnChainDialog(String address, long amount, String message) {
+        Intent intent = new Intent();
+        intent.putExtra("onChain", true);
+        intent.putExtra("onChainAddress", address);
+        intent.putExtra("onChainAmount", amount);
+        intent.putExtra("onChainMessage", message);
+        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+        sendBottomSheetDialog.setArguments(intent.getExtras());
+        return sendBottomSheetDialog;
+    }
+
     @Override
     public void onDestroyView() {
         mHandler.removeCallbacksAndMessages(null);
