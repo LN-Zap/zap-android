@@ -195,8 +195,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConfig = (LndConnectConfig) config;
 
-                String id;
-                id = walletConfigsManager.addWalletConfig(config.getHost(),
+                String id = walletConfigsManager.addWalletConfig(config.getHost(),
                         WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
                         lndConfig.getCert(), lndConfig.getMacaroon());
 
@@ -209,8 +208,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             } else if (config instanceof BTCPayConfig) {
                 BTCPayConfig btcPayConfig = (BTCPayConfig) config;
 
-                String id;
-                id = walletConfigsManager.addWalletConfig(config.getHost(),
+                String id = walletConfigsManager.addWalletConfig(config.getHost(),
                         WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
                         null, btcPayConfig.getMacaroon());
 
