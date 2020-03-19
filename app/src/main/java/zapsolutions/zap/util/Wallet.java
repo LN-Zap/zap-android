@@ -55,6 +55,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import zapsolutions.zap.R;
+import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.lightning.LightningNodeUri;
 
@@ -124,7 +125,7 @@ public class Wallet {
     }
 
     /**
-     * Use this to reset the wallet information when the connection type was changed.
+     * Use this to reset the wallet information when the wallet was switched.
      */
     public void reset() {
         compositeDisposable.clear();
@@ -135,11 +136,28 @@ public class Wallet {
         mChannelBalancePendingOpen = 0;
         mChannelBalanceLimbo = 0;
 
+        mOnChainTransactionList = null;
+        mInvoiceList = null;
+        mTempInvoiceUpdateList = null;
+        mPaymentsList = null;
+        mOpenChannelsList = null;
+        mPendingOpenChannelsList = null;
+        mPendingClosedChannelsList = null;
+        mPendingForceClosedChannelsList = null;
+        mPendingWaitingCloseChannelsList = null;
+
+        mConnectionCheckInProgress = false;
+        mTransactionUpdated = false;
+        mInvoicesUpdated = false;
+        mPaymentsUpdated = false;
+        mUpdatingHistory = false;
+
         mInfoFetched = false;
         mSyncedToChain = false;
         mTestnet = false;
         mLNDVersion = "not connected";
         mHandler.removeCallbacksAndMessages(null);
+        App.getAppContext().connectionToLNDEstablished = false;
         mChannelsUpdateDebounceHandler.shutdown();
     }
 
