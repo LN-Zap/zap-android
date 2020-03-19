@@ -80,10 +80,10 @@ public class LandingActivity extends BaseAppCompatActivity {
 
     private void convertWalletNameToUUID() {
         if (PrefsUtil.isWalletSetup()) {
-            if (WalletConfigsManager.getInstance().getWalletConfigsJson().getConnections().size() > 0) {
-                WalletConfig config = WalletConfigsManager.getInstance().getWalletConfigsJson().getConnections().get(0);
+            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                WalletConfig config = (WalletConfig)WalletConfigsManager.getInstance().getWalletConfigsJson().getConnections().toArray()[0];
                 WalletConfigsManager.getInstance().removeAllWalletConfigs();
-                String id = WalletConfigsManager.getInstance().addWalletConfig(config.getHost(), config.getType(), config.getHost(), config.getPort(), config.getCert(), config.getMacaroon());
+                String id = WalletConfigsManager.getInstance().addWalletConfig(config.getHost(), config.getType(), config.getHost(), config.getPort(), config.getCert(), config.getMacaroon()).getId();
                 try {
                     WalletConfigsManager.getInstance().apply();
                 } catch (Exception e) {

@@ -197,7 +197,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
                 String id = walletConfigsManager.addWalletConfig(config.getHost(),
                         WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
-                        lndConfig.getCert(), lndConfig.getMacaroon());
+                        lndConfig.getCert(), lndConfig.getMacaroon()).getId();
 
                 walletConfigsManager.apply();
 
@@ -210,7 +210,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
                 String id = walletConfigsManager.addWalletConfig(config.getHost(),
                         WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
-                        null, btcPayConfig.getMacaroon());
+                        null, btcPayConfig.getMacaroon()).getId();
 
                 walletConfigsManager.apply();
 

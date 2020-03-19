@@ -78,7 +78,6 @@ public class WalletConfigsManager {
         if (mInstance == null) {
             mInstance = new WalletConfigsManager();
         }
-
         return mInstance;
     }
 
@@ -88,7 +87,7 @@ public class WalletConfigsManager {
      * @param walletConfigsString parses as JSON
      * @return if the JSON syntax is valid
      */
-    public static boolean isValidJson(String walletConfigsString) {
+    private static boolean isValidJson(String walletConfigsString) {
         try {
             WalletConfigsJson walletConfigs = new Gson().fromJson(walletConfigsString, WalletConfigsJson.class);
             return walletConfigs != null;
@@ -106,13 +105,13 @@ public class WalletConfigsManager {
     }
 
     /**
-     * Checks if a wallet configuration with the given UUID exists.
+     * Checks if a wallet configuration already exists.
      *
-     * @param id The UUID of the wallet
+     * @param walletConfig
      * @return
      */
-    public boolean doesWalletConfigExist(@NonNull String id) {
-        return mWalletConfigsJson.doesWalletConfigExist(id);
+    public boolean doesWalletConfigExist(@NonNull WalletConfig walletConfig) {
+        return mWalletConfigsJson.doesWalletConfigExist(walletConfig);
     }
 
 
@@ -127,28 +126,30 @@ public class WalletConfigsManager {
      * @param cert     The certificate. This is optional and can be null
      * @param macaroon The Macaroon. Encoded as base16 (hex)
      */
-    public String addWalletConfig(@NonNull String alias, @NonNull String type, String host,
-                                  int port, @Nullable String cert, String macaroon) {
+    public WalletConfig addWalletConfig(@NonNull String alias, @NonNull String type, String host,
+                                        int port, @Nullable String cert, String macaroon) {
 
         // Create the UUID for the new config
         String id = UUID.randomUUID().toString();
 
         // Create the config
-        WalletConfig config = new WalletConfig();
+        WalletConfig config = new WalletConfig(id);
         config.setAlias(alias);
         config.setType(type);
         config.setHost(host);
         config.setPort(port);
         config.setCert(cert);
         config.setMacaroon(macaroon);
-        config.setId(id);
 
         // Add the config to our configurations array
-        mWalletConfigsJson.addWallet(config);
+        boolean walletAdded = mWalletConfigsJson.addWallet(config);
 
-        ZapLog.debug(LOG_TAG, "The wallet ID is:" + id);
-
-        return id;
+        if (walletAdded) {
+            ZapLog.debug(LOG_TAG, "The ID of the created WalletConfig is:" + id);
+            return config;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -163,23 +164,27 @@ public class WalletConfigsManager {
      * @param cert     The certificate. This is optional and can be null
      * @param macaroon The Macaroon. Encoded as base16 (hex)
      */
-    public String updateWalletConfig(@NonNull String id, @NonNull String alias, @NonNull String type, String host,
-                                     int port, @Nullable String cert, String macaroon) {
+    public WalletConfig updateWalletConfig(@NonNull String id, @NonNull String alias, @NonNull String type, String host,
+                                           int port, @Nullable String cert, String macaroon) {
 
         // Create the config
-        WalletConfig config = new WalletConfig();
+        WalletConfig config = new WalletConfig(id);
         config.setAlias(alias);
         config.setType(type);
         config.setHost(host);
         config.setPort(port);
         config.setCert(cert);
         config.setMacaroon(macaroon);
-        config.setId(id);
 
-        // Add the config to our configurations array
-        mWalletConfigsJson.addWallet(config);
+        // Update the config in our configurations array
+        boolean walletUpdated = mWalletConfigsJson.updateWalletConfig(config);
 
-        return id;
+        if (walletUpdated) {
+            ZapLog.debug(LOG_TAG, "WalletConfig updated! (id =" + id + ")");
+            return config;
+        } else {
+            return null;
+        }
     }
 
 
@@ -189,12 +194,11 @@ public class WalletConfigsManager {
      * @return
      */
     public WalletConfig getCurrentWalletConfig() {
-        WalletConfig config = getWalletConfig(PrefsUtil.getCurrentWalletConfig());
-        if (config == null && mWalletConfigsJson.mConnections.size() > 0) {
-            PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, mWalletConfigsJson.mConnections.get(0).getId()).commit();
-            return mWalletConfigsJson.mConnections.get(0);
+        WalletConfig config = getWalletConfigById(PrefsUtil.getCurrentWalletConfig());
+        if (config == null && hasAnyConfigs()) {
+            PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, ((WalletConfig) mWalletConfigsJson.mConnections.toArray()[0]).getId()).commit();
+            return (WalletConfig) mWalletConfigsJson.mConnections.toArray()[0];
         }
-
         return config;
     }
 
@@ -205,8 +209,8 @@ public class WalletConfigsManager {
      * @param id The UUID of the wallet
      * @return Returns null if no configuration is found for the given uuid
      */
-    public WalletConfig getWalletConfig(@NonNull String id) {
-        return mWalletConfigsJson.getConnection(id);
+    public WalletConfig getWalletConfigById(@NonNull String id) {
+        return mWalletConfigsJson.getConnectionById(id);
     }
 
     /**
@@ -232,57 +236,61 @@ public class WalletConfigsManager {
                         break;
                     }
                 }
-
                 WalletConfig currentConfig = sortedList.get(index);
                 sortedList.remove(index);
                 sortedList.add(0, currentConfig);
             }
         }
-
         return sortedList;
     }
 
 
     /**
      * Renames the desired wallet config.
+     * Do not forget to call apply() afterwards to make this change permanent.
      *
-     * @param id       The UUID of the wallet that should be renamed.
-     * @param newAlias The new alias
+     * @param walletConfig The wallet config that should be renamed.
+     * @param newAlias     The new alias
      * @return false if the old alias did not exist.
      */
-    public boolean renameWalletConfig(String id, @NonNull String newAlias) {
-        return mWalletConfigsJson.renameWalletConfig(id, newAlias);
+    public boolean renameWalletConfig(@NonNull WalletConfig walletConfig, @NonNull String newAlias) {
+        return mWalletConfigsJson.renameWalletConfig(walletConfig, newAlias);
     }
 
     /**
      * Removes the desired wallet config.
+     * Do not forget to call apply() afterwards to make this change permanent.
      *
-     * @param id
+     * @param walletConfig
      */
-    public boolean removeWalletConfig(@NonNull String id) {
-        return mWalletConfigsJson.removeWalletConfig(id);
-    }
-
-    public boolean hasAtLeastOneConfig() {
-        return mWalletConfigsJson.getConnections().size() != 0;
+    public boolean removeWalletConfig(@NonNull WalletConfig walletConfig) {
+        return mWalletConfigsJson.removeWalletConfig(walletConfig);
     }
 
     public boolean hasLocalConfig() {
-        if (!hasAtLeastOneConfig()) {
-            return false;
-        } else {
+        if (hasAnyConfigs()) {
             boolean hasLocal = false;
-            for (int i = 0; i < mWalletConfigsJson.getConnections().size(); i++) {
-                if (mWalletConfigsJson.getConnections().get(i).isLocal()) {
+            for (WalletConfig walletConfig : mWalletConfigsJson.getConnections()) {
+                if (walletConfig.isLocal()) {
                     hasLocal = true;
                     break;
                 }
             }
             return hasLocal;
+        } else {
+            return false;
         }
     }
 
-    public void removeAllWalletConfigs(){
+    public boolean hasAnyConfigs() {
+        return !mWalletConfigsJson.getConnections().isEmpty();
+    }
+
+    /**
+     * Removes all wallet configs.
+     * Do not forget to call apply() afterwards to make this change permanent.
+     */
+    public void removeAllWalletConfigs() {
         mWalletConfigsJson = createEmptyWalletConfigsJson();
     }
 
