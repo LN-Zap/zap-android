@@ -295,6 +295,7 @@ public class Wallet {
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
+            broadcastBalanceUpdate();
         }, throwable -> ZapLog.debug(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
     }
 
@@ -1071,18 +1072,15 @@ public class Wallet {
         mOnChainBalanceTotal = total;
         mOnChainBalanceConfirmed = confirmed;
         mOnChainBalanceUnconfirmed = unconfirmed;
-        broadcastBalanceUpdate();
     }
 
     private void setChannelBalance(long balance, long pendingOpen) {
         mChannelBalance = balance;
         mChannelBalancePendingOpen = pendingOpen;
-        broadcastBalanceUpdate();
     }
 
     private void setChannelBalanceLimbo(long balanceLimbo) {
         mChannelBalanceLimbo = balanceLimbo;
-        broadcastBalanceUpdate();
     }
 
     /**
