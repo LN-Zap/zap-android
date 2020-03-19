@@ -72,6 +72,10 @@ public class WalletConfig extends RemoteConfiguration implements Comparable<Wall
 
     @Override
     public int hashCode() {
-        return this.id.hashCode();
+        if (this.id !=null) {
+            return this.id.hashCode();
+        } else {
+            return this.alias.hashCode();
+        }
     }
 }
