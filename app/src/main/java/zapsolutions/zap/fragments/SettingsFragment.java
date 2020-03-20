@@ -383,7 +383,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onResume() {
         super.onResume();
         mListCurrency.setValue(PrefsUtil.getSecondCurrency());
-        mListCurrency.setSummary(PrefsUtil.getSecondCurrency());
+        mListCurrency.setSummary("%s");
         createSecondCurrencyList();
         pinOptionText();
     }

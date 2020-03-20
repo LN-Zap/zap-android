@@ -39,12 +39,6 @@
             android:title="@string/settings_language"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="hapticPin"
-            android:title="@string/settings_hapticPin"
-            app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
 
