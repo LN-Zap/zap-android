@@ -87,6 +87,11 @@
             android:title="@string/settings_preventScreenRecording"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:key="resetGuardian"
+            android:title="@string/settings_resetSecurityWarnings"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
