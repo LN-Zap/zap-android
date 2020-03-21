@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">Crear Billetera</string>
     <string name="setup_connect_remote_description">Control remoto a su propio nodo.</string>
     <string name="setup_connect_remote_button">Conectarse a un Nodo Remoto.</string>
-    <string name="setup_connect_scan_connection_info">Escanea información de conección</string>
     <string name="demo_setupWalletBtn">Configurar Billetera</string>
     <string name="demo_setupWalletFirst">Primero debes configurar una billetera.</string>
     <string name="send_lightningPayment">Enviar pago relámpago</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">Enviar pago</string>
     <string name="send_success">Pago\nexitoso</string>
     <string name="send_fail">Pago fallido</string>
-    <string name="send_scan_info">Escanea solicitud de pago</string>
     <string name="receive_generateRequest">Generar Solicitud</string>
     <string name="receive_generateRequest_failed">La solicitud no pudo ser generada.</string>
     <string name="receive_lightning_request">Solicitud Lightning</string>

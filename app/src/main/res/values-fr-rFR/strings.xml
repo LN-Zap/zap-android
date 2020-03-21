@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">Créer un portefeuille</string>
     <string name="setup_connect_remote_description">Contrôlez à distance votre propre nœud.</string>
     <string name="setup_connect_remote_button">Se connecter au nœud</string>
-    <string name="setup_connect_scan_connection_info">Scannez les informations de connexion</string>
     <string name="demo_setupWalletBtn">Configurer le portefeuille</string>
     <string name="demo_setupWalletFirst">Vous devez d\'abord configurer un portefeuille.</string>
     <string name="send_lightningPayment">Envoyer un paiement Lightning</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">Envoyer un paiement</string>
     <string name="send_success">Paiement\nenvoyé</string>
     <string name="send_fail">Paiement\néchoué</string>
-    <string name="send_scan_info">Scannez la demande de paiement</string>
     <string name="receive_generateRequest">Générer une demande</string>
     <string name="receive_generateRequest_failed">Échec de la génération de demande de paiement.</string>
     <string name="receive_lightning_request">Demande Lightning</string>

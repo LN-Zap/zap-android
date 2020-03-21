@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">Criar Carteira</string>
     <string name="setup_connect_remote_description">Controle remotamente o seu nó.</string>
     <string name="setup_connect_remote_button">Conectar ao Nó Remoto</string>
-    <string name="setup_connect_scan_connection_info">Escaneie dados de conexão</string>
     <string name="demo_setupWalletBtn">Configurar Carteira</string>
     <string name="demo_setupWalletFirst">Você primeiro precisa configurar uma carteira.</string>
     <string name="send_lightningPayment">Enviar pagamento em lightning</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">Enviar pagamento</string>
     <string name="send_success">Pagamento\nbem sucedido</string>
     <string name="send_fail">Pagamento\nfalhou</string>
-    <string name="send_scan_info">Escaneie o pedido de pagamento</string>
     <string name="receive_generateRequest">Gerar Pedido</string>
     <string name="receive_generateRequest_failed">Geração de pedido falhou.</string>
     <string name="receive_lightning_request">Pedido via Lightning</string>

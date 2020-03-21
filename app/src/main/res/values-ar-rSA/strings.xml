@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">إنشاء محفظة</string>
     <string name="setup_connect_remote_description">التحكم عن بعد بالـ node الخاصة بك.</string>
     <string name="setup_connect_remote_button">الاتصال بالـ Node عن بعد</string>
-    <string name="setup_connect_scan_connection_info">مسح بيانات الاتصال</string>
     <string name="demo_setupWalletBtn">إعداد محفظة</string>
     <string name="demo_setupWalletFirst">عليك أولاً إعداد محفظة.</string>
     <string name="send_lightningPayment">إرسال دفعة Lightning</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">إرسل الدفعة</string>
     <string name="send_success">نجاح\nالدفعة</string>
     <string name="send_fail">فشل\nالدفعة</string>
-    <string name="send_scan_info">مسح طلب الدفع</string>
     <string name="receive_generateRequest">إنشاء الطلب</string>
     <string name="receive_generateRequest_failed">فشل إنشاء الطلب.</string>
     <string name="receive_lightning_request">طلب Lightning</string>
