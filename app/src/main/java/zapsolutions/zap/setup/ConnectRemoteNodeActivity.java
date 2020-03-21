@@ -24,6 +24,7 @@ import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
@@ -38,7 +39,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     public void onCreate(Bundle state) {
         super.onCreate(state);
 
-        mScannerInstructions.setText(R.string.setup_connect_scan_connection_info);
         showButtonHelp();
 
         showCameraWithPermissionRequest();
@@ -59,6 +59,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         if (isClipboardContentValid) {
             verifyDesiredConnection(clipboardContent);
         }
+    }
+
+    @Override
+    public void onButtonInstructionsHelpClick() {
+        HelpDialogUtil.showDialog(ConnectRemoteNodeActivity.this, R.string.help_dialog_scanConnectionInfo);
     }
 
     @Override

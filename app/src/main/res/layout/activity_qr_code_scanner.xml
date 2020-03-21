@@ -2,7 +2,6 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -90,7 +89,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scannerInstructions" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/scannerInstructions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,14 +97,36 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:textColor="@color/white"
-            android:textSize="24sp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.20"
-            tools:text="Scan data" />
+            app:layout_constraintVertical_bias="0.20">
+
+            <TextView
+                android:id="@+id/scannerInstructionsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/scan_qr_code"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <ImageView
+                android:id="@+id/scannerInstructionsHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="0dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_help_black_24dp"
+                android:tint="@color/lightningOrange" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/textViewPeers"

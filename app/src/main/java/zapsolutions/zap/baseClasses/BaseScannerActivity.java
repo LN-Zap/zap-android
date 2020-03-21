@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -30,11 +31,12 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     protected ZBarScannerView mScannerView;
     protected int mHighlightColor;
     protected int mGrayColor;
-    protected TextView mScannerInstructions;
+    protected ImageView mScannerInstructionsHelp;
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;
     private Button mButtonPaste;
     private Button mButtonHelp;
+
 
     @Override
     public void onCreate(Bundle state) {
@@ -44,7 +46,6 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
 
         mScannerView = new ZBarScannerView(this);
         mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
-        mScannerInstructions = findViewById(R.id.scannerInstructions);
 
         // Only respond to QR-Codes
         ArrayList<BarcodeFormat> formats = new ArrayList<>();
@@ -75,6 +76,9 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
 
         mBtnFlashlight = findViewById(R.id.scannerFlashButton);
         mBtnFlashlight.setOnClickListener(this);
+
+        mScannerInstructionsHelp = findViewById(R.id.scannerInstructionsHelp);
+        mScannerInstructionsHelp.setOnClickListener(this);
     }
 
     @Override
@@ -112,6 +116,9 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                 break;
             case R.id.scannerFlashButton:
                 onButtonFlashClick();
+                break;
+            case R.id.scannerInstructionsHelp:
+                onButtonInstructionsHelpClick();
                 break;
         }
     }
@@ -172,6 +179,10 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     }
 
     public void onButtonHelpClick() {
+        // handled in subclass
+    }
+
+    public void onButtonInstructionsHelpClick() {
         // handled in subclass
     }
 

@@ -155,7 +155,6 @@
     <string name="setup_connect_local_button">Create Wallet</string>
     <string name="setup_connect_remote_description">Remote control your own node.</string>
     <string name="setup_connect_remote_button">Connect to Remote Node</string>
-    <string name="setup_connect_scan_connection_info">Scan connection data</string>
 
 
     <string name="demo_setupWalletBtn">Setup Wallet</string>
@@ -167,7 +166,6 @@
     <string name="send_sendPayment">Send payment</string>
     <string name="send_success">Payment\nsuccessful</string>
     <string name="send_fail">Payment\nfailed</string>
-    <string name="send_scan_info">Scan payment request</string>
 
 
     <string name="receive_generateRequest">Generate Request</string>
@@ -341,4 +339,9 @@
     <string name="tor_add_repo">Add Repository</string>
 
     <string name="nfc_type_not_supported">Unsupported NFC type</string>
+
+    <string name="help_dialog_scanPaymentRequest">QR-Codes containing the following are valid:\n\n- Bitcoin Address\n- Bitcoin Payment Request\n- Lightning Payment Request</string>
+    <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
+    <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
 </resources>
