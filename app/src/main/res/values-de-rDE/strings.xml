@@ -181,7 +181,6 @@
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
     <string name="settings_systemLanguage">Systemsprache</string>
     <string name="settings_manageChannels">Lightning-Kanäle verwalten</string>
-    <string name="settings_resetConnection">Verbindungseinstellungen zurücksetzen</string>
     <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
     <string name="settings_preventScreenRecording">Bildschirmaufnahmen blockieren</string>
     <string name="settings_hideTotalBalance">Gesamtguthaben verstecken</string>
