@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -44,7 +46,11 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
             int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
             if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
-                resetApp();
+                if (ver == 17) {
+                    convertWalletNameToUUID();
+                } else {
+                    resetApp();
+                }
             } else {
                 enterWallet();
             }
@@ -70,6 +76,23 @@ public class LandingActivity extends BaseAppCompatActivity {
         } else {
             enterWallet();
         }
+    }
+
+    private void convertWalletNameToUUID() {
+        if (PrefsUtil.isWalletSetup()) {
+            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                WalletConfig config = (WalletConfig) WalletConfigsManager.getInstance().getWalletConfigsJson().getConnections().toArray()[0];
+                WalletConfigsManager.getInstance().removeAllWalletConfigs();
+                String id = WalletConfigsManager.getInstance().addWalletConfig(config.getHost(), config.getType(), config.getHost(), config.getPort(), config.getCert(), config.getMacaroon()).getId();
+                try {
+                    WalletConfigsManager.getInstance().apply();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
+            }
+        }
+        enterWallet();
     }
 
     private void enterWallet() {

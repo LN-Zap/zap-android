@@ -18,15 +18,18 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
 import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
+import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
@@ -192,22 +195,26 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConfig = (LndConnectConfig) config;
 
-                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
-                        "remote", lndConfig.getHost(), lndConfig.getPort(),
-                        lndConfig.getCert(), lndConfig.getMacaroon());
+                String id = walletConfigsManager.addWalletConfig(config.getHost(),
+                        WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
+                        lndConfig.getCert(), lndConfig.getMacaroon()).getId();
 
                 walletConfigsManager.apply();
+
+                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
 
                 success = true;
 
             } else if (config instanceof BTCPayConfig) {
                 BTCPayConfig btcPayConfig = (BTCPayConfig) config;
 
-                walletConfigsManager.addWalletConfig(WalletConfigsManager.DEFAULT_WALLET_NAME,
-                        "remote", btcPayConfig.getHost(), btcPayConfig.getPort(),
-                        null, btcPayConfig.getMacaroon());
+                String id = walletConfigsManager.addWalletConfig(config.getHost(),
+                        WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
+                        null, btcPayConfig.getMacaroon()).getId();
 
                 walletConfigsManager.apply();
+
+                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
 
                 success = true;
 
@@ -224,8 +231,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             prefs.edit()
-                    .putBoolean("isWalletSetup", true)
+                    .putBoolean(PrefsUtil.IS_WALLET_SETUP, true)
                     .commit();
+
+            // In case another wallet was open before, we want to have all values reset.
+            Wallet.getInstance().reset();
 
             // Show home screen, remove history stack
             Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);

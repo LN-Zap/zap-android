@@ -4,73 +4,66 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.Set;
 
 public class WalletConfigsJson {
 
     @SerializedName("connections")
-    List<WalletConfig> mConnections;
+    Set<WalletConfig> mConnections;
 
-    public WalletConfig getConnection(@NonNull String alias) {
+    public WalletConfig getConnectionById(@NonNull String id) {
+        for (WalletConfig walletConnectionConfig : mConnections) {
+            if (walletConnectionConfig.getId().equals(id)) {
+                return walletConnectionConfig;
+            }
+        }
+        return null;
+    }
+
+    public WalletConfig getConnectionByAlias(@NonNull String alias) {
         for (WalletConfig walletConnectionConfig : mConnections) {
             if (walletConnectionConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
                 return walletConnectionConfig;
             }
         }
-
         return null;
     }
 
-    boolean doesWalletConfigExist(String alias) {
-        return getConnection(alias) != null;
+    public Set<WalletConfig> getConnections() {
+        return mConnections;
     }
 
-    void addWalletConfig(@NonNull WalletConfig walletConfig) {
+    boolean doesWalletConfigExist(@NonNull WalletConfig walletConfig) {
+        return mConnections.contains(walletConfig);
+    }
 
-        // Test if it already exist
-        if (doesWalletConfigExist(walletConfig.getAlias())) {
-            int tempIndex = getWalletIndex(walletConfig.getAlias());
-            // It exists, replace it.
-            mConnections.set(tempIndex, walletConfig);
-        } else {
-            // Nothing exist yet, create a new one.
+    boolean addWallet(@NonNull WalletConfig walletConfig) {
+        return mConnections.add(walletConfig);
+    }
+
+    boolean removeWalletConfig(WalletConfig walletConfig) {
+        return mConnections.remove(walletConfig);
+    }
+
+    boolean updateWalletConfig(WalletConfig walletConfig) {
+        if (doesWalletConfigExist(walletConfig)) {
+            mConnections.remove(walletConfig);
             mConnections.add(walletConfig);
-        }
-
-    }
-
-
-    public boolean removeConnection(String alias) {
-
-        if (doesWalletConfigExist(alias)) {
-            int tempIndex = getWalletIndex(alias);
-            mConnections.remove(tempIndex);
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
-    public boolean renameConnection(String oldAlias, String newAlias) {
-        if (doesWalletConfigExist(oldAlias)) {
-            if (doesWalletConfigExist(newAlias) && !newAlias.toLowerCase().equals(oldAlias.toLowerCase())) {
-                // We cannot rename it to an already existing wallet.
-                return false;
-            }
-            int tempIndex = getWalletIndex(oldAlias);
-            mConnections.get(tempIndex).setAlias(newAlias);
+    boolean renameWalletConfig(WalletConfig walletConfig, @NonNull String newAlias) {
+        if (doesWalletConfigExist(walletConfig)) {
+            WalletConfig tempConfig = getConnectionById(walletConfig.getId());
+            tempConfig.setAlias(newAlias);
+            mConnections.remove(walletConfig);
+            mConnections.add(tempConfig);
             return true;
+        } else {
+            return false;
         }
-        return false;
-    }
-
-    private int getWalletIndex(@NonNull String alias) {
-        int tempIndex = -1;
-        for (WalletConfig tempConfig : mConnections) {
-            if (tempConfig.getAlias().toLowerCase().equals(alias.toLowerCase())) {
-                tempIndex = mConnections.indexOf(tempConfig);
-                break;
-            }
-        }
-        return tempIndex;
     }
 }
