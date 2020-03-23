@@ -81,7 +81,7 @@ public class LandingActivity extends BaseAppCompatActivity {
     private void convertWalletNameToUUID() {
         if (PrefsUtil.isWalletSetup()) {
             if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-                WalletConfig config = (WalletConfig)WalletConfigsManager.getInstance().getWalletConfigsJson().getConnections().toArray()[0];
+                WalletConfig config = (WalletConfig) WalletConfigsManager.getInstance().getWalletConfigsJson().getConnections().toArray()[0];
                 WalletConfigsManager.getInstance().removeAllWalletConfigs();
                 String id = WalletConfigsManager.getInstance().addWalletConfig(config.getHost(), config.getType(), config.getHost(), config.getPort(), config.getCert(), config.getMacaroon()).getId();
                 try {
@@ -90,13 +90,9 @@ public class LandingActivity extends BaseAppCompatActivity {
                     e.printStackTrace();
                 }
                 PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
-                enterWallet();
-            } else {
-                enterWallet();
             }
-        } else {
-            enterWallet();
         }
+        enterWallet();
     }
 
     private void enterWallet() {

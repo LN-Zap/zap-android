@@ -18,10 +18,6 @@ public class WalletConfig extends RemoteConfiguration implements Comparable<Wall
         return this.id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getAlias() {
         return this.alias;
     }
