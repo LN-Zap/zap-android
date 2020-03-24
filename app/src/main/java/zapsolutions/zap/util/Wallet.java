@@ -788,7 +788,7 @@ public class Wallet {
         if (invoice.getValue() == 0) {
             payed = invoice.getAmtPaidSat() != 0;
         } else {
-            payed = invoice.getValue() == invoice.getAmtPaidSat();
+            payed = invoice.getValue() <= invoice.getAmtPaidSat();
         }
         return payed;
     }
