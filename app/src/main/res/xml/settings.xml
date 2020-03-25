@@ -39,12 +39,6 @@
             android:title="@string/settings_language"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="hapticPin"
-            android:title="@string/settings_hapticPin"
-            app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
 
@@ -86,11 +80,6 @@
             android:defaultValue="false"
             android:key="hideTotalBalance"
             android:title="@string/settings_hideTotalBalance"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="resetGuardian"
-            android:title="@string/settings_resetSecurityWarnings"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

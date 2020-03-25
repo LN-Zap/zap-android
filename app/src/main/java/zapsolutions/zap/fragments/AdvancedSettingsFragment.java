@@ -107,6 +107,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
             }
         });
 
+        // Action when clicked on "reset security warnings"
+        final Preference prefResetGuardian = findPreference("resetGuardian");
+        prefResetGuardian.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                UserGuardian.reenableAllSecurityWarnings(getActivity());
+                Toast.makeText(getActivity(), R.string.guardian_reset, Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
     }
 
     private void setFeeSummary(Preference preference, String value) {

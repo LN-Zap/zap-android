@@ -40,7 +40,6 @@ import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -248,18 +247,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-
-        // Action when clicked on "reset security warnings"
-        final Preference prefResetGuardian = findPreference("resetGuardian");
-        prefResetGuardian.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                UserGuardian.reenableAllSecurityWarnings(getActivity());
-                Toast.makeText(getActivity(), R.string.guardian_reset, Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
-
         // Action when clicked on "need help"
         final Preference prefHelp = findPreference("help");
         prefHelp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -383,7 +370,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onResume() {
         super.onResume();
         mListCurrency.setValue(PrefsUtil.getSecondCurrency());
-        mListCurrency.setSummary(PrefsUtil.getSecondCurrency());
+        mListCurrency.setSummary("%s");
         createSecondCurrencyList();
         pinOptionText();
     }
