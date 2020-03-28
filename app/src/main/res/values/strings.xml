@@ -281,6 +281,7 @@
     <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
     <string name="error_channel_close">Could not close channel: %s</string>
     <string name="error_pin_deactivation_attempt">It looks like someone tried to deactivate your PIN. The App will close now.\nYou can reinstall the app and use the recovery process to regain access to your funds.</string>
+    <string name="error_empty_wallet_name">An empty name is not allowed.</string>
 
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
@@ -352,4 +353,6 @@
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificate</string>
+    <string name="confirm_wallet_deletion">Do you really want to delete this wallet?</string>
+    <string name="no_wallets">No wallets</string>
 </resources>

@@ -16,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import zapsolutions.zap.HomeActivity;
+import zapsolutions.zap.LandingActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.setup.ConnectRemoteNodeActivity;
@@ -123,11 +125,18 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (PrefsUtil.getCurrentWalletConfig().equals(mId)) {
-                    Toast.makeText(WalletDetailsActivity.this, "You cannot delete the currently active wallet.", Toast.LENGTH_LONG).show();
-                } else {
-                    deleteWallet();
-                }
+                new AlertDialog.Builder(WalletDetailsActivity.this)
+                        .setMessage(R.string.confirm_wallet_deletion)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                deleteWallet();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        }).show();
             }
         });
     }
@@ -150,8 +159,8 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
         adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (input.getText().toString().isEmpty()) {
-                    Toast.makeText(WalletDetailsActivity.this, "An empty name is not allowed.", Toast.LENGTH_LONG).show();
+                if (input.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(WalletDetailsActivity.this, R.string.error_empty_wallet_name, Toast.LENGTH_LONG).show();
                     mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     showWalletNameInput();
                 } else {
@@ -160,7 +169,7 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
                     try {
                         walletConfigsManager.apply();
                         TextView tvWalletName = findViewById(R.id.walletName);
-                        tvWalletName.setText(input.getText().toString());
+                        tvWalletName.setText(input.getText().toString().trim());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -203,6 +212,18 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
             e.printStackTrace();
         }
 
-        finish();
+        if (PrefsUtil.getCurrentWalletConfig().equals(mId)) {
+            Wallet.getInstance().reset();
+            LndConnection.getInstance().closeConnection();
+            PrefsUtil.edit().remove(PrefsUtil.CURRENT_WALLET_CONFIG).commit();
+            if (!walletConfigsManager.hasAnyConfigs()) {
+                PrefsUtil.edit().putBoolean(PrefsUtil.IS_WALLET_SETUP, false).commit();
+            }
+            Intent intent = new Intent(WalletDetailsActivity.this, LandingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            finish();
+        }
     }
 }
