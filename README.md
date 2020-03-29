@@ -7,6 +7,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 ## Features
 
 **Wallet**
+- [x] Manage multiple wallets
 - [x] Fiat currency prices
 - [x] Support for Bech32 and P2SH addresses
 - [x] BTC, mBTC, bit & Satoshi units
@@ -14,6 +15,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 - [x] Available in many languages
 - [ ] Resend failed lightning transactions
 - [x] Transaction filter
+- [x] Read NFC tags
 
 **Security**
 - [x] PIN protected access
