@@ -181,7 +181,6 @@
     <string name="settings_hapticPin">Retour tactile du code PIN</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_manageChannels">Gérer les canaux Lightning</string>
-    <string name="settings_resetConnection">Réinitialiser la connexion au nœud distant</string>
     <string name="settings_scramblePin">Mélanger l\'écran</string>
     <string name="settings_preventScreenRecording">Empêcher les captures d\'écran</string>
     <string name="settings_hideTotalBalance">Cacher le solde total</string>

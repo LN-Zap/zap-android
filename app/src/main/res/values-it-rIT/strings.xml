@@ -181,7 +181,6 @@
     <string name="settings_hapticPin">PIN con Feedback Aptico</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_manageChannels">Gestisci Canali Lightning</string>
-    <string name="settings_resetConnection">Ripristina Configurazione Nodo Remoto</string>
     <string name="settings_scramblePin">Rimescola Schermata PIN</string>
     <string name="settings_preventScreenRecording">Previeni Registrazione Schermo</string>
     <string name="settings_hideTotalBalance">Nascondi bilancio totale</string>

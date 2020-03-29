@@ -109,8 +109,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvConnectError = view.findViewById(R.id.connectError);
 
         // Show loading screen
-        mWalletConnectedLayout.setVisibility(View.GONE);
-        mLoadingWalletLayout.setVisibility(View.VISIBLE);
+        showLoading();
 
         mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -497,7 +496,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mLoadingWalletLayout.setVisibility(View.GONE);
     }
 
-    public void showLoadingForWalletUnlock() {
+    public void showLoading() {
         mWalletConnectedLayout.setVisibility(View.GONE);
         mWalletNotConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.VISIBLE);

@@ -181,7 +181,6 @@
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_manageChannels">Gestionează canalele Lightning</string>
-    <string name="settings_resetConnection">Resetează configurarea nod distant</string>
     <string name="settings_scramblePin">Amestecă ecranul PIN</string>
     <string name="settings_preventScreenRecording">Împiedică înregistrarea ecranului</string>
     <string name="settings_hideTotalBalance">Ascunde suma totală</string>

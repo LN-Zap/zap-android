@@ -398,7 +398,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setView(viewInflated);
 
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
-            ((WalletFragment) mCurrentFragment).showLoadingForWalletUnlock();
+            ((WalletFragment) mCurrentFragment).showLoading();
             Wallet.getInstance().unlockWallet(input.getText().toString());
             mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             mIsFirstUnlockAttempt = false;

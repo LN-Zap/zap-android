@@ -35,13 +35,13 @@ import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.pin.PinSetupActivity;
-import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
+import zapsolutions.zap.walletManagement.ManageWalletsActivity;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -123,7 +123,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        /*
+
         // Action when clicked on "Manage wallets"
         final Preference prefManageWallets = findPreference("manageWallets");
         prefManageWallets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -134,7 +134,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-        */
+
 
         // Action when clicked on "Manage channels"
         final Preference prefManageChannels = findPreference("manageLightningChannels");
@@ -147,22 +147,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-
-        // Action when clicked on "reset connection settings"
-        final Preference prefResetConfig = findPreference("resetConfig");
-        prefResetConfig.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (PrefsUtil.isWalletSetup()) {
-                    Intent intent = new Intent(getActivity(), SetupActivity.class);
-                    intent.putExtra(RefConstants.SETUP_MODE, SetupActivity.CHANGE_CONNECTION);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
-                }
-                return true;
-            }
-        });
 
         // Action when clicked on the pin preference
         mPinPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

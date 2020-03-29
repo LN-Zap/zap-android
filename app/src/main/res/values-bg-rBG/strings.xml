@@ -181,7 +181,6 @@
     <string name="settings_hapticPin">Осезаема ПИН обратна връзка</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_manageChannels">Управление на lightning канали</string>
-    <string name="settings_resetConnection">Нулирай конфигурацията на отдалечения нод</string>
     <string name="settings_scramblePin">Разбъркване на ПИН Екрана</string>
     <string name="settings_preventScreenRecording">Забраняване записването на екрана</string>
     <string name="settings_hideTotalBalance">Скриване на баланса</string>
