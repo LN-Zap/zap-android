@@ -115,12 +115,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvOffline = view.findViewById(R.id.offline);
         mWalletSpinner = view.findViewById(R.id.walletSpinner);
 
-        if (PrefsUtil.isWalletSetup()){
-            mWalletSpinner.setVisibility(View.VISIBLE);
-        } else {
-            mWalletSpinner.setVisibility(View.GONE);
-        }
-
 
         // Show loading screen
         showLoading();
@@ -466,6 +460,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mExchangeRateListenerRegistered = true;
         }
 
+        if (PrefsUtil.isWalletSetup()){
+            mWalletSpinner.init();
+            mWalletSpinner.setVisibility(View.VISIBLE);
+        } else {
+            mWalletSpinner.setVisibility(View.GONE);
+        }
 
         if (!PrefsUtil.isWalletSetup()) {
             // If the App is not setup yet,

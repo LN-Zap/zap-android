@@ -52,7 +52,7 @@ public class WalletSpinner extends AppCompatSpinner {
 
     private OnWalletSpinnerChangedListener mListener;
 
-    private void init() {
+    public void init() {
         updateList();
 
         initFinished = false;
