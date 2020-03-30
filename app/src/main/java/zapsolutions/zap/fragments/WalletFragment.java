@@ -461,7 +461,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
 
         if (PrefsUtil.isWalletSetup()){
-            mWalletSpinner.init();
+            mWalletSpinner.updateList();
             mWalletSpinner.setVisibility(View.VISIBLE);
         } else {
             mWalletSpinner.setVisibility(View.GONE);

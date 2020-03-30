@@ -52,10 +52,8 @@ public class WalletSpinner extends AppCompatSpinner {
 
     private OnWalletSpinnerChangedListener mListener;
 
-    public void init() {
+    private void init() {
         updateList();
-
-        initFinished = false;
 
         this.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -96,7 +94,9 @@ public class WalletSpinner extends AppCompatSpinner {
         });
     }
 
-    private void updateList() {
+    public void updateList() {
+
+        initFinished = false;
 
         String[] items = new String[WalletConfigsManager.getInstance().getAllWalletConfigs(true).size() + 1];
         for (int i = 0; i < WalletConfigsManager.getInstance().getAllWalletConfigs(true).size(); i++) {
