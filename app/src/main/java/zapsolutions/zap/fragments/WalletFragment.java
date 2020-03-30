@@ -24,11 +24,14 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.SendActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.customView.WalletSpinner;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.Balances;
@@ -68,6 +71,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
     private TextView mTvConnectError;
+    private TextView mTvOffline;
+    private WalletSpinner mWalletSpinner;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -107,9 +112,28 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mWalletNotConnectedLayout = view.findViewById(R.id.ConnectionError);
         mLoadingWalletLayout = view.findViewById(R.id.loading);
         mTvConnectError = view.findViewById(R.id.connectError);
+        mTvOffline = view.findViewById(R.id.offline);
+        mWalletSpinner = view.findViewById(R.id.walletSpinner);
+
 
         // Show loading screen
         showLoading();
+
+        mWalletSpinner.setOnWalletSpinnerChangedListener(new WalletSpinner.OnWalletSpinnerChangedListener() {
+            @Override
+            public void onWalletChanged() {
+                // Close current connection and reset all
+                LndConnection.getInstance().closeConnection();
+                Wallet.getInstance().reset();
+                updateTotalBalanceDisplay();
+
+                // Show loading screen
+                showLoading();
+
+                // Open the newly selected wallet
+                ((HomeActivity) getActivity()).openWallet();
+            }
+        });
 
         mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -382,22 +406,24 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             if (PrefsUtil.isWalletSetup()) {
                 if (Wallet.getInstance().isTestnet()) {
                     mTvMode.setText("TESTNET");
-                    mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superGreen));
                     mTvMode.setVisibility(View.VISIBLE);
                 } else {
-                    mTvMode.setText("");
                     mTvMode.setVisibility(View.GONE);
                 }
             } else {
                 // Wallet is not setup
-                mTvMode.setText("");
                 mTvMode.setVisibility(View.GONE);
             }
+            mTvOffline.setVisibility(View.GONE);
+            if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()) {
+                mTvBtcRate.setVisibility(View.VISIBLE);
+            }
+
         } else {
             if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                mTvMode.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
-                mTvMode.setTextColor(ContextCompat.getColor(getActivity(), R.color.superRed));
-                mTvMode.setVisibility(View.VISIBLE);
+                mTvOffline.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
+                mTvOffline.setVisibility(View.VISIBLE);
+                mTvBtcRate.setVisibility(View.GONE);
             } else {
                 mWalletConnectedLayout.setVisibility(View.GONE);
                 mLoadingWalletLayout.setVisibility(View.GONE);
@@ -434,6 +460,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mExchangeRateListenerRegistered = true;
         }
 
+        if (PrefsUtil.isWalletSetup()){
+            mWalletSpinner.updateList();
+            mWalletSpinner.setVisibility(View.VISIBLE);
+        } else {
+            mWalletSpinner.setVisibility(View.GONE);
+        }
 
         if (!PrefsUtil.isWalletSetup()) {
             // If the App is not setup yet,

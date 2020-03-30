@@ -223,7 +223,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
 
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
+        openWallet();
+    }
 
+    public void openWallet() {
         // Start lnd connection
         if (PrefsUtil.isWalletSetup()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);

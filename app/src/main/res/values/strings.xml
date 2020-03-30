@@ -355,4 +355,5 @@
     <string name="certificate">Certificate</string>
     <string name="confirm_wallet_deletion">Do you really want to delete this wallet?</string>
     <string name="no_wallets">No wallets</string>
+    <string name="spinner_manage_wallets">Manage…</string>
 </resources>
