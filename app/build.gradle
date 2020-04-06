@@ -141,7 +141,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // QR-Code scanner: ToDo: check if this is secure
-    implementation 'me.dm7.barcodescanner:zbar:1.9.8'
+    implementation 'me.dm7.barcodescanner:zbar:1.9.13'
 
     // QR-Code generator: ToDo: check if this is secure
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
