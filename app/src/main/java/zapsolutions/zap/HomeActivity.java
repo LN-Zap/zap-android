@@ -223,7 +223,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
 
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
+        openWallet();
+    }
 
+    public void openWallet() {
         // Start lnd connection
         if (PrefsUtil.isWalletSetup()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);
@@ -398,7 +401,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setView(viewInflated);
 
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
-            ((WalletFragment) mCurrentFragment).showLoadingForWalletUnlock();
+            ((WalletFragment) mCurrentFragment).showLoading();
             Wallet.getInstance().unlockWallet(input.getText().toString());
             mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             mIsFirstUnlockAttempt = false;

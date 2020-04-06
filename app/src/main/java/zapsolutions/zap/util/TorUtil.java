@@ -26,7 +26,11 @@ public class TorUtil {
     private final static String GUARDIAN_REPO = "https://guardianproject.info/fdroid/repo?fingerprint=B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A6135";
 
     public static boolean isCurrentConnectionTor() {
-        return LndConnection.getInstance().getConnectionConfig().getHost().contains(".onion");
+        if (LndConnection.getInstance().getConnectionConfig().isLocal()) {
+            return false;
+        } else {
+            return LndConnection.getInstance().getConnectionConfig().getHost().contains(".onion");
+        }
     }
 
     public static void askToInstallOrbotIfMissing(Activity activity) {

@@ -99,6 +99,11 @@
             android:name=".channelManagement.ScanNodePubKeyActivity"
             android:label="@string/channel_open"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="zapsolutions.zap.walletManagement.WalletDetailsActivity"
+            android:label="@string/activity_wallet_details"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
         <meta-data android:name="android.nfc.disable_beam_default"
             android:value="true" />
     </application>

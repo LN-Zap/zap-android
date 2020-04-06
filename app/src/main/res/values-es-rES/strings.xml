@@ -179,7 +179,6 @@
     <string name="settings_hapticPin">Respuesta táctil</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_manageChannels">Administrar Canales de Pago</string>
-    <string name="settings_resetConnection">Restablecer Configuración del Nodo Remoto</string>
     <string name="settings_scramblePin">Mezclar Pantalla de PIN</string>
     <string name="settings_preventScreenRecording">Prevenir la Grabación de la Pantalla</string>
     <string name="settings_hideTotalBalance">Esconder el balance total</string>

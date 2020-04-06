@@ -55,6 +55,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import zapsolutions.zap.R;
+import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.lightning.LightningNodeUri;
 
@@ -124,7 +125,7 @@ public class Wallet {
     }
 
     /**
-     * Use this to reset the wallet information when the connection type was changed.
+     * Use this to reset the wallet information when the wallet was switched.
      */
     public void reset() {
         compositeDisposable.clear();
@@ -135,11 +136,28 @@ public class Wallet {
         mChannelBalancePendingOpen = 0;
         mChannelBalanceLimbo = 0;
 
+        mOnChainTransactionList = null;
+        mInvoiceList = null;
+        mTempInvoiceUpdateList = null;
+        mPaymentsList = null;
+        mOpenChannelsList = null;
+        mPendingOpenChannelsList = null;
+        mPendingClosedChannelsList = null;
+        mPendingForceClosedChannelsList = null;
+        mPendingWaitingCloseChannelsList = null;
+
+        mConnectionCheckInProgress = false;
+        mTransactionUpdated = false;
+        mInvoicesUpdated = false;
+        mPaymentsUpdated = false;
+        mUpdatingHistory = false;
+
         mInfoFetched = false;
         mSyncedToChain = false;
         mTestnet = false;
         mLNDVersion = "not connected";
         mHandler.removeCallbacksAndMessages(null);
+        App.getAppContext().connectionToLNDEstablished = false;
         mChannelsUpdateDebounceHandler.shutdown();
     }
 
@@ -295,6 +313,7 @@ public class Wallet {
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
+            broadcastBalanceUpdate();
         }, throwable -> ZapLog.debug(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
     }
 
@@ -788,7 +807,7 @@ public class Wallet {
         if (invoice.getValue() == 0) {
             payed = invoice.getAmtPaidSat() != 0;
         } else {
-            payed = invoice.getValue() == invoice.getAmtPaidSat();
+            payed = invoice.getValue() <= invoice.getAmtPaidSat();
         }
         return payed;
     }
@@ -1071,18 +1090,15 @@ public class Wallet {
         mOnChainBalanceTotal = total;
         mOnChainBalanceConfirmed = confirmed;
         mOnChainBalanceUnconfirmed = unconfirmed;
-        broadcastBalanceUpdate();
     }
 
     private void setChannelBalance(long balance, long pendingOpen) {
         mChannelBalance = balance;
         mChannelBalancePendingOpen = pendingOpen;
-        broadcastBalanceUpdate();
     }
 
     private void setChannelBalanceLimbo(long balanceLimbo) {
         mChannelBalanceLimbo = balanceLimbo;
-        broadcastBalanceUpdate();
     }
 
     /**

@@ -39,12 +39,6 @@
             android:title="@string/settings_language"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="hapticPin"
-            android:title="@string/settings_hapticPin"
-            app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
 
@@ -52,24 +46,15 @@
         android:title="@string/navigation_wallet"
         app:iconSpaceReserved="false">
 
-        <!-- Multi wallet support
         <Preference
             android:key="manageWallets"
             android:title="@string/activity_manage_wallets"
             app:iconSpaceReserved="false" />
-            -->
 
         <Preference
             android:key="manageLightningChannels"
             android:title="@string/settings_manageChannels"
             app:iconSpaceReserved="false" />
-
-
-        <Preference
-            android:key="resetConfig"
-            android:title="@string/settings_resetConnection"
-            app:iconSpaceReserved="false" />
-
 
     </PreferenceCategory>
 
@@ -86,11 +71,6 @@
             android:defaultValue="false"
             android:key="hideTotalBalance"
             android:title="@string/settings_hideTotalBalance"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="resetGuardian"
-            android:title="@string/settings_resetSecurityWarnings"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

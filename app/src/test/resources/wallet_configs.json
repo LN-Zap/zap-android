@@ -1,6 +1,7 @@
 {
   "connections": [
     {
+      "id": "e4f2fcf7-82c7-46f4-8867-50c3f8a603f4",
       "alias": "FirstWalletName",
       "type": "remote",
       "host": "TestHost",
@@ -9,6 +10,7 @@
       "macaroon": "TestMacaroon"
     },
     {
+      "id": "a4f2fcf7-82c7-46f4-8867-50c3f8a603f4",
       "alias": "SecondWalletName",
       "type": "local",
       "host": "host",

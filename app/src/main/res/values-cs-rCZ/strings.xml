@@ -179,7 +179,6 @@
     <string name="settings_hapticPin">Hmatová zpětná vazba PIN</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_manageChannels">Správa Lightning kanálů</string>
-    <string name="settings_resetConnection">Reset konfigurace vzdáleného uzlu</string>
     <string name="settings_scramblePin">Zamíchaná PIN obrazovka</string>
     <string name="settings_preventScreenRecording">Zabraňte nahrávání obrazovky</string>
     <string name="settings_hideTotalBalance">Skrýt celkový zůstatek</string>

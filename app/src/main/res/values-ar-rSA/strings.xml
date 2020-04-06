@@ -179,7 +179,6 @@
     <string name="settings_hapticPin">ردة فعل ملموسة للـ PIN</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_manageChannels">إدارة قنوات Lightning</string>
-    <string name="settings_resetConnection">Reset Remote Node Configuration</string>
     <string name="settings_scramblePin">Scramble PIN Screen</string>
     <string name="settings_preventScreenRecording">Prevent Screen Recording</string>
     <string name="settings_hideTotalBalance">Hide total balance</string>
