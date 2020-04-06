@@ -25,6 +25,7 @@ import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
 import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -52,7 +53,6 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
 
         mAdapter = new LightningNodeRecyclerAdapter(suggestedLightningNodes, this);
         mRecyclerViewPeers.setAdapter(mAdapter);
-        mScannerInstructions.setText(R.string.scan_qr_code);
 
         showCameraWithPermissionRequest();
 
@@ -122,6 +122,11 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
         } catch (NullPointerException e) {
             showError(getResources().getString(R.string.error_emptyClipboardConnect), 2000);
         }
+    }
+
+    @Override
+    public void onButtonInstructionsHelpClick() {
+        HelpDialogUtil.showDialog(ScanNodePubKeyActivity.this, R.string.help_dialog_scanNodePublicKey);
     }
 
     @Override

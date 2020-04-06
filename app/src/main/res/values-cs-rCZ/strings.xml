@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">Vytvořit peněženku</string>
     <string name="setup_connect_remote_description">Dálkové ovládání vlastního uzlu.</string>
     <string name="setup_connect_remote_button">Připojit se ke vzdálenému uzlu</string>
-    <string name="setup_connect_scan_connection_info">Naskenovat data připojení</string>
     <string name="demo_setupWalletBtn">Nastavení peněženky</string>
     <string name="demo_setupWalletFirst">Nejprve musíte nastavit peněženku.</string>
     <string name="send_lightningPayment">Odeslat lightning platbu</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">Odeslat platbu</string>
     <string name="send_success">Platba\nje úspěšná</string>
     <string name="send_fail">Platba\nselhala</string>
-    <string name="send_scan_info">Naskenujte žádost o platbu</string>
     <string name="receive_generateRequest">Vygenerovat požadavek</string>
     <string name="receive_generateRequest_failed">Generování požadavku se nezdařilo.</string>
     <string name="receive_lightning_request">Lightning požadavek</string>

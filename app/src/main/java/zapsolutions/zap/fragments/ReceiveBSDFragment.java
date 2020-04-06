@@ -42,6 +42,7 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
@@ -81,6 +82,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
     private String mValueBeforeUnitSwitch;
     private boolean mUseValueBeforeUnitSwitch = true;
     private boolean mAmountValid = true;
+    private ImageButton mBtnHelp;
 
     @Nullable
     @Override
@@ -109,7 +111,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         mNumpad = view.findViewById(R.id.Numpad);
         mBtnNext = view.findViewById(R.id.nextButton);
         mBtnGenerateRequest = view.findViewById(R.id.generateRequestButton);
-
+        mBtnHelp = view.findViewById(R.id.helpButton);
 
         mTvNoIncomingBalance = view.findViewById(R.id.noIncomingChannelBalanceText);
         mViewNoIncomingBalance = view.findViewById(R.id.noIncomingChannelBalanceView);
@@ -187,12 +189,21 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
             }
         });
 
+        // Action when clicked on "?" (help) button
+        mBtnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_LightningVsOnChain);
+            }
+        });
+
 
         // Action when clicked on "Lightning" Button
         mBtnLn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                mBtnHelp.setVisibility(View.GONE);
                 mBtnNext.setEnabled(false);
                 mBtnNext.setTextColor(getResources().getColor(R.color.gray));
                 mEtAmount.setHint(getResources().getString(R.string.amount));
@@ -289,6 +300,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
             public void onClick(View v) {
 
                 mOnChain = true;
+                mBtnHelp.setVisibility(View.GONE);
                 mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_on_chain));
                 mTvTitle.setText(R.string.receive_on_chain_request);
 

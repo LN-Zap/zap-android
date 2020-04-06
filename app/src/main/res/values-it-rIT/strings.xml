@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">Crea Wallet</string>
     <string name="setup_connect_remote_description">Controlla in remoto il tuo nodo.</string>
     <string name="setup_connect_remote_button">Connetti a Nodo Remoto</string>
-    <string name="setup_connect_scan_connection_info">Scansiona dati di connessione</string>
     <string name="demo_setupWalletBtn">Imposta Wallet</string>
     <string name="demo_setupWalletFirst">Devi prima impostare un wallet.</string>
     <string name="send_lightningPayment">Invia pagamento lightning</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">Invia pagamento</string>
     <string name="send_success">Pagamento\ncompletato</string>
     <string name="send_fail">Pagamento\nfallito</string>
-    <string name="send_scan_info">Scansiona richiesta pagamento</string>
     <string name="receive_generateRequest">Genera richiesta</string>
     <string name="receive_generateRequest_failed">Generazione richiesta non riuscita.</string>
     <string name="receive_lightning_request">Richiesta Lightning</string>

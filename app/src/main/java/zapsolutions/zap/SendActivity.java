@@ -12,6 +12,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.NfcUtil;
 
@@ -29,7 +30,6 @@ public class SendActivity extends BaseScannerActivity {
         //NFC
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        mScannerInstructions.setText(R.string.send_scan_info);
         showCameraWithPermissionRequest();
     }
 
@@ -43,6 +43,11 @@ public class SendActivity extends BaseScannerActivity {
         } catch (NullPointerException e) {
             showError(getResources().getString(R.string.error_emptyClipboardPayment), 4000);
         }
+    }
+
+    @Override
+    public void onButtonInstructionsHelpClick() {
+        HelpDialogUtil.showDialog(SendActivity.this, R.string.help_dialog_scanPaymentRequest);
     }
 
     @Override

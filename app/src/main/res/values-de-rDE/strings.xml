@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">Wallet erstellen</string>
     <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
-    <string name="setup_connect_scan_connection_info">Verbindungsdaten scannen</string>
     <string name="demo_setupWalletBtn">Wallet einrichten</string>
     <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
     <string name="send_lightningPayment">Lightning Zahlung senden</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">Zahlung senden</string>
     <string name="send_success">Zahlung\nerfolgreich</string>
     <string name="send_fail">Zahlung\nfehlgeschlagen</string>
-    <string name="send_scan_info">Zahlungsanfrage scannen</string>
     <string name="receive_generateRequest">Anfrage generieren</string>
     <string name="receive_generateRequest_failed">Generieren der Anfrage fehlgeschlagen.</string>
     <string name="receive_lightning_request">Lightning Zahlungsanfrage</string>

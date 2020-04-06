@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">Създаване на портфейл</string>
     <string name="setup_connect_remote_description">Контролирайте дистанционно Вашия нод</string>
     <string name="setup_connect_remote_button">Свързване към отдалечен нод</string>
-    <string name="setup_connect_scan_connection_info">Сканиране на данните за свързване</string>
     <string name="demo_setupWalletBtn">Настрой портфейл</string>
     <string name="demo_setupWalletFirst">Първо трябва да настроите портфейла си.</string>
     <string name="send_lightningPayment">Изпрати lightning плащане</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">Изпращане на плащането</string>
     <string name="send_success">Плащането\nуспешно</string>
     <string name="send_fail">Плащането\nнеуспешно</string>
-    <string name="send_scan_info">Сканирай заявка за плащане</string>
     <string name="receive_generateRequest">Създай заявка</string>
     <string name="receive_generateRequest_failed">Създаването на заявка неуспешно.</string>
     <string name="receive_lightning_request">Lightning Заявка</string>

@@ -141,7 +141,6 @@
     <string name="setup_connect_local_button">Creează un nou portofel</string>
     <string name="setup_connect_remote_description">Controlează la distanță nodul tău personal.</string>
     <string name="setup_connect_remote_button">Conectează-te la un Nod</string>
-    <string name="setup_connect_scan_connection_info">Scanează informația de conectare</string>
     <string name="demo_setupWalletBtn">Setează un portofel</string>
     <string name="demo_setupWalletFirst">Trebuie să setezi un portofel mai întâi.</string>
     <string name="send_lightningPayment">Trimite o plată Lightning</string>
@@ -149,7 +148,6 @@
     <string name="send_sendPayment">Trimite plată</string>
     <string name="send_success">Plată\nreușită</string>
     <string name="send_fail">Plată\nnereușită</string>
-    <string name="send_scan_info">Scanează cererea de plată</string>
     <string name="receive_generateRequest">Generează cerere</string>
     <string name="receive_generateRequest_failed">Nu s-a reușit generarea cererii.</string>
     <string name="receive_lightning_request">Cerere de plată Lightning</string>
