@@ -22,8 +22,6 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
-        // for RxAndroid 3.x Snapshot - remove if released
-        maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local" }
     }
 }
 

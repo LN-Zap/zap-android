@@ -616,7 +616,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         mBehavior = BottomSheetBehavior.from(bottomSheet);
 
 
-        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        mBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_DRAGGING) {
