@@ -405,7 +405,7 @@ public class SendBSDFragment extends RxBSDFragment {
                                     ZapLog.debug(LOG_TAG, throwable.getMessage());
 
                                     String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                                    String errormessage = throwable.getCause().getMessage().replace("UNKNOWN:", errorPrefix);
+                                    String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
                                     mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
                                 }));
                     } else {
@@ -649,7 +649,7 @@ public class SendBSDFragment extends RxBSDFragment {
                     ZapLog.debug(LOG_TAG, throwable.getMessage());
 
                     String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                    String errormessage = throwable.getCause().getMessage().replace("UNKNOWN:", errorPrefix);
+                    String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
                     mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
 
                 }));
