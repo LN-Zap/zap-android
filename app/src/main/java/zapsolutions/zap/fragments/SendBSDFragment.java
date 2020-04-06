@@ -110,6 +110,27 @@ public class SendBSDFragment extends RxBSDFragment {
     private float mLnFeePercentCalculated;
     private float mLnFeePercentSettingLimit;
 
+    public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice) {
+        Intent intent = new Intent();
+        intent.putExtra("onChain", false);
+        intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
+        intent.putExtra("lnInvoice", invoice);
+        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+        sendBottomSheetDialog.setArguments(intent.getExtras());
+        return sendBottomSheetDialog;
+    }
+
+    public static SendBSDFragment createOnChainDialog(String address, long amount, String message) {
+        Intent intent = new Intent();
+        intent.putExtra("onChain", true);
+        intent.putExtra("onChainAddress", address);
+        intent.putExtra("onChainAmount", amount);
+        intent.putExtra("onChainMessage", message);
+        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+        sendBottomSheetDialog.setArguments(intent.getExtras());
+        return sendBottomSheetDialog;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -555,27 +576,6 @@ public class SendBSDFragment extends RxBSDFragment {
         return view;
     }
 
-    public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice) {
-        Intent intent = new Intent();
-        intent.putExtra("onChain", false);
-        intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
-        intent.putExtra("lnInvoice", invoice);
-        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-        sendBottomSheetDialog.setArguments(intent.getExtras());
-        return sendBottomSheetDialog;
-    }
-
-    public static SendBSDFragment createOnChainDialog(String address, long amount, String message) {
-        Intent intent = new Intent();
-        intent.putExtra("onChain", true);
-        intent.putExtra("onChainAddress", address);
-        intent.putExtra("onChainAmount", amount);
-        intent.putExtra("onChainMessage", message);
-        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-        sendBottomSheetDialog.setArguments(intent.getExtras());
-        return sendBottomSheetDialog;
-    }
-
     @Override
     public void onDestroyView() {
         mHandler.removeCallbacksAndMessages(null);
@@ -664,7 +664,7 @@ public class SendBSDFragment extends RxBSDFragment {
         mBehavior = BottomSheetBehavior.from(bottomSheet);
         mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        mBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_DRAGGING) {
