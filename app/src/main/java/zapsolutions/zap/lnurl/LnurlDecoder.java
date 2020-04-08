@@ -1,6 +1,6 @@
 package zapsolutions.zap.lnurl;
 
-public class Lnurl {
+public class LnurlDecoder {
 
     public static String decode(String lnurl) throws Exception {
 

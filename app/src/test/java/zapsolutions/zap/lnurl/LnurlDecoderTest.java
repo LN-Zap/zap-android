@@ -5,7 +5,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 
-public class LnurlTest {
+public class LnurlDecoderTest {
 
     // Test vectors have been verified here: https://lnurl.bigsun.xyz/codec/
 
@@ -21,42 +21,42 @@ public class LnurlTest {
 
     @Test
     public void givenValidLnurl_WhenDecode_ThenReturnDecoded() throws Exception {
-        assertEquals(LNURL_PAY_DECODED, Lnurl.decode(LNURL_PAY));
-        assertEquals(LNURL_WITHDRAW_DECODED, Lnurl.decode(LNURL_WITHDRAW));
+        assertEquals(LNURL_PAY_DECODED, LnurlDecoder.decode(LNURL_PAY));
+        assertEquals(LNURL_WITHDRAW_DECODED, LnurlDecoder.decode(LNURL_WITHDRAW));
     }
 
     @Test
     public void givenInvalidLnurl_WhenDecode_ThenReturnError() {
         try {
-            String decoded = Lnurl.decode(LNURL_TEST);
-            assertEquals("test", Lnurl.decode(LNURL_TEST));
+            String decoded = LnurlDecoder.decode(LNURL_TEST);
+            assertEquals("test", LnurlDecoder.decode(LNURL_TEST));
         } catch (Exception e) {
             assertEquals(e.getMessage(), "This should have worked");
         }
 
         try {
-            String decoded = Lnurl.decode(INVALID_LNURL_INVALID_PREFIX);
+            String decoded = LnurlDecoder.decode(INVALID_LNURL_INVALID_PREFIX);
             assertNull(decoded);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Lnurl decoding failed: The data to decode is not a lnurl");
         }
 
         try {
-            String decoded = Lnurl.decode(INVALID_LNURL_MIXED_CASE);
+            String decoded = LnurlDecoder.decode(INVALID_LNURL_MIXED_CASE);
             assertNull(decoded);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Lnurl decoding failed: bech32 cannot mix upper and lower case");
         }
 
         try {
-            String decoded = Lnurl.decode(INVALID_LNURL_WRONG_CHECKSUM);
+            String decoded = LnurlDecoder.decode(INVALID_LNURL_WRONG_CHECKSUM);
             assertNull(decoded);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Lnurl decoding failed: invalid bech32 checksum");
         }
 
         try {
-            String decoded = Lnurl.decode(INVALID_LNURL_WRONG_CHARACTER);
+            String decoded = LnurlDecoder.decode(INVALID_LNURL_WRONG_CHARACTER);
             assertNull(decoded);
         } catch (Exception e) {
             assertEquals(e.getMessage(), "Lnurl decoding failed: bech32 characters out of range");

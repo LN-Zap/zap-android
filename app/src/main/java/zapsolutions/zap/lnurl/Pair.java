@@ -1,5 +1,7 @@
 package zapsolutions.zap.lnurl;
 
+// clone of org.apache.commons.lang3.tuple.Pair;
+
 public class Pair<K, V> {
 
     private K elementLeft = null;
