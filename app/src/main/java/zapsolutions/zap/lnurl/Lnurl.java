@@ -1,12 +1,13 @@
 package zapsolutions.zap.lnurl;
 
-import zapsolutions.zap.util.ZapLog;
-
 public class Lnurl {
 
-    private static final String LOG_TAG = Lnurl.class.getName();
+    public static String decode(String lnurl) throws Exception {
 
-    public static String decode(String lnurl) {
+        if (!lnurl.substring(0, 5).toLowerCase().equals("lnurl")) {
+            throw new Exception("Lnurl decoding failed: The data to decode is not a lnurl");
+        }
+
         String decodedLnurl = null;
         try {
             byte[] decodedBech32 = Bech32.bech32Decode(lnurl, false).getRight();
@@ -22,10 +23,8 @@ public class Lnurl {
             byte[] regroupedBits = booleanArrayToBytes(bitArray);
 
             decodedLnurl = new String(regroupedBits);
-            ZapLog.debug(LOG_TAG, "Decoded LNURL: " + decodedLnurl);
         } catch (Exception e) {
-            e.printStackTrace();
-            ZapLog.debug(LOG_TAG, "LNURL DECODE ERROR: " + e.getMessage());
+            throw new Exception("Lnurl decoding failed: " + e.getMessage());
         }
         return decodedLnurl;
     }
