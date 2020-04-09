@@ -1,6 +1,14 @@
-package zapsolutions.zap.lnurl;
+package zapsolutions.zap.util;
+
+import androidx.core.util.Pair;
 
 import java.util.Locale;
+
+
+/**
+ * This class is a slightly modified version of SamouraiDev's implementation which can be found here:
+ * https://github.com/sipa/bech32/pull/19
+ */
 
 public class Bech32 {
 
@@ -77,7 +85,7 @@ public class Bech32 {
         byte[] data = new byte[dataWithChecksum.length - 6];
         System.arraycopy(dataWithChecksum, 0, data, 0, dataWithChecksum.length - 6);
 
-        return Pair.of(new String(hrp), data);
+        return Pair.create(new String(hrp), data);
     }
 
     private static int polymod(byte[] values) {

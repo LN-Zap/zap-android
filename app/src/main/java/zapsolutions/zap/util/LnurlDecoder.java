@@ -1,16 +1,22 @@
-package zapsolutions.zap.lnurl;
+package zapsolutions.zap.util;
+
+import zapsolutions.zap.util.Bech32;
 
 public class LnurlDecoder {
 
     public static String decode(String lnurl) throws Exception {
 
+        if (lnurl == null) {
+            throw new IllegalArgumentException("Lnurl decoding failed: The data to decode is not a lnurl");
+        }
+
         if (!lnurl.substring(0, 5).toLowerCase().equals("lnurl")) {
-            throw new Exception("Lnurl decoding failed: The data to decode is not a lnurl");
+            throw new IllegalArgumentException("Lnurl decoding failed: The data to decode is not a lnurl");
         }
 
         String decodedLnurl = null;
         try {
-            byte[] decodedBech32 = Bech32.bech32Decode(lnurl, false).getRight();
+            byte[] decodedBech32 = Bech32.bech32Decode(lnurl, false).second;
 
             // Translate the bytes to 5 bit groups, most significant bit first.
             boolean[] bitArray = new boolean[decodedBech32.length * 5];
@@ -24,7 +30,7 @@ public class LnurlDecoder {
 
             decodedLnurl = new String(regroupedBits);
         } catch (Exception e) {
-            throw new Exception("Lnurl decoding failed: " + e.getMessage());
+            throw new IllegalArgumentException("Lnurl decoding failed: " + e.getMessage());
         }
         return decodedLnurl;
     }

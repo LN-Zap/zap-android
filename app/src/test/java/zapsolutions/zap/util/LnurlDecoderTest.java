@@ -1,6 +1,8 @@
-package zapsolutions.zap.lnurl;
+package zapsolutions.zap.util;
 
 import org.junit.Test;
+
+import zapsolutions.zap.util.LnurlDecoder;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
@@ -32,6 +34,12 @@ public class LnurlDecoderTest {
             assertEquals("test", LnurlDecoder.decode(LNURL_TEST));
         } catch (Exception e) {
             assertEquals(e.getMessage(), "This should have worked");
+        }
+
+        try {
+            String decoded = LnurlDecoder.decode(null);
+        } catch (Exception e) {
+            assertEquals(e.getMessage(), "Lnurl decoding failed: The data to decode is not a lnurl");
         }
 
         try {
