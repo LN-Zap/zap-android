@@ -153,7 +153,7 @@
     <string name="receive_lightning_request">Lightning Verzoek</string>
     <string name="receive_on_chain_request">On-Chain Verzoek</string>
     <string name="receive_noActiveChannels">Om Bitcoin over het lightning netwerk te ontvangen, moet je eerst kanalen openen.</string>
-    <string name="receive_noIncomeBalance">Om Bitcoin over het lightning netwerk te ontvangen, moet tenminste één van je kanalen wat saldo hebben bij je tegenpartij.\n\nOm dat te bereiken, moet je eerst iets uitgeven op het lightning netwerk.\n\n In het 'beheer kanalen' gedeelte kan je altijd zien hoeveel je kan verzenden en ontvangen op het lightning netwerk.</string>
+    <string name="receive_noIncomeBalance">Om Bitcoin over het lightning netwerk te ontvangen, moet tenminste één van je kanalen wat saldo hebben bij je tegenpartij.\n\nOm dat te bereiken, moet je eerst iets uitgeven op het lightning netwerk.\n\n In het &amp;beheer kanalen&amp; gedeelte kan je altijd zien hoeveel je kan verzenden en ontvangen op het lightning netwerk.</string>
     <string name="receive_requestFullfilled">Betalingsverzoek\nbetaald</string>
     <string name="guardian_doNotShowAgain">Laat niet opnieuw zien.</string>
     <string name="guardian_Title">Attentie</string>
