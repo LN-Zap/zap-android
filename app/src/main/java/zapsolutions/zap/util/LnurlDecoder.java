@@ -1,17 +1,20 @@
 package zapsolutions.zap.util;
 
-import zapsolutions.zap.util.Bech32;
-
 public class LnurlDecoder {
 
     public static String decode(String lnurl) throws Exception {
 
         if (lnurl == null) {
-            throw new IllegalArgumentException("Lnurl decoding failed: The data to decode is not a lnurl");
+            throw new IllegalArgumentException("LNURL decoding failed: The data to decode is not a LNURL");
+        }
+
+        // Remove the "lightning:" uri scheme if it is present
+        if (InvoiceUtil.isLightningUri(lnurl)) {
+            lnurl = lnurl.substring(InvoiceUtil.URI_PREFIX_LIGHTNING.length());
         }
 
         if (!lnurl.substring(0, 5).toLowerCase().equals("lnurl")) {
-            throw new IllegalArgumentException("Lnurl decoding failed: The data to decode is not a lnurl");
+            throw new IllegalArgumentException("LNURL decoding failed: The data to decode is not a LNURL");
         }
 
         String decodedLnurl = null;
@@ -30,7 +33,7 @@ public class LnurlDecoder {
 
             decodedLnurl = new String(regroupedBits);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Lnurl decoding failed: " + e.getMessage());
+            throw new IllegalArgumentException("LNURL decoding failed: " + e.getMessage());
         }
         return decodedLnurl;
     }
