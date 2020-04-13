@@ -42,6 +42,7 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.lnurl.ScanLnurlWithdrawActivity;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -56,6 +57,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
     private static final String LOG_TAG = ReceiveBSDFragment.class.getName();
 
     private View mBtnLn;
+    private View mBtnScanLnurl;
     private View mBtnOnChain;
     private View mChooseTypeView;
     private ImageView mIvBsdIcon;
@@ -97,6 +99,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         mUG = new UserGuardian(getActivity(), this);
 
         mBtnLn = view.findViewById(R.id.lnBtn);
+        mBtnScanLnurl = view.findViewById(R.id.scanLnurl);
         mBtnOnChain = view.findViewById(R.id.onChainBtn);
         mIvBsdIcon = view.findViewById(R.id.bsdIcon);
         mIconAnchor = view.findViewById(R.id.anchor);
@@ -197,6 +200,15 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
             }
         });
 
+        mBtnScanLnurl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ScanLnurlWithdrawActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivityForResult(intent, 2);
+                dismiss();
+            }
+        });
 
         // Action when clicked on "Lightning" Button
         mBtnLn.setOnClickListener(new View.OnClickListener() {

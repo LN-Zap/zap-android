@@ -101,7 +101,6 @@
         app:layout_constraintTop_toBottomOf="@id/titleLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lnBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -109,13 +108,35 @@
             android:layout_weight="1"
             android:background="@drawable/bg_clickable_item">
 
+            <ImageView
+                android:id="@+id/scanLnurl"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:elevation="2dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:tint="@color/lightningOrange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_scan_qr_code_18dp" />
+
+            <ImageView
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/scanLnurl"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@color/deepSeaBlue" />
+
             <LinearLayout
+                android:id="@+id/lnBtn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -184,7 +205,7 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
