@@ -30,7 +30,6 @@ import zapsolutions.zap.SendActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.WalletSpinner;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
@@ -66,7 +65,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ImageView mIvSwitchButton;
     private Animation mBalanceFadeOutAnimation;
     private Animation mLogoFadeInAnimation;
-    private FragmentManager mFragmentManager;
+    public FragmentManager mFragmentManager;
     private ConstraintLayout mWalletConnectedLayout;
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
@@ -236,7 +235,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), SendActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, RefConstants.REQUEST_CODE_PAYMENT);
             }
         });
 
@@ -359,26 +358,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed. Here it is 1
-        if (requestCode == 1) {
-            // This gets executed if a valid payment request was scanned or pasted
-            if (data != null) {
-                if (data.getExtras().getString("error") == null) {
-                    // forward data to send fragment
-                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                    sendBottomSheetDialog.setArguments(data.getExtras());
-                    sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
-                } else {
-                    ZapLog.debug(LOG_TAG, "Error arrived!");
-                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
-                }
-            }
-        }
-    }
-
-    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Update if primary currency has been switched from this or another activity
         if (key.equals("firstCurrencyIsPrimary")) {
@@ -460,7 +439,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mExchangeRateListenerRegistered = true;
         }
 
-        if (PrefsUtil.isWalletSetup()){
+        if (PrefsUtil.isWalletSetup()) {
             mWalletSpinner.updateList();
             mWalletSpinner.setVisibility(View.VISIBLE);
         } else {

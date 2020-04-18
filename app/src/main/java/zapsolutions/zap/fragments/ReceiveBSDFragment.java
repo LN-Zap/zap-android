@@ -47,6 +47,7 @@ import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -203,10 +204,34 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         mBtnScanLnurl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ScanLnurlWithdrawActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivityForResult(intent, 2);
-                dismiss();
+
+                // Check if we can receive anything over the lightning network
+                boolean canReceiveLightningPayment;
+                boolean hasActiveChannels = Wallet.getInstance().hasOpenActiveChannels();
+
+                if (hasActiveChannels) {
+                    if (Wallet.getInstance().getMaxLightningReceiveAmount() > 0L) {
+                        // We have remote balances on at least one channel, so we can receive a lightning payment!
+                        canReceiveLightningPayment = true;
+                    } else {
+                        mTvNoIncomingBalance.setText(R.string.receive_noIncomeBalance);
+                        canReceiveLightningPayment = false;
+                    }
+                } else {
+                    mTvNoIncomingBalance.setText(R.string.receive_noActiveChannels);
+                    canReceiveLightningPayment = false;
+                }
+
+                if (canReceiveLightningPayment) {
+                    // go to scan Activity
+                    Intent intent = new Intent(getActivity(), ScanLnurlWithdrawActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivityForResult(intent, RefConstants.REQUEST_CODE_LNURL_WITHDRAW);
+                    dismiss();
+                } else {
+                    // In this case we want to show the lightning channel info which already happens if we click the normal lightning button.
+                    mBtnLn.callOnClick();
+                }
             }
         });
 

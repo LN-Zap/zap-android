@@ -6,12 +6,25 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
+import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
+import zapsolutions.zap.util.LnurlDecoder;
 import zapsolutions.zap.util.NfcUtil;
+import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.ZapLog;
 
 public class ScanLnurlWithdrawActivity extends BaseScannerActivity {
 
@@ -66,7 +79,56 @@ public class ScanLnurlWithdrawActivity extends BaseScannerActivity {
     }
 
     private void validateLnurl(String lnurl) {
-        // ToDo: implement validation!
+        try {
+            String decodedLnurl = LnurlDecoder.decode(lnurl);
+
+            StringRequest lnurlRequest = new StringRequest(Request.Method.GET, decodedLnurl,
+                    response -> validateFirstResponse(response),
+                    error -> {
+                        URL url = null;
+                        try {
+                            url = new URL(decodedLnurl);
+                            String host = url.getHost();
+                            showError(getResources().getString(R.string.lnurl_service_not_responding, host), 4000);
+                        } catch (MalformedURLException e) {
+                            String host = getResources().getString(R.string.host);
+                            showError(getResources().getString(R.string.lnurl_service_not_responding, host), 4000);
+                            e.printStackTrace();
+                        }
+                    });
+
+            ZapLog.debug(LOG_TAG, "LNURL: Requesting withdraw data...");
+            HttpClient.getInstance().addToRequestQueue(lnurlRequest, "LnurlWithdrawRequest");
+
+        } catch (Exception e) {
+            ZapLog.debug(LOG_TAG, e.getMessage());
+            showError(getResources().getString(R.string.lnurl_decoding_failed), 4000);
+        }
+    }
+
+    private void validateFirstResponse(@NonNull String withdrawResponse) {
+        LnurlWithdrawResponse lnurlWithdrawResponse = new Gson().fromJson(withdrawResponse, LnurlWithdrawResponse.class);
+
+        if (lnurlWithdrawResponse.getStatus() != null) {
+            showError(lnurlWithdrawResponse.getReason(), 4000);
+        } else {
+            if (lnurlWithdrawResponse.getTag().equals(LnurlResponse.TAG_WITHDRAW)) {
+                goToLnurlWithdrawScreen(lnurlWithdrawResponse);
+            } else {
+                showError(getResources().getString(R.string.lnurl_wrong_tag), 4000);
+            }
+        }
+    }
+
+    private void goToLnurlWithdrawScreen(LnurlWithdrawResponse lnurlWithdrawResponse) {
+        ZapLog.debug(LOG_TAG, "LNURL: valid data received...");
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(LnurlWithdrawResponse.ARGS_KEY, lnurlWithdrawResponse);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        setResult(RefConstants.RESULT_CODE_LNURL_WITHDRAW, intent);
+        finish();
     }
 
     @Override

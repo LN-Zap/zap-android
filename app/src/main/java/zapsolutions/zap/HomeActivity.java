@@ -42,6 +42,7 @@ import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
+import zapsolutions.zap.lnurl.LnurlWithdrawBSDFragment;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.InvoiceUtil;
@@ -484,5 +485,38 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 showError(error, duration);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RefConstants.RESULT_CODE_PAYMENT) {
+            // This gets executed if a valid payment request was scanned or pasted
+            if (data != null) {
+                if (data.getExtras().getString("error") == null) {
+                    // forward data to send fragment
+                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                    sendBottomSheetDialog.setArguments(data.getExtras());
+                    sendBottomSheetDialog.show(((WalletFragment) mCurrentFragment).mFragmentManager, "sendBottomSheetDialog");
+                } else {
+                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
+                }
+            }
+        }
+
+        if (resultCode == RefConstants.RESULT_CODE_LNURL_WITHDRAW) {
+            // This gets executed if a valid lnurl was scanned or pasted
+            if (data != null) {
+                if (data.getExtras().getString("error") == null) {
+                    // forward data to withdraw fragment and show the dialog
+                    LnurlWithdrawBSDFragment withdrawDialog = new LnurlWithdrawBSDFragment();
+                    withdrawDialog.setArguments(data.getExtras());
+                    withdrawDialog.show(((WalletFragment) mCurrentFragment).mFragmentManager, "withdrawDialog");
+                } else {
+                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
+                }
+            }
+        }
     }
 }

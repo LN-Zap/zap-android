@@ -89,6 +89,7 @@
     <string name="install">Install</string>
     <string name="continue_string">Continue</string>
     <string name="withdraw">Withdraw</string>
+    <string name="unknown">Unknown</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -363,4 +364,12 @@
     <string name="confirm_wallet_deletion">Do you really want to delete this wallet?</string>
     <string name="no_wallets">No wallets</string>
     <string name="spinner_manage_wallets">Manage…</string>
+
+    <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
+    <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>
+    <string name="lnurl_decoding_failed">The data does not contain a valid LNURL.</string>
+    <string name="lnurl_withdraw_insufficent_channel_balance">The withdraw amount is bigger than what you can receive over lightning with your current open channels</string>
+    <string name="lnurl_wrong_tag">Wrong LNURL type</string>
+    <string name="lnurl_service_not_responding">%s is not responding</string>
+    <string name="lnurl_service">Service</string>
 </resources>
