@@ -1027,12 +1027,14 @@ public class Wallet {
     }
 
     /**
-     * Returns the the highest remote balance of all active channels.
-     * This can be used to determine maximum possible receive amount for a lightning invoice as long as there is no splicing.
+     * Get the maximum amount that can be received over Lighning Channels.
      *
-     * @return
+     * @return amount in satoshis
      */
-    public long getMaxChannelRemoteBalance() {
+    public long getMaxLightningReceiveAmount() {
+
+        // ToDO: Calculate differently depending on LND version (consider multi path for LND 0.9 and up)
+
         long tempMax = 0L;
         if (mOpenChannelsList != null) {
             for (Channel c : mOpenChannelsList) {
@@ -1047,12 +1049,14 @@ public class Wallet {
     }
 
     /**
-     * Returns the the highest local balance of all active channels.
-     * This can be used to determine maximum possible send amount for a lightning payment as long as there is no splicing.
+     * Get the maximum amount that can be send over Lighning Channels.
      *
-     * @return
+     * @return amount in satoshis
      */
-    public long getMaxChannelLocalBalance() {
+    public long getMaxLightningSendAmount() {
+
+        // ToDO: Calculate differently depending on LND version (consider multi path for LND 0.10 and up)
+
         long tempMax = 0L;
         if (mOpenChannelsList != null) {
             for (Channel c : mOpenChannelsList) {

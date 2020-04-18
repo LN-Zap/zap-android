@@ -241,7 +241,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
                 boolean hasActiveChannels = Wallet.getInstance().hasOpenActiveChannels();
 
                 if (hasActiveChannels) {
-                    if (Wallet.getInstance().getMaxChannelRemoteBalance() > 0L) {
+                    if (Wallet.getInstance().getMaxLightningReceiveAmount() > 0L) {
                         // We have remote balances on at least one channel, so we can receive a lightning payment!
                         canReceiveLightningPayment = true;
                     } else {
@@ -450,7 +450,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
                     long maxReceivable;
                     mUseValueBeforeUnitSwitch = false;
                     if (PrefsUtil.isWalletSetup()) {
-                        maxReceivable = Wallet.getInstance().getMaxChannelRemoteBalance();
+                        maxReceivable = Wallet.getInstance().getMaxLightningReceiveAmount();
                     } else {
                         maxReceivable = 500000000000L;
                     }
