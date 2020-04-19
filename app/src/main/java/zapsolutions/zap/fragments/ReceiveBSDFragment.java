@@ -41,7 +41,6 @@ import zapsolutions.zap.GeneratedRequestActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -51,7 +50,7 @@ import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 
-public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInterface {
+public class ReceiveBSDFragment extends RxBSDFragment {
 
     private static final String LOG_TAG = ReceiveBSDFragment.class.getName();
 
@@ -78,7 +77,6 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
     private TextView mTvNoIncomingBalance;
     private Button mBtnManageChannels;
     private View mViewNoIncomingBalance;
-    private UserGuardian mUG;
     private String mValueBeforeUnitSwitch;
     private boolean mUseValueBeforeUnitSwitch = true;
     private boolean mAmountValid = true;
@@ -93,8 +91,6 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         if (PrefsUtil.preventScreenRecording()) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
-
-        mUG = new UserGuardian(getActivity(), this);
 
         mBtnLn = view.findViewById(R.id.lnBtn);
         mBtnOnChain = view.findViewById(R.id.onChainBtn);
@@ -370,9 +366,10 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         mBtnGenerateRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
                 if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600) {
-                    mUG.securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
+                    // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
+                    new UserGuardian(getActivity(), ReceiveBSDFragment.this::generateRequest)
+                            .securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
                 } else {
                     generateRequest();
                 }
@@ -596,15 +593,6 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         } else {
             // The wallet is not setup. Show setup wallet message.
             Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void guardianDialogConfirmed(String DialogName) {
-        switch (DialogName) {
-            case UserGuardian.OLD_EXCHANGE_RATE:
-                generateRequest();
-                break;
         }
     }
 

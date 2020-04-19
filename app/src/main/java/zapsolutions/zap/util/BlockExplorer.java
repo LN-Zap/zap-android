@@ -7,13 +7,12 @@ import android.content.Intent;
 import android.net.Uri;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
 
 /**
  * This class allows showing details of On-Chain transactions and addresses using
  * 3rd Party services (Block Explorers)
  */
-public class BlockExplorer implements UserGuardianInterface {
+public class BlockExplorer {
 
     private String mUrl;
     private boolean misNetworkSupported;
@@ -64,7 +63,8 @@ public class BlockExplorer implements UserGuardianInterface {
         if (explorer.equals("Blockstream (v3 Tor)")) {
             startBlockExplorer();
         } else {
-            new UserGuardian(mContext, this).privacyBlockExplorer();
+            // Ask user to confirm risking privacy issues
+            new UserGuardian(mContext, this::startBlockExplorer).privacyBlockExplorer();
         }
     }
 
@@ -112,14 +112,8 @@ public class BlockExplorer implements UserGuardianInterface {
         if (explorer.equals("Blockstream (v3 Tor)")) {
             startBlockExplorer();
         } else {
-            new UserGuardian(mContext, this).privacyBlockExplorer();
-        }
-    }
-
-    @Override
-    public void guardianDialogConfirmed(String DialogName) {
-        if (DialogName.equals(UserGuardian.BLOCK_EXPLORER)) {
-            startBlockExplorer();
+            // Ask user to confirm risking privacy issues
+            new UserGuardian(mContext, this::startBlockExplorer).privacyBlockExplorer();
         }
     }
 

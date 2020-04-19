@@ -10,7 +10,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.BiometricUtil;
 import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -18,10 +17,9 @@ import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.UserGuardian;
 
 
-public class AdvancedSettingsFragment extends PreferenceFragmentCompat implements UserGuardianInterface {
+public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
 
     private static final String LOG_TAG = AdvancedSettingsFragment.class.getName();
-    private UserGuardian mUG;
     private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwScreenProtection;
     private ListPreference mListBlockExplorer;
@@ -32,8 +30,6 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the settings from an XML resource
         setPreferencesFromResource(R.xml.advanced_settings, rootKey);
-
-        mUG = new UserGuardian(getActivity(), this);
 
         // On change block explorer option
         mListBlockExplorer = findPreference("blockExplorer");
@@ -82,7 +78,8 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScrambledPin.isChecked()) {
-                    mUG.securityScrambledPin();
+                    // Ask user to confirm disabling scramble
+                    new UserGuardian(getActivity(), () -> mSwScrambledPin.setChecked(false)).securityScrambledPin();
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
@@ -97,7 +94,11 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScreenProtection.isChecked()) {
-                    mUG.securityScreenProtection();
+                    // Ask user to confirm disabling screen protection
+                    new UserGuardian(getActivity(), () -> {
+                        mSwScreenProtection.setChecked(false);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                    }).securityScreenProtection();
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
@@ -112,7 +113,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         prefResetGuardian.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                UserGuardian.reenableAllSecurityWarnings(getActivity());
+                UserGuardian.reenableAllSecurityWarnings();
                 Toast.makeText(getActivity(), R.string.guardian_reset, Toast.LENGTH_LONG).show();
                 return true;
             }
@@ -124,19 +125,6 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat implement
         String s = value.replace("%", "%%");
         String string = getString(R.string.fee_limit_threshold, RefConstants.LN_PAYMENT_FEE_THRESHOLD, s);
         preference.setSummary(string);
-    }
-
-    @Override
-    public void guardianDialogConfirmed(String DialogName) {
-        switch (DialogName) {
-            case UserGuardian.DISABLE_SCRAMBLED_PIN:
-                mSwScrambledPin.setChecked(false);
-                break;
-            case UserGuardian.DISABLE_SCREEN_PROTECTION:
-                mSwScreenProtection.setChecked(false);
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                break;
-        }
     }
 
     private void createLnExpiryDisplayEntries() {
