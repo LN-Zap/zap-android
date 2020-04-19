@@ -399,8 +399,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        layout="@layout/numpad"
+    <zapsolutions.zap.customView.NumpadView
+        android:id="@+id/numpadView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="25dp"
@@ -429,7 +429,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Numpad" />
+        app:layout_constraintTop_toBottomOf="@id/numpadView" />
 
     <Button
         android:id="@+id/generateRequestButton"
