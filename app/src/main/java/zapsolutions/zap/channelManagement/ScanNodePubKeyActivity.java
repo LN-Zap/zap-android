@@ -133,14 +133,7 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
     public void handleCameraResult(Result rawResult) {
         super.handleCameraResult(rawResult);
 
-        if (!processUserData(rawResult.getContents())) {
-            // Note:
-            // * Wait 2 seconds to resume the preview.
-            // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-            // * I don't know why this is the case but I don't have the time to figure out.
-            Handler handler = new Handler();
-            handler.postDelayed(() -> mScannerView.resumeCameraPreview(ScanNodePubKeyActivity.this), 2000);
-        }
+        processUserData(rawResult.getContents());
     }
 
     private boolean processUserData(String rawData) {

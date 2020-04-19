@@ -55,18 +55,6 @@ public class SendActivity extends BaseScannerActivity {
         super.handleCameraResult(rawResult);
 
         validateInvoice(rawResult.getContents());
-
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScannerView.resumeCameraPreview(SendActivity.this);
-            }
-        }, 2000);
     }
 
     @Override
