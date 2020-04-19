@@ -198,8 +198,8 @@
                 android:id="@+id/finishedText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                tools:text="detailed message" />
         </LinearLayout>
 
         <Button
