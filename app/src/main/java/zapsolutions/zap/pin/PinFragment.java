@@ -124,12 +124,14 @@ public class PinFragment extends Fragment {
         mNumFails = PrefsUtil.getPrefs().getInt("numPINFails", 0);
 
         // Get PIN length
-        String pinString = null;
         if (mMode == CONFIRM_MODE) {
-            pinString = mTempPin;
+            String pinString = mTempPin;
+            mPinLength = pinString != null ? pinString.length() : RefConstants.PIN_MIN_LENGTH;
+        } else if (mMode == ENTER_MODE) {
+            mPinLength = PrefsUtil.getPrefs().getInt(PrefsUtil.PIN_LENGTH, RefConstants.PIN_MIN_LENGTH);
+        } else {
+            mPinLength = RefConstants.PIN_MIN_LENGTH;
         }
-
-        mPinLength = pinString != null ? pinString.length() : RefConstants.PIN_MIN_LENGTH;
 
         mUserInput = new StringBuilder();
         mNumpad = new ScrambledNumpad();

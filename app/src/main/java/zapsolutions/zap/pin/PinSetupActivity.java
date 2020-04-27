@@ -76,7 +76,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
         }
         if (mSetupMode == CHANGE_PIN) {
             // Show success message
-            Toast.makeText(PinSetupActivity.this, "PIN changed!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PinSetupActivity.this, R.string.pin_changed, Toast.LENGTH_SHORT).show();
 
             // Reset the PIN timeout. We don't want to ask for PIN again...
             TimeOutUtil.getInstance().restartTimer();
