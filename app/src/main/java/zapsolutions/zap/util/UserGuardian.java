@@ -3,14 +3,12 @@ package zapsolutions.zap.util;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
 
 
 /**
@@ -19,51 +17,54 @@ import zapsolutions.zap.interfaces.UserGuardianInterface;
  * his security or privacy.
  * To avoid too many popups, these messages have a "do not show again" option.
  * <p>
- * A class using the UserGuardian class needs to implement the UserGuardianInterface
- * to handle users choice.
- * <p>
  * Please note that a dialog which will not be shown (do not show again checked) executes
  * the callback like it does when "ok" is pressed.
  */
 public class UserGuardian {
 
-    public static final String COPY_TO_CLIPBOARD = "guardianCopyToClipboard";
-    public static final String PASTE_FROM_CLIPBOARD = "guardianPasteFromClipboard";
-    public static final String DISABLE_SCRAMBLED_PIN = "guardianDisableScrambledPin";
-    public static final String DISABLE_SCREEN_PROTECTION = "guardianDisableScreenProtection";
-    public static final String HIGH_ONCHAIN_FEE = "guardianHighOnCainFees";
-    public static final String OLD_EXCHANGE_RATE = "guardianOldExchangeRate";
-    public static final String TOO_MUCH_MONEY = "guardianTooMuchMoney";
-    public static final String MAINNET_NOT_READY = "guardianMainnetNotReady";
-    public static final String REMOTE_CONNECT = "guardianRemoteConnect";
-    public static final String BLOCK_EXPLORER = "guardianBlockExplorer";
+    private static final String DIALOG_COPY_TO_CLIPBOARD = "guardianCopyToClipboard";
+    private static final String DIALOG_PASTE_FROM_CLIPBOARD = "guardianPasteFromClipboard";
+    private static final String DIALOG_DISABLE_SCRAMBLED_PIN = "guardianDisableScrambledPin";
+    private static final String DIALOG_DISABLE_SCREEN_PROTECTION = "guardianDisableScreenProtection";
+    private static final String DIALOG_HIGH_ONCHAIN_FEE = "guardianHighOnCainFees";
+    private static final String DIALOG_OLD_EXCHANGE_RATE = "guardianOldExchangeRate";
+    private static final String DIALOG_TOO_MUCH_MONEY = "guardianTooMuchMoney";
+    private static final String DIALOG_MAINNET_NOT_READY = "guardianMainnetNotReady";
+    private static final String DIALOG_REMOTE_CONNECT = "guardianRemoteConnect";
+    private static final String DIALOG_BLOCK_EXPLORER = "guardianBlockExplorer";
+
+    public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
+    public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
 
     private final Context mContext;
-    private final UserGuardianInterface mAction;
+    private OnGuardianConfirmedListener mListener;
     private String mCurrentDialogName;
     private CheckBox mDontShowAgain;
 
-
-    public UserGuardian(Context ctx, UserGuardianInterface caller) {
+    public UserGuardian(Context ctx) {
         mContext = ctx;
-        mAction = caller;
+    }
+
+    public UserGuardian(Context ctx, OnGuardianConfirmedListener listener) {
+        mContext = ctx;
+        mListener = listener;
     }
 
     /**
      * Reset all "do not show again" selections.
      */
-    public static void reenableAllSecurityWarnings(Context ctx) {
+    public static void reenableAllSecurityWarnings() {
         PrefsUtil.edit()
-                .putBoolean(COPY_TO_CLIPBOARD, true)
-                .putBoolean(PASTE_FROM_CLIPBOARD, true)
-                .putBoolean(DISABLE_SCRAMBLED_PIN, true)
-                .putBoolean(DISABLE_SCREEN_PROTECTION, true)
-                .putBoolean(HIGH_ONCHAIN_FEE, true)
-                .putBoolean(OLD_EXCHANGE_RATE, true)
-                .putBoolean(TOO_MUCH_MONEY, true)
-                .putBoolean(MAINNET_NOT_READY, true)
-                .putBoolean(REMOTE_CONNECT, true)
-                .putBoolean(BLOCK_EXPLORER, true)
+                .putBoolean(DIALOG_COPY_TO_CLIPBOARD, true)
+                .putBoolean(DIALOG_PASTE_FROM_CLIPBOARD, true)
+                .putBoolean(DIALOG_DISABLE_SCRAMBLED_PIN, true)
+                .putBoolean(DIALOG_DISABLE_SCREEN_PROTECTION, true)
+                .putBoolean(DIALOG_HIGH_ONCHAIN_FEE, true)
+                .putBoolean(DIALOG_OLD_EXCHANGE_RATE, true)
+                .putBoolean(DIALOG_TOO_MUCH_MONEY, true)
+                .putBoolean(DIALOG_MAINNET_NOT_READY, true)
+                .putBoolean(DIALOG_REMOTE_CONNECT, true)
+                .putBoolean(DIALOG_BLOCK_EXPLORER, true)
                 .apply();
     }
 
@@ -74,20 +75,20 @@ public class UserGuardian {
      * @param data the data that is copied to clipboard
      */
     public void securityCopyToClipboard(String data, int type) {
-        mCurrentDialogName = COPY_TO_CLIPBOARD;
+        mCurrentDialogName = DIALOG_COPY_TO_CLIPBOARD;
 
         String compareString;
         String message = "";
         switch (type) {
-            case 0: // On-Chain Request
+            case CLIPBOARD_DATA_TYPE_ONCHAIN:
                 if (data.length() > 15) {
                     compareString = data.substring(0, 15) + " ...";
                     message = mContext.getResources().getString(R.string.guardian_copyToClipboard_onChain, compareString);
                 }
                 break;
-            case 1: // Lightning Request
+            case CLIPBOARD_DATA_TYPE_LIGHTNING:
                 if (data.length() > 15) {
-                    compareString = "... " + data.substring(data.length() - 8, data.length());
+                    compareString = "... " + data.substring(data.length() - 8);
                     message = mContext.getResources().getString(R.string.guardian_copyToClipboard_lightning, compareString);
                 }
                 break;
@@ -102,7 +103,7 @@ public class UserGuardian {
      * Warn the user about pasting a payment request from clipboard.
      */
     public void securityPasteFromClipboard() {
-        mCurrentDialogName = PASTE_FROM_CLIPBOARD;
+        mCurrentDialogName = DIALOG_PASTE_FROM_CLIPBOARD;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
         adb.setMessage(R.string.guardian_pasteFromClipboard);
         showGuardianDialog(adb);
@@ -112,7 +113,7 @@ public class UserGuardian {
      * Warn the user about using the wallet on mainnet, while it is still not secure.
      */
     public void securityMainnetNotReady() {
-        mCurrentDialogName = MAINNET_NOT_READY;
+        mCurrentDialogName = DIALOG_MAINNET_NOT_READY;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
         adb.setMessage(R.string.guardian_notReadyForMainnet);
         showGuardianDialog(adb);
@@ -122,7 +123,7 @@ public class UserGuardian {
      * Warn the user to not disable scrambled pin input.
      */
     public void securityScrambledPin() {
-        mCurrentDialogName = DISABLE_SCRAMBLED_PIN;
+        mCurrentDialogName = DIALOG_DISABLE_SCRAMBLED_PIN;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setMessage(R.string.guardian_disableScrambledPin);
         showGuardianDialog(adb);
@@ -132,7 +133,7 @@ public class UserGuardian {
      * Warn the user to not disable screen protection.
      */
     public void securityScreenProtection() {
-        mCurrentDialogName = DISABLE_SCREEN_PROTECTION;
+        mCurrentDialogName = DIALOG_DISABLE_SCREEN_PROTECTION;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setMessage(R.string.guardian_disableScreenProtection);
         showGuardianDialog(adb);
@@ -146,7 +147,7 @@ public class UserGuardian {
      * @param feeRate 0 = 0% ; 1 = 100% (equal transaction amount) ; >1 you pay more fees than you transact
      */
     public void securityHighOnChainFee(float feeRate) {
-        mCurrentDialogName = HIGH_ONCHAIN_FEE;
+        mCurrentDialogName = DIALOG_HIGH_ONCHAIN_FEE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         String feeRateString = String.format("%.1f", feeRate * 100);
         adb.setMessage(mContext.getResources().getString(R.string.guardian_highOnChainFee, feeRateString));
@@ -160,7 +161,7 @@ public class UserGuardian {
      * @param age in seconds
      */
     public void securityOldExchangeRate(double age) {
-        mCurrentDialogName = OLD_EXCHANGE_RATE;
+        mCurrentDialogName = DIALOG_OLD_EXCHANGE_RATE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         String ageString = String.format("%.1f", age / 3600);
         adb.setMessage(mContext.getResources().getString(R.string.guardian_oldExchangeRate, ageString));
@@ -171,7 +172,7 @@ public class UserGuardian {
      * Warn the user if he stores large amounts of Bitcoin in his wallet.
      */
     public void securityTooMuchMoney() {
-        mCurrentDialogName = TOO_MUCH_MONEY;
+        mCurrentDialogName = DIALOG_TOO_MUCH_MONEY;
         AlertDialog.Builder adb = createDontShowAgainDialog(false);
         adb.setMessage(R.string.guardian_tooMuchMoney);
         showGuardianDialog(adb);
@@ -181,7 +182,7 @@ public class UserGuardian {
      * Warn the user if he is trying to connect to a remote server.
      */
     public void securityConnectToRemoteServer(String host) {
-        mCurrentDialogName = REMOTE_CONNECT;
+        mCurrentDialogName = DIALOG_REMOTE_CONNECT;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         String message = mContext.getResources().getString(R.string.guardian_remoteConnect, host);
         adb.setMessage(message);
@@ -192,7 +193,7 @@ public class UserGuardian {
      * Warn the user about accessing a transaction or address with a non tor block explorer.
      */
     public void privacyBlockExplorer() {
-        mCurrentDialogName = BLOCK_EXPLORER;
+        mCurrentDialogName = DIALOG_BLOCK_EXPLORER;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setMessage(R.string.guardian_blockExplorer);
         showGuardianDialog(adb);
@@ -215,21 +216,19 @@ public class UserGuardian {
         View titleView = adbInflater.inflate(R.layout.guardian_title, null);
         adb.setView(DialogLayout);
         adb.setCustomTitle(titleView);
-        adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
+        adb.setPositiveButton(R.string.ok, (dialog, which) -> {
 
-                if (mDontShowAgain.isChecked()) {
-                    PrefsUtil.edit().putBoolean(mCurrentDialogName, false).apply();
-                }
+            if (mDontShowAgain.isChecked()) {
+                PrefsUtil.edit().putBoolean(mCurrentDialogName, false).apply();
+            }
 
+            if (mListener != null) {
                 // Execute interface callback on "OK"
-                mAction.guardianDialogConfirmed(mCurrentDialogName);
+                mListener.onGuardianConfirmed();
             }
         });
         if (hasCancelOption) {
-            adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                }
+            adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
             });
         }
         return adb;
@@ -251,7 +250,11 @@ public class UserGuardian {
             }
             dlg.show();
         } else {
-            mAction.guardianDialogConfirmed(mCurrentDialogName);
+            mListener.onGuardianConfirmed();
         }
+    }
+
+    public interface OnGuardianConfirmedListener {
+        void onGuardianConfirmed();
     }
 }

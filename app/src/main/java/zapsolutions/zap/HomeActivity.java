@@ -41,7 +41,6 @@ import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceive
 import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.InvoiceUtil;
@@ -57,11 +56,10 @@ import zapsolutions.zap.util.ZapLog;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.InfoListener, Wallet.WalletLoadedListener, UserGuardianInterface {
+        Wallet.InfoListener, Wallet.WalletLoadedListener {
 
     private static final String LOG_TAG = HomeActivity.class.getName();
     private Handler mHandler;
-    private UserGuardian mUG;
     private InputMethodManager mInputMethodManager;
     private ScheduledExecutorService mExchangeRateScheduler;
     private ScheduledExecutorService mLNDInfoScheduler;
@@ -122,7 +120,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         //NFC
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        mUG = new UserGuardian(this, this);
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         mHandler = new Handler();
 
@@ -329,16 +326,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             if (!Wallet.getInstance().isTestnet() && Wallet.getInstance().isConnectedToLND()) {
                 if (!mMainnetWarningShownOnce) {
                     // Show mainnet not ready warning
-                    mUG.securityMainnetNotReady();
+                    new UserGuardian(this).securityMainnetNotReady();
                     mMainnetWarningShownOnce = true;
                 }
             }
         }
-    }
-
-    @Override
-    public void guardianDialogConfirmed(String DialogName) {
-
     }
 
     @Override
