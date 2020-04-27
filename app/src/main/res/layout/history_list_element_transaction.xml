@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/transactionRootView"
     android:layout_width="match_parent"
     android:layout_height="65dp"
@@ -38,10 +39,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="12:23"
             android:textAlignment="center"
             android:textColor="@color/gray"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            tools:text="12:23" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,8 +59,8 @@
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="State"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="State" />
 
         <TextView
             android:id="@+id/secondaryTransactionDescription"
@@ -68,10 +69,10 @@
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Description"
             android:textColor="@color/gray"
             android:textSize="12sp"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:text="Description" />
     </LinearLayout>
 
     <LinearLayout
@@ -84,17 +85,17 @@
             android:id="@+id/transactionAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="+ 157 sat"
             android:textAlignment="textEnd"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="+ 157 sat" />
 
         <TextView
             android:id="@+id/transactionFeeAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fee: 0 sat"
             android:textAlignment="textEnd"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            tools:text="Fee: 0 sat" />
     </LinearLayout>
 
 </LinearLayout>
