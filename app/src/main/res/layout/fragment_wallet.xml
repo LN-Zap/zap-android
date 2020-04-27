@@ -19,10 +19,10 @@
         <zapsolutions.zap.customView.WalletSpinner
             android:id="@+id/walletSpinner"
             android:layout_width="180dp"
-            android:dropDownWidth="180dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:background="@null"
+            android:dropDownWidth="180dp"
             android:popupBackground="@drawable/bg_wallet_spinner_popup"
             android:textSize="16sp"
             android:visibility="visible"
@@ -71,17 +71,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
-
             android:textAlignment="textEnd"
             android:textColor="@color/gray"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/BalanceLayout"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="TESTNET" />
@@ -130,25 +126,25 @@
                     android:id="@+id/BalancePrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Primary"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="38sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Primary" />
 
-                <zapsolutions.zap.nonClippingText.NonClippingTextView
+                <zapsolutions.zap.customView.NonClippingTextView
                     android:id="@+id/BalancePrimaryUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Unit"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    tools:text="BTC" />
 
             </LinearLayout>
 
@@ -167,22 +163,22 @@
                     android:id="@+id/BalanceSecondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Secondary"
                     android:textAlignment="center"
                     android:textColor="@color/gray"
                     android:textSize="15sp"
-                    app:layout_constraintTop_toBottomOf="@id/BalancePrimary" />
+                    app:layout_constraintTop_toBottomOf="@id/BalancePrimary"
+                    tools:text="Secondary" />
 
-                <zapsolutions.zap.nonClippingText.NonClippingTextView
+                <zapsolutions.zap.customView.NonClippingTextView
                     android:id="@+id/BalanceSecondaryUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:text="Unit"
                     android:textAlignment="center"
                     android:textColor="@color/gray"
                     android:textSize="15sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    tools:text="sat" />
             </LinearLayout>
 
 

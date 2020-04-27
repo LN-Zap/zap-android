@@ -111,6 +111,7 @@
     <string name="pin_confirm_new">Confirm new PIN</string>
     <string name="pin_entered_wrong">Wrong PIN</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Wait %1$s seconds.</string>
+    <string name="pin_changed">PIN changed!</string>
 
 
     <string name="requested_payment">Requested</string>

@@ -160,7 +160,7 @@
                 android:id="@+id/localBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="localBalance"
+                tools:text="2500 sat"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -185,7 +185,7 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="remoteBalance" />
+                tools:text="1000 sat" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
