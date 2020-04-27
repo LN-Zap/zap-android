@@ -41,6 +41,7 @@ import zapsolutions.zap.GeneratedRequestActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -67,10 +68,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
     private TextView mTvUnit;
     private View mMemoView;
     private TextView mTvTitle;
-    private View mNumpad;
-    private Button[] mBtnNumpad = new Button[10];
-    private Button mBtnNumpadDot;
-    private ImageButton mBtnNumpadBack;
+    private NumpadView mNumpad;
     private Button mBtnNext;
     private Button mBtnGenerateRequest;
     private boolean mOnChain;
@@ -108,7 +106,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         mEtMemo = view.findViewById(R.id.receiveMemo);
         mMemoView = view.findViewById(R.id.receiveMemoTopLayout);
         mTvTitle = view.findViewById(R.id.bsdTitle);
-        mNumpad = view.findViewById(R.id.Numpad);
+        mNumpad = view.findViewById(R.id.numpadView);
         mBtnNext = view.findViewById(R.id.nextButton);
         mBtnGenerateRequest = view.findViewById(R.id.generateRequestButton);
         mBtnHelp = view.findViewById(R.id.helpButton);
@@ -117,58 +115,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         mViewNoIncomingBalance = view.findViewById(R.id.noIncomingChannelBalanceView);
         mBtnManageChannels = view.findViewById(R.id.manageChannels);
 
-
-        // Get numpad buttons
-        mBtnNumpad[0] = view.findViewById(R.id.Numpad1);
-        mBtnNumpad[1] = view.findViewById(R.id.Numpad2);
-        mBtnNumpad[2] = view.findViewById(R.id.Numpad3);
-        mBtnNumpad[3] = view.findViewById(R.id.Numpad4);
-        mBtnNumpad[4] = view.findViewById(R.id.Numpad5);
-        mBtnNumpad[5] = view.findViewById(R.id.Numpad6);
-        mBtnNumpad[6] = view.findViewById(R.id.Numpad7);
-        mBtnNumpad[7] = view.findViewById(R.id.Numpad8);
-        mBtnNumpad[8] = view.findViewById(R.id.Numpad9);
-        mBtnNumpad[9] = view.findViewById(R.id.Numpad0);
-
-        mBtnNumpadDot = view.findViewById(R.id.NumpadDot);
-        mBtnNumpadBack = view.findViewById(R.id.NumpadBack);
-
-        // Set action for numpad number buttons
-        for (Button btn : mBtnNumpad) {
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    // Add input
-                    int start = Math.max(mEtAmount.getSelectionStart(), 0);
-                    int end = Math.max(mEtAmount.getSelectionEnd(), 0);
-                    mEtAmount.getText().replace(Math.min(start, end), Math.max(start, end),
-                            btn.getText(), 0, btn.getText().length());
-
-                }
-            });
-        }
-
-        // Set action for numpad "." button
-        mBtnNumpadDot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Add input
-                int start = Math.max(mEtAmount.getSelectionStart(), 0);
-                int end = Math.max(mEtAmount.getSelectionEnd(), 0);
-                mEtAmount.getText().replace(Math.min(start, end), Math.max(start, end),
-                        mBtnNumpadDot.getText(), 0, mBtnNumpadDot.getText().length());
-            }
-        });
-
-        // Set action for numpad "delete" button
-        mBtnNumpadBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // remove Input
-                deleteAmountInput();
-            }
-        });
+        mNumpad.bindEditText(mEtAmount);
 
         // add "optional" hint to optional fields
         mEtAmount.setHint(getResources().getString(R.string.amount) + " (" + getResources().getString(R.string.optional) + ")");
@@ -426,7 +373,7 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
 
                 // remove the last inputted character if not valid
                 if (!mAmountValid) {
-                    deleteAmountInput();
+                    mNumpad.removeOneDigit();
                 }
 
                 // make text red if input is too large
@@ -494,28 +441,6 @@ public class ReceiveBSDFragment extends RxBSDFragment implements UserGuardianInt
         return R.style.ZapBottomSheetDialogTheme;
     }
 
-    private void deleteAmountInput() {
-        boolean selection = mEtAmount.getSelectionStart() != mEtAmount.getSelectionEnd();
-
-        int start = Math.max(mEtAmount.getSelectionStart(), 0);
-        int end = Math.max(mEtAmount.getSelectionEnd(), 0);
-
-        String before = mEtAmount.getText().toString().substring(0, start);
-        String after = mEtAmount.getText().toString().substring(end);
-
-        if (selection) {
-            String outputText = before + after;
-            mEtAmount.setText(outputText);
-            mEtAmount.setSelection(start);
-        } else {
-            if (before.length() >= 1) {
-                String newBefore = before.substring(0, before.length() - 1);
-                String outputText = newBefore + after;
-                mEtAmount.setText(outputText);
-                mEtAmount.setSelection(start - 1);
-            }
-        }
-    }
 
     private void showKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
