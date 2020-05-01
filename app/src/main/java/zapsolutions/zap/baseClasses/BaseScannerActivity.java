@@ -37,11 +37,13 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     private TextView mTvPermissionRequired;
     private Button mButtonPaste;
     private Button mButtonHelp;
+    private Handler mHandler;
 
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+        mHandler = new Handler();
         setContentView(R.layout.activity_qr_code_scanner);
         setupToolbar();
 
@@ -93,6 +95,12 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     public void onPause() {
         super.onPause();
         mScannerView.stopCamera();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -178,8 +186,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         // * Wait 2 seconds to resume the preview.
         // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
         // * I don't know why this is the case but I don't have the time to figure out.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mScannerView.resumeCameraPreview(BaseScannerActivity.this);
