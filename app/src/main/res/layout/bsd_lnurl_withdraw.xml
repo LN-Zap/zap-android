@@ -146,7 +146,7 @@
             app:layout_constraintStart_toEndOf="@+id/withdrawAmount"
             app:layout_constraintTop_toTopOf="parent">
 
-            <zapsolutions.zap.nonClippingText.NonClippingTextView
+            <zapsolutions.zap.customView.NonClippingTextView
                 android:id="@+id/unit"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
@@ -184,12 +184,12 @@
             android:maxLength="50"
             android:paddingTop="5dp"
             android:paddingBottom="9dp"
+            android:text="@string/lnurl_service"
             android:textAlignment="viewStart"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/line2"
-            android:text="@string/lnurl_service" />
+            app:layout_constraintTop_toBottomOf="@id/line2" />
 
         <TextView
             android:id="@+id/withdrawSource"
@@ -198,11 +198,11 @@
             android:background="#00000000"
             android:ellipsize="end"
             android:maxLines="1"
+            android:paddingStart="15dp"
             android:paddingTop="9dp"
             android:paddingBottom="9dp"
             android:textAlignment="viewEnd"
             android:textSize="16sp"
-            android:paddingStart="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/withdrawSourceLabel"
@@ -254,8 +254,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        layout="@layout/numpad"
+    <zapsolutions.zap.customView.NumpadView
+        android:id="@+id/numpadView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -283,7 +283,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Numpad" />
+        app:layout_constraintTop_toBottomOf="@id/numpadView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/paymentProgressLayout"

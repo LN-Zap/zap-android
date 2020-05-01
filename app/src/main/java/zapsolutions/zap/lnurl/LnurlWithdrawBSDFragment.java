@@ -45,6 +45,7 @@ import java.net.URL;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.fragments.RxBSDFragment;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -64,10 +65,7 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
     private EditText mEtDescription;
     private TextView mTvUnit;
     private View mDescriptionView;
-    private View mNumpad;
-    private Button[] mBtnNumpad = new Button[10];
-    private Button mBtnNumpadDot;
-    private ImageButton mBtnNumpadBack;
+    private NumpadView mNumpad;
     private Button mBtnWithdraw;
     private View mProgressScreen;
     private View mFinishedScreen;
@@ -132,7 +130,7 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
         mDescriptionView = view.findViewById(R.id.withdrawDescriptionTopLayout);
         mTvWithdrawSource = view.findViewById(R.id.withdrawSource);
 
-        mNumpad = view.findViewById(R.id.Numpad);
+        mNumpad = view.findViewById(R.id.numpadView);
         mBtnWithdraw = view.findViewById(R.id.withdrawButton);
 
         mProgressScreen = view.findViewById(R.id.paymentProgressLayout);
@@ -145,59 +143,7 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
         mTvFinishedText2 = view.findViewById(R.id.finishedText2);
         mProgressBar = view.findViewById(R.id.progressBar);
 
-
-        // Get numpad buttons
-        mBtnNumpad[0] = view.findViewById(R.id.Numpad1);
-        mBtnNumpad[1] = view.findViewById(R.id.Numpad2);
-        mBtnNumpad[2] = view.findViewById(R.id.Numpad3);
-        mBtnNumpad[3] = view.findViewById(R.id.Numpad4);
-        mBtnNumpad[4] = view.findViewById(R.id.Numpad5);
-        mBtnNumpad[5] = view.findViewById(R.id.Numpad6);
-        mBtnNumpad[6] = view.findViewById(R.id.Numpad7);
-        mBtnNumpad[7] = view.findViewById(R.id.Numpad8);
-        mBtnNumpad[8] = view.findViewById(R.id.Numpad9);
-        mBtnNumpad[9] = view.findViewById(R.id.Numpad0);
-
-        mBtnNumpadDot = view.findViewById(R.id.NumpadDot);
-        mBtnNumpadBack = view.findViewById(R.id.NumpadBack);
-
-        // Set action for numpad number buttons
-        for (Button btn : mBtnNumpad) {
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    // Add input
-                    int start = Math.max(mEtAmount.getSelectionStart(), 0);
-                    int end = Math.max(mEtAmount.getSelectionEnd(), 0);
-                    mEtAmount.getText().replace(Math.min(start, end), Math.max(start, end),
-                            btn.getText(), 0, btn.getText().length());
-
-                }
-            });
-        }
-
-        // Set action for numpad "." button
-        mBtnNumpadDot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Add input
-                int start = Math.max(mEtAmount.getSelectionStart(), 0);
-                int end = Math.max(mEtAmount.getSelectionEnd(), 0);
-                mEtAmount.getText().replace(Math.min(start, end), Math.max(start, end),
-                        mBtnNumpadDot.getText(), 0, mBtnNumpadDot.getText().length());
-            }
-        });
-
-        // Set action for numpad "delete" button
-        mBtnNumpadBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // remove Input
-                deleteAmountInput();
-            }
-        });
-
+        mNumpad.bindEditText(mEtAmount);
 
         // deactivate default keyboard for number input.
         mEtAmount.setShowSoftInputOnFocus(false);
@@ -223,7 +169,7 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
 
                 // remove the last inputted character if not valid
                 if (!mAmountValid) {
-                    deleteAmountInput();
+                    mNumpad.removeOneDigit();
                     return;
                 }
 
@@ -485,37 +431,10 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
         return R.style.ZapBottomSheetDialogTheme;
     }
 
-    private void deleteAmountInput() {
-        boolean selection = mEtAmount.getSelectionStart() != mEtAmount.getSelectionEnd();
-
-        int start = Math.max(mEtAmount.getSelectionStart(), 0);
-        int end = Math.max(mEtAmount.getSelectionEnd(), 0);
-
-        String before = mEtAmount.getText().toString().substring(0, start);
-        String after = mEtAmount.getText().toString().substring(end);
-
-        if (selection) {
-            String outputText = before + after;
-            mEtAmount.setText(outputText);
-            mEtAmount.setSelection(start);
-        } else {
-            if (before.length() >= 1) {
-                String newBefore = before.substring(0, before.length() - 1);
-                String outputText = newBefore + after;
-                mEtAmount.setText(outputText);
-                mEtAmount.setSelection(start - 1);
-            }
-        }
-    }
-
     private void switchToWithdrawProgressScreen() {
 
         // make previous buttons and edit texts unclickable
-        for (Button btn : mBtnNumpad) {
-            btn.setEnabled(false);
-        }
-        mBtnNumpadBack.setEnabled(false);
-        mBtnNumpadDot.setEnabled(false);
+        mNumpad.setEnabled(false);
         mBtnWithdraw.setEnabled(false);
         mEtAmount.setEnabled(false);
         mNumpad.setEnabled(false);
