@@ -31,7 +31,6 @@ import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
 import zapsolutions.zap.customView.WalletSpinner;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.Balances;
 import zapsolutions.zap.util.ExchangeRateUtil;
@@ -40,7 +39,6 @@ import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TorUtil;
-import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -49,11 +47,10 @@ import zapsolutions.zap.util.ZapLog;
  * A simple {@link Fragment} subclass.
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.BalanceListener, Wallet.InfoListener, Wallet.WalletLoadedListener, ExchangeRateUtil.ExchangeRateListener, UserGuardianInterface {
+        Wallet.BalanceListener, Wallet.InfoListener, Wallet.WalletLoadedListener, ExchangeRateUtil.ExchangeRateListener {
 
     private static final String LOG_TAG = WalletFragment.class.getName();
 
-    private UserGuardian mUG;
     private TextView mTvPrimaryBalance;
     private TextView mTvPrimaryBalanceUnit;
     private TextView mTvSecondaryBalance;
@@ -89,8 +86,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
-
-        mUG = new UserGuardian(getActivity(), this);
 
         mFragmentManager = getFragmentManager();
 
@@ -462,11 +457,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         Wallet.getInstance().unregisterInfoListener(this);
         Wallet.getInstance().unregisterWalletLoadedListener(this);
         ExchangeRateUtil.getInstance().unregisterExchangeRateListener(this);
-    }
-
-    @Override
-    public void guardianDialogConfirmed(String DialogName) {
-
     }
 
     @Override

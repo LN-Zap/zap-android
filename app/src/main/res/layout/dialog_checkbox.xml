@@ -9,7 +9,7 @@
     android:paddingEnd="10dp"
     android:paddingBottom="0dp">
 
-    <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    <CheckBox
         android:id="@+id/skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

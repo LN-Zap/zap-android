@@ -210,10 +210,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="localBalance"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balanceBarLocal" />
+            app:layout_constraintTop_toBottomOf="@+id/balanceBarLocal"
+            tools:text="2500 sat" />
 
         <TextView
             android:id="@+id/remoteBalance"
@@ -223,7 +223,7 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/balanceBarRemote"
-            tools:text="remoteBalance" />
+            tools:text="1000 sat" />
 
         <ImageView
             android:id="@+id/separator_3"

@@ -36,8 +36,6 @@ import zapsolutions.zap.util.ZapLog;
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     private static final String LOG_TAG = ConnectRemoteNodeActivity.class.getName();
 
-    private UserGuardian mUG;
-
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -181,13 +179,10 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
     private void connectIfUserConfirms(RemoteConfiguration remoteConfiguration) {
         // Ask user to confirm the connection to remote host
-        mUG = new UserGuardian(this, DialogName -> {
-            if (UserGuardian.REMOTE_CONNECT.equals(DialogName)) {
-                // Connect using the supplied configuration
-                connect(remoteConfiguration);
-            }
-        });
-        mUG.securityConnectToRemoteServer(remoteConfiguration.getHost());
+        new UserGuardian(this, () -> {
+            // Connect using the supplied configuration
+            connect(remoteConfiguration);
+        }).securityConnectToRemoteServer(remoteConfiguration.getHost());
     }
 
     private void connect(RemoteConfiguration config) {

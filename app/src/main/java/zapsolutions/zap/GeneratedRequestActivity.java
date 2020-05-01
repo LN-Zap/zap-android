@@ -21,7 +21,6 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.android.QRCode;
 
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.interfaces.UserGuardianInterface;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -30,11 +29,10 @@ import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 
 
-public class GeneratedRequestActivity extends BaseAppCompatActivity implements UserGuardianInterface, Wallet.InvoiceSubscriptionListener {
+public class GeneratedRequestActivity extends BaseAppCompatActivity implements Wallet.InvoiceSubscriptionListener {
 
     private static final String LOG_TAG = GeneratedRequestActivity.class.getName();
 
-    private UserGuardian mUG;
     private String mDataToEncode;
     private boolean mOnChain;
     private String mAddress;
@@ -62,7 +60,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         }
 
         setContentView(R.layout.activity_generate_request);
-        mUG = new UserGuardian(this, this);
 
 
         // Register listeners
@@ -177,11 +174,11 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
         btnCopyLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOnChain) {
-                    mUG.securityCopyToClipboard(mDataToEncode, 0);
-                } else {
-                    mUG.securityCopyToClipboard(mDataToEncode, 1);
-                }
+                // Ask user to confirm risks about clipboard manipulation
+                new UserGuardian(GeneratedRequestActivity.this, () -> {
+                    // Copy data to clipboard
+                    ClipBoardUtil.copyToClipboard(getApplicationContext(), "Address", mDataToEncode);
+                }).securityCopyToClipboard(mDataToEncode, mOnChain ? UserGuardian.CLIPBOARD_DATA_TYPE_ONCHAIN : UserGuardian.CLIPBOARD_DATA_TYPE_LIGHTNING);
             }
         });
 
@@ -201,15 +198,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements U
             return base + "?" + name + "=" + value;
         else
             return base + "&" + name + "=" + value;
-    }
-
-    @Override
-    public void guardianDialogConfirmed(String DialogName) {
-        switch (DialogName) {
-            case UserGuardian.COPY_TO_CLIPBOARD:
-                ClipBoardUtil.copyToClipboard(getApplicationContext(), "Address", mDataToEncode);
-                break;
-        }
     }
 
     @Override

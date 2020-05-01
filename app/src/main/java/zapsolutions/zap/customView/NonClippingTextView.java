@@ -1,4 +1,4 @@
-package zapsolutions.zap.nonClippingText;
+package zapsolutions.zap.customView;
 
 import android.content.Context;
 import android.util.AttributeSet;

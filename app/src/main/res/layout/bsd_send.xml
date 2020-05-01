@@ -214,15 +214,15 @@
             app:layout_constraintStart_toEndOf="@+id/sendAmount"
             app:layout_constraintTop_toTopOf="parent">
 
-            <zapsolutions.zap.nonClippingText.NonClippingTextView
+            <zapsolutions.zap.customView.NonClippingTextView
                 android:id="@+id/sendUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
-                android:text="UNIT"
                 android:textAlignment="center"
                 android:textSize="30sp"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                tools:text="BTC" />
 
             <ImageView
                 android:id="@+id/sendSwitchUnitImage"
@@ -308,8 +308,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        layout="@layout/numpad"
+    <zapsolutions.zap.customView.NumpadView
+        android:id="@+id/numpadView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -337,7 +337,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Numpad" />
+        app:layout_constraintTop_toBottomOf="@id/numpadView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/paymentProgressLayout"
@@ -427,7 +427,7 @@
                 android:id="@+id/finishedText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                tools:text="detailed message"
                 android:textAlignment="center" />
         </LinearLayout>
 
