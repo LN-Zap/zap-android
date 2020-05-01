@@ -175,7 +175,7 @@ public class Wallet {
             ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
 
             compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                    .timeout(RefConstants.TIMEOUT_MEDIUM, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                    .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                     .subscribe(infoResponse -> {
                         ZapLog.debug(LOG_TAG, "LND is reachable.");
                         // Save the received data.

@@ -32,7 +32,7 @@ public class RefConstants {
     // API request timeouts
     public static final int TIMEOUT_SHORT = 5;
     public static final int TIMEOUT_MEDIUM = 10;
-    public static final int TIMEOUT_LONG = 15;
+    public static final int TIMEOUT_LONG = 30;
 
     // Number of seconds after moving the app to background until the app gets locked.
     public static final int ACCESS_TIMEOUT = 10;
