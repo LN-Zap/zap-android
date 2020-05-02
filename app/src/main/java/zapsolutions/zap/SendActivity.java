@@ -15,6 +15,7 @@ import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.NfcUtil;
+import zapsolutions.zap.util.RefConstants;
 
 public class SendActivity extends BaseScannerActivity {
 
@@ -41,7 +42,7 @@ public class SendActivity extends BaseScannerActivity {
         try {
             validateInvoice(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
         } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_emptyClipboardPayment), 4000);
+            showError(getResources().getString(R.string.error_emptyClipboardPayment), RefConstants.ERROR_DURATION_SHORT);
         }
     }
 

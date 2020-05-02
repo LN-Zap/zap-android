@@ -29,10 +29,15 @@ public class RefConstants {
     public static final int PIN_MAX_FAILS = 3;
     public static final int PIN_DELAY_TIME = 30;
 
-    // API request timeouts
+    // API request timeouts (in seconds)
     public static final int TIMEOUT_SHORT = 5;
     public static final int TIMEOUT_MEDIUM = 10;
     public static final int TIMEOUT_LONG = 15;
+
+    // Error message durations (in milliseconds)
+    public static final int ERROR_DURATION_SHORT = 3000;
+    public static final int ERROR_DURATION_MEDIUM = 5000;
+    public static final int ERROR_DURATION_LONG = 8000;
 
     // Number of seconds after moving the app to background until the app gets locked.
     public static final int ACCESS_TIMEOUT = 10;

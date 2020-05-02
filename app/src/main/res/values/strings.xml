@@ -281,6 +281,7 @@
     <string name="error_channel_close">Could not close channel: %s</string>
     <string name="error_pin_deactivation_attempt">It looks like someone tried to deactivate your PIN. The App will close now.\nYou can reinstall the app and use the recovery process to regain access to your funds.</string>
     <string name="error_empty_wallet_name">An empty name is not allowed.</string>
+    <string name="error_invalid_bitcoin_request">Invalid bitcoin request.</string>
 
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
