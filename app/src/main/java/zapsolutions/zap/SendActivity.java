@@ -15,6 +15,7 @@ import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.NfcUtil;
+import zapsolutions.zap.util.RefConstants;
 
 public class SendActivity extends BaseScannerActivity {
 
@@ -41,7 +42,7 @@ public class SendActivity extends BaseScannerActivity {
         try {
             validateInvoice(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
         } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_emptyClipboardPayment), 4000);
+            showError(getResources().getString(R.string.error_emptyClipboardPayment), RefConstants.ERROR_DURATION_SHORT);
         }
     }
 
@@ -55,18 +56,6 @@ public class SendActivity extends BaseScannerActivity {
         super.handleCameraResult(rawResult);
 
         validateInvoice(rawResult.getContents());
-
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScannerView.resumeCameraPreview(SendActivity.this);
-            }
-        }, 2000);
     }
 
     @Override

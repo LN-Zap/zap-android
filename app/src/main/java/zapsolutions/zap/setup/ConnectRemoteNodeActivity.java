@@ -55,7 +55,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext());
             isClipboardContentValid = true;
         } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_emptyClipboardConnect), 4000);
+            showError(getResources().getString(R.string.error_emptyClipboardConnect), RefConstants.ERROR_DURATION_SHORT);
         }
         if (isClipboardContentValid) {
             verifyDesiredConnection(clipboardContent);
@@ -77,25 +77,12 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             qrCodeContent = rawResult.getContents();
             isQrCodeContentValid = true;
         } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_qr_code_result_null), 4000);
+            showError(getResources().getString(R.string.error_qr_code_result_null), RefConstants.ERROR_DURATION_SHORT);
         }
 
         if (isQrCodeContentValid) {
             verifyDesiredConnection(qrCodeContent);
         }
-
-
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScannerView.resumeCameraPreview(ConnectRemoteNodeActivity.this);
-            }
-        }, 2000);
     }
 
     @Override
@@ -116,7 +103,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             String configUrl = connectString.replace("config=", "");
             StringRequest btcPayConfigRequest = new StringRequest(Request.Method.GET, configUrl,
                     response -> connectBtcPay(response),
-                    error -> showError(getResources().getString(R.string.error_unableToFetchBTCPayConfig), 4000));
+                    error -> showError(getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT));
 
             ZapLog.debug(LOG_TAG, "Fetching BTCPay config...");
             HttpClient.getInstance().addToRequestQueue(btcPayConfigRequest, "BTCPayConfigRequest");
@@ -124,7 +111,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             // Valid BTCPay JSON
             connectBtcPay(connectString);
         } else {
-            showError(getResources().getString(R.string.error_connection_unsupported_format), 7000);
+            showError(getResources().getString(R.string.error_connection_unsupported_format), RefConstants.ERROR_DURATION_LONG);
         }
     }
 
@@ -135,19 +122,19 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         if (parser.hasError()) {
             switch (parser.getError()) {
                 case LndConnectStringParser.ERROR_INVALID_CONNECT_STRING:
-                    showError(getResources().getString(R.string.error_connection_invalidLndConnectString), 8000);
+                    showError(getResources().getString(R.string.error_connection_invalidLndConnectString), RefConstants.ERROR_DURATION_LONG);
                     break;
                 case LndConnectStringParser.ERROR_NO_MACAROON:
-                    showError(getResources().getString(R.string.error_connection_no_macaroon), 5000);
+                    showError(getResources().getString(R.string.error_connection_no_macaroon), RefConstants.ERROR_DURATION_MEDIUM);
                     break;
                 case LndConnectStringParser.ERROR_INVALID_CERTIFICATE:
-                    showError(getResources().getString(R.string.error_connection_invalid_certificate), 5000);
+                    showError(getResources().getString(R.string.error_connection_invalid_certificate), RefConstants.ERROR_DURATION_SHORT);
                     break;
                 case LndConnectStringParser.ERROR_INVALID_MACAROON:
-                    showError(getResources().getString(R.string.error_connection_invalid_macaroon), 5000);
+                    showError(getResources().getString(R.string.error_connection_invalid_macaroon), RefConstants.ERROR_DURATION_SHORT);
                     break;
                 case LndConnectStringParser.ERROR_INVALID_HOST_OR_PORT:
-                    showError(getResources().getString(R.string.error_connection_invalid_host_or_port), 5000);
+                    showError(getResources().getString(R.string.error_connection_invalid_host_or_port), RefConstants.ERROR_DURATION_SHORT);
                     break;
             }
         } else {
@@ -162,13 +149,13 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         if (btcPayConfigParser.hasError()) {
             switch (btcPayConfigParser.getError()) {
                 case BTCPayConfigParser.ERROR_INVALID_JSON:
-                    showError(getResources().getString(R.string.error_connection_btcpay_invalid_json), 4000);
+                    showError(getResources().getString(R.string.error_connection_btcpay_invalid_json), RefConstants.ERROR_DURATION_MEDIUM);
                     break;
                 case BTCPayConfigParser.ERROR_MISSING_BTC_GRPC_CONFIG:
-                    showError(getResources().getString(R.string.error_connection_btcpay_invalid_config), 4000);
+                    showError(getResources().getString(R.string.error_connection_btcpay_invalid_config), RefConstants.ERROR_DURATION_MEDIUM);
                     break;
                 case BTCPayConfigParser.ERROR_NO_MACAROON:
-                    showError(getResources().getString(R.string.error_connection_no_macaroon), 4000);
+                    showError(getResources().getString(R.string.error_connection_no_macaroon), RefConstants.ERROR_DURATION_MEDIUM);
                     break;
             }
         } else {
@@ -221,7 +208,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showError(e.getMessage(), 3000);
+            showError(e.getMessage(), RefConstants.ERROR_DURATION_SHORT);
         }
 
         if (success) {

@@ -120,7 +120,7 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
             String clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext());
             processUserData(clipboardContent);
         } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_emptyClipboardConnect), 2000);
+            showError(getResources().getString(R.string.error_emptyClipboardConnect), RefConstants.ERROR_DURATION_SHORT);
         }
     }
 
@@ -133,21 +133,14 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
     public void handleCameraResult(Result rawResult) {
         super.handleCameraResult(rawResult);
 
-        if (!processUserData(rawResult.getContents())) {
-            // Note:
-            // * Wait 2 seconds to resume the preview.
-            // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-            // * I don't know why this is the case but I don't have the time to figure out.
-            Handler handler = new Handler();
-            handler.postDelayed(() -> mScannerView.resumeCameraPreview(ScanNodePubKeyActivity.this), 2000);
-        }
+        processUserData(rawResult.getContents());
     }
 
     private boolean processUserData(String rawData) {
         LightningNodeUri nodeUri = LightningParser.parseNodeUri(rawData);
 
         if (nodeUri == null) {
-            showError(getResources().getString(R.string.error_lightning_uri_invalid), 5000);
+            showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
             return false;
         } else {
             return finishWithNode(nodeUri);
