@@ -61,7 +61,7 @@ public class InvoiceUtil {
 
         // Avoid index out of bounds. An Request with less than 11 characters isn't valid.
         if (data.length() < 11) {
-            listener.onError(ctx.getString(R.string.error_notAPaymentRequest), 7000);
+            listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
             return;
         }
 
@@ -85,14 +85,14 @@ public class InvoiceUtil {
                     decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
                 } else {
                     // Show error. Please use a TESTNET invoice.
-                    listener.onError(ctx.getString(R.string.error_useTestnetRequest), 5000);
+                    listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
                 }
             } else {
                 if (lnInvoiceType.equals(InvoiceUtil.INVOICE_PREFIX_LIGHTNING_MAINNET)) {
                     decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
                 } else {
                     // Show error. Please use a MAINNET invoice.
-                    listener.onError(ctx.getString(R.string.error_useMainnetRequest), 5000);
+                    listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
                 }
             }
 
@@ -134,7 +134,7 @@ public class InvoiceUtil {
                 } catch (URISyntaxException e) {
                     ZapLog.debug(LOG_TAG, "URI could not be parsed");
                     e.printStackTrace();
-                    listener.onError("Invalid Bitcoin Request", 5000);
+                    listener.onError(ctx.getString(R.string.error_invalid_bitcoin_request), RefConstants.ERROR_DURATION_MEDIUM);
                 }
 
             } else {
@@ -154,25 +154,25 @@ public class InvoiceUtil {
                     listener.onValidBitcoinInvoice(address, amount, message);
                 } else if (address.startsWith("1") || address.startsWith("3") || address.toLowerCase().startsWith("bc1")) {
                     // Show error. Please use a TESTNET invoice.
-                    listener.onError(ctx.getString(R.string.error_useTestnetRequest), 5000);
+                    listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
                 } else {
                     // Show error. No valid payment info.
-                    listener.onError(ctx.getString(R.string.error_notAPaymentRequest), 7000);
+                    listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
                 }
             } else {
                 // We are on mainnet
                 if (address.startsWith("1") || address.startsWith("3") || address.toLowerCase().startsWith("bc1")) {
                     listener.onValidBitcoinInvoice(address, amount, message);
                 } else if (address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.toLowerCase().startsWith("tb1")) {
-                    listener.onError(ctx.getString(R.string.error_useMainnetRequest), 5000);
+                    listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
                 } else {
                     // Show error. No valid payment info.
-                    listener.onError(ctx.getString(R.string.error_notAPaymentRequest), 7000);
+                    listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
                 }
             }
         } else {
             // Show error. No valid payment info.
-            listener.onError(ctx.getString(R.string.error_notAPaymentRequest), 7000);
+            listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
         }
     }
 
@@ -189,10 +189,10 @@ public class InvoiceUtil {
 
                     if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
                         // Show error: payment request expired.
-                        listener.onError(ctx.getString(R.string.error_paymentRequestExpired), 3000);
+                        listener.onError(ctx.getString(R.string.error_paymentRequestExpired), RefConstants.ERROR_DURATION_SHORT);
                     } else if (paymentRequest.getNumSatoshis() == 0) {
                         // Disable 0 sat invoices
-                        listener.onError(ctx.getString(R.string.error_notAPaymentRequest), 7000);
+                        listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
                     } else {
                         // Decoded successfully, go to send page.
 
@@ -200,7 +200,7 @@ public class InvoiceUtil {
                     }
                 }, throwable -> {
                     // If LND can't decode the payment request, show the error LND throws (always english)
-                    listener.onError(throwable.getMessage(), 5000);
+                    listener.onError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM);
 
                     ZapLog.debug(LOG_TAG, throwable.getMessage());
                 }));
