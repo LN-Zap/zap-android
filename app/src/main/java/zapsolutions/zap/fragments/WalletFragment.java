@@ -62,7 +62,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ImageView mIvSwitchButton;
     private Animation mBalanceFadeOutAnimation;
     private Animation mLogoFadeInAnimation;
-    public FragmentManager mFragmentManager;
     private ConstraintLayout mWalletConnectedLayout;
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
@@ -86,9 +85,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
-
-        mFragmentManager = getFragmentManager();
-
 
         // Get View elements
         mClBalanceLayout = view.findViewById(R.id.BalanceLayout);
@@ -241,7 +237,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 ReceiveBSDFragment receiveBottomSheetDialog = new ReceiveBSDFragment();
-                receiveBottomSheetDialog.show(mFragmentManager, "receiveBottomSheetDialog");
+                receiveBottomSheetDialog.show(getParentFragmentManager(), "receiveBottomSheetDialog");
             }
         });
 

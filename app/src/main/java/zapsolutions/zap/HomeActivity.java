@@ -490,7 +490,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     // forward data to send fragment
                     SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
                     sendBottomSheetDialog.setArguments(data.getExtras());
-                    sendBottomSheetDialog.show(((WalletFragment) mCurrentFragment).mFragmentManager, "sendBottomSheetDialog");
+                    sendBottomSheetDialog.show(mCurrentFragment.getParentFragmentManager(), "sendBottomSheetDialog");
                 } else {
                     showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
                 }
@@ -504,7 +504,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     // forward data to withdraw fragment and show the dialog
                     LnUrlWithdrawBSDFragment withdrawDialog = new LnUrlWithdrawBSDFragment();
                     withdrawDialog.setArguments(data.getExtras());
-                    withdrawDialog.show(((WalletFragment) mCurrentFragment).mFragmentManager, "withdrawDialog");
+                    withdrawDialog.show(mCurrentFragment.getParentFragmentManager(), "withdrawDialog");
                 } else {
                     showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
                 }
