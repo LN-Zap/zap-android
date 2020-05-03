@@ -2,13 +2,19 @@ package zapsolutions.zap.lnurl;
 
 import androidx.annotation.NonNull;
 
-public class LnurlFinalWithdrawRequest {
+/**
+ * This class helps to construct the final withdraw request after the negotiation has happened.
+ *
+ * Please refer to step 5 in the following reference:
+ * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-withdraw.md
+ */
+public class LnUrlFinalWithdrawRequest {
 
     private String mCallback;
     private String mK1;
     private String mInvoice;
 
-    private LnurlFinalWithdrawRequest(String callback, String k1, String invoice) {
+    private LnUrlFinalWithdrawRequest(String callback, String k1, String invoice) {
         mCallback = callback;
         mK1 = k1;
         mInvoice = invoice;
@@ -54,8 +60,8 @@ public class LnurlFinalWithdrawRequest {
             return this;
         }
 
-        public LnurlFinalWithdrawRequest build() {
-            return new LnurlFinalWithdrawRequest(mCallback, mK1, mInvoice);
+        public LnUrlFinalWithdrawRequest build() {
+            return new LnUrlFinalWithdrawRequest(mCallback, mK1, mInvoice);
         }
     }
 }

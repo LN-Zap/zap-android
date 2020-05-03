@@ -41,7 +41,7 @@ import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceive
 import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
-import zapsolutions.zap.lnurl.LnurlWithdrawBSDFragment;
+import zapsolutions.zap.lnurl.LnUrlWithdrawBSDFragment;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.InvoiceUtil;
@@ -502,7 +502,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             if (data != null) {
                 if (data.getExtras().getString("error") == null) {
                     // forward data to withdraw fragment and show the dialog
-                    LnurlWithdrawBSDFragment withdrawDialog = new LnurlWithdrawBSDFragment();
+                    LnUrlWithdrawBSDFragment withdrawDialog = new LnUrlWithdrawBSDFragment();
                     withdrawDialog.setArguments(data.getExtras());
                     withdrawDialog.show(((WalletFragment) mCurrentFragment).mFragmentManager, "withdrawDialog");
                 } else {

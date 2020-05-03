@@ -2,7 +2,13 @@ package zapsolutions.zap.lnurl;
 
 import java.io.Serializable;
 
-public class LnurlWithdrawResponse extends LnurlResponse implements Serializable {
+/**
+ * This class helps to work with the received response from a LNURL-withdraw request.
+ *
+ * Please refer to step 3 in the following reference:
+ * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-withdraw.md
+ */
+public class LnUrlWithdrawResponse extends LnUrlResponse implements Serializable {
 
     public static final String ARGS_KEY = "lnurlWithdrawResponse";
 

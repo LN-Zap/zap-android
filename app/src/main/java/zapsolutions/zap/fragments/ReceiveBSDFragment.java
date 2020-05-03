@@ -42,7 +42,7 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.customView.NumpadView;
-import zapsolutions.zap.lnurl.ScanLnurlWithdrawActivity;
+import zapsolutions.zap.lnurl.ScanLnUrlWithdrawActivity;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -167,7 +167,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
 
                 if (canReceiveLightningPayment) {
                     // go to scan Activity
-                    Intent intent = new Intent(getActivity(), ScanLnurlWithdrawActivity.class);
+                    Intent intent = new Intent(getActivity(), ScanLnUrlWithdrawActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivityForResult(intent, RefConstants.REQUEST_CODE_LNURL_WITHDRAW);
                     dismiss();

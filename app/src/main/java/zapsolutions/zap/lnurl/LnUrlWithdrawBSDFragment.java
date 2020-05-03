@@ -53,9 +53,9 @@ import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 
-public class LnurlWithdrawBSDFragment extends RxBSDFragment {
+public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
 
-    private static final String LOG_TAG = LnurlWithdrawBSDFragment.class.getName();
+    private static final String LOG_TAG = LnUrlWithdrawBSDFragment.class.getName();
 
     private ConstraintLayout mRootLayout;
     private ImageView mIvBsdIcon;
@@ -88,7 +88,7 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
     private long mTempCurrentSatoshiValue;
 
     private Handler mHandler;
-    private LnurlWithdrawResponse mWithdrawData;
+    private LnUrlWithdrawResponse mWithdrawData;
 
 
     @Nullable
@@ -96,7 +96,7 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Bundle args = getArguments();
-        mWithdrawData = (LnurlWithdrawResponse) args.getSerializable(LnurlWithdrawResponse.ARGS_KEY);
+        mWithdrawData = (LnUrlWithdrawResponse) args.getSerializable(LnUrlWithdrawResponse.ARGS_KEY);
 
         // Calculate correct min and max withdrawal value for LNURL. Zap limits withdrawal to full satoshis.
         mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable() / 1000), Wallet.getInstance().getMaxLightningReceiveAmount());
@@ -304,13 +304,13 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
                         .subscribe(addInvoiceResponse -> {
 
                             // Invoice was created. Now forward it to the LNURL service to initiate withdraw.
-                            LnurlFinalWithdrawRequest lnurlFinalWithdrawRequest = new LnurlFinalWithdrawRequest.Builder()
+                            LnUrlFinalWithdrawRequest lnUrlFinalWithdrawRequest = new LnUrlFinalWithdrawRequest.Builder()
                                     .setCallback(mWithdrawData.getCallback())
                                     .setK1(mWithdrawData.getK1())
                                     .setInvoice(addInvoiceResponse.getPaymentRequest())
                                     .build();
 
-                            StringRequest lnurlRequest = new StringRequest(Request.Method.GET, lnurlFinalWithdrawRequest.requestAsString(),
+                            StringRequest lnUrlRequest = new StringRequest(Request.Method.GET, lnUrlFinalWithdrawRequest.requestAsString(),
                                     response -> validateSecondResponse(response),
                                     error -> {
                                         if (mServiceURLString != null) {
@@ -322,7 +322,7 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
                                     });
 
                             // Send final request to LNURL service
-                            HttpClient.getInstance().addToRequestQueue(lnurlRequest, "LnurlFinalWithdrawRequest");
+                            HttpClient.getInstance().addToRequestQueue(lnUrlRequest, "LnUrlFinalWithdrawRequest");
 
                         }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
@@ -384,13 +384,13 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
     }
 
     private void validateSecondResponse(@NonNull String withdrawResponse) {
-        LnurlWithdrawResponse lnurlWithdrawResponse = new Gson().fromJson(withdrawResponse, LnurlWithdrawResponse.class);
+        LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(withdrawResponse, LnUrlWithdrawResponse.class);
 
-        if (lnurlWithdrawResponse.getStatus().equals("OK")) {
+        if (lnUrlWithdrawResponse.getStatus().equals("OK")) {
             switchToSuccessScreen();
         } else {
-            ZapLog.debug(LOG_TAG, "LNURL: Failed to withdraw. " + lnurlWithdrawResponse.getReason());
-            switchToFailedScreen(lnurlWithdrawResponse.getReason());
+            ZapLog.debug(LOG_TAG, "LNURL: Failed to withdraw. " + lnUrlWithdrawResponse.getReason());
+            switchToFailedScreen(lnUrlWithdrawResponse.getReason());
         }
     }
 
