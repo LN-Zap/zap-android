@@ -182,7 +182,7 @@ public class InvoiceUtil {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
-                .timeout(RefConstants.TIMEOUT_SHORT, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_SHORT * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(paymentRequest -> {
                     ZapLog.debug(LOG_TAG, paymentRequest.toString());
