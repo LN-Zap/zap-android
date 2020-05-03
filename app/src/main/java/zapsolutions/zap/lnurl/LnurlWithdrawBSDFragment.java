@@ -98,7 +98,7 @@ public class LnurlWithdrawBSDFragment extends RxBSDFragment {
         Bundle args = getArguments();
         mWithdrawData = (LnurlWithdrawResponse) args.getSerializable(LnurlWithdrawResponse.ARGS_KEY);
 
-        // Calculate correct min and max withdraw value for LNURL. Zap limits withdrawl to full satoshis.
+        // Calculate correct min and max withdrawal value for LNURL. Zap limits withdrawal to full satoshis.
         mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable() / 1000), Wallet.getInstance().getMaxLightningReceiveAmount());
         mMinWithdrawable = mWithdrawData.getMinWithdrawable() % 1000 == 0 ? Math.max((mWithdrawData.getMinWithdrawable() / 1000), 1L) : Math.max((mWithdrawData.getMinWithdrawable() / 1000) + 1L, 1L);
 
