@@ -4,6 +4,7 @@ package zapsolutions.zap.baseClasses;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,11 +37,13 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     private TextView mTvPermissionRequired;
     private Button mButtonPaste;
     private Button mButtonHelp;
+    private Handler mHandler;
 
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+        mHandler = new Handler();
         setContentView(R.layout.activity_qr_code_scanner);
         setupToolbar();
 
@@ -92,6 +95,12 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     public void onPause() {
         super.onPause();
         mScannerView.stopCamera();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -170,8 +179,19 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
 
     public void handleCameraResult(Result result) {
         if (result != null) {
-            ZapLog.debug(LOG_TAG, result.getContents());
+            ZapLog.debug(LOG_TAG, "Scanned content: " + result.getContents());
         }
+
+        // Note:
+        // * Wait 2 seconds to resume the preview.
+        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
+        // * I don't know why this is the case but I don't have the time to figure out.
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mScannerView.resumeCameraPreview(BaseScannerActivity.this);
+            }
+        }, 2000);
     }
 
     public void onButtonPasteClick() {
