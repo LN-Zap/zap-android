@@ -24,6 +24,7 @@ import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.LnurlDecoder;
 import zapsolutions.zap.util.NfcUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
 
 public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
@@ -50,7 +51,7 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
         try {
             validateLnUrl(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
         } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_emptyClipboardLnurlWithdraw), 4000);
+            showError(getResources().getString(R.string.error_emptyClipboardLnurlWithdraw), RefConstants.ERROR_DURATION_SHORT);
         }
     }
 
@@ -64,18 +65,6 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
         super.handleCameraResult(rawResult);
 
         validateLnUrl(rawResult.getContents());
-
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScannerView.resumeCameraPreview(ScanLnUrlWithdrawActivity.this);
-            }
-        }, 2000);
     }
 
     private void validateLnUrl(String lnUrl) {
@@ -89,10 +78,10 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
                         try {
                             url = new URL(decodedLnUrl);
                             String host = url.getHost();
-                            showError(getResources().getString(R.string.lnurl_service_not_responding, host), 4000);
+                            showError(getResources().getString(R.string.lnurl_service_not_responding, host), RefConstants.ERROR_DURATION_SHORT);
                         } catch (MalformedURLException e) {
                             String host = getResources().getString(R.string.host);
-                            showError(getResources().getString(R.string.lnurl_service_not_responding, host), 4000);
+                            showError(getResources().getString(R.string.lnurl_service_not_responding, host), RefConstants.ERROR_DURATION_SHORT);
                             e.printStackTrace();
                         }
                     });
@@ -102,7 +91,7 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
 
         } catch (Exception e) {
             ZapLog.debug(LOG_TAG, e.getMessage());
-            showError(getResources().getString(R.string.lnurl_decoding_failed), 4000);
+            showError(getResources().getString(R.string.lnurl_decoding_failed), RefConstants.ERROR_DURATION_SHORT);
         }
     }
 
@@ -110,12 +99,12 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
         LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(withdrawResponse, LnUrlWithdrawResponse.class);
 
         if (lnUrlWithdrawResponse.hasError()) {
-            showError(lnUrlWithdrawResponse.getReason(), 4000);
+            showError(lnUrlWithdrawResponse.getReason(), RefConstants.ERROR_DURATION_MEDIUM);
         } else {
             if (lnUrlWithdrawResponse.isWithdraw()) {
                 goToLnurlWithdrawScreen(lnUrlWithdrawResponse);
             } else {
-                showError(getResources().getString(R.string.lnurl_wrong_tag), 4000);
+                showError(getResources().getString(R.string.lnurl_wrong_tag), RefConstants.ERROR_DURATION_SHORT);
             }
         }
     }
