@@ -55,12 +55,6 @@ public class RefConstants {
     public static final String URL_HELP = "https://docs.zaphq.io/";
     public static final String URL_SUGGESTED_NODES = "https://resources.zaphq.io/api/v1/suggested-nodes";
 
-    // Activity Result codes
-    public static final int REQUEST_CODE_PAYMENT = 101;
-    public static final int REQUEST_CODE_LNURL_WITHDRAW = 102;
-    public static final int RESULT_CODE_PAYMENT = 201;
-    public static final int RESULT_CODE_LNURL_WITHDRAW = 202;
-
     // Other
     public static final String SETUP_MODE = "setupMode";
 

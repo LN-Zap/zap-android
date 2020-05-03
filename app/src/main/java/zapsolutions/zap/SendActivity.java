@@ -15,7 +15,6 @@ import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.NfcUtil;
-import zapsolutions.zap.util.RefConstants;
 
 public class SendActivity extends BaseScannerActivity {
 
@@ -103,7 +102,7 @@ public class SendActivity extends BaseScannerActivity {
         intent.putExtra("onChainAddress", address);
         intent.putExtra("onChainAmount", amount);
         intent.putExtra("onChainMessage", message);
-        setResult(RefConstants.RESULT_CODE_PAYMENT, intent);
+        setResult(HomeActivity.RESULT_CODE_PAYMENT, intent);
         finish();
     }
 
@@ -113,7 +112,7 @@ public class SendActivity extends BaseScannerActivity {
         intent.putExtra("onChain", false);
         intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
         intent.putExtra("lnInvoice", invoice);
-        setResult(RefConstants.RESULT_CODE_PAYMENT, intent);
+        setResult(HomeActivity.RESULT_CODE_PAYMENT, intent);
         finish();
     }
 

@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import me.dm7.barcodescanner.zbar.Result;
+import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.HttpClient;
@@ -23,7 +24,6 @@ import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.LnurlDecoder;
 import zapsolutions.zap.util.NfcUtil;
-import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
 
 public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
@@ -127,7 +127,7 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
         bundle.putSerializable(LnUrlWithdrawResponse.ARGS_KEY, lnurlWithdrawResponse);
         Intent intent = new Intent();
         intent.putExtras(bundle);
-        setResult(RefConstants.RESULT_CODE_LNURL_WITHDRAW, intent);
+        setResult(HomeActivity.RESULT_CODE_LNURL_WITHDRAW, intent);
         finish();
     }
 

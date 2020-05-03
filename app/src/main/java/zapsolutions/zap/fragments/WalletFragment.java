@@ -20,7 +20,6 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -226,7 +225,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), SendActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivityForResult(intent, RefConstants.REQUEST_CODE_PAYMENT);
+                startActivityForResult(intent, HomeActivity.REQUEST_CODE_PAYMENT);
             }
         });
 

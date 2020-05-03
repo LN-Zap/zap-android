@@ -59,6 +59,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         SharedPreferences.OnSharedPreferenceChangeListener,
         Wallet.InfoListener, Wallet.WalletLoadedListener {
 
+    // Activity Result codes
+    public static final int REQUEST_CODE_PAYMENT = 101;
+    public static final int REQUEST_CODE_LNURL_WITHDRAW = 102;
+    public static final int RESULT_CODE_PAYMENT = 201;
+    public static final int RESULT_CODE_LNURL_WITHDRAW = 202;
+
     private static final String LOG_TAG = HomeActivity.class.getName();
     private Handler mHandler;
     private InputMethodManager mInputMethodManager;
@@ -483,7 +489,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RefConstants.RESULT_CODE_PAYMENT) {
+        if (resultCode == HomeActivity.RESULT_CODE_PAYMENT) {
             // This gets executed if a valid payment request was scanned or pasted
             if (data != null) {
                 if (data.getExtras().getString("error") == null) {
@@ -497,7 +503,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
         }
 
-        if (resultCode == RefConstants.RESULT_CODE_LNURL_WITHDRAW) {
+        if (resultCode == HomeActivity.RESULT_CODE_LNURL_WITHDRAW) {
             // This gets executed if a valid lnurl was scanned or pasted
             if (data != null) {
                 if (data.getExtras().getString("error") == null) {
