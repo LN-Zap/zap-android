@@ -33,6 +33,14 @@ public class TorUtil {
         }
     }
 
+    public static int getTorTimeoutMultiplier(){
+        if (isCurrentConnectionTor()) {
+            return RefConstants.TOR_TIMEOUT_MULTIPLIER;
+        } else {
+            return 1;
+        }
+    }
+
     public static void askToInstallOrbotIfMissing(Activity activity) {
         if (!isOrbotInstalled(activity)) {
             new AlertDialog.Builder(activity)

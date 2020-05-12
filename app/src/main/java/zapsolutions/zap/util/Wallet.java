@@ -175,7 +175,7 @@ public class Wallet {
             ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
 
             compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                    .timeout(RefConstants.TIMEOUT_MEDIUM, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                    .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                     .subscribe(infoResponse -> {
                         ZapLog.debug(LOG_TAG, "LND is reachable.");
                         // Save the received data.
@@ -479,7 +479,7 @@ public class Wallet {
 
     public void openChannel(LightningNodeUri nodeUri, long amount) {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(listPeersResponse -> {
                     boolean connected = false;
                     for (Peer node : listPeersResponse.getPeersList()) {
@@ -518,7 +518,7 @@ public class Wallet {
         ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(connectPeerResponse -> {
                     ZapLog.debug(LOG_TAG, "Successfully connected to peer, trying to open channel...");
                     openChannelConnected(nodeUri, amount);
@@ -544,7 +544,7 @@ public class Wallet {
                 .setLocalFundingAmount(amount).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().openChannel(openChannelRequest)
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(openStatusUpdate -> {
                     ZapLog.debug(LOG_TAG, "Open channel update: " + openStatusUpdate.getUpdateCase().getNumber());
@@ -570,7 +570,7 @@ public class Wallet {
         CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder().setChannelPoint(point).setForce(force).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().closeChannel(closeChannelRequest)
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(closeStatusUpdate -> {
                     ZapLog.debug(LOG_TAG, "Closing channel update: " + closeStatusUpdate.getUpdateCase().getNumber());
@@ -660,7 +660,7 @@ public class Wallet {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(nodeInfo -> {
                     // Add the nodeInfo to our list, if it is not already a member of the list.
                     boolean nodeInfoAlreadyExists = false;
