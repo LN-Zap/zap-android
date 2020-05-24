@@ -232,7 +232,7 @@ public class SendBSDFragment extends RxBSDFragment {
                         }
                     } else {
                         if (PrefsUtil.isWalletSetup()) {
-                            maxSendable = Wallet.getInstance().getMaxChannelLocalBalance();
+                            maxSendable = Wallet.getInstance().getMaxLightningSendAmount();
                         } else {
                             maxSendable = 750000;
                         }
