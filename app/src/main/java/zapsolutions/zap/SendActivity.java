@@ -91,7 +91,7 @@ public class SendActivity extends BaseScannerActivity {
         intent.putExtra("onChainAddress", address);
         intent.putExtra("onChainAmount", amount);
         intent.putExtra("onChainMessage", message);
-        setResult(1, intent);
+        setResult(HomeActivity.RESULT_CODE_PAYMENT, intent);
         finish();
     }
 
@@ -101,7 +101,7 @@ public class SendActivity extends BaseScannerActivity {
         intent.putExtra("onChain", false);
         intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
         intent.putExtra("lnInvoice", invoice);
-        setResult(1, intent);
+        setResult(HomeActivity.RESULT_CODE_PAYMENT, intent);
         finish();
     }
 

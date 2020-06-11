@@ -88,6 +88,8 @@
     <string name="none">None</string>
     <string name="install">Install</string>
     <string name="continue_string">Continue</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="unknown">Unknown</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -248,6 +250,7 @@
     <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
     <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
     <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
+    <string name="error_emptyClipboardLnurlWithdraw">Your clipboard does not contain any LNURL data.</string>
     <string name="error_qr_code_result_null">Unable to read QR-Code, please try again.</string>
     <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use one of the following formats:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="error_unableToFetchBTCPayConfig">Could not fetch configuration from BTCPay Server.</string>
@@ -348,6 +351,7 @@
     <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
+    <string name="help_dialog_scanLnurlWithdraw">QR-Codes containing the following are valid:\n\n- LNURL</string>
 
     <string name="wallet_name">Wallet Name</string>
     <string name="delete">Delete</string>
@@ -362,4 +366,12 @@
     <string name="confirm_wallet_deletion">Do you really want to delete this wallet?</string>
     <string name="no_wallets">No wallets</string>
     <string name="spinner_manage_wallets">Manage…</string>
+
+    <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
+    <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>
+    <string name="lnurl_decoding_failed">The data does not contain a valid LNURL.</string>
+    <string name="lnurl_withdraw_insufficent_channel_balance">The withdraw amount is bigger than what you can receive over lightning with your current open channels</string>
+    <string name="lnurl_wrong_tag">Wrong LNURL type</string>
+    <string name="lnurl_service_not_responding">%s is not responding</string>
+    <string name="lnurl_service">Service</string>
 </resources>

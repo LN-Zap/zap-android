@@ -20,7 +20,6 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -62,7 +61,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ImageView mIvSwitchButton;
     private Animation mBalanceFadeOutAnimation;
     private Animation mLogoFadeInAnimation;
-    private FragmentManager mFragmentManager;
     private ConstraintLayout mWalletConnectedLayout;
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
@@ -86,9 +84,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
-
-        mFragmentManager = getFragmentManager();
-
 
         // Get View elements
         mClBalanceLayout = view.findViewById(R.id.BalanceLayout);
@@ -230,7 +225,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), SendActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, HomeActivity.REQUEST_CODE_PAYMENT);
             }
         });
 
@@ -241,7 +236,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 ReceiveBSDFragment receiveBottomSheetDialog = new ReceiveBSDFragment();
-                receiveBottomSheetDialog.show(mFragmentManager, "receiveBottomSheetDialog");
+                receiveBottomSheetDialog.show(getParentFragmentManager(), "receiveBottomSheetDialog");
             }
         });
 
@@ -350,26 +345,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
         ZapLog.debug(LOG_TAG, "Total balance display updated");
 
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed. Here it is 1
-        if (requestCode == 1) {
-            // This gets executed if a valid payment request was scanned or pasted
-            if (data != null) {
-                if (data.getExtras().getString("error") == null) {
-                    // forward data to send fragment
-                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                    sendBottomSheetDialog.setArguments(data.getExtras());
-                    sendBottomSheetDialog.show(mFragmentManager, "sendBottomSheetDialog");
-                } else {
-                    ZapLog.debug(LOG_TAG, "Error arrived!");
-                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
-                }
-            }
-        }
     }
 
     @Override

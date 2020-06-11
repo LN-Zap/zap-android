@@ -402,6 +402,29 @@ public class MonetaryUtil {
     }
 
     /**
+     * Converts the given satoshis to secondary currency.
+     *
+     * @param value
+     * @return String without grouping
+     */
+    public String convertSatoshiToSecondary(Long value) {
+
+        if (value == 0) {
+            return "0";
+        } else {
+            if (PrefsUtil.firstCurrencyIsPrimary()) {
+                double result = (value * mSecondCurrency.getRate());
+                DecimalFormat df = TextInputCurrencyFormat(mSecondCurrency);
+                return df.format(result);
+            } else {
+                double result = (value * mFirstCurrency.getRate());
+                DecimalFormat df = TextInputCurrencyFormat(mFirstCurrency);
+                return df.format(result);
+            }
+        }
+    }
+
+    /**
      * Converts the supplied value to bitcoin. The exchange rate of the primary currency is used.
      *
      * @param primaryValue

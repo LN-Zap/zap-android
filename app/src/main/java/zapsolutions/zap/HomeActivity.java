@@ -41,6 +41,7 @@ import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceive
 import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
+import zapsolutions.zap.lnurl.LnUrlWithdrawBSDFragment;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.InvoiceUtil;
@@ -57,6 +58,12 @@ import zapsolutions.zap.util.ZapLog;
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
         Wallet.InfoListener, Wallet.WalletLoadedListener {
+
+    // Activity Result codes
+    public static final int REQUEST_CODE_PAYMENT = 101;
+    public static final int REQUEST_CODE_LNURL_WITHDRAW = 102;
+    public static final int RESULT_CODE_PAYMENT = 201;
+    public static final int RESULT_CODE_LNURL_WITHDRAW = 202;
 
     private static final String LOG_TAG = HomeActivity.class.getName();
     private Handler mHandler;
@@ -476,5 +483,38 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 showError(error, duration);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == HomeActivity.RESULT_CODE_PAYMENT) {
+            // This gets executed if a valid payment request was scanned or pasted
+            if (data != null) {
+                if (data.getExtras().getString("error") == null) {
+                    // forward data to send fragment
+                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+                    sendBottomSheetDialog.setArguments(data.getExtras());
+                    sendBottomSheetDialog.show(mCurrentFragment.getParentFragmentManager(), "sendBottomSheetDialog");
+                } else {
+                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
+                }
+            }
+        }
+
+        if (resultCode == HomeActivity.RESULT_CODE_LNURL_WITHDRAW) {
+            // This gets executed if a valid lnurl was scanned or pasted
+            if (data != null) {
+                if (data.getExtras().getString("error") == null) {
+                    // forward data to withdraw fragment and show the dialog
+                    LnUrlWithdrawBSDFragment withdrawDialog = new LnUrlWithdrawBSDFragment();
+                    withdrawDialog.setArguments(data.getExtras());
+                    withdrawDialog.show(mCurrentFragment.getParentFragmentManager(), "withdrawDialog");
+                } else {
+                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
+                }
+            }
+        }
     }
 }

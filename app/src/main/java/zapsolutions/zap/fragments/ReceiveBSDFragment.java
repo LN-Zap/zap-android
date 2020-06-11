@@ -38,10 +38,12 @@ import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import zapsolutions.zap.GeneratedRequestActivity;
+import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.customView.NumpadView;
+import zapsolutions.zap.lnurl.ScanLnUrlWithdrawActivity;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -56,6 +58,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
     private static final String LOG_TAG = ReceiveBSDFragment.class.getName();
 
     private View mBtnLn;
+    private View mBtnScanLnurl;
     private View mBtnOnChain;
     private View mChooseTypeView;
     private ImageView mIvBsdIcon;
@@ -91,6 +94,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
         }
 
         mBtnLn = view.findViewById(R.id.lnBtn);
+        mBtnScanLnurl = view.findViewById(R.id.scanLnurl);
         mBtnOnChain = view.findViewById(R.id.onChainBtn);
         mIvBsdIcon = view.findViewById(R.id.bsdIcon);
         mIconAnchor = view.findViewById(R.id.anchor);
@@ -140,6 +144,21 @@ public class ReceiveBSDFragment extends RxBSDFragment {
             }
         });
 
+        mBtnScanLnurl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hasLightningIncomeBalance()) {
+                    // go to scan Activity
+                    Intent intent = new Intent(getActivity(), ScanLnUrlWithdrawActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivityForResult(intent, HomeActivity.REQUEST_CODE_LNURL_WITHDRAW);
+                    dismiss();
+                } else {
+                    // In this case we want to show the lightning channel info which already happens if we click the normal lightning button.
+                    mBtnLn.callOnClick();
+                }
+            }
+        });
 
         // Action when clicked on "Lightning" Button
         mBtnLn.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +174,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                 mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_lightning));
                 mTvTitle.setText(R.string.receive_lightning_request);
 
+                boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !PrefsUtil.isWalletSetup();
 
                 // Animate bsd Icon size
                 ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(mIvBsdIcon, "scaleX", 0f, 1f);
@@ -166,28 +186,6 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                 scaleUpIcon.setInterpolator(new AnticipateOvershootInterpolator(1.0f));
                 scaleUpIcon.play(scaleUpX).with(scaleUpY);
                 scaleUpIcon.start();
-
-                // Check if we can receive anything over the lightning network
-                boolean canReceiveLightningPayment;
-                boolean hasActiveChannels = Wallet.getInstance().hasOpenActiveChannels();
-
-                if (hasActiveChannels) {
-                    if (Wallet.getInstance().getMaxLightningReceiveAmount() > 0L) {
-                        // We have remote balances on at least one channel, so we can receive a lightning payment!
-                        canReceiveLightningPayment = true;
-                    } else {
-                        mTvNoIncomingBalance.setText(R.string.receive_noIncomeBalance);
-                        canReceiveLightningPayment = false;
-                    }
-                } else {
-                    mTvNoIncomingBalance.setText(R.string.receive_noActiveChannels);
-                    canReceiveLightningPayment = false;
-                }
-
-                // In Demo Mode, we want to show the working way...
-                if (!PrefsUtil.isWalletSetup()) {
-                    canReceiveLightningPayment = true;
-                }
 
                 // Animate Layout changes
                 ConstraintSet csRoot = new ConstraintSet();
@@ -541,5 +539,22 @@ public class ReceiveBSDFragment extends RxBSDFragment {
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
         });
+    }
+
+    private boolean hasLightningIncomeBalance() {
+        boolean hasActiveChannels = Wallet.getInstance().hasOpenActiveChannels();
+
+        if (hasActiveChannels) {
+            if (Wallet.getInstance().getMaxLightningReceiveAmount() > 0L) {
+                // We have remote balances on at least one channel, so we can receive a lightning payment!
+                return true;
+            } else {
+                mTvNoIncomingBalance.setText(R.string.receive_noIncomeBalance);
+                return false;
+            }
+        } else {
+            mTvNoIncomingBalance.setText(R.string.receive_noActiveChannels);
+            return false;
+        }
     }
 }

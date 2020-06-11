@@ -1029,7 +1029,7 @@ public class Wallet {
     /**
      * Get the maximum amount that can be received over Lightning Channels.
      *
-     * @return
+     * @return amount in satoshis
      */
     public long getMaxLightningReceiveAmount() {
 
@@ -1066,10 +1066,10 @@ public class Wallet {
     /**
      * Get the maximum amount that can be send over Lightning Channels.
      *
-     * @return
+     * @return amount in satoshis
      */
     public long getMaxLightningSendAmount() {
-
+      
         // ToDo: Calculate differently depending on LND version (consider multi path for LND 0.10 and up)
 
         long tempMax = 0L;
