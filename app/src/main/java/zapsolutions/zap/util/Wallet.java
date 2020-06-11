@@ -107,7 +107,7 @@ public class Wallet {
     private boolean mUpdatingHistory = false;
     private boolean mTestnet = false;
     private boolean mConnectionCheckInProgress = false;
-    private String mLNDVersion = "not connected";
+    private String mLNDVersionString = "not connected";
     private Handler mHandler = new Handler();
     private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
 
@@ -155,7 +155,7 @@ public class Wallet {
         mInfoFetched = false;
         mSyncedToChain = false;
         mTestnet = false;
-        mLNDVersion = "not connected";
+        mLNDVersionString = "not connected";
         mHandler.removeCallbacksAndMessages(null);
         App.getAppContext().connectionToLNDEstablished = false;
         mChannelsUpdateDebounceHandler.shutdown();
@@ -181,7 +181,7 @@ public class Wallet {
                         // Save the received data.
                         mSyncedToChain = infoResponse.getSyncedToChain();
                         mTestnet = infoResponse.getTestnet();
-                        mLNDVersion = infoResponse.getVersion();
+                        mLNDVersionString = infoResponse.getVersion();
                         mInfoFetched = true;
                         mConnectedToLND = true;
                         mConnectionCheckInProgress = false;
@@ -329,7 +329,7 @@ public class Wallet {
                     // Save the received data.
                     mSyncedToChain = infoResponse.getSyncedToChain();
                     mTestnet = infoResponse.getTestnet();
-                    mLNDVersion = infoResponse.getVersion();
+                    mLNDVersionString = infoResponse.getVersion();
                     mInfoFetched = true;
                     mConnectedToLND = true;
 
@@ -1027,32 +1027,51 @@ public class Wallet {
     }
 
     /**
-     * Returns the the highest remote balance of all active channels.
-     * This can be used to determine maximum possible receive amount for a lightning invoice as long as there is no splicing.
+     * Get the maximum amount that can be received over Lightning Channels.
      *
      * @return
      */
-    public long getMaxChannelRemoteBalance() {
-        long tempMax = 0L;
-        if (mOpenChannelsList != null) {
-            for (Channel c : mOpenChannelsList) {
-                if (c.getActive()) {
-                    if (c.getRemoteBalance() > tempMax) {
-                        tempMax = c.getRemoteBalance();
+    public long getMaxLightningReceiveAmount() {
+
+        Version actualLNDVersion = getLNDVersion();
+        Version MppReceive = new Version("0.9");
+
+        if (actualLNDVersion.compareTo(MppReceive) < 0){
+            // Mpp receive is not supported. Use the maximum remote balance of all channels as maximum.
+            long tempMax = 0L;
+            if (mOpenChannelsList != null) {
+                for (Channel c : mOpenChannelsList) {
+                    if (c.getActive()) {
+                        if (c.getRemoteBalance() > tempMax) {
+                            tempMax = c.getRemoteBalance();
+                        }
                     }
                 }
             }
+            return tempMax;
+        } else {
+            // Mpp is supported. Use the sum of the remote balances of all channels as maximum.
+            long tempMax = 0L;
+            if (mOpenChannelsList != null) {
+                for (Channel c : mOpenChannelsList) {
+                    if (c.getActive()) {
+                            tempMax = tempMax + c.getRemoteBalance();
+                    }
+                }
+            }
+            return tempMax;
         }
-        return tempMax;
     }
 
     /**
-     * Returns the the highest local balance of all active channels.
-     * This can be used to determine maximum possible send amount for a lightning payment as long as there is no splicing.
+     * Get the maximum amount that can be send over Lightning Channels.
      *
      * @return
      */
-    public long getMaxChannelLocalBalance() {
+    public long getMaxLightningSendAmount() {
+
+        // ToDo: Calculate differently depending on LND version (consider multi path for LND 0.10 and up)
+
         long tempMax = 0L;
         if (mOpenChannelsList != null) {
             for (Channel c : mOpenChannelsList) {
@@ -1074,8 +1093,12 @@ public class Wallet {
         return mTestnet;
     }
 
-    public String getLNDVersion() {
-        return mLNDVersion;
+    public String getLNDVersionString() {
+        return mLNDVersionString;
+    }
+
+    public Version getLNDVersion() {
+        return new Version(mLNDVersionString.split("-")[0]);
     }
 
     public boolean isInfoFetched() {

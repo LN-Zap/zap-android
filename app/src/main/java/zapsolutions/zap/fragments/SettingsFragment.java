@@ -265,7 +265,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         .setTitle(R.string.settings_about)
                         .setMessage("Version:  " + BuildConfig.VERSION_NAME +
                                 "\nBuild:  " + BuildConfig.VERSION_CODE +
-                                "\nLND version:  " + Wallet.getInstance().getLNDVersion().split(" commit")[0])
+                                "\nLND version:  " + Wallet.getInstance().getLNDVersionString().split(" commit")[0])
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
