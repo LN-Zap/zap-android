@@ -32,7 +32,8 @@ public class RefConstants {
     // API request timeouts (in seconds)
     public static final int TIMEOUT_SHORT = 5;
     public static final int TIMEOUT_MEDIUM = 10;
-    public static final int TIMEOUT_LONG = 15;
+    public static final int TIMEOUT_LONG = 20;
+    public static final int TOR_TIMEOUT_MULTIPLIER = 3;
 
     // Error message durations (in milliseconds)
     public static final int ERROR_DURATION_SHORT = 3000;

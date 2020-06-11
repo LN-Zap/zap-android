@@ -122,7 +122,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
             }
         } else {
             // if a specific value was requested
-            if (amountPayed.equals(invoiceAmount)) {
+            if (Wallet.getInstance().isInvoicePayed(invoice)) {
                 // The invoice has been payed
                 bindPayedInvoice(invoice);
             } else {

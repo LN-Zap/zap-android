@@ -107,7 +107,7 @@ public class Wallet {
     private boolean mUpdatingHistory = false;
     private boolean mTestnet = false;
     private boolean mConnectionCheckInProgress = false;
-    private String mLNDVersion = "not connected";
+    private String mLNDVersionString = "not connected";
     private Handler mHandler = new Handler();
     private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
 
@@ -155,7 +155,7 @@ public class Wallet {
         mInfoFetched = false;
         mSyncedToChain = false;
         mTestnet = false;
-        mLNDVersion = "not connected";
+        mLNDVersionString = "not connected";
         mHandler.removeCallbacksAndMessages(null);
         App.getAppContext().connectionToLNDEstablished = false;
         mChannelsUpdateDebounceHandler.shutdown();
@@ -175,13 +175,13 @@ public class Wallet {
             ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
 
             compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                    .timeout(RefConstants.TIMEOUT_MEDIUM, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                    .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                     .subscribe(infoResponse -> {
                         ZapLog.debug(LOG_TAG, "LND is reachable.");
                         // Save the received data.
                         mSyncedToChain = infoResponse.getSyncedToChain();
                         mTestnet = infoResponse.getTestnet();
-                        mLNDVersion = infoResponse.getVersion();
+                        mLNDVersionString = infoResponse.getVersion();
                         mInfoFetched = true;
                         mConnectedToLND = true;
                         mConnectionCheckInProgress = false;
@@ -329,7 +329,7 @@ public class Wallet {
                     // Save the received data.
                     mSyncedToChain = infoResponse.getSyncedToChain();
                     mTestnet = infoResponse.getTestnet();
-                    mLNDVersion = infoResponse.getVersion();
+                    mLNDVersionString = infoResponse.getVersion();
                     mInfoFetched = true;
                     mConnectedToLND = true;
 
@@ -479,7 +479,7 @@ public class Wallet {
 
     public void openChannel(LightningNodeUri nodeUri, long amount) {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(listPeersResponse -> {
                     boolean connected = false;
                     for (Peer node : listPeersResponse.getPeersList()) {
@@ -518,7 +518,7 @@ public class Wallet {
         ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(connectPeerResponse -> {
                     ZapLog.debug(LOG_TAG, "Successfully connected to peer, trying to open channel...");
                     openChannelConnected(nodeUri, amount);
@@ -544,7 +544,7 @@ public class Wallet {
                 .setLocalFundingAmount(amount).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().openChannel(openChannelRequest)
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(openStatusUpdate -> {
                     ZapLog.debug(LOG_TAG, "Open channel update: " + openStatusUpdate.getUpdateCase().getNumber());
@@ -570,7 +570,7 @@ public class Wallet {
         CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder().setChannelPoint(point).setForce(force).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().closeChannel(closeChannelRequest)
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(closeStatusUpdate -> {
                     ZapLog.debug(LOG_TAG, "Closing channel update: " + closeStatusUpdate.getUpdateCase().getNumber());
@@ -660,7 +660,7 @@ public class Wallet {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
-                .timeout(RefConstants.TIMEOUT_LONG, TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(nodeInfo -> {
                     // Add the nodeInfo to our list, if it is not already a member of the list.
                     boolean nodeInfoAlreadyExists = false;
@@ -1027,35 +1027,50 @@ public class Wallet {
     }
 
     /**
-     * Get the maximum amount that can be received over Lighning Channels.
+     * Get the maximum amount that can be received over Lightning Channels.
      *
      * @return amount in satoshis
      */
     public long getMaxLightningReceiveAmount() {
 
-        // ToDO: Calculate differently depending on LND version (consider multi path for LND 0.9 and up)
+        Version actualLNDVersion = getLNDVersion();
+        Version MppReceive = new Version("0.9");
 
-        long tempMax = 0L;
-        if (mOpenChannelsList != null) {
-            for (Channel c : mOpenChannelsList) {
-                if (c.getActive()) {
-                    if (c.getRemoteBalance() > tempMax) {
-                        tempMax = c.getRemoteBalance();
+        if (actualLNDVersion.compareTo(MppReceive) < 0){
+            // Mpp receive is not supported. Use the maximum remote balance of all channels as maximum.
+            long tempMax = 0L;
+            if (mOpenChannelsList != null) {
+                for (Channel c : mOpenChannelsList) {
+                    if (c.getActive()) {
+                        if (c.getRemoteBalance() > tempMax) {
+                            tempMax = c.getRemoteBalance();
+                        }
                     }
                 }
             }
+            return tempMax;
+        } else {
+            // Mpp is supported. Use the sum of the remote balances of all channels as maximum.
+            long tempMax = 0L;
+            if (mOpenChannelsList != null) {
+                for (Channel c : mOpenChannelsList) {
+                    if (c.getActive()) {
+                            tempMax = tempMax + c.getRemoteBalance();
+                    }
+                }
+            }
+            return tempMax;
         }
-        return tempMax;
     }
 
     /**
-     * Get the maximum amount that can be send over Lighning Channels.
+     * Get the maximum amount that can be send over Lightning Channels.
      *
      * @return amount in satoshis
      */
     public long getMaxLightningSendAmount() {
-
-        // ToDO: Calculate differently depending on LND version (consider multi path for LND 0.10 and up)
+      
+        // ToDo: Calculate differently depending on LND version (consider multi path for LND 0.10 and up)
 
         long tempMax = 0L;
         if (mOpenChannelsList != null) {
@@ -1078,8 +1093,12 @@ public class Wallet {
         return mTestnet;
     }
 
-    public String getLNDVersion() {
-        return mLNDVersion;
+    public String getLNDVersionString() {
+        return mLNDVersionString;
+    }
+
+    public Version getLNDVersion() {
+        return new Version(mLNDVersionString.split("-")[0]);
     }
 
     public boolean isInfoFetched() {
