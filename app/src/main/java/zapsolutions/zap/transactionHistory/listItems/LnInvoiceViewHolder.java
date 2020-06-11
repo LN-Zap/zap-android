@@ -54,11 +54,11 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
             }
         } else {
             // if a specific value was requested
-            if (amtPayed.equals(amt)) {
+            if (Wallet.getInstance().isInvoicePayed(lnInvoiceItem.getInvoice())) {
                 // The invoice has been payed
                 setIcon(TransactionIcon.LIGHTNING);
                 setPrimaryDescription(mContext.getString(R.string.received));
-                setAmount(amt, true);
+                setAmount(amtPayed, true);
             } else {
                 // The invoice has not been payed yet
                 setIcon(TransactionIcon.PENDING);
