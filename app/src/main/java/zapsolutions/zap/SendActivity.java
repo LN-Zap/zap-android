@@ -81,6 +81,11 @@ public class SendActivity extends BaseScannerActivity {
             public void onError(String error, int duration) {
                 showError(error, duration);
             }
+
+            @Override
+            public void onNoInvoiceData() {
+                showError(getResources().getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
+            }
         });
 
     }

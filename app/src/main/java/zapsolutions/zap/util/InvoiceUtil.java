@@ -19,35 +19,10 @@ import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 public class InvoiceUtil {
     private static final String LOG_TAG = InvoiceUtil.class.getName();
 
-    public static String URI_PREFIX_LIGHTNING = "lightning:";
-    public static String URI_PREFIX_BITCOIN = "bitcoin:";
     public static String INVOICE_PREFIX_LIGHTNING_TESTNET = "lntb";
     public static String INVOICE_PREFIX_LIGHTNING_MAINNET = "lnbc";
     private static int INVOICE_LIGHTNING_MIN_LENGTH = 4;
 
-    public static String generateLightningUri(@NonNull String data) {
-        if (isLightningUri(data)) {
-            return data;
-        }
-
-        return URI_PREFIX_LIGHTNING + data;
-    }
-
-    public static String generateBitcoinUri(@NonNull String data) {
-        if (isBitcoinUri(data)) {
-            return data;
-        }
-
-        return URI_PREFIX_BITCOIN + data;
-    }
-
-    public static boolean isLightningUri(@NonNull String data) {
-        return hasPrefix(URI_PREFIX_LIGHTNING, data);
-    }
-
-    public static boolean isBitcoinUri(@NonNull String data) {
-        return hasPrefix(URI_PREFIX_BITCOIN, data);
-    }
 
     public static boolean isLightningInvoice(@NonNull String data) {
         if (data.isEmpty() || data.length() < INVOICE_LIGHTNING_MIN_LENGTH) {
@@ -69,9 +44,7 @@ public class InvoiceUtil {
         String lnInvoice = data.toLowerCase();
 
         // Remove the "lightning:" uri scheme if it is present, LND needs it without uri scheme
-        if (InvoiceUtil.isLightningUri(lnInvoice)) {
-            lnInvoice = lnInvoice.substring(InvoiceUtil.URI_PREFIX_LIGHTNING.length());
-        }
+        lnInvoice = UriUtil.removeURI(lnInvoice);
 
         // Check if the invoice is a lightning invoice
         if (InvoiceUtil.isLightningInvoice(lnInvoice)) {
@@ -100,11 +73,11 @@ public class InvoiceUtil {
             // We do not have a lightning invoice... check if it is a valid bitcoin address / invoice
 
             // Check if we have a bitcoin invoice with the "bitcoin:" uri scheme
-            if (InvoiceUtil.isBitcoinUri(data)) {
+            if (UriUtil.isBitcoinUri(data)) {
 
                 // Add "//" to make it parsable for the java URI class if it is not present
-                if (!data.substring(0, 10).equalsIgnoreCase(InvoiceUtil.URI_PREFIX_BITCOIN + "//")) {
-                    data = InvoiceUtil.URI_PREFIX_BITCOIN + "//" + data.substring(8);
+                if (!data.substring(0, 10).equalsIgnoreCase(UriUtil.URI_PREFIX_BITCOIN + "//")) {
+                    data = UriUtil.URI_PREFIX_BITCOIN + "//" + data.substring(8);
                 }
 
                 URI bitcoinURI = null;
@@ -171,8 +144,7 @@ public class InvoiceUtil {
                 }
             }
         } else {
-            // Show error. No valid payment info.
-            listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
+            listener.onNoInvoiceData();
         }
     }
 
@@ -194,8 +166,6 @@ public class InvoiceUtil {
                         // Disable 0 sat invoices
                         listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
                     } else {
-                        // Decoded successfully, go to send page.
-
                         listener.onValidLightningInvoice(paymentRequest, invoice);
                     }
                 }, throwable -> {
@@ -221,5 +191,7 @@ public class InvoiceUtil {
         void onValidBitcoinInvoice(String address, long amount, String message);
 
         void onError(String error, int duration);
+
+        void onNoInvoiceData();
     }
 }

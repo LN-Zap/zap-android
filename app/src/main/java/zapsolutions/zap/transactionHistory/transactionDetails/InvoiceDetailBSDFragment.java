@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.ClipBoardUtil;
-import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.TimeFormatUtil;
+import zapsolutions.zap.util.UriUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -143,7 +143,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
 
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getValue()));
 
-        String lightningUri = InvoiceUtil.generateLightningUri(invoice.getPaymentRequest());
+        String lightningUri = UriUtil.generateLightningUri(invoice.getPaymentRequest());
         // Generate "QR-Code"
         Bitmap bmpQRCode = QRCode
                 .from(lightningUri)
