@@ -4,34 +4,22 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 
-import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
 
 import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
-import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.RemoteConfiguration;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
-import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
-import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser;
-import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
-import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectStringParser;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
-import zapsolutions.zap.util.ZapLog;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     private static final String LOG_TAG = ConnectRemoteNodeActivity.class.getName();
@@ -96,140 +84,70 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
     private void verifyDesiredConnection(String connectString) {
 
-        if (connectString.toLowerCase().startsWith("lndconnect")) {
-            connectLndConnect(connectString);
-        } else if (connectString.startsWith("config=")) {
-            // URL to BTCPayConfigJson
-            String configUrl = connectString.replace("config=", "");
-            StringRequest btcPayConfigRequest = new StringRequest(Request.Method.GET, configUrl,
-                    response -> connectBtcPay(response),
-                    error -> showError(getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT));
-
-            ZapLog.debug(LOG_TAG, "Fetching BTCPay config...");
-            HttpClient.getInstance().addToRequestQueue(btcPayConfigRequest, "BTCPayConfigRequest");
-        } else if (BTCPayConfigParser.isValidJson(connectString)) {
-            // Valid BTCPay JSON
-            connectBtcPay(connectString);
-        } else {
-            showError(getResources().getString(R.string.error_connection_unsupported_format), RefConstants.ERROR_DURATION_LONG);
-        }
-    }
-
-    private void connectLndConnect(String connectString) {
-
-        LndConnectStringParser parser = new LndConnectStringParser(connectString).parse();
-
-        if (parser.hasError()) {
-            switch (parser.getError()) {
-                case LndConnectStringParser.ERROR_INVALID_CONNECT_STRING:
-                    showError(getResources().getString(R.string.error_connection_invalidLndConnectString), RefConstants.ERROR_DURATION_LONG);
-                    break;
-                case LndConnectStringParser.ERROR_NO_MACAROON:
-                    showError(getResources().getString(R.string.error_connection_no_macaroon), RefConstants.ERROR_DURATION_MEDIUM);
-                    break;
-                case LndConnectStringParser.ERROR_INVALID_CERTIFICATE:
-                    showError(getResources().getString(R.string.error_connection_invalid_certificate), RefConstants.ERROR_DURATION_SHORT);
-                    break;
-                case LndConnectStringParser.ERROR_INVALID_MACAROON:
-                    showError(getResources().getString(R.string.error_connection_invalid_macaroon), RefConstants.ERROR_DURATION_SHORT);
-                    break;
-                case LndConnectStringParser.ERROR_INVALID_HOST_OR_PORT:
-                    showError(getResources().getString(R.string.error_connection_invalid_host_or_port), RefConstants.ERROR_DURATION_SHORT);
-                    break;
+        RemoteConnectUtil.decodeConnectionString(this, connectString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
+            @Override
+            public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
+                connectIfUserConfirms(remoteConfiguration);
             }
-        } else {
-            // Parsing was successful
-            connectIfUserConfirms(parser.getConnectionConfig());
-        }
-    }
 
-    private void connectBtcPay(@NonNull String btcPayConfigurationJson) {
-        BTCPayConfigParser btcPayConfigParser = new BTCPayConfigParser(btcPayConfigurationJson).parse();
-
-        if (btcPayConfigParser.hasError()) {
-            switch (btcPayConfigParser.getError()) {
-                case BTCPayConfigParser.ERROR_INVALID_JSON:
-                    showError(getResources().getString(R.string.error_connection_btcpay_invalid_json), RefConstants.ERROR_DURATION_MEDIUM);
-                    break;
-                case BTCPayConfigParser.ERROR_MISSING_BTC_GRPC_CONFIG:
-                    showError(getResources().getString(R.string.error_connection_btcpay_invalid_config), RefConstants.ERROR_DURATION_MEDIUM);
-                    break;
-                case BTCPayConfigParser.ERROR_NO_MACAROON:
-                    showError(getResources().getString(R.string.error_connection_no_macaroon), RefConstants.ERROR_DURATION_MEDIUM);
-                    break;
+            @Override
+            public void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration) {
+                connectIfUserConfirms(remoteConfiguration);
             }
-        } else {
-            // Parsing was successful
-            connectIfUserConfirms(btcPayConfigParser.getConnectionConfig());
-        }
+
+            @Override
+            public void onNoConnectData() {
+                showError(getResources().getString(R.string.error_connection_unsupported_format), RefConstants.ERROR_DURATION_LONG);
+            }
+
+            @Override
+            public void onError(String error, int duration) {
+                showError(error, duration);
+            }
+        });
     }
+
 
     private void connectIfUserConfirms(RemoteConfiguration remoteConfiguration) {
         // Ask user to confirm the connection to remote host
         new UserGuardian(this, () -> {
-            // Connect using the supplied configuration
             connect(remoteConfiguration);
         }).securityConnectToRemoteServer(remoteConfiguration.getHost());
     }
 
-    private void connect(RemoteConfiguration config) {
+    private void connect(RemoteConfiguration remoteConfiguration) {
+        // Connect using the supplied configuration
+        RemoteConnectUtil.saveRemoteConfiguration(remoteConfiguration, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
-        boolean success = false;
+            @Override
+            public void onSaved(String id) {
 
-        WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
-
-        try {
-            if (config instanceof LndConnectConfig) {
-                LndConnectConfig lndConfig = (LndConnectConfig) config;
-
-                String id = walletConfigsManager.addWalletConfig(config.getHost(),
-                        WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
-                        lndConfig.getCert(), lndConfig.getMacaroon()).getId();
-
-                walletConfigsManager.apply();
-
+                // The configuration was saved. Now make it the currently active wallet.
                 PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
 
-                success = true;
+                // Do not ask for pin again...
+                TimeOutUtil.getInstance().restartTimer();
 
-            } else if (config instanceof BTCPayConfig) {
-                BTCPayConfig btcPayConfig = (BTCPayConfig) config;
+                // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ConnectRemoteNodeActivity.this);
+                prefs.edit()
+                        .putBoolean(PrefsUtil.IS_WALLET_SETUP, true)
+                        .commit();
 
-                String id = walletConfigsManager.addWalletConfig(config.getHost(),
-                        WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
-                        null, btcPayConfig.getMacaroon()).getId();
+                // In case another wallet was open before, we want to have all values reset.
+                Wallet.getInstance().reset();
 
-                walletConfigsManager.apply();
-
-                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
-
-                success = true;
-
+                // Show home screen, remove history stack. Going to HomeActivity will initiate the connection to our new remote configuration.
+                Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError(e.getMessage(), RefConstants.ERROR_DURATION_SHORT);
-        }
 
-        if (success) {
-            // Do not ask for pin again...
-            TimeOutUtil.getInstance().restartTimer();
-
-            // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            prefs.edit()
-                    .putBoolean(PrefsUtil.IS_WALLET_SETUP, true)
-                    .commit();
-
-            // In case another wallet was open before, we want to have all values reset.
-            Wallet.getInstance().reset();
-
-            // Show home screen, remove history stack
-            Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-
+            @Override
+            public void onError(String error, int duration) {
+                showError(error, duration);
+            }
+        });
     }
 
 }
