@@ -13,11 +13,15 @@ public class LightningParser {
 
         if (uri.length() == NODE_URI_MIN_LENGTH) {
             // PubKey only
-            return new LightningNodeUri.Builder().setPubKey(uri).build();
+            if (isHex(uri)) {
+                return new LightningNodeUri.Builder().setPubKey(uri).build();
+            } else {
+                return null;
+            }
         }
 
-        if (!uri.contains("@")) {
-            // longer and no @, something is wrong
+        if (!(uri.charAt(NODE_URI_MIN_LENGTH) == '@')) {
+            // longer and no @ after PubKey. Something is wrong.
             return null;
         }
 
@@ -27,6 +31,14 @@ public class LightningParser {
             return null;
         }
 
-        return new LightningNodeUri.Builder().setPubKey(parts[0]).setHost(parts[1]).build();
+        if (isHex(parts[0])) {
+            return new LightningNodeUri.Builder().setPubKey(parts[0]).setHost(parts[1]).build();
+        } else {
+            return null;
+        }
+    }
+
+    private static boolean isHex(String input){
+        return input.matches("^[0-9a-fA-F]+$");
     }
 }
