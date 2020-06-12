@@ -23,6 +23,18 @@ public class LnUrlUtil {
         try {
             String decodedLnUrl = LnurlDecoder.decode(data);
 
+            // Check if it has a query param called login. In this case do not make a GET request as the AuthFlow works different.
+            URL decodedUrl = null;
+            try {
+                decodedUrl = new URL(decodedLnUrl);
+                if (decodedUrl.getQuery().contains("tag=login")) {
+                    listener.onError(ctx.getString(R.string.lnurl_wrong_tag), RefConstants.ERROR_DURATION_MEDIUM);
+                    return;
+                }
+            } catch (MalformedURLException e) {
+                listener.onError(ctx.getString(R.string.lnurl_wrong_tag), RefConstants.ERROR_DURATION_MEDIUM);
+            }
+
             StringRequest lnurlRequest = new StringRequest(Request.Method.GET, decodedLnUrl,
                     response -> interpretLnUrlReadResponse(response, listener, ctx),
                     error -> {
@@ -58,7 +70,7 @@ public class LnUrlUtil {
                 ZapLog.debug(LOG_TAG, "LNURL: valid withdraw data received...");
                 LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(response, LnUrlWithdrawResponse.class);
                 listener.onValidLnUrlWithdraw(lnUrlWithdrawResponse);
-            } else if (lnUrlResponse.isPayRequest()){
+            } else if (lnUrlResponse.isPayRequest()) {
                 // ToDo: Implement pay request response
                 listener.onValidLnUrlPayRequest();
             } else {

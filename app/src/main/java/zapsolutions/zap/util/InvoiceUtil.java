@@ -130,7 +130,7 @@ public class InvoiceUtil {
                     listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
                 } else {
                     // Show error. No valid payment info.
-                    listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
+                    listener.onNoInvoiceData();
                 }
             } else {
                 // We are on mainnet
@@ -140,7 +140,7 @@ public class InvoiceUtil {
                     listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
                 } else {
                     // Show error. No valid payment info.
-                    listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
+                    listener.onNoInvoiceData();
                 }
             }
         } else {
