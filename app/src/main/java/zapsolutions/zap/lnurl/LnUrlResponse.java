@@ -10,9 +10,10 @@ import java.io.Serializable;
  * Please refer to the following reference:
  * https://github.com/btcontract/lnurl-rfc
  */
-public abstract class LnUrlResponse implements Serializable {
+public class LnUrlResponse implements Serializable {
 
     public static final String TAG_WITHDRAW = "withdrawRequest";
+    public static final String TAG_PAY_REQUEST = "payRequest";
 
     private String tag;
     private String callback;
@@ -45,5 +46,9 @@ public abstract class LnUrlResponse implements Serializable {
 
     public boolean isWithdraw(){
         return tag.equals(LnUrlResponse.TAG_WITHDRAW);
+    }
+
+    public boolean isPayRequest(){
+        return tag.equals(LnUrlResponse.TAG_PAY_REQUEST);
     }
 }
