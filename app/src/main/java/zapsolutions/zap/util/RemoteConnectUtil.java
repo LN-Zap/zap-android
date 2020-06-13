@@ -103,8 +103,6 @@ public class RemoteConnectUtil {
 
                 walletConfigsManager.apply();
 
-                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
-
                 listener.onSaved(id);
 
             } else if (config instanceof BTCPayConfig) {
@@ -115,8 +113,6 @@ public class RemoteConnectUtil {
                         null, btcPayConfig.getMacaroon()).getId();
 
                 walletConfigsManager.apply();
-
-                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
 
                 listener.onSaved(id);
 
