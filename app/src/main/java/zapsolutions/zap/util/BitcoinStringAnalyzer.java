@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import zapsolutions.zap.R;
 import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
@@ -98,7 +99,7 @@ public class BitcoinStringAnalyzer {
             @Override
             public void onNoInvoiceData() {
                 // No Invoice or Address either, we have unrecognizable data
-                listener.onError("Unrecognized data", RefConstants.ERROR_DURATION_SHORT);
+                listener.onError(ctx.getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
             }
         });
     }

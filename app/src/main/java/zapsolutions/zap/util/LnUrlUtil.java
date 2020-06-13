@@ -28,11 +28,11 @@ public class LnUrlUtil {
             try {
                 decodedUrl = new URL(decodedLnUrl);
                 if (decodedUrl.getQuery().contains("tag=login")) {
-                    listener.onError(ctx.getString(R.string.lnurl_wrong_tag), RefConstants.ERROR_DURATION_MEDIUM);
+                    listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
                     return;
                 }
             } catch (MalformedURLException e) {
-                listener.onError(ctx.getString(R.string.lnurl_wrong_tag), RefConstants.ERROR_DURATION_MEDIUM);
+                listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
             }
 
             StringRequest lnurlRequest = new StringRequest(Request.Method.GET, decodedLnUrl,
@@ -75,7 +75,7 @@ public class LnUrlUtil {
                 listener.onValidLnUrlPayRequest();
             } else {
                 ZapLog.debug(LOG_TAG, "LNURL: valid but unsupported data received...");
-                listener.onError(ctx.getString(R.string.lnurl_wrong_tag), RefConstants.ERROR_DURATION_MEDIUM);
+                listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
             }
         }
     }

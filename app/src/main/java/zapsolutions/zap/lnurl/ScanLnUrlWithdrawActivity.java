@@ -77,7 +77,7 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
 
             @Override
             public void onValidLnUrlPayRequest() {
-                showError(getResources().getString(R.string.lnurl_wrong_tag), RefConstants.ERROR_DURATION_SHORT);
+                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
             }
 
             @Override
@@ -87,7 +87,7 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
 
             @Override
             public void onNoLnUrlData() {
-                showError(getResources().getString(R.string.lnurl_decoding_failed), RefConstants.ERROR_DURATION_SHORT);
+                showError(getResources().getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_SHORT);
             }
         });
     }
