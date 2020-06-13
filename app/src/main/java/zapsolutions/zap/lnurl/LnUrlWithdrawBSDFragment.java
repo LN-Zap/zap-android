@@ -3,6 +3,7 @@ package zapsolutions.zap.lnurl;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
@@ -89,6 +90,16 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
 
     private Handler mHandler;
     private LnUrlWithdrawResponse mWithdrawData;
+
+    public static LnUrlWithdrawBSDFragment createWithdrawDialog(LnUrlWithdrawResponse response) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(LnUrlWithdrawResponse.ARGS_KEY, response);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        LnUrlWithdrawBSDFragment lnUrlWithdrawBSDFragment = new LnUrlWithdrawBSDFragment();
+        lnUrlWithdrawBSDFragment.setArguments(intent.getExtras());
+        return lnUrlWithdrawBSDFragment;
+    }
 
 
     @Nullable
