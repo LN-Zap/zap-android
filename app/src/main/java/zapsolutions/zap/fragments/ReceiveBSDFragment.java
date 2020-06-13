@@ -44,7 +44,7 @@ import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.NumpadView;
-import zapsolutions.zap.lnurl.ScanLnUrlWithdrawActivity;
+import zapsolutions.zap.lnurl.withdraw.ScanLnUrlWithdrawActivity;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;

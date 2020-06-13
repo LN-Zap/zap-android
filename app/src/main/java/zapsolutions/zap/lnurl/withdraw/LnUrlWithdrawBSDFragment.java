@@ -1,4 +1,4 @@
-package zapsolutions.zap.lnurl;
+package zapsolutions.zap.lnurl.withdraw;
 
 
 import android.animation.AnimatorSet;

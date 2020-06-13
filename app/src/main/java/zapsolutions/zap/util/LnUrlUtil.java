@@ -13,8 +13,9 @@ import java.net.URL;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
+import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.LnUrlResponse;
-import zapsolutions.zap.lnurl.LnUrlWithdrawResponse;
+import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 
 public class LnUrlUtil {
     private static final String LOG_TAG = LnUrlUtil.class.getName();
@@ -72,8 +73,8 @@ public class LnUrlUtil {
                 LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(response, LnUrlWithdrawResponse.class);
                 listener.onValidLnUrlWithdraw(lnUrlWithdrawResponse);
             } else if (lnUrlResponse.isPayRequest()) {
-                // ToDo: Implement pay request response
-                listener.onValidLnUrlPayRequest();
+                LnUrlPayResponse lnUrlPayResponse = new Gson().fromJson(response, LnUrlPayResponse.class);
+                listener.onValidLnUrlPay(lnUrlPayResponse);
             } else {
                 ZapLog.debug(LOG_TAG, "LNURL: valid but unsupported data received...");
                 listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
@@ -86,7 +87,7 @@ public class LnUrlUtil {
 
         void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse);
 
-        void onValidLnUrlPayRequest();
+        void onValidLnUrlPay(LnUrlPayResponse payResponse);
 
         void onError(String error, int duration);
 

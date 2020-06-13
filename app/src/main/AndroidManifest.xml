@@ -105,7 +105,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".lnurl.ScanLnUrlWithdrawActivity"
+            android:name=".lnurl.withdraw.ScanLnUrlWithdrawActivity"
             android:label="@string/withdraw"
             android:screenOrientation="portrait" />
         <meta-data android:name="android.nfc.disable_beam_default"

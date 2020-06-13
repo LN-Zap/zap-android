@@ -1,32 +1,20 @@
-package zapsolutions.zap.lnurl;
+package zapsolutions.zap.lnurl.withdraw;
 
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.os.Handler;
-
-import androidx.annotation.NonNull;
-
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
-import zapsolutions.zap.connection.HttpClient;
+import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.LnUrlUtil;
-import zapsolutions.zap.util.LnurlDecoder;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.ZapLog;
 
 public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
 
@@ -76,7 +64,7 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
             }
 
             @Override
-            public void onValidLnUrlPayRequest() {
+            public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
                 showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
             }
 

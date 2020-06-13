@@ -45,8 +45,9 @@ import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
-import zapsolutions.zap.lnurl.LnUrlWithdrawBSDFragment;
-import zapsolutions.zap.lnurl.LnUrlWithdrawResponse;
+import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
+import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawBSDFragment;
+import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.BitcoinStringAnalyzer;
 import zapsolutions.zap.util.ExchangeRateUtil;
@@ -485,13 +486,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
-            public void onValidLnurlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
+            public void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
                 LnUrlWithdrawBSDFragment lnUrlWithdrawBSDFragment = LnUrlWithdrawBSDFragment.createWithdrawDialog(withdrawResponse);
                 lnUrlWithdrawBSDFragment.show(getSupportFragmentManager(), "lnurlWithdrawBottomSheetDialog");
             }
 
             @Override
-            public void onValidLnurlPay() {
+            public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
                 showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
             }
 
