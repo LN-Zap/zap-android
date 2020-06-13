@@ -94,6 +94,12 @@ public class WalletSpinner extends AppCompatSpinner {
         });
     }
 
+    @Override
+    public boolean performClick() {
+        updateList();
+        return super.performClick();
+    }
+
     public void updateList() {
 
         initFinished = false;

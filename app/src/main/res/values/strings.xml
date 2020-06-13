@@ -366,6 +366,7 @@
     <string name="confirm_wallet_deletion">Do you really want to delete this wallet?</string>
     <string name="no_wallets">No wallets</string>
     <string name="spinner_manage_wallets">Manage…</string>
+    <string name="wallet_added">Wallet has been added.</string>
 
     <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
     <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>

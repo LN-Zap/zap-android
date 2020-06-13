@@ -36,19 +36,24 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
+import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
+import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lnurl.LnUrlWithdrawBSDFragment;
+import zapsolutions.zap.lnurl.LnUrlWithdrawResponse;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
+import zapsolutions.zap.util.BitcoinStringAnalyzer;
 import zapsolutions.zap.util.ExchangeRateUtil;
-import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.UserGuardian;
@@ -364,7 +369,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             // Check if Zap was started from an URI link or by NFC.
             // If yes, forward the invoice.
             if (App.getAppContext().getUriSchemeData() != null) {
-                readInvoice(App.getAppContext().getUriSchemeData());
+                analyzeString(App.getAppContext().getUriSchemeData());
                 App.getAppContext().setUriSchemeData(null);
             }
 
@@ -455,7 +460,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             @Override
             public void onSuccess(String payload) {
                 if (PrefsUtil.isWalletSetup()) {
-                    readInvoice(payload);
+                    analyzeString(payload);
                 } else {
                     ZapLog.debug(LOG_TAG, "Wallet not setup.");
                     Toast.makeText(HomeActivity.this, R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
@@ -464,8 +469,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         });
     }
 
-    private void readInvoice(String invoice) {
-        InvoiceUtil.readInvoice(HomeActivity.this, compositeDisposable, invoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
+    private void analyzeString(String input) {
+        BitcoinStringAnalyzer.analyze(HomeActivity.this, compositeDisposable, input, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
             public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
                 SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice);
@@ -479,13 +484,38 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
-            public void onError(String error, int duration) {
-                showError(error, duration);
+            public void onValidLnurlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
+                LnUrlWithdrawBSDFragment lnUrlWithdrawBSDFragment = LnUrlWithdrawBSDFragment.createWithdrawDialog(withdrawResponse);
+                lnUrlWithdrawBSDFragment.show(getSupportFragmentManager(), "lnurlWithdrawBottomSheetDialog");
             }
 
             @Override
-            public void onNoInvoiceData() {
-                showError(getResources().getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
+            public void onValidLnurlPay() {
+                showError(getResources().getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
+            }
+
+            @Override
+            public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
+                addWallet(remoteConfiguration);
+            }
+
+            @Override
+            public void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration) {
+                addWallet(remoteConfiguration);
+            }
+
+            @Override
+            public void onValidNodeUri(LightningNodeUri nodeUri) {
+                OpenChannelBSDFragment openChannelBSDFragment = new OpenChannelBSDFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(OpenChannelBSDFragment.ARGS_NODE_URI, nodeUri);
+                openChannelBSDFragment.setArguments(bundle);
+                openChannelBSDFragment.show(getSupportFragmentManager(), OpenChannelBSDFragment.TAG);
+            }
+
+            @Override
+            public void onError(String error, int duration) {
+                showError(error, duration);
             }
         });
     }
@@ -521,5 +551,28 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 }
             }
         }
+    }
+
+    private void addWallet(RemoteConfiguration remoteConfiguration) {
+        new UserGuardian(HomeActivity.this, () -> {
+            RemoteConnectUtil.saveRemoteConfiguration(remoteConfiguration, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+
+                @Override
+                public void onSaved(String id) {
+                    new AlertDialog.Builder(HomeActivity.this)
+                            .setMessage(R.string.wallet_added)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            }).show();
+                }
+
+                @Override
+                public void onError(String error, int duration) {
+                    showError(error, duration);
+                }
+            });
+        }).securityConnectToRemoteServer(remoteConfiguration.getHost());
     }
 }
