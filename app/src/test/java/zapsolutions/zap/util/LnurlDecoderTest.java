@@ -21,32 +21,31 @@ public class LnurlDecoderTest {
     private static String INVALID_LNURL_INVALID_PREFIX = "prefix1w3jhxaqnadsez";
 
     @Test
-    public void givenValidLnurl_WhenDecode_ThenReturnDecoded() throws Exception {
+    public void givenValidLnurl_WhenDecode_ThenReturnDecoded() throws LnurlDecoder.NoLnUrlDataException {
         assertEquals(LNURL_PAY_DECODED, LnurlDecoder.decode(LNURL_PAY));
         assertEquals(LNURL_PAY_DECODED, LnurlDecoder.decode(LNURL_PAY_WITH_URI));
         assertEquals(LNURL_WITHDRAW_DECODED, LnurlDecoder.decode(LNURL_WITHDRAW));
+        assertEquals("test", LnurlDecoder.decode(LNURL_TEST));
     }
 
     @Test
     public void givenInvalidLnurl_WhenDecode_ThenReturnError() {
-        try {
-            String decoded = LnurlDecoder.decode(LNURL_TEST);
-            assertEquals("test", LnurlDecoder.decode(LNURL_TEST));
-        } catch (Exception e) {
-            assertEquals(e.getMessage(), "This should have worked");
-        }
 
         try {
             String decoded = LnurlDecoder.decode(null);
-        } catch (Exception e) {
-            assertEquals(e.getMessage(), "LNURL decoding failed: The data to decode is not a LNURL");
+        } catch (IllegalArgumentException e) {
+            assert false;
+        } catch (LnurlDecoder.NoLnUrlDataException e) {
+            assert true;
         }
 
         try {
             String decoded = LnurlDecoder.decode(INVALID_LNURL_INVALID_PREFIX);
             assertNull(decoded);
-        } catch (Exception e) {
-            assertEquals(e.getMessage(), "LNURL decoding failed: The data to decode is not a LNURL");
+        } catch (IllegalArgumentException e) {
+            assert false;
+        } catch (LnurlDecoder.NoLnUrlDataException e) {
+            assert true;
         }
 
         try {
