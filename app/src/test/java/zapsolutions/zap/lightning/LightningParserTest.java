@@ -36,6 +36,22 @@ public class LightningParserTest {
     }
 
     @Test
+    public void givenInvalidCharsInPubKey_whenParseNodeUri_thenReturnLightningNodeUri() {
+        String invalidPubKey = "T2a40ff73c1a2c6469b95e7cc544876e9a3b1d73737af8be10330652923b67db7f";
+        LightningNodeUri parsedUri = LightningParser.parseNodeUri(invalidPubKey);
+
+        assertNull(parsedUri);
+    }
+
+    @Test
+    public void givenInvalidPubKeyLength_whenParseNodeUri_thenReturnLightningNodeUri() {
+        String uri = "02a40ff73c1a2c6469b95e7cc544876e9a3b1d73737af8be10330652923b67db7f73737af8be10330652923b67db7@127.0.0.1";
+        LightningNodeUri parsedUri = LightningParser.parseNodeUri(uri);
+
+        assertNull(parsedUri);
+    }
+
+    @Test
     public void givenValidUri_whenParseNodeUri_thenReturnLightningNodeUri() {
         String uri = "02a40ff73c1a2c6469b95e7cc544876e9a3b1d73737af8be10330652923b67db7f@127.0.0.1";
         LightningNodeUri parsedUri = LightningParser.parseNodeUri(uri);
