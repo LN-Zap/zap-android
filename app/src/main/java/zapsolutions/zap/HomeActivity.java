@@ -491,7 +491,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             @Override
             public void onValidLnurlPay() {
-                showError(getResources().getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
+                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
             }
 
             @Override
