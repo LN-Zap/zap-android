@@ -35,6 +35,7 @@ import java.util.Locale;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
 import zapsolutions.zap.transactionHistory.listItems.LnInvoiceItem;
@@ -183,7 +184,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         List<HistoryListItem> expiredRequest = new LinkedList<>();
         List<HistoryListItem> internalTransactions = new LinkedList<>();
 
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
 
             // Add all payment relevant items to one of the lists above
 
@@ -305,7 +306,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
     @Override
     public void onRefresh() {
-        if (PrefsUtil.isWalletSetup() && Wallet.getInstance().isInfoFetched()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs() && Wallet.getInstance().isInfoFetched()) {
             Wallet.getInstance().fetchLNDTransactionHistory();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);

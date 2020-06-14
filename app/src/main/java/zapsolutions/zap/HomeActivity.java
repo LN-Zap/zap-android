@@ -39,6 +39,7 @@ import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
@@ -237,7 +238,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void openWallet() {
         // Start lnd connection
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);
 
             LndConnection.getInstance().openConnection();
@@ -308,7 +309,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.getInstance().cancelSubscriptions();
 
         // Kill lnd connection
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             LndConnection.getInstance().closeConnection();
         }
     }
@@ -334,7 +335,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     @Override
     public void onInfoUpdated(boolean connected) {
-        if ((PrefsUtil.isWalletSetup())) {
+        if ((WalletConfigsManager.getInstance().hasAnyConfigs())) {
             if (!Wallet.getInstance().isTestnet() && Wallet.getInstance().isConnectedToLND()) {
                 if (!mMainnetWarningShownOnce) {
                     // Show mainnet not ready warning
@@ -459,7 +460,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         NfcUtil.readTag(this, intent, new NfcUtil.OnNfcResponseListener() {
             @Override
             public void onSuccess(String payload) {
-                if (PrefsUtil.isWalletSetup()) {
+                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                     analyzeString(payload);
                 } else {
                     ZapLog.debug(LOG_TAG, "Wallet not setup.");

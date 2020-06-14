@@ -216,9 +216,6 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
             Wallet.getInstance().reset();
             LndConnection.getInstance().closeConnection();
             PrefsUtil.edit().remove(PrefsUtil.CURRENT_WALLET_CONFIG).commit();
-            if (!walletConfigsManager.hasAnyConfigs()) {
-                PrefsUtil.edit().putBoolean(PrefsUtil.IS_WALLET_SETUP, false).commit();
-            }
             Intent intent = new Intent(WalletDetailsActivity.this, LandingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

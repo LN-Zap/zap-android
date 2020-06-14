@@ -25,7 +25,7 @@ public class LandingActivity extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Save data when App was started with a task.
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
 
             // Zap was started from an URI link.
             Intent intent = getIntent();
@@ -62,7 +62,7 @@ public class LandingActivity extends BaseAppCompatActivity {
     }
 
     private void resetApp() {
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             // Reset settings
             PrefsUtil.edit().clear().commit();
 
@@ -79,7 +79,7 @@ public class LandingActivity extends BaseAppCompatActivity {
     }
 
     private void convertWalletNameToUUID() {
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                 WalletConfig config = (WalletConfig) WalletConfigsManager.getInstance().getWalletConfigsJson().getConnections().toArray()[0];
                 WalletConfigsManager.getInstance().removeAllWalletConfigs();
@@ -100,7 +100,7 @@ public class LandingActivity extends BaseAppCompatActivity {
         // Set new settings version
         PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
 
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             PinScreenUtil.askForAccess(this, () -> {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

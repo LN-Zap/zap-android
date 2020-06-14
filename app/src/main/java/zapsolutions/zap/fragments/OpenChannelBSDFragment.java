@@ -37,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -198,7 +199,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                 long minSendAmount = 20000;
                 long maxSendAmount = 17666215;
 
-                if (PrefsUtil.isWalletSetup()) {
+                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                     long onChainAvailable = Wallet.getInstance().getBalances().onChainConfirmed();
 
                     if (onChainAvailable < maxSendAmount) {

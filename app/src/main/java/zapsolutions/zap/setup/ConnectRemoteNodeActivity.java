@@ -128,12 +128,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
 
-                // We use commit here, as we want to be sure, that the data is saved and readable when we want to access it in the next step.
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ConnectRemoteNodeActivity.this);
-                prefs.edit()
-                        .putBoolean(PrefsUtil.IS_WALLET_SETUP, true)
-                        .commit();
-
                 // In case another wallet was open before, we want to have all values reset.
                 Wallet.getInstance().reset();
 

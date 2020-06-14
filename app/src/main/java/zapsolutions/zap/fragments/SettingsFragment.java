@@ -34,6 +34,7 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.pin.PinSetupActivity;
 import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -152,7 +153,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mPinPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (PrefsUtil.isWalletSetup()) {
+                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                     if (PrefsUtil.isPinEnabled()) {
                         Intent intent = new Intent(getActivity(), PinSetupActivity.class);
                         intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.CHANGE_PIN);
