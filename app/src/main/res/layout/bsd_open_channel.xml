@@ -218,8 +218,7 @@
                     android:id="@+id/localAmountUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:textAlignment="center"
+                    android:gravity="center"
                     android:textSize="30sp"
                     android:textStyle="italic"
                     tools:text="UNIT" />
