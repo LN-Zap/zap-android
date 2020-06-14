@@ -49,6 +49,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.LightningFeeView;
 import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.customView.OnChainFeeView;
@@ -225,13 +226,13 @@ public class SendBSDFragment extends RxBSDFragment {
                     long maxSendable;
                     if (mOnChain) {
 
-                        if (PrefsUtil.isWalletSetup()) {
+                        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                             maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
                         } else {
                             maxSendable = Wallet.getInstance().getDemoBalances().onChainConfirmed();
                         }
                     } else {
-                        if (PrefsUtil.isWalletSetup()) {
+                        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                             maxSendable = Wallet.getInstance().getMaxLightningSendAmount();
                         } else {
                             maxSendable = 750000;
@@ -427,7 +428,7 @@ public class SendBSDFragment extends RxBSDFragment {
                 public void onClick(View v) {
 
                     // send lightning payment
-                    if (PrefsUtil.isWalletSetup()) {
+                    if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                         SendRequest.Builder srb = SendRequest.newBuilder();
 
                         if (mLnPaymentRequest.getNumSatoshis() <= RefConstants.LN_PAYMENT_FEE_THRESHOLD) {

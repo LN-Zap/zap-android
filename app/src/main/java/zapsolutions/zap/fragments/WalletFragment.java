@@ -29,6 +29,7 @@ import zapsolutions.zap.SendActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.WalletSpinner;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.Balances;
@@ -242,7 +243,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         // Action when clicked on "setup wallet"
         Button btnSetup = view.findViewById(R.id.setupWallet);
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             btnSetup.setVisibility(View.INVISIBLE);
         }
         btnSetup.setOnClickListener(new View.OnClickListener() {
@@ -278,7 +279,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (App.getAppContext().connectionToLNDEstablished) {
             connectionToLNDEstablished();
         } else {
-            if (PrefsUtil.isWalletSetup()) {
+            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                 if (!LndConnection.getInstance().isConnected()) {
                     LndConnection.getInstance().openConnection();
                 }
@@ -292,7 +293,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void connectionToLNDEstablished() {
 
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
 
             // Show info about mode (offline, testnet or mainnet) if it is already known
             onInfoUpdated(Wallet.getInstance().isInfoFetched());
@@ -312,7 +313,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
 
         Balances balances;
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             balances = Wallet.getInstance().getBalances();
         } else {
             balances = Wallet.getInstance().getDemoBalances();
@@ -372,7 +373,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mLoadingWalletLayout.setVisibility(View.GONE);
             mWalletNotConnectedLayout.setVisibility(View.GONE);
 
-            if (PrefsUtil.isWalletSetup()) {
+            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                 if (Wallet.getInstance().isTestnet()) {
                     mTvMode.setText("TESTNET");
                     mTvMode.setVisibility(View.VISIBLE);
@@ -429,14 +430,14 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mExchangeRateListenerRegistered = true;
         }
 
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             mWalletSpinner.updateList();
             mWalletSpinner.setVisibility(View.VISIBLE);
         } else {
             mWalletSpinner.setVisibility(View.GONE);
         }
 
-        if (!PrefsUtil.isWalletSetup()) {
+        if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
             // If the App is not setup yet,
             // this will cause to get the status text updated. Otherwise it would be empty.
             Wallet.getInstance().simulateFetchInfoForDemo(NetworkUtil.isConnectedToInternet(getActivity()));
@@ -459,7 +460,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (success) {
             connectionToLNDEstablished();
         } else {
-            if (PrefsUtil.isWalletSetup()) {
+            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                 if (error != Wallet.WalletLoadedListener.ERROR_LOCKED) {
                     onInfoUpdated(false);
                     if (error == Wallet.WalletLoadedListener.ERROR_AUTHENTICATION) {

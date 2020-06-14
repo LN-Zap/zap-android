@@ -14,7 +14,6 @@ import zapsolutions.zap.customView.OnChainFeeView;
 public class PrefsUtil {
 
     // shared preference references
-    public static final String IS_WALLET_SETUP = "isWalletSetup";
     public static final String PREVENT_SCREEN_RECORDING = "preventScreenRecording";
     public static final String FIRST_CURRENCY_IS_PRIMARY = "firstCurrencyIsPrimary";
     public static final String PIN_HASH = "pin_hash";
@@ -52,10 +51,6 @@ public class PrefsUtil {
 
 
     // Shortcuts to often used preferences
-
-    public static boolean isWalletSetup() {
-        return getPrefs().getBoolean(IS_WALLET_SETUP, false);
-    }
 
     public static boolean preventScreenRecording() {
         return getPrefs().getBoolean(PREVENT_SCREEN_RECORDING, true);

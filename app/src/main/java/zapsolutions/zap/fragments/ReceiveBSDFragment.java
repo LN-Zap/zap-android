@@ -42,6 +42,7 @@ import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.lnurl.ScanLnUrlWithdrawActivity;
 import zapsolutions.zap.util.HelpDialogUtil;
@@ -174,7 +175,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                 mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_lightning));
                 mTvTitle.setText(R.string.receive_lightning_request);
 
-                boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !PrefsUtil.isWalletSetup();
+                boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !WalletConfigsManager.getInstance().hasAnyConfigs();
 
                 // Animate bsd Icon size
                 ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(mIvBsdIcon, "scaleX", 0f, 1f);
@@ -379,7 +380,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                 } else {
                     long maxReceivable;
                     mUseValueBeforeUnitSwitch = false;
-                    if (PrefsUtil.isWalletSetup()) {
+                    if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                         maxReceivable = Wallet.getInstance().getMaxLightningReceiveAmount();
                     } else {
                         maxReceivable = 500000000000L;
@@ -443,7 +444,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
     }
 
     private void generateRequest() {
-        if (PrefsUtil.isWalletSetup()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             // The wallet is setup. Communicate with LND and generate the request.
             if (mOnChain) {
 
