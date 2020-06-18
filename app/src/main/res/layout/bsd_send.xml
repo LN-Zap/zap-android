@@ -218,8 +218,7 @@
                 android:id="@+id/sendUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textSize="30sp"
                 android:textStyle="italic"
                 tools:text="BTC" />
