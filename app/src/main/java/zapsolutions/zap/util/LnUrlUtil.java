@@ -27,7 +27,8 @@ public class LnUrlUtil {
             URL decodedUrl = null;
             try {
                 decodedUrl = new URL(decodedLnUrl);
-                if (decodedUrl.getQuery().contains("tag=login")) {
+                String query = decodedUrl.getQuery();
+                if (query != null && query.contains("tag=login")) {
                     listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
                     return;
                 }
