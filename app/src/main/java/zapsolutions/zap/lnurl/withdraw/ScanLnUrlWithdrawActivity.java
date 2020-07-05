@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
+import java.net.URL;
+
 import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
+import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
+import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
@@ -65,6 +69,21 @@ public class ScanLnUrlWithdrawActivity extends BaseScannerActivity {
 
             @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
+                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
+            }
+
+            @Override
+            public void onValidLnUrlChannel(LnUrlChannelResponse channelResponse) {
+                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
+            }
+
+            @Override
+            public void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse) {
+                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
+            }
+
+            @Override
+            public void onValidLnUrlAuth(URL url) {
                 showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
             }
 

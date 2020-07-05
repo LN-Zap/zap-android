@@ -5,14 +5,13 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import zapsolutions.zap.lnurl.LnUrlResponse;
 
 /**
  * This class helps to work with the received response from a LNURL-pay request.
- *
+ * <p>
  * Please refer to step 3 in the following reference:
  * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-pay.md
  */
@@ -45,16 +44,17 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
     public String getMetadata(String metadataName) {
         List<String[]> list = getMetadataAsList();
         for (String[] stringArray : list) {
-            if (stringArray[0].equals(metadataName)){
+            if (stringArray[0].equals(metadataName)) {
                 return stringArray[1];
             }
         }
         return null;
     }
 
-    private List<String[]> getMetadataAsList(){
+    private List<String[]> getMetadataAsList() {
         Gson gson = new Gson();
-        Type listType = new TypeToken<List<String[]>>() {}.getType();
+        Type listType = new TypeToken<List<String[]>>() {
+        }.getType();
         List<String[]> list = gson.fromJson(metadata, listType);
         return list;
     }

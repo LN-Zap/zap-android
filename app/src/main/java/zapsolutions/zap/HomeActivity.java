@@ -29,6 +29,7 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.net.URL;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +46,8 @@ import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
+import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
+import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
@@ -492,7 +495,22 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
+            public void onValidLnUrlChannel(LnUrlChannelResponse channelResponse) {
+                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
+            }
+
+            @Override
+            public void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse) {
+                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
+            }
+
+            @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
+                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
+            }
+
+            @Override
+            public void onValidLnUrlAuth(URL url) {
                 showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
             }
 

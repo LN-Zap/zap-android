@@ -13,8 +13,10 @@ import java.net.URL;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
-import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.LnUrlResponse;
+import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
+import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
+import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 
 public class LnUrlUtil {
@@ -30,7 +32,12 @@ public class LnUrlUtil {
                 decodedUrl = new URL(decodedLnUrl);
                 String query = decodedUrl.getQuery();
                 if (query != null && query.contains("tag=login")) {
-                    listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
+                    String k1 = UtilFunctions.getQueryParam(decodedUrl, "k1");
+                    if (k1 != null && k1.length() == 64 && UtilFunctions.isHex(k1)) {
+                        listener.onValidLnUrlAuth(decodedUrl);
+                    } else {
+                        listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+                    }
                     return;
                 }
             } catch (MalformedURLException e) {
@@ -73,8 +80,17 @@ public class LnUrlUtil {
                 LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(response, LnUrlWithdrawResponse.class);
                 listener.onValidLnUrlWithdraw(lnUrlWithdrawResponse);
             } else if (lnUrlResponse.isPayRequest()) {
+                ZapLog.debug(LOG_TAG, "LNURL: valid pay request data received...");
                 LnUrlPayResponse lnUrlPayResponse = new Gson().fromJson(response, LnUrlPayResponse.class);
                 listener.onValidLnUrlPay(lnUrlPayResponse);
+            } else if (lnUrlResponse.isChannelRequest()) {
+                ZapLog.debug(LOG_TAG, "LNURL: valid channel request data received...");
+                LnUrlChannelResponse lnUrlChannelResponse = new Gson().fromJson(response, LnUrlChannelResponse.class);
+                listener.onValidLnUrlChannel(lnUrlChannelResponse);
+            } else if (lnUrlResponse.isHostedChannelRequest()) {
+                ZapLog.debug(LOG_TAG, "LNURL: valid hosted channel request data received...");
+                LnUrlHostedChannelResponse lnUrlHostedChannelResponse = new Gson().fromJson(response, LnUrlHostedChannelResponse.class);
+                listener.onValidLnUrlHostedChannel(lnUrlHostedChannelResponse);
             } else {
                 ZapLog.debug(LOG_TAG, "LNURL: valid but unsupported data received...");
                 listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
@@ -88,6 +104,12 @@ public class LnUrlUtil {
         void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse);
 
         void onValidLnUrlPay(LnUrlPayResponse payResponse);
+
+        void onValidLnUrlChannel(LnUrlChannelResponse channelResponse);
+
+        void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse);
+
+        void onValidLnUrlAuth(URL url);
 
         void onError(String error, int duration);
 

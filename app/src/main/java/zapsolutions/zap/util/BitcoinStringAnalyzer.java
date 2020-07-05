@@ -6,11 +6,15 @@ import androidx.annotation.NonNull;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 
+import java.net.URL;
+
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
+import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
+import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 
@@ -30,6 +34,21 @@ public class BitcoinStringAnalyzer {
             @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
                 listener.onValidLnUrlPay(payResponse);
+            }
+
+            @Override
+            public void onValidLnUrlChannel(LnUrlChannelResponse channelResponse) {
+                listener.onValidLnUrlChannel(channelResponse);
+            }
+
+            @Override
+            public void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse) {
+                listener.onValidLnUrlHostedChannel(hostedChannelResponse);
+            }
+
+            @Override
+            public void onValidLnUrlAuth(URL url) {
+                listener.onValidLnUrlAuth(url);
             }
 
             @Override
@@ -112,7 +131,13 @@ public class BitcoinStringAnalyzer {
 
         void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse);
 
+        void onValidLnUrlChannel(LnUrlChannelResponse channelResponse);
+
+        void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse);
+
         void onValidLnUrlPay(LnUrlPayResponse payResponse);
+
+        void onValidLnUrlAuth(URL url);
 
         void onValidLndConnectString(RemoteConfiguration remoteConfiguration);
 

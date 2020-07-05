@@ -2,6 +2,8 @@ package zapsolutions.zap.lightning;
 
 import androidx.annotation.NonNull;
 
+import zapsolutions.zap.util.UtilFunctions;
+
 public class LightningParser {
 
     private static int NODE_URI_MIN_LENGTH = 66;
@@ -13,7 +15,7 @@ public class LightningParser {
 
         if (uri.length() == NODE_URI_MIN_LENGTH) {
             // PubKey only
-            if (isHex(uri)) {
+            if (UtilFunctions.isHex(uri)) {
                 return new LightningNodeUri.Builder().setPubKey(uri).build();
             } else {
                 return null;
@@ -31,14 +33,10 @@ public class LightningParser {
             return null;
         }
 
-        if (isHex(parts[0])) {
+        if (UtilFunctions.isHex(parts[0])) {
             return new LightningNodeUri.Builder().setPubKey(parts[0]).setHost(parts[1]).build();
         } else {
             return null;
         }
-    }
-
-    private static boolean isHex(String input){
-        return input.matches("^[0-9a-fA-F]+$");
     }
 }
