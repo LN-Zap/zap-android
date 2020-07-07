@@ -1,6 +1,8 @@
-package zapsolutions.zap.lnurl;
+package zapsolutions.zap.lnurl.withdraw;
 
 import java.io.Serializable;
+
+import zapsolutions.zap.lnurl.LnUrlResponse;
 
 /**
  * This class helps to work with the received response from a LNURL-withdraw request.

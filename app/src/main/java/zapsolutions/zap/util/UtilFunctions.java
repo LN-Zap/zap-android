@@ -1,5 +1,6 @@
 package zapsolutions.zap.util;
 
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -96,5 +97,22 @@ public class UtilFunctions {
         PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         return skf.generateSecret(spec).getEncoded();
+    }
+
+    public static String getQueryParam(URL url, String parameter) {
+        if (url != null && url.getQuery() != null) {
+            String[] params = url.getQuery().split("&");
+            for (String param : params) {
+                String name = param.split("=")[0];
+                if (parameter.equals(name)) {
+                    return param.split("=")[1];
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean isHex(String input) {
+        return input.matches("^[0-9a-fA-F]+$");
     }
 }
