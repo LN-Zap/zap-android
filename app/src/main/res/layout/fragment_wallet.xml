@@ -92,7 +92,7 @@
             android:layout_marginBottom="8dp"
             android:src="@drawable/ic_cloudlightning"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/sendButton"
+            app:layout_constraintBottom_toTopOf="@+id/scanButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -106,7 +106,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/sendButton"
+            app:layout_constraintBottom_toTopOf="@+id/scanButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -185,14 +185,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/sendButton"
+            android:id="@+id/scanButton"
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_send_ripple"
-            android:text="@string/pay"
+            android:text="@string/scan"
             android:textAllCaps="false"
             android:textColor="@color/lightningOrange"
             android:textSize="18sp"
@@ -216,7 +216,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.74"
-            app:layout_constraintStart_toEndOf="@+id/sendButton" />
+            app:layout_constraintStart_toEndOf="@+id/scanButton" />
 
         <ImageView
             android:id="@+id/switchButtonImage"

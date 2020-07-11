@@ -25,7 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
-import zapsolutions.zap.SendActivity;
+import zapsolutions.zap.ScanActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
@@ -219,17 +219,16 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        // Action when clicked on "send"
-        Button btnSend = view.findViewById(R.id.sendButton);
-        btnSend.setOnClickListener(new OnSingleClickListener() {
+        // Action when clicked on "scan"
+        View btnScan = view.findViewById(R.id.scanButton);
+        btnScan.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                Intent intent = new Intent(getActivity(), SendActivity.class);
+                Intent intent = new Intent(getActivity(), ScanActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivityForResult(intent, HomeActivity.REQUEST_CODE_PAYMENT);
+                startActivityForResult(intent, HomeActivity.REQUEST_CODE_GENERIC_SCAN);
             }
         });
-
 
         // Action when clicked on "receive"
         Button btnReceive = view.findViewById(R.id.receiveButton);
