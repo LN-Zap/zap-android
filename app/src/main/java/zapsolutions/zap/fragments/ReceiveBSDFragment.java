@@ -38,13 +38,11 @@ import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import zapsolutions.zap.GeneratedRequestActivity;
-import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.NumpadView;
-import zapsolutions.zap.lnurl.withdraw.ScanLnUrlWithdrawActivity;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -59,7 +57,6 @@ public class ReceiveBSDFragment extends RxBSDFragment {
     private static final String LOG_TAG = ReceiveBSDFragment.class.getName();
 
     private View mBtnLn;
-    private View mBtnScanLnurl;
     private View mBtnOnChain;
     private View mChooseTypeView;
     private ImageView mIvBsdIcon;
@@ -95,7 +92,6 @@ public class ReceiveBSDFragment extends RxBSDFragment {
         }
 
         mBtnLn = view.findViewById(R.id.lnBtn);
-        mBtnScanLnurl = view.findViewById(R.id.scanLnurl);
         mBtnOnChain = view.findViewById(R.id.onChainBtn);
         mIvBsdIcon = view.findViewById(R.id.bsdIcon);
         mIconAnchor = view.findViewById(R.id.anchor);
@@ -142,22 +138,6 @@ public class ReceiveBSDFragment extends RxBSDFragment {
             @Override
             public void onClick(View v) {
                 HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_LightningVsOnChain);
-            }
-        });
-
-        mBtnScanLnurl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hasLightningIncomeBalance()) {
-                    // go to scan Activity
-                    Intent intent = new Intent(getActivity(), ScanLnUrlWithdrawActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivityForResult(intent, HomeActivity.REQUEST_CODE_LNURL_WITHDRAW);
-                    dismiss();
-                } else {
-                    // In this case we want to show the lightning channel info which already happens if we click the normal lightning button.
-                    mBtnLn.callOnClick();
-                }
             }
         });
 
