@@ -86,6 +86,11 @@ public class RemoteLndLightningService implements LndLightningService {
     }
 
     @Override
+    public Observable<com.github.lightningnetwork.lnd.lnrpc.PeerEvent> subscribePeerEvents(com.github.lightningnetwork.lnd.lnrpc.PeerEventSubscription request) {
+        return DefaultObservable.createDefault(emitter -> asyncStub.subscribePeerEvents(request, new RemoteLndStreamObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse> getInfo(com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.getInfo(request, new RemoteLndSingleObserver<>(emitter)));
     }
@@ -118,6 +123,11 @@ public class RemoteLndLightningService implements LndLightningService {
     @Override
     public Observable<com.github.lightningnetwork.lnd.lnrpc.OpenStatusUpdate> openChannel(com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest request) {
         return DefaultObservable.createDefault(emitter -> asyncStub.openChannel(request, new RemoteLndStreamObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.FundingStateStepResp> fundingStateStep(com.github.lightningnetwork.lnd.lnrpc.FundingTransitionMsg request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.fundingStateStep(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
     @Override
@@ -178,6 +188,11 @@ public class RemoteLndLightningService implements LndLightningService {
     @Override
     public Single<com.github.lightningnetwork.lnd.lnrpc.ChannelGraph> describeGraph(com.github.lightningnetwork.lnd.lnrpc.ChannelGraphRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.describeGraph(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.NodeMetricsResponse> getNodeMetrics(com.github.lightningnetwork.lnd.lnrpc.NodeMetricsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getNodeMetrics(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
     @Override
@@ -253,6 +268,11 @@ public class RemoteLndLightningService implements LndLightningService {
     @Override
     public Observable<com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot> subscribeChannelBackups(com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription request) {
         return DefaultObservable.createDefault(emitter -> asyncStub.subscribeChannelBackups(request, new RemoteLndStreamObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.BakeMacaroonResponse> bakeMacaroon(com.github.lightningnetwork.lnd.lnrpc.BakeMacaroonRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bakeMacaroon(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
 }

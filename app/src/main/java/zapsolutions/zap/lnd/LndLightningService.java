@@ -33,6 +33,8 @@ public interface LndLightningService {
 
     Single<com.github.lightningnetwork.lnd.lnrpc.ListPeersResponse> listPeers(com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest request);
 
+    Observable<com.github.lightningnetwork.lnd.lnrpc.PeerEvent> subscribePeerEvents(com.github.lightningnetwork.lnd.lnrpc.PeerEventSubscription request);
+
     Single<com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse> getInfo(com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse> pendingChannels(com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest request);
@@ -47,17 +49,19 @@ public interface LndLightningService {
 
     Observable<com.github.lightningnetwork.lnd.lnrpc.OpenStatusUpdate> openChannel(com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest request);
 
-// skipped ChannelAcceptor
+    Single<com.github.lightningnetwork.lnd.lnrpc.FundingStateStepResp> fundingStateStep(com.github.lightningnetwork.lnd.lnrpc.FundingTransitionMsg request);
+
+    // skipped ChannelAcceptor
 
     Observable<com.github.lightningnetwork.lnd.lnrpc.CloseStatusUpdate> closeChannel(com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.AbandonChannelResponse> abandonChannel(com.github.lightningnetwork.lnd.lnrpc.AbandonChannelRequest request);
 
-// skipped SendPayment
+    // skipped SendPayment
 
     Single<com.github.lightningnetwork.lnd.lnrpc.SendResponse> sendPaymentSync(com.github.lightningnetwork.lnd.lnrpc.SendRequest request);
 
-// skipped SendToRoute
+    // skipped SendToRoute
 
     Single<com.github.lightningnetwork.lnd.lnrpc.SendResponse> sendToRouteSync(com.github.lightningnetwork.lnd.lnrpc.SendToRouteRequest request);
 
@@ -76,6 +80,8 @@ public interface LndLightningService {
     Single<com.github.lightningnetwork.lnd.lnrpc.DeleteAllPaymentsResponse> deleteAllPayments(com.github.lightningnetwork.lnd.lnrpc.DeleteAllPaymentsRequest request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.ChannelGraph> describeGraph(com.github.lightningnetwork.lnd.lnrpc.ChannelGraphRequest request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.NodeMetricsResponse> getNodeMetrics(com.github.lightningnetwork.lnd.lnrpc.NodeMetricsRequest request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.ChannelEdge> getChanInfo(com.github.lightningnetwork.lnd.lnrpc.ChanInfoRequest request);
 
@@ -106,4 +112,6 @@ public interface LndLightningService {
     Single<com.github.lightningnetwork.lnd.lnrpc.RestoreBackupResponse> restoreChannelBackups(com.github.lightningnetwork.lnd.lnrpc.RestoreChanBackupRequest request);
 
     Observable<com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot> subscribeChannelBackups(com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.BakeMacaroonResponse> bakeMacaroon(com.github.lightningnetwork.lnd.lnrpc.BakeMacaroonRequest request);
 }
