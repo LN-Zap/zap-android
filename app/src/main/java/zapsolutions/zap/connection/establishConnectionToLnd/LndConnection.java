@@ -11,10 +11,24 @@ import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.lnd.LndAutopilotService;
+import zapsolutions.zap.lnd.LndChainNotifierService;
+import zapsolutions.zap.lnd.LndInvoicesService;
 import zapsolutions.zap.lnd.LndLightningService;
+import zapsolutions.zap.lnd.LndRouterService;
+import zapsolutions.zap.lnd.LndSignerService;
+import zapsolutions.zap.lnd.LndWalletKitService;
 import zapsolutions.zap.lnd.LndWalletUnlockerService;
+import zapsolutions.zap.lnd.LndWatchtowerClientService;
+import zapsolutions.zap.lnd.RemoteLndAutopilotService;
+import zapsolutions.zap.lnd.RemoteLndChainNotifierService;
+import zapsolutions.zap.lnd.RemoteLndInvoicesService;
 import zapsolutions.zap.lnd.RemoteLndLightningService;
+import zapsolutions.zap.lnd.RemoteLndRouterService;
+import zapsolutions.zap.lnd.RemoteLndSignerService;
+import zapsolutions.zap.lnd.RemoteLndWalletKitService;
 import zapsolutions.zap.lnd.RemoteLndWalletUnlockerService;
+import zapsolutions.zap.lnd.RemoteLndWatchtowerClientService;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -29,8 +43,15 @@ public class LndConnection {
     private SSLSocketFactory mSSLFactory;
     private MacaroonCallCredential mMacaroon;
     private ManagedChannel mSecureChannel;
+    private LndAutopilotService mLndAutopilotService;
+    private LndChainNotifierService mLndChainNotifierService;
+    private LndInvoicesService mLndInvoicesService;
     private LndLightningService mLndLightningService;
+    private LndRouterService mLndRouterService;
+    private LndSignerService mLndSignerService;
+    private LndWalletKitService mLndWalletKitService;
     private LndWalletUnlockerService mLndWalletUnlockerService;
+    private LndWatchtowerClientService mLndWatchtowerClientService;
     private WalletConfig mConnectionConfig;
     private boolean isConnected = false;
 
@@ -45,12 +66,40 @@ public class LndConnection {
         return mLndConnectionInstance;
     }
 
+    public LndAutopilotService getAutopilotService() {
+        return mLndAutopilotService;
+    }
+
+    public LndChainNotifierService getChainNotifierService() {
+        return mLndChainNotifierService;
+    }
+
+    public LndInvoicesService getInvoicesService() {
+        return mLndInvoicesService;
+    }
+
     public LndLightningService getLightningService() {
         return mLndLightningService;
     }
 
+    public LndRouterService getRouterService() {
+        return mLndRouterService;
+    }
+
+    public LndSignerService getSignerService() {
+        return mLndSignerService;
+    }
+
+    public LndWalletKitService getWalletKitService() {
+        return mLndWalletKitService;
+    }
+
     public LndWalletUnlockerService getWalletUnlockerService() {
         return mLndWalletUnlockerService;
+    }
+
+    public LndWatchtowerClientService getWatchtowerService() {
+        return mLndWatchtowerClientService;
     }
 
     private void readSavedConnectionInfo() {
@@ -97,7 +146,14 @@ public class LndConnection {
                     .build();
         }
 
+        mLndAutopilotService = new RemoteLndAutopilotService(mSecureChannel, mMacaroon);
+        mLndChainNotifierService = new RemoteLndChainNotifierService(mSecureChannel, mMacaroon);
+        mLndInvoicesService = new RemoteLndInvoicesService(mSecureChannel, mMacaroon);
         mLndLightningService = new RemoteLndLightningService(mSecureChannel, mMacaroon);
+        mLndRouterService = new RemoteLndRouterService(mSecureChannel, mMacaroon);
+        mLndSignerService = new RemoteLndSignerService(mSecureChannel, mMacaroon);
+        mLndWalletKitService = new RemoteLndWalletKitService(mSecureChannel, mMacaroon);
+        mLndWatchtowerClientService = new RemoteLndWatchtowerClientService(mSecureChannel, mMacaroon);
         mLndWalletUnlockerService = new RemoteLndWalletUnlockerService(mSecureChannel, mMacaroon);
     }
 
