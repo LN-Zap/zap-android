@@ -10,34 +10,43 @@ import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.setup.ConnectRemoteNodeActivity;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.UriUtil;
 import zapsolutions.zap.util.ZapLog;
 
 public class LandingActivity extends BaseAppCompatActivity {
 
     private static final String LOG_TAG = LandingActivity.class.getName();
 
+    boolean doSetupFromUri = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Save data when App was started with a task.
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
 
-            // Zap was started from an URI link.
-            Intent intent = getIntent();
-            if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-                Uri uri = intent.getData();
-                App.getAppContext().setUriSchemeData(uri.toString());
-                ZapLog.debug(LOG_TAG, "URI was detected: " + uri.toString());
+        // Zap was started from an URI link.
+        Intent intent = getIntent();
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            Uri uri = intent.getData();
+            App.getAppContext().setUriSchemeData(uri.toString());
+            ZapLog.debug(LOG_TAG, "URI was detected: " + uri.toString());
+            if (!WalletConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
+                setupWalletFromUri();
             }
+        }
 
-            // Zap was started using NFC.
-            if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
-                NfcUtil.readTag(LandingActivity.this, intent, payload -> App.getAppContext().setUriSchemeData(payload));
+        // Zap was started using NFC.
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+
+            NfcUtil.readTag(LandingActivity.this, intent, payload -> App.getAppContext().setUriSchemeData(payload));
+            if (!WalletConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
+                setupWalletFromUri();
             }
         }
 
@@ -58,7 +67,6 @@ public class LandingActivity extends BaseAppCompatActivity {
             // Make sure settings get reset for versions that don't expose settings version
             resetApp();
         }
-
     }
 
     private void resetApp() {
@@ -113,12 +121,21 @@ public class LandingActivity extends BaseAppCompatActivity {
 
         } else {
 
-            // Clear connection data if something is there
-            PrefsUtil.edit().remove(PrefsUtil.WALLET_CONFIGS).commit();
+            if (!doSetupFromUri) {
+                // Clear connection data if something is there
+                PrefsUtil.edit().remove(PrefsUtil.WALLET_CONFIGS).commit();
 
-
-            Intent homeIntent = new Intent(this, HomeActivity.class);
-            startActivity(homeIntent);
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                startActivity(homeIntent);
+            }
         }
+    }
+
+    private void setupWalletFromUri() {
+        doSetupFromUri = true;
+        Intent connectIntent = new Intent(this, ConnectRemoteNodeActivity.class);
+        connectIntent.putExtra(ConnectRemoteNodeActivity.EXTRA_STARTED_FROM_URI, true);
+        connectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(connectIntent);
     }
 }

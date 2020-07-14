@@ -61,6 +61,7 @@ import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.TorUtil;
+import zapsolutions.zap.util.UriUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -253,6 +254,15 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
             }
         }
+
+        // Check if Zap was started from an URI link or by NFC.
+        if (App.getAppContext().getUriSchemeData() != null) {
+            // Only check for connecting wallets. Other operations need a wallet fully loaded.
+            if (UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
+                analyzeString(App.getAppContext().getUriSchemeData());
+                App.getAppContext().setUriSchemeData(null);
+            }
+        }
     }
 
     // This function gets called when app is moved to background.
@@ -372,7 +382,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             // Check if Zap was started from an URI link or by NFC.
-            // If yes, forward the invoice.
             if (App.getAppContext().getUriSchemeData() != null) {
                 analyzeString(App.getAppContext().getUriSchemeData());
                 App.getAppContext().setUriSchemeData(null);
@@ -575,12 +584,23 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     private void addWallet(RemoteConfiguration remoteConfiguration) {
         new UserGuardian(HomeActivity.this, () -> {
-            RemoteConnectUtil.saveRemoteConfiguration(remoteConfiguration, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+            RemoteConnectUtil.saveRemoteConfiguration(remoteConfiguration, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
                 @Override
                 public void onSaved(String id) {
                     new AlertDialog.Builder(HomeActivity.this)
                             .setMessage(R.string.wallet_added)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            }).show();
+                }
+
+                @Override
+                public void onAlreadyExists() {
+                    new AlertDialog.Builder(HomeActivity.this)
+                            .setMessage(R.string.wallet_already_exists)
                             .setCancelable(true)
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
