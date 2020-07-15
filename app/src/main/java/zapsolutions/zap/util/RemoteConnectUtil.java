@@ -97,22 +97,29 @@ public class RemoteConnectUtil {
         try {
             if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConfig = (LndConnectConfig) config;
+
+                int port = lndConfig.getPort();
+                if (port == 8080) {
+                    // Zap Android does not support REST. If the REST port was supplied, we automatically change it to the standard gRPC port.
+                    port = 10009;
+                }
+
                 String id;
                 if (walletUUID == null) {
 
-                    if (walletConfigsManager.doesDestinationExist(lndConfig.getHost(), lndConfig.getPort())) {
+                    if (walletConfigsManager.doesDestinationExist(lndConfig.getHost(), port)) {
                         listener.onAlreadyExists();
                         return;
                     }
 
                     id = walletConfigsManager.addWalletConfig(lndConfig.getHost(),
-                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
+                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), port,
                             lndConfig.getCert(), lndConfig.getMacaroon()).getId();
                 } else {
                     id = walletUUID;
                     String oldAlias = walletConfigsManager.getWalletConfigById(id).getAlias();
                     walletConfigsManager.updateWalletConfig(id, oldAlias,
-                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
+                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), port,
                             lndConfig.getCert(), lndConfig.getMacaroon());
                 }
 
@@ -123,22 +130,28 @@ public class RemoteConnectUtil {
             } else if (config instanceof BTCPayConfig) {
                 BTCPayConfig btcPayConfig = (BTCPayConfig) config;
 
+                int port = btcPayConfig.getPort();
+                if (port == 8080) {
+                    // Zap Android does not support REST. If the REST port was supplied, we automatically change it to the standard gRPC port.
+                    port = 10009;
+                }
+
                 String id;
                 if (walletUUID == null) {
 
-                    if (walletConfigsManager.doesDestinationExist(btcPayConfig.getHost(), btcPayConfig.getPort())) {
+                    if (walletConfigsManager.doesDestinationExist(btcPayConfig.getHost(), port)) {
                         listener.onAlreadyExists();
                         return;
                     }
 
                     id = walletConfigsManager.addWalletConfig(btcPayConfig.getHost(),
-                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
+                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), port,
                             null, btcPayConfig.getMacaroon()).getId();
                 } else {
                     id = walletUUID;
                     String oldAlias = walletConfigsManager.getWalletConfigById(id).getAlias();
                     walletConfigsManager.updateWalletConfig(id, oldAlias,
-                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
+                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), port,
                             null, btcPayConfig.getMacaroon());
                 }
 
