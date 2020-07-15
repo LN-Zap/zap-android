@@ -38,6 +38,7 @@
 
                 <data android:scheme="bitcoin" />
                 <data android:scheme="lightning" />
+                <data android:scheme="lndconnect" />
 
             </intent-filter>
             <intent-filter>
@@ -47,6 +48,7 @@
 
                 <data android:scheme="bitcoin" />
                 <data android:scheme="lightning" />
+                <data android:scheme="lndconnect" />
             </intent-filter>
         </activity>
         <activity

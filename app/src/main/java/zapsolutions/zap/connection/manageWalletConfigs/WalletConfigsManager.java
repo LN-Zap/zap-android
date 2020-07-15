@@ -114,6 +114,23 @@ public class WalletConfigsManager {
         return mWalletConfigsJson.doesWalletConfigExist(walletConfig);
     }
 
+    /**
+     * Checks if a wallet configuration already exists that points to the same destination.
+     *
+     * @param host
+     * @param port
+     * @return
+     */
+    public boolean doesDestinationExist(@NonNull String host, @NonNull int port) {
+        List<WalletConfig> configList = getAllWalletConfigs(false);
+        for (WalletConfig tempConfig : configList) {
+            if (tempConfig.getHost().equals(host) && tempConfig.getPort() == port) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Adds a wallet configuration to our current setup.

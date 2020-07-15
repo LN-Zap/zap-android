@@ -367,6 +367,7 @@
     <string name="no_wallets">No wallets</string>
     <string name="spinner_manage_wallets">Manage…</string>
     <string name="wallet_added">Wallet has been added.</string>
+    <string name="wallet_already_exists">This wallet already exists.\nIf you want to update its connection data, please go to the walltes detail page.</string>
 
     <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
     <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>

@@ -1,15 +1,15 @@
 package zapsolutions.zap.setup;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.preference.PreferenceManager;
 
 import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
+import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.util.ClipBoardUtil;
@@ -20,13 +20,31 @@ import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
+import zapsolutions.zap.walletManagement.ManageWalletsActivity;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
+
+    public static final String EXTRA_STARTED_FROM_URI = "startedFromURI";
+
     private static final String LOG_TAG = ConnectRemoteNodeActivity.class.getName();
+    private String mWalletUUID;
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+
+        // Receive data from last activity
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey(ManageWalletsActivity.WALLET_ID)) {
+                mWalletUUID = extras.getString(ManageWalletsActivity.WALLET_ID);
+            }
+            if (extras.getBoolean(EXTRA_STARTED_FROM_URI, false)) {
+                String connectString = App.getAppContext().getUriSchemeData();
+                App.getAppContext().setUriSchemeData(null);
+                verifyDesiredConnection(connectString);
+            }
+        }
 
         showButtonHelp();
 
@@ -117,7 +135,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
     private void connect(RemoteConfiguration remoteConfiguration) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(remoteConfiguration, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(remoteConfiguration, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {
@@ -135,6 +153,17 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
                 Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onAlreadyExists() {
+                new AlertDialog.Builder(ConnectRemoteNodeActivity.this)
+                        .setMessage(R.string.wallet_already_exists)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        }).show();
             }
 
             @Override

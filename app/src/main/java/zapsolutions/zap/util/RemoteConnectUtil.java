@@ -3,6 +3,7 @@ package zapsolutions.zap.util;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -89,17 +90,31 @@ public class RemoteConnectUtil {
     }
 
 
-    public static void saveRemoteConfiguration(RemoteConfiguration config, OnSaveRemoteConfigurationListener listener) {
+    public static void saveRemoteConfiguration(RemoteConfiguration config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
 
         WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
 
         try {
             if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConfig = (LndConnectConfig) config;
+                String id;
+                if (walletUUID == null) {
 
-                String id = walletConfigsManager.addWalletConfig(config.getHost(),
-                        WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
-                        lndConfig.getCert(), lndConfig.getMacaroon()).getId();
+                    if (walletConfigsManager.doesDestinationExist(lndConfig.getHost(), lndConfig.getPort())) {
+                        listener.onAlreadyExists();
+                        return;
+                    }
+
+                    id = walletConfigsManager.addWalletConfig(lndConfig.getHost(),
+                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
+                            lndConfig.getCert(), lndConfig.getMacaroon()).getId();
+                } else {
+                    id = walletUUID;
+                    String oldAlias = walletConfigsManager.getWalletConfigById(id).getAlias();
+                    walletConfigsManager.updateWalletConfig(id, oldAlias,
+                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
+                            lndConfig.getCert(), lndConfig.getMacaroon());
+                }
 
                 walletConfigsManager.apply();
 
@@ -108,9 +123,24 @@ public class RemoteConnectUtil {
             } else if (config instanceof BTCPayConfig) {
                 BTCPayConfig btcPayConfig = (BTCPayConfig) config;
 
-                String id = walletConfigsManager.addWalletConfig(config.getHost(),
-                        WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
-                        null, btcPayConfig.getMacaroon()).getId();
+                String id;
+                if (walletUUID == null) {
+
+                    if (walletConfigsManager.doesDestinationExist(btcPayConfig.getHost(), btcPayConfig.getPort())) {
+                        listener.onAlreadyExists();
+                        return;
+                    }
+
+                    id = walletConfigsManager.addWalletConfig(btcPayConfig.getHost(),
+                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
+                            null, btcPayConfig.getMacaroon()).getId();
+                } else {
+                    id = walletUUID;
+                    String oldAlias = walletConfigsManager.getWalletConfigById(id).getAlias();
+                    walletConfigsManager.updateWalletConfig(id, oldAlias,
+                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
+                            null, btcPayConfig.getMacaroon());
+                }
 
                 walletConfigsManager.apply();
 
@@ -138,6 +168,8 @@ public class RemoteConnectUtil {
     public interface OnSaveRemoteConfigurationListener {
 
         void onSaved(String walletId);
+
+        void onAlreadyExists();
 
         void onError(String error, int duration);
     }
