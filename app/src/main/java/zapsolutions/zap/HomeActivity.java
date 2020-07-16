@@ -149,15 +149,20 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         // Make navigation drawer menu open on a left swipe on the first page of the pager.
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private int times = 0;
+            private int times2 = 0;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (position == 0 && positionOffset == 0 && positionOffsetPixels == 0) {
                     times++;
                     if (times >= 3) {
-                        mDrawer.openDrawer(GravityCompat.START);
-                        mViewPager.setSwipeable(false);
+                        if (times2 < 3) {
+                            mDrawer.openDrawer(GravityCompat.START);
+                            mViewPager.setSwipeable(false);
+                        }
                     }
+                } else {
+                    times2 ++;
                 }
             }
 
@@ -170,6 +175,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             public void onPageScrollStateChanged(int state) {
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     times = 0;
+                    times2 = 0;
                 }
             }
         });
@@ -672,6 +678,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         TextView lndVersion = findViewById(R.id.lndVersion);
         String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
         lndVersion.setText(lndVersionString);
+    }
+
+    public TransactionHistoryFragment getHistoryFragment(){
+        return mPagerAdapter.getHistoryFragment();
     }
 
 

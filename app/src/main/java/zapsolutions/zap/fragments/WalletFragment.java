@@ -119,11 +119,14 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 Wallet.getInstance().reset();
                 updateTotalBalanceDisplay();
 
-                // update status dot
+                // Update status dot
                 updateStatusDot(alias);
 
                 // Show loading screen
                 showLoading();
+
+                // Clear history list
+                ((HomeActivity) getActivity()).getHistoryFragment().updateHistoryDisplayList();
 
                 // Reset drawer menu
                 ((HomeActivity) getActivity()).resetDrawerNavigationMenu();
@@ -133,8 +136,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        // update status dot
-        updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+        // Update status dot
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+        }
 
 
         mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {

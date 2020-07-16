@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
@@ -44,6 +45,7 @@ import zapsolutions.zap.transactionHistory.listItems.OnChainTransactionItem;
 import zapsolutions.zap.transactionHistory.transactionDetails.InvoiceDetailBSDFragment;
 import zapsolutions.zap.transactionHistory.transactionDetails.LnPaymentDetailBSDFragment;
 import zapsolutions.zap.transactionHistory.transactionDetails.OnChainTransactionDetailBSDFragment;
+import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
@@ -82,6 +84,22 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         mListOptions = view.findViewById(R.id.listOptions);
         mEmptyListText = view.findViewById(R.id.listEmpty);
         mTitle = view.findViewById(R.id.heading);
+
+        ImageView backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                ((HomeActivity) getActivity()).mViewPager.setCurrentItem(0);
+            }
+        });
+
+        ImageView searchButton = view.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                Toast.makeText(getActivity(), R.string.coming_soon, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mHistoryItems = new ArrayList<>();
         mCompositeDisposable = new CompositeDisposable();
@@ -171,7 +189,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         super.onDestroyView();
     }
 
-    private void updateHistoryDisplayList() {
+    public void updateHistoryDisplayList() {
 
         // Save state, we want to keep the scroll offset after the update.
         Parcelable recyclerViewState;
@@ -280,6 +298,11 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Restore state (e.g. scroll offset)
         mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
+    }
+
+    public void resetHistoryFragment() {
+        mHistoryItems.clear();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
