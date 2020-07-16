@@ -70,7 +70,7 @@ public class WalletSpinner extends AppCompatSpinner {
                             updateList();
 
                             // Inform the listener. This is where the new wallet is opened.
-                            mListener.onWalletChanged();
+                            mListener.onWalletChanged(selectedWalletId, WalletConfigsManager.getInstance().getWalletConfigById(selectedWalletId).getAlias());
                         }
                     } else {
                         // Open wallet Management
@@ -116,7 +116,7 @@ public class WalletSpinner extends AppCompatSpinner {
     }
 
     public interface OnWalletSpinnerChangedListener {
-        void onWalletChanged();
+        void onWalletChanged(String id, String alias);
     }
 
     public void setOnWalletSpinnerChangedListener(OnWalletSpinnerChangedListener listener) {

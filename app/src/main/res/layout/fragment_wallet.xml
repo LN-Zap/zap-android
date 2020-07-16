@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@drawable/line"
         android:backgroundTint="@color/seaBlueGradient"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
-
+            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -38,7 +38,7 @@
             android:background="@null"
             android:dropDownWidth="180dp"
             android:popupBackground="@drawable/bg_wallet_spinner_popup"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,19 +46,42 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/offline"
+            android:id="@+id/walletNameWidthDummy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
             android:textColor="@color/superRed"
-            android:textSize="16sp"
-            android:visibility="gone"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="wallet name" />
+
+        <ImageView
+            android:id="@+id/statusDot"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/walletNameWidthDummy"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_status_dot_black_24dp" />
+
+        <ImageView
+            android:id="@+id/historyButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerCrop"
+            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="OFFLINE" />
+            app:srcCompat="@drawable/ic_baseline_history_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -76,6 +99,7 @@
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
+            android:paddingBottom="10dp"
             android:textAlignment="textEnd"
             android:textColor="@color/gray"
             android:textSize="20sp"
@@ -192,7 +216,7 @@
             android:layout_height="80dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/button_send_ripple"
             android:text="@string/scan"
             android:textAllCaps="false"
@@ -209,7 +233,7 @@
             android:layout_height="80dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/button_receive_ripple"
             android:text="@string/receive"
             android:textAllCaps="false"

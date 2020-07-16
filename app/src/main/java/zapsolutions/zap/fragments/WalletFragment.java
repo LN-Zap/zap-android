@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,9 +66,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
     private TextView mTvConnectError;
-    private TextView mTvOffline;
     private WalletSpinner mWalletSpinner;
     private ImageView mDrawerMenuButton;
+    private TextView mWalletNameWidthDummy;
+    private ImageView mStatusDot;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -101,20 +103,24 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mWalletNotConnectedLayout = view.findViewById(R.id.ConnectionError);
         mLoadingWalletLayout = view.findViewById(R.id.loading);
         mTvConnectError = view.findViewById(R.id.connectError);
-        mTvOffline = view.findViewById(R.id.offline);
+        mStatusDot = view.findViewById(R.id.statusDot);
         mWalletSpinner = view.findViewById(R.id.walletSpinner);
         mDrawerMenuButton = view.findViewById(R.id.drawerMenuButton);
+        mWalletNameWidthDummy = view.findViewById(R.id.walletNameWidthDummy);
 
         // Show loading screen
         showLoading();
 
         mWalletSpinner.setOnWalletSpinnerChangedListener(new WalletSpinner.OnWalletSpinnerChangedListener() {
             @Override
-            public void onWalletChanged() {
+            public void onWalletChanged(String id, String alias) {
                 // Close current connection and reset all
                 LndConnection.getInstance().closeConnection();
                 Wallet.getInstance().reset();
                 updateTotalBalanceDisplay();
+
+                // update status dot
+                updateStatusDot(alias);
 
                 // Show loading screen
                 showLoading();
@@ -126,6 +132,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 ((HomeActivity) getActivity()).openWallet();
             }
         });
+
+        // update status dot
+        updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+
 
         mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -150,9 +160,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         // Hide balance if the setting was chosen
         if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
-            mClBalanceLayout.setVisibility(View.INVISIBLE);
-            mIvSwitchButton.setVisibility(View.INVISIBLE);
-            mIvLogo.setVisibility(View.VISIBLE);
+            hideBalance();
         }
 
         // Action when clicked on menu button
@@ -160,6 +168,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 ((HomeActivity) getActivity()).mDrawer.openDrawer(GravityCompat.START);
+            }
+        });
+
+        // Action when clicked on "History Button"
+        ImageView historyButton = view.findViewById(R.id.historyButton);
+        historyButton.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                ((HomeActivity) getActivity()).mViewPager.setCurrentItem(1);
             }
         });
 
@@ -343,6 +360,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (key.equals("firstCurrencyIsPrimary")) {
             updateTotalBalanceDisplay();
         }
+        if (key.equals("hideTotalBalance")) {
+            if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
+                hideBalance();
+            } else {
+                showBalance();
+            }
+        }
     }
 
     @Override
@@ -373,17 +397,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 // Wallet is not setup
                 mTvMode.setVisibility(View.GONE);
             }
-            mTvOffline.setVisibility(View.GONE);
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superGreen)));
         } else {
-            if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                mTvOffline.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
-                mTvOffline.setVisibility(View.VISIBLE);
-            } else {
-                mWalletConnectedLayout.setVisibility(View.GONE);
-                mLoadingWalletLayout.setVisibility(View.GONE);
-                mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
-            }
-
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
+            mWalletConnectedLayout.setVisibility(View.GONE);
+            mLoadingWalletLayout.setVisibility(View.GONE);
+            mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
         }
 
     }
@@ -481,6 +500,27 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mWalletConnectedLayout.setVisibility(View.GONE);
         mWalletNotConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideBalance() {
+        mClBalanceLayout.setVisibility(View.INVISIBLE);
+        mIvSwitchButton.setVisibility(View.INVISIBLE);
+        mIvLogo.setVisibility(View.VISIBLE);
+    }
+
+    private void showBalance() {
+        mClBalanceLayout.setVisibility(View.VISIBLE);
+        mIvSwitchButton.setVisibility(View.VISIBLE);
+        mIvLogo.setVisibility(View.INVISIBLE);
+    }
+
+    private void updateStatusDot(String walletAlias) {
+        mWalletNameWidthDummy.setText(walletAlias);
+        if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
+        } else {
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.lightningOrange)));
+        }
     }
 
     private void showError(String message, int duration) {

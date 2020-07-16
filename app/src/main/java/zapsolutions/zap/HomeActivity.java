@@ -23,14 +23,15 @@ import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.viewpager.widget.ViewPager;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.net.URL;
@@ -46,6 +47,7 @@ import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.customView.CustomViewPager;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.WalletFragment;
@@ -93,8 +95,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mIsExchangeRateSchedulerRunning = false;
     private boolean mIsLNDInfoSchedulerRunning = false;
     private boolean mIsNetworkChangeReceiverRunning = false;
-    private Fragment mCurrentFragment = null;
-    private FragmentTransaction mFt;
+
     private boolean mInfoChangeListenerRegistered;
     private boolean mWalletLoadedListenerRegistered;
     private boolean mMainnetWarningShownOnce;
@@ -104,38 +105,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     public DrawerLayout mDrawer;
     private NavigationView mNavigationView;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_wallet:
-                    // Display the fragment as main content.
-                    mFt = getSupportFragmentManager().beginTransaction();
-                    mCurrentFragment = new WalletFragment();
-                    mFt.replace(R.id.mainContent, mCurrentFragment);
-                    //mFt.addToBackStack(null);
-                    mFt.commit();
-                    return true;
-                case R.id.navigation_history:
-                    // Display the fragment as main content.
-                    mFt = getSupportFragmentManager().beginTransaction();
-                    mCurrentFragment = new TransactionHistoryFragment();
-                    mFt.replace(R.id.mainContent, mCurrentFragment);
-                    //mFt.addToBackStack(null);
-                    mFt.commit();
-                    return true;
-            }
-            return false;
-        }
-    };
+    public CustomViewPager mViewPager;
+    private HomePagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //NFC
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -143,7 +120,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         mHandler = new Handler();
 
-        // Setup navigation drawer
+
+        // Setup navigation drawer menu
         mDrawer = findViewById(R.id.drawerLayout);
         mNavigationView = findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -163,20 +141,44 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
         lndVersion.setText(lndVersionString);
 
+
+        // Setup view pager
+        mViewPager = findViewById(R.id.viewPager);
+        mPagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
+        // Make navigation drawer menu open on a left swipe on the first page of the pager.
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private int times = 0;
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 0 && positionOffset == 0 && positionOffsetPixels == 0) {
+                    times++;
+                    if (times >= 3) {
+                        mDrawer.openDrawer(GravityCompat.START);
+                        mViewPager.setSwipeable(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    times = 0;
+                }
+            }
+        });
+
+
         mUnlockDialog = buildUnlockDialog();
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-
-        // Set wallet fragment as beginning fragment
-        mFt = getSupportFragmentManager().beginTransaction();
-        mCurrentFragment = new WalletFragment();
-        mFt.replace(R.id.mainContent, mCurrentFragment);
-        mFt.commit();
-
-        // Setup Listener
-        BottomNavigationView navigation = findViewById(R.id.mainNavigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     // This schedule keeps us up to date on exchange rates
@@ -354,6 +356,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
+        } else if (mViewPager.getCurrentItem() == 1) {
+            mViewPager.setCurrentItem(0);
         } else {
             new AlertDialog.Builder(this)
                     .setMessage(R.string.confirmExit)
@@ -371,6 +375,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     })
                     .show();
         }
+
     }
 
     @Override
@@ -424,7 +429,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 }
 
                 mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                ((WalletFragment) mCurrentFragment).showBackgroundForWalletUnlock();
+                mPagerAdapter.getWalletFragment().showBackgroundForWalletUnlock();
 
                 if (!mIsFirstUnlockAttempt) {
                     Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
@@ -447,7 +452,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setView(viewInflated);
 
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
-            ((WalletFragment) mCurrentFragment).showLoading();
+            mPagerAdapter.getWalletFragment().showLoading();
             Wallet.getInstance().unlockWallet(input.getText().toString());
             mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             mIsFirstUnlockAttempt = false;
@@ -456,7 +461,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
             InputMethodManager inputMethodManager = (InputMethodManager) HomeActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-            ((WalletFragment) mCurrentFragment).showErrorAfterNotUnlocked();
+            mPagerAdapter.getWalletFragment().showErrorAfterNotUnlocked();
             mIsFirstUnlockAttempt = true;
             dialog.cancel();
         });
@@ -581,34 +586,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == HomeActivity.RESULT_CODE_PAYMENT) {
-            // This gets executed if a valid payment request was scanned or pasted
-            if (data != null) {
-                if (data.getExtras().getString("error") == null) {
-                    // forward data to send fragment
-                    SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
-                    sendBottomSheetDialog.setArguments(data.getExtras());
-                    sendBottomSheetDialog.show(mCurrentFragment.getParentFragmentManager(), "sendBottomSheetDialog");
-                } else {
-                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
-                }
-            }
-        }
-
-        if (resultCode == HomeActivity.RESULT_CODE_LNURL_WITHDRAW) {
-            // This gets executed if a valid lnurl was scanned or pasted
-            if (data != null) {
-                if (data.getExtras().getString("error") == null) {
-                    // forward data to withdraw fragment and show the dialog
-                    LnUrlWithdrawBSDFragment withdrawDialog = new LnUrlWithdrawBSDFragment();
-                    withdrawDialog.setArguments(data.getExtras());
-                    withdrawDialog.show(mCurrentFragment.getParentFragmentManager(), "withdrawDialog");
-                } else {
-                    showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
-                }
-            }
-        }
-
         if (resultCode == HomeActivity.RESULT_CODE_GENERIC_SCAN) {
             // This gets executed if readable data was found using the generic scanner
             if (data != null) {
@@ -695,5 +672,43 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         TextView lndVersion = findViewById(R.id.lndVersion);
         String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
         lndVersion.setText(lndVersionString);
+    }
+
+
+    private class HomePagerAdapter extends FragmentPagerAdapter {
+        private WalletFragment mWalletFragment;
+        private TransactionHistoryFragment mHistoryFragment;
+
+        public HomePagerAdapter(FragmentManager fm) {
+            super(fm);
+            mWalletFragment = new WalletFragment();
+            mHistoryFragment = new TransactionHistoryFragment();
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            switch (pos) {
+
+                case 0:
+                    return mWalletFragment;
+                case 1:
+                    return mHistoryFragment;
+                default:
+                    return mWalletFragment;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        public WalletFragment getWalletFragment() {
+            return mWalletFragment;
+        }
+
+        public TransactionHistoryFragment getHistoryFragment() {
+            return mHistoryFragment;
+        }
     }
 }
