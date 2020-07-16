@@ -16,9 +16,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
@@ -28,6 +31,7 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.net.URL;
 import java.util.concurrent.Executors;
@@ -37,13 +41,13 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.fragments.SendBSDFragment;
-import zapsolutions.zap.fragments.SettingsFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
@@ -55,6 +59,7 @@ import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.BitcoinStringAnalyzer;
 import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.NfcUtil;
+import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PinScreenUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -65,10 +70,11 @@ import zapsolutions.zap.util.UriUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
+import zapsolutions.zap.walletManagement.ManageWalletsActivity;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.InfoListener, Wallet.WalletLoadedListener {
+        Wallet.InfoListener, Wallet.WalletLoadedListener, NavigationView.OnNavigationItemSelectedListener {
 
     // Activity Result codes
     public static final int REQUEST_CODE_PAYMENT = 101;
@@ -96,6 +102,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private AlertDialog mUnlockDialog;
     private NfcAdapter mNfcAdapter;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    public DrawerLayout mDrawer;
+    private NavigationView mNavigationView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -119,14 +127,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     //mFt.addToBackStack(null);
                     mFt.commit();
                     return true;
-                case R.id.navigation_settings:
-                    // Display the fragment as main content.
-                    mFt = getSupportFragmentManager().beginTransaction();
-                    mCurrentFragment = new SettingsFragment();
-                    mFt.replace(R.id.mainContent, mCurrentFragment);
-                    //mFt.addToBackStack(null);
-                    mFt.commit();
-                    return true;
             }
             return false;
         }
@@ -142,6 +142,26 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         mHandler = new Handler();
+
+        // Setup navigation drawer
+        mDrawer = findViewById(R.id.drawerLayout);
+        mNavigationView = findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.getHeaderView(0).findViewById(R.id.headerButton).setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if (Wallet.getInstance().isConnectedToLND()) {
+                    //Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
+                    //startActivity(intent);
+                }
+            }
+        });
+        TextView zapVersion = findViewById(R.id.zapVersion);
+        String zapVersionString = "zap version:  " + BuildConfig.VERSION_NAME + ", build: " + BuildConfig.VERSION_CODE;
+        zapVersion.setText(zapVersionString);
+        TextView lndVersion = findViewById(R.id.lndVersion);
+        String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
+        lndVersion.setText(lndVersionString);
 
         mUnlockDialog = buildUnlockDialog();
 
@@ -332,21 +352,25 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setMessage(R.string.confirmExit)
-                .setCancelable(true)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        HomeActivity.super.onBackPressed();
-                    }
-                })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        } else {
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.confirmExit)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            HomeActivity.super.onBackPressed();
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                })
-                .show();
+                        }
+                    })
+                    .show();
+        }
     }
 
     @Override
@@ -388,6 +412,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 analyzeString(App.getAppContext().getUriSchemeData());
                 App.getAppContext().setUriSchemeData(null);
             }
+
+            updateDrawerNavigationMenu();
 
             ZapLog.debug(LOG_TAG, "Wallet loaded");
         } else {
@@ -623,5 +649,51 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 }
             });
         }).securityConnectToRemoteServer(remoteConfiguration.getHost());
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.drawerChannels:
+                Intent intentChannels = new Intent(this, ManageChannelsActivity.class);
+                startActivity(intentChannels);
+                break;
+            case R.id.drawerWallets:
+                Intent intentWallets = new Intent(this, ManageWalletsActivity.class);
+                startActivity(intentWallets);
+                break;
+            case R.id.drawerBackup:
+                Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.drawerSettings:
+                Intent intentSettings = new Intent(this, SettingsActivity.class);
+                startActivity(intentSettings);
+                break;
+            case R.id.drawerBuy:
+                Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.drawerSupport:
+                Intent intentSupport = new Intent(this, SupportActivity.class);
+                startActivity(intentSupport);
+                break;
+        }
+        return true;
+    }
+
+    public void updateDrawerNavigationMenu() {
+        TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
+        userWalletName.setText(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+        TextView lndVersion = findViewById(R.id.lndVersion);
+        String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
+        lndVersion.setText(lndVersionString);
+    }
+
+    public void resetDrawerNavigationMenu() {
+        TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
+        userWalletName.setText(getResources().getString(R.string.drawer_no_wallet));
+        TextView lndVersion = findViewById(R.id.lndVersion);
+        String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
+        lndVersion.setText(lndVersionString);
     }
 }

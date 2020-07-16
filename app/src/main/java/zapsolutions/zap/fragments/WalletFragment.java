@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -55,7 +55,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private TextView mTvPrimaryBalanceUnit;
     private TextView mTvSecondaryBalance;
     private TextView mTvSecondaryBalanceUnit;
-    private TextView mTvBtcRate;
     private TextView mTvMode;
     private ConstraintLayout mClBalanceLayout;
     private ImageView mIvLogo;
@@ -68,6 +67,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private TextView mTvConnectError;
     private TextView mTvOffline;
     private WalletSpinner mWalletSpinner;
+    private ImageView mDrawerMenuButton;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -94,7 +94,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvPrimaryBalanceUnit = view.findViewById(R.id.BalancePrimaryUnit);
         mTvSecondaryBalance = view.findViewById(R.id.BalanceSecondary);
         mTvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
-        mTvBtcRate = view.findViewById(R.id.btcRate);
         mTvMode = view.findViewById(R.id.mode);
         mBalanceFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.balance_fade_out);
         mLogoFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logo_fade_in);
@@ -104,7 +103,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvConnectError = view.findViewById(R.id.connectError);
         mTvOffline = view.findViewById(R.id.offline);
         mWalletSpinner = view.findViewById(R.id.walletSpinner);
-
+        mDrawerMenuButton = view.findViewById(R.id.drawerMenuButton);
 
         // Show loading screen
         showLoading();
@@ -119,6 +118,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
                 // Show loading screen
                 showLoading();
+
+                // Reset drawer menu
+                ((HomeActivity) getActivity()).resetDrawerNavigationMenu();
 
                 // Open the newly selected wallet
                 ((HomeActivity) getActivity()).openWallet();
@@ -152,6 +154,14 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mIvSwitchButton.setVisibility(View.INVISIBLE);
             mIvLogo.setVisibility(View.VISIBLE);
         }
+
+        // Action when clicked on menu button
+        mDrawerMenuButton.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                ((HomeActivity) getActivity()).mDrawer.openDrawer(GravityCompat.START);
+            }
+        });
 
         // Action when clicked on the logo
         mIvLogo.setOnClickListener(new View.OnClickListener() {
@@ -323,26 +333,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
         mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
-        if (MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()) {
-            // Hide btc rate info if both units are btc
-            mTvBtcRate.setVisibility(View.GONE);
-        } else {
-            String rate;
-            if (MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin()) {
-                rate = MonetaryUtil.getInstance().getSecondaryDisplayAmountAndUnit(100000000);
-            } else {
-                rate = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(100000000);
-            }
-
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                rate = "1 \u20BF ≈ " + rate;
-            } else {
-                rate = "1 BTC ≈ " + rate;
-            }
-
-            mTvBtcRate.setText(rate);
-            mTvBtcRate.setVisibility(View.VISIBLE);
-        }
         ZapLog.debug(LOG_TAG, "Total balance display updated");
 
     }
@@ -384,15 +374,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvMode.setVisibility(View.GONE);
             }
             mTvOffline.setVisibility(View.GONE);
-            if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin()) {
-                mTvBtcRate.setVisibility(View.VISIBLE);
-            }
-
         } else {
             if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 mTvOffline.setText(getActivity().getResources().getString(R.string.offline).toUpperCase());
                 mTvOffline.setVisibility(View.VISIBLE);
-                mTvBtcRate.setVisibility(View.GONE);
             } else {
                 mWalletConnectedLayout.setVisibility(View.GONE);
                 mLoadingWalletLayout.setVisibility(View.GONE);

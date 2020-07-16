@@ -109,7 +109,7 @@ public class WalletSpinner extends AppCompatSpinner {
             items[i] = WalletConfigsManager.getInstance().getAllWalletConfigs(true).get(i).getAlias();
         }
         items[items.length - 1] = getContext().getResources().getString(R.string.spinner_manage_wallets);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.wallet_spinner_item, items);
 
         //set the spinners adapter to the previously created one.
         this.setAdapter(adapter);

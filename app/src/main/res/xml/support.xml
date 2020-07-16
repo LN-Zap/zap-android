@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:icon="@null"
+    android:key="topPrefScreen"
+    android:title="@string/navigation_settings">
+
+
+    <Preference
+        android:key="help"
+        android:summary="@string/support_help_description"
+        android:title="@string/settings_help"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="reportIssue"
+        android:summary="@string/support_issue_description"
+        android:title="@string/settings_reportIssue"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="contribute"
+        android:summary="@string/support_contribute_description"
+        android:title="@string/contribute"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="privacy"
+        android:summary="@string/support_privacy_description"
+        android:title="@string/privacy"
+        app:iconSpaceReserved="false" />
+
+
+</PreferenceScreen>
