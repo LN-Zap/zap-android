@@ -61,6 +61,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 MonetaryUtil.getInstance().loadFirstCurrencyFromPrefs(String.valueOf(newValue));
+                // Calling switch currency twice will update all currency labels across the app
+                // while keeping the same currency as primary
+                MonetaryUtil.getInstance().switchCurrencies();
+                MonetaryUtil.getInstance().switchCurrencies();
                 return true;
             }
         });
@@ -84,6 +88,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 MonetaryUtil.getInstance().loadSecondCurrencyFromPrefs(String.valueOf(newValue));
+                // Calling switch currency twice will update all currency labels across the app
+                // while keeping the same currency as primary
+                MonetaryUtil.getInstance().switchCurrencies();
+                MonetaryUtil.getInstance().switchCurrencies();
                 return true;
             }
         });
