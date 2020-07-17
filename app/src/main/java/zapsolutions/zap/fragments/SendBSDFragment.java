@@ -337,7 +337,7 @@ public class SendBSDFragment extends RxBSDFragment {
                 @Override
                 public void onClick(View v) {
 
-                    ZapLog.debug(LOG_TAG, "Trying to send on-chain payment...");
+                    ZapLog.d(LOG_TAG, "Trying to send on-chain payment...");
                     // Send on-chain payment
 
                     long sendAmount = 0L;
@@ -364,13 +364,13 @@ public class SendBSDFragment extends RxBSDFragment {
                                     // updated the history, so it is shown the next time the user views it
                                     Wallet.getInstance().updateOnChainTransactionHistory();
 
-                                    ZapLog.debug(LOG_TAG, sendCoinsResponse.toString());
+                                    ZapLog.d(LOG_TAG, sendCoinsResponse.toString());
 
                                     // show success animation
                                     mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
                                 }, throwable -> {
-                                    ZapLog.debug(LOG_TAG, "Exception in send coins request task.");
-                                    ZapLog.debug(LOG_TAG, throwable.getMessage());
+                                    ZapLog.d(LOG_TAG, "Exception in send coins request task.");
+                                    ZapLog.d(LOG_TAG, throwable.getMessage());
 
                                     String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
                                     String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
@@ -560,7 +560,7 @@ public class SendBSDFragment extends RxBSDFragment {
     private void sendPayment(SendRequest.Builder paymentRequestBuilder) {
         switchToSendProgressScreen();
 
-        ZapLog.debug(LOG_TAG, "Trying to send lightning payment...");
+        ZapLog.d(LOG_TAG, "Trying to send lightning payment...");
 
         paymentRequestBuilder.setPaymentRequest(mLnInvoice);
 
@@ -578,7 +578,7 @@ public class SendBSDFragment extends RxBSDFragment {
                     // updated the history, so it is shown the next time the user views it
                     Wallet.getInstance().updateLightningPaymentHistory();
 
-                    ZapLog.debug(LOG_TAG, sendResponse.toString());
+                    ZapLog.d(LOG_TAG, sendResponse.toString());
 
                     // show success animation
                     mHandler.postDelayed(() -> {
@@ -592,8 +592,8 @@ public class SendBSDFragment extends RxBSDFragment {
 
                     }, 300);
                 }, throwable -> {
-                    ZapLog.debug(LOG_TAG, "Exception in send payment task.");
-                    ZapLog.debug(LOG_TAG, throwable.getMessage());
+                    ZapLog.d(LOG_TAG, "Exception in send payment task.");
+                    ZapLog.d(LOG_TAG, throwable.getMessage());
 
                     String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
                     String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
@@ -871,8 +871,8 @@ public class SendBSDFragment extends RxBSDFragment {
         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
                 .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat())),
                         throwable -> {
-                            ZapLog.debug(LOG_TAG, "Exception in fee estimation request task.");
-                            ZapLog.debug(LOG_TAG, throwable.getMessage());
+                            ZapLog.d(LOG_TAG, "Exception in fee estimation request task.");
+                            ZapLog.d(LOG_TAG, throwable.getMessage());
                             setFeeFailure();
                         }));
     }
@@ -890,7 +890,7 @@ public class SendBSDFragment extends RxBSDFragment {
         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().queryRoutes(asyncQueryRoutesRequest)
                 .subscribe(queryRoutesResponse -> {
                     if (queryRoutesResponse.getRoutesCount() == 0) {
-                        ZapLog.debug(LOG_TAG, "No route found.");
+                        ZapLog.d(LOG_TAG, "No route found.");
                         setFeeFailure();
                     } else {
                         Route route = queryRoutesResponse.getRoutes(0);
@@ -908,8 +908,8 @@ public class SendBSDFragment extends RxBSDFragment {
                         setCalculatedFeeAmount(feeString);
                     }
                 }, throwable -> {
-                    ZapLog.debug(LOG_TAG, "Exception in query routes request task.");
-                    ZapLog.debug(LOG_TAG, throwable.getMessage());
+                    ZapLog.d(LOG_TAG, "Exception in query routes request task.");
+                    ZapLog.d(LOG_TAG, throwable.getMessage());
                     setFeeFailure();
                 }));
     }

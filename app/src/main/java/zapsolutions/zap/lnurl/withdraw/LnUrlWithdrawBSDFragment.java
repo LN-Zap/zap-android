@@ -290,7 +290,7 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
 
                 switchToWithdrawProgressScreen();
 
-                ZapLog.debug(LOG_TAG, "Trying to withdraw...");
+                ZapLog.d(LOG_TAG, "Trying to withdraw...");
 
                 // Create ln-invoice
                 long value;
@@ -337,7 +337,7 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
 
                         }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                            ZapLog.debug(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
+                            ZapLog.d(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
                         }));
             }
         });
@@ -400,7 +400,7 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         if (lnUrlWithdrawResponse.getStatus().equals("OK")) {
             switchToSuccessScreen();
         } else {
-            ZapLog.debug(LOG_TAG, "LNURL: Failed to withdraw. " + lnUrlWithdrawResponse.getReason());
+            ZapLog.d(LOG_TAG, "LNURL: Failed to withdraw. " + lnUrlWithdrawResponse.getReason());
             switchToFailedScreen(lnUrlWithdrawResponse.getReason());
         }
     }

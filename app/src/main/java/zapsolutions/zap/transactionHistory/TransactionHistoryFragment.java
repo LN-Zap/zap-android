@@ -309,7 +309,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
     public void onHistoryUpdated() {
         updateHistoryDisplayList();
         mSwipeRefreshLayout.setRefreshing(false);
-        ZapLog.debug(LOG_TAG, "History updated!");
+        ZapLog.d(LOG_TAG, "History updated!");
     }
 
     @Override

@@ -72,7 +72,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
             try {
                 bindInvoice(transactionString);
             } catch (InvalidProtocolBufferException | NullPointerException exception) {
-                ZapLog.debug(TAG, "Failed to parse invoice.");
+                ZapLog.d(TAG, "Failed to parse invoice.");
                 dismiss();
             }
         }

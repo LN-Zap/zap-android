@@ -254,12 +254,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                     fiatEntryDisplayValue[i] = currencyName;
                 } catch (JSONException e) {
-                    ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+                    ZapLog.d(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
                 }
             }
 
         } catch (JSONException e) {
-            ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+            ZapLog.d(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
         }
 
         // Combine btc list with fiat list

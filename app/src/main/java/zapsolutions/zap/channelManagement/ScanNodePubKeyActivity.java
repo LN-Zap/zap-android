@@ -2,7 +2,6 @@ package zapsolutions.zap.channelManagement;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
@@ -88,9 +87,9 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
 
                         updateSuggestedNodes();
                     } catch (JSONException e) {
-                        ZapLog.debug(LOG_TAG, "Could not parse suggested peers: " + e.getMessage());
+                        ZapLog.d(LOG_TAG, "Could not parse suggested peers: " + e.getMessage());
                     }
-                }, error -> ZapLog.debug(LOG_TAG, "Could not fetch suggested peers: " + error.getMessage()));
+                }, error -> ZapLog.d(LOG_TAG, "Could not fetch suggested peers: " + error.getMessage()));
 
         HttpClient.getInstance().addToRequestQueue(suggestedPeersRequest, "SuggestedPeers");
     }

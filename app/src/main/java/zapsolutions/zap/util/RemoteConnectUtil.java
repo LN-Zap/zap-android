@@ -32,7 +32,7 @@ public class RemoteConnectUtil {
                     response -> decodeBtcPay(ctx, response, listener),
                     error -> listener.onError(ctx.getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT));
 
-            ZapLog.debug(LOG_TAG, "Fetching BTCPay config...");
+            ZapLog.d(LOG_TAG, "Fetching BTCPay config...");
             HttpClient.getInstance().addToRequestQueue(btcPayConfigRequest, "BTCPayConfigRequest");
         } else if (BTCPayConfigParser.isValidJson(data)) {
             // Valid BTCPay JSON

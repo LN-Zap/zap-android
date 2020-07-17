@@ -26,7 +26,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             InputStream in = new URL(url).openStream();
             image = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
-            ZapLog.debug(LOG_TAG, e.getMessage());
+            ZapLog.d(LOG_TAG, e.getMessage());
         }
         return image;
     }
