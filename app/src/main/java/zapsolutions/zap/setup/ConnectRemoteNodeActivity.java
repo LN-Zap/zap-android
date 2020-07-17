@@ -135,7 +135,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
     private void connect(RemoteConfiguration remoteConfiguration) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(remoteConfiguration, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, remoteConfiguration, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {

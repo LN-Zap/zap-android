@@ -1,6 +1,8 @@
 package zapsolutions.zap.util;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -90,29 +92,52 @@ public class RemoteConnectUtil {
     }
 
 
-    public static void saveRemoteConfiguration(RemoteConfiguration config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
+    public static void saveRemoteConfiguration(Context ctx, RemoteConfiguration config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
+        int port = config.getPort();
+        if (port == 8080) {
+            // Zap Android does not support REST. If the REST port was supplied, we ask the user if he wants to change it to 10009 (gRPC port).
+            new AlertDialog.Builder(ctx)
+                    .setMessage(R.string.rest_port)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            executeSaveRemoteConfiguration(config, walletUUID, 10009, listener);
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            executeSaveRemoteConfiguration(config, walletUUID, port, listener);
+                        }
+                    }).show();
+        } else {
+            executeSaveRemoteConfiguration(config, walletUUID, port, listener);
+        }
+    }
 
+    private static void executeSaveRemoteConfiguration(RemoteConfiguration config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
         WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
 
         try {
             if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConfig = (LndConnectConfig) config;
+
                 String id;
                 if (walletUUID == null) {
 
-                    if (walletConfigsManager.doesDestinationExist(lndConfig.getHost(), lndConfig.getPort())) {
+                    if (walletConfigsManager.doesDestinationExist(lndConfig.getHost(), port)) {
                         listener.onAlreadyExists();
                         return;
                     }
 
                     id = walletConfigsManager.addWalletConfig(lndConfig.getHost(),
-                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
+                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), port,
                             lndConfig.getCert(), lndConfig.getMacaroon()).getId();
                 } else {
                     id = walletUUID;
                     String oldAlias = walletConfigsManager.getWalletConfigById(id).getAlias();
                     walletConfigsManager.updateWalletConfig(id, oldAlias,
-                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), lndConfig.getPort(),
+                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), port,
                             lndConfig.getCert(), lndConfig.getMacaroon());
                 }
 
@@ -126,19 +151,19 @@ public class RemoteConnectUtil {
                 String id;
                 if (walletUUID == null) {
 
-                    if (walletConfigsManager.doesDestinationExist(btcPayConfig.getHost(), btcPayConfig.getPort())) {
+                    if (walletConfigsManager.doesDestinationExist(btcPayConfig.getHost(), port)) {
                         listener.onAlreadyExists();
                         return;
                     }
 
                     id = walletConfigsManager.addWalletConfig(btcPayConfig.getHost(),
-                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
+                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), port,
                             null, btcPayConfig.getMacaroon()).getId();
                 } else {
                     id = walletUUID;
                     String oldAlias = walletConfigsManager.getWalletConfigById(id).getAlias();
                     walletConfigsManager.updateWalletConfig(id, oldAlias,
-                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), btcPayConfig.getPort(),
+                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), port,
                             null, btcPayConfig.getMacaroon());
                 }
 

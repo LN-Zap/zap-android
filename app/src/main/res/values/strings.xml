@@ -382,6 +382,9 @@
     <string name="lnurl_service">Service</string>
 
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
+
+    <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC) instead?</string>
+
     <string name="drawer_menu_wallets">Wallets</string>
     <string name="drawer_menu_channels">Channels</string>
     <string name="drawer_menu_backup">Backup</string>
@@ -392,5 +395,4 @@
     <string name="support_issue_description">Found a bug? Let us know!</string>
     <string name="support_privacy_description">We value your privacy.</string>
     <string name="support_help_description">Visit our documentation.</string>
-
 </resources>
