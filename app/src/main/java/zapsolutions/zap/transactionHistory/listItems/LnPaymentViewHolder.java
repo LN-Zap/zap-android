@@ -61,7 +61,7 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
                             // Set description
                             setSecondaryDescription(payReq.getDescription(), true);
                         }
-                    }, throwable -> ZapLog.debug(LOG_TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
+                    }, throwable -> ZapLog.d(LOG_TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
     }
 
     @Override

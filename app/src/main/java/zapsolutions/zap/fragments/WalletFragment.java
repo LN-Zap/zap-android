@@ -358,7 +358,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
         mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
-        ZapLog.debug(LOG_TAG, "Total balance display updated");
+        ZapLog.v(LOG_TAG, "Total balance display updated");
 
     }
 

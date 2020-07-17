@@ -31,7 +31,7 @@ public class NfcUtil {
      */
     public static void readTag(Context ctx, Intent intent, OnNfcResponseListener listener) {
         String action = intent.getAction();
-        ZapLog.debug(LOG_TAG, "onNewIntent: " + action);
+        ZapLog.v(LOG_TAG, "onNewIntent: " + action);
         if (action != null) {
             if (action.equals(NfcAdapter.ACTION_TAG_DISCOVERED) || action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
 
@@ -45,9 +45,9 @@ public class NfcUtil {
                     // Process the messages array.
                     NdefMessage message = messages[0];
 
-                    ZapLog.debug(LOG_TAG, "Ndef message: " + message);
+                    ZapLog.v(LOG_TAG, "Ndef message: " + message);
                     NdefRecord[] records = message.getRecords();
-                    ZapLog.debug(LOG_TAG, "Ndef record: " + records[0]);
+                    ZapLog.v(LOG_TAG, "Ndef record: " + records[0]);
                     if (records[0].getTnf() == NdefRecord.TNF_WELL_KNOWN) {
                         if (Arrays.equals(records[0].getType(), NdefRecord.RTD_URI)) {
                             byte[] rawPayload = records[0].getPayload();
@@ -56,19 +56,19 @@ public class NfcUtil {
                                 sb.append((char) rawPayload[i]);
                             }
                             String payload = sb.toString();
-                            ZapLog.debug(LOG_TAG, "Ndef payload: " + payload);
+                            ZapLog.d(LOG_TAG, "Ndef payload: " + payload);
                             listener.onSuccess(payload);
                         } else {
-                            ZapLog.debug(LOG_TAG, "This NdefRecord is not supported");
+                            ZapLog.w(LOG_TAG, "This NdefRecord is not supported");
                             showNotSupportedToast(ctx);
                         }
                     } else {
-                        ZapLog.debug(LOG_TAG, "This NdefRecord type name field (TNF) is not supported");
+                        ZapLog.w(LOG_TAG, "This NdefRecord type name field (TNF) is not supported");
                         showNotSupportedToast(ctx);
                     }
 
                 } else {
-                    ZapLog.debug(LOG_TAG, "Tag message is empty");
+                    ZapLog.w(LOG_TAG, "Tag message is empty");
                     showNotSupportedToast(ctx);
                 }
             }

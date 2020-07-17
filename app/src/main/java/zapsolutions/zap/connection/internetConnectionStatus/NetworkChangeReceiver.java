@@ -8,7 +8,6 @@ import android.os.Handler;
 import java.util.concurrent.RejectedExecutionException;
 
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
-import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -18,7 +17,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        ZapLog.debug("NetworkChangeReceiver: ", "Network status changed!");
+        ZapLog.d("NetworkChangeReceiver: ", "Network status changed!");
 
         int status = NetworkUtil.getConnectivityStatusString(context);
 
@@ -35,7 +34,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                         // The following command will find out, if we have a connection to LND
                         Wallet.getInstance().fetchInfoFromLND();
                     } catch (RejectedExecutionException ex) {
-                        ZapLog.debug(LOG_TAG, "Execute of fetchFromLND() was rejected");
+                        ZapLog.d(LOG_TAG, "Execute of fetchFromLND() was rejected");
                     }
                 }, 5000);
             }

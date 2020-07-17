@@ -179,7 +179,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
 
     public void handleCameraResult(Result result) {
         if (result != null) {
-            ZapLog.debug(LOG_TAG, "Scanned content: " + result.getContents());
+            ZapLog.v(LOG_TAG, "Scanned content: " + result.getContents());
         }
 
         // Note:

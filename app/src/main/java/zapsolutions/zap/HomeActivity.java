@@ -218,7 +218,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mLNDInfoScheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            ZapLog.debug(LOG_TAG, "LND info check initiated");
+                            ZapLog.v(LOG_TAG, "LND info check initiated");
                             Wallet.getInstance().fetchInfoFromLND();
                         }
                     }, 0, 30, TimeUnit.SECONDS);
@@ -241,7 +241,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     // This function gets called when app is moved to foreground.
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onMoveToForeground() {
-        ZapLog.debug(LOG_TAG, "Zap moved to foreground");
+        ZapLog.d(LOG_TAG, "Zap moved to foreground");
 
 
         // Test if PIN screen should be shown.
@@ -299,7 +299,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onMoveToBackground() {
 
-        ZapLog.debug(LOG_TAG, "Zap moved to background");
+        ZapLog.d(LOG_TAG, "Zap moved to background");
 
         App.getAppContext().connectionToLNDEstablished = false;
 
@@ -318,7 +318,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private void stopListenersAndSchedules() {
         if (TimeOutUtil.getInstance().getCanBeRestarted()) {
             TimeOutUtil.getInstance().restartTimer();
-            ZapLog.debug(LOG_TAG, "PIN timer restarted");
+            ZapLog.d(LOG_TAG, "PIN timer restarted");
         }
         TimeOutUtil.getInstance().setCanBeRestarted(false);
 
@@ -426,7 +426,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             updateDrawerNavigationMenu();
 
-            ZapLog.debug(LOG_TAG, "Wallet loaded");
+            ZapLog.d(LOG_TAG, "Wallet loaded");
         } else {
             if (error == Wallet.WalletLoadedListener.ERROR_LOCKED) {
 
@@ -515,7 +515,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                     analyzeString(payload);
                 } else {
-                    ZapLog.debug(LOG_TAG, "Wallet not setup.");
+                    ZapLog.d(LOG_TAG, "Wallet not setup.");
                     Toast.makeText(HomeActivity.this, R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
                 }
             }

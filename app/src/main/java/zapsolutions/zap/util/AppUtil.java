@@ -84,7 +84,7 @@ public class AppUtil {
                 currencyCode = jsonCountryList.getJSONObject(country).getString("CurrencyCode");
             }
         } catch (JSONException e) {
-            ZapLog.debug(LOG_TAG, "Error reading country_list JSON: " + e.getMessage());
+            ZapLog.e(LOG_TAG, "Error reading country_list JSON: " + e.getMessage());
         }
         return currencyCode;
     }
@@ -104,7 +104,7 @@ public class AppUtil {
             try {
                 mFiatList = new JSONObject(currencies);
             } catch (JSONException e) {
-                ZapLog.debug(LOG_TAG, "Error reading currency_list JSON: " + e.getMessage());
+                ZapLog.e(LOG_TAG, "Error reading currency_list JSON: " + e.getMessage());
             }
         }
 
@@ -114,7 +114,7 @@ public class AppUtil {
                 try {
                     currencyName = mFiatList.getJSONObject(currencyCode).getString("CurrencyName");
                 } catch (JSONException e) {
-                    ZapLog.debug(LOG_TAG, "Error reading currencyName JSON: " + e.getMessage());
+                    ZapLog.e(LOG_TAG, "Error reading currencyName JSON: " + e.getMessage());
                 }
             }
         }

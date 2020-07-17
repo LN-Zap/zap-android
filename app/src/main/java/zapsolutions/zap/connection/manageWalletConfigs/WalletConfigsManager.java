@@ -162,7 +162,7 @@ public class WalletConfigsManager {
         boolean walletAdded = mWalletConfigsJson.addWallet(config);
 
         if (walletAdded) {
-            ZapLog.debug(LOG_TAG, "The ID of the created WalletConfig is:" + id);
+            ZapLog.d(LOG_TAG, "The ID of the created WalletConfig is:" + id);
             return config;
         } else {
             return null;
@@ -197,7 +197,7 @@ public class WalletConfigsManager {
         boolean walletUpdated = mWalletConfigsJson.updateWalletConfig(config);
 
         if (walletUpdated) {
-            ZapLog.debug(LOG_TAG, "WalletConfig updated! (id =" + id + ")");
+            ZapLog.d(LOG_TAG, "WalletConfig updated! (id =" + id + ")");
             return config;
         } else {
             return null;

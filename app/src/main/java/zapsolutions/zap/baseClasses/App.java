@@ -23,7 +23,7 @@ public class App extends Application {
             if (e.getMessage() != null && e.getMessage().contains("shutdownNow")) {
                 // Is propagated from gRPC when shutting down channel
             } else {
-                ZapLog.debug("RxJava", e.getMessage());
+                ZapLog.d("RxJava", e.getMessage());
             }
         });
     }

@@ -123,7 +123,7 @@ public class LnPaymentDetailBSDFragment extends RxBSDFragment {
                         mMemo.setVisibility(View.GONE);
                         mMemoLabel.setVisibility(View.GONE);
                     }
-                }, throwable -> ZapLog.debug(TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
+                }, throwable -> ZapLog.d(TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
     }
 
     @Override

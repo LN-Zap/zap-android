@@ -82,7 +82,7 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
                 bindOnChainTransaction(transactionString);
 
             } catch (InvalidProtocolBufferException | NullPointerException exception) {
-                ZapLog.debug(TAG, "Failed to parse transaction.");
+                ZapLog.d(TAG, "Failed to parse transaction.");
                 dismiss();
             }
         }

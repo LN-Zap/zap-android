@@ -441,7 +441,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                         .setTypeValue(addressType) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
                         .build();
 
-                ZapLog.debug(LOG_TAG, "OnChain generating...");
+                ZapLog.d(LOG_TAG, "OnChain generating...");
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().newAddress(asyncNewAddressRequest)
                         .subscribe(newAddressResponse -> {
                             String value;
@@ -460,7 +460,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                             dismiss();
                         }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                            ZapLog.debug(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
+                            ZapLog.d(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
                         }));
 
             } else {
@@ -481,7 +481,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
 
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
                         .subscribe(addInvoiceResponse -> {
-                            ZapLog.debug(LOG_TAG, addInvoiceResponse.toString());
+                            ZapLog.d(LOG_TAG, addInvoiceResponse.toString());
 
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
@@ -491,7 +491,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                             dismiss();
                         }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                            ZapLog.debug(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
+                            ZapLog.d(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
                         }));
             }
         } else {
