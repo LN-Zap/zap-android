@@ -69,6 +69,7 @@ public class Wallet {
     private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
     private final Set<InfoListener> mInfoListeners = new HashSet<>();
     private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
+    private final Set<LndConnectionTestListener> mLndConnectionTestListeners = new HashSet<>();
     private final Set<WalletLoadedListener> mWalletLoadedListeners = new HashSet<>();
     private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
     private final Set<TransactionSubscriptionListener> mTransactionSubscriptionListeners = new HashSet<>();
@@ -100,6 +101,9 @@ public class Wallet {
     private long mChannelBalanceLimbo = 0;
     private boolean mConnectedToLND = false;
     private boolean mInfoFetched = false;
+    private boolean mBalancesFetched = false;
+    private boolean mChannelsFetched = false;
+    private boolean mIsWalletReady = false;
     private boolean mSyncedToChain = false;
     private boolean mTransactionUpdated = false;
     private boolean mInvoicesUpdated = false;
@@ -154,6 +158,9 @@ public class Wallet {
         mUpdatingHistory = false;
 
         mInfoFetched = false;
+        mBalancesFetched = false;
+        mChannelsFetched = false;
+        mIsWalletReady = false;
         mSyncedToChain = false;
         mTestnet = false;
         mLNDVersionString = "not connected";
@@ -164,16 +171,16 @@ public class Wallet {
 
     /**
      * This will be used on loading. If this request finishes without an error, our connection to LND is established.
-     * All Listeners registered to WalletLoadedListener will be informed about any changes.
+     * All listeners registered to LndConnectionTestListener will be informed about the result.
      */
-    public void checkIfLndIsReachableAndTriggerWalletLoadedInterface() {
+    public void testLndConnectionAndLoadWallet() {
         // Retrieve info from LND with gRPC (async)
 
         if (!mConnectionCheckInProgress) {
 
             mConnectionCheckInProgress = true;
 
-            ZapLog.d(LOG_TAG, "Test if LND is reachable.");
+            ZapLog.d(LOG_TAG, "LND connection test.");
 
             compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
                     .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
@@ -186,7 +193,7 @@ public class Wallet {
                         mInfoFetched = true;
                         mConnectedToLND = true;
                         mConnectionCheckInProgress = false;
-                        broadcastWalletLoadedUpdate(true, -1);
+                        broadcastLndConnectionTestResult(true, -1);
                     }, throwable -> {
                         mConnectionCheckInProgress = false;
 
@@ -195,38 +202,38 @@ public class Wallet {
                             // - LND daemon is not running
                             // - An incorrect port is used
                             // - A wrong certificate is used (When the certificate creation failed due to an error)
-                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
                         } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
                             // This is the case if:
                             // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
                             ZapLog.e(LOG_TAG, "Cannot reach remote");
-                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TIMEOUT);
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TIMEOUT);
                         } else if (throwable.getMessage().toLowerCase().contains("unimplemented")) {
                             // This is the case if:
                             // - The wallet is locked
-                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
                             ZapLog.e(LOG_TAG, "Wallet is locked!");
                         } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
                             // This is the case if:
                             // - The macaroon is invalid
-                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
                             ZapLog.e(LOG_TAG, "Macaroon is invalid!");
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
                         } else if (throwable.getMessage().contains("UNKNOWN")) {
                             // This is the case if:
                             // - The macaroon has wrong encoding
-                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
                             ZapLog.e(LOG_TAG, "Macaroon is invalid!");
                         } else if (throwable.getMessage().contains(".onion")) {
                             // This is the case if:
                             // - Orbot is not running or not in vpn mode and the user tries to connect to a tor node.
-                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TOR);
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TOR);
                             ZapLog.e(LOG_TAG, "Cannot resolve onion address!");
                         } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERRUPTED);
                             ZapLog.e(LOG_TAG, "Test if LND is reachable was interrupted.");
-                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_INTERRUPTED);
                         } else {
                             // Any other error, show unavailable message
-                            broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
                             ZapLog.e(LOG_TAG, throwable.getMessage());
                         }
                     }));
@@ -255,7 +262,7 @@ public class Wallet {
                     mHandler.postDelayed(() -> {
                         // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
                         // ToDo: Create a routine that retries this until successful
-                        checkIfLndIsReachableAndTriggerWalletLoadedInterface();
+                        testLndConnectionAndLoadWallet();
                     }, 10000);
 
                     mHandler.postDelayed(() -> {
@@ -267,7 +274,7 @@ public class Wallet {
                 }, throwable -> {
                     ZapLog.e(LOG_TAG, throwable.getMessage());
                     // Show password prompt again after error
-                    broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
+                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
                 }));
     }
 
@@ -314,7 +321,16 @@ public class Wallet {
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
+            ZapLog.d(LOG_TAG, "Balances Fetched!");
             broadcastBalanceUpdate();
+
+            if (!mIsWalletReady) {
+                mBalancesFetched = true;
+                if (mChannelsFetched) {
+                    mIsWalletReady = true;
+                    broadcastWalletLoadedUpdate();
+                }
+            }
         }, throwable -> ZapLog.e(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
     }
 
@@ -589,14 +605,11 @@ public class Wallet {
     }
 
     public void fetchChannelsFromLND() {
-        ZapLog.d(LOG_TAG, "Fetch channels from LND.");
-
         Single<ListChannelsResponse> listChannelsObservable = LndConnection.getInstance().getLightningService().listChannels(ListChannelsRequest.newBuilder().build());
         Single<PendingChannelsResponse> pendingChannelsObservable = LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build());
         Single<ClosedChannelsResponse> closedChannelsObservable = LndConnection.getInstance().getLightningService().closedChannels(ClosedChannelsRequest.newBuilder().build());
 
         compositeDisposable.add(Single.zip(listChannelsObservable, pendingChannelsObservable, closedChannelsObservable, (listChannelsResponse, pendingChannelsResponse, closedChannelsResponse) -> {
-            ZapLog.d(LOG_TAG, "Fetched channels from LND.");
 
             mOpenChannelsList = listChannelsResponse.getChannelsList();
 
@@ -645,6 +658,14 @@ public class Wallet {
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
+            ZapLog.d(LOG_TAG, "Channels fetched!");
+            if (!mIsWalletReady) {
+                mChannelsFetched = true;
+                if (mBalancesFetched) {
+                    mIsWalletReady = true;
+                    broadcastWalletLoadedUpdate();
+                }
+            }
         }, throwable -> ZapLog.e(LOG_TAG, "Exception in get channels info request task: " + throwable.getMessage())));
     }
 
@@ -656,6 +677,15 @@ public class Wallet {
      * @param pubkey
      */
     public void fetchNodeInfoFromLND(String pubkey) {
+
+        // Abort if we already fetched it before.
+        for (NodeInfo i : mNodeInfos) {
+            if (i.getNode().getPubKey().equals(pubkey)) {
+                return;
+            }
+        }
+
+        // Fetch it!
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(pubkey)
                 .build();
@@ -663,16 +693,8 @@ public class Wallet {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(nodeInfo -> {
-                    // Add the nodeInfo to our list, if it is not already a member of the list.
-                    boolean nodeInfoAlreadyExists = false;
-                    for (NodeInfo i : mNodeInfos) {
-                        if (i.getNode().getPubKey().equals(nodeInfo.getNode().getPubKey())) {
-                            nodeInfoAlreadyExists = true;
-                        }
-                    }
-                    if (!nodeInfoAlreadyExists) {
-                        mNodeInfos.add(nodeInfo);
-                    }
+                    ZapLog.v(LOG_TAG, "Fetched Node info from " + nodeInfo.getNode().getAlias());
+                    mNodeInfos.add(nodeInfo);
                 }, throwable -> ZapLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage())));
     }
 
@@ -1037,7 +1059,7 @@ public class Wallet {
         Version actualLNDVersion = getLNDVersion();
         Version MppReceive = new Version("0.9");
 
-        if (actualLNDVersion.compareTo(MppReceive) < 0){
+        if (actualLNDVersion.compareTo(MppReceive) < 0) {
             // Mpp receive is not supported. Use the maximum remote balance of all channels as maximum.
             long tempMax = 0L;
             if (mOpenChannelsList != null) {
@@ -1056,7 +1078,7 @@ public class Wallet {
             if (mOpenChannelsList != null) {
                 for (Channel c : mOpenChannelsList) {
                     if (c.getActive()) {
-                            tempMax = tempMax + c.getRemoteBalance();
+                        tempMax = tempMax + c.getRemoteBalance();
                     }
                 }
             }
@@ -1070,7 +1092,7 @@ public class Wallet {
      * @return amount in satoshis
      */
     public long getMaxLightningSendAmount() {
-      
+
         // ToDo: Calculate differently depending on LND version (consider multi path for LND 0.10 and up)
 
         long tempMax = 0L;
@@ -1126,23 +1148,29 @@ public class Wallet {
     }
 
     /**
-     * Notify all listeners to finished wallet initialization.
+     * Notify all listeners about the lnd connection test result.
      *
      * @param success true if successful
-     * @param error   one of WalletLoadedListener errors, -1 if successful
+     * @param error   one of LndConnectionTestListener errors
      */
-    public void broadcastWalletLoadedUpdate(boolean success, int error) {
-        for (WalletLoadedListener listener : mWalletLoadedListeners) {
-            listener.onWalletLoadedUpdated(success, error);
+    public void broadcastLndConnectionTestResult(boolean success, int error) {
+        if (success) {
+            for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
+                listener.onLndConnectSuccess();
+            }
+        } else {
+            for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
+                listener.onLndConnectError(error);
+            }
         }
     }
 
-    public void registerWalletLoadedListener(WalletLoadedListener listener) {
-        mWalletLoadedListeners.add(listener);
+    public void registerLndConnectionTestListener(LndConnectionTestListener listener) {
+        mLndConnectionTestListeners.add(listener);
     }
 
-    public void unregisterWalletLoadedListener(WalletLoadedListener listener) {
-        mWalletLoadedListeners.remove(listener);
+    public void unregisterLndConnectionTestListener(LndConnectionTestListener listener) {
+        mLndConnectionTestListeners.remove(listener);
     }
 
     /**
@@ -1336,7 +1364,21 @@ public class Wallet {
         mChannelOpenUpdateListeners.remove(listener);
     }
 
-    public interface WalletLoadedListener {
+    private void broadcastWalletLoadedUpdate() {
+        for (WalletLoadedListener listener : mWalletLoadedListeners) {
+            listener.onWalletLoaded();
+        }
+    }
+
+    public void registerWalletLoadedListener(WalletLoadedListener listener) {
+        mWalletLoadedListeners.add(listener);
+    }
+
+    public void unregisterWalletLoadedListener(WalletLoadedListener listener) {
+        mWalletLoadedListeners.remove(listener);
+    }
+
+    public interface LndConnectionTestListener {
 
         int ERROR_LOCKED = 0;
         int ERROR_INTERRUPTED = 1;
@@ -1345,7 +1387,13 @@ public class Wallet {
         int ERROR_AUTHENTICATION = 4;
         int ERROR_TOR = 5;
 
-        void onWalletLoadedUpdated(boolean success, int error);
+        void onLndConnectError(int error);
+
+        void onLndConnectSuccess();
+    }
+
+    public interface WalletLoadedListener {
+        void onWalletLoaded();
     }
 
     public interface BalanceListener {

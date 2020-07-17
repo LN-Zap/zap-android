@@ -48,7 +48,8 @@ import zapsolutions.zap.util.ZapLog;
  * A simple {@link Fragment} subclass.
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.BalanceListener, Wallet.InfoListener, Wallet.WalletLoadedListener, ExchangeRateUtil.ExchangeRateListener {
+        Wallet.BalanceListener, Wallet.InfoListener, Wallet.LndConnectionTestListener,
+        Wallet.WalletLoadedListener, ExchangeRateUtil.ExchangeRateListener {
 
     private static final String LOG_TAG = WalletFragment.class.getName();
 
@@ -75,6 +76,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private boolean mBalanceChangeListenerRegistered = false;
     private boolean mInfoChangeListenerRegistered = false;
     private boolean mExchangeRateListenerRegistered = false;
+    private boolean mLndConnectionTestListenerRegistered = false;
     private boolean mWalletLoadedListenerRegistered = false;
 
     public WalletFragment() {
@@ -301,7 +303,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     mWalletConnectedLayout.setVisibility(View.GONE);
                     mWalletNotConnectedLayout.setVisibility(View.GONE);
                     mLoadingWalletLayout.setVisibility(View.VISIBLE);
-                    Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
+                    Wallet.getInstance().testLndConnectionAndLoadWallet();
                 }
             }
         });
@@ -311,29 +313,26 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
 
         if (App.getAppContext().connectionToLNDEstablished) {
-            connectionToLNDEstablished();
+            walletLoadingCompleted();
         } else {
             if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                 if (!LndConnection.getInstance().isConnected()) {
                     LndConnection.getInstance().openConnection();
                 }
 
-                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
+                Wallet.getInstance().testLndConnectionAndLoadWallet();
             }
         }
 
         return view;
     }
 
-    private void connectionToLNDEstablished() {
+    private void walletLoadingCompleted() {
 
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
 
-            // Show info about mode (offline, testnet or mainnet) if it is already known
+            // Show info about mode (offline, connected, error, testnet or mainnet, ...)
             onInfoUpdated(Wallet.getInstance().isInfoFetched());
-
-            // Fetch the current balance and info from LND
-            Wallet.getInstance().fetchBalanceFromLND();
         }
     }
 
@@ -432,13 +431,17 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             Wallet.getInstance().registerInfoListener(this);
             mInfoChangeListenerRegistered = true;
         }
-        if (!mWalletLoadedListenerRegistered) {
-            Wallet.getInstance().registerWalletLoadedListener(this);
-            mWalletLoadedListenerRegistered = true;
+        if (!mLndConnectionTestListenerRegistered) {
+            Wallet.getInstance().registerLndConnectionTestListener(this);
+            mLndConnectionTestListenerRegistered = true;
         }
         if (!mExchangeRateListenerRegistered) {
             ExchangeRateUtil.getInstance().registerExchangeRateListener(this);
             mExchangeRateListenerRegistered = true;
+        }
+        if (!mWalletLoadedListenerRegistered) {
+            Wallet.getInstance().registerWalletLoadedListener(this);
+            mWalletLoadedListenerRegistered = true;
         }
 
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
@@ -462,32 +465,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
         Wallet.getInstance().unregisterBalanceListener(this);
         Wallet.getInstance().unregisterInfoListener(this);
-        Wallet.getInstance().unregisterWalletLoadedListener(this);
+        Wallet.getInstance().unregisterLndConnectionTestListener(this);
         ExchangeRateUtil.getInstance().unregisterExchangeRateListener(this);
-    }
-
-    @Override
-    public void onWalletLoadedUpdated(boolean success, int error) {
-        if (success) {
-            connectionToLNDEstablished();
-        } else {
-            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-                if (error != Wallet.WalletLoadedListener.ERROR_LOCKED) {
-                    onInfoUpdated(false);
-                    if (error == Wallet.WalletLoadedListener.ERROR_AUTHENTICATION) {
-                        mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
-                    } else if (error == Wallet.WalletLoadedListener.ERROR_TIMEOUT) {
-                        mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionConfig().getHost()));
-                    } else if (error == Wallet.WalletLoadedListener.ERROR_UNAVAILABLE) {
-                        mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(LndConnection.getInstance().getConnectionConfig().getPort())));
-                    } else if (error == Wallet.WalletLoadedListener.ERROR_TOR) {
-                        mTvConnectError.setText(R.string.error_connection_tor_unreachable);
-                    }
-                }
-            } else {
-                onInfoUpdated(true);
-            }
-        }
+        Wallet.getInstance().unregisterWalletLoadedListener(this);
     }
 
     public void showErrorAfterNotUnlocked() {
@@ -537,5 +517,34 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.superRed));
         msg.setDuration(duration);
         msg.show();
+    }
+
+    @Override
+    public void onLndConnectError(int error) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            if (error != Wallet.LndConnectionTestListener.ERROR_LOCKED) {
+                onInfoUpdated(false);
+                if (error == Wallet.LndConnectionTestListener.ERROR_AUTHENTICATION) {
+                    mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_TIMEOUT) {
+                    mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, LndConnection.getInstance().getConnectionConfig().getHost()));
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_UNAVAILABLE) {
+                    mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(LndConnection.getInstance().getConnectionConfig().getPort())));
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_TOR) {
+                    mTvConnectError.setText(R.string.error_connection_tor_unreachable);
+                }
+            }
+        } else {
+            onInfoUpdated(true);
+        }
+    }
+
+    @Override
+    public void onLndConnectSuccess() {
+    }
+
+    @Override
+    public void onWalletLoaded() {
+        walletLoadingCompleted();
     }
 }
