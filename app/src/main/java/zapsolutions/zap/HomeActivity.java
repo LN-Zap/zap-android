@@ -584,7 +584,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     private void addWallet(RemoteConfiguration remoteConfiguration) {
         new UserGuardian(HomeActivity.this, () -> {
-            RemoteConnectUtil.saveRemoteConfiguration(remoteConfiguration, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, remoteConfiguration, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
                 @Override
                 public void onSaved(String id) {

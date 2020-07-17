@@ -1,6 +1,8 @@
 package zapsolutions.zap.util;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -90,19 +92,35 @@ public class RemoteConnectUtil {
     }
 
 
-    public static void saveRemoteConfiguration(RemoteConfiguration config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
+    public static void saveRemoteConfiguration(Context ctx, RemoteConfiguration config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
+        int port = config.getPort();
+        if (port == 8080) {
+            // Zap Android does not support REST. If the REST port was supplied, we ask the user if he wants to change it to 10009 (gRPC port).
+            new AlertDialog.Builder(ctx)
+                    .setMessage(R.string.rest_port)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            executeSaveRemoteConfiguration(config, walletUUID, 10009, listener);
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            executeSaveRemoteConfiguration(config, walletUUID, port, listener);
+                        }
+                    }).show();
+        } else {
+            executeSaveRemoteConfiguration(config, walletUUID, port, listener);
+        }
+    }
 
+    private static void executeSaveRemoteConfiguration(RemoteConfiguration config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
         WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
 
         try {
             if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConfig = (LndConnectConfig) config;
-
-                int port = lndConfig.getPort();
-                if (port == 8080) {
-                    // Zap Android does not support REST. If the REST port was supplied, we automatically change it to the standard gRPC port.
-                    port = 10009;
-                }
 
                 String id;
                 if (walletUUID == null) {
@@ -129,12 +147,6 @@ public class RemoteConnectUtil {
 
             } else if (config instanceof BTCPayConfig) {
                 BTCPayConfig btcPayConfig = (BTCPayConfig) config;
-
-                int port = btcPayConfig.getPort();
-                if (port == 8080) {
-                    // Zap Android does not support REST. If the REST port was supplied, we automatically change it to the standard gRPC port.
-                    port = 10009;
-                }
 
                 String id;
                 if (walletUUID == null) {

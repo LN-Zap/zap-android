@@ -378,4 +378,6 @@
     <string name="lnurl_service">Service</string>
 
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
+
+    <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC) instead?</string>
 </resources>
