@@ -19,12 +19,12 @@
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="?selectableItemBackgroundBorderless"
-            android:scaleType="centerCrop"
+            android:scaleType="center"
             android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,10 +45,11 @@
 
         <ImageView
             android:id="@+id/listOptions"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginEnd="8dp"
             android:background="?selectableItemBackgroundBorderless"
+            android:scaleType="center"
             android:src="@drawable/ic_filter_list_black_24dp"
             android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -57,12 +58,12 @@
 
         <ImageView
             android:id="@+id/searchButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="?selectableItemBackgroundBorderless"
-            android:scaleType="centerCrop"
+            android:scaleType="center"
             android:tint="@color/white"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
