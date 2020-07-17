@@ -35,7 +35,6 @@
             android:id="@+id/walletSpinner"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:background="@null"
             android:dropDownWidth="180dp"
             android:popupBackground="@drawable/bg_wallet_spinner_popup"
@@ -139,7 +138,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4">
+            app:layout_constraintVertical_bias="0.45">
 
             <LinearLayout
                 android:id="@+id/BalancePrimaryLayout"

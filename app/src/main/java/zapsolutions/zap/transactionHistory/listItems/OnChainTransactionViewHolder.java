@@ -1,5 +1,6 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
+import android.content.SharedPreferences;
 import android.view.View;
 
 import zapsolutions.zap.R;
@@ -8,12 +9,14 @@ import zapsolutions.zap.util.Wallet;
 
 public class OnChainTransactionViewHolder extends TransactionViewHolder {
 
+    private OnChainTransactionItem mOnChainTransactionItem;
 
     public OnChainTransactionViewHolder(View v) {
         super(v);
     }
 
     public void bindOnChainTransactionItem(OnChainTransactionItem onChainTransactionItem) {
+        mOnChainTransactionItem = onChainTransactionItem;
 
         // Get amounts
         Long amount = onChainTransactionItem.getOnChainTransaction().getAmount();
@@ -82,5 +85,12 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
 
         // Set on click listener
         setOnRootViewClickListener(onChainTransactionItem, HistoryListItem.TYPE_ON_CHAIN_TRANSACTION);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("firstCurrencyIsPrimary")) {
+            bindOnChainTransactionItem(mOnChainTransactionItem);
+        }
     }
 }

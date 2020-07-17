@@ -1,19 +1,15 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.util.Date;
 
 import zapsolutions.zap.R;
 
-public class DateLineViewHolder extends RecyclerView.ViewHolder {
+public class DateLineViewHolder extends HistoryItemViewHolder {
     private TextView mTvDate;
-    private Context mContext;
 
     public DateLineViewHolder(View v) {
         super(v);
