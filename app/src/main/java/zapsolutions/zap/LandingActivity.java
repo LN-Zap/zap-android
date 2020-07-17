@@ -35,7 +35,7 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Uri uri = intent.getData();
             App.getAppContext().setUriSchemeData(uri.toString());
-            ZapLog.debug(LOG_TAG, "URI was detected: " + uri.toString());
+            ZapLog.d(LOG_TAG, "URI was detected: " + uri.toString());
             if (!WalletConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
                 setupWalletFromUri();
             }

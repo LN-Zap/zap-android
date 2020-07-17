@@ -122,7 +122,7 @@ public class LndConnection {
             try {
                 mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
             } catch (RuntimeException e) {
-                ZapLog.debug(LOG_TAG, "Error on Certificate");
+                ZapLog.e(LOG_TAG, "Error creating certificate");
             }
 
         }
@@ -160,7 +160,7 @@ public class LndConnection {
     public void openConnection() {
         if (!isConnected) {
             isConnected = true;
-            ZapLog.debug(LOG_TAG, "Starting LND connection...(Open Http Channel)");
+            ZapLog.d(LOG_TAG, "Starting LND connection...(Open Http Channel)");
             readSavedConnectionInfo();
             generateChannelAndStubs();
         }
@@ -169,7 +169,7 @@ public class LndConnection {
 
     public void closeConnection() {
         if (mSecureChannel != null) {
-            ZapLog.debug(LOG_TAG, "Shutting down LND connection...(Closing Http Channel)");
+            ZapLog.d(LOG_TAG, "Shutting down LND connection...(Closing Http Channel)");
             shutdownChannel();
         }
 
@@ -187,12 +187,12 @@ public class LndConnection {
     private void shutdownChannel() {
         try {
             if (mSecureChannel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS)) {
-                ZapLog.debug(LOG_TAG, "LND channel shutdown successfully...");
+                ZapLog.d(LOG_TAG, "LND channel shutdown successfully...");
             } else {
-                ZapLog.debug(LOG_TAG, "LND channel shutdown failed...");
+                ZapLog.e(LOG_TAG, "LND channel shutdown failed...");
             }
         } catch (InterruptedException e) {
-            ZapLog.debug(LOG_TAG, "LND channel shutdown exception: " + e.getMessage());
+            ZapLog.e(LOG_TAG, "LND channel shutdown exception: " + e.getMessage());
         }
     }
 

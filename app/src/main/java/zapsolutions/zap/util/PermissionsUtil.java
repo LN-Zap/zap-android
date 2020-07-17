@@ -36,7 +36,7 @@ public class PermissionsUtil {
             // Do not request permission if user already denied it.
             // If forceRequest is true, the user will still be asked unless he ticked "don't ask me again".
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permissions[i]) & !forceRequest) {
-                ZapLog.debug("PermissionsUtil", "User denied this request before, no permission requested");
+                ZapLog.w("PermissionsUtil", "User denied this request before, no permission requested");
             } else {
                 ActivityCompat.requestPermissions((Activity) context, permissions, code);
                 break;

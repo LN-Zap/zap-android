@@ -84,12 +84,12 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                             CustomSSLSocketFactory.create(certificateBytes);
                         } catch (RuntimeException e) {
 
-                            ZapLog.debug(LOG_TAG, "certificate creation failed");
+                            ZapLog.e(LOG_TAG, "certificate creation failed");
                             mError = ERROR_INVALID_CERTIFICATE;
                             return this;
                         }
                     } catch (IllegalArgumentException e) {
-                        ZapLog.debug(LOG_TAG, "cert decoding failed");
+                        ZapLog.e(LOG_TAG, "cert decoding failed");
                         mError = ERROR_INVALID_CERTIFICATE;
                         return this;
                     }
@@ -97,7 +97,7 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
 
                 // validate macaroon if everything was valid so far
                 if (macaroon == null) {
-                    ZapLog.debug(LOG_TAG, "lnd connect string does not include a macaroon");
+                    ZapLog.e(LOG_TAG, "lnd connect string does not include a macaroon");
                     mError = ERROR_NO_MACAROON;
                     return this;
                 } else {
@@ -106,7 +106,7 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                         byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroon);
                         macaroon = BaseEncoding.base16().encode(macaroonBytes);
                     } catch (IllegalArgumentException e) {
-                        ZapLog.debug(LOG_TAG, "macaroon decoding failed");
+                        ZapLog.e(LOG_TAG, "macaroon decoding failed");
 
                         mError = ERROR_INVALID_MACAROON;
                         return this;
@@ -123,13 +123,13 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                 return this;
 
             } else {
-                ZapLog.debug(LOG_TAG, "Connect URI has no parameters");
+                ZapLog.e(LOG_TAG, "Connect URI has no parameters");
                 mError = ERROR_INVALID_CONNECT_STRING;
                 return this;
             }
 
         } catch (URISyntaxException e) {
-            ZapLog.debug(LOG_TAG, "URI could not be parsed");
+            ZapLog.e(LOG_TAG, "URI could not be parsed");
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
         }

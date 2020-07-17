@@ -1,5 +1,6 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
+import android.content.SharedPreferences;
 import android.view.View;
 
 import zapsolutions.zap.R;
@@ -8,12 +9,14 @@ import zapsolutions.zap.util.Wallet;
 
 public class LnInvoiceViewHolder extends TransactionViewHolder {
 
+    private LnInvoiceItem mLnInvoiceItem;
 
     public LnInvoiceViewHolder(View v) {
         super(v);
     }
 
     public void bindLnInvoiceItem(LnInvoiceItem lnInvoiceItem) {
+        mLnInvoiceItem = lnInvoiceItem;
 
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         setSuccessState(true);
@@ -77,5 +80,12 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
 
         // Set on click listener
         setOnRootViewClickListener(lnInvoiceItem, HistoryListItem.TYPE_LN_INVOICE);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("firstCurrencyIsPrimary")) {
+            bindLnInvoiceItem(mLnInvoiceItem);
+        }
     }
 }

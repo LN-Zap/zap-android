@@ -383,7 +383,7 @@ public class ChannelDetailBSDFragment extends BottomSheetDialogFragment implemen
 
     @Override
     public void onChannelCloseUpdate(String channelPoint, int status, String message) {
-        ZapLog.debug(TAG, "Channel close: " + channelPoint + " status=(" + status + ")");
+        ZapLog.d(TAG, "Channel close: " + channelPoint + " status=(" + status + ")");
 
         if (getActivity() != null && mChannelPoint.equals(channelPoint)) {
 

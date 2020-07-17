@@ -4,10 +4,10 @@ package zapsolutions.zap;
 import android.os.Bundle;
 
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.fragments.AdvancedSettingsFragment;
+import zapsolutions.zap.fragments.SupportFragment;
 
 
-public class AdvancedSettingsActivity extends BaseAppCompatActivity {
+public class SupportActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +15,7 @@ public class AdvancedSettingsActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_settings);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.mainContent, new AdvancedSettingsFragment())
+                .replace(R.id.mainContent, new SupportFragment())
                 .commit();
     }
 }

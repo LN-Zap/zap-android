@@ -38,13 +38,11 @@ import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import zapsolutions.zap.GeneratedRequestActivity;
-import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.NumpadView;
-import zapsolutions.zap.lnurl.withdraw.ScanLnUrlWithdrawActivity;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -59,7 +57,6 @@ public class ReceiveBSDFragment extends RxBSDFragment {
     private static final String LOG_TAG = ReceiveBSDFragment.class.getName();
 
     private View mBtnLn;
-    private View mBtnScanLnurl;
     private View mBtnOnChain;
     private View mChooseTypeView;
     private ImageView mIvBsdIcon;
@@ -95,7 +92,6 @@ public class ReceiveBSDFragment extends RxBSDFragment {
         }
 
         mBtnLn = view.findViewById(R.id.lnBtn);
-        mBtnScanLnurl = view.findViewById(R.id.scanLnurl);
         mBtnOnChain = view.findViewById(R.id.onChainBtn);
         mIvBsdIcon = view.findViewById(R.id.bsdIcon);
         mIconAnchor = view.findViewById(R.id.anchor);
@@ -142,22 +138,6 @@ public class ReceiveBSDFragment extends RxBSDFragment {
             @Override
             public void onClick(View v) {
                 HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_LightningVsOnChain);
-            }
-        });
-
-        mBtnScanLnurl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hasLightningIncomeBalance()) {
-                    // go to scan Activity
-                    Intent intent = new Intent(getActivity(), ScanLnUrlWithdrawActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivityForResult(intent, HomeActivity.REQUEST_CODE_LNURL_WITHDRAW);
-                    dismiss();
-                } else {
-                    // In this case we want to show the lightning channel info which already happens if we click the normal lightning button.
-                    mBtnLn.callOnClick();
-                }
             }
         });
 
@@ -461,7 +441,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                         .setTypeValue(addressType) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
                         .build();
 
-                ZapLog.debug(LOG_TAG, "OnChain generating...");
+                ZapLog.d(LOG_TAG, "OnChain generating...");
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().newAddress(asyncNewAddressRequest)
                         .subscribe(newAddressResponse -> {
                             String value;
@@ -480,7 +460,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                             dismiss();
                         }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                            ZapLog.debug(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
+                            ZapLog.d(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
                         }));
 
             } else {
@@ -501,7 +481,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
 
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
                         .subscribe(addInvoiceResponse -> {
-                            ZapLog.debug(LOG_TAG, addInvoiceResponse.toString());
+                            ZapLog.d(LOG_TAG, addInvoiceResponse.toString());
 
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
@@ -511,7 +491,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                             dismiss();
                         }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                            ZapLog.debug(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
+                            ZapLog.d(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
                         }));
             }
         } else {

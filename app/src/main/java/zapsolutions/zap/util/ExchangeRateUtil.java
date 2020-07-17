@@ -67,7 +67,7 @@ public class ExchangeRateUtil {
             if (request != null) {
                 // Adding request to request queue
                 HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
-                ZapLog.debug(LOG_TAG, "Exchange rate request initiated");
+                ZapLog.v(LOG_TAG, "Exchange rate request initiated");
             }
         }
     }
@@ -83,10 +83,10 @@ public class ExchangeRateUtil {
     private JsonObjectRequest getBlockchainInfoRequest() {
         JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://blockchain.info/ticker", null,
                 response -> {
-                    ZapLog.debug(LOG_TAG, "Received exchange rates from blockchain.info");
+                    ZapLog.v(LOG_TAG, "Received exchange rates from blockchain.info");
                     JSONObject responseRates = parseBlockchainInfoResponse(response);
                     applyExchangeRatesAndSaveInPreferences(responseRates);
-                }, error -> ZapLog.debug(LOG_TAG, "Fetching exchange rates from blockchain.info failed"));
+                }, error -> ZapLog.w(LOG_TAG, "Fetching exchange rates from blockchain.info failed"));
 
         return rateRequest;
     }
@@ -101,10 +101,10 @@ public class ExchangeRateUtil {
     private JsonObjectRequest getCoinbaseRequest() {
         JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://api.coinbase.com/v2/exchange-rates?currency=BTC", null,
                 response -> {
-                    ZapLog.debug(LOG_TAG, "Received exchange rates from coinbase");
+                    ZapLog.v(LOG_TAG, "Received exchange rates from coinbase");
                     JSONObject responseRates = parseCoinbaseResponse(response);
                     applyExchangeRatesAndSaveInPreferences(removeNonFiat(responseRates));
-                }, error -> ZapLog.debug(LOG_TAG, "Fetching exchange rates from coinbase failed"));
+                }, error -> ZapLog.w(LOG_TAG, "Fetching exchange rates from coinbase failed"));
 
         return rateRequest;
     }
@@ -132,7 +132,7 @@ public class ExchangeRateUtil {
                 currentCurrency.put(TIMESTAMP, System.currentTimeMillis() / 1000);
                 formattedRates.put(fiatCode, currentCurrency);
             } catch (JSONException e) {
-                ZapLog.debug(LOG_TAG, "Unable to read exchange rate from blockchain.info response.");
+                ZapLog.e(LOG_TAG, "Unable to read exchange rate from blockchain.info response.");
             }
         }
 
@@ -177,7 +177,7 @@ public class ExchangeRateUtil {
                     currentCurrency.put(TIMESTAMP, System.currentTimeMillis() / 1000);
                     formattedRates.put(rateCode, currentCurrency);
                 } catch (JSONException e) {
-                    ZapLog.debug(LOG_TAG, "Unable to read exchange rate from coinbase response.");
+                    ZapLog.e(LOG_TAG, "Unable to read exchange rate from coinbase response.");
                 }
             }
         } else {
@@ -200,7 +200,7 @@ public class ExchangeRateUtil {
         try {
             fiatList = new JSONObject(currencies);
         } catch (JSONException e) {
-            ZapLog.debug(LOG_TAG, "Error reading currency_list JSON: " + e.getMessage());
+            ZapLog.e(LOG_TAG, "Error reading currency_list JSON: " + e.getMessage());
         }
 
         // Remove all exchange rates that are not in the list
@@ -262,7 +262,7 @@ public class ExchangeRateUtil {
         editor.commit();
         setDefaultCurrency();
         broadcastExchangeRateUpdate();
-        ZapLog.debug(LOG_TAG, "Exchange rate is: " + MonetaryUtil.getInstance().getSecondCurrency().getRate() * 1E8);
+        ZapLog.v(LOG_TAG, "Exchange rate is: " + MonetaryUtil.getInstance().getSecondCurrency().getRate() * 1E8);
     }
 
     private void setDefaultCurrency() {
@@ -295,7 +295,7 @@ public class ExchangeRateUtil {
                 }
             }
         } catch (JSONException e) {
-            ZapLog.debug(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+            ZapLog.e(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
         }
         return false;
     }

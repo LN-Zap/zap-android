@@ -36,7 +36,7 @@ public class InvoiceUtil {
 
         // Avoid index out of bounds. An Request with less than 11 characters isn't valid.
         if (data.length() < 11) {
-            listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
+            listener.onNoInvoiceData();
             return;
         }
 
@@ -105,7 +105,7 @@ public class InvoiceUtil {
                     validateOnChainAddress(ctx, listener, onChainAddress, onChainInvoiceAmount, onChainInvoiceMessage);
 
                 } catch (URISyntaxException e) {
-                    ZapLog.debug(LOG_TAG, "URI could not be parsed");
+                    ZapLog.w(LOG_TAG, "URI could not be parsed");
                     e.printStackTrace();
                     listener.onError(ctx.getString(R.string.error_invalid_bitcoin_request), RefConstants.ERROR_DURATION_MEDIUM);
                 }
@@ -157,7 +157,7 @@ public class InvoiceUtil {
                 .timeout(RefConstants.TIMEOUT_SHORT * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(paymentRequest -> {
-                    ZapLog.debug(LOG_TAG, paymentRequest.toString());
+                    ZapLog.d(LOG_TAG, paymentRequest.toString());
 
                     if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
                         // Show error: payment request expired.
@@ -172,7 +172,7 @@ public class InvoiceUtil {
                     // If LND can't decode the payment request, show the error LND throws (always english)
                     listener.onError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM);
 
-                    ZapLog.debug(LOG_TAG, throwable.getMessage());
+                    ZapLog.d(LOG_TAG, throwable.getMessage());
                 }));
 
     }

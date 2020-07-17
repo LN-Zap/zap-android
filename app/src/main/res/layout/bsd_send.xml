@@ -20,9 +20,9 @@
             android:id="@+id/closeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:paddingTop="10dp"
-            android:paddingEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="?selectableItemBackgroundBorderless"
             android:tint="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -426,8 +426,8 @@
                 android:id="@+id/finishedText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="detailed message"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                tools:text="detailed message" />
         </LinearLayout>
 
         <Button

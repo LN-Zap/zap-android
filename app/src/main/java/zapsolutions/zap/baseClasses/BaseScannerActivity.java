@@ -31,7 +31,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     private static final String LOG_TAG = BaseScannerActivity.class.getName();
     protected ZBarScannerView mScannerView;
     protected int mHighlightColor;
-    protected int mGrayColor;
+    protected int mWhiteColor;
     protected ImageView mScannerInstructionsHelp;
     private ImageButton mBtnFlashlight;
     private TextView mTvPermissionRequired;
@@ -57,7 +57,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
 
         // Prepare colors
         mHighlightColor = ContextCompat.getColor(this, R.color.lightningOrange);
-        mGrayColor = ContextCompat.getColor(this, R.color.gray);
+        mWhiteColor = ContextCompat.getColor(this, R.color.white);
 
         // Scanner settings
         mScannerView.setAspectTolerance(0.5f);
@@ -179,7 +179,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
 
     public void handleCameraResult(Result result) {
         if (result != null) {
-            ZapLog.debug(LOG_TAG, "Scanned content: " + result.getContents());
+            ZapLog.v(LOG_TAG, "Scanned content: " + result.getContents());
         }
 
         // Note:
@@ -209,7 +209,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     public void onButtonFlashClick() {
         if (mScannerView.getFlash()) {
             mScannerView.setFlash(false);
-            mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mGrayColor));
+            mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mWhiteColor));
         } else {
             mScannerView.setFlash(true);
             mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mHighlightColor));

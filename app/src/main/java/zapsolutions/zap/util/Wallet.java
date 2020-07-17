@@ -136,6 +136,7 @@ public class Wallet {
         mChannelBalancePendingOpen = 0;
         mChannelBalanceLimbo = 0;
 
+        mConnectedToLND = false;
         mOnChainTransactionList = null;
         mInvoiceList = null;
         mTempInvoiceUpdateList = null;
@@ -172,12 +173,12 @@ public class Wallet {
 
             mConnectionCheckInProgress = true;
 
-            ZapLog.debug(LOG_TAG, "Test if LND is reachable.");
+            ZapLog.d(LOG_TAG, "Test if LND is reachable.");
 
             compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
                     .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                     .subscribe(infoResponse -> {
-                        ZapLog.debug(LOG_TAG, "LND is reachable.");
+                        ZapLog.d(LOG_TAG, "LND is reachable.");
                         // Save the received data.
                         mSyncedToChain = infoResponse.getSyncedToChain();
                         mTestnet = infoResponse.getTestnet();
@@ -198,35 +199,35 @@ public class Wallet {
                         } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
                             // This is the case if:
                             // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
-                            ZapLog.debug(LOG_TAG, "Cannot reach remote");
+                            ZapLog.e(LOG_TAG, "Cannot reach remote");
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TIMEOUT);
                         } else if (throwable.getMessage().toLowerCase().contains("unimplemented")) {
                             // This is the case if:
                             // - The wallet is locked
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
-                            ZapLog.debug(LOG_TAG, "Wallet is locked!");
+                            ZapLog.e(LOG_TAG, "Wallet is locked!");
                         } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
                             // This is the case if:
                             // - The macaroon is invalid
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
-                            ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
+                            ZapLog.e(LOG_TAG, "Macaroon is invalid!");
                         } else if (throwable.getMessage().contains("UNKNOWN")) {
                             // This is the case if:
                             // - The macaroon has wrong encoding
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_AUTHENTICATION);
-                            ZapLog.debug(LOG_TAG, "Macaroon is invalid!");
+                            ZapLog.e(LOG_TAG, "Macaroon is invalid!");
                         } else if (throwable.getMessage().contains(".onion")) {
                             // This is the case if:
                             // - Orbot is not running or not in vpn mode and the user tries to connect to a tor node.
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_TOR);
-                            ZapLog.debug(LOG_TAG, "Cannot resolve onion address!");
+                            ZapLog.e(LOG_TAG, "Cannot resolve onion address!");
                         } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
-                            ZapLog.debug(LOG_TAG, "Test if LND is reachable was interrupted.");
+                            ZapLog.e(LOG_TAG, "Test if LND is reachable was interrupted.");
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_INTERRUPTED);
                         } else {
                             // Any other error, show unavailable message
                             broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_UNAVAILABLE);
-                            ZapLog.debug(LOG_TAG, throwable.getMessage());
+                            ZapLog.e(LOG_TAG, throwable.getMessage());
                         }
                     }));
         }
@@ -244,7 +245,7 @@ public class Wallet {
 
         compositeDisposable.add(LndConnection.getInstance().getWalletUnlockerService().unlockWallet(unlockRequest)
                 .subscribe(unlockWalletResponse -> {
-                    ZapLog.debug(LOG_TAG, "successfully unlocked");
+                    ZapLog.d(LOG_TAG, "successfully unlocked");
 
                     // We have to reset the connection, because until you unlock the wallet, there is no Lightning rpc service available.
                     // Thus we could not connect to it with previous channel, so we reset the connection and connect to all services when unlocked.
@@ -264,7 +265,7 @@ public class Wallet {
                         Wallet.getInstance().fetchChannelsFromLND();
                     }, 12000);
                 }, throwable -> {
-                    ZapLog.debug(LOG_TAG, throwable.getMessage());
+                    ZapLog.e(LOG_TAG, throwable.getMessage());
                     // Show password prompt again after error
                     broadcastWalletLoadedUpdate(false, WalletLoadedListener.ERROR_LOCKED);
                 }));
@@ -314,7 +315,7 @@ public class Wallet {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
             broadcastBalanceUpdate();
-        }, throwable -> ZapLog.debug(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
+        }, throwable -> ZapLog.e(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
     }
 
     /**
@@ -339,7 +340,7 @@ public class Wallet {
                         mConnectedToLND = false;
                         broadcastInfoUpdate(false);
                     }
-                    ZapLog.debug(LOG_TAG, "Exception in fetch info task: " + throwable.getMessage());
+                    ZapLog.w(LOG_TAG, "Exception in fetch info task: " + throwable.getMessage());
                 }));
     }
 
@@ -424,7 +425,7 @@ public class Wallet {
 
                     mTransactionUpdated = true;
                     isHistoryUpdateFinished();
-                }, throwable -> ZapLog.debug(LOG_TAG, "Exception in transaction request task: " + throwable.getMessage())));
+                }, throwable -> ZapLog.e(LOG_TAG, "Exception in transaction request task: " + throwable.getMessage())));
     }
 
     /**
@@ -457,7 +458,7 @@ public class Wallet {
                         // there are still invoices to fetch, get the next batch!
                         fetchInvoicesFromLND(lastIndex + 100);
                     }
-                }, throwable -> ZapLog.debug(LOG_TAG, "Exception in invoice request task: " + throwable.getMessage())));
+                }, throwable -> ZapLog.e(LOG_TAG, "Exception in invoice request task: " + throwable.getMessage())));
     }
 
     /**
@@ -474,7 +475,7 @@ public class Wallet {
                     mPaymentsList = Lists.reverse(listPaymentsResponse.getPaymentsList());
                     mPaymentsUpdated = true;
                     isHistoryUpdateFinished();
-                }, throwable -> ZapLog.debug(LOG_TAG, "Exception in payment request task: " + throwable.getMessage())));
+                }, throwable -> ZapLog.e(LOG_TAG, "Exception in payment request task: " + throwable.getMessage())));
     }
 
     public void openChannel(LightningNodeUri nodeUri, long amount) {
@@ -490,14 +491,14 @@ public class Wallet {
                     }
 
                     if (connected) {
-                        ZapLog.debug(LOG_TAG, "Already connected to peer, trying to open channel...");
+                        ZapLog.d(LOG_TAG, "Already connected to peer, trying to open channel...");
                         openChannelConnected(nodeUri, amount);
                     } else {
-                        ZapLog.debug(LOG_TAG, "Not connected to peer, trying to connect...");
+                        ZapLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
                         connectPeer(nodeUri, amount);
                     }
                 }, throwable -> {
-                    ZapLog.debug(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
+                    ZapLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
                     if (throwable.getMessage().toLowerCase().contains("terminated")) {
                         broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS_TIMEOUT, throwable.getMessage());
                     } else {
@@ -520,10 +521,10 @@ public class Wallet {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(connectPeerResponse -> {
-                    ZapLog.debug(LOG_TAG, "Successfully connected to peer, trying to open channel...");
+                    ZapLog.d(LOG_TAG, "Successfully connected to peer, trying to open channel...");
                     openChannelConnected(nodeUri, amount);
                 }, throwable -> {
-                    ZapLog.debug(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
+                    ZapLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
 
                     if (throwable.getMessage().toLowerCase().contains("refused")) {
                         broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, throwable.getMessage());
@@ -547,10 +548,10 @@ public class Wallet {
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(openStatusUpdate -> {
-                    ZapLog.debug(LOG_TAG, "Open channel update: " + openStatusUpdate.getUpdateCase().getNumber());
+                    ZapLog.d(LOG_TAG, "Open channel update: " + openStatusUpdate.getUpdateCase().getNumber());
                     broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.SUCCESS, null);
                 }, throwable -> {
-                    ZapLog.debug(LOG_TAG, "Error opening channel: " + throwable.getMessage());
+                    ZapLog.e(LOG_TAG, "Error opening channel: " + throwable.getMessage());
 
                     if (throwable.getMessage().toLowerCase().contains("pending channels exceed maximum")) {
                         broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_PENDING_MAX, throwable.getMessage());
@@ -573,10 +574,10 @@ public class Wallet {
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(closeStatusUpdate -> {
-                    ZapLog.debug(LOG_TAG, "Closing channel update: " + closeStatusUpdate.getUpdateCase().getNumber());
+                    ZapLog.d(LOG_TAG, "Closing channel update: " + closeStatusUpdate.getUpdateCase().getNumber());
                     broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.SUCCESS, null);
                 }, throwable -> {
-                    ZapLog.debug(LOG_TAG, "Error closing channel: " + throwable.getMessage());
+                    ZapLog.e(LOG_TAG, "Error closing channel: " + throwable.getMessage());
                     if (throwable.getMessage().toLowerCase().contains("offline")) {
                         broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_PEER_OFFLINE, throwable.getMessage());
                     } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
@@ -588,14 +589,14 @@ public class Wallet {
     }
 
     public void fetchChannelsFromLND() {
-        ZapLog.debug(LOG_TAG, "Fetch channels from LND.");
+        ZapLog.d(LOG_TAG, "Fetch channels from LND.");
 
         Single<ListChannelsResponse> listChannelsObservable = LndConnection.getInstance().getLightningService().listChannels(ListChannelsRequest.newBuilder().build());
         Single<PendingChannelsResponse> pendingChannelsObservable = LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build());
         Single<ClosedChannelsResponse> closedChannelsObservable = LndConnection.getInstance().getLightningService().closedChannels(ClosedChannelsRequest.newBuilder().build());
 
         compositeDisposable.add(Single.zip(listChannelsObservable, pendingChannelsObservable, closedChannelsObservable, (listChannelsResponse, pendingChannelsResponse, closedChannelsResponse) -> {
-            ZapLog.debug(LOG_TAG, "Fetched channels from LND.");
+            ZapLog.d(LOG_TAG, "Fetched channels from LND.");
 
             mOpenChannelsList = listChannelsResponse.getChannelsList();
 
@@ -635,7 +636,7 @@ public class Wallet {
 
             // Delay each request for 100ms to not stress LND
             ArrayList<String> channelNodesList = new ArrayList<>(channelNodes);
-            ZapLog.debug(LOG_TAG, "Fetching node info for " + channelNodesList.size() + " nodes.");
+            ZapLog.d(LOG_TAG, "Fetching node info for " + channelNodesList.size() + " nodes.");
 
             compositeDisposable.add(Observable.range(0, channelNodesList.size())
                     .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
@@ -644,7 +645,7 @@ public class Wallet {
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
-        }, throwable -> ZapLog.debug(LOG_TAG, "Exception in get channels info request task: " + throwable.getMessage())));
+        }, throwable -> ZapLog.e(LOG_TAG, "Exception in get channels info request task: " + throwable.getMessage())));
     }
 
     /**
@@ -672,7 +673,7 @@ public class Wallet {
                     if (!nodeInfoAlreadyExists) {
                         mNodeInfos.add(nodeInfo);
                     }
-                }, throwable -> ZapLog.debug(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage())));
+                }, throwable -> ZapLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage())));
     }
 
 
@@ -685,7 +686,7 @@ public class Wallet {
     public void subscribeToTransactions() {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeTransactions(GetTransactionsRequest.newBuilder().build())
                 .subscribe(transaction -> {
-                    ZapLog.debug(LOG_TAG, "Received transaction subscription event.");
+                    ZapLog.d(LOG_TAG, "Received transaction subscription event.");
                     broadcastTransactionUpdate(transaction);
                 }));
     }
@@ -703,7 +704,7 @@ public class Wallet {
     public void subscribeToInvoices() {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeInvoices(InvoiceSubscription.newBuilder().build())
                 .subscribe(invoice -> {
-                    ZapLog.debug(LOG_TAG, "Received invoice subscription event.");
+                    ZapLog.d(LOG_TAG, "Received invoice subscription event.");
 
                     // is this a new invoice or is an old one updated?
                     if (mInvoiceList != null) {
@@ -749,25 +750,25 @@ public class Wallet {
     public void subscribeToChannelEvents() {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeChannelEvents(ChannelEventSubscription.newBuilder().build())
                 .subscribe(channelEventUpdate -> {
-                    ZapLog.debug(LOG_TAG, "Received channel update event");
+                    ZapLog.d(LOG_TAG, "Received channel update event");
                     switch (channelEventUpdate.getChannelCase()) {
                         case OPEN_CHANNEL:
-                            ZapLog.debug(LOG_TAG, "Channel has been opened");
+                            ZapLog.d(LOG_TAG, "Channel has been opened");
                             break;
                         case CLOSED_CHANNEL:
-                            ZapLog.debug(LOG_TAG, "Channel has been closed");
+                            ZapLog.d(LOG_TAG, "Channel has been closed");
                             break;
                         case ACTIVE_CHANNEL:
-                            ZapLog.debug(LOG_TAG, "Channel went active");
+                            ZapLog.d(LOG_TAG, "Channel went active");
                             break;
                         case INACTIVE_CHANNEL:
-                            ZapLog.debug(LOG_TAG, "Open channel went to inactive");
+                            ZapLog.d(LOG_TAG, "Open channel went to inactive");
                             break;
                         case CHANNEL_NOT_SET:
-                            ZapLog.debug(LOG_TAG, "Received channel event update case: not set Channel");
+                            ZapLog.d(LOG_TAG, "Received channel event update case: not set Channel");
                             break;
                         default:
-                            ZapLog.debug(LOG_TAG, "Unknown channel event: " + channelEventUpdate.getChannelCase());
+                            ZapLog.d(LOG_TAG, "Unknown channel event: " + channelEventUpdate.getChannelCase());
                             break;
                     }
 
@@ -777,7 +778,7 @@ public class Wallet {
     }
 
     public void updateLNDChannelsWithDebounce() {
-        ZapLog.debug(LOG_TAG, "Fetch channels from LND. (debounce)");
+        ZapLog.d(LOG_TAG, "Fetch channels from LND. (debounce)");
 
         mChannelsUpdateDebounceHandler.attempt(this::fetchChannelsFromLND, DebounceHandler.DEBOUNCE_1_SECOND);
     }
@@ -791,7 +792,7 @@ public class Wallet {
     public void subscribeToChannelBackup() {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeChannelBackups(ChannelBackupSubscription.newBuilder().build())
                 .subscribe(chanBackupSnapshot -> {
-                    ZapLog.debug(LOG_TAG, "Received channel backup event.");
+                    ZapLog.d(LOG_TAG, "Received channel backup event.");
                     broadcastChannelBackup(chanBackupSnapshot);
                 }));
     }
