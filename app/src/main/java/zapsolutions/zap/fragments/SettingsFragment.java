@@ -1,13 +1,10 @@
 package zapsolutions.zap.fragments;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.preference.ListPreference;
@@ -32,7 +29,6 @@ import zapsolutions.zap.AdvancedSettingsActivity;
 import zapsolutions.zap.BuildConfig;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.pin.PinSetupActivity;
@@ -40,9 +36,7 @@ import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-import zapsolutions.zap.walletManagement.ManageWalletsActivity;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -67,6 +61,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 MonetaryUtil.getInstance().loadFirstCurrencyFromPrefs(String.valueOf(newValue));
+                // Calling switch currency twice will update all currency labels across the app
+                // while keeping the same currency as primary
+                MonetaryUtil.getInstance().switchCurrencies();
+                MonetaryUtil.getInstance().switchCurrencies();
                 return true;
             }
         });
@@ -90,6 +88,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 MonetaryUtil.getInstance().loadSecondCurrencyFromPrefs(String.valueOf(newValue));
+                // Calling switch currency twice will update all currency labels across the app
+                // while keeping the same currency as primary
+                MonetaryUtil.getInstance().switchCurrencies();
+                MonetaryUtil.getInstance().switchCurrencies();
                 return true;
             }
         });
@@ -121,30 +123,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }).show();
 
                 return false;
-            }
-        });
-
-
-        // Action when clicked on "Manage wallets"
-        final Preference prefManageWallets = findPreference("manageWallets");
-        prefManageWallets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), ManageWalletsActivity.class);
-                startActivity(intent);
-                return true;
-            }
-        });
-
-
-        // Action when clicked on "Manage channels"
-        final Preference prefManageChannels = findPreference("manageLightningChannels");
-        prefManageChannels.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), ManageChannelsActivity.class);
-                startActivity(intent);
-                return true;
             }
         });
 
@@ -229,56 +207,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 } else {
                     return true;
                 }
-            }
-        });
-
-        // Action when clicked on "need help"
-        final Preference prefHelp = findPreference("help");
-        prefHelp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                String url = RefConstants.URL_HELP;
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                getActivity().startActivity(browserIntent);
-                return true;
-            }
-        });
-
-        // Action when clicked on "reportBug"
-        final Preference prefIssue = findPreference("reportIssue");
-        prefIssue.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                String url = "https://github.com/LN-Zap/zap-android/issues";
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                getActivity().startActivity(browserIntent);
-                return true;
-            }
-        });
-
-
-        // Action when clicked on "About"
-        final Preference prefAbout = findPreference("about");
-        prefAbout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.settings_about)
-                        .setMessage("Version:  " + BuildConfig.VERSION_NAME +
-                                "\nBuild:  " + BuildConfig.VERSION_CODE +
-                                "\nLND version:  " + Wallet.getInstance().getLNDVersionString().split(" commit")[0])
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        });
-                Dialog dlg = adb.create();
-                // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PrefsUtil.preventScreenRecording()) {
-                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                }
-                dlg.show();
-                return true;
             }
         });
     }

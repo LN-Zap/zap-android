@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/drawerGroup1">
+        <item
+            android:id="@+id/drawerWallets"
+            android:icon="@drawable/ic_wallet_24"
+            android:title="@string/drawer_menu_wallets" />
+        <item
+            android:id="@+id/drawerChannels"
+            android:icon="@drawable/ic_open_channel_24"
+            android:title="@string/drawer_menu_channels" />
+        <item
+            android:id="@+id/drawerBackup"
+            android:icon="@drawable/ic_baseline_lock_24"
+            android:title="@string/drawer_menu_backup" />
+        <item
+            android:id="@+id/drawerSettings"
+            android:icon="@drawable/ic_nav_settings_black_24dp"
+            android:title="@string/settings" />
+    </group>
+
+    <group android:id="@+id/drawerGroup3">
+        <item
+            android:id="@+id/drawerBuy"
+            android:icon="@drawable/ic_shopping_cart_24"
+            android:title="@string/drawer_menu_buy" />
+    </group>
+
+    <item
+        android:id="@+id/drawerSupport"
+        android:icon="@drawable/ic_mail_outline_24"
+        android:title="@string/support" />
+</menu>

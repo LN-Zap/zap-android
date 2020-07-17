@@ -58,8 +58,11 @@ public class RefConstants {
     public static final int LN_PAYMENT_FEE_THRESHOLD = 100;
 
     // URLS
-    public static final String URL_HELP = "https://docs.zaphq.io/";
+    public static final String URL_HELP = "https://docs.zaphq.io/docs-android-getting-started";
+    public static final String URL_PRIVACY = "https://zaphq.io/privacy";
     public static final String URL_SUGGESTED_NODES = "https://resources.zaphq.io/api/v1/suggested-nodes";
+    public static final String URL_CONTRIBUTE = "https://github.com/LN-Zap/zap-android#contribute";
+    public static final String URL_ISSUES = "https://github.com/LN-Zap/zap-android/issues";
 
     // Other
     public static final String SETUP_MODE = "setupMode";

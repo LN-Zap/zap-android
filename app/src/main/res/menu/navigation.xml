@@ -11,9 +11,4 @@
         android:icon="@drawable/ic_nav_history_black_24dp"
         android:title="@string/navigation_history" />
 
-    <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_nav_settings_black_24dp"
-        android:title="@string/navigation_settings" />
-
 </menu>

@@ -136,6 +136,7 @@ public class Wallet {
         mChannelBalancePendingOpen = 0;
         mChannelBalanceLimbo = 0;
 
+        mConnectedToLND = false;
         mOnChainTransactionList = null;
         mInvoiceList = null;
         mTempInvoiceUpdateList = null;

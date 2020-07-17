@@ -93,8 +93,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="zapsolutions.zap.SettingsActivity"
+            android:label="@string/navigation_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="zapsolutions.zap.AdvancedSettingsActivity"
             android:label="@string/activity_advanced_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="zapsolutions.zap.SupportActivity"
+            android:label="@string/support"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity

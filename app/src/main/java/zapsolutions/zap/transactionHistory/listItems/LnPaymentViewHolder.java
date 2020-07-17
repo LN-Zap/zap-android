@@ -1,5 +1,6 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
+import android.content.SharedPreferences;
 import android.view.View;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
@@ -14,6 +15,7 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
     private static final String LOG_TAG = LnPaymentViewHolder.class.getName();
 
     private CompositeDisposable mCompositeDisposable;
+    private LnPaymentItem mLnPaymentItem;
 
     public LnPaymentViewHolder(View v) {
         super(v);
@@ -24,6 +26,7 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
     }
 
     public void bindLnPaymentItem(LnPaymentItem lnPaymentItem) {
+        mLnPaymentItem = lnPaymentItem;
 
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         setSuccessState(true);
@@ -59,5 +62,12 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
                             setSecondaryDescription(payReq.getDescription(), true);
                         }
                     }, throwable -> ZapLog.debug(LOG_TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("firstCurrencyIsPrimary")) {
+            bindLnPaymentItem(mLnPaymentItem);
+        }
     }
 }

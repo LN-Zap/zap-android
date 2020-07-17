@@ -1,6 +1,5 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,7 +7,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -18,9 +16,8 @@ import zapsolutions.zap.transactionHistory.TransactionSelectListener;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 
-public class TransactionViewHolder extends RecyclerView.ViewHolder {
+public class TransactionViewHolder extends HistoryItemViewHolder {
 
-    Context mContext;
     View mRootView;
 
     private TransactionSelectListener mTransactionSelectListener;
@@ -30,6 +27,7 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
     private TextView mSecondaryDescription;
     private TextView mAmount;
     private TextView mTransactionFee;
+    protected boolean mIsPreferenceListenerRegistered = false;
 
 
     TransactionViewHolder(@NonNull View itemView) {
@@ -43,6 +41,9 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
         mTransactionFee = itemView.findViewById(R.id.transactionFeeAmount);
         mRootView = itemView.findViewById(R.id.transactionRootView);
         mContext = itemView.getContext();
+
+        mAmount.setOnClickListener(v -> MonetaryUtil.getInstance().switchCurrencies());
+        mTransactionFee.setOnClickListener(v -> MonetaryUtil.getInstance().switchCurrencies());
     }
 
     void setTimeOfDay(long creationDate) {

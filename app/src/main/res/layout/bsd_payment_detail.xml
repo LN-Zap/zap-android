@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@null"
+        android:background="?selectableItemBackgroundBorderless"
         android:tint="@color/gray"
         app:layout_constraintBottom_toTopOf="@+id/separator_1"
         app:layout_constraintEnd_toEndOf="parent"
