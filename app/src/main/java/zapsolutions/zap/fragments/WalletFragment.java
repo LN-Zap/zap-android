@@ -138,7 +138,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         // Update status dot
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            mStatusDot.setVisibility(View.VISIBLE);
             updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+        } else {
+            mStatusDot.setVisibility(View.GONE);
         }
 
 
