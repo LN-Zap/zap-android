@@ -98,7 +98,7 @@ public class RemoteConnectUtil {
             // Zap Android does not support REST. If the REST port was supplied, we ask the user if he wants to change it to 10009 (gRPC port).
             new AlertDialog.Builder(ctx)
                     .setMessage(R.string.rest_port)
-                    .setCancelable(true)
+                    .setCancelable(false)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             executeSaveRemoteConfiguration(config, walletUUID, 10009, listener);
