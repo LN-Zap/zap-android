@@ -73,8 +73,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     // Activity Result codes
     public static final int REQUEST_CODE_PAYMENT = 101;
     public static final int REQUEST_CODE_LNURL_WITHDRAW = 102;
+    public static final int REQUEST_CODE_GENERIC_SCAN = 103;
     public static final int RESULT_CODE_PAYMENT = 201;
     public static final int RESULT_CODE_LNURL_WITHDRAW = 202;
+    public static final int RESULT_CODE_GENERIC_SCAN = 203;
 
     private static final String LOG_TAG = HomeActivity.class.getName();
     private Handler mHandler;
@@ -578,6 +580,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 } else {
                     showError(data.getExtras().getString("error"), data.getExtras().getInt("error_duration"));
                 }
+            }
+        }
+
+        if (resultCode == HomeActivity.RESULT_CODE_GENERIC_SCAN) {
+            // This gets executed if readable data was found using the generic scanner
+            if (data != null) {
+                analyzeString(data.getExtras().getString(ScanActivity.EXTRA_GENERIC_SCAN_DATA));
             }
         }
     }

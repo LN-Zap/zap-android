@@ -36,7 +36,7 @@ public class InvoiceUtil {
 
         // Avoid index out of bounds. An Request with less than 11 characters isn't valid.
         if (data.length() < 11) {
-            listener.onError(ctx.getString(R.string.error_notAPaymentRequest), RefConstants.ERROR_DURATION_LONG);
+            listener.onNoInvoiceData();
             return;
         }
 
