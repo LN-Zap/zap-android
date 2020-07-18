@@ -314,14 +314,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         if (App.getAppContext().connectionToLNDEstablished) {
             walletLoadingCompleted();
-        } else {
-            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-                if (!LndConnection.getInstance().isConnected()) {
-                    LndConnection.getInstance().openConnection();
-                }
-
-                Wallet.getInstance().testLndConnectionAndLoadWallet();
-            }
         }
 
         return view;

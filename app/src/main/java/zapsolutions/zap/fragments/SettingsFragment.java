@@ -171,6 +171,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                getActivity().finishAffinity();
                 AppUtil.getInstance(getActivity()).restartApp();
                 return true;
             }
