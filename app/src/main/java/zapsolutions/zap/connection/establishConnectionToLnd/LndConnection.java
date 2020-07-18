@@ -186,7 +186,7 @@ public class LndConnection {
      */
     private void shutdownChannel() {
         try {
-            if (mSecureChannel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS)) {
+            if (mSecureChannel.shutdownNow().awaitTermination(1, TimeUnit.SECONDS)) {
                 ZapLog.d(LOG_TAG, "LND channel shutdown successfully...");
             } else {
                 ZapLog.e(LOG_TAG, "LND channel shutdown failed...");

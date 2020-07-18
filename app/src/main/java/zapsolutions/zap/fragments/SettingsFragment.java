@@ -113,6 +113,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                                 // We have to use commit here, apply would not finish before the app is restarted.
                                 editor.commit();
+
+                                // FinishAffinity is needed here, otherwise the home activity still exist when restarting leading to lnd connection issues.
+                                getActivity().finishAffinity();
+
                                 AppUtil.getInstance(getActivity()).restartApp();
 
                             }
@@ -167,6 +171,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                getActivity().finishAffinity();
                 AppUtil.getInstance(getActivity()).restartApp();
                 return true;
             }

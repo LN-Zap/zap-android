@@ -76,7 +76,8 @@ import zapsolutions.zap.walletManagement.ManageWalletsActivity;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.InfoListener, Wallet.WalletLoadedListener, NavigationView.OnNavigationItemSelectedListener {
+        Wallet.InfoListener, Wallet.LndConnectionTestListener,
+        Wallet.WalletLoadedListener, NavigationView.OnNavigationItemSelectedListener {
 
     // Activity Result codes
     public static final int REQUEST_CODE_PAYMENT = 101;
@@ -97,7 +98,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mIsNetworkChangeReceiverRunning = false;
 
     private boolean mInfoChangeListenerRegistered;
-    private boolean mWalletLoadedListenerRegistered;
+    private boolean mLndConnectionTestListenerRegistered;
+    private boolean mWalletLoadedListener;
     private boolean mMainnetWarningShownOnce;
     private boolean mIsFirstUnlockAttempt = true;
     private AlertDialog mUnlockDialog;
@@ -162,7 +164,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         }
                     }
                 } else {
-                    times2 ++;
+                    times2++;
                 }
             }
 
@@ -257,9 +259,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         setupExchangeRateSchedule();
         registerNetworkStatusChangeListener();
 
-        if (!mWalletLoadedListenerRegistered) {
+        if (!mLndConnectionTestListenerRegistered) {
+            Wallet.getInstance().registerLndConnectionTestListener(this);
+            mLndConnectionTestListenerRegistered = true;
+        }
+
+        if (!mWalletLoadedListener) {
             Wallet.getInstance().registerWalletLoadedListener(this);
-            mWalletLoadedListenerRegistered = true;
         }
 
         if (!mInfoChangeListenerRegistered) {
@@ -281,7 +287,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             if (TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(this)) {
                 TorUtil.askToInstallOrbotIfMissing(this);
             } else {
-                Wallet.getInstance().checkIfLndIsReachableAndTriggerWalletLoadedInterface();
+                Wallet.getInstance().testLndConnectionAndLoadWallet();
             }
         }
 
@@ -323,10 +329,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         TimeOutUtil.getInstance().setCanBeRestarted(false);
 
         // Unregister Handler, Wallet Loaded & Info Listener
+        Wallet.getInstance().unregisterLndConnectionTestListener(this);
+        mLndConnectionTestListenerRegistered = false;
         Wallet.getInstance().unregisterWalletLoadedListener(this);
-        mWalletLoadedListenerRegistered = false;
+        mWalletLoadedListener = false;
         Wallet.getInstance().unregisterInfoListener(this);
         mInfoChangeListenerRegistered = false;
+
         mHandler.removeCallbacksAndMessages(null);
 
         PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
@@ -398,50 +407,43 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     @Override
-    public void onWalletLoadedUpdated(boolean success, int error) {
-        if (success) {
-            // We managed to establish a connection to LND.
-            // Now we can start to fetch all information needed from LND
-            App.getAppContext().connectionToLNDEstablished = true;
+    public void onLndConnectError(int error) {
+        if (error == Wallet.LndConnectionTestListener.ERROR_LOCKED) {
 
-            setupLNDInfoSchedule();
-
-            // Fetch the transaction history
-            Wallet.getInstance().fetchLNDTransactionHistory();
-
-            Wallet.getInstance().fetchChannelsFromLND();
-
-            Wallet.getInstance().subscribeToTransactions();
-            Wallet.getInstance().subscribeToInvoices();
-
-            if (mHandler != null) {
-                mHandler.postDelayed(() -> Wallet.getInstance().subscribeToChannelEvents(), 3000);
+            if (mUnlockDialog != null && !mUnlockDialog.isShowing()) {
+                mUnlockDialog.show();
             }
 
-            // Check if Zap was started from an URI link or by NFC.
-            if (App.getAppContext().getUriSchemeData() != null) {
-                analyzeString(App.getAppContext().getUriSchemeData());
-                App.getAppContext().setUriSchemeData(null);
-            }
+            mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            mPagerAdapter.getWalletFragment().showBackgroundForWalletUnlock();
 
-            updateDrawerNavigationMenu();
-
-            ZapLog.d(LOG_TAG, "Wallet loaded");
-        } else {
-            if (error == Wallet.WalletLoadedListener.ERROR_LOCKED) {
-
-                if (mUnlockDialog != null && !mUnlockDialog.isShowing()) {
-                    mUnlockDialog.show();
-                }
-
-                mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                mPagerAdapter.getWalletFragment().showBackgroundForWalletUnlock();
-
-                if (!mIsFirstUnlockAttempt) {
-                    Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
-                }
+            if (!mIsFirstUnlockAttempt) {
+                Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    public void onLndConnectSuccess() {
+        // We managed to establish a connection to LND.
+        // Now we can start to fetch all information needed from LND
+        App.getAppContext().connectionToLNDEstablished = true;
+
+        // Fetch the transaction history
+        Wallet.getInstance().fetchLNDTransactionHistory();
+        Wallet.getInstance().fetchBalanceFromLND();
+        Wallet.getInstance().fetchChannelsFromLND();
+
+        Wallet.getInstance().subscribeToTransactions();
+        Wallet.getInstance().subscribeToInvoices();
+
+        if (mHandler != null) {
+            mHandler.postDelayed(() -> Wallet.getInstance().subscribeToChannelEvents(), 3000);
+        }
+
+        updateDrawerNavigationMenu();
+
+        setupLNDInfoSchedule();
     }
 
     private AlertDialog buildUnlockDialog() {
@@ -680,8 +682,19 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         lndVersion.setText(lndVersionString);
     }
 
-    public TransactionHistoryFragment getHistoryFragment(){
+    public TransactionHistoryFragment getHistoryFragment() {
         return mPagerAdapter.getHistoryFragment();
+    }
+
+    @Override
+    public void onWalletLoaded() {
+        // Check if Zap was started from an URI link or by NFC.
+        if (App.getAppContext().getUriSchemeData() != null) {
+            analyzeString(App.getAppContext().getUriSchemeData());
+            App.getAppContext().setUriSchemeData(null);
+        }
+
+        ZapLog.d(LOG_TAG, "Wallet loaded");
     }
 
 

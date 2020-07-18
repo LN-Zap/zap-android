@@ -22,8 +22,6 @@ public class LandingActivity extends BaseAppCompatActivity {
 
     private static final String LOG_TAG = LandingActivity.class.getName();
 
-    boolean doSetupFromUri = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +36,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             ZapLog.d(LOG_TAG, "URI was detected: " + uri.toString());
             if (!WalletConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
                 setupWalletFromUri();
+                return;
             }
         }
 
@@ -47,6 +46,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             NfcUtil.readTag(LandingActivity.this, intent, payload -> App.getAppContext().setUriSchemeData(payload));
             if (!WalletConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
                 setupWalletFromUri();
+                return;
             }
         }
 
@@ -120,19 +120,15 @@ public class LandingActivity extends BaseAppCompatActivity {
             });
 
         } else {
+            // Clear connection data if something is there
+            PrefsUtil.edit().remove(PrefsUtil.WALLET_CONFIGS).commit();
 
-            if (!doSetupFromUri) {
-                // Clear connection data if something is there
-                PrefsUtil.edit().remove(PrefsUtil.WALLET_CONFIGS).commit();
-
-                Intent homeIntent = new Intent(this, HomeActivity.class);
-                startActivity(homeIntent);
-            }
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            startActivity(homeIntent);
         }
     }
 
     private void setupWalletFromUri() {
-        doSetupFromUri = true;
         Intent connectIntent = new Intent(this, ConnectRemoteNodeActivity.class);
         connectIntent.putExtra(ConnectRemoteNodeActivity.EXTRA_STARTED_FROM_URI, true);
         connectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
