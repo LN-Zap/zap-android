@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
@@ -21,14 +22,19 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
+import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.Wallet;
+import zapsolutions.zap.util.ZapLog;
 
-public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, Wallet.ChannelsUpdatedSubscriptionListener {
+public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet.ChannelsUpdatedSubscriptionListener {
+
+    private static final String LOG_TAG = ManageChannelsActivity.class.getName();
 
     private static int REQUEST_CODE_OPEN_CHANNEL = 100;
     private RecyclerView mRecyclerView;
     private ChannelItemAdapter mAdapter;
     private TextView mEmptyListText;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<ChannelListItem> mChannelItems;
 
     @Override
@@ -37,6 +43,12 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         setContentView(R.layout.activity_manage_channels);
 
         Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
+
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.seaBlueGradient3));
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.white));
 
         mRecyclerView = findViewById(R.id.channelsList);
         mEmptyListText = findViewById(R.id.listEmpty);
@@ -159,5 +171,12 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     @Override
     public void onChannelsUpdated() {
         runOnUiThread(this::updateChannelsDisplayList);
+        mSwipeRefreshLayout.setRefreshing(false);
+        ZapLog.d(LOG_TAG, "Channels updated!");
+    }
+
+    @Override
+    public void onRefresh() {
+        Wallet.getInstance().fetchChannelsFromLND();
     }
 }
