@@ -612,42 +612,90 @@ public class Wallet {
         compositeDisposable.add(Single.zip(listChannelsObservable, pendingChannelsObservable, closedChannelsObservable, (listChannelsResponse, pendingChannelsResponse, closedChannelsResponse) -> {
 
             mOpenChannelsList = listChannelsResponse.getChannelsList();
-
-            Set<String> channelNodes = new HashSet<>();
-
-            // Load NodeInfos for all involved nodes. This allows us to display aliases later.
-            for (Channel c : mOpenChannelsList) {
-                channelNodes.add(c.getRemotePubkey());
-            }
-
-            // closed channels
             mClosedChannelsList = closedChannelsResponse.getChannelsList();
-            // Load NodeInfos for all involved nodes. This allows us to display aliases later.
-            for (ChannelCloseSummary c : mClosedChannelsList) {
-                channelNodes.add(c.getRemotePubkey());
-            }
-
-            // pending channels
             mPendingOpenChannelsList = pendingChannelsResponse.getPendingOpenChannelsList();
             mPendingClosedChannelsList = pendingChannelsResponse.getPendingClosingChannelsList();
             mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
             mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
 
+
             // Load NodeInfos for all involved nodes. This allows us to display aliases later.
+            Set<String> channelNodes = new HashSet<>();
+
+            for (Channel c : mOpenChannelsList) {
+                boolean alreadyFetched = false;
+                for (NodeInfo i : mNodeInfos) {
+                    if (i.getNode().getPubKey().equals(c.getRemotePubkey())) {
+                        alreadyFetched = true;
+                        break;
+                    }
+                }
+                if (!alreadyFetched) {
+                    channelNodes.add(c.getRemotePubkey());
+                }
+            }
+            for (ChannelCloseSummary c : mClosedChannelsList) {
+                boolean alreadyFetched = false;
+                for (NodeInfo i : mNodeInfos) {
+                    if (i.getNode().getPubKey().equals(c.getRemotePubkey())) {
+                        alreadyFetched = true;
+                        break;
+                    }
+                }
+                if (!alreadyFetched) {
+                    channelNodes.add(c.getRemotePubkey());
+                }
+            }
             for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
-                channelNodes.add(c.getChannel().getRemoteNodePub());
+                boolean alreadyFetched = false;
+                for (NodeInfo i : mNodeInfos) {
+                    if (i.getNode().getPubKey().equals(c.getChannel().getRemoteNodePub())) {
+                        alreadyFetched = true;
+                        break;
+                    }
+                }
+                if (!alreadyFetched) {
+                    channelNodes.add(c.getChannel().getRemoteNodePub());
+                }
             }
             for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
-                channelNodes.add(c.getChannel().getRemoteNodePub());
+                boolean alreadyFetched = false;
+                for (NodeInfo i : mNodeInfos) {
+                    if (i.getNode().getPubKey().equals(c.getChannel().getRemoteNodePub())) {
+                        alreadyFetched = true;
+                        break;
+                    }
+                }
+                if (!alreadyFetched) {
+                    channelNodes.add(c.getChannel().getRemoteNodePub());
+                }
             }
             for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
-                channelNodes.add(c.getChannel().getRemoteNodePub());
+                boolean alreadyFetched = false;
+                for (NodeInfo i : mNodeInfos) {
+                    if (i.getNode().getPubKey().equals(c.getChannel().getRemoteNodePub())) {
+                        alreadyFetched = true;
+                        break;
+                    }
+                }
+                if (!alreadyFetched) {
+                    channelNodes.add(c.getChannel().getRemoteNodePub());
+                }
             }
             for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
-                channelNodes.add(c.getChannel().getRemoteNodePub());
+                boolean alreadyFetched = false;
+                for (NodeInfo i : mNodeInfos) {
+                    if (i.getNode().getPubKey().equals(c.getChannel().getRemoteNodePub())) {
+                        alreadyFetched = true;
+                        break;
+                    }
+                }
+                if (!alreadyFetched) {
+                    channelNodes.add(c.getChannel().getRemoteNodePub());
+                }
             }
 
-            // Delay each request for 100ms to not stress LND
+            // Delay each NodeInfo request for 100ms to not stress LND
             ArrayList<String> channelNodesList = new ArrayList<>(channelNodes);
             ZapLog.d(LOG_TAG, "Fetching node info for " + channelNodesList.size() + " nodes.");
 
@@ -677,15 +725,6 @@ public class Wallet {
      * @param pubkey
      */
     public void fetchNodeInfoFromLND(String pubkey) {
-
-        // Abort if we already fetched it before.
-        for (NodeInfo i : mNodeInfos) {
-            if (i.getNode().getPubKey().equals(pubkey)) {
-                return;
-            }
-        }
-
-        // Fetch it!
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(pubkey)
                 .build();
