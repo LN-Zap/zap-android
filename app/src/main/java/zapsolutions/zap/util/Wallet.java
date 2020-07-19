@@ -99,6 +99,7 @@ public class Wallet {
     private long mChannelBalance = 0;
     private long mChannelBalancePendingOpen = 0;
     private long mChannelBalanceLimbo = 0;
+    private String mIdentityPubKey;
     private boolean mConnectedToLND = false;
     private boolean mInfoFetched = false;
     private boolean mBalancesFetched = false;
@@ -163,6 +164,7 @@ public class Wallet {
         mIsWalletReady = false;
         mSyncedToChain = false;
         mTestnet = false;
+        mIdentityPubKey = null;
         mLNDVersionString = "not connected";
         mHandler.removeCallbacksAndMessages(null);
         App.getAppContext().connectionToLNDEstablished = false;
@@ -193,6 +195,7 @@ public class Wallet {
                         mInfoFetched = true;
                         mConnectedToLND = true;
                         mConnectionCheckInProgress = false;
+                        mIdentityPubKey = infoResponse.getIdentityPubkey();
                         broadcastLndConnectionTestResult(true, -1);
                     }, throwable -> {
                         mConnectionCheckInProgress = false;
@@ -347,6 +350,7 @@ public class Wallet {
                     mSyncedToChain = infoResponse.getSyncedToChain();
                     mTestnet = infoResponse.getTestnet();
                     mLNDVersionString = infoResponse.getVersion();
+                    mIdentityPubKey = infoResponse.getIdentityPubkey();
                     mInfoFetched = true;
                     mConnectedToLND = true;
 
@@ -1130,6 +1134,10 @@ public class Wallet {
 
     public boolean isConnectedToLND() {
         return mConnectedToLND;
+    }
+
+    public String getIdentityPubKey() {
+        return mIdentityPubKey;
     }
 
     private void setOnChainBalance(long total, long confirmed, long unconfirmed) {
