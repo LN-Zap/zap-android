@@ -371,7 +371,7 @@
     <string name="no_wallets">No wallets</string>
     <string name="spinner_manage_wallets">Manage…</string>
     <string name="wallet_added">Wallet has been added.</string>
-    <string name="wallet_already_exists">This wallet already exists.\nIf you want to update its connection data, please go to the walltes detail page.</string>
+    <string name="wallet_already_exists">This wallet already exists.\nIf you want to update its connection data, please go to the wallets detail page.</string>
 
     <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
     <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>
@@ -380,6 +380,9 @@
     <string name="lnurl_unsupported_type">Unsupported LNURL type</string>
     <string name="lnurl_service_not_responding">%s is not responding</string>
     <string name="lnurl_service">Service</string>
+    <string name="lnurl_service_provided_invalid_data">The Service you are interacting with provided invalid data.</string>
+    <string name="lnurl_channel_opening_question">Do you really want to open a channel with:</string>
+    <string name="lnurl_channel_pending_hint">The channel is opening. This may take a while.\nYou can check the channels state in your channels overview.</string>
 
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
 

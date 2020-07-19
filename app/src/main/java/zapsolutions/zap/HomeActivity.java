@@ -52,6 +52,7 @@ import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.WalletFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
+import zapsolutions.zap.lnurl.channel.LnUrlChannelBSDFragment;
 import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
@@ -546,7 +547,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             @Override
             public void onValidLnUrlChannel(LnUrlChannelResponse channelResponse) {
-                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
+                LnUrlChannelBSDFragment lnUrlChannelBSDFragment = LnUrlChannelBSDFragment.createLnURLChannelDialog(channelResponse);
+                lnUrlChannelBSDFragment.show(getSupportFragmentManager(), "lnurlChannelBottomSheetDialog");
             }
 
             @Override
