@@ -22,7 +22,6 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
-import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -63,7 +62,13 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         mAdapter = new ChannelItemAdapter(mChannelItems, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Display the current state of channels
         updateChannelsDisplayList();
+
+        // Refetch channels from LND. This will automatically update the view when finished.
+        // Is necessary, as we might display outdated data otherwise.
+        Wallet.getInstance().fetchChannelsFromLND();
     }
 
     private void updateChannelsDisplayList() {
