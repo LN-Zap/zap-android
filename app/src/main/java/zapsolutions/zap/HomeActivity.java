@@ -132,8 +132,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             @Override
             public void onSingleClick(View v) {
                 if (Wallet.getInstance().isConnectedToLND()) {
-                    //Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
-                    //startActivity(intent);
+                    Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
+                    startActivity(intent);
                 }
             }
         });
