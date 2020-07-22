@@ -35,6 +35,7 @@ public class UserGuardian {
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
+    public static final int CLIPBOARD_DATA_TYPE_NODE_URI = 2;
 
     private final Context mContext;
     private OnGuardianConfirmedListener mListener;
@@ -90,6 +91,12 @@ public class UserGuardian {
                 if (data.length() > 15) {
                     compareString = "... " + data.substring(data.length() - 8);
                     message = mContext.getResources().getString(R.string.guardian_copyToClipboard_lightning, compareString);
+                }
+                break;
+            case CLIPBOARD_DATA_TYPE_NODE_URI:
+                if (data.length() > 15) {
+                    compareString = data.substring(0, 8) + " ...";
+                    message = mContext.getResources().getString(R.string.guardian_copyToClipboard_onChain, compareString);
                 }
                 break;
         }

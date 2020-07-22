@@ -103,6 +103,7 @@
     <string name="activity_manage_wallets">Manage Wallets</string>
     <string name="activity_advanced_settings">Advanced Settings</string>
     <string name="activity_wallet_details">Wallet Details</string>
+    <string name="activity_identity">Identity</string>
 
 
     <string name="navigation_wallet">Wallet</string>
@@ -398,4 +399,6 @@
     <string name="support_issue_description">Found a bug? Let us know!</string>
     <string name="support_privacy_description">We value your privacy.</string>
     <string name="support_help_description">Visit our documentation.</string>
+
+    <string name="identity_explanation">This is your identity on the lightning network!\Others can open a channel with you if they scan this QR-Code.</string>
 </resources>
