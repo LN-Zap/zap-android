@@ -561,7 +561,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
                 LnUrlPayBSDFragment lnUrlPayBSDFragment = LnUrlPayBSDFragment.createLnUrlPayDialog(payResponse);
                 lnUrlPayBSDFragment.show(getSupportFragmentManager(), "lnurlPayBottomSheetDialog");
-                //showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
             }
 
             @Override
