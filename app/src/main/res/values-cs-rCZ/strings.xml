@@ -9,7 +9,7 @@
     Parameters:
     Some strings have parameters, which allows them to show different content.
     Parameters look like this:   %1$s  ,  %2$d  ,  ...
-    Above every string with a parameter there is an explanation, what this parameter can be.
+    Every string with parameters has an explanation as comment in the string tag.
     With this information you should be able to move the parameter to the correct place in your
     translated string.
 
@@ -84,6 +84,15 @@
     <string name="none">Žádný</string>
     <string name="install">Instalovat</string>
     <string name="continue_string">Pokračovat</string>
+    <string name="withdraw">Výběr</string>
+    <string name="unknown">Neznámý</string>
+    <string name="scan">Skenovat</string>
+    <string name="settings">Nastavení</string>
+    <string name="support">Podpora</string>
+    <string name="contribute">Přispět</string>
+    <string name="privacy">Soukromí</string>
+    <string name="payee">Payee</string>
+    <string name="open">Open</string>
     <string name="activity_receive">Příjmout</string>
     <string name="activity_send">Zaplatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
@@ -91,6 +100,7 @@
     <string name="activity_manage_wallets">Správa peněženek</string>
     <string name="activity_advanced_settings">Pokročilé nastavení</string>
     <string name="activity_wallet_details">Detaily peněženky</string>
+    <string name="activity_identity">Identita</string>
     <string name="navigation_wallet">Peněženka</string>
     <string name="navigation_history">Historie</string>
     <string name="navigation_settings">Nastavení</string>
@@ -102,6 +112,7 @@
     <string name="pin_confirm_new">Potvrďte nový PIN</string>
     <string name="pin_entered_wrong">Špatný PIN</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Počkejte %1$s sekund.</string>
+    <string name="pin_changed">PIN byl změněn!</string>
     <string name="requested_payment">Vyžadováno</string>
     <string name="request_expired">Expirováno</string>
     <string name="internal">Interní</string>
@@ -246,6 +257,7 @@
     <string name="error_channel_close">Kanál nelze zavřít: %s</string>
     <string name="error_pin_deactivation_attempt">Vypadá to, že se někdo pokusil deaktivovat váš kód PIN. Aplikace se nyní zavře.\nMůžete aplikaci znovu nainstalovat a pomocí procesu obnovy získat zpět přístup ke svým prostředkům.</string>
     <string name="error_empty_wallet_name">Prázdné jméno není povoleno.</string>
+    <string name="error_invalid_bitcoin_request">Neplatný bitcoin požadavek.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuta</item>
         <item quantity="few">%d Minuty</item>
@@ -310,6 +322,7 @@
     <string name="help_dialog_scanNodePublicKey">QR-kódy obsahující následující informace jsou platné: \n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:\n\n- Lndconnect řetězec (lndconnect://...)\n- BtcPay Server připojení (config=...)\n- Celý obsah vašeho BTCPay Server config souboru</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ okamžité\n+ nízké poplatky\n- není vždy možné\n\nIdeální pro malé transakce.\nPoužívejte, kdykoli je to možné.\n\n\nOn-Chain:\n\n+ vždy možné\n-pomalejší\n- vyšší poplatky\n\nDobré pro velké transakce.\nPoužijte, pokud není možné použít Lightning.</string>
+    <string name="help_dialog_scanGeneric">Zde můžete cokoli.\nNaskenujte QR kód a Zap automaticky určí, v závislosti na datech, jakou akci provést.</string>
     <string name="wallet_name">Název peněženky</string>
     <string name="delete">Smazat</string>
     <string name="rename">Přejmenovat</string>
@@ -323,4 +336,33 @@
     <string name="confirm_wallet_deletion">Opravdu chcete tuto peněženku smazat?</string>
     <string name="no_wallets">Žádné peněženky</string>
     <string name="spinner_manage_wallets">Spravovat…</string>
+    <string name="wallet_added">Peněženka byla přidána.</string>
+    <string name="wallet_already_exists">Tato peněženka již existuje.\nChcete-li aktualizovat data připojení, přejděte na stránku s podrobnostmi o peněženkách.</string>
+    <string name="lnurl_withdraw_success">Výběr\nse povedl</string>
+    <string name="lnurl_withdraw_fail">Výběr\nselhal</string>
+    <string name="lnurl_decoding_no_lnurl_data">Data neobsahují platnou LNURL.</string>
+    <string name="lnurl_withdraw_insufficient_channel_balance">The withdraw amount is bigger than what you can receive over lightning with your current open channels.</string>
+    <string name="lnurl_unsupported_type">Nepodporovaný typ LNURL</string>
+    <string name="lnurl_service_not_responding">%s neodpovídá</string>
+    <string name="lnurl_service">Služba</string>
+    <string name="lnurl_service_provided_invalid_data">Služba, se kterou komunikujete, poskytuje neplatná data.</string>
+    <string name="lnurl_channel_opening_question">Opravdu chcete otevřít kanál s:</string>
+    <string name="lnurl_channel_pending_hint">Kanál se otevírá. Může to chvíli trvat.\nStav kanálů můžete zkontrolovat ve vašem přehledu kanálů.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
+    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s odeslal neplatnou žádost o platbu.</string>
+    <string name="lnurl_pay_success_secret_decrypt_error">Your payment was successful, but the secret that you received could not be decrypted.</string>
+    <string name="lnurl_pay_save_url">IMPORTANT:\nThe URL has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
+    <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
+    <string name="string_analyzer_unrecognized_data">Nerozpoznaná data.</string>
+    <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
+    <string name="drawer_menu_wallets">Peněženky</string>
+    <string name="drawer_menu_channels">Kanály</string>
+    <string name="drawer_menu_backup">Záloha</string>
+    <string name="drawer_menu_buy">Koupit bitcoiny</string>
+    <string name="drawer_no_wallet">Žádná peněženka</string>
+    <string name="support_contribute_description">Pomozte vylepšit Zap.</string>
+    <string name="support_issue_description">Našli jste chybu? Dej nám vědět!</string>
+    <string name="support_privacy_description">We care about your privacy.</string>
+    <string name="support_help_description">Navštivte naši dokumentaci.</string>
+    <string name="identity_explanation">This is your identity on the lightning network!\nOthers can open a channel with you if they scan this QR-Code.</string>
 </resources>
