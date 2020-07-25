@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import zapsolutions.zap.lnurl.LnUrlResponse;
+import zapsolutions.zap.util.UtilFunctions;
 
 /**
  * This class helps to work with the received response from a LNURL-pay request.
@@ -57,5 +58,9 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
         }.getType();
         List<String[]> list = gson.fromJson(metadata, listType);
         return list;
+    }
+
+    public String getMetadataHash() {
+        return UtilFunctions.sha256Hash(metadata);
     }
 }
