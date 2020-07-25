@@ -9,7 +9,7 @@
     Parameters:
     Some strings have parameters, which allows them to show different content.
     Parameters look like this:   %1$s  ,  %2$d  ,  ...
-    Above every string with a parameter there is an explanation, what this parameter can be.
+    Every string with parameters has an explanation as comment in the string tag.
     With this information you should be able to move the parameter to the correct place in your
     translated string.
 
@@ -84,6 +84,15 @@
     <string name="none">Kein Limit</string>
     <string name="install">Installieren</string>
     <string name="continue_string">Weiter</string>
+    <string name="withdraw">Abhebung</string>
+    <string name="unknown">Unbekannt</string>
+    <string name="scan">Scannen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="support">Support</string>
+    <string name="contribute">Mitwirken</string>
+    <string name="privacy">Datenschutz</string>
+    <string name="payee">Empfänger</string>
+    <string name="open">Öffnen</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -91,6 +100,7 @@
     <string name="activity_manage_wallets">Wallets Verwalten</string>
     <string name="activity_advanced_settings">Erweiterte Einstellungen</string>
     <string name="activity_wallet_details">Wallet Details</string>
+    <string name="activity_identity">Identität</string>
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Verlauf</string>
     <string name="navigation_settings">Einstellungen</string>
@@ -102,6 +112,7 @@
     <string name="pin_confirm_new">Neue PIN bestätigen</string>
     <string name="pin_entered_wrong">Falsche PIN</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Warte %1$s Sekunden.</string>
+    <string name="pin_changed">PIN geändert!</string>
     <string name="requested_payment">Angefordert</string>
     <string name="request_expired">Abgelaufen</string>
     <string name="internal">Intern</string>
@@ -246,6 +257,7 @@
     <string name="error_channel_close">Der Kanal konnte nicht geschlossen werden: %s</string>
     <string name="error_pin_deactivation_attempt">Es sieht so aus, als ob jemand versucht hat, deine PIN zu deaktivieren. Die App wird nun beendet.\nDu kannst die App neu installieren und den Wiederherstellungsprozess nutzen, um wieder Zugriff auf dein Guthaben zu erhalten.</string>
     <string name="error_empty_wallet_name">Ein leerer Name ist nicht erlaubt.</string>
+    <string name="error_invalid_bitcoin_request">Ungültige Bitcoinanfrage.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>
@@ -298,6 +310,7 @@
     <string name="help_dialog_scanNodePublicKey">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
+    <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und Zap wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="wallet_name">Name der Wallet</string>
     <string name="delete">Löschen</string>
     <string name="rename">Umbenennen</string>
@@ -311,4 +324,33 @@
     <string name="confirm_wallet_deletion">Möchtest du diese Wallet wirklich löschen?</string>
     <string name="no_wallets">Keine Wallets</string>
     <string name="spinner_manage_wallets">Verwalten…</string>
+    <string name="wallet_added">Wallet wurde hinzugefügt.</string>
+    <string name="wallet_already_exists">Diese Wallet existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zur den Wallet Details.</string>
+    <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>
+    <string name="lnurl_withdraw_fail">Abhebung\nfehlgeschlagen</string>
+    <string name="lnurl_decoding_no_lnurl_data">Die Daten enthalten keine gültige LNURL.</string>
+    <string name="lnurl_withdraw_insufficient_channel_balance">Der Betrag, den du abheben möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen empfangen kannst.</string>
+    <string name="lnurl_unsupported_type">Dieser LNURL Typ wird nicht unterstützt</string>
+    <string name="lnurl_service_not_responding">%s antwortet nicht</string>
+    <string name="lnurl_service">Dienst</string>
+    <string name="lnurl_service_provided_invalid_data">Der Dienst mit dem du interagierst hat ungültige Daten übermittelt.</string>
+    <string name="lnurl_channel_opening_question">Möchtest du wirklich einen Kanal mit folgendem Peer öffnen?</string>
+    <string name="lnurl_channel_pending_hint">Der Kanal wird geöffnet. Das kann eine Weile dauern.\nDu kannst den Status des Kanals jederzeit in deiner Kanalübersicht überprüfen.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
+    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s hat eine ungültige Zahlungsanfrage geschickt.</string>
+    <string name="lnurl_pay_success_secret_decrypt_error">Die Zahlung war erfolgreich, aber das Geheimnis, das du erhalten hast, konnte nicht entschlüsselt werden.</string>
+    <string name="lnurl_pay_save_url">WICHTIG:\nDie URL wurde in die Zwischenablage kopiert. Bitte speicher sie ab, falls du sie später nochmal brauchst. Dieses Fenster wird nicht nocheinmal angezeigt.</string>
+    <string name="lnurl_pay_save_secret">WICHTIG:\nDer Code wurde in die Zwischenablage kopiert. Bitte speicher ihn ab, falls du ihn später nochmal brauchst. Dieses Fenster wird nicht nocheinmal angezeigt.</string>
+    <string name="string_analyzer_unrecognized_data">Unbekannte Daten.</string>
+    <string name="rest_port">REST (Port 8080) wird nicht unterstützt.\n\nMöchtest du den Port auf 10009 (gRPC) ändern?</string>
+    <string name="drawer_menu_wallets">Wallets</string>
+    <string name="drawer_menu_channels">Kanäle</string>
+    <string name="drawer_menu_backup">Backup</string>
+    <string name="drawer_menu_buy">Bitcoin kaufen</string>
+    <string name="drawer_no_wallet">Keine Wallet</string>
+    <string name="support_contribute_description">Hilf mit Zap zu verbessern.</string>
+    <string name="support_issue_description">Du hast einen Fehler gefunden? Lass es uns wissen!</string>
+    <string name="support_privacy_description">Uns ist deine Privatsphäre wichtig.</string>
+    <string name="support_help_description">Schau dir unsere Dokumentation an.</string>
+    <string name="identity_explanation">Das bist du im Lightning-Netzwerk!\nAndere können einen Kanal mit dir öffnen, wenn sie diesen QR-Code scannen.</string>
 </resources>
