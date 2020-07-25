@@ -14,6 +14,7 @@ Native android lightning wallet focused on user experience and ease of use âš¡ï¸
 - [x] Open `lightning:` & `bitcoin:` urls
 - [x] Available in many languages
 - [ ] Resend failed lightning transactions
+- [x] LNURL support (pay, withdraw & channel)
 - [x] Transaction filter
 - [x] Read NFC tags
 
