@@ -10,10 +10,12 @@
             android:id="@+id/drawerChannels"
             android:icon="@drawable/ic_open_channel_24"
             android:title="@string/drawer_menu_channels" />
+        <!--
         <item
             android:id="@+id/drawerBackup"
             android:icon="@drawable/ic_baseline_lock_24"
             android:title="@string/drawer_menu_backup" />
+        -->
         <item
             android:id="@+id/drawerSettings"
             android:icon="@drawable/ic_nav_settings_black_24dp"

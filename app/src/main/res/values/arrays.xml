@@ -49,6 +49,7 @@
         <item>it</item>
         <item>ro</item>
         <item>es</item>
+        <item>uk</item>
     </string-array>
 
     <string-array name="languageDisplayValues">
@@ -62,6 +63,7 @@
         <item>Italian</item>
         <item>Romanian</item>
         <item>Spanish</item>
+        <item>Ukrainian</item>
     </string-array>
 
     <string-array name="lnRequestExpiry">

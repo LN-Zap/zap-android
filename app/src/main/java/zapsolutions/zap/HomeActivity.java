@@ -652,9 +652,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Intent intentWallets = new Intent(this, ManageWalletsActivity.class);
                 startActivity(intentWallets);
                 break;
+                /*
             case R.id.drawerBackup:
                 Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
                 break;
+                 */
             case R.id.drawerSettings:
                 Intent intentSettings = new Intent(this, SettingsActivity.class);
                 startActivity(intentSettings);
