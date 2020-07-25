@@ -1,14 +1,19 @@
-package zapsolutions.zap.lnurl.withdraw;
+package zapsolutions.zap.lnurl.pay;
 
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,38 +41,49 @@ import androidx.transition.TransitionManager;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
+import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
+import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
+import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.fragments.RxBSDFragment;
+import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 
-public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
+public class LnUrlPayBSDFragment extends RxBSDFragment {
 
-    private static final String LOG_TAG = LnUrlWithdrawBSDFragment.class.getName();
+    private static final String LOG_TAG = LnUrlPayBSDFragment.class.getName();
 
     private ConstraintLayout mRootLayout;
     private ImageView mIvBsdIcon;
     private TextView mTvTitle;
-    private View mWithdrawAmountView;
+    private View mSendAmountView;
     private EditText mEtAmount;
     private EditText mEtDescription;
     private TextView mTvUnit;
     private View mDescriptionView;
     private NumpadView mNumpad;
-    private Button mBtnWithdraw;
+    private Button mBtnSend;
     private View mProgressScreen;
     private View mFinishedScreen;
     private Button mOkButton;
@@ -76,29 +92,31 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
     private ImageView mIvFinishedPaymentTypeIcon;
     private TextView mTvFinishedText;
     private TextView mTvFinishedText2;
+    private TextView mTvFinishedText3;
     private View mProgressBar;
-    private TextView mTvWithdrawSource;
+    private TextView mTvPayee;
     private BottomSheetBehavior mBehavior;
     private long mFixedAmount;
     private boolean mAmountValid = true;
-    private long mMinWithdrawable;
-    private long mMaxWithdrawable;
+    private long mMinSendable;
+    private long mMaxSendable;
     private String mServiceURLString;
     private boolean mCurrencyJustSwitched;
     private boolean mValueModifiedSinceSwitch;
     private long mTempCurrentSatoshiValue;
+    private long mFinalChosenAmount;
 
     private Handler mHandler;
-    private LnUrlWithdrawResponse mWithdrawData;
+    private LnUrlPayResponse mPaymentData;
 
-    public static LnUrlWithdrawBSDFragment createWithdrawDialog(LnUrlWithdrawResponse response) {
+    public static LnUrlPayBSDFragment createLnUrlPayDialog(LnUrlPayResponse response) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(LnUrlWithdrawResponse.ARGS_KEY, response);
+        bundle.putSerializable(LnUrlPayResponse.ARGS_KEY, response);
         Intent intent = new Intent();
         intent.putExtras(bundle);
-        LnUrlWithdrawBSDFragment lnUrlWithdrawBSDFragment = new LnUrlWithdrawBSDFragment();
-        lnUrlWithdrawBSDFragment.setArguments(intent.getExtras());
-        return lnUrlWithdrawBSDFragment;
+        LnUrlPayBSDFragment lnUrlPayBSDFragment = new LnUrlPayBSDFragment();
+        lnUrlPayBSDFragment.setArguments(intent.getExtras());
+        return lnUrlPayBSDFragment;
     }
 
 
@@ -107,15 +125,15 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Bundle args = getArguments();
-        mWithdrawData = (LnUrlWithdrawResponse) args.getSerializable(LnUrlWithdrawResponse.ARGS_KEY);
+        mPaymentData = (LnUrlPayResponse) args.getSerializable(LnUrlPayResponse.ARGS_KEY);
 
         // Calculate correct min and max withdrawal value for LNURL. Zap limits withdrawal to full satoshis.
-        mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable() / 1000), Wallet.getInstance().getMaxLightningReceiveAmount());
-        mMinWithdrawable = mWithdrawData.getMinWithdrawable() % 1000 == 0 ? Math.max((mWithdrawData.getMinWithdrawable() / 1000), 1L) : Math.max((mWithdrawData.getMinWithdrawable() / 1000) + 1L, 1L);
+        mMaxSendable = Math.min((mPaymentData.getMaxSendable() / 1000), Wallet.getInstance().getMaxLightningSendAmount());
+        mMinSendable = mPaymentData.getMinSendable() % 1000 == 0 ? Math.max((mPaymentData.getMinSendable() / 1000), 1L) : Math.max((mPaymentData.getMinSendable() / 1000) + 1L, 1L);
 
-        // Extract the URL from the Withdraw service
+        // Extract the URL from the service
         try {
-            URL url = new URL(mWithdrawData.getCallback());
+            URL url = new URL(mPaymentData.getCallback());
             mServiceURLString = url.getHost();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -123,7 +141,7 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
 
         mHandler = new Handler();
 
-        View view = inflater.inflate(R.layout.bsd_lnurl_withdraw, container);
+        View view = inflater.inflate(R.layout.bsd_lnurl_pay, container);
 
         // Apply FLAG_SECURE to dialog to prevent screen recording
         if (PrefsUtil.preventScreenRecording()) {
@@ -134,15 +152,15 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         mIvBsdIcon = view.findViewById(R.id.bsdIcon);
         mTvTitle = view.findViewById(R.id.bsdTitle);
 
-        mWithdrawAmountView = view.findViewById(R.id.withdrawInputsView);
-        mEtAmount = view.findViewById(R.id.withdrawAmount);
+        mSendAmountView = view.findViewById(R.id.sendInputsView);
+        mEtAmount = view.findViewById(R.id.sendAmount);
         mTvUnit = view.findViewById(R.id.unit);
-        mEtDescription = view.findViewById(R.id.withdrawDescription);
-        mDescriptionView = view.findViewById(R.id.withdrawDescriptionTopLayout);
-        mTvWithdrawSource = view.findViewById(R.id.withdrawSource);
+        mEtDescription = view.findViewById(R.id.sendDescription);
+        mDescriptionView = view.findViewById(R.id.sendDescriptionTopLayout);
+        mTvPayee = view.findViewById(R.id.sendPayee);
 
         mNumpad = view.findViewById(R.id.numpadView);
-        mBtnWithdraw = view.findViewById(R.id.withdrawButton);
+        mBtnSend = view.findViewById(R.id.sendButton);
 
         mProgressScreen = view.findViewById(R.id.paymentProgressLayout);
         mFinishedScreen = view.findViewById(R.id.paymentFinishedLayout);
@@ -152,6 +170,7 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         mIvFinishedPaymentTypeIcon = view.findViewById(R.id.finishedPaymentTypeIcon);
         mTvFinishedText = view.findViewById(R.id.finishedText);
         mTvFinishedText2 = view.findViewById(R.id.finishedText2);
+        mTvFinishedText3 = view.findViewById(R.id.finishedText3);
         mProgressBar = view.findViewById(R.id.progressBar);
 
         mNumpad.bindEditText(mEtAmount);
@@ -188,34 +207,34 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
 
                     if (mFixedAmount != 0L) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnWithdraw.setEnabled(true);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.lightningOrange));
+                        mBtnSend.setEnabled(true);
+                        mBtnSend.setTextColor(getResources().getColor(R.color.lightningOrange));
                         return;
                     }
                     mValueModifiedSinceSwitch = true;
                     long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
 
                     // make text red if input is too large or too small
-                    if (currentValue > mMaxWithdrawable) {
+                    if (currentValue > mMaxSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.superRed));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMaxWithdrawable);
+                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMaxSendable);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
-                        mBtnWithdraw.setEnabled(false);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
-                    } else if (currentValue < mMinWithdrawable) {
+                        mBtnSend.setEnabled(false);
+                        mBtnSend.setTextColor(getResources().getColor(R.color.gray));
+                    } else if (currentValue < mMinSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.superRed));
-                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMinWithdrawable);
+                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMinSendable);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
-                        mBtnWithdraw.setEnabled(false);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
+                        mBtnSend.setEnabled(false);
+                        mBtnSend.setTextColor(getResources().getColor(R.color.gray));
                     } else {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnWithdraw.setEnabled(true);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.lightningOrange));
+                        mBtnSend.setEnabled(true);
+                        mBtnSend.setTextColor(getResources().getColor(R.color.lightningOrange));
                     }
                     if (currentValue == 0) {
-                        mBtnWithdraw.setEnabled(false);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
+                        mBtnSend.setEnabled(false);
+                        mBtnSend.setTextColor(getResources().getColor(R.color.gray));
                     }
                 }
                 mCurrencyJustSwitched = false;
@@ -246,23 +265,23 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         mIvBsdIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_icon_modal_lightning));
         mIvFinishedPaymentTypeIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_nav_wallet_balck_24dp));
         mIvProgressPaymentTypeIcon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_nav_wallet_balck_24dp));
-        mTvTitle.setText(R.string.withdraw);
+        mTvTitle.setText(R.string.pay);
         if (mServiceURLString != null) {
-            mTvWithdrawSource.setText(mServiceURLString);
+            mTvPayee.setText(mServiceURLString);
         } else {
-            mTvWithdrawSource.setText(R.string.unknown);
+            mTvPayee.setText(R.string.unknown);
         }
 
-        if (mWithdrawData.getDefaultDescription() == null) {
+        if (mPaymentData.getMetadata(LnUrlPayResponse.METADATA_TEXT) == null) {
             mDescriptionView.setVisibility(View.GONE);
         } else {
             mDescriptionView.setVisibility(View.VISIBLE);
-            mEtDescription.setText(mWithdrawData.getDefaultDescription());
+            mEtDescription.setText(mPaymentData.getMetadata(LnUrlPayResponse.METADATA_TEXT));
         }
 
-        if (mWithdrawData.getMinWithdrawable() == mWithdrawData.getMaxWithdrawable()) {
+        if (mPaymentData.getMinSendable() == mPaymentData.getMaxSendable()) {
             // A specific amount was requested. We are not allowed to change the amount.
-            mFixedAmount = mWithdrawData.getMaxWithdrawable() / 1000;
+            mFixedAmount = mPaymentData.getMaxSendable() / 1000;
             mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
             mEtAmount.clearFocus();
             mEtAmount.setFocusable(false);
@@ -270,10 +289,10 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         } else {
             // No specific amount was requested. Let User input an amount, but pre fill with maxWithdraw amount.
             mNumpad.setVisibility(View.VISIBLE);
-            mTempCurrentSatoshiValue = mMaxWithdrawable;
+            mTempCurrentSatoshiValue = mMinSendable;
             mCurrencyJustSwitched = true;
             mValueModifiedSinceSwitch = false;
-            mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mMaxWithdrawable));
+            mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mMinSendable));
 
             mHandler.postDelayed(() -> {
                 // We have to call this delayed, as otherwise it will still bring up the softKeyboard
@@ -283,62 +302,47 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         }
 
 
-        // Action when clicked on "withdraw"
-        mBtnWithdraw.setOnClickListener(new View.OnClickListener() {
+        // Action when clicked on "send"
+        mBtnSend.setText(R.string.activity_send);
+        mBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 switchToWithdrawProgressScreen();
 
-                ZapLog.d(LOG_TAG, "Trying to withdraw...");
+                ZapLog.v(LOG_TAG, "Lnurl pay initiated...");
 
-                // Create ln-invoice
-                long value;
                 if (mFixedAmount == 0L) {
                     if (!mValueModifiedSinceSwitch) {
-                        value = mTempCurrentSatoshiValue;
+                        mFinalChosenAmount = mTempCurrentSatoshiValue;
                     } else {
-                        value = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                        mFinalChosenAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
                     }
                 } else {
-                    value = mFixedAmount;
+                    mFinalChosenAmount = mFixedAmount;
                 }
 
-                Invoice asyncInvoiceRequest = Invoice.newBuilder()
-                        .setValue(value)
-                        .setMemo(mWithdrawData.getDefaultDescription())
-                        .setExpiry(60L) // in seconds
+                // Create send request
+                LnUrlSecondPayRequest lnUrlSecondPayRequest = new LnUrlSecondPayRequest.Builder()
+                        .setCallback(mPaymentData.getCallback())
+                        .setAmount(mFinalChosenAmount * 1000)
                         .build();
 
+                ZapLog.v(LOG_TAG, "Sent following request to service: " + lnUrlSecondPayRequest.requestAsString());
 
-                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
-                        .subscribe(addInvoiceResponse -> {
+                StringRequest lnUrlRequest = new StringRequest(Request.Method.GET, lnUrlSecondPayRequest.requestAsString(),
+                        response -> validateSecondResponse(response),
+                        error -> {
+                            if (mServiceURLString != null) {
+                                switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, mServiceURLString));
+                            } else {
+                                String host = getResources().getString(R.string.host);
+                                switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
+                            }
+                        });
 
-                            // Invoice was created. Now forward it to the LNURL service to initiate withdraw.
-                            LnUrlFinalWithdrawRequest lnUrlFinalWithdrawRequest = new LnUrlFinalWithdrawRequest.Builder()
-                                    .setCallback(mWithdrawData.getCallback())
-                                    .setK1(mWithdrawData.getK1())
-                                    .setInvoice(addInvoiceResponse.getPaymentRequest())
-                                    .build();
-
-                            StringRequest lnUrlRequest = new StringRequest(Request.Method.GET, lnUrlFinalWithdrawRequest.requestAsString(),
-                                    response -> validateSecondResponse(response),
-                                    error -> {
-                                        if (mServiceURLString != null) {
-                                            switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, mServiceURLString));
-                                        } else {
-                                            String host = getResources().getString(R.string.host);
-                                            switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
-                                        }
-                                    });
-
-                            // Send final request to LNURL service
-                            HttpClient.getInstance().addToRequestQueue(lnUrlRequest, "LnUrlFinalWithdrawRequest");
-
-                        }, throwable -> {
-                            Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                            ZapLog.d(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
-                        }));
+                // Send request to LNURL service
+                HttpClient.getInstance().addToRequestQueue(lnUrlRequest, "LnUrlSecondPayRequest");
             }
         });
 
@@ -385,25 +389,194 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         });
 
 
-        if (mMinWithdrawable > mMaxWithdrawable) {
-            // There is no way the withdraw can be routed... show an error immediately
+        if (mMinSendable > mMaxSendable) {
+            // There is no way the payment can be routed... show an error immediately
             switchToWithdrawProgressScreen();
-            switchToFailedScreen(getResources().getString(R.string.lnurl_withdraw_insufficient_channel_balance));
+            switchToFailedScreen(getResources().getString(R.string.lnurl_pay_insufficient_channel_balance));
         }
 
         return view;
     }
 
-    private void validateSecondResponse(@NonNull String withdrawResponse) {
-        LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(withdrawResponse, LnUrlWithdrawResponse.class);
+    private void validateSecondResponse(@NonNull String secondPayResponse) {
 
-        if (lnUrlWithdrawResponse.getStatus().equals("OK")) {
-            switchToSuccessScreen();
+        ZapLog.d(LOG_TAG, "Second pay response: " + secondPayResponse);
+
+        LnUrlPaySecondResponse lnUrlPaySecondResponse = new Gson().fromJson(secondPayResponse, LnUrlPaySecondResponse.class);
+
+        if (lnUrlPaySecondResponse.hasError()) {
+            ZapLog.d(LOG_TAG, "LNURL: Failed to pay. " + lnUrlPaySecondResponse.getReason());
+            switchToFailedScreen(lnUrlPaySecondResponse.getReason());
         } else {
-            ZapLog.d(LOG_TAG, "LNURL: Failed to withdraw. " + lnUrlWithdrawResponse.getReason());
-            switchToFailedScreen(lnUrlWithdrawResponse.getReason());
+            PayReqString decodePaymentRequest = PayReqString.newBuilder()
+                    .setPayReq(lnUrlPaySecondResponse.getPaymentRequest())
+                    .build();
+
+            getCompositeDisposable().add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
+                    .timeout(RefConstants.TIMEOUT_SHORT * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(invoice -> {
+                        ZapLog.v(LOG_TAG, invoice.toString());
+
+                        if (invoice.getTimestamp() + invoice.getExpiry() < System.currentTimeMillis() / 1000) {
+                            // Show error: payment request expired.
+                            ZapLog.e(LOG_TAG, "LNURL: Payment request expired.");
+                            switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                        } else if (invoice.getNumSatoshis() == 0) {
+                            // Disable 0 sat invoices
+                            ZapLog.e(LOG_TAG, "LNURL: 0 sat payments are not allowed.");
+                            switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                        } else if (invoice.getNumSatoshis() != mFinalChosenAmount) {
+                            ZapLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
+                            switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                        } else if (!invoice.getDescriptionHash().equals(mPaymentData.getMetadataHash())) {
+                            ZapLog.e(LOG_TAG, "LNURL: The hash in the invoice does not match the hash of from the metadata send before.");
+                            switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                        } else {
+                            SendRequest sendRequest = SendRequest.newBuilder()
+                                    .setPaymentRequest(lnUrlPaySecondResponse.getPaymentRequest())
+                                    .build();
+
+                            sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendRequest);
+                        }
+                    }, throwable -> {
+                        // If LND can't decode the payment request, show the error LND throws (always english)
+                        switchToFailedScreen(throwable.getMessage());
+                        ZapLog.e(LOG_TAG, throwable.getMessage());
+                    }));
         }
     }
+
+
+    private void sendPayment(LnUrlPaySuccessAction successAction, SendRequest sendRequest) {
+
+        ZapLog.d(LOG_TAG, "Trying to send lightning payment...");
+
+        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().sendPaymentSync(sendRequest)
+                .subscribe(sendResponse -> {
+                    // updated the history, so it is shown the next time the user views it
+                    Wallet.getInstance().updateLightningPaymentHistory();
+
+                    ZapLog.d(LOG_TAG, sendResponse.toString());
+
+                    // show success animation
+                    mHandler.postDelayed(() -> {
+                        if (sendResponse.getPaymentError().equals("")) {
+                            executeSuccessAction(successAction, sendResponse);
+                        } else {
+                            String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ": ";
+                            String error = errorPrefix + sendResponse.getPaymentError();
+                            switchToFailedScreen(error);
+                        }
+
+                    }, 300);
+                }, throwable -> {
+                    ZapLog.d(LOG_TAG, "Exception in send payment task.");
+                    ZapLog.d(LOG_TAG, throwable.getMessage());
+
+                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                    String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
+                    mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
+
+                }));
+    }
+
+
+    private void executeSuccessAction(LnUrlPaySuccessAction successAction, SendResponse sendResponse) {
+
+        mTvFinishedText2.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mFinalChosenAmount));
+
+        if (successAction == null) {
+            ZapLog.d(LOG_TAG, "No Success action.");
+            mTvFinishedText3.setVisibility(View.GONE);
+        } else if (successAction.isMessage()) {
+            ZapLog.d(LOG_TAG, "SuccessAction: Message: " + successAction.getMessage());
+            mTvFinishedText3.setText(successAction.getMessage());
+        } else if (successAction.isUrl()) {
+            ZapLog.d(LOG_TAG, "SuccessAction: Url: " + successAction.getUrl());
+            mTvFinishedText3.setVisibility(View.GONE);
+
+            ClipBoardUtil.copyToClipboard(getActivity(), "URL", successAction.getUrl());
+            String message = successAction.getDescription() + "\n\n" + successAction.getUrl() + "\n";
+            LayoutInflater adbInflater = LayoutInflater.from(getActivity());
+            View titleView = adbInflater.inflate(R.layout.dialog_warning_header, null);
+            ((TextView) titleView.findViewById(R.id.warningMessage)).setText(R.string.lnurl_pay_save_url);
+            AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
+                    .setMessage(message)
+                    .setCustomTitle(titleView)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.open, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // Call the url
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(successAction.getUrl()));
+                            getActivity().startActivity(browserIntent);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            Dialog dlg = adb.create();
+            // Apply FLAG_SECURE to dialog to prevent screen recording
+            if (PrefsUtil.preventScreenRecording()) {
+                dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            }
+            dlg.show();
+        } else if (successAction.isAes()) {
+            // Decrypt ciphertext with payment preimage
+            ZapLog.d(LOG_TAG, "SuccessAction: Aes.");
+            try {
+                String decrypted = decrypt(successAction.getCiphertext(), sendResponse.getPaymentPreimage().toByteArray(), successAction.getIv());
+                ZapLog.d(LOG_TAG, "Decrypted secret is: " + decrypted);
+                mTvFinishedText3.setVisibility(View.GONE);
+
+                ClipBoardUtil.copyToClipboard(getActivity(), "Code", decrypted);
+                String message = successAction.getDescription() + "\n\n" + decrypted + "\n";
+                LayoutInflater adbInflater = LayoutInflater.from(getActivity());
+                View titleView = adbInflater.inflate(R.layout.dialog_warning_header, null);
+                ((TextView) titleView.findViewById(R.id.warningMessage)).setText(R.string.lnurl_pay_save_secret);
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
+                        .setMessage(message)
+                        .setCustomTitle(titleView)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                            }
+                        });
+                Dialog dlg = adb.create();
+                // Apply FLAG_SECURE to dialog to prevent screen recording
+                if (PrefsUtil.preventScreenRecording()) {
+                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+                dlg.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                ZapLog.e(LOG_TAG, "Decryption error!");
+                mTvFinishedText3.setText(R.string.lnurl_pay_success_secret_decrypt_error);
+            }
+        } else {
+            ZapLog.d(LOG_TAG, "Success action not supported.");
+            mTvFinishedText3.setVisibility(View.GONE);
+        }
+        switchToSuccessScreen();
+    }
+
+
+    public static String decrypt(String textToDecrypt, byte[] key, String iv) throws Exception {
+        final String initializationVector = "8119745113154120";
+        byte[] encrypted_bytes = Base64.decode(textToDecrypt, Base64.DEFAULT);
+        byte[] iv_bytes = Base64.decode(iv, Base64.DEFAULT);
+        SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, skeySpec, new IvParameterSpec(iv_bytes));
+        byte[] decrypted = cipher.doFinal(encrypted_bytes);
+        return new String(decrypted, "UTF-8");
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -446,7 +619,7 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
 
         // make previous buttons and edit texts unclickable
         mNumpad.setEnabled(false);
-        mBtnWithdraw.setEnabled(false);
+        mBtnSend.setEnabled(false);
         mEtAmount.setEnabled(false);
         mNumpad.setEnabled(false);
 
@@ -456,9 +629,9 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         animateOut.setDuration(200);
         animateOut.setFillAfter(true);
         mNumpad.startAnimation(animateOut);
-        mWithdrawAmountView.startAnimation(animateOut);
+        mSendAmountView.startAnimation(animateOut);
         mDescriptionView.startAnimation(animateOut);
-        mBtnWithdraw.startAnimation(animateOut);
+        mBtnSend.startAnimation(animateOut);
         mTvTitle.startAnimation(animateOut);
         mIvBsdIcon.startAnimation(animateOut);
 
@@ -573,7 +746,7 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
         scaleDownIcon.start();
 
         // Set failed states
-        mTvFinishedText.setText(R.string.lnurl_withdraw_fail);
+        mTvFinishedText.setText(R.string.send_fail);
         mTvFinishedText.setTextColor(getResources().getColor(R.color.superRed));
         mTvFinishedText2.setText(error);
 
