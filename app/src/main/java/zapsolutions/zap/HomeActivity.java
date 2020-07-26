@@ -661,9 +661,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Intent intentSettings = new Intent(this, SettingsActivity.class);
                 startActivity(intentSettings);
                 break;
+                /*
             case R.id.drawerBuy:
                 Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
                 break;
+                 */
             case R.id.drawerSupport:
                 Intent intentSupport = new Intent(this, SupportActivity.class);
                 startActivity(intentSupport);
