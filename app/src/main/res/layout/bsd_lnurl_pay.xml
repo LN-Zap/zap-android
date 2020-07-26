@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="5dp"
             android:paddingBottom="10dp"
-            android:text="@string/withdraw"
+            android:text="@string/pay"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -144,7 +144,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/withdrawAmount"
+            app:layout_constraintStart_toEndOf="@+id/sendAmount"
             app:layout_constraintTop_toTopOf="parent">
 
             <zapsolutions.zap.customView.NonClippingTextView
@@ -177,7 +177,7 @@
             app:srcCompat="@color/gray" />
 
         <TextView
-            android:id="@+id/withdrawSourceLabel"
+            android:id="@+id/payeeSourceLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -205,7 +205,7 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/withdrawSourceLabel"
+            app:layout_constraintStart_toEndOf="@id/payeeSourceLabel"
             app:layout_constraintTop_toBottomOf="@id/line2"
             tools:text="lnurl.bigsun.xyz" />
 
@@ -276,7 +276,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/bg_clickable_item"
-        android:text="@string/withdraw"
+        android:text="@string/pay"
         android:textAllCaps="false"
         android:textColor="@color/lightningOrange"
         android:textSize="16sp"
