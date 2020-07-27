@@ -22,12 +22,14 @@
             android:title="@string/settings" />
     </group>
 
+    <!--
     <group android:id="@+id/drawerGroup3">
         <item
             android:id="@+id/drawerBuy"
             android:icon="@drawable/ic_shopping_cart_24"
             android:title="@string/drawer_menu_buy" />
     </group>
+     -->
 
     <item
         android:id="@+id/drawerSupport"
