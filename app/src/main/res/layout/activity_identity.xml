@@ -35,6 +35,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35000002" />
 
+    <zapsolutions.zap.customView.IdentitySwitchView
+        android:id="@+id/identityTypeSwitcher"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintBottom_toTopOf="@id/hintButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userAvatarView" />
+
     <Button
         android:id="@+id/hintButton"
         style="@style/Widget.AppCompat.Button.Borderless"
@@ -49,19 +59,19 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userAvatarView" />
+        app:layout_constraintTop_toBottomOf="@+id/identityTypeSwitcher" />
 
     <TextView
         android:id="@+id/publicKey"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:text="@string/identity_explanation"
         android:textColor="@color/gray"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userAvatarView"
-        android:text="@string/identity_explanation"
+        app:layout_constraintTop_toBottomOf="@id/identityTypeSwitcher"
         tools:visibility="visible" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

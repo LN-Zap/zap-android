@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -15,13 +14,16 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.android.QRCode;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.lightning.LightningNodeUri;
 
 public class UserAvatarView extends ConstraintLayout {
 
     private ImageView mIvQRCode;
     private ImageFilterView mIvUserAvatar;
-    private String mNodePubKey;
+    private LightningNodeUri[] mNodeUris;
     private OnStateChangedListener mListener;
+    private int mCurrentUriId = 0;
+    private boolean mIsQRCodeIncluded;
 
     public UserAvatarView(Context context) {
         super(context);
@@ -48,65 +50,118 @@ public class UserAvatarView extends ConstraintLayout {
         showAvatar();
     }
 
-    public void setupWithNodePubKey(@NonNull String nodePubKey, boolean includeQRCode) {
-        mNodePubKey = nodePubKey;
-        showAvatar();
+    public void setupWithNodeUri(LightningNodeUri nodeUri, boolean includeQRCode) {
+        LightningNodeUri[] tempNodeUris = new LightningNodeUri[1];
+        tempNodeUris[0] = nodeUri;
 
-        if (mNodePubKey != null) {
-            if (!mNodePubKey.isEmpty()) {
-                if (includeQRCode) {
+        setupWithNodeUris(tempNodeUris, includeQRCode);
+    }
+
+    public void setupWithNodeUris(LightningNodeUri[] nodeUris, boolean includeQRCode) {
+        reset();
+        mNodeUris = nodeUris;
+        mIsQRCodeIncluded = includeQRCode;
+
+        /*
+        if (mIsQRCodeIncluded) {
+            mIvQRCode.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAvatar();
+                    ((MotionLayout) findViewById(R.id.userAvatarMotionLayout)).transitionToStart();
+                    if (mListener != null) {
+                        mListener.onHide();
+                    }
+                }
+            });
+
+            mIvUserAvatar.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showQRCode();
+                    ((MotionLayout) findViewById(R.id.userAvatarMotionLayout)).transitionToEnd();
+                    if (mListener != null) {
+                        mListener.onReveal();
+                    }
+                }
+            });
+        }
+        */
+
+
+        showAvatar();
+        showTorIdentity();
+    }
+
+    public void showTorIdentity() {
+        if (mNodeUris != null) {
+            if (mNodeUris.length > 1) {
+                for (int i = 0; i < mNodeUris.length; i++) {
+                    if (mNodeUris[i].getHost() != null && mNodeUris[i].getHost().toLowerCase().contains("onion")) {
+                        showIdentity(i);
+                        return;
+                    }
+                    showIdentity(0);
+                }
+            } else {
+                showIdentity(0);
+            }
+        }
+    }
+
+    public void showClearNetIdentity() {
+        if (mNodeUris != null) {
+            if (mNodeUris.length > 1) {
+                for (int i = 0; i < mNodeUris.length; i++) {
+                    if (mNodeUris[i].getHost() != null && !mNodeUris[i].getHost().toLowerCase().contains("onion")) {
+                        showIdentity(i);
+                        return;
+                    }
+                    showIdentity(0);
+                }
+            } else {
+                showIdentity(0);
+            }
+        }
+    }
+
+    private void showIdentity(int id) {
+        if (mNodeUris != null) {
+            mCurrentUriId = Math.min(mNodeUris.length, id);
+
+            if (mNodeUris[mCurrentUriId] != null) {
+                if (mIsQRCodeIncluded) {
                     // Generate "QR-Code"
                     Bitmap bmpQRCode = QRCode
-                            .from(mNodePubKey)
+                            .from(mNodeUris[mCurrentUriId].getAsString())
                             .withSize(750, 750)
                             .withErrorCorrection(ErrorCorrectionLevel.L)
                             .bitmap();
                     mIvQRCode.setImageBitmap(bmpQRCode);
-                    /*
-                    mIvQRCode.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            showAvatar();
-                            ((MotionLayout) findViewById(R.id.userAvatarMotionLayout)).transitionToStart();
-                            if (mListener != null) {
-                                mListener.onHide();
-                            }
-                        }
-                    });
-
-                     */
                 }
-                
+
                 // Load user Avatar
                 /*
                 Glide.with(getContext())
                         .setDefaultRequestOptions(new RequestOptions().timeout(15000))
-                        .load(UserAvatarUtil.getAvatarUrl(mNodePubKey))
+                        .load(UserAvatarUtil.getAvatarUrl(mNodeUris[mCurrentUriId].getPubKey()))
                         .placeholder(R.drawable.ic_person_24)
                         //.circleCrop()
                         .into(mIvUserAvatar);
 
                 if (includeQRCode) {
 
-                    mIvUserAvatar.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            showQRCode();
-                            ((MotionLayout) findViewById(R.id.userAvatarMotionLayout)).transitionToEnd();
-                            if (mListener != null) {
-                                mListener.onReveal();
-                            }
-                        }
-                    });
-                }
 
+                }
                  */
             }
         }
     }
 
     public void reset() {
-        mNodePubKey = null;
+        mNodeUris = null;
+        mIsQRCodeIncluded = false;
+        mCurrentUriId = 0;
         mIvUserAvatar.setOnClickListener(null);
         mIvQRCode.setOnClickListener(null);
         mIvUserAvatar.setImageResource(R.drawable.ic_person_24);
@@ -130,5 +185,45 @@ public class UserAvatarView extends ConstraintLayout {
         void onReveal();
 
         void onHide();
+    }
+
+    public LightningNodeUri getCurrentNodeIdentity() {
+        if (mNodeUris == null) {
+            return null;
+        } else {
+            return mNodeUris[mCurrentUriId];
+        }
+    }
+
+    public boolean isCurrentNodeIdentityTor() {
+        if (mNodeUris == null) {
+            return false;
+        } else {
+            if (mNodeUris[mCurrentUriId].getHost() != null) {
+                return mNodeUris[mCurrentUriId].getHost().toLowerCase().contains("onion");
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public boolean hasTorAndPublicIdentity() {
+        if (mNodeUris == null) {
+            return false;
+        }
+        if (mNodeUris.length > 1) {
+            boolean hasPublic = false;
+            boolean hasTor = false;
+            for (LightningNodeUri nodeUri : mNodeUris) {
+                if (nodeUri.getHost() != null && nodeUri.getHost().toLowerCase().contains("onion")) {
+                    hasTor = true;
+                } else if (nodeUri.getHost() == null || !nodeUri.getHost().toLowerCase().contains("onion")) {
+                    hasPublic = true;
+                }
+            }
+            return hasPublic && hasTor;
+        } else {
+            return false;
+        }
     }
 }

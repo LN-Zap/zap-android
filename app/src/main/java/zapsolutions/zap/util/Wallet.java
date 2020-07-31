@@ -58,6 +58,7 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.lightning.LightningNodeUri;
+import zapsolutions.zap.lightning.LightningParser;
 
 import static zapsolutions.zap.util.UtilFunctions.hexStringToByteArray;
 
@@ -100,6 +101,7 @@ public class Wallet {
     private long mChannelBalancePendingOpen = 0;
     private long mChannelBalanceLimbo = 0;
     private String mIdentityPubKey;
+    private LightningNodeUri[] mNodeUris;
     private boolean mConnectedToLND = false;
     private boolean mInfoFetched = false;
     private boolean mBalancesFetched = false;
@@ -165,6 +167,7 @@ public class Wallet {
         mSyncedToChain = false;
         mTestnet = false;
         mIdentityPubKey = null;
+        mNodeUris = null;
         mLNDVersionString = "not connected";
         mHandler.removeCallbacksAndMessages(null);
         App.getAppContext().connectionToLNDEstablished = false;
@@ -196,6 +199,12 @@ public class Wallet {
                         mConnectedToLND = true;
                         mConnectionCheckInProgress = false;
                         mIdentityPubKey = infoResponse.getIdentityPubkey();
+                        if (mNodeUris == null) {
+                            mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
+                            for (int i = 0; i < infoResponse.getUrisCount(); i++) {
+                                mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
+                            }
+                        }
                         broadcastLndConnectionTestResult(true, -1);
                     }, throwable -> {
                         mConnectionCheckInProgress = false;
@@ -351,6 +360,12 @@ public class Wallet {
                     mTestnet = infoResponse.getTestnet();
                     mLNDVersionString = infoResponse.getVersion();
                     mIdentityPubKey = infoResponse.getIdentityPubkey();
+                    if (mNodeUris == null) {
+                        mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
+                        for (int i = 0; i < infoResponse.getUrisCount(); i++) {
+                            mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
+                        }
+                    }
                     mInfoFetched = true;
                     mConnectedToLND = true;
 
@@ -1177,6 +1192,10 @@ public class Wallet {
 
     public String getIdentityPubKey() {
         return mIdentityPubKey;
+    }
+
+    public LightningNodeUri[] getNodeUris() {
+        return mNodeUris;
     }
 
     private void setOnChainBalance(long total, long confirmed, long unconfirmed) {
