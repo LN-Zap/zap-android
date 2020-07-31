@@ -22,6 +22,8 @@ import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
+import zapsolutions.zap.lnurl.channel.LnUrlChannelBSDFragment;
+import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -153,7 +155,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_OPEN_CHANNEL && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_OPEN_CHANNEL && resultCode == ScanNodePubKeyActivity.RESULT_CODE_NODE_URI) {
             if (data != null) {
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanNodePubKeyActivity.EXTRA_NODE_URI);
 
@@ -162,6 +164,14 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
                 bundle.putSerializable(OpenChannelBSDFragment.ARGS_NODE_URI, nodeUri);
                 openChannelBSDFragment.setArguments(bundle);
                 openChannelBSDFragment.show(getSupportFragmentManager(), OpenChannelBSDFragment.TAG);
+            }
+        }
+
+        if (requestCode == REQUEST_CODE_OPEN_CHANNEL && resultCode == ScanNodePubKeyActivity.RESULT_CODE_LNURL_CHANNEL) {
+            if (data != null) {
+                LnUrlChannelResponse channelResponse = (LnUrlChannelResponse) data.getSerializableExtra(ScanNodePubKeyActivity.EXTRA_CHANNEL_RESPONSE);
+                LnUrlChannelBSDFragment lnUrlChannelBSDFragment = LnUrlChannelBSDFragment.createLnURLChannelDialog(channelResponse);
+                lnUrlChannelBSDFragment.show(getSupportFragmentManager(), "lnurlChannelBottomSheetDialog");
             }
         }
     }
