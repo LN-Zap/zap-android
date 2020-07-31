@@ -211,6 +211,7 @@ public class LnUrlChannelBSDFragment extends RxBSDFragment {
 
     private void openChannel() {
 
+        ZapLog.v(LOG_TAG, "Remote Node uri: " + mLnUrlChannelResponse.getUri());
         LightningNodeUri nodeUri = LightningParser.parseNodeUri(mLnUrlChannelResponse.getUri());
 
         if (nodeUri == null) {
