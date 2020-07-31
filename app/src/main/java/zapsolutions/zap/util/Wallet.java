@@ -57,6 +57,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.lightning.LightningNodeUri;
 
 import static zapsolutions.zap.util.UtilFunctions.hexStringToByteArray;
@@ -1099,6 +1100,10 @@ public class Wallet {
      */
     public long getMaxLightningReceiveAmount() {
 
+        if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            return 0;
+        }
+
         Version actualLNDVersion = getLNDVersion();
         Version MppReceive = new Version("0.9");
 
@@ -1137,6 +1142,10 @@ public class Wallet {
     public long getMaxLightningSendAmount() {
 
         // ToDo: Calculate differently depending on LND version (consider multi path for LND 0.10 and up)
+
+        if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            return 0;
+        }
 
         long tempMax = 0L;
         if (mOpenChannelsList != null) {
