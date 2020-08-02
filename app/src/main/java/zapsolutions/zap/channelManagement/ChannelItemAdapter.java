@@ -18,7 +18,7 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final SortedList<ChannelListItem> mSortedList = new SortedList<>(ChannelListItem.class, new SortedList.Callback<ChannelListItem>() {
         @Override
         public int compare(ChannelListItem i1, ChannelListItem i2) {
-            return i2.compareTo(i1);
+            return i1.compareTo(i2);
         }
 
         @Override
@@ -126,27 +126,6 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             default:
                 throw new IllegalStateException("Unknown channel type: " + type);
         }
-    }
-
-
-    public void add(ChannelListItem item) {
-        mSortedList.add(item);
-    }
-
-    public void remove(ChannelListItem item) {
-        mSortedList.remove(item);
-    }
-
-    public void add(List<ChannelListItem> items) {
-        mSortedList.addAll(items);
-    }
-
-    public void remove(List<ChannelListItem> items) {
-        mSortedList.beginBatchedUpdates();
-        for (ChannelListItem item : items) {
-            mSortedList.remove(item);
-        }
-        mSortedList.endBatchedUpdates();
     }
 
     public void replaceAll(List<ChannelListItem> items) {

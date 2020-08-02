@@ -4,6 +4,9 @@ import androidx.annotation.Nullable;
 
 import com.google.protobuf.ByteString;
 
+import zapsolutions.zap.baseClasses.App;
+import zapsolutions.zap.util.Wallet;
+
 public abstract class ChannelListItem implements Comparable<ChannelListItem> {
 
     public static final int TYPE_OPEN_CHANNEL = 0;
@@ -21,49 +24,46 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
     public int compareTo(ChannelListItem channelListItem) {
         ChannelListItem other = channelListItem;
 
-        Long ownCapacity = 0l;
+        String ownPubkey = "";
         switch (this.getType()) {
             case TYPE_OPEN_CHANNEL:
-                ownCapacity = ((OpenChannelItem) this).getChannel().getCapacity();
+                ownPubkey = ((OpenChannelItem) this).getChannel().getRemotePubkey();
                 break;
             case TYPE_PENDING_OPEN_CHANNEL:
-                ownCapacity = ((PendingOpenChannelItem) this).getChannel().getChannel().getCapacity();
+                ownPubkey = ((PendingOpenChannelItem) this).getChannel().getChannel().getRemoteNodePub();
                 break;
             case TYPE_PENDING_CLOSING_CHANNEL:
-                ownCapacity = ((PendingClosingChannelItem) this).getChannel().getChannel().getCapacity();
+                ownPubkey = ((PendingClosingChannelItem) this).getChannel().getChannel().getRemoteNodePub();
                 break;
             case TYPE_PENDING_FORCE_CLOSING_CHANNEL:
-                ownCapacity = ((PendingForceClosingChannelItem) this).getChannel().getChannel().getCapacity();
+                ownPubkey = ((PendingForceClosingChannelItem) this).getChannel().getChannel().getRemoteNodePub();
                 break;
             case TYPE_WAITING_CLOSE_CHANNEL:
-                ownCapacity = ((WaitingCloseChannelItem) this).getChannel().getChannel().getCapacity();
-                break;
-            case TYPE_CLOSED_CHANNEL:
-                ownCapacity = 0l;
+                ownPubkey = ((WaitingCloseChannelItem) this).getChannel().getChannel().getRemoteNodePub();
         }
 
-        Long otherCapacity = 0l;
+        String otherPubkey = "";
         switch (other.getType()) {
             case TYPE_OPEN_CHANNEL:
-                otherCapacity = ((OpenChannelItem) other).getChannel().getCapacity();
+                otherPubkey = ((OpenChannelItem) other).getChannel().getRemotePubkey();
                 break;
             case TYPE_PENDING_OPEN_CHANNEL:
-                otherCapacity = ((PendingOpenChannelItem) other).getChannel().getChannel().getCapacity();
+                otherPubkey = ((PendingOpenChannelItem) other).getChannel().getChannel().getRemoteNodePub();
                 break;
             case TYPE_PENDING_CLOSING_CHANNEL:
-                otherCapacity = ((PendingClosingChannelItem) other).getChannel().getChannel().getCapacity();
+                otherPubkey = ((PendingClosingChannelItem) other).getChannel().getChannel().getRemoteNodePub();
                 break;
             case TYPE_PENDING_FORCE_CLOSING_CHANNEL:
-                otherCapacity = ((PendingForceClosingChannelItem) other).getChannel().getChannel().getCapacity();
+                otherPubkey = ((PendingForceClosingChannelItem) other).getChannel().getChannel().getRemoteNodePub();
                 break;
             case TYPE_WAITING_CLOSE_CHANNEL:
-                otherCapacity = ((WaitingCloseChannelItem) other).getChannel().getChannel().getCapacity();
-                break;
-            case TYPE_CLOSED_CHANNEL:
-                otherCapacity = 0l;
+                otherPubkey = ((WaitingCloseChannelItem) other).getChannel().getChannel().getRemoteNodePub();
         }
 
-        return ownCapacity.compareTo(otherCapacity);
+        String ownAlias = Wallet.getInstance().getNodeAliasFromPubKey(ownPubkey, App.getAppContext()).toLowerCase();
+        String otherAlias = Wallet.getInstance().getNodeAliasFromPubKey(otherPubkey, App.getAppContext()).toLowerCase();
+
+        return ownAlias.compareTo(otherAlias);
     }
 
     public boolean isSameChannel(@Nullable Object obj) {
