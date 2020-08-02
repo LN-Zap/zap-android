@@ -20,6 +20,7 @@ import java.util.List;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.util.Wallet;
@@ -68,7 +69,9 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         // Refetch channels from LND. This will automatically update the view when finished.
         // Is necessary, as we might display outdated data otherwise.
-        Wallet.getInstance().fetchChannelsFromLND();
+        if(WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            Wallet.getInstance().fetchChannelsFromLND();
+        }
     }
 
     private void updateChannelsDisplayList() {
@@ -182,6 +185,11 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     public void onRefresh() {
-        Wallet.getInstance().fetchChannelsFromLND();
+
+        if(WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            Wallet.getInstance().fetchChannelsFromLND();
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }
