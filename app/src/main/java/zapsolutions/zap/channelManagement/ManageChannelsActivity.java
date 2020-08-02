@@ -171,7 +171,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             if (data != null) {
                 LnUrlChannelResponse channelResponse = (LnUrlChannelResponse) data.getSerializableExtra(ScanNodePubKeyActivity.EXTRA_CHANNEL_RESPONSE);
                 LnUrlChannelBSDFragment lnUrlChannelBSDFragment = LnUrlChannelBSDFragment.createLnURLChannelDialog(channelResponse);
-                lnUrlChannelBSDFragment.show(getSupportFragmentManager(), "lnurlChannelBottomSheetDialog");
+                lnUrlChannelBSDFragment.show(getSupportFragmentManager(), LnUrlChannelBSDFragment.TAG);
             }
         }
     }
