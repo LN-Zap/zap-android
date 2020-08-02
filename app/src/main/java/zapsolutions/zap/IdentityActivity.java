@@ -48,13 +48,13 @@ public class IdentityActivity extends BaseAppCompatActivity {
                 public void onIdentityTypeChanged(IdentitySwitchView.IdentityType identityType) {
                     switch (identityType) {
                         case TOR:
-                            mUserAvatarView.showTorIdentity();
+                            mUserAvatarView.showIdentity(true);
                             break;
                         case PUBLIC:
-                            mUserAvatarView.showClearNetIdentity();
+                            mUserAvatarView.showIdentity(false);
                             break;
                         default:
-                            mUserAvatarView.showTorIdentity();
+                            mUserAvatarView.showIdentity(true);
                     }
                 }
             });

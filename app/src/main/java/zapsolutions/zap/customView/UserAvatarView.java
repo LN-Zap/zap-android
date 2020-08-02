@@ -88,40 +88,23 @@ public class UserAvatarView extends ConstraintLayout {
         }
         */
 
-
         showAvatar();
-        showTorIdentity();
+        showIdentity(true);
     }
 
-    public void showTorIdentity() {
+    public void showIdentity(boolean tor) {
         if (mNodeUris != null) {
             if (mNodeUris.length > 1) {
                 for (int i = 0; i < mNodeUris.length; i++) {
-                    if (mNodeUris[i].getHost() != null && mNodeUris[i].getHost().toLowerCase().contains("onion")) {
-                        showIdentity(i);
-                        return;
+                    if (mNodeUris[i].getHost() != null ) {
+                        if(mNodeUris[i].getHost().toLowerCase().contains("onion") == tor) {
+                            showIdentity(i);
+                            return;
+                        }
                     }
-                    showIdentity(0);
                 }
-            } else {
-                showIdentity(0);
             }
-        }
-    }
-
-    public void showClearNetIdentity() {
-        if (mNodeUris != null) {
-            if (mNodeUris.length > 1) {
-                for (int i = 0; i < mNodeUris.length; i++) {
-                    if (mNodeUris[i].getHost() != null && !mNodeUris[i].getHost().toLowerCase().contains("onion")) {
-                        showIdentity(i);
-                        return;
-                    }
-                    showIdentity(0);
-                }
-            } else {
-                showIdentity(0);
-            }
+            showIdentity(0);
         }
     }
 
