@@ -64,7 +64,7 @@ import zapsolutions.zap.util.ZapLog;
 
 public class LnUrlChannelBSDFragment extends RxBSDFragment {
 
-    private static final String LOG_TAG = LnUrlChannelBSDFragment.class.getName();
+    public static final String TAG = LnUrlChannelBSDFragment.class.getName();
 
     private static final String EXTRA_LNURL_CHANNEL_RESPONSE = "lnurlChannelResponse";
 
@@ -218,10 +218,11 @@ public class LnUrlChannelBSDFragment extends RxBSDFragment {
 
     private void openChannel() {
 
+        ZapLog.v(TAG, "Remote Node uri: " + mLnUrlChannelResponse.getUri());
         LightningNodeUri nodeUri = LightningParser.parseNodeUri(mLnUrlChannelResponse.getUri());
 
         if (nodeUri == null) {
-            ZapLog.e(LOG_TAG, "Node Uri could not be parsed");
+            ZapLog.e(TAG, "Node Uri could not be parsed");
             switchToFailedScreen(getActivity().getResources().getString(R.string.lnurl_service_provided_invalid_data));
             return;
         }
@@ -239,14 +240,14 @@ public class LnUrlChannelBSDFragment extends RxBSDFragment {
                     }
 
                     if (connected) {
-                        ZapLog.v(LOG_TAG, "Already connected to peer, moving on...");
+                        ZapLog.v(TAG, "Already connected to peer, moving on...");
                         sendFinalRequestToService();
                     } else {
-                        ZapLog.v(LOG_TAG, "Not connected to peer, trying to connect...");
+                        ZapLog.v(TAG, "Not connected to peer, trying to connect...");
                         connectPeer(nodeUri);
                     }
                 }, throwable -> {
-                    ZapLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
+                    ZapLog.e(TAG, "Error listing peers request: " + throwable.getMessage());
                     if (throwable.getMessage().toLowerCase().contains("terminated")) {
                         switchToFailedScreen(getActivity().getResources().getString(R.string.error_get_peers_timeout));
                     } else {
@@ -265,10 +266,10 @@ public class LnUrlChannelBSDFragment extends RxBSDFragment {
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(connectPeerResponse -> {
-                    ZapLog.v(LOG_TAG, "Successfully connected to peer");
+                    ZapLog.v(TAG, "Successfully connected to peer");
                     sendFinalRequestToService();
                 }, throwable -> {
-                    ZapLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
+                    ZapLog.e(TAG, "Error connecting to peer: " + throwable.getMessage());
 
                     if (throwable.getMessage().toLowerCase().contains("refused")) {
                         switchToFailedScreen(getActivity().getResources().getString(R.string.error_connect_peer_refused));
@@ -290,15 +291,15 @@ public class LnUrlChannelBSDFragment extends RxBSDFragment {
                 .setIsPrivate(false)
                 .build();
 
-        ZapLog.v(LOG_TAG, lnUrlFinalOpenChannelRequest.requestAsString());
+        ZapLog.v(TAG, lnUrlFinalOpenChannelRequest.requestAsString());
 
         StringRequest lnUrlRequest = new StringRequest(Request.Method.GET, lnUrlFinalOpenChannelRequest.requestAsString(),
                 response -> {
-                    ZapLog.v(LOG_TAG, response);
+                    ZapLog.v(TAG, response);
                     validateFinalResponse(response);
                 },
                 error -> {
-                    ZapLog.e(LOG_TAG, "Final request failed");
+                    ZapLog.e(TAG, "Final request failed");
                     switchToFailedScreen("Final request failed");
                 });
 
@@ -310,10 +311,10 @@ public class LnUrlChannelBSDFragment extends RxBSDFragment {
         LnUrlResponse lnUrlResponse = new Gson().fromJson(openChannelResponse, LnUrlResponse.class);
 
         if (lnUrlResponse.getStatus().equals("OK")) {
-            ZapLog.d(LOG_TAG, "LNURL: Success. The service initiated the channel opening.");
+            ZapLog.d(TAG, "LNURL: Success. The service initiated the channel opening.");
             switchToSuccessScreen();
         } else {
-            ZapLog.e(LOG_TAG, "LNURL: Failed to open channel. " + lnUrlResponse.getReason());
+            ZapLog.e(TAG, "LNURL: Failed to open channel. " + lnUrlResponse.getReason());
             switchToFailedScreen(lnUrlResponse.getReason());
         }
     }

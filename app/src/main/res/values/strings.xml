@@ -274,7 +274,7 @@
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_wrong_password">Wrong password</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">The wallet needs to be setup to open a channel.</string>
     <string name="error_connect_peer">Could not establish connection to peer node.</string>
     <string name="error_connect_peer_refused">Connection has been refused by peer.</string>
@@ -353,9 +353,8 @@
 
     <string name="nfc_type_not_supported">Unsupported NFC type</string>
 
-
     <string name="help_dialog_scanPaymentRequest">QR-Codes containing the following are valid:\n\n- Bitcoin Address\n- Bitcoin Payment Request\n- Lightning Payment Request</string>
-    <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take dependig on the data.</string>
