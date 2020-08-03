@@ -132,9 +132,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mNavigationView.getHeaderView(0).findViewById(R.id.headerButton).setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (Wallet.getInstance().isConnectedToLND()) {
-                    Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
-                    startActivity(intent);
+                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                    if (Wallet.getInstance().isConnectedToLND()) {
+                        Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
         });

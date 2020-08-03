@@ -25,7 +25,7 @@ public class LnUrlUtil {
     public static void readLnUrl(Context ctx, String data, OnLnUrlReadListener listener) {
         try {
             String decodedLnUrl = LnurlDecoder.decode(data);
-
+            ZapLog.v(LOG_TAG, "Decoded LNURL: " + decodedLnUrl);
             // Check if it has a query param called login. In this case do not make a GET request as the AuthFlow works different.
             URL decodedUrl = null;
             try {
