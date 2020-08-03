@@ -96,7 +96,7 @@ public class IdentityActivity extends BaseAppCompatActivity {
 
                         new UserGuardian(IdentityActivity.this, () -> {
                             // Copy data to clipboard
-                            ClipBoardUtil.copyToClipboard(getApplicationContext(), "NodePubKey", mUserAvatarView.getCurrentNodeIdentity().getAsString());
+                            ClipBoardUtil.copyToClipboard(getApplicationContext(), "LightningUri", mUserAvatarView.getCurrentNodeIdentity().getAsString());
                         }).securityCopyToClipboard(mUserAvatarView.getCurrentNodeIdentity().getAsString(), UserGuardian.CLIPBOARD_DATA_TYPE_NODE_URI);
                         break;
                 }

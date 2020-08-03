@@ -97,7 +97,7 @@ public class UserAvatarView extends ConstraintLayout {
             if (mNodeUris.length > 1) {
                 for (int i = 0; i < mNodeUris.length; i++) {
                     if (mNodeUris[i].getHost() != null ) {
-                        if(mNodeUris[i].getHost().toLowerCase().contains("onion") == tor) {
+                        if(mNodeUris[i].isTorUri() == tor) {
                             showIdentity(i);
                             return;
                         }
@@ -183,7 +183,7 @@ public class UserAvatarView extends ConstraintLayout {
             return false;
         } else {
             if (mNodeUris[mCurrentUriId].getHost() != null) {
-                return mNodeUris[mCurrentUriId].getHost().toLowerCase().contains("onion");
+                return mNodeUris[mCurrentUriId].isTorUri();
             } else {
                 return false;
             }
@@ -198,9 +198,9 @@ public class UserAvatarView extends ConstraintLayout {
             boolean hasPublic = false;
             boolean hasTor = false;
             for (LightningNodeUri nodeUri : mNodeUris) {
-                if (nodeUri.getHost() != null && nodeUri.getHost().toLowerCase().contains("onion")) {
+                if (nodeUri.getHost() != null && nodeUri.isTorUri()) {
                     hasTor = true;
-                } else if (nodeUri.getHost() == null || !nodeUri.getHost().toLowerCase().contains("onion")) {
+                } else if (nodeUri.getHost() == null || !nodeUri.isTorUri()) {
                     hasPublic = true;
                 }
             }
