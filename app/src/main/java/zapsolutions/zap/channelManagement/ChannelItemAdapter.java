@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
 
 import java.util.List;
 
@@ -14,18 +15,54 @@ import zapsolutions.zap.R;
 
 public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<ChannelListItem> mItems;
+    private final SortedList<ChannelListItem> mSortedList = new SortedList<>(ChannelListItem.class, new SortedList.Callback<ChannelListItem>() {
+        @Override
+        public int compare(ChannelListItem i1, ChannelListItem i2) {
+            return i1.compareTo(i2);
+        }
+
+        @Override
+        public void onChanged(int position, int count) {
+            notifyItemRangeChanged(position, count);
+        }
+
+        @Override
+        public boolean areContentsTheSame(ChannelListItem oldItem, ChannelListItem newItem) {
+            return oldItem.equals(newItem);
+        }
+
+        @Override
+        public boolean areItemsTheSame(ChannelListItem item1, ChannelListItem item2) {
+            return item1.isSameChannel(item2);
+        }
+
+        @Override
+        public void onInserted(int position, int count) {
+            notifyItemRangeInserted(position, count);
+        }
+
+        @Override
+        public void onRemoved(int position, int count) {
+            notifyItemRangeRemoved(position, count);
+        }
+
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            notifyItemMoved(fromPosition, toPosition);
+        }
+    });
+
+
     private ChannelSelectListener mChannelSelectListener;
 
     // Construct the adapter with a data list
-    public ChannelItemAdapter(List<ChannelListItem> dataset, ChannelSelectListener channelSelectListener) {
-        mItems = dataset;
+    public ChannelItemAdapter(ChannelSelectListener channelSelectListener) {
         mChannelSelectListener = channelSelectListener;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mItems.get(position).getType();
+        return mSortedList.get(position).getType();
     }
 
     @NonNull
@@ -58,31 +95,31 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (type) {
             case ChannelListItem.TYPE_OPEN_CHANNEL:
                 OpenChannelViewHolder openChannelHolder = (OpenChannelViewHolder) holder;
-                OpenChannelItem openChannelItem = (OpenChannelItem) mItems.get(position);
+                OpenChannelItem openChannelItem = (OpenChannelItem) mSortedList.get(position);
                 openChannelHolder.bindOpenChannelItem(openChannelItem);
                 openChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
                 PendingOpenChannelViewHolder pendingOpenChannelHolder = (PendingOpenChannelViewHolder) holder;
-                PendingOpenChannelItem pendingOpenChannelItem = (PendingOpenChannelItem) mItems.get(position);
+                PendingOpenChannelItem pendingOpenChannelItem = (PendingOpenChannelItem) mSortedList.get(position);
                 pendingOpenChannelHolder.bindPendingOpenChannelItem(pendingOpenChannelItem);
                 pendingOpenChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
                 PendingClosingChannelViewHolder pendingClosingChannelHolder = (PendingClosingChannelViewHolder) holder;
-                PendingClosingChannelItem pendingClosingChannelItem = (PendingClosingChannelItem) mItems.get(position);
+                PendingClosingChannelItem pendingClosingChannelItem = (PendingClosingChannelItem) mSortedList.get(position);
                 pendingClosingChannelHolder.bindPendingClosingChannelItem(pendingClosingChannelItem);
                 pendingClosingChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
                 PendingForceClosingChannelViewHolder pendingForceClosingChannelHolder = (PendingForceClosingChannelViewHolder) holder;
-                PendingForceClosingChannelItem pendingForceClosingChannelItem = (PendingForceClosingChannelItem) mItems.get(position);
+                PendingForceClosingChannelItem pendingForceClosingChannelItem = (PendingForceClosingChannelItem) mSortedList.get(position);
                 pendingForceClosingChannelHolder.bindPendingForceClosingChannelItem(pendingForceClosingChannelItem);
                 pendingForceClosingChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
                 WaitingCloseChannelViewHolder waitingCloseChannelHolder = (WaitingCloseChannelViewHolder) holder;
-                WaitingCloseChannelItem waitingCloseChannelItem = (WaitingCloseChannelItem) mItems.get(position);
+                WaitingCloseChannelItem waitingCloseChannelItem = (WaitingCloseChannelItem) mSortedList.get(position);
                 waitingCloseChannelHolder.bindWaitingCloseChannelItem(waitingCloseChannelItem);
                 waitingCloseChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
@@ -91,9 +128,13 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    public void replaceAll(List<ChannelListItem> items) {
+        mSortedList.replaceAll(items);
+    }
+
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mSortedList.size();
     }
 }

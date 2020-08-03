@@ -2,10 +2,13 @@ package zapsolutions.zap.channelManagement;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -62,7 +65,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
             startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
         });
-        mAdapter = new ChannelItemAdapter(mChannelItems, this);
+        mAdapter = new ChannelItemAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -70,7 +73,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         updateChannelsDisplayList();
 
         // Refetch channels from LND. This will automatically update the view when finished.
-        // Is necessary, as we might display outdated data otherwise.
+        // This is necessary, as we might display outdated data otherwise.
         if(WalletConfigsManager.getInstance().hasAnyConfigs()) {
             Wallet.getInstance().fetchChannelsFromLND();
         }
@@ -139,7 +142,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         }
 
         // Update the view
-        mAdapter.notifyDataSetChanged();
+        mAdapter.replaceAll(mChannelItems);
     }
 
     @Override
@@ -201,5 +204,73 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.searchButton);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.search));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                final List<ChannelListItem> filteredContactList = filter(mChannelItems, newText);
+                mAdapter.replaceAll(filteredContactList);
+                mRecyclerView.scrollToPosition(0);
+
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private List<ChannelListItem> filter(List<ChannelListItem> items, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<ChannelListItem> filteredItemList = new ArrayList<>();
+        for (ChannelListItem item : items) {
+            String text;
+            String pubkey;
+
+            switch (item.getType()) {
+                case ChannelListItem.TYPE_OPEN_CHANNEL:
+                    pubkey = ((OpenChannelItem) item).getChannel().getRemotePubkey();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    break;
+                case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
+                    pubkey = ((PendingOpenChannelItem) item).getChannel().getChannel().getRemoteNodePub();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    break;
+                case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
+                    pubkey = ((PendingClosingChannelItem) item).getChannel().getChannel().getRemoteNodePub();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    break;
+                case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
+                    pubkey = ((PendingForceClosingChannelItem) item).getChannel().getChannel().getRemoteNodePub();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    break;
+                case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
+                    pubkey = ((WaitingCloseChannelItem) item).getChannel().getChannel().getRemoteNodePub();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    break;
+                case ChannelListItem.TYPE_CLOSED_CHANNEL:
+                    text = "";
+                default:
+                    text = "";
+            }
+
+            if (text.contains(lowerCaseQuery)) {
+                filteredItemList.add(item);
+            }
+        }
+        return filteredItemList;
     }
 }
