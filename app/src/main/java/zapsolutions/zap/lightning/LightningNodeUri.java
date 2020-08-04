@@ -41,6 +41,21 @@ public class LightningNodeUri implements Serializable {
         return mImage;
     }
 
+    public String getAsString() {
+        String uri = mPubKey;
+        if (mHost != null) {
+            uri = uri + "@" + mHost;
+        }
+        return uri;
+    }
+
+    public boolean isTorUri() {
+        if (getHost() == null) {
+            return false;
+        }
+        return getHost().toLowerCase().contains("onion");
+    }
+
     public static class Builder {
         private String mPubKey;
         private String mHost;
