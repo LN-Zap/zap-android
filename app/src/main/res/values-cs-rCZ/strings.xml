@@ -91,12 +91,13 @@
     <string name="support">Podpora</string>
     <string name="contribute">Přispět</string>
     <string name="privacy">Soukromí</string>
-    <string name="payee">Payee</string>
-    <string name="open">Open</string>
+    <string name="payee">Příjemce</string>
+    <string name="open">Otevřít</string>
+    <string name="search">Hledat</string>
     <string name="activity_receive">Příjmout</string>
     <string name="activity_send">Zaplatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
-    <string name="activity_manage_channels">Správa Lightning kanálů</string>
+    <string name="activity_manage_channels">Lightning kanály</string>
     <string name="activity_manage_wallets">Správa peněženek</string>
     <string name="activity_advanced_settings">Pokročilé nastavení</string>
     <string name="activity_wallet_details">Detaily peněženky</string>
@@ -240,7 +241,7 @@
     <string name="error_connection_btcpay_invalid_json">Syntaxe JSON konfiguračního souboru BTCPay Serveru je neplatná.</string>
     <string name="error_connection_btcpay_invalid_config">Konfigurace BTCPay Serveru neobsahuje konfiguraci BTC GRPC.</string>
     <string name="error_wrong_password">Špatné heslo</string>
-    <string name="error_lightning_uri_invalid">Neplatný formát.\nPoužijte jednu z následujících možností:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="error_lightning_uri_invalid">Neplatný formát.\nPoužijte jednu z následujících možností:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Aby bylo možné otevřít kanál, je třeba nastavit peněženku.</string>
     <string name="error_connect_peer">Nelze navázat spojení s rovnocenným uzlem.</string>
     <string name="error_connect_peer_refused">Spojení bylo peerem odmítnuto.</string>
@@ -319,10 +320,10 @@
     <string name="tor_add_repo">Přidat úložiště</string>
     <string name="nfc_type_not_supported">Nepodporovaný typ NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-kódy obsahující následující informace jsou platné: \n\n- Bitcoinová adresa\n- Žádost o bitcoin platbu\n- Žádost o lightning platbu</string>
-    <string name="help_dialog_scanNodePublicKey">QR-kódy obsahující následující informace jsou platné: \n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanNodePublicKey">Platí QR-kódy obsahující následující:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:\n\n- Lndconnect řetězec (lndconnect://...)\n- BtcPay Server připojení (config=...)\n- Celý obsah vašeho BTCPay Server config souboru</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ okamžité\n+ nízké poplatky\n- není vždy možné\n\nIdeální pro malé transakce.\nPoužívejte, kdykoli je to možné.\n\n\nOn-Chain:\n\n+ vždy možné\n-pomalejší\n- vyšší poplatky\n\nDobré pro velké transakce.\nPoužijte, pokud není možné použít Lightning.</string>
-    <string name="help_dialog_scanGeneric">Zde můžete cokoli.\nNaskenujte QR kód a Zap automaticky určí, v závislosti na datech, jakou akci provést.</string>
+    <string name="help_dialog_scanGeneric">Zde je povoleno cokoli.\nVyhledejte pouze QR kód a Zap automaticky určí, která akce bude provedena v závislosti na datech.</string>
     <string name="wallet_name">Název peněženky</string>
     <string name="delete">Smazat</string>
     <string name="rename">Přejmenovat</string>
@@ -341,20 +342,20 @@
     <string name="lnurl_withdraw_success">Výběr\nse povedl</string>
     <string name="lnurl_withdraw_fail">Výběr\nselhal</string>
     <string name="lnurl_decoding_no_lnurl_data">Data neobsahují platnou LNURL.</string>
-    <string name="lnurl_withdraw_insufficient_channel_balance">The withdraw amount is bigger than what you can receive over lightning with your current open channels.</string>
+    <string name="lnurl_withdraw_insufficient_channel_balance">Částka výběru je větší než částka, kterou můžete obdržet přes lightning se svými aktuálními otevřenými kanály.</string>
     <string name="lnurl_unsupported_type">Nepodporovaný typ LNURL</string>
     <string name="lnurl_service_not_responding">%s neodpovídá</string>
     <string name="lnurl_service">Služba</string>
     <string name="lnurl_service_provided_invalid_data">Služba, se kterou komunikujete, poskytuje neplatná data.</string>
     <string name="lnurl_channel_opening_question">Opravdu chcete otevřít kanál s:</string>
     <string name="lnurl_channel_pending_hint">Kanál se otevírá. Může to chvíli trvat.\nStav kanálů můžete zkontrolovat ve vašem přehledu kanálů.</string>
-    <string name="lnurl_pay_insufficient_channel_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">Částka, kterou chcete zaplatit, je větší než částka, kterou můžete odeslat přes lightning pomocí aktuálně otevřených kanálů.</string>
     <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s odeslal neplatnou žádost o platbu.</string>
-    <string name="lnurl_pay_success_secret_decrypt_error">Your payment was successful, but the secret that you received could not be decrypted.</string>
-    <string name="lnurl_pay_save_url">IMPORTANT:\nThe URL has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
-    <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
+    <string name="lnurl_pay_success_secret_decrypt_error">Vaše platba byla úspěšná, ale tajemství, které jste obdrželi, nebylo možné dešifrovat.</string>
+    <string name="lnurl_pay_save_url">DŮLEŽITÉ: \nURL byla zkopírována do vaší schránky. Uložte ji, pokud ji budete potřebovat později. Tento dialog se znovu nezobrazí.</string>
+    <string name="lnurl_pay_save_secret">DŮLEŽITÉ:\nKód byl zkopírován do vaší schránky. Uložte ho, pokud ho budete potřebovat později. Tento dialog se znovu nezobrazí.</string>
     <string name="string_analyzer_unrecognized_data">Nerozpoznaná data.</string>
-    <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
+    <string name="rest_port">REST (port 8080) není podporován.\n\nChcete změnit port na 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Peněženky</string>
     <string name="drawer_menu_channels">Kanály</string>
     <string name="drawer_menu_backup">Záloha</string>
@@ -362,7 +363,9 @@
     <string name="drawer_no_wallet">Žádná peněženka</string>
     <string name="support_contribute_description">Pomozte vylepšit Zap.</string>
     <string name="support_issue_description">Našli jste chybu? Dej nám vědět!</string>
-    <string name="support_privacy_description">We care about your privacy.</string>
+    <string name="support_privacy_description">Záleží nám na vašem soukromí.</string>
     <string name="support_help_description">Navštivte naši dokumentaci.</string>
-    <string name="identity_explanation">This is your identity on the lightning network!\nOthers can open a channel with you if they scan this QR-Code.</string>
+    <string name="identity_explanation">Toto je vaše identita v lightning síti!\nOstatní s vámo mohou otevřít kanál, pokud naskenují tento QR kód.</string>
+    <string name="identity_switch_tor">Tor</string>
+    <string name="identity_switch_public">Veřejné</string>
 </resources>

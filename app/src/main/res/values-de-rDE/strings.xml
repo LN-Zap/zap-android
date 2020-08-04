@@ -93,10 +93,11 @@
     <string name="privacy">Datenschutz</string>
     <string name="payee">Empfänger</string>
     <string name="open">Öffnen</string>
+    <string name="search">Suchen</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
-    <string name="activity_manage_channels">Lightning-Kanäle verwalten</string>
+    <string name="activity_manage_channels">Lightning-Kanäle</string>
     <string name="activity_manage_wallets">Wallets Verwalten</string>
     <string name="activity_advanced_settings">Erweiterte Einstellungen</string>
     <string name="activity_wallet_details">Wallet Details</string>
@@ -240,7 +241,7 @@
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
-    <string name="error_lightning_uri_invalid">Ungültiges Format.\nBitte verwende eines der folgenden Formate:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="error_lightning_uri_invalid">Ungültiges Format.\nBitte verwende eines der folgenden Formate:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Die Wallet muss eingerichtet sein, um einen Kanal zu öffnen.</string>
     <string name="error_connect_peer">Es konnte keine Verbindung zum Peer aufgebaut werden.</string>
     <string name="error_connect_peer_refused">Die Verbindung wurde vom Peer abgelehnt.</string>
@@ -307,7 +308,7 @@
     <string name="tor_add_repo">Repository hinzufügen</string>
     <string name="nfc_type_not_supported">Dieser NFC Typ wird nicht unterstützt</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Bitcoin Adresse\n- Bitcoin Zahlungsanfrage\n- Lightning Zahlungsanfrage</string>
-    <string name="help_dialog_scanNodePublicKey">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanNodePublicKey">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und Zap wird automatisch die entsprechende Aktion ausführen.</string>
@@ -353,4 +354,6 @@
     <string name="support_privacy_description">Uns ist deine Privatsphäre wichtig.</string>
     <string name="support_help_description">Schau dir unsere Dokumentation an.</string>
     <string name="identity_explanation">Das bist du im Lightning-Netzwerk!\nAndere können einen Kanal mit dir öffnen, wenn sie diesen QR-Code scannen.</string>
+    <string name="identity_switch_tor">Tor</string>
+    <string name="identity_switch_public">Öffentlich</string>
 </resources>
