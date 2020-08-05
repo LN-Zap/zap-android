@@ -93,11 +93,11 @@
     <string name="privacy">Поверителност</string>
     <string name="payee">Получател</string>
     <string name="open">Отвори</string>
-    <string name="search">Search</string>
+    <string name="search">Търси</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
-    <string name="activity_manage_channels">Lightning Channels</string>
+    <string name="activity_manage_channels">Lightning Kанали</string>
     <string name="activity_manage_wallets">Управление на портфейли</string>
     <string name="activity_advanced_settings">Разширени настройки</string>
     <string name="activity_wallet_details">Детайли за Портфейла</string>
@@ -241,7 +241,7 @@
     <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
     <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
     <string name="error_wrong_password">Грешна парола</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="error_lightning_uri_invalid">Невалиден формат.\nМоля използвайте едно от следните:\n- pubkey\n- pubkey@host\n- pubkey@host:port\nLNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Портфейлът трябва да бъде настроен, за да отворите канал.</string>
     <string name="error_connect_peer">Връзка не можа да бъде установена с пиър node-а.</string>
     <string name="error_connect_peer_refused">Връзката бе отказана от пиъра.</string>
@@ -308,10 +308,10 @@
     <string name="tor_add_repo">Добави Репозитория</string>
     <string name="nfc_type_not_supported">Неподдържан NFC тип</string>
     <string name="help_dialog_scanPaymentRequest">QR-Кодове, съдържащи следните, са валидни:\n\n- Биткойн Адрес\n- Биткойн Заявка за Плащане\n- Lightning Заявка за Плащане</string>
-    <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="help_dialog_scanNodePublicKey">QR-Кодове, съдържащи следните, са валидни:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanConnectionInfo">QR-Кодове, съдържащи следните, са валидни:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Пълното съдържание на Вашия BTCPay Server config файл</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ мигновен\n+ ниски такси\n- не винаги възможен\n\nПерфектен за малки транзакции.\nИзползвайте винаги, щом може.\n\n\nOn-Chain:\n\n+ винаги възможен\n- по-бавен\n- по-високи такси\n\nПодходящ за големи транзакции.\nИзползвайте, когато Lightning не е възможен.</string>
-    <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
+    <string name="help_dialog_scanGeneric">Всичко е разрешено тук.\nСамо сканирайте QR-Код и Zap автоматично ще определи какво да направи, взависимост от предоставените данни.</string>
     <string name="wallet_name">Име на Портфейла</string>
     <string name="delete">Изтрий</string>
     <string name="rename">Преименувай</string>
@@ -355,5 +355,5 @@
     <string name="support_help_description">Посетете документацията ни.</string>
     <string name="identity_explanation">Това е идентичността Ви на lightning network-а.\nДруги могат да отворят канал с Вас ако сканират този QR-код.</string>
     <string name="identity_switch_tor">Tor</string>
-    <string name="identity_switch_public">Public</string>
+    <string name="identity_switch_public">Публичен</string>
 </resources>
