@@ -85,7 +85,7 @@ public class ScanActivity extends BaseScannerActivity {
             LnurlDecoder.decode(data);
             readableDataFound(data);
             return;
-        } catch (LnurlDecoder.NoLnUrlDataException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -11,7 +11,7 @@ public class LnurlDecoder {
         // Remove the "lightning:" uri scheme if it is present
         lnurl = UriUtil.removeURI(lnurl);
 
-        if (!lnurl.substring(0, 5).toLowerCase().equals("lnurl")) {
+        if (lnurl.length() < 5 || !lnurl.substring(0, 5).toLowerCase().equals("lnurl")) {
             throw new NoLnUrlDataException("LNURL decoding failed: The data to decode is not a LNURL");
         }
 

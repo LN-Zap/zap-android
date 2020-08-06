@@ -63,6 +63,8 @@ public class LnUrlUtil {
             HttpClient.getInstance().addToRequestQueue(lnurlRequest, "LnUrlWithdrawRequest");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
+            ZapLog.e(LOG_TAG, "LNURL is invalid. Decoding failed.");
+            listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
         } catch (LnurlDecoder.NoLnUrlDataException e) {
             listener.onNoLnUrlData();
         }
