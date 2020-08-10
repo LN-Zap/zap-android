@@ -9,6 +9,8 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -19,9 +21,14 @@ import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 public class InvoiceUtil {
     private static final String LOG_TAG = InvoiceUtil.class.getName();
 
-    public static String INVOICE_PREFIX_LIGHTNING_TESTNET = "lntb";
     public static String INVOICE_PREFIX_LIGHTNING_MAINNET = "lnbc";
-    private static int INVOICE_LIGHTNING_MIN_LENGTH = 4;
+    public static String INVOICE_PREFIX_LIGHTNING_TESTNET = "lntb";
+    public static String INVOICE_PREFIX_LIGHTNING_REGTEST = "lnbcrt";
+    public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_MAINNET = new ArrayList<>(Arrays.asList("1", "3", "bc1"));
+    public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_TESTNET = new ArrayList<>(Arrays.asList("m", "n", "2", "tb1"));
+    public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_REGTEST = new ArrayList<>(Arrays.asList("m", "n", "2", "bcrt1"));
+    private static int INVOICE_LIGHTNING_MIN_LENGTH = 6;
+    private static int ADDRESS_ON_CHAIN_MIN_LENGTH = 5;
 
 
     public static boolean isLightningInvoice(@NonNull String data) {
@@ -29,7 +36,18 @@ public class InvoiceUtil {
             return false;
         }
 
-        return hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, data) || hasPrefix(INVOICE_PREFIX_LIGHTNING_TESTNET, data);
+        return hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, data) || hasPrefix(INVOICE_PREFIX_LIGHTNING_TESTNET, data) || hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, data);
+    }
+
+    public static boolean isBitcoinAddress(@NonNull String data) {
+        if (data.isEmpty() || data.length() < ADDRESS_ON_CHAIN_MIN_LENGTH) {
+            return false;
+        }
+        ArrayList<String> prefixes = new ArrayList<>();
+        prefixes.addAll(ADDRESS_PREFIX_ONCHAIN_MAINNET);
+        prefixes.addAll(ADDRESS_PREFIX_ONCHAIN_TESTNET);
+        prefixes.addAll(ADDRESS_PREFIX_ONCHAIN_REGTEST);
+        return hasPrefix(prefixes, data);
     }
 
     public static void readInvoice(Context ctx, CompositeDisposable compositeDisposable, String data, OnReadInvoiceCompletedListener listener) {
@@ -49,26 +67,32 @@ public class InvoiceUtil {
         // Check if the invoice is a lightning invoice
         if (InvoiceUtil.isLightningInvoice(lnInvoice)) {
 
-            // We have a lightning invoice
-
             // Check if the invoice is for the same network the app is connected to
-            String lnInvoiceType = lnInvoice.substring(0, 4);
-            if (Wallet.getInstance().isTestnet()) {
-                if (lnInvoiceType.equals(InvoiceUtil.INVOICE_PREFIX_LIGHTNING_TESTNET)) {
-                    decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
-                } else {
-                    // Show error. Please use a TESTNET invoice.
-                    listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
-                }
-            } else {
-                if (lnInvoiceType.equals(InvoiceUtil.INVOICE_PREFIX_LIGHTNING_MAINNET)) {
-                    decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
-                } else {
-                    // Show error. Please use a MAINNET invoice.
-                    listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
-                }
+            switch (Wallet.getInstance().getNetwork()) {
+                case MAINNET:
+                    if (hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, lnInvoice)) {
+                        decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
+                    } else {
+                        // Show error. Please use a MAINNET invoice.
+                        listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                    }
+                    break;
+                case TESTNET:
+                    if (hasPrefix(INVOICE_PREFIX_LIGHTNING_TESTNET, lnInvoice)) {
+                        decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
+                    } else {
+                        // Show error. Please use a TESTNET invoice.
+                        listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                    }
+                    break;
+                case REGTEST:
+                    if (hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, lnInvoice)) {
+                        decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
+                    } else {
+                        // Show error. Please use a REGTEST invoice.
+                        listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                    }
             }
-
         } else {
             // We do not have a lightning invoice... check if it is a valid bitcoin address / invoice
 
@@ -120,28 +144,29 @@ public class InvoiceUtil {
     }
 
     private static void validateOnChainAddress(Context ctx, OnReadInvoiceCompletedListener listener, String address, long amount, String message) {
-        if (address != null) {
-            if (Wallet.getInstance().isTestnet()) {
-                // We are on testnet
-                if (address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.toLowerCase().startsWith("tb1")) {
-                    listener.onValidBitcoinInvoice(address, amount, message);
-                } else if (address.startsWith("1") || address.startsWith("3") || address.toLowerCase().startsWith("bc1")) {
-                    // Show error. Please use a TESTNET invoice.
-                    listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
-                } else {
-                    // Show error. No valid payment info.
-                    listener.onNoInvoiceData();
-                }
-            } else {
-                // We are on mainnet
-                if (address.startsWith("1") || address.startsWith("3") || address.toLowerCase().startsWith("bc1")) {
-                    listener.onValidBitcoinInvoice(address, amount, message);
-                } else if (address.startsWith("m") || address.startsWith("n") || address.startsWith("2") || address.toLowerCase().startsWith("tb1")) {
-                    listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
-                } else {
-                    // Show error. No valid payment info.
-                    listener.onNoInvoiceData();
-                }
+        if (address != null && isBitcoinAddress(address)) {
+            switch (Wallet.getInstance().getNetwork()) {
+                case MAINNET:
+                    if (hasPrefix(ADDRESS_PREFIX_ONCHAIN_MAINNET, address)) {
+                        listener.onValidBitcoinInvoice(address, amount, message);
+                    } else {
+                        listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                    }
+                    break;
+                case TESTNET:
+                    if (hasPrefix((ArrayList<String>) ADDRESS_PREFIX_ONCHAIN_TESTNET, address)) {
+                        listener.onValidBitcoinInvoice(address, amount, message);
+                    } else {
+                        listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                    }
+                    break;
+                case REGTEST:
+                    if (hasPrefix((ArrayList<String>) ADDRESS_PREFIX_ONCHAIN_REGTEST, address)) {
+                        listener.onValidBitcoinInvoice(address, amount, message);
+                    } else {
+                        listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                    }
+                    break;
             }
         } else {
             listener.onNoInvoiceData();
@@ -183,6 +208,21 @@ public class InvoiceUtil {
         }
 
         return data.substring(0, prefix.length()).equalsIgnoreCase(prefix);
+    }
+
+    private static boolean hasPrefix(@NonNull ArrayList<String> prefixes, @NonNull String data) {
+        if (data.isEmpty()) {
+            return false;
+        }
+        boolean hasPrefix = false;
+        for (String prefix : prefixes) {
+            if (data.length() >= prefix.length()) {
+                if (data.substring(0, prefix.length()).equalsIgnoreCase(prefix)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public interface OnReadInvoiceCompletedListener {

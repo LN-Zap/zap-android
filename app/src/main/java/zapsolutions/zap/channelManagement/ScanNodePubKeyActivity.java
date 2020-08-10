@@ -71,39 +71,41 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
     }
 
     public void getSuggestedPeers() {
-        JsonObjectRequest suggestedPeersRequest = new JsonObjectRequest(Request.Method.GET, RefConstants.URL_SUGGESTED_NODES, null,
-                response -> {
-                    try {
-                        JSONObject bitcoin = response.getJSONObject("bitcoin");
-                        boolean isMainnet = !Wallet.getInstance().isTestnet();
-                        JSONArray nodeArray;
-                        if (isMainnet) {
-                            nodeArray = bitcoin.getJSONArray("mainnet");
-                        } else {
-                            nodeArray = bitcoin.getJSONArray("testnet");
+        if (Wallet.getInstance().getNetwork() != Wallet.Network.REGTEST) {
+            JsonObjectRequest suggestedPeersRequest = new JsonObjectRequest(Request.Method.GET, RefConstants.URL_SUGGESTED_NODES, null,
+                    response -> {
+                        try {
+                            JSONObject bitcoin = response.getJSONObject("bitcoin");
+                            boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
+                            JSONArray nodeArray;
+                            if (isMainnet) {
+                                nodeArray = bitcoin.getJSONArray("mainnet");
+                            } else {
+                                nodeArray = bitcoin.getJSONArray("testnet");
+                            }
+
+                            for (int i = 0; i < nodeArray.length(); i++) {
+                                JSONObject jsonNode = nodeArray.getJSONObject(i);
+
+                                LightningNodeUri node = new LightningNodeUri.Builder()
+                                        .setPubKey(jsonNode.getString("pubkey"))
+                                        .setHost(jsonNode.getString("host"))
+                                        .setNickname(jsonNode.getString("nickname"))
+                                        .setDescription(jsonNode.getString("description"))
+                                        .setImage(jsonNode.getString("image"))
+                                        .build();
+
+                                suggestedLightningNodes.add(node);
+                            }
+
+                            updateSuggestedNodes();
+                        } catch (JSONException e) {
+                            ZapLog.d(LOG_TAG, "Could not parse suggested peers: " + e.getMessage());
                         }
+                    }, error -> ZapLog.d(LOG_TAG, "Could not fetch suggested peers: " + error.getMessage()));
 
-                        for (int i = 0; i < nodeArray.length(); i++) {
-                            JSONObject jsonNode = nodeArray.getJSONObject(i);
-
-                            LightningNodeUri node = new LightningNodeUri.Builder()
-                                    .setPubKey(jsonNode.getString("pubkey"))
-                                    .setHost(jsonNode.getString("host"))
-                                    .setNickname(jsonNode.getString("nickname"))
-                                    .setDescription(jsonNode.getString("description"))
-                                    .setImage(jsonNode.getString("image"))
-                                    .build();
-
-                            suggestedLightningNodes.add(node);
-                        }
-
-                        updateSuggestedNodes();
-                    } catch (JSONException e) {
-                        ZapLog.d(LOG_TAG, "Could not parse suggested peers: " + e.getMessage());
-                    }
-                }, error -> ZapLog.d(LOG_TAG, "Could not fetch suggested peers: " + error.getMessage()));
-
-        HttpClient.getInstance().addToRequestQueue(suggestedPeersRequest, "SuggestedPeers");
+            HttpClient.getInstance().addToRequestQueue(suggestedPeersRequest, "SuggestedPeers");
+        }
     }
 
     public void updateSuggestedNodes() {

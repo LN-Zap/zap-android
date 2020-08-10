@@ -5,10 +5,12 @@ import com.google.common.io.BaseEncoding;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
 
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
+import zapsolutions.zap.BuildConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.lnd.LndAutopilotService;
@@ -132,16 +134,24 @@ public class LndConnection {
         String host = mConnectionConfig.getHost();
         int port = mConnectionConfig.getPort();
 
+        HostnameVerifier hostnameVerifier = null;  // null = default hostnameVerifier
+        if (BuildConfig.BUILD_TYPE.equals("debug")) {
+            // Disable hostname verification on debug build variant. This is is used to prevent connection errors to REGTEST nodes.
+            hostnameVerifier = new HostnameVerifierAllowAll();
+        }
+
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
         if (mSSLFactory == null) {
             // BTCPay
             mSecureChannel = OkHttpChannelBuilder
                     .forAddress(host, port)
+                    .hostnameVerifier(hostnameVerifier)
                     .build();
 
         } else {
             mSecureChannel = OkHttpChannelBuilder
                     .forAddress(host, port)
+                    .hostnameVerifier(hostnameVerifier)
                     .sslSocketFactory(mSSLFactory)
                     .build();
         }
