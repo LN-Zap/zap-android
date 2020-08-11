@@ -38,6 +38,8 @@ import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
+import com.github.lightningnetwork.lnd.routerrpc.HtlcEvent;
+import com.github.lightningnetwork.lnd.routerrpc.SubscribeHtlcEventsRequest;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 
@@ -80,6 +82,7 @@ public class Wallet {
     private final Set<ChannelBackupSubscriptionListener> mChannelBackupSubscriptionListeners = new HashSet<>();
     private final Set<ChannelCloseUpdateListener> mChannelCloseUpdateListeners = new HashSet<>();
     private final Set<ChannelOpenUpdateListener> mChannelOpenUpdateListeners = new HashSet<>();
+    private final Set<HtlcSubscriptionListener> mHtlcSubscriptionListeners = new HashSet<>();
 
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
@@ -118,6 +121,7 @@ public class Wallet {
     private String mLNDVersionString = "not connected";
     private Handler mHandler = new Handler();
     private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
+    private DebounceHandler mBalancesDebounceHandler = new DebounceHandler();
 
     private Wallet() {
         ;
@@ -173,6 +177,7 @@ public class Wallet {
         mHandler.removeCallbacksAndMessages(null);
         App.getAppContext().connectionToLNDEstablished = false;
         mChannelsUpdateDebounceHandler.shutdown();
+        mBalancesDebounceHandler.shutdown();
     }
 
     /**
@@ -322,6 +327,12 @@ public class Wallet {
     public Balances getDemoBalances() {
         return new Balances(0, 0,
                 0, 0, 0, 0);
+    }
+
+    public void fetchBalancesWithDebounce() {
+        ZapLog.d(LOG_TAG, "Fetch balance from LND. (debounce)");
+
+        mBalancesDebounceHandler.attempt(this::fetchBalanceFromLND, DebounceHandler.DEBOUNCE_1_SECOND);
     }
 
     /**
@@ -784,7 +795,24 @@ public class Wallet {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeTransactions(GetTransactionsRequest.newBuilder().build())
                 .subscribe(transaction -> {
                     ZapLog.d(LOG_TAG, "Received transaction subscription event.");
+                    fetchBalancesWithDebounce(); // Always update balances if a transaction event occurs.
                     broadcastTransactionUpdate(transaction);
+                }));
+    }
+
+    /**
+     * Use this to subscribe the wallet to htlc events that happen on LND.
+     * The events will be captured and forwarded to the HtlcSubscriptionListener.
+     * All parts of the App that want to react on transaction events have to subscribe to the
+     * HtlcSubscriptionListener.
+     */
+    public void subscribeToHtlcEvents() {
+        compositeDisposable.add(LndConnection.getInstance().getRouterService().subscribeHtlcEvents(SubscribeHtlcEventsRequest.newBuilder().build())
+                .subscribe(htlcEvent -> {
+                    ZapLog.d(LOG_TAG, "Received htlc subscription event. Type: " + htlcEvent.getEventType().toString());
+                    fetchBalancesWithDebounce(); // Always update balances if a htlc event occurs.
+                    updateLNDChannelsWithDebounce(); // Always update channels if a htlc event occurs.
+                    broadcastHtlcEvent(htlcEvent);
                 }));
     }
 
@@ -1369,6 +1397,25 @@ public class Wallet {
     }
 
     /**
+     * Notify all listeners to htlc update.
+     *
+     * @param htlcEvent the htlc event that occured
+     */
+    private void broadcastHtlcEvent(HtlcEvent htlcEvent) {
+        for (HtlcSubscriptionListener listener : mHtlcSubscriptionListeners) {
+            listener.onHtlcEvent(htlcEvent);
+        }
+    }
+
+    public void registerHtlcSubscriptionListener(HtlcSubscriptionListener listener) {
+        mHtlcSubscriptionListeners.add(listener);
+    }
+
+    public void unregisterHtlcSubscriptionListener(HtlcSubscriptionListener listener) {
+        mHtlcSubscriptionListeners.remove(listener);
+    }
+
+    /**
      * Notify all listeners to channel event updates.
      *
      * @param channelEventUpdate the channel update
@@ -1507,6 +1554,10 @@ public class Wallet {
 
     public interface TransactionSubscriptionListener {
         void onTransactionEvent(Transaction transaction);
+    }
+
+    public interface HtlcSubscriptionListener {
+        void onHtlcEvent(HtlcEvent htlcEvent);
     }
 
     public interface ChannelEventSubscriptionListener {

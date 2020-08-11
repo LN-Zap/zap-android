@@ -439,6 +439,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.getInstance().fetchChannelsFromLND();
 
         Wallet.getInstance().subscribeToTransactions();
+        Wallet.getInstance().subscribeToHtlcEvents();
         Wallet.getInstance().subscribeToInvoices();
 
         if (mHandler != null) {
