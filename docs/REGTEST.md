@@ -3,7 +3,7 @@
 A regtest setup will save you a lot of time as it allows you to test Zap in a simulated network.
 
 
-### Create a Network
+### Create a network
 
 The easiest way to create and manage simulated regtest networks is by using Polar.
 
@@ -11,13 +11,13 @@ The easiest way to create and manage simulated regtest networks is by using Pola
 2. Setup a network in Polar with at least one LND node.
 
 
-### Remote control your simulated LND nodes with Zap Android
+### Remote control your simulated regtest LND nodes with Zap
 
 To connect Zap with a simulated LND node:
 1. Click on a LND node in Polar and navigate to the connect tab.
 2. Select "LND Connect" in the sub tab.
 3. Copy the connect string using the copy icon.
-4. Open a textfile and paste the string there. It should now look like this: </br>
+4. Open a textfile and paste the string there. It should now look something like this: </br>
 `lndconnect://127.0.0.1:10001?cert=MIICBzCC...`
 5. Now it depends if you want to connect from the Android Studio emulator or from a physical phone.
 For the emulator you have to replace the IP address with 10.0.2.2, for a phone you have to replace it with the local network IP address of the computer running polar. The result should look something like this:<p>
