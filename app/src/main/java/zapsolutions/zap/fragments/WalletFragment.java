@@ -386,11 +386,17 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mWalletNotConnectedLayout.setVisibility(View.GONE);
 
             if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-                if (Wallet.getInstance().isTestnet()) {
-                    mTvMode.setText("TESTNET");
-                    mTvMode.setVisibility(View.VISIBLE);
-                } else {
-                    mTvMode.setVisibility(View.GONE);
+                switch (Wallet.getInstance().getNetwork()) {
+                    case MAINNET:
+                        mTvMode.setVisibility(View.GONE);
+                        break;
+                    case TESTNET:
+                        mTvMode.setText("TESTNET");
+                        mTvMode.setVisibility(View.VISIBLE);
+                        break;
+                    case REGTEST:
+                        mTvMode.setText("REGTEST");
+                        mTvMode.setVisibility(View.VISIBLE);
                 }
             } else {
                 // Wallet is not setup

@@ -62,6 +62,8 @@ If any of that sounds cool to you, feel free to dive in! [Open an issue][issues]
 
 If you would like to help contribute to the project, please see the [Contributing Guide](docs/CONTRIBUTING.md)
 
+If you want to setup a testing environment, please see the [Regtest Guide](docs/REGTEST.md)
+
 And if you want to build the app yourself take a look at the [Installation Guide](docs/INSTALL.md)
 
 ## Maintainers

@@ -256,6 +256,7 @@
     <string name="error_paymentRequestExpired">This payment request expired.</string>
     <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
     <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>
+    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
     <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
     <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
     <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
@@ -410,4 +411,6 @@
     <string name="identity_explanation">This is your identity on the lightning network!\nOthers can open a channel with you if they scan this QR-Code.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Public</string>
+
+    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
 </resources>

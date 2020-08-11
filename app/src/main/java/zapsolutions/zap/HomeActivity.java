@@ -400,7 +400,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @Override
     public void onInfoUpdated(boolean connected) {
         if ((WalletConfigsManager.getInstance().hasAnyConfigs())) {
-            if (!Wallet.getInstance().isTestnet() && Wallet.getInstance().isConnectedToLND()) {
+            if (Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET && Wallet.getInstance().isConnectedToLND()) {
                 if (!mMainnetWarningShownOnce) {
                     // Show mainnet not ready warning
                     new UserGuardian(this).securityMainnetNotReady();

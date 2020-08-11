@@ -113,7 +113,7 @@ public class Wallet {
     private boolean mInvoicesUpdated = false;
     private boolean mPaymentsUpdated = false;
     private boolean mUpdatingHistory = false;
-    private boolean mTestnet = false;
+    private Network mNetwork;
     private boolean mConnectionCheckInProgress = false;
     private String mLNDVersionString = "not connected";
     private Handler mHandler = new Handler();
@@ -166,7 +166,7 @@ public class Wallet {
         mChannelsFetched = false;
         mIsWalletReady = false;
         mSyncedToChain = false;
-        mTestnet = false;
+        mNetwork = null;
         mIdentityPubKey = null;
         mNodeUris = null;
         mLNDVersionString = "not connected";
@@ -194,7 +194,14 @@ public class Wallet {
                         ZapLog.d(LOG_TAG, "LND is reachable.");
                         // Save the received data.
                         mSyncedToChain = infoResponse.getSyncedToChain();
-                        mTestnet = infoResponse.getTestnet();
+                        if (mNetwork == null) {
+                            for (int i = 0; i < infoResponse.getChainsCount(); i++) {
+                                if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
+                                    mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
+                                    break;
+                                }
+                            }
+                        }
                         mLNDVersionString = infoResponse.getVersion();
                         mInfoFetched = true;
                         mConnectedToLND = true;
@@ -249,6 +256,8 @@ public class Wallet {
                             broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
                             ZapLog.e(LOG_TAG, throwable.getMessage());
                         }
+                        ZapLog.e(LOG_TAG, throwable.getMessage());
+                        ZapLog.e(LOG_TAG, throwable.getCause().getMessage());
                     }));
         }
     }
@@ -358,9 +367,16 @@ public class Wallet {
 
                     // Save the received data.
                     mSyncedToChain = infoResponse.getSyncedToChain();
-                    mTestnet = infoResponse.getTestnet();
                     mLNDVersionString = infoResponse.getVersion();
                     mIdentityPubKey = infoResponse.getIdentityPubkey();
+                    if (mNetwork == null) {
+                        for (int i = 0; i < infoResponse.getChainsCount(); i++) {
+                            if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
+                                mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
+                                break;
+                            }
+                        }
+                    }
                     if (mNodeUris == null) {
                         mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
                         for (int i = 0; i < infoResponse.getUrisCount(); i++) {
@@ -1179,8 +1195,8 @@ public class Wallet {
         return mSyncedToChain;
     }
 
-    public boolean isTestnet() {
-        return mTestnet;
+    public Network getNetwork() {
+        return mNetwork;
     }
 
     public String getLNDVersionString() {
@@ -1530,6 +1546,20 @@ public class Wallet {
         int ERROR_CHANNEL_OPEN = 9;
 
         void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message);
+    }
+
+    public enum Network {
+        MAINNET,
+        TESTNET,
+        REGTEST;
+
+        public static Wallet.Network parseFromString(String enumAsString) {
+            try {
+                return valueOf(enumAsString.toUpperCase());
+            } catch (Exception ex) {
+                return MAINNET;
+            }
+        }
     }
 }
 

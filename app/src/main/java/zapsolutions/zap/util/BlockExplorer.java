@@ -26,9 +26,18 @@ public class BlockExplorer {
      * @param ctx
      */
     public void showTransaction(String transactionID, Context ctx) {
+        if (Wallet.getInstance().getNetwork() == Wallet.Network.REGTEST) {
+            new AlertDialog.Builder(ctx)
+                    .setMessage(R.string.regtest_blockexplorer_unavailable)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
+                    }).show();
+            return;
+        }
+
         mContext = ctx;
         String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "BlockCypher");
-        boolean isMainnet = !Wallet.getInstance().isTestnet();
+        boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
         String networkID = "";
         mUrl = "";
         misNetworkSupported = true;
@@ -75,9 +84,19 @@ public class BlockExplorer {
      * @param ctx
      */
     public void showAddress(String address, Context ctx) {
+
+        if (Wallet.getInstance().getNetwork() == Wallet.Network.REGTEST) {
+            new AlertDialog.Builder(ctx)
+                    .setMessage(R.string.regtest_blockexplorer_unavailable)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
+                    }).show();
+            return;
+        }
+
         mContext = ctx;
         String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "BlockCypher");
-        boolean isMainnet = !Wallet.getInstance().isTestnet();
+        boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
         String networkID = "";
         mUrl = "";
         misNetworkSupported = true;
@@ -136,7 +155,7 @@ public class BlockExplorer {
             mContext.startActivity(browserIntent);
         } else {
             String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Blockstream");
-            boolean isMainnet = !Wallet.getInstance().isTestnet();
+            boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
             unsupportedNetwork(explorer, isMainnet ? "mainnet" : "testnet", mContext);
         }
     }
