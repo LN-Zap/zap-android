@@ -19,6 +19,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     TextView mStatus;
     ImageView mStatusDot;
     View mRootView;
+    View mContentView;
     Context mContext;
     private ChannelSelectListener mChannelSelectListener;
     private TextView mRemoteName;
@@ -39,7 +40,8 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         mCapacity = itemView.findViewById(R.id.capacity);
         mLocalBar = itemView.findViewById(R.id.localBar);
         mRemoteBar = itemView.findViewById(R.id.remoteBar);
-        mRootView = itemView.findViewById(R.id.transactionRootView);
+        mRootView = itemView.findViewById(R.id.channelRootView);
+        mContentView = itemView.findViewById(R.id.channelContent);
         mContext = itemView.getContext();
     }
 

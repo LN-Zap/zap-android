@@ -109,7 +109,19 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
             return false;
         }
 
-        return channelListItem.getChannelByteString().equals(this.getChannelByteString());
+        switch (this.getType()) {
+            case TYPE_OPEN_CHANNEL:
+                return ((OpenChannelItem) this).getChannel().getNumUpdates() == ((OpenChannelItem) channelListItem).getChannel().getNumUpdates();
+            case TYPE_PENDING_OPEN_CHANNEL:
+                return ((PendingOpenChannelItem) this).getChannel().getChannel().getLocalBalance() == ((PendingOpenChannelItem) channelListItem).getChannel().getChannel().getLocalBalance();
+            case TYPE_PENDING_CLOSING_CHANNEL:
+                return ((PendingClosingChannelItem) this).getChannel().getChannel().getLocalBalance() == ((PendingClosingChannelItem) channelListItem).getChannel().getChannel().getLocalBalance();
+            case TYPE_PENDING_FORCE_CLOSING_CHANNEL:
+                return ((PendingForceClosingChannelItem) this).getChannel().getChannel().getLocalBalance() == ((PendingForceClosingChannelItem) channelListItem).getChannel().getChannel().getLocalBalance();
+            case TYPE_WAITING_CLOSE_CHANNEL:
+                return ((WaitingCloseChannelItem) this).getChannel().getChannel().getLocalBalance() == ((WaitingCloseChannelItem) channelListItem).getChannel().getChannel().getLocalBalance();
+        }
+        return false;
     }
 
     @Override

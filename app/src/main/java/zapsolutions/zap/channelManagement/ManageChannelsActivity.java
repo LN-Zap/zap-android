@@ -41,6 +41,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     private TextView mEmptyListText;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<ChannelListItem> mChannelItems;
+    private String mCurrentSearchString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         // Refetch channels from LND. This will automatically update the view when finished.
         // This is necessary, as we might display outdated data otherwise.
-        if(WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             Wallet.getInstance().fetchChannelsFromLND();
         }
     }
@@ -142,7 +143,12 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         }
 
         // Update the view
-        mAdapter.replaceAll(mChannelItems);
+        if (mCurrentSearchString.isEmpty()) {
+            mAdapter.replaceAll(mChannelItems);
+        } else {
+            final List<ChannelListItem> filteredContactList = filter(mChannelItems, mCurrentSearchString);
+            mAdapter.replaceAll(filteredContactList);
+        }
     }
 
     @Override
@@ -198,8 +204,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     public void onRefresh() {
-
-        if(WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             Wallet.getInstance().fetchChannelsFromLND();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
@@ -221,11 +226,10 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+                mCurrentSearchString = newText;
                 final List<ChannelListItem> filteredContactList = filter(mChannelItems, newText);
                 mAdapter.replaceAll(filteredContactList);
                 mRecyclerView.scrollToPosition(0);
-
                 return true;
             }
         });
