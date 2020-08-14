@@ -15,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,13 +26,11 @@ import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.google.protobuf.ByteString;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Set;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.HomeActivity;
@@ -45,6 +44,7 @@ import zapsolutions.zap.transactionHistory.listItems.OnChainTransactionItem;
 import zapsolutions.zap.transactionHistory.transactionDetails.InvoiceDetailBSDFragment;
 import zapsolutions.zap.transactionHistory.transactionDetails.LnPaymentDetailBSDFragment;
 import zapsolutions.zap.transactionHistory.transactionDetails.OnChainTransactionDetailBSDFragment;
+import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
@@ -53,7 +53,7 @@ import zapsolutions.zap.util.ZapLog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, Wallet.TransactionSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getName();
 
@@ -65,6 +65,9 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
     private TextView mTitle;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private CompositeDisposable mCompositeDisposable;
+    private SearchView mSearchView;
+    private ImageView mSearchButton;
+    private String mCurrentSearchString = "";
 
     private List<HistoryListItem> mHistoryItems;
 
@@ -73,6 +76,9 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Required empty public constructor
     }
 
+    public SearchView getSearchView() {
+        return mSearchView;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,6 +90,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         mListOptions = view.findViewById(R.id.listOptions);
         mEmptyListText = view.findViewById(R.id.listEmpty);
         mTitle = view.findViewById(R.id.heading);
+        mSearchView = view.findViewById(R.id.searchView);
+        mSearchButton = view.findViewById(R.id.searchButton);
 
         ImageView backButton = view.findViewById(R.id.backButton);
         backButton.setOnClickListener(new OnSingleClickListener() {
@@ -93,11 +101,41 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
             }
         });
 
-        ImageView searchButton = view.findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new OnSingleClickListener() {
+
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSingleClick(View v) {
-                Toast.makeText(getActivity(), R.string.coming_soon, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                mTitle.setVisibility(View.GONE);
+                mSearchView.setVisibility(View.VISIBLE);
+                mSearchButton.setVisibility(View.GONE);
+                mSearchView.setFocusable(true);
+                mSearchView.setIconified(false);
+            }
+        });
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mCurrentSearchString = newText;
+                final List<HistoryListItem> filteredHistoryList = filter(mHistoryItems, newText);
+                mAdapter.replaceAll(filteredHistoryList);
+                mRecyclerView.scrollToPosition(0);
+                return true;
+            }
+        });
+
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                mTitle.setVisibility(View.VISIBLE);
+                mSearchView.setVisibility(View.GONE);
+                mSearchButton.setVisibility(View.VISIBLE);
+                return false;
             }
         });
 
@@ -107,6 +145,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Register listeners
         Wallet.getInstance().registerHistoryListener(this);
         Wallet.getInstance().registerInvoiceSubscriptionListener(this);
+        Wallet.getInstance().registerTransactionSubscriptionListener(this);
 
 
         // use a linear layout manager
@@ -114,7 +153,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create and set adapter
-        mAdapter = new HistoryItemAdapter(mHistoryItems, this, mCompositeDisposable);
+        mAdapter = new HistoryItemAdapter(this, mCompositeDisposable);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -201,6 +240,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         List<HistoryListItem> normalPayments = new LinkedList<>();
         List<HistoryListItem> expiredRequest = new LinkedList<>();
         List<HistoryListItem> internalTransactions = new LinkedList<>();
+        Set<HistoryListItem> dateLines = new HashSet<>();
 
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
 
@@ -262,25 +302,12 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         }
 
 
-        // Sort by Date
-        Collections.sort(mHistoryItems, Collections.<HistoryListItem>reverseOrder());
-
-
         // Add the Date Lines
-        // Our start date is tomorrow to make sure the first date is set even if it is today.
-        String tempDateText = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                .format(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
-        for (int i = 0; i < mHistoryItems.size(); i++) {
-
-            String currDateText = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                    .format(new Date(mHistoryItems.get(i).mCreationDate * 1000L));
-            if (!tempDateText.equals(currDateText)) {
-                DateItem dateItem = new DateItem(mHistoryItems.get(i).mCreationDate);
-                mHistoryItems.add(i, dateItem);
-                i++;
-                tempDateText = currDateText;
-            }
+        for (HistoryListItem item : mHistoryItems) {
+            DateItem dateItem = new DateItem(item.mCreationDate);
+            dateLines.add(dateItem);
         }
+        mHistoryItems.addAll(dateLines);
 
 
         // Show "No transactions" if the list is empty
@@ -293,11 +320,15 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
 
         // Update the list view
-        mAdapter.notifyDataSetChanged();
+        if (mCurrentSearchString.isEmpty()) {
+            mAdapter.replaceAll(mHistoryItems);
+        } else {
+            final List<HistoryListItem> filteredHistoryList = filter(mHistoryItems, mCurrentSearchString);
+            mAdapter.replaceAll(filteredHistoryList);
+        }
 
         // Restore state (e.g. scroll offset)
         mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
     }
 
     public void resetHistoryFragment() {
@@ -325,6 +356,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Unregister listeners
         Wallet.getInstance().unregisterHistoryListener(this);
         Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
+        Wallet.getInstance().unregisterTransactionSubscriptionListener(this);
     }
 
     @Override
@@ -338,44 +370,36 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
     @Override
     public void onNewInvoiceAdded(Invoice invoice) {
+        LnInvoiceItem item = new LnInvoiceItem(invoice);
+        mHistoryItems.add(item);
+        mAdapter.add(item);
 
-        // This has to happen on the UI thread. Only this thread can change the recycler view.
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                mHistoryItems.add(1, new LnInvoiceItem(invoice));
-                mAdapter.notifyItemInserted(1);
-            }
-        });
-
+        // Add dateline if necessary
+        DateItem dateItem = new DateItem(item.mCreationDate);
+        mAdapter.add(dateItem);
     }
 
     @Override
     public void onExistingInvoiceUpdated(Invoice invoice) {
+        LnInvoiceItem item = new LnInvoiceItem(invoice);
+        // Add updates the view if it already exists.
+        mHistoryItems.add(item);
+        mAdapter.add(item);
 
-        // This has to happen on the UI thread. Only this thread can change the recycler view.
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
+        // Add dateline if necessary
+        DateItem dateItem = new DateItem(item.mCreationDate);
+        mAdapter.add(dateItem);
+    }
 
-                // Find out which element has to be replaced
-                int changeIndex = -1;
-                for (int i = 0; i < mHistoryItems.size() - 1; i++) {
-                    if (mHistoryItems.get(i).getType() == HistoryListItem.TYPE_LN_INVOICE) {
-                        LnInvoiceItem invoiceItem = (LnInvoiceItem) mHistoryItems.get(i);
-                        if (invoiceItem.getInvoice().getAddIndex() == invoice.getAddIndex()) {
-                            changeIndex = i;
-                            break;
-                        }
-                    }
-                }
+    @Override
+    public void onTransactionEvent(Transaction transaction) {
+        OnChainTransactionItem item = new OnChainTransactionItem(transaction);
+        mHistoryItems.add(item);
+        mAdapter.add(item);
 
-                // Replace it
-                if (changeIndex >= 0) {
-                    mHistoryItems.set(changeIndex, new LnInvoiceItem(invoice));
-                    mAdapter.notifyItemChanged(changeIndex);
-                }
-            }
-        });
-
+        // Add dateline if necessary
+        DateItem dateItem = new DateItem(item.mCreationDate);
+        mAdapter.add(dateItem);
     }
 
     @Override
@@ -411,4 +435,45 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         }
 
     }
+
+    private List<HistoryListItem> filter(List<HistoryListItem> items, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        if (lowerCaseQuery.isEmpty()) {
+            return items;
+        }
+
+        final List<HistoryListItem> filteredItemList = new ArrayList<>();
+
+        for (HistoryListItem item : items) {
+            String text;
+            switch (item.getType()) {
+                case HistoryListItem.TYPE_LN_INVOICE:
+                    text = ((LnInvoiceItem) item).getInvoice().getMemo() + MonetaryUtil.getInstance().getPrimaryDisplayAmount(((LnInvoiceItem) item).getInvoice().getValue());
+                    break;
+                case HistoryListItem.TYPE_LN_PAYMENT:
+                    text = ((LnPaymentItem) item).getMemo() + MonetaryUtil.getInstance().getPrimaryDisplayAmount(((LnPaymentItem) item).getPayment().getValueSat());
+                    break;
+                case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
+                    text = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
+                    break;
+                default:
+                    text = "";
+            }
+            if (text != null && text.toLowerCase().contains(lowerCaseQuery)) {
+                filteredItemList.add(item);
+            }
+        }
+
+        // Add the Date Lines
+        Set<HistoryListItem> dateLines = new HashSet<>();
+        for (HistoryListItem item : filteredItemList) {
+            DateItem dateItem = new DateItem(item.mCreationDate);
+            dateLines.add(dateItem);
+        }
+        filteredItemList.addAll(dateLines);
+
+        return filteredItemList;
+    }
+
 }

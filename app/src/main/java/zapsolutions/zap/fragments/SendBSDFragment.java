@@ -364,13 +364,13 @@ public class SendBSDFragment extends RxBSDFragment {
                                     // updated the history, so it is shown the next time the user views it
                                     Wallet.getInstance().updateOnChainTransactionHistory();
 
-                                    ZapLog.d(LOG_TAG, sendCoinsResponse.toString());
+                                    ZapLog.v(LOG_TAG, sendCoinsResponse.toString());
 
                                     // show success animation
                                     mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
                                 }, throwable -> {
-                                    ZapLog.d(LOG_TAG, "Exception in send coins request task.");
-                                    ZapLog.d(LOG_TAG, throwable.getMessage());
+                                    ZapLog.e(LOG_TAG, "Exception in send coins request task.");
+                                    ZapLog.e(LOG_TAG, throwable.getMessage());
 
                                     String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
                                     String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
@@ -578,7 +578,7 @@ public class SendBSDFragment extends RxBSDFragment {
                     // updated the history, so it is shown the next time the user views it
                     Wallet.getInstance().updateLightningPaymentHistory();
 
-                    ZapLog.d(LOG_TAG, sendResponse.toString());
+                    ZapLog.v(LOG_TAG, sendResponse.toString());
 
                     // show success animation
                     mHandler.postDelayed(() -> {
@@ -592,8 +592,8 @@ public class SendBSDFragment extends RxBSDFragment {
 
                     }, 300);
                 }, throwable -> {
-                    ZapLog.d(LOG_TAG, "Exception in send payment task.");
-                    ZapLog.d(LOG_TAG, throwable.getMessage());
+                    ZapLog.e(LOG_TAG, "Exception in send payment task.");
+                    ZapLog.e(LOG_TAG, throwable.getMessage());
 
                     String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
                     String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
@@ -871,8 +871,8 @@ public class SendBSDFragment extends RxBSDFragment {
         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
                 .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat())),
                         throwable -> {
-                            ZapLog.d(LOG_TAG, "Exception in fee estimation request task.");
-                            ZapLog.d(LOG_TAG, throwable.getMessage());
+                            ZapLog.w(LOG_TAG, "Exception in fee estimation request task.");
+                            ZapLog.w(LOG_TAG, throwable.getMessage());
                             setFeeFailure();
                         }));
     }
@@ -908,8 +908,8 @@ public class SendBSDFragment extends RxBSDFragment {
                         setCalculatedFeeAmount(feeString);
                     }
                 }, throwable -> {
-                    ZapLog.d(LOG_TAG, "Exception in query routes request task.");
-                    ZapLog.d(LOG_TAG, throwable.getMessage());
+                    ZapLog.w(LOG_TAG, "Exception in query routes request task.");
+                    ZapLog.w(LOG_TAG, throwable.getMessage());
                     setFeeFailure();
                 }));
     }

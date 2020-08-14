@@ -460,7 +460,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                             dismiss();
                         }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                            ZapLog.d(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
+                            ZapLog.e(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
                         }));
 
             } else {
@@ -481,7 +481,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
 
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
                         .subscribe(addInvoiceResponse -> {
-                            ZapLog.d(LOG_TAG, addInvoiceResponse.toString());
+                            ZapLog.v(LOG_TAG, addInvoiceResponse.toString());
 
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
@@ -491,7 +491,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                             dismiss();
                         }, throwable -> {
                             Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
-                            ZapLog.d(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
+                            ZapLog.e(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
                         }));
             }
         } else {

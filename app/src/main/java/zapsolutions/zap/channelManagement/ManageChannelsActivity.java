@@ -146,8 +146,8 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         if (mCurrentSearchString.isEmpty()) {
             mAdapter.replaceAll(mChannelItems);
         } else {
-            final List<ChannelListItem> filteredContactList = filter(mChannelItems, mCurrentSearchString);
-            mAdapter.replaceAll(filteredContactList);
+            final List<ChannelListItem> filteredChannelList = filter(mChannelItems, mCurrentSearchString);
+            mAdapter.replaceAll(filteredChannelList);
         }
     }
 
