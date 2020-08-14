@@ -227,8 +227,8 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             @Override
             public boolean onQueryTextChange(String newText) {
                 mCurrentSearchString = newText;
-                final List<ChannelListItem> filteredContactList = filter(mChannelItems, newText);
-                mAdapter.replaceAll(filteredContactList);
+                final List<ChannelListItem> filteredChannelList = filter(mChannelItems, newText);
+                mAdapter.replaceAll(filteredChannelList);
                 mRecyclerView.scrollToPosition(0);
                 return true;
             }
@@ -247,31 +247,29 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             switch (item.getType()) {
                 case ChannelListItem.TYPE_OPEN_CHANNEL:
                     pubkey = ((OpenChannelItem) item).getChannel().getRemotePubkey();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
                     break;
                 case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
                     pubkey = ((PendingOpenChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
                     break;
                 case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
                     pubkey = ((PendingClosingChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
                     break;
                 case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
                     pubkey = ((PendingForceClosingChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
                     break;
                 case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
                     pubkey = ((WaitingCloseChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this).toLowerCase();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
                     break;
-                case ChannelListItem.TYPE_CLOSED_CHANNEL:
-                    text = "";
                 default:
                     text = "";
             }
 
-            if (text.contains(lowerCaseQuery)) {
+            if (text.toLowerCase().contains(lowerCaseQuery)) {
                 filteredItemList.add(item);
             }
         }
