@@ -182,7 +182,7 @@ public class InvoiceUtil {
                 .timeout(RefConstants.TIMEOUT_SHORT * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(paymentRequest -> {
-                    ZapLog.d(LOG_TAG, paymentRequest.toString());
+                    ZapLog.v(LOG_TAG, paymentRequest.toString());
 
                     if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
                         // Show error: payment request expired.
