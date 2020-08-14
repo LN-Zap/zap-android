@@ -17,11 +17,11 @@ public class OpenChannelViewHolder extends ChannelViewHolder {
         if (isActive) {
             mStatus.setText(R.string.channel_state_open);
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.superGreen)));
-            mRootView.setAlpha(1f);
+            mContentView.setAlpha(1f);
         } else {
             mStatus.setText(R.string.channel_state_offline);
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.gray)));
-            mRootView.setAlpha(0.65f);
+            mContentView.setAlpha(0.65f);
         }
     }
 

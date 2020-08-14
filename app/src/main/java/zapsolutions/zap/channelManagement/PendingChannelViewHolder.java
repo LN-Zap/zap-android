@@ -25,7 +25,7 @@ public abstract class PendingChannelViewHolder extends ChannelViewHolder {
     private void setState() {
         mStatus.setText(getStatusText());
         mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, getStatusColor())));
-        mRootView.setAlpha(0.65f);
+        mContentView.setAlpha(0.65f);
     }
 
     void bindPendingChannelItem(PendingChannelsResponse.PendingChannel pendingChannel) {

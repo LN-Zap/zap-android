@@ -28,12 +28,12 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public boolean areContentsTheSame(ChannelListItem oldItem, ChannelListItem newItem) {
-            return oldItem.equals(newItem);
+            return oldItem.equalsWithSameContent(newItem);
         }
 
         @Override
         public boolean areItemsTheSame(ChannelListItem item1, ChannelListItem item2) {
-            return item1.isSameChannel(item2);
+            return item1.equals(item2);
         }
 
         @Override

@@ -66,54 +66,72 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
         return ownAlias.compareTo(otherAlias);
     }
 
-    public boolean isSameChannel(@Nullable Object obj) {
+    public boolean equalsWithSameContent(@Nullable Object obj) {
+        if (!equals(obj)) {
+            return false;
+        }
+
+        ChannelListItem that = (ChannelListItem) obj;
+
+        switch (this.getType()) {
+            case TYPE_OPEN_CHANNEL:
+                return ((OpenChannelItem) this).getChannel().getNumUpdates() == ((OpenChannelItem) that).getChannel().getNumUpdates();
+            case TYPE_PENDING_OPEN_CHANNEL:
+                return ((PendingOpenChannelItem) this).getChannel().getChannel().getLocalBalance() == ((PendingOpenChannelItem) that).getChannel().getChannel().getLocalBalance();
+            case TYPE_PENDING_CLOSING_CHANNEL:
+                return ((PendingClosingChannelItem) this).getChannel().getChannel().getLocalBalance() == ((PendingClosingChannelItem) that).getChannel().getChannel().getLocalBalance();
+            case TYPE_PENDING_FORCE_CLOSING_CHANNEL:
+                return ((PendingForceClosingChannelItem) this).getChannel().getChannel().getLocalBalance() == ((PendingForceClosingChannelItem) that).getChannel().getChannel().getLocalBalance();
+            case TYPE_WAITING_CLOSE_CHANNEL:
+                return ((WaitingCloseChannelItem) this).getChannel().getChannel().getLocalBalance() == ((WaitingCloseChannelItem) that).getChannel().getChannel().getLocalBalance();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
         if (obj == this) {
             return true;
         }
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        ChannelListItem channelListItem = (ChannelListItem) obj;
-        if (channelListItem.getType() != this.getType()) {
+        ChannelListItem that = (ChannelListItem) obj;
+        if (that.getType() != this.getType()) {
             return false;
         }
 
         switch (this.getType()) {
             case TYPE_OPEN_CHANNEL:
-                return ((OpenChannelItem) this).getChannel().getChanId() == ((OpenChannelItem) channelListItem).getChannel().getChanId();
+                return ((OpenChannelItem) this).getChannel().getChanId() == ((OpenChannelItem) that).getChannel().getChanId();
             case TYPE_PENDING_OPEN_CHANNEL:
-                return ((PendingOpenChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((PendingOpenChannelItem) channelListItem).getChannel().getChannel().getChannelPoint());
+                return ((PendingOpenChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((PendingOpenChannelItem) that).getChannel().getChannel().getChannelPoint());
             case TYPE_PENDING_CLOSING_CHANNEL:
-                return ((PendingClosingChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((PendingClosingChannelItem) channelListItem).getChannel().getChannel().getChannelPoint());
+                return ((PendingClosingChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((PendingClosingChannelItem) that).getChannel().getChannel().getChannelPoint());
             case TYPE_PENDING_FORCE_CLOSING_CHANNEL:
-                return ((PendingForceClosingChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((PendingForceClosingChannelItem) channelListItem).getChannel().getChannel().getChannelPoint());
+                return ((PendingForceClosingChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((PendingForceClosingChannelItem) that).getChannel().getChannel().getChannelPoint());
             case TYPE_WAITING_CLOSE_CHANNEL:
-                return ((WaitingCloseChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((WaitingCloseChannelItem) channelListItem).getChannel().getChannel().getChannelPoint());
+                return ((WaitingCloseChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((WaitingCloseChannelItem) that).getChannel().getChannel().getChannelPoint());
+            default:
+                return false;
         }
-
-        return channelListItem.getChannelByteString().equals(this.getChannelByteString());
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-
-        if (obj == this) {
-            return true;
-        }
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-
-        ChannelListItem channelListItem = (ChannelListItem) obj;
-        if (channelListItem.getType() != this.getType()) {
-            return false;
-        }
-
-        return channelListItem.getChannelByteString().equals(this.getChannelByteString());
     }
 
     @Override
     public int hashCode() {
-        return this.getChannelByteString().hashCode();
+        switch (this.getType()) {
+            case TYPE_OPEN_CHANNEL:
+                return Long.valueOf(((OpenChannelItem) this).getChannel().getChanId()).hashCode();
+            case TYPE_PENDING_OPEN_CHANNEL:
+                return ((PendingOpenChannelItem) this).getChannel().getChannel().getChannelPoint().hashCode();
+            case TYPE_PENDING_CLOSING_CHANNEL:
+                return ((PendingClosingChannelItem) this).getChannel().getChannel().getChannelPoint().hashCode();
+            case TYPE_PENDING_FORCE_CLOSING_CHANNEL:
+                return ((PendingForceClosingChannelItem) this).getChannel().getChannel().getChannelPoint().hashCode();
+            case TYPE_WAITING_CLOSE_CHANNEL:
+                return ((WaitingCloseChannelItem) this).getChannel().getChannel().getChannelPoint().hashCode();
+            default:
+                return 0;
+        }
     }
 }
