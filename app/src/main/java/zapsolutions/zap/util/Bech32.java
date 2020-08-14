@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class Bech32 {
 
-    private static final String CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+    public static final String CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
 
     public static String bech32Encode(String hrp, byte[] data) {
 
@@ -155,6 +155,28 @@ public class Bech32 {
         }
 
         return ret;
+    }
+
+    public static byte[] regroupBytes(byte[] bytes) {
+        // regroups the "5 bit" bytes to 8 bit bytes.
+        boolean[] bitArray = new boolean[bytes.length * 5];
+        for (int i = 0; i < bytes.length; i++) {
+            for (int j = 3; j < 8; j++)
+                bitArray[i * 5 + j - 3] = (bytes[i] & (byte) (128 / Math.pow(2, j))) != 0;
+        }
+        return bitArrayToBytes(bitArray);
+    }
+
+    private static byte[] bitArrayToBytes(boolean[] input) {
+        byte[] toReturn = new byte[input.length / 8];
+        for (int entry = 0; entry < toReturn.length; entry++) {
+            for (int bit = 0; bit < 8; bit++) {
+                if (input[entry * 8 + bit]) {
+                    toReturn[entry] |= (128 >> bit);
+                }
+            }
+        }
+        return toReturn;
     }
 
 }
