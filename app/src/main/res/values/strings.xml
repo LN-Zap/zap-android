@@ -98,6 +98,7 @@
     <string name="payee">Payee</string>
     <string name="open">Open</string>
     <string name="search">Search</string>
+    <string name="confirmations">Confirmations</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>

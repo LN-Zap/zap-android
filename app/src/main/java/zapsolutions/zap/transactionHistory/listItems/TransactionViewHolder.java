@@ -130,8 +130,8 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         mSecondaryDescription.setText(description);
     }
 
-    void setSuccessState(boolean successful) {
-        mContentView.setAlpha(successful ? 1f : 0.5f);
+    void setDisplayMode(boolean isOpaque) {
+        mContentView.setAlpha(isOpaque ? 1f : 0.5f);
     }
 
     public void addOnTransactionSelectListener(TransactionSelectListener transactionSelectListener) {

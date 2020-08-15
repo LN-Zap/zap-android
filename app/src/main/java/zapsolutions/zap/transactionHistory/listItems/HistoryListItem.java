@@ -17,6 +17,10 @@ public abstract class HistoryListItem implements Comparable<HistoryListItem> {
         }
 
         switch (this.getType()) {
+            case TYPE_ON_CHAIN_TRANSACTION:
+                int thisConfs = ((OnChainTransactionItem) this).getOnChainTransaction().getNumConfirmations();
+                int oConfs = ((OnChainTransactionItem) o).getOnChainTransaction().getNumConfirmations();
+                return thisConfs == oConfs;
             case TYPE_LN_INVOICE:
                 return ((LnInvoiceItem) this).getInvoice().getStateValue() == ((LnInvoiceItem) o).getInvoice().getStateValue();
             case TYPE_LN_PAYMENT:

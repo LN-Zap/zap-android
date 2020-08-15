@@ -25,7 +25,7 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
         mLnPaymentItem = lnPaymentItem;
 
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
-        setSuccessState(true);
+        setDisplayMode(true);
 
         setIcon(TransactionIcon.LIGHTNING);
         setTimeOfDay(lnPaymentItem.mCreationDate);

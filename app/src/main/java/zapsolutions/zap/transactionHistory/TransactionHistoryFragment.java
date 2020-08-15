@@ -377,6 +377,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Add dateline if necessary
         DateItem dateItem = new DateItem(item.mCreationDate);
         mAdapter.add(dateItem);
+
+        mRecyclerView.scrollToPosition(0);
     }
 
     @Override
@@ -393,6 +395,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
     @Override
     public void onTransactionEvent(Transaction transaction) {
+        int tempCount = mAdapter.getItemCount();
         OnChainTransactionItem item = new OnChainTransactionItem(transaction);
         mHistoryItems.add(item);
         mAdapter.add(item);
@@ -400,6 +403,10 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Add dateline if necessary
         DateItem dateItem = new DateItem(item.mCreationDate);
         mAdapter.add(dateItem);
+        
+        if (tempCount != mAdapter.getItemCount()) {
+            mRecyclerView.scrollToPosition(0);
+        }
     }
 
     @Override
