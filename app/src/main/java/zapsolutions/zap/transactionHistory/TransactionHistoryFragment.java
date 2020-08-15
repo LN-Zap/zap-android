@@ -53,7 +53,7 @@ import zapsolutions.zap.util.ZapLog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, Wallet.TransactionSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getName();
 
@@ -145,7 +145,6 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Register listeners
         Wallet.getInstance().registerHistoryListener(this);
         Wallet.getInstance().registerInvoiceSubscriptionListener(this);
-        Wallet.getInstance().registerTransactionSubscriptionListener(this);
 
 
         // use a linear layout manager
@@ -356,7 +355,6 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Unregister listeners
         Wallet.getInstance().unregisterHistoryListener(this);
         Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
-        Wallet.getInstance().unregisterTransactionSubscriptionListener(this);
     }
 
     @Override
@@ -391,22 +389,6 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Add dateline if necessary
         DateItem dateItem = new DateItem(item.mCreationDate);
         mAdapter.add(dateItem);
-    }
-
-    @Override
-    public void onTransactionEvent(Transaction transaction) {
-        int tempCount = mAdapter.getItemCount();
-        OnChainTransactionItem item = new OnChainTransactionItem(transaction);
-        mHistoryItems.add(item);
-        mAdapter.add(item);
-
-        // Add dateline if necessary
-        DateItem dateItem = new DateItem(item.mCreationDate);
-        mAdapter.add(dateItem);
-        
-        if (tempCount != mAdapter.getItemCount()) {
-            mRecyclerView.scrollToPosition(0);
-        }
     }
 
     @Override
