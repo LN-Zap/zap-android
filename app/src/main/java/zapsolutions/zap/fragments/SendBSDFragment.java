@@ -251,7 +251,7 @@ public class SendBSDFragment extends RxBSDFragment {
                         mBtnSend.setEnabled(true);
                         mBtnSend.setTextColor(getResources().getColor(R.color.lightningOrange));
                     }
-                    if (currentValue == 0) {
+                    if (currentValue == 0 && mFixedAmount == 0L) {
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
                     }
