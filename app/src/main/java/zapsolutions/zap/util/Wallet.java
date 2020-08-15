@@ -190,6 +190,7 @@ public class Wallet {
         if (!mConnectionCheckInProgress) {
 
             mConnectionCheckInProgress = true;
+            mIsWalletReady = false;
 
             ZapLog.d(LOG_TAG, "LND connection test.");
 
