@@ -795,6 +795,13 @@ public class Wallet {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeTransactions(GetTransactionsRequest.newBuilder().build())
                 .subscribe(transaction -> {
                     ZapLog.d(LOG_TAG, "Received transaction subscription event.");
+
+                    // update internal transaction list
+                    compositeDisposable.add(LndConnection.getInstance().getLightningService().getTransactions(GetTransactionsRequest.newBuilder().build())
+                            .subscribe(transactionDetails -> {
+                                mOnChainTransactionList = Lists.reverse(transactionDetails.getTransactionsList());
+                            }, throwable -> ZapLog.e(LOG_TAG, "Exception in transaction request task: " + throwable.getMessage())));
+
                     fetchBalancesWithDebounce(); // Always update balances if a transaction event occurs.
                     broadcastTransactionUpdate(transaction);
                 }));

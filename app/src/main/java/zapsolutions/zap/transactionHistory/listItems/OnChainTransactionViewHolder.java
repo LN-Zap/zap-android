@@ -18,12 +18,16 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
     public void bindOnChainTransactionItem(OnChainTransactionItem onChainTransactionItem) {
         mOnChainTransactionItem = onChainTransactionItem;
 
+        // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
+        setDisplayMode(true);
+
+        if (onChainTransactionItem.getOnChainTransaction().getNumConfirmations() == 0){
+            setDisplayMode(false);
+        }
+
         // Get amounts
         Long amount = onChainTransactionItem.getOnChainTransaction().getAmount();
         long fee = onChainTransactionItem.getOnChainTransaction().getTotalFees();
-
-        // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
-        setSuccessState(true);
 
         setTimeOfDay(onChainTransactionItem.mCreationDate);
 

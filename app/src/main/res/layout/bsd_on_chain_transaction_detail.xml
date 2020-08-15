@@ -159,6 +159,28 @@
         app:layout_constraintTop_toBottomOf="@+id/fee"
         tools:text="Yesterday" />
 
+    <TextView
+        android:id="@+id/confirmationsLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateLabel"
+        tools:text="Confirmations:" />
+
+    <TextView
+        android:id="@+id/confirmations"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:textAlignment="viewEnd"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/amountLabel"
+        app:layout_constraintTop_toBottomOf="@id/dateLabel"
+        tools:text="6+" />
 
     <TextView
         android:id="@+id/transactionIDLabel"
@@ -167,7 +189,7 @@
         android:paddingTop="10dp"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date"
+        app:layout_constraintTop_toBottomOf="@+id/confirmationsLabel"
         tools:text="Transaction ID:" />
 
     <TextView
@@ -183,7 +205,7 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@id/txIDCopyIcon"
         app:layout_constraintStart_toEndOf="@id/transactionIDLabel"
-        app:layout_constraintTop_toBottomOf="@+id/date"
+        app:layout_constraintTop_toBottomOf="@+id/confirmationsLabel"
         tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
 
     <ImageView

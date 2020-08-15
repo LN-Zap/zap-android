@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
 
 import java.util.List;
 
@@ -24,20 +25,54 @@ import zapsolutions.zap.transactionHistory.listItems.OnChainTransactionViewHolde
 
 
 public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<HistoryListItem> mItems;
     private TransactionSelectListener mTransactionSelectListener;
     private CompositeDisposable mCompositeDisposable;
 
-    // Construct the adapter with a data list
-    public HistoryItemAdapter(List<HistoryListItem> dataset, TransactionSelectListener transactionSelectListener, CompositeDisposable compositeDisposable) {
-        mItems = dataset;
+    private final SortedList<HistoryListItem> mSortedList = new SortedList<>(HistoryListItem.class, new SortedList.Callback<HistoryListItem>() {
+        @Override
+        public int compare(HistoryListItem i1, HistoryListItem i2) {
+            return i1.compareTo(i2);
+        }
+
+        @Override
+        public void onChanged(int position, int count) {
+            notifyItemRangeChanged(position, count);
+        }
+
+        @Override
+        public boolean areContentsTheSame(HistoryListItem oldItem, HistoryListItem newItem) {
+            return oldItem.equalsWithSameContent(newItem);
+        }
+
+        @Override
+        public boolean areItemsTheSame(HistoryListItem item1, HistoryListItem item2) {
+            return item1.equals(item2);
+        }
+
+        @Override
+        public void onInserted(int position, int count) {
+            notifyItemRangeInserted(position, count);
+        }
+
+        @Override
+        public void onRemoved(int position, int count) {
+            notifyItemRangeRemoved(position, count);
+        }
+
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            notifyItemMoved(fromPosition, toPosition);
+        }
+    });
+
+    public HistoryItemAdapter(TransactionSelectListener transactionSelectListener, CompositeDisposable compositeDisposable) {
         mTransactionSelectListener = transactionSelectListener;
         mCompositeDisposable = compositeDisposable;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mItems.get(position).getType();
+        return mSortedList.get(position).getType();
     }
 
     @Override
@@ -68,24 +103,24 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (type) {
             case HistoryListItem.TYPE_DATE:
                 DateLineViewHolder dateHolder = (DateLineViewHolder) holder;
-                DateItem dateItem = (DateItem) mItems.get(position);
+                DateItem dateItem = (DateItem) mSortedList.get(position);
                 dateHolder.bindDateItem(dateItem);
                 break;
             case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
                 OnChainTransactionViewHolder onChainTransactionHolder = (OnChainTransactionViewHolder) holder;
-                OnChainTransactionItem onChainTransactionItem = (OnChainTransactionItem) mItems.get(position);
+                OnChainTransactionItem onChainTransactionItem = (OnChainTransactionItem) mSortedList.get(position);
                 onChainTransactionHolder.bindOnChainTransactionItem(onChainTransactionItem);
                 onChainTransactionHolder.addOnTransactionSelectListener(mTransactionSelectListener);
                 break;
             case HistoryListItem.TYPE_LN_INVOICE:
                 LnInvoiceViewHolder lnInvoiceHolder = (LnInvoiceViewHolder) holder;
-                LnInvoiceItem lnInvoiceItem = (LnInvoiceItem) mItems.get(position);
+                LnInvoiceItem lnInvoiceItem = (LnInvoiceItem) mSortedList.get(position);
                 lnInvoiceHolder.bindLnInvoiceItem(lnInvoiceItem);
                 lnInvoiceHolder.addOnTransactionSelectListener(mTransactionSelectListener);
                 break;
             case HistoryListItem.TYPE_LN_PAYMENT:
                 LnPaymentViewHolder lnPaymentHolder = (LnPaymentViewHolder) holder;
-                LnPaymentItem lnPaymentItem = (LnPaymentItem) mItems.get(position);
+                LnPaymentItem lnPaymentItem = (LnPaymentItem) mSortedList.get(position);
                 lnPaymentHolder.setCompositeDisposable(mCompositeDisposable);
                 lnPaymentHolder.bindLnPaymentItem(lnPaymentItem);
                 lnPaymentHolder.addOnTransactionSelectListener(mTransactionSelectListener);
@@ -111,9 +146,17 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         super.onViewDetachedFromWindow(holder);
     }
 
+    public void replaceAll(List<HistoryListItem> items) {
+        mSortedList.replaceAll(items);
+    }
+
+    public void add(HistoryListItem item) {
+        mSortedList.add(item);
+    }
+
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mSortedList.size();
     }
 }

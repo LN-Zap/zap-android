@@ -46,6 +46,8 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
     private ImageView mTransactionIDCopyButton;
     private TextView mAddressLabel;
     private TextView mAddress;
+    private TextView mConfrimationsLabel;
+    private TextView mConfirmations;
     private ImageView mAddressCopyButton;
 
     @Nullable
@@ -71,6 +73,8 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
         mAddressLabel = view.findViewById(R.id.addressLabel);
         mAddress = view.findViewById(R.id.address);
         mAddressCopyButton = view.findViewById(R.id.addressCopyIcon);
+        mConfrimationsLabel = view.findViewById(R.id.confirmationsLabel);
+        mConfirmations = view.findViewById(R.id.confirmations);
 
         ImageButton closeButton = view.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(view1 -> dismiss());
@@ -108,6 +112,8 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
         mTransactionIDLabel.setText(transactionIDLabel);
         String addressLabel = getString(R.string.address) + ":";
         mAddressLabel.setText(addressLabel);
+        String confirmationsLabel = getString(R.string.confirmations) + ":";
+        mConfrimationsLabel.setText(confirmationsLabel);
 
         mDate.setText(TimeFormatUtil.formatTimeAndDateLong(mTransaction.getTimeStamp(), getActivity()));
 
@@ -118,6 +124,12 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
         mAddress.setOnClickListener(view -> new BlockExplorer().showAddress(mTransaction.getDestAddresses(0), getActivity()));
         mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mTransaction.getTxHash()));
         mAddressCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Address", mTransaction.getDestAddresses(0)));
+        if (mTransaction.getNumConfirmations() < 7){
+            mConfirmations.setText(String.valueOf(mTransaction.getNumConfirmations()));
+        } else {
+            mConfirmations.setText("6+");
+        }
+
 
         // is internal?
         if (Wallet.getInstance().isTransactionInternal(mTransaction)) {

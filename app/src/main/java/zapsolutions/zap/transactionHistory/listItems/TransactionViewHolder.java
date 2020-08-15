@@ -19,6 +19,7 @@ import zapsolutions.zap.util.OnSingleClickListener;
 public class TransactionViewHolder extends HistoryItemViewHolder {
 
     View mRootView;
+    View mContentView;
 
     private TransactionSelectListener mTransactionSelectListener;
     private ImageView mIcon;
@@ -27,8 +28,6 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
     private TextView mSecondaryDescription;
     private TextView mAmount;
     private TextView mTransactionFee;
-    protected boolean mIsPreferenceListenerRegistered = false;
-
 
     TransactionViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -40,6 +39,7 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         mAmount = itemView.findViewById(R.id.transactionAmount);
         mTransactionFee = itemView.findViewById(R.id.transactionFeeAmount);
         mRootView = itemView.findViewById(R.id.transactionRootView);
+        mContentView = itemView.findViewById(R.id.transactionContent);
         mContext = itemView.getContext();
 
         mAmount.setOnClickListener(v -> MonetaryUtil.getInstance().switchCurrencies());
@@ -130,8 +130,8 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         mSecondaryDescription.setText(description);
     }
 
-    void setSuccessState(boolean successful) {
-        mRootView.setAlpha(successful ? 1f : 0.5f);
+    void setDisplayMode(boolean isOpaque) {
+        mContentView.setAlpha(isOpaque ? 1f : 0.5f);
     }
 
     public void addOnTransactionSelectListener(TransactionSelectListener transactionSelectListener) {

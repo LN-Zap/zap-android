@@ -19,7 +19,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
         mLnInvoiceItem = lnInvoiceItem;
 
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
-        setSuccessState(true);
+        setDisplayMode(true);
 
         setFee(0, false);
         setTimeOfDay(lnInvoiceItem.mCreationDate);
@@ -49,7 +49,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
                 if (Wallet.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
                     // The invoice has expired
                     setPrimaryDescription(mContext.getString(R.string.request_expired));
-                    setSuccessState(false);
+                    setDisplayMode(false);
                 } else {
                     // The invoice has not yet expired
                     setPrimaryDescription(mContext.getString(R.string.requested_payment));
@@ -70,7 +70,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
                 if (Wallet.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
                     // The invoice has expired
                     setPrimaryDescription(mContext.getString(R.string.request_expired));
-                    setSuccessState(false);
+                    setDisplayMode(false);
                 } else {
                     // The invoice has not yet expired
                     setPrimaryDescription(mContext.getString(R.string.requested_payment));
