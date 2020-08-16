@@ -191,6 +191,8 @@ public class Wallet {
 
             mConnectionCheckInProgress = true;
             mIsWalletReady = false;
+            mBalancesFetched = false;
+            mChannelsFetched = false;
 
             ZapLog.d(LOG_TAG, "LND connection test.");
 
