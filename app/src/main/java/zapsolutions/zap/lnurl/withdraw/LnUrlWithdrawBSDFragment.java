@@ -34,6 +34,7 @@ import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
@@ -310,7 +311,6 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
                         .setExpiry(60L) // in seconds
                         .build();
 
-
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
                         .subscribe(addInvoiceResponse -> {
 
@@ -331,6 +331,10 @@ public class LnUrlWithdrawBSDFragment extends RxBSDFragment {
                                             switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
                                         }
                                     });
+
+                            // Make sure this request is executed only once and it doesn't timeout to fast.
+                            // If this is not done, then it can happen that Zap shows an error although everything was executed.
+                            lnUrlRequest.setRetryPolicy(new DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
                             // Send final request to LNURL service
                             HttpClient.getInstance().addToRequestQueue(lnUrlRequest, "LnUrlFinalWithdrawRequest");

@@ -29,6 +29,7 @@ import androidx.transition.ChangeBounds;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
@@ -47,7 +48,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
@@ -302,6 +302,10 @@ public class LnUrlChannelBSDFragment extends RxBSDFragment {
                     ZapLog.e(TAG, "Final request failed");
                     switchToFailedScreen("Final request failed");
                 });
+
+        // Make sure this request is executed only once and it doesn't timeout to fast.
+        // If this is not done, then it can happen that Zap shows an error although everything was executed.
+        lnUrlRequest.setRetryPolicy(new DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Send final request to LNURL service
         HttpClient.getInstance().addToRequestQueue(lnUrlRequest, "LnUrlFinalChannelRequest");
