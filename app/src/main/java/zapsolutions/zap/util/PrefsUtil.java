@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.OnChainFeeView;
 
 /**
@@ -29,6 +28,7 @@ public class PrefsUtil {
     public static final String IS_DEFAULT_CURRENCY_SET = "isDefaultCurrencySet";
     public static final String FIRST_CURRENCY = "firstCurrency";
     public static final String SECOND_CURRENCY = "secondCurrency";
+    public static final String LAST_CLIPBOARD_SCAN = "lastClipboardScan";
 
     // wallet config preferences references
     public static final String PREFS_ENCRYPTED = "prefs_encrypted";
