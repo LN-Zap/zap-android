@@ -190,6 +190,9 @@ public class Wallet {
         if (!mConnectionCheckInProgress) {
 
             mConnectionCheckInProgress = true;
+            mIsWalletReady = false;
+            mBalancesFetched = false;
+            mChannelsFetched = false;
 
             ZapLog.d(LOG_TAG, "LND connection test.");
 
@@ -795,13 +798,7 @@ public class Wallet {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeTransactions(GetTransactionsRequest.newBuilder().build())
                 .subscribe(transaction -> {
                     ZapLog.d(LOG_TAG, "Received transaction subscription event.");
-
-                    // update internal transaction list
-                    compositeDisposable.add(LndConnection.getInstance().getLightningService().getTransactions(GetTransactionsRequest.newBuilder().build())
-                            .subscribe(transactionDetails -> {
-                                mOnChainTransactionList = Lists.reverse(transactionDetails.getTransactionsList());
-                            }, throwable -> ZapLog.e(LOG_TAG, "Exception in transaction request task: " + throwable.getMessage())));
-
+                    fetchTransactionsFromLND(); // update internal transaction list
                     fetchBalancesWithDebounce(); // Always update balances if a transaction event occurs.
                     broadcastTransactionUpdate(transaction);
                 }));

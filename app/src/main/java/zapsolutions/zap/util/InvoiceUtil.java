@@ -70,7 +70,7 @@ public class InvoiceUtil {
             // Check if the invoice is for the same network the app is connected to
             switch (Wallet.getInstance().getNetwork()) {
                 case MAINNET:
-                    if (hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, lnInvoice)) {
+                    if (hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, lnInvoice) && !hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, lnInvoice)) {
                         decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
                     } else {
                         // Show error. Please use a MAINNET invoice.
