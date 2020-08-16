@@ -432,6 +432,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     @Override
+    public void onLndConnectError(String error) {
+
+    }
+
+    @Override
     public void onLndConnectSuccess() {
         // We managed to establish a connection to LND.
         // Now we can start to fetch all information needed from LND

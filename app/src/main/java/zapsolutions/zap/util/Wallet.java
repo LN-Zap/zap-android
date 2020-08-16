@@ -226,11 +226,33 @@ public class Wallet {
                         mConnectionCheckInProgress = false;
 
                         if (throwable.getMessage().toLowerCase().contains("unavailable") && !throwable.getMessage().toLowerCase().contains(".onion")) {
-                            // This is the case if:
-                            // - LND daemon is not running
-                            // - An incorrect port is used
-                            // - A wrong certificate is used (When the certificate creation failed due to an error)
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
+                            ZapLog.e(LOG_TAG, "LND Service unavailable");
+                            if (throwable.getCause() != null) {
+                                if (throwable.getCause().getMessage().toLowerCase().contains("cannot verify hostname")) {
+                                    // This is the case if:
+                                    // - The hostname used to initiate the lnd connection (the hostname from the lndconnect string) does not match with the hostname in the provided certificate.
+                                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_VERIFICATION);
+                                } else if (throwable.getCause().getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    // This is the case if:
+                                    // - We have an internet or network connection, but the desired host is not resolvable.
+                                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
+                                } else if (throwable.getCause().getMessage().toLowerCase().contains("enetunreach")) {
+                                    // This is the case if:
+                                    // - We have no internet or network connection at all.
+                                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_NETWORK_UNREACHABLE);
+                                } else if (throwable.getCause().getMessage().toLowerCase().contains("econnrefused")) {
+                                    // This is the case if:
+                                    // - LND daemon is not running
+                                    // - An incorrect port is used
+                                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
+                                } else {
+                                    // Unknown error. Print what gets returned directly, always english.
+                                    broadcastLndConnectionTestResult(throwable.getCause().getMessage());
+                                }
+                            } else {
+                                // Unknown error. Print what gets returned directly, always english.
+                                broadcastLndConnectionTestResult(throwable.getMessage());
+                            }
                         } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
                             // This is the case if:
                             // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
@@ -239,8 +261,8 @@ public class Wallet {
                         } else if (throwable.getMessage().toLowerCase().contains("unimplemented")) {
                             // This is the case if:
                             // - The wallet is locked
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
                             ZapLog.e(LOG_TAG, "Wallet is locked!");
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
                         } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
                             // This is the case if:
                             // - The macaroon is invalid
@@ -249,23 +271,26 @@ public class Wallet {
                         } else if (throwable.getMessage().contains("UNKNOWN")) {
                             // This is the case if:
                             // - The macaroon has wrong encoding
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
                             ZapLog.e(LOG_TAG, "Macaroon is invalid!");
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
                         } else if (throwable.getMessage().contains(".onion")) {
                             // This is the case if:
                             // - Orbot is not running or not in vpn mode and the user tries to connect to a tor node.
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TOR);
                             ZapLog.e(LOG_TAG, "Cannot resolve onion address!");
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TOR);
                         } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERRUPTED);
                             ZapLog.e(LOG_TAG, "Test if LND is reachable was interrupted.");
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERRUPTED);
                         } else {
-                            // Any other error, show unavailable message
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
-                            ZapLog.e(LOG_TAG, throwable.getMessage());
+                            // Unknown error. Print what gets returned directly, always english.
+                            ZapLog.e(LOG_TAG, "Unknown connection error..");
+                            broadcastLndConnectionTestResult(throwable.getMessage());
                         }
                         ZapLog.e(LOG_TAG, throwable.getMessage());
-                        ZapLog.e(LOG_TAG, throwable.getCause().getMessage());
+                        if (throwable.getCause() != null) {
+                            ZapLog.e(LOG_TAG, throwable.getCause().getMessage());
+                            throwable.getCause().printStackTrace();
+                        }
                     }));
         }
     }
@@ -1288,6 +1313,12 @@ public class Wallet {
         }
     }
 
+    public void broadcastLndConnectionTestResult(String errorMessage) {
+        for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
+            listener.onLndConnectError(errorMessage);
+        }
+    }
+
     public void registerLndConnectionTestListener(LndConnectionTestListener listener) {
         mLndConnectionTestListeners.add(listener);
     }
@@ -1528,8 +1559,13 @@ public class Wallet {
         int ERROR_UNAVAILABLE = 3;
         int ERROR_AUTHENTICATION = 4;
         int ERROR_TOR = 5;
+        int ERROR_HOST_VERIFICATION = 6;
+        int ERROR_HOST_UNRESOLVABLE = 7;
+        int ERROR_NETWORK_UNREACHABLE = 8;
 
         void onLndConnectError(int error);
+
+        void onLndConnectError(String error);
 
         void onLndConnectSuccess();
     }
