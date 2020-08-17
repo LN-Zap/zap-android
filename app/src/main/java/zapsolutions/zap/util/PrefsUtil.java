@@ -29,6 +29,7 @@ public class PrefsUtil {
     public static final String FIRST_CURRENCY = "firstCurrency";
     public static final String SECOND_CURRENCY = "secondCurrency";
     public static final String LAST_CLIPBOARD_SCAN = "lastClipboardScan";
+    public static final String SCAN_CLIPBOARD = "scanClipboard";
 
     // wallet config preferences references
     public static final String PREFS_ENCRYPTED = "prefs_encrypted";

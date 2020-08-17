@@ -42,6 +42,10 @@ public class ClipBoardUtil {
 
     public static void performClipboardScan(Context context, CompositeDisposable compositeDisposable, OnClipboardScanProceedListener listener) {
 
+        if (!PrefsUtil.getPrefs().getBoolean(PrefsUtil.SCAN_CLIPBOARD, true)) {
+            return;
+        }
+
         try {
             getPrimaryContent(context);
         } catch (NullPointerException e) {

@@ -39,6 +39,13 @@
             android:title="@string/settings_language"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="scanClipboard"
+            android:title="@string/settings_scan_clipboard"
+            android:summary="@string/settings_scan_clipboard_summary"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
 
