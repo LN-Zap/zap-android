@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -303,7 +304,14 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     mWalletConnectedLayout.setVisibility(View.GONE);
                     mWalletNotConnectedLayout.setVisibility(View.GONE);
                     mLoadingWalletLayout.setVisibility(View.VISIBLE);
-                    Wallet.getInstance().testLndConnectionAndLoadWallet();
+
+                    // We delay the execution, to make it obvious to the user the button press had an effect.
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Wallet.getInstance().testLndConnectionAndLoadWallet();
+                        }
+                    }, 200);
                 }
             }
         });
@@ -530,10 +538,25 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(LndConnection.getInstance().getConnectionConfig().getPort())));
                 } else if (error == Wallet.LndConnectionTestListener.ERROR_TOR) {
                     mTvConnectError.setText(R.string.error_connection_tor_unreachable);
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_HOST_VERIFICATION) {
+                    mTvConnectError.setText(R.string.error_connection_host_verification_failed);
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE) {
+                    mTvConnectError.setText(getString(R.string.error_connection_host_unresolvable, LndConnection.getInstance().getConnectionConfig().getHost()));
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_NETWORK_UNREACHABLE) {
+                    mTvConnectError.setText(R.string.error_connection_network_unreachable);
                 }
             }
         } else {
             onInfoUpdated(true);
+        }
+    }
+
+    @Override
+    public void onLndConnectError(String error) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            onInfoUpdated(false);
+            String errorMessage = getString(R.string.error_connection_unknown) + "\n\n" + error;
+            mTvConnectError.setText(errorMessage);
         }
     }
 
