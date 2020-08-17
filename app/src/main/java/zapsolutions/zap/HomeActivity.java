@@ -61,6 +61,7 @@ import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.BitcoinStringAnalyzer;
+import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -253,13 +254,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToForeground() {
         ZapLog.d(LOG_TAG, "Zap moved to foreground");
 
-
         // Test if PIN screen should be shown.
-
         PinScreenUtil.askForAccess(this, () -> {
             continueMoveToForeground();
         });
-
     }
 
     private void continueMoveToForeground() {
@@ -703,13 +701,21 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     @Override
     public void onWalletLoaded() {
+        ZapLog.d(LOG_TAG, "Wallet loaded");
+
         // Check if Zap was started from an URI link or by NFC.
         if (App.getAppContext().getUriSchemeData() != null) {
             analyzeString(App.getAppContext().getUriSchemeData());
             App.getAppContext().setUriSchemeData(null);
+        } else {
+            // Do we have any clipboard data that zap can read?
+            ClipBoardUtil.performClipboardScan(HomeActivity.this, compositeDisposable, new ClipBoardUtil.OnClipboardScanProceedListener() {
+                @Override
+                public void onProceed(String content) {
+                    analyzeString(content);
+                }
+            });
         }
-
-        ZapLog.d(LOG_TAG, "Wallet loaded");
     }
 
 

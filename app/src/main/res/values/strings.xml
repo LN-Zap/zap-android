@@ -214,6 +214,8 @@
     <string name="settings_btcUnit">Bitcoin Unit</string>
     <string name="settings_currency">Second Unit</string>
     <string name="settings_language">Language</string>
+    <string name="settings_scan_clipboard">Check clipboard</string>
+    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
     <string name="settings_systemLanguage">System Language</string>
 
@@ -414,4 +416,9 @@
     <string name="identity_switch_public">Public</string>
 
     <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
+
+    <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
+    <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
+    <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
+    <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
 </resources>
