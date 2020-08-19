@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 
 public class InvoiceUtil {
     private static final String LOG_TAG = InvoiceUtil.class.getName();

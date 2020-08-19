@@ -29,7 +29,7 @@ import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.ScanActivity;
 import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.WalletSpinner;

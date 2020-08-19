@@ -1,12 +1,9 @@
-package zapsolutions.zap.connection.establishConnectionToLnd;
+package zapsolutions.zap.connection.lndConnection;
 
-
-import com.google.common.io.BaseEncoding;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSocketFactory;
 
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
@@ -42,7 +39,6 @@ public class LndConnection {
 
     private static LndConnection mLndConnectionInstance;
 
-    private SSLSocketFactory mSSLFactory;
     private MacaroonCallCredential mMacaroon;
     private ManagedChannel mSecureChannel;
     private LndAutopilotService mLndAutopilotService;
@@ -111,50 +107,26 @@ public class LndConnection {
 
         // Generate Macaroon
         mMacaroon = new MacaroonCallCredential(mConnectionConfig.getMacaroon());
-
-        mSSLFactory = null;
-
-        // Generate certificate if one was supplied
-        if (mConnectionConfig.getCert() != null) {
-            // We have a certificate, try to load it.
-
-            String certificateBase64UrlString = mConnectionConfig.getCert();
-            byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
-
-            try {
-                mSSLFactory = CustomSSLSocketFactory.create(certificateBytes);
-            } catch (RuntimeException e) {
-                ZapLog.e(LOG_TAG, "Error creating certificate");
-            }
-
-        }
     }
 
     private void generateChannelAndStubs() {
         String host = mConnectionConfig.getHost();
         int port = mConnectionConfig.getPort();
 
-        HostnameVerifier hostnameVerifier = null;  // null = default hostnameVerifier
-        if (BuildConfig.BUILD_TYPE.equals("debug")) {
+        HostnameVerifier hostnameVerifier = null;
+        if (BuildConfig.BUILD_TYPE.equals("debug") || mConnectionConfig.isTor()) {
             // Disable hostname verification on debug build variant. This is is used to prevent connection errors to REGTEST nodes.
-            hostnameVerifier = new HostnameVerifierAllowAll();
+            // On Tor we do not need it, as tor already makes sure we are connected with the correct host.
+            hostnameVerifier = new BlindHostnameVerifier();
         }
 
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
-        if (mSSLFactory == null) {
-            // BTCPay
-            mSecureChannel = OkHttpChannelBuilder
-                    .forAddress(host, port)
-                    .hostnameVerifier(hostnameVerifier)
-                    .build();
+        mSecureChannel = OkHttpChannelBuilder
+                .forAddress(host, port)
+                .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
+                .sslSocketFactory(LndSSLSocketFactory.create(mConnectionConfig)) // null = default SSLSocketFactory
+                .build();
 
-        } else {
-            mSecureChannel = OkHttpChannelBuilder
-                    .forAddress(host, port)
-                    .hostnameVerifier(hostnameVerifier)
-                    .sslSocketFactory(mSSLFactory)
-                    .build();
-        }
 
         mLndAutopilotService = new RemoteLndAutopilotService(mSecureChannel, mMacaroon);
         mLndChainNotifierService = new RemoteLndChainNotifierService(mSecureChannel, mMacaroon);

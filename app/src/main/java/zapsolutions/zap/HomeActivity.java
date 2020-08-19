@@ -44,7 +44,7 @@ import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.RemoteConfiguration;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.CustomViewPager;

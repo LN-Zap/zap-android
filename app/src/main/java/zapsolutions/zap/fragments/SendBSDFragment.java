@@ -48,7 +48,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.LightningFeeView;
 import zapsolutions.zap.customView.NumpadView;

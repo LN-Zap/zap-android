@@ -1,4 +1,4 @@
-package zapsolutions.zap.connection.establishConnectionToLnd;
+package zapsolutions.zap.connection.lndConnection;
 
 import java.util.concurrent.Executor;
 
@@ -30,7 +30,6 @@ public class MacaroonCallCredential extends CallCredentials {
             final MetadataApplier metadataApplier
     ) {
         String authority = requestInfo.getAuthority();
-        // System.out.println(authority);
         executor.execute(new Runnable() {
             public void run() {
                 try {
