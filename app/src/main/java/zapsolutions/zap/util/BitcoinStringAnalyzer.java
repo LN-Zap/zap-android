@@ -123,7 +123,7 @@ public class BitcoinStringAnalyzer {
             @Override
             public void onNoInvoiceData() {
                 // No Invoice or Address either, we have unrecognizable data
-                listener.onError(ctx.getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
+                listener.onNoReadableData();
             }
         });
     }
@@ -151,5 +151,7 @@ public class BitcoinStringAnalyzer {
         void onValidNodeUri(LightningNodeUri nodeUri);
 
         void onError(String error, int duration);
+
+        void onNoReadableData();
     }
 }
