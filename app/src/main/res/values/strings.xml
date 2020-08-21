@@ -421,7 +421,7 @@
 
     <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
 
-    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:"</string>
+    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
     <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
     <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
     <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
