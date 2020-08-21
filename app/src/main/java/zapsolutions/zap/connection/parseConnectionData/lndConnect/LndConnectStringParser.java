@@ -2,10 +2,14 @@ package zapsolutions.zap.connection.parseConnectionData.lndConnect;
 
 import com.google.common.io.BaseEncoding;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 
-import zapsolutions.zap.connection.establishConnectionToLnd.CustomSSLSocketFactory;
 import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
 import zapsolutions.zap.util.ZapLog;
 
@@ -81,10 +85,13 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                     try {
                         byte[] certificateBytes = BaseEncoding.base64Url().decode(cert);
                         try {
-                            CustomSSLSocketFactory.create(certificateBytes);
-                        } catch (RuntimeException e) {
-
-                            ZapLog.e(LOG_TAG, "certificate creation failed");
+                            // Generate the CA Certificate from the supplied byte array
+                            InputStream caInput = null;
+                            caInput = new ByteArrayInputStream(certificateBytes);
+                            Certificate ca = CertificateFactory.getInstance("X.509").generateCertificate(caInput);
+                        } catch (CertificateException e) {
+                            e.printStackTrace();
+                            ZapLog.e(LOG_TAG, "certificate validation failed");
                             mError = ERROR_INVALID_CERTIFICATE;
                             return this;
                         }
@@ -113,7 +120,7 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                     }
                 }
 
-                // everything is ok, initiate connection
+                // everything is ok
                 LndConnectConfig lndConnectConfig = new LndConnectConfig();
                 lndConnectConfig.setHost(connectURI.getHost());
                 lndConnectConfig.setPort(connectURI.getPort());

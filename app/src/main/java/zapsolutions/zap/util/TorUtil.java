@@ -14,7 +14,7 @@ import android.util.Log;
 import java.util.List;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 
 public class TorUtil {
 
@@ -29,7 +29,7 @@ public class TorUtil {
         if (LndConnection.getInstance().getConnectionConfig().isLocal()) {
             return false;
         } else {
-            return LndConnection.getInstance().getConnectionConfig().getHost().contains(".onion");
+            return LndConnection.getInstance().getConnectionConfig().isTor();
         }
     }
 

@@ -48,6 +48,13 @@ public class WalletConfig extends RemoteConfiguration implements Comparable<Wall
         this.id = id;
     }
 
+    public boolean isTor() {
+        if (getHost() == null) {
+            return false;
+        }
+        return getHost().toLowerCase().endsWith(".onion");
+    }
+
     @Override
     public int compareTo(WalletConfig walletConfig) {
         WalletConfig other = walletConfig;

@@ -46,7 +46,7 @@ import java.net.URL;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.fragments.RxBSDFragment;
 import zapsolutions.zap.util.MonetaryUtil;

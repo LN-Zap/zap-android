@@ -49,7 +49,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
-import zapsolutions.zap.connection.establishConnectionToLnd.LndConnection;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.fragments.RxBSDFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
