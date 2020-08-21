@@ -94,6 +94,7 @@
     <string name="payee">Empfänger</string>
     <string name="open">Öffnen</string>
     <string name="search">Suchen</string>
+    <string name="confirmations">Bestätigungen</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -188,6 +189,8 @@
     <string name="settings_btcUnit">Bitcoin Einheit</string>
     <string name="settings_currency">Zweite Einheit</string>
     <string name="settings_language">Sprache</string>
+    <string name="settings_scan_clipboard">Zwischenablage scannen</string>
+    <string name="settings_scan_clipboard_summary">Automatisch Daten in der Zwischenablage erkennen, die Zap verarbeiten kann.</string>
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
     <string name="settings_systemLanguage">Systemsprache</string>
     <string name="settings_manageChannels">Lightning-Kanäle verwalten</string>
@@ -222,6 +225,7 @@
     <string name="error_paymentRequestExpired">Die Zahlungsanfrage is abgelaufen.</string>
     <string name="error_useTestnetRequest">Du bist mit dem TESTNET verbunden. Bitte verwende TESTNET Adressen oder Zahlungsanfragen.</string>
     <string name="error_useMainnetRequest">Du bist mit dem MAINNET verbunden. Bitte verwende MAINNET Adressen oder Zahlungsanfragen.</string>
+    <string name="error_useRegtestRequest">Du bist mit einem REGTEST Netzwerk verbunden. Bitte verwende REGTEST Adressen oder Zahlungsanfragen.</string>
     <string name="error_cameraPermissionRequired">Um QR-Codes zu scannen musst du Zap die Erlaubnis geben, die Kamera zu verwenden.</string>
     <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
@@ -235,7 +239,11 @@
     <string name="error_connection_invalid_host_or_port">Der angegebene Host oder Port is ungültig.</string>
     <string name="error_connection_invalid_macaroon2">Zugriff verweigert!\n\nDas Macaroon ist ungültig.</string>
     <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Die Verbindung zu LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND deamon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)\n\n- Stelle sicher, dass das Zertifikat gültig ist.</string>
+    <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.\n\nDer Hostnamen deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Zertifikats überein.\n\nMöglicherweise musst du das Zertifikat erneuern. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain hinterlegt ist, bevor du das Zertifikat neu erstellst.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden.\n\nBitte aktualisiere die Verbindungseinstellungen deiner Wallet, falls dein Knoten mittlerweile unter einem anderen Namen oder einer anderen Addresse erreichbar ist.</string>
+    <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND daemon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
+    <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
+    <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
     <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte stelle sicher, dass:\n\n- Orbot läuft\n\n- Orbot im VPN Modus ist\n\n- Zap in Orbot\'s Liste der aktivierten Apps ist.</string>
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
@@ -356,4 +364,10 @@
     <string name="identity_explanation">Das bist du im Lightning-Netzwerk!\nAndere können einen Kanal mit dir öffnen, wenn sie diesen QR-Code scannen.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Öffentlich</string>
+    <string name="regtest_blockexplorer_unavailable">Block-Explorer sind im REGTEST Modus nicht verfügbar.</string>
+    <string name="clipboard_error_heading">Ungültige Daten in der Zwischenablage gefunden:</string>
+    <string name="clipboard_scan_payment">Die Zwischenablage enthält Zahlungsinformationen. Möchtest du eine Zahlung durchführen?</string>
+    <string name="clipboard_scan_lnurl">Die Zwischenablage enthält LNURL Daten. Möchtest du sie verwenden?</string>
+    <string name="clipboard_scan_node_pubkey">Die Zwischenablage enthält den Schlüssel eines anderen Knotens. Möchtest du einen Kanal öffnen?</string>
+    <string name="clipboard_scan_connect">Die Zwischenablage enthält Verbindungsinformationen. Möchtest du eine neue Wallet hinzufügen?</string>
 </resources>
