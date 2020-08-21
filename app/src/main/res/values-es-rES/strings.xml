@@ -94,6 +94,7 @@
     <string name="payee">Payee</string>
     <string name="open">Open</string>
     <string name="search">Search</string>
+    <string name="confirmations">Confirmations</string>
     <string name="activity_receive">Recibir</string>
     <string name="activity_send">Enviar</string>
     <string name="activity_connectRemoteNode">Conectar a Nodo Remoto</string>
@@ -188,6 +189,8 @@
     <string name="settings_btcUnit">Unidad de Bitcoin</string>
     <string name="settings_currency">Segunda Unidad</string>
     <string name="settings_language">Idioma</string>
+    <string name="settings_scan_clipboard">Check clipboard</string>
+    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
     <string name="settings_hapticPin">Respuesta táctil</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_manageChannels">Administrar Canales de Pago</string>
@@ -222,6 +225,7 @@
     <string name="error_paymentRequestExpired">Esta solicitud de pago ha expirado.</string>
     <string name="error_useTestnetRequest">Estás conectado a la TESTNET. Por favor usa direcciones y solicitudes de pago para TESTNET.</string>
     <string name="error_useMainnetRequest">Estás conectado a la MAINNET. Por favor usa direcciones o solicitudes de pago para MAINNET.</string>
+    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
     <string name="error_cameraPermissionRequired">Para escanear códigos QR debes permitir que Zap acceda a la cámara.</string>
     <string name="error_emptyClipboardPayment">Su portapapeles no contiene ningún dato de pago.</string>
     <string name="error_emptyClipboardConnect">Su portapapeles no contiene ningún dato de conexión.</string>
@@ -235,7 +239,11 @@
     <string name="error_connection_invalid_host_or_port">El host o puerto proporcionado no es válido.</string>
     <string name="error_connection_invalid_macaroon2">Acceso denegado!\n\nEl macaroon es inválido.</string>
     <string name="error_connection_server_unreachable">Tiempo de espera agotado.\nEl servidor no responde.\n\n- Por favor asegúrate de tener una buena conexión a internet.\n\n- Asegúrese de que el servidor se esté ejecutando y todavia tenga el siguiente IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">No se puede conectar a LND.\n\n- asegúrese que el servicio de LND se esté ejecutando en su servidor.\n\n- asegúrese de que su reenvío de puertos esté activo. (Puerto: %1$s)\n\n- asegúrese de que su certificado sea válido.</string>
+    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
+    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
+    <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
+    <string name="error_connection_unknown">Connection failed.</string>
     <string name="error_connection_tor_unreachable">La conexión a Tor ha fallado.\n Por favor asegúrese que:\n\n- Orbot se está ejecutando\n\n- Orbot está en modo VPN\n\n- Zap está incluida en la lista de apps activas de Orbot.</string>
     <string name="error_connection_wallet_locked">Por favor desbloquee la billetera.</string>
     <string name="error_connection_btcpay_invalid_json">La sintaxis JSON de la configuración del servidor BTCPay no es válida.</string>
@@ -356,4 +364,10 @@
     <string name="identity_explanation">This is your identity on the lightning network!\nOthers can open a channel with you if they scan this QR-Code.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Public</string>
+    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
+    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
+    <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
+    <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
+    <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
+    <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
 </resources>

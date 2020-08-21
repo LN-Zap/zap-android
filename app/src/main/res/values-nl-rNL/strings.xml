@@ -94,6 +94,7 @@
     <string name="payee">Payee</string>
     <string name="open">Open</string>
     <string name="search">Search</string>
+    <string name="confirmations">Confirmations</string>
     <string name="activity_receive">Ontvang</string>
     <string name="activity_send">Betaal</string>
     <string name="activity_connectRemoteNode">Verbind met externe node</string>
@@ -188,6 +189,8 @@
     <string name="settings_btcUnit">Bitcoin-eenheid</string>
     <string name="settings_currency">Tweede Eenheid</string>
     <string name="settings_language">Taal</string>
+    <string name="settings_scan_clipboard">Check clipboard</string>
+    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
     <string name="settings_hapticPin">Haptische PIN-feedback</string>
     <string name="settings_systemLanguage">Systeem Taal</string>
     <string name="settings_manageChannels">Beheer Lightningkanalen</string>
@@ -222,6 +225,7 @@
     <string name="error_paymentRequestExpired">Dit betalingsverzoek is verlopen.</string>
     <string name="error_useTestnetRequest">Je bent verbonden met het TESTNET. Gebruik een TESTNET-adres of betalingsverzoek.</string>
     <string name="error_useMainnetRequest">Je bent verbonden met het MAINNET. Gebruik een MAINNET-adres of betalingsverzoek.</string>
+    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
     <string name="error_cameraPermissionRequired">Om QR-Codes te scannen heeft Zap toestemming nodig om de camera te gebruiken.</string>
     <string name="error_emptyClipboardPayment">Je klembord bevat geen betalingsdata.</string>
     <string name="error_emptyClipboardConnect">Je klembord bevat geen verbindingsdata.</string>
@@ -235,7 +239,11 @@
     <string name="error_connection_invalid_host_or_port">De verstrekte host of poort is ongeldig.</string>
     <string name="error_connection_invalid_macaroon2">Toegang geweigerd!\n\nDe macaroon is ongeldig.</string>
     <string name="error_connection_server_unreachable">Timeout.\nDe server reageert niet.\n\n-Zorg ervoor dat je een goede internetverbinding hebt\n\n- Zorg er voor dat de server draait de nog steeds de volgende IP heeft:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Kan niet verbinden met LND.\n\n- zorg ervoor dat de LND daemon draait op je server.\n\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)\n\n- zorg ervoor dat je certificaat geldig is.</string>
+    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
+    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
+    <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
+    <string name="error_connection_unknown">Connection failed.</string>
     <string name="error_connection_tor_unreachable">Tor-verbinding mislukt.\n Zorg ervoor dat:\n\n- Orbot draait\n\n- Orbot in VPN Mode staat\n\n- Zap in Orbot\'s lijst van geactiveerde apps staat.</string>
     <string name="error_connection_wallet_locked">Ontgrendel de wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON-syntax van de BTCPay-serverconfiguratie is ongeldig.</string>
@@ -356,4 +364,10 @@
     <string name="identity_explanation">This is your identity on the lightning network!\nOthers can open a channel with you if they scan this QR-Code.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Public</string>
+    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
+    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
+    <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
+    <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
+    <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
+    <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
 </resources>
