@@ -601,6 +601,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             public void onError(String error, int duration) {
                 showError(error, duration);
             }
+
+            @Override
+            public void onNoReadableData() {
+                showError(getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
+            }
         });
     }
 
@@ -718,6 +723,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 @Override
                 public void onProceed(String content) {
                     analyzeString(content);
+                }
+
+                @Override
+                public void onError(String error, int duration) {
+                    showError(error, duration);
                 }
             });
         }

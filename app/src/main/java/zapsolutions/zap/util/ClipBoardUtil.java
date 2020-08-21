@@ -127,7 +127,13 @@ public class ClipBoardUtil {
 
             @Override
             public void onError(String error, int duration) {
-                // in case we have an error, we just want to ignore it
+                String errorMessage = context.getString(R.string.clipboard_error_heading) + "\n\n" + error;
+                listener.onError(errorMessage, duration + 1000);
+            }
+
+            @Override
+            public void onNoReadableData() {
+                // in case we have unrecognized data, we just want to ignore it
             }
         });
     }
@@ -150,5 +156,7 @@ public class ClipBoardUtil {
 
     public interface OnClipboardScanProceedListener {
         void onProceed(String content);
+
+        void onError(String error, int duration);
     }
 }

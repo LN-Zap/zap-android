@@ -145,6 +145,11 @@ public class ScanActivity extends BaseScannerActivity {
             public void onError(String error, int duration) {
                 showError(error, duration);
             }
+
+            @Override
+            public void onNoReadableData() {
+                showError(getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
+            }
         });
 
 
