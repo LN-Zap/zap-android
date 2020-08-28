@@ -4,11 +4,9 @@ package zapsolutions.zap.baseClasses;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,18 +16,24 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ResultPoint;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.DefaultDecoderFactory;
+import com.journeyapps.barcodescanner.Size;
 
-import me.dm7.barcodescanner.zbar.BarcodeFormat;
-import me.dm7.barcodescanner.zbar.Result;
-import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.PermissionsUtil;
 import zapsolutions.zap.util.ZapLog;
 
-public abstract class BaseScannerActivity extends BaseAppCompatActivity implements ZBarScannerView.ResultHandler, View.OnClickListener {
+public abstract class BaseScannerActivity extends BaseAppCompatActivity implements View.OnClickListener {
     private static final String LOG_TAG = BaseScannerActivity.class.getName();
-    protected ZBarScannerView mScannerView;
     protected int mHighlightColor;
     protected int mWhiteColor;
     protected ImageView mScannerInstructionsHelp;
@@ -37,71 +41,85 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     private TextView mTvPermissionRequired;
     private Button mButtonPaste;
     private Button mButtonHelp;
-    private Handler mHandler;
 
+    protected DecoratedBarcodeView mQRCodeScannerView;
+    private String mLastText;
+    private long mLastTimeStamp;
+    private boolean mIsFlashlightActive;
+
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if (result.getText() == null || result.getText().isEmpty()) {
+                return;
+            }
+
+            if (result.getText().equals(mLastText)) {
+                if (System.currentTimeMillis() - mLastTimeStamp < 3000) {
+                    // Prevent duplicate scans
+                    return;
+                }
+            }
+
+            mLastText = result.getText();
+            mLastTimeStamp = System.currentTimeMillis();
+            handleCameraResult(result.getText());
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+        }
+    };
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        mHandler = new Handler();
         setContentView(R.layout.activity_qr_code_scanner);
         setupToolbar();
 
-        mScannerView = new ZBarScannerView(this);
-        mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
+        mQRCodeScannerView = findViewById(R.id.barcode_scanner);
+        Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
+        mQRCodeScannerView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
+        mQRCodeScannerView.decodeContinuous(callback);
+        mQRCodeScannerView.setStatusText("");
 
-        // Only respond to QR-Codes
-        ArrayList<BarcodeFormat> formats = new ArrayList<>();
-        formats.add(BarcodeFormat.QRCODE);
-        mScannerView.setFormats(formats);
+        mTvPermissionRequired = findViewById(R.id.scannerPermissionRequired);
 
         // Prepare colors
         mHighlightColor = ContextCompat.getColor(this, R.color.lightningOrange);
         mWhiteColor = ContextCompat.getColor(this, R.color.white);
 
-        // Scanner settings
-        mScannerView.setAspectTolerance(0.5f);
-
-        // Styling the scanner view
-        mScannerView.setSquareViewFinder(true);
-        mScannerView.setLaserEnabled(false);
-        mScannerView.setBorderColor(mHighlightColor);
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int strokeWidth = metrics.densityDpi / 25;
-        mScannerView.setBorderStrokeWidth(strokeWidth);
-        mScannerView.setIsBorderCornerRounded(true);
-
         mButtonPaste = findViewById(R.id.scannerPaste);
         mButtonPaste.setOnClickListener(this);
-
         mButtonHelp = findViewById(R.id.scannerHelp);
         mButtonHelp.setOnClickListener(this);
-
         mBtnFlashlight = findViewById(R.id.scannerFlashButton);
         mBtnFlashlight.setOnClickListener(this);
-
         mScannerInstructionsHelp = findViewById(R.id.scannerInstructionsHelp);
         mScannerInstructionsHelp.setOnClickListener(this);
+
+        // if the device does not have flashlight in its camera,
+        // then remove the switch flashlight button...
+        if (!hasFlash()) {
+            mBtnFlashlight.setVisibility(View.GONE);
+        }
+
+        checkForCameraPermission();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mScannerView.setResultHandler(this);
-        mScannerView.startCamera();
+        mQRCodeScannerView.resume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();
+        mQRCodeScannerView.pause();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mHandler.removeCallbacksAndMessages(null);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -140,18 +158,13 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, show the camera view.
-                    showCameraView();
+                    mTvPermissionRequired.setVisibility(View.GONE);
                 } else {
                     // Permission denied, show required permission message.
                     mTvPermissionRequired.setVisibility(View.VISIBLE);
                 }
             }
         }
-    }
-
-    @Override
-    public void handleResult(Result result) {
-        handleCameraResult(result);
     }
 
     public void setupToolbar() {
@@ -163,35 +176,17 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         }
     }
 
-    protected void showCameraView() {
-        ViewGroup contentFrame = findViewById(R.id.content_frame);
-        contentFrame.addView(mScannerView);
-    }
-
-    public void showCameraWithPermissionRequest() {
+    public void checkForCameraPermission() {
         // Check for camera permission
-        if (PermissionsUtil.hasCameraPermission(this)) {
-            showCameraView();
-        } else {
+        if (!PermissionsUtil.hasCameraPermission(this)) {
             PermissionsUtil.requestCameraPermission(this, true);
         }
     }
 
-    public void handleCameraResult(Result result) {
+    public void handleCameraResult(String result) {
         if (result != null) {
-            ZapLog.v(LOG_TAG, "Scanned content: " + result.getContents());
+            ZapLog.v(LOG_TAG, "Scanned content: " + result);
         }
-
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScannerView.resumeCameraPreview(BaseScannerActivity.this);
-            }
-        }, 2000);
     }
 
     public void onButtonPasteClick() {
@@ -207,17 +202,35 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     }
 
     public void onButtonFlashClick() {
-        if (mScannerView.getFlash()) {
-            mScannerView.setFlash(false);
+        if (mIsFlashlightActive) { //ToDo
+            mIsFlashlightActive = false;
+            mQRCodeScannerView.setTorchOff();
             mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mWhiteColor));
         } else {
-            mScannerView.setFlash(true);
+            mIsFlashlightActive = true;
+            mQRCodeScannerView.setTorchOn();
             mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mHighlightColor));
         }
     }
 
     protected void showButtonHelp() {
         mButtonHelp.setVisibility(View.VISIBLE);
+    }
+
+    protected void setScannerRect(int length) {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int rectLength = (int) metrics.scaledDensity * length;
+        mQRCodeScannerView.getBarcodeView().setFramingRectSize(new Size(rectLength, rectLength));
+    }
+
+    /**
+     * Check if the device's camera has a Flashlight.
+     *
+     * @return true if there is Flashlight, otherwise false.
+     */
+    private boolean hasFlash() {
+        return getApplicationContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 
 }

@@ -20,7 +20,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.HttpClient;
@@ -65,8 +64,7 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
         mAdapter = new LightningNodeRecyclerAdapter(suggestedLightningNodes, this);
         mRecyclerViewPeers.setAdapter(mAdapter);
 
-        showCameraWithPermissionRequest();
-
+        setScannerRect(200);
         getSuggestedPeers();
     }
 
@@ -144,10 +142,10 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
     }
 
     @Override
-    public void handleCameraResult(Result rawResult) {
-        super.handleCameraResult(rawResult);
+    public void handleCameraResult(String result) {
+        super.handleCameraResult(result);
 
-        processUserData(rawResult.getContents());
+        processUserData(result);
     }
 
     private void processUserData(String rawData) {

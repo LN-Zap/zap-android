@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
@@ -47,8 +46,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         }
 
         showButtonHelp();
-
-        showCameraWithPermissionRequest();
     }
 
     @Override
@@ -74,21 +71,9 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     }
 
     @Override
-    public void handleCameraResult(Result rawResult) {
-        super.handleCameraResult(rawResult);
-
-        String qrCodeContent = "";
-        boolean isQrCodeContentValid = false;
-        try {
-            qrCodeContent = rawResult.getContents();
-            isQrCodeContentValid = true;
-        } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_qr_code_result_null), RefConstants.ERROR_DURATION_SHORT);
-        }
-
-        if (isQrCodeContentValid) {
-            verifyDesiredConnection(qrCodeContent);
-        }
+    public void handleCameraResult(String result) {
+        super.handleCameraResult(result);
+        verifyDesiredConnection(result);
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import java.net.URL;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import me.dm7.barcodescanner.zbar.Result;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
 import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.lightning.LightningNodeUri;
@@ -39,8 +38,6 @@ public class ScanActivity extends BaseScannerActivity {
 
         //NFC
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-
-        showCameraWithPermissionRequest();
     }
 
 
@@ -61,10 +58,10 @@ public class ScanActivity extends BaseScannerActivity {
     }
 
     @Override
-    public void handleCameraResult(Result rawResult) {
-        super.handleCameraResult(rawResult);
+    public void handleCameraResult(String result) {
+        super.handleCameraResult(result);
 
-        readData(rawResult.getContents());
+        readData(result);
     }
 
     @Override
