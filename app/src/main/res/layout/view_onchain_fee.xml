@@ -57,11 +57,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingStart="4dp"
-            android:tint="@color/lightningOrange"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_down_24dp" />
+            app:srcCompat="@drawable/ic_arrow_down_24dp"
+            app:tint="@color/lightningOrange" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

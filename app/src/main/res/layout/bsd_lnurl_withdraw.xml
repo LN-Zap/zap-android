@@ -162,8 +162,8 @@
                 android:gravity="center"
                 android:paddingStart="4dp"
                 android:paddingTop="5dp"
-                android:tint="@color/lightningOrange"
-                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
+                app:srcCompat="@drawable/ic_swap_vert_black_24dp"
+                app:tint="@color/lightningOrange" />
         </LinearLayout>
 
         <ImageView
@@ -299,12 +299,12 @@
             android:id="@+id/progressPaymentTypeIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
+            app:tint="@color/white" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -321,11 +321,11 @@
             android:id="@+id/progressFinishedIcon"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:tint="@color/superGreen"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_check_circle_black_60dp" />
+            app:srcCompat="@drawable/ic_check_circle_black_60dp"
+            app:tint="@color/superGreen" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -365,8 +365,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
-                android:tint="@color/white"
-                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/finishedText2"

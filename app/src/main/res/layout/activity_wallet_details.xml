@@ -27,10 +27,10 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_remote_black_24dp"
-                android:tint="@android:color/secondary_text_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/secondary_text_dark" />
 
             <TextView
                 android:id="@+id/walletName"

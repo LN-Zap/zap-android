@@ -126,7 +126,7 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:scaleType="center"
                 android:src="@drawable/ic_help_black_24dp"
-                android:tint="@color/lightningOrange" />
+                app:tint="@color/lightningOrange" />
         </LinearLayout>
 
 

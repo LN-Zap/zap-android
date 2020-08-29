@@ -124,8 +124,8 @@
                     android:id="@+id/lnBtnIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="@color/lightningOrange"
-                    app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+                    app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
+                    app:tint="@color/lightningOrange" />
 
                 <TextView
                     android:id="@+id/lnBtnText"
@@ -193,8 +193,8 @@
                     android:id="@+id/onChainBtnIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="@color/lightningOrange"
-                    app:srcCompat="@drawable/ic_onchain_black_24dp" />
+                    app:srcCompat="@drawable/ic_onchain_black_24dp"
+                    app:tint="@color/lightningOrange" />
 
                 <TextView
                     android:id="@+id/onChainBtnText"
@@ -354,8 +354,8 @@
                 android:gravity="center"
                 android:paddingStart="4dp"
                 android:paddingTop="5dp"
-                android:tint="@color/lightningOrange"
-                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
+                app:srcCompat="@drawable/ic_swap_vert_black_24dp"
+                app:tint="@color/lightningOrange" />
         </LinearLayout>
 
         <!-- If we want to show the maximum amount, we could enable it here

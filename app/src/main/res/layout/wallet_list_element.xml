@@ -31,8 +31,8 @@
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:layout_weight="0"
-            android:tint="@color/lightningOrange"
-            app:srcCompat="@drawable/ic_remote_black_24dp" />
+            app:srcCompat="@drawable/ic_remote_black_24dp"
+            app:tint="@color/lightningOrange" />
 
         <TextView
             android:id="@+id/walletTypeDescription"
@@ -78,8 +78,8 @@
             android:layout_height="24dp"
             android:layout_gravity="end"
             android:layout_weight="0"
-            android:tint="@color/lightningOrange"
-            app:srcCompat="@drawable/ic_check_circle_black_60dp" />
+            app:srcCompat="@drawable/ic_check_circle_black_60dp"
+            app:tint="@color/lightningOrange" />
 
     </LinearLayout>
 

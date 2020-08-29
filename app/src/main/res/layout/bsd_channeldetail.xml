@@ -65,11 +65,11 @@
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:background="@null"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/fundingTxText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/fundingTxText"
-            app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+            app:srcCompat="@drawable/ic_content_copy_black_24dp"
+            app:tint="@color/white" />
 
         <View
             android:id="@+id/spacer2"
@@ -144,11 +144,11 @@
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:background="@null"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/remotePubKeyText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/remotePubKeyText"
-            app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+            app:srcCompat="@drawable/ic_content_copy_black_24dp"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/separator_2"
@@ -336,11 +336,11 @@
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:background="@null"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/closingTxText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/closingTxText"
-                app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+                app:srcCompat="@drawable/ic_content_copy_black_24dp"
+                app:tint="@color/white" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
@@ -395,12 +395,12 @@
             android:id="@+id/closeChannelProgressThunderIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+            app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
+            app:tint="@color/white" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -458,8 +458,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
-                android:tint="@color/white"
-                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp" />
+                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/finishedText2"

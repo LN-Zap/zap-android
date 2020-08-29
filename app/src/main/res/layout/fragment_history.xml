@@ -25,11 +25,11 @@
             android:layout_marginEnd="8dp"
             android:background="?selectableItemBackgroundBorderless"
             android:scaleType="center"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="?attr/homeAsUpIndicator" />
+            app:srcCompat="?attr/homeAsUpIndicator"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/heading"
@@ -66,12 +66,12 @@
             android:layout_marginEnd="8dp"
             android:background="?selectableItemBackgroundBorderless"
             android:scaleType="center"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/listOptions"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_search_24" />
+            app:srcCompat="@drawable/ic_baseline_search_24"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/listOptions"
@@ -81,10 +81,10 @@
             android:background="?selectableItemBackgroundBorderless"
             android:scaleType="center"
             android:src="@drawable/ic_filter_list_black_24dp"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
