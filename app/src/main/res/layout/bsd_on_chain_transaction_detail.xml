@@ -214,11 +214,11 @@
         android:layout_height="20dp"
         android:background="@null"
         android:paddingStart="20dp"
-        android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/transactionID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/transactionID"
-        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+        app:srcCompat="@drawable/ic_content_copy_black_24dp"
+        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/addressLabel"
@@ -252,11 +252,11 @@
         android:layout_height="20dp"
         android:background="@null"
         android:paddingStart="20dp"
-        android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/address"
-        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+        app:srcCompat="@drawable/ic_content_copy_black_24dp"
+        app:tint="@color/white" />
 
     <View
         android:id="@+id/spacer"

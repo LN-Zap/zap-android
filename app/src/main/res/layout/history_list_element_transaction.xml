@@ -37,8 +37,8 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_weight="0"
-                android:tint="@color/lightningOrange"
-                app:srcCompat="@drawable/ic_onchain_black_24dp" />
+                app:srcCompat="@drawable/ic_onchain_black_24dp"
+                app:tint="@color/lightningOrange" />
 
             <TextView
                 android:id="@+id/timeOfDay"

@@ -135,13 +135,13 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
-                    android:tint="@color/lightningOrange"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/bolt_black_filled_24dp" />
+                    app:srcCompat="@drawable/bolt_black_filled_24dp"
+                    app:tint="@color/lightningOrange" />
 
                 <ProgressBar
                     android:id="@+id/remoteBar"

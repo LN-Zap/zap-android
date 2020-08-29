@@ -90,7 +90,6 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                             caInput = new ByteArrayInputStream(certificateBytes);
                             Certificate ca = CertificateFactory.getInstance("X.509").generateCertificate(caInput);
                         } catch (CertificateException e) {
-                            e.printStackTrace();
                             ZapLog.e(LOG_TAG, "certificate validation failed");
                             mError = ERROR_INVALID_CERTIFICATE;
                             return this;
