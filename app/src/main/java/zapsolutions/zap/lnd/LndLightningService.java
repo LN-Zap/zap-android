@@ -37,6 +37,8 @@ public interface LndLightningService {
 
     Single<com.github.lightningnetwork.lnd.lnrpc.GetInfoResponse> getInfo(com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest request);
 
+    Single<com.github.lightningnetwork.lnd.lnrpc.GetRecoveryInfoResponse> getRecoveryInfo(com.github.lightningnetwork.lnd.lnrpc.GetRecoveryInfoRequest request);
+
     Single<com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse> pendingChannels(com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.ListChannelsResponse> listChannels(com.github.lightningnetwork.lnd.lnrpc.ListChannelsRequest request);
