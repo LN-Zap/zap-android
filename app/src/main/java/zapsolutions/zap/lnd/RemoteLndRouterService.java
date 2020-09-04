@@ -36,6 +36,11 @@ public class RemoteLndRouterService implements LndRouterService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.HTLCAttempt> sendToRouteV2(com.github.lightningnetwork.lnd.routerrpc.SendToRouteRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.sendToRouteV2(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.routerrpc.ResetMissionControlResponse> resetMissionControl(com.github.lightningnetwork.lnd.routerrpc.ResetMissionControlRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.resetMissionControl(request, new RemoteLndSingleObserver<>(emitter)));
     }

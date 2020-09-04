@@ -4,6 +4,12 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface LndWalletKitService {
 
+    Single<com.github.lightningnetwork.lnd.walletrpc.ListUnspentResponse> listUnspent(com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.LeaseOutputResponse> leaseOutput(com.github.lightningnetwork.lnd.walletrpc.LeaseOutputRequest request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.ReleaseOutputResponse> releaseOutput(com.github.lightningnetwork.lnd.walletrpc.ReleaseOutputRequest request);
+
     Single<com.github.lightningnetwork.lnd.signrpc.KeyDescriptor> deriveNextKey(com.github.lightningnetwork.lnd.walletrpc.KeyReq request);
 
     Single<com.github.lightningnetwork.lnd.signrpc.KeyDescriptor> deriveKey(com.github.lightningnetwork.lnd.signrpc.KeyLocator request);
@@ -19,4 +25,8 @@ public interface LndWalletKitService {
     Single<com.github.lightningnetwork.lnd.walletrpc.PendingSweepsResponse> pendingSweeps(com.github.lightningnetwork.lnd.walletrpc.PendingSweepsRequest request);
 
     Single<com.github.lightningnetwork.lnd.walletrpc.BumpFeeResponse> bumpFee(com.github.lightningnetwork.lnd.walletrpc.BumpFeeRequest request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.ListSweepsResponse> listSweeps(com.github.lightningnetwork.lnd.walletrpc.ListSweepsRequest request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.LabelTransactionResponse> labelTransaction(com.github.lightningnetwork.lnd.walletrpc.LabelTransactionRequest request);
 }

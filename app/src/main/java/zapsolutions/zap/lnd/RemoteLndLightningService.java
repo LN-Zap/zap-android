@@ -96,6 +96,11 @@ public class RemoteLndLightningService implements LndLightningService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.GetRecoveryInfoResponse> getRecoveryInfo(com.github.lightningnetwork.lnd.lnrpc.GetRecoveryInfoRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getRecoveryInfo(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse> pendingChannels(com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.pendingChannels(request, new RemoteLndSingleObserver<>(emitter)));
     }
