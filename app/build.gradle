@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.jaredsburrows.license'
 
 // Needed for gRPC
 apply plugin: 'com.google.protobuf'
@@ -72,6 +73,20 @@ android {
     }
 }
 
+// Execute this manually
+licenseReport {
+    generateHtmlReport = false
+    generateJsonReport = true
+    copyHtmlReportToAssets = false
+    copyJsonReportToAssets = false
+}
+
+// Copy the licenses file into the res dir if it exists
+copy {
+    from "$buildDir/reports/licenses/licenseReleaseReport.json"
+    into "$projectDir/src/main/res/raw/"
+    rename "licenseReleaseReport.json", "license_report.json"
+}
 
 //  Needed for gRPC
 sourceSets {

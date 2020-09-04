@@ -12,6 +12,9 @@ buildscript {
         // Needed for gRPC
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.13'
 
+        // OSS Licenses
+        classpath 'com.jaredsburrows:gradle-license-plugin:0.8.80'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
