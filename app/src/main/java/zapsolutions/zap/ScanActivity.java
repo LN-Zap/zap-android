@@ -80,13 +80,20 @@ public class ScanActivity extends BaseScannerActivity {
         Therefore we first have to check if it is a LNURL and then hand over to the HomeActivity.
         Executing the rest twice doesn't harm anyone and makes sure the errors are displayed on the scan activity.
          */
-
+        try {
+            URL url = new URL(data);
+            String query = url.getQuery();
+            if (query != null && query.contains("lightning=LNURL1")) {
+                readableDataFound(data);
+                return;
+            }
+        } catch (Exception ignored) {
+        }
         try {
             LnurlDecoder.decode(data);
             readableDataFound(data);
             return;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
 
