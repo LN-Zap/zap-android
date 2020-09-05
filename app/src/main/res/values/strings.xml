@@ -426,4 +426,7 @@
     <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
     <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
     <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
+
+    <string name="third_party_licenses">Third-party licenses</string>
+    <string name="licenses">Licenses</string>
 </resources>

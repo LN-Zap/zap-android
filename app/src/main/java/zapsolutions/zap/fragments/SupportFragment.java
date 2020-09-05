@@ -10,6 +10,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.licenses.LicensesActivity;
 import zapsolutions.zap.util.RefConstants;
 
 
@@ -34,7 +35,7 @@ public class SupportFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 String url = RefConstants.URL_HELP;
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                getActivity().startActivity(browserIntent);
+                startActivity(browserIntent);
                 return true;
             }
         });
@@ -46,7 +47,7 @@ public class SupportFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 String url = RefConstants.URL_ISSUES;
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                getActivity().startActivity(browserIntent);
+                startActivity(browserIntent);
                 return true;
             }
         });
@@ -59,7 +60,7 @@ public class SupportFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 String url = RefConstants.URL_CONTRIBUTE;
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                getActivity().startActivity(browserIntent);
+                startActivity(browserIntent);
                 return true;
             }
         });
@@ -71,7 +72,17 @@ public class SupportFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 String url = RefConstants.URL_PRIVACY;
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                getActivity().startActivity(browserIntent);
+                startActivity(browserIntent);
+                return true;
+            }
+        });
+
+        // Action when clicked on "licenses"
+        final Preference prefLicenses = findPreference("licenses");
+        prefLicenses.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(getActivity(), LicensesActivity.class));
                 return true;
             }
         });
