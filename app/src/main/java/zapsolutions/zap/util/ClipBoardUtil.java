@@ -24,6 +24,7 @@ import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class ClipBoardUtil {
+    private static final String LOG_TAG = ClipBoardUtil.class.getName();
 
     public static void copyToClipboard(Context context, String label, CharSequence data) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
@@ -56,22 +57,32 @@ public class ClipBoardUtil {
         String clipboardContentHash = UtilFunctions.sha256Hash(clipboardContent);
 
         if (PrefsUtil.getPrefs().getString(PrefsUtil.LAST_CLIPBOARD_SCAN, "").equals(clipboardContentHash)) {
+            ZapLog.v(LOG_TAG, "Clipboard with same content was checked before");
             return;
         } else {
             PrefsUtil.edit().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
         }
 
+        ZapLog.v(LOG_TAG, "New Clipboard content found!");
+
         /* We are not allowed to access LNURL links twice.
         Therefore we first have to check if it is a LNURL and then hand over to the listener to perform the action.
         Executing the rest twice doesn't harm anyone.
          */
-
+        try {
+            URL url = new URL(clipboardContent);
+            String query = url.getQuery();
+            if (query != null && query.contains("lightning=LNURL1")) {
+                showProceedQuestion(R.string.clipboard_scan_lnurl, context, listener);
+                return;
+            }
+        } catch (Exception ignored) {
+        }
         try {
             LnurlDecoder.decode(clipboardContent);
             showProceedQuestion(R.string.clipboard_scan_lnurl, context, listener);
             return;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
         BitcoinStringAnalyzer.analyze(context, compositeDisposable, clipboardContent, new BitcoinStringAnalyzer.OnDataDecodedListener() {

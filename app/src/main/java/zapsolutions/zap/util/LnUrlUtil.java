@@ -23,6 +23,17 @@ public class LnUrlUtil {
     private static final String LOG_TAG = LnUrlUtil.class.getName();
 
     public static void readLnUrl(Context ctx, String data, OnLnUrlReadListener listener) {
+        // Extract fallback LNURL from URL if one is present
+        try {
+            URL url = new URL(data);
+            String query = url.getQuery();
+            if (query != null && query.contains("lightning=LNURL1")) {
+                data = UtilFunctions.getQueryParam(url, "lightning");
+            }
+        } catch (MalformedURLException ignored) {
+        }
+
+        // Check the full data or the extracted LNURL from above to see if it is a valid LNURL
         try {
             String decodedLnUrl = LnurlDecoder.decode(data);
             ZapLog.v(LOG_TAG, "Decoded LNURL: " + decodedLnUrl);
