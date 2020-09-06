@@ -1,0 +1,19 @@
+[
+  {
+    "project": "Gradle License Plugin",
+    "description": null,
+    "version": "0.8.80",
+    "developers": [
+      "Jared Burrows"
+    ],
+    "url": "https://github.com/jaredsburrows/gradle-license-plugin",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.jaredsburrows:gradle-license-plugin:0.8.80"
+  }
+]

@@ -30,5 +30,10 @@
         android:title="@string/privacy"
         app:iconSpaceReserved="false" />
 
+    <Preference
+        android:key="licenses"
+        android:title="@string/third_party_licenses"
+        app:iconSpaceReserved="false" />
+
 
 </PreferenceScreen>

@@ -115,13 +115,20 @@
             android:name=".IdentityActivity"
             android:label="@string/activity_identity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeWithActionBar"/>
+            android:theme="@style/AppThemeWithActionBar" />
         <activity
             android:name="zapsolutions.zap.walletManagement.WalletDetailsActivity"
             android:label="@string/activity_wallet_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
-        <meta-data android:name="android.nfc.disable_beam_default"
+        <activity
+            android:name="zapsolutions.zap.licenses.LicensesActivity"
+            android:label="@string/third_party_licenses"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+
+        <meta-data
+            android:name="android.nfc.disable_beam_default"
             android:value="true" />
     </application>
 
