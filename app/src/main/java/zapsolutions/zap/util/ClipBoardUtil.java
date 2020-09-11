@@ -32,6 +32,10 @@ public class ClipBoardUtil {
             ClipData clip = ClipData.newPlainText(label, data);
             clipboard.setPrimaryClip(clip);
             Toast.makeText(context, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+
+            // Make sure the data just copied to clipboard does not trigger a clipboard scan popup
+            String clipboardContentHash = UtilFunctions.sha256Hash(data.toString());
+            PrefsUtil.edit().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
         }
     }
 
