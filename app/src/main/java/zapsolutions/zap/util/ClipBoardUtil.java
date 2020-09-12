@@ -73,20 +73,9 @@ public class ClipBoardUtil {
         Therefore we first have to check if it is a LNURL and then hand over to the listener to perform the action.
         Executing the rest twice doesn't harm anyone.
          */
-        try {
-            URL url = new URL(clipboardContent);
-            String query = url.getQuery();
-            if (query != null && query.contains("lightning=LNURL1")) {
-                showProceedQuestion(R.string.clipboard_scan_lnurl, context, listener);
-                return;
-            }
-        } catch (Exception ignored) {
-        }
-        try {
-            LnurlDecoder.decode(clipboardContent);
+        if (BitcoinStringAnalyzer.isLnUrl(clipboardContent)) {
             showProceedQuestion(R.string.clipboard_scan_lnurl, context, listener);
             return;
-        } catch (Exception ignored) {
         }
 
         BitcoinStringAnalyzer.analyze(context, compositeDisposable, clipboardContent, new BitcoinStringAnalyzer.OnDataDecodedListener() {
