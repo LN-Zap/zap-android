@@ -21,6 +21,23 @@ import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 
 public class BitcoinStringAnalyzer {
 
+    public static boolean isLnUrl(String inputString){
+        try {
+            URL url = new URL(inputString);
+            String query = url.getQuery();
+            if (query != null && query.contains("lightning=LNURL1")) {
+                return true;
+            }
+        } catch (Exception ignored) {
+        }
+        try {
+            LnurlDecoder.decode(inputString);
+            return true;
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
     public static void analyze(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
         checkIfLnUrl(ctx, compositeDisposable, inputString, listener);
     }

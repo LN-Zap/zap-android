@@ -21,7 +21,6 @@ import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 import zapsolutions.zap.util.BitcoinStringAnalyzer;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
-import zapsolutions.zap.util.LnurlDecoder;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.RefConstants;
 
@@ -80,22 +79,10 @@ public class ScanActivity extends BaseScannerActivity {
         Therefore we first have to check if it is a LNURL and then hand over to the HomeActivity.
         Executing the rest twice doesn't harm anyone and makes sure the errors are displayed on the scan activity.
          */
-        try {
-            URL url = new URL(data);
-            String query = url.getQuery();
-            if (query != null && query.contains("lightning=LNURL1")) {
-                readableDataFound(data);
-                return;
-            }
-        } catch (Exception ignored) {
-        }
-        try {
-            LnurlDecoder.decode(data);
+        if (BitcoinStringAnalyzer.isLnUrl(data)) {
             readableDataFound(data);
             return;
-        } catch (Exception ignored) {
         }
-
 
         BitcoinStringAnalyzer.analyze(ScanActivity.this, compositeDisposable, data, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
@@ -110,27 +97,27 @@ public class ScanActivity extends BaseScannerActivity {
 
             @Override
             public void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
-                readableDataFound(data);
+                // never reached
             }
 
             @Override
             public void onValidLnUrlChannel(LnUrlChannelResponse channelResponse) {
-                readableDataFound(data);
+                // never reached
             }
 
             @Override
             public void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse) {
-                readableDataFound(data);
+                // never reached
             }
 
             @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
-                readableDataFound(data);
+                // never reached
             }
 
             @Override
             public void onValidLnUrlAuth(URL url) {
-                readableDataFound(data);
+                // never reached
             }
 
             @Override
