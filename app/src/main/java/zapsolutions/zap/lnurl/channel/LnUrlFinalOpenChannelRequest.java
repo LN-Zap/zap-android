@@ -39,9 +39,9 @@ public class LnUrlFinalOpenChannelRequest {
     }
 
     public String requestAsString() {
-
         String isPrivate = mIsPrivate ? "1" : "0";
-        return mCallback + "?k1=" + mK1 + "&remoteid=" + mRemoteId + "&private=" + isPrivate;
+        String paramStart = mCallback.contains("?") ? "&" : "?";
+        return mCallback + paramStart + "k1=" + mK1 + "&remoteid=" + mRemoteId + "&private=" + isPrivate;
     }
 
 
