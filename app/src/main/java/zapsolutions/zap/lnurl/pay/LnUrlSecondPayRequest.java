@@ -37,8 +37,9 @@ public class LnUrlSecondPayRequest {
     }
 
     public String requestAsString() {
+        String paramStart = mCallback.contains("?") ? "&" : "?";
         if (mFromNodes == null) {
-            return mCallback + "?amount=" + mAmount + "&nonce=" + generateNonce();
+            return mCallback + paramStart + "amount=" + mAmount + "&nonce=" + generateNonce();
         } else {
             String fromNodesString = "";
             for (int i = 0; i < mFromNodes.length; i++) {
@@ -48,7 +49,7 @@ public class LnUrlSecondPayRequest {
                     fromNodesString = fromNodesString + mFromNodes[i] + ",";
                 }
             }
-            return mCallback + "?amount=" + mAmount + "&nonce=" + generateNonce() + "&fromnodes=" + fromNodesString;
+            return mCallback + paramStart + "amount=" + mAmount + "&nonce=" + generateNonce() + "&fromnodes=" + fromNodesString;
         }
     }
 
