@@ -156,7 +156,7 @@
     <string name="setup_connect_remote_button">Conectar ao nó remoto</string>
     <string name="demo_setupWalletBtn">Configurar carteira</string>
     <string name="demo_setupWalletFirst">Você precisa primeiro configurar uma carteira.</string>
-    <string name="send_lightningPayment">Enviar pagamento pela Lightning</string>
+    <string name="send_lightningPayment">Enviar pagamento pela rede Lightning</string>
     <string name="send_onChainPayment">Enviar pagamento pela rede Bitcoin</string>
     <string name="send_sendPayment">Enviar pagamento</string>
     <string name="send_success">Pagamento\nbem sucedido</string>
