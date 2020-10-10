@@ -152,7 +152,7 @@
     <string name="setup_connect_heading">Como você deseja usar a ZAP?</string>
     <string name="setup_connect_local_description">Criar uma carteira neste aparelho.</string>
     <string name="setup_connect_local_button">Criar carteira</string>
-    <string name="setup_connect_remote_description">Controle se nó remotamente.</string>
+    <string name="setup_connect_remote_description">Controle seu nó remotamente.</string>
     <string name="setup_connect_remote_button">Conectar ao nó remoto</string>
     <string name="demo_setupWalletBtn">Configurar carteira</string>
     <string name="demo_setupWalletFirst">Você precisa primeiro configurar uma carteira.</string>
