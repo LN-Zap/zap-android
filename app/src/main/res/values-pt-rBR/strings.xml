@@ -163,7 +163,7 @@
     <string name="send_fail">Pagamento\nfalhou</string>
     <string name="receive_generateRequest">Cobrar</string>
     <string name="receive_generateRequest_failed">Geração de cobrança falhou.</string>
-    <string name="receive_lightning_request">Cobrança via Lightning</string>
+    <string name="receive_lightning_request">Cobrança via rede Lightning</string>
     <string name="receive_on_chain_request">Cobrança via rede Bitcoin</string>
     <string name="receive_noActiveChannels">Para poder receber Bitcoin pela rede Lightning, você precisa primeiro abrir canais.</string>
     <string name="receive_noIncomeBalance">Para poder receber Bitcoin pela Lightning Network, pelo menos um dos seus canais precisa ter fundos no lado da contraparte.\n\nPara conseguir isso, você precisa gastar algo na Lightning Network primeiro.\n\nNa área de gerenciar canais, você pode sempre ver o quanto é capaz de enviar ou receber pela Lightning Network.</string>
