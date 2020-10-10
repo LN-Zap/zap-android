@@ -163,8 +163,8 @@
     <string name="send_fail">Pagamento\nfalhou</string>
     <string name="receive_generateRequest">Cobrar</string>
     <string name="receive_generateRequest_failed">Geração de cobrança falhou.</string>
-    <string name="receive_lightning_request">Pedido via Lightning</string>
-    <string name="receive_on_chain_request">Pedido via rede Bitcoin</string>
+    <string name="receive_lightning_request">Cobrança via Lightning</string>
+    <string name="receive_on_chain_request">Cobrança via rede Bitcoin</string>
     <string name="receive_noActiveChannels">Para poder receber Bitcoin pela rede Lightning, você precisa primeiro abrir canais.</string>
     <string name="receive_noIncomeBalance">Para poder receber Bitcoin pela Lightning Network, pelo menos um dos seus canais precisa ter fundos no lado da contraparte.\n\nPara conseguir isso, você precisa gastar algo na Lightning Network primeiro.\n\nNa área de gerenciar canais, você pode sempre ver o quanto é capaz de enviar ou receber pela Lightning Network.</string>
     <string name="receive_requestFullfilled">Cobrança\npaga</string>
@@ -222,7 +222,7 @@
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
     <string name="error_notAPaymentRequest">Invalid payment information.\n\nPlease use a Bitcoin address or Lightning payment request to initiate a payment.</string>
-    <string name="error_paymentRequestExpired">Este pedido de pagamento expirou.</string>
+    <string name="error_paymentRequestExpired">Esta cobrança de pagamento expirou.</string>
     <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
     <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>
     <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
