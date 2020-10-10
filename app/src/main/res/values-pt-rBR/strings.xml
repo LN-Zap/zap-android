@@ -166,7 +166,7 @@
     <string name="receive_lightning_request">Cobrança via rede Lightning</string>
     <string name="receive_on_chain_request">Cobrança via rede Bitcoin</string>
     <string name="receive_noActiveChannels">Para poder receber Bitcoin pela rede Lightning, você precisa primeiro abrir canais.</string>
-    <string name="receive_noIncomeBalance">Para poder receber Bitcoin pela Lightning Network, pelo menos um dos seus canais precisa ter fundos no lado da contraparte.\n\nPara conseguir isso, você precisa gastar algo na Lightning Network primeiro.\n\nNa área de gerenciar canais, você pode sempre ver o quanto é capaz de enviar ou receber pela Lightning Network.</string>
+    <string name="receive_noIncomeBalance">Para poder receber Bitcoin pela rede Lightning, pelo menos um dos seus canais precisa ter fundos no lado da contraparte.\n\nPara conseguir isso, você precisa gastar algo na rede Lightning primeiro.\n\nNa área de gerenciar canais, você pode sempre ver o quanto é capaz de enviar ou receber pela rede Lightning.</string>
     <string name="receive_requestFullfilled">Cobrança\npaga</string>
     <string name="guardian_doNotShowAgain">Não mostrar novamente.</string>
     <string name="guardian_Title">Atenção</string>
