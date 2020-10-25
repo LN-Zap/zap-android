@@ -205,6 +205,7 @@
     <string name="guardian_notReadyForMainnet">You are on MAINNET with real Bitcoin!\nZap Android is in early development phase. You might lose funds!\n\nIf you don\'t want to take that risk, switch to testnet in the meantime.</string>
     <string name="guardian_remoteConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
     <string name="guardian_blockExplorer">By looking up information with a Block Explorer your IP-Address gets exposed. If you want to increase your anonymity, you should either not use it or go to the settings and choose a Block Explorer that supports Tor.</string>
+    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
 
 
     <string name="settings_category_general">General</string>

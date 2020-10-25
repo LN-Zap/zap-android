@@ -73,6 +73,7 @@ import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.UriUtil;
 import zapsolutions.zap.util.UserGuardian;
+import zapsolutions.zap.util.Version;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 import zapsolutions.zap.walletManagement.ManageWalletsActivity;
@@ -439,6 +440,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         // We managed to establish a connection to LND.
         // Now we can start to fetch all information needed from LND
         App.getAppContext().connectionToLNDEstablished = true;
+
+        // Warn the user if an old LND version is used.
+        if (Wallet.getInstance().getLNDVersion().compareTo(new Version("0.11"))<0) {
+            new UserGuardian(this).securityOldLndVersion("v0.11.0-beta");
+        }
 
         // Fetch the transaction history
         Wallet.getInstance().fetchLNDTransactionHistory();
