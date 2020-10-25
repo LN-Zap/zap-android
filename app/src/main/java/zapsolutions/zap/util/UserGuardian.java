@@ -32,6 +32,7 @@ public class UserGuardian {
     private static final String DIALOG_MAINNET_NOT_READY = "guardianMainnetNotReady";
     private static final String DIALOG_REMOTE_CONNECT = "guardianRemoteConnect";
     private static final String DIALOG_BLOCK_EXPLORER = "guardianBlockExplorer";
+    private static final String DIALOG_OLD_LND_VERSION = "guardianOldLndVersion";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -66,6 +67,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_MAINNET_NOT_READY, true)
                 .putBoolean(DIALOG_REMOTE_CONNECT, true)
                 .putBoolean(DIALOG_BLOCK_EXPLORER, true)
+                .putBoolean(DIALOG_OLD_LND_VERSION, true)
                 .apply();
     }
 
@@ -192,6 +194,17 @@ public class UserGuardian {
         mCurrentDialogName = DIALOG_REMOTE_CONNECT;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         String message = mContext.getResources().getString(R.string.guardian_remoteConnect, host);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user about using an old LND version.
+     */
+    public void securityOldLndVersion(String versionName) {
+        mCurrentDialogName = DIALOG_OLD_LND_VERSION;
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_oldLndVersion_remote, versionName);
         adb.setMessage(message);
         showGuardianDialog(adb);
     }
