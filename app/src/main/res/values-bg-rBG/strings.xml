@@ -94,7 +94,7 @@
     <string name="payee">Получател</string>
     <string name="open">Отвори</string>
     <string name="search">Търси</string>
-    <string name="confirmations">Confirmations</string>
+    <string name="confirmations">Потвърждения</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -182,6 +182,7 @@
     <string name="guardian_notReadyForMainnet">Вие сте на MAINNET с истински Биткойн!\nZap Android е в ранна фаза на разработка. Може да загубите средства!\n\n Ако не искате да поемете този риск, превключете на testnet междувременно.</string>
     <string name="guardian_remoteConnect">Сигурни ли сте, че искате да се свържете с\n\n%1$s\n\nМоля проверете адреса внимателно.</string>
     <string name="guardian_blockExplorer">Като преглеждате информация с Block Explorer, вашият IP адрес бива изложен. Ако желаете да увеличите анонимността си, не използвайте тази опция или отидите в настройки и изберете Block Explorer, който поддържа Tor.</string>
+    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
     <string name="settings_category_general">Общи</string>
     <string name="settings_category_security">Сигурност</string>
     <string name="settings_category_help">Помощ</string>
@@ -189,8 +190,8 @@
     <string name="settings_btcUnit">Биткойн единица</string>
     <string name="settings_currency">Вторична единица</string>
     <string name="settings_language">Език</string>
-    <string name="settings_scan_clipboard">Check clipboard</string>
-    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
+    <string name="settings_scan_clipboard">Проверка на клипборда</string>
+    <string name="settings_scan_clipboard_summary">Автоматично проверява клипборда за данни, които Zap може да използва.</string>
     <string name="settings_hapticPin">Осезаема ПИН обратна връзка</string>
     <string name="settings_systemLanguage">Системен Език</string>
     <string name="settings_manageChannels">Управление на lightning канали</string>
@@ -225,7 +226,7 @@
     <string name="error_paymentRequestExpired">Тази заявка за плащане е изтекла.</string>
     <string name="error_useTestnetRequest">Свързани сте с TESTNET. Моля използвайте TESTNET адреси или заявки за плащания.</string>
     <string name="error_useMainnetRequest">Свързани сте с MAINNET. Моля използвайте MAINNET адреси или заявки за плащания.</string>
-    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
+    <string name="error_useRegtestRequest">Свързани сте с REGTEST. Моля използвайте REGTEST адреси или заявки за плащания.</string>
     <string name="error_cameraPermissionRequired">За да сканирате QR-кодове трябва да разрешите на Zap да използва камерата.</string>
     <string name="error_emptyClipboardPayment">Клипбордът Ви не съдържа никакви данни за плащания.</string>
     <string name="error_emptyClipboardConnect">Клипбордът Ви не съдържа никакви данни за свързване.</string>
@@ -239,11 +240,11 @@
     <string name="error_connection_invalid_host_or_port">Избраният хост или порт е невалиден.</string>
     <string name="error_connection_invalid_macaroon2">Достъп отказан!\n\nMacaroon-ът е невалиден.</string>
     <string name="error_connection_server_unreachable">Таймаут.\nСървърът не отговаря.\n\n- Моля уверете се, че имате добра Интернет връзка.\n\n- Моля уверете се, че сървърът работи и все още има следното IP:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
-    <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
-    <string name="error_connection_unknown">Connection failed.</string>
+    <string name="error_connection_host_verification_failed">Верификацията на hostname неуспешна.\n\nHostname-ът на връзката Ви не съвпада с този на сертификата.\n\n Може да се наложи да пресъздадете сертификата си. Уверете се, че hostname-ът е добавен в lnd.conf като tlsextradomain, преди да го направите.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Хостът (%1$s) не може да бъде намерен.\n\nМоля променете настройките за връзка на портфейла си ако нодът Ви вече работи под нов адрес или hostname.</string>
+    <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.\n\n- Уверете се, че LND deamon-ът работи на сървъра Ви.\n\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)</string>
+    <string name="error_connection_network_unreachable">Неуспешно свързване с хоста.\n\nМоля уверете се, че имате връзка С Интернет.</string>
+    <string name="error_connection_unknown">Връзката неуспешна.</string>
     <string name="error_connection_tor_unreachable">Връзката с Tor неуспешна.\n Моля, уверете се, че:\n\n- Orbot работи\n\n- Orbot е във VPN режим\n\n- Zap е в списъка с активирани приложения на Orbot.</string>
     <string name="error_connection_wallet_locked">Моля отключете портфейла.</string>
     <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
@@ -364,10 +365,12 @@
     <string name="identity_explanation">Това е идентичността Ви на lightning network-а.\nДруги могат да отворят канал с Вас ако сканират този QR-код.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Публичен</string>
-    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
-    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
-    <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
-    <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
-    <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
-    <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
+    <string name="regtest_blockexplorer_unavailable">Block explorer-ите не са налични в REGTEST режим.</string>
+    <string name="clipboard_error_heading">Данни в клипборда бяха намерени, но са невалидни:</string>
+    <string name="clipboard_scan_payment">Клипбордът Ви съдържа информация за плащане. Искате ли да инициирате такова?</string>
+    <string name="clipboard_scan_lnurl">Кипбордът Ви съдържа LNURL данни. Искате ли да ги използвате?</string>
+    <string name="clipboard_scan_node_pubkey">Клипбордът Ви съдържа публичен ключ на нод. Искате ли да отворите канал?</string>
+    <string name="clipboard_scan_connect">Клипбордът Ви съдържа данни за свързване. Искате ли да добавите нов портфейл?</string>
+    <string name="third_party_licenses">Third-party licenses</string>
+    <string name="licenses">Licenses</string>
 </resources>

@@ -182,6 +182,7 @@
     <string name="guardian_notReadyForMainnet">Du bist mit dem MAINNET verbunden!\nZap Android is noch in einer frühen Entwicklungsphase. Du könntest echtes Geld verlieren!\n\nFalls du dieses Risiko nicht auf dich nehmen willst, wechsle solange ins Testnet.</string>
     <string name="guardian_remoteConnect">Willst du eine Verbindung mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
     <string name="guardian_blockExplorer">Durch die Verwendung eines Block-Explorers wird deine IP-Adresse für die Betreiber sichtbar. Wenn du deine Anonymität erhöhen möchtest, solltest du dieses Funktion entweder nicht nutzen, oder in den Einstellungen einen Block-Explorer auswählen, der Tor unterstütz.</string>
+    <string name="guardian_oldLndVersion_remote">Bitte aktualisieren.\n\nDie Node mit der du verbunden bist, führt eine alte Version von LND aus. Versionen, die älter sind als %1$s, werden nicht mehr aktiv unterstützt.</string>
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_security">Sicherheit</string>
     <string name="settings_category_help">Hilfe</string>
@@ -370,4 +371,6 @@
     <string name="clipboard_scan_lnurl">Die Zwischenablage enthält LNURL Daten. Möchtest du sie verwenden?</string>
     <string name="clipboard_scan_node_pubkey">Die Zwischenablage enthält den Schlüssel eines anderen Knotens. Möchtest du einen Kanal öffnen?</string>
     <string name="clipboard_scan_connect">Die Zwischenablage enthält Verbindungsinformationen. Möchtest du eine neue Wallet hinzufügen?</string>
+    <string name="third_party_licenses">Drittanbieter-Lizenzen</string>
+    <string name="licenses">Lizenzen</string>
 </resources>

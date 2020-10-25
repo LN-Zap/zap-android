@@ -182,6 +182,7 @@
     <string name="guardian_notReadyForMainnet">Vous êtes sur le réseau Mainnet, avec de vrais bitcoin !\nZap Android est en phase de développement précoce, vous risquez de perdre des fonds !\n\nSi vous ne souhaitez pas prendre ce risque, basculez sur le réseau Testnet à la place.</string>
     <string name="guardian_remoteConnect">Êtes-vous sûr de vouloir vous connecter à \n\n%1$s\n\nVeuillez vérifier cet hôte avec prudence.</string>
     <string name="guardian_blockExplorer">En consultant des informations sur un explorateur de blocs, votre adresse IP est dévoilée. Si vous souhaitez préserver votre anonymat, vous ne devriez par en utiliser un, ou en utiliser un qui prend en charge Tor.</string>
+    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
     <string name="settings_category_general">Réglages généraux</string>
     <string name="settings_category_security">Sécurité</string>
     <string name="settings_category_help">Aide</string>
@@ -370,4 +371,6 @@
     <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
     <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
     <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
+    <string name="third_party_licenses">Third-party licenses</string>
+    <string name="licenses">Licenses</string>
 </resources>

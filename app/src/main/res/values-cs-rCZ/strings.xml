@@ -94,7 +94,7 @@
     <string name="payee">Příjemce</string>
     <string name="open">Otevřít</string>
     <string name="search">Hledat</string>
-    <string name="confirmations">Confirmations</string>
+    <string name="confirmations">Potvrzení</string>
     <string name="activity_receive">Příjmout</string>
     <string name="activity_send">Zaplatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
@@ -182,6 +182,7 @@
     <string name="guardian_notReadyForMainnet">Jste na MAINNETu se skutečnými bitcoiny!\nZap Android je v počáteční fázi vývoje. Můžete ztratit finanční prostředky!\n\nPokud toto riziko nechcete podstoupit, mezitím přepněte na testovací síť.</string>
     <string name="guardian_remoteConnect">Opravdu se chcete připojit k \n\n%1$s\n\nProsím pečlivě zkontrolujte název hostitele.</string>
     <string name="guardian_blockExplorer">Vyhledáním informací pomocí aplikace Block Explorer se vaše IP adresa odhalí. Pokud chcete zvýšit anonymitu, neměli byste ji používat, nebo přejděte na nastavení a vyberte Průzkumník bloků, který podporuje Tor.</string>
+    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
     <string name="settings_category_general">Obecné</string>
     <string name="settings_category_security">Zabezpečení</string>
     <string name="settings_category_help">Pomoc</string>
@@ -189,8 +190,8 @@
     <string name="settings_btcUnit">Bitcoin jednotka</string>
     <string name="settings_currency">Sekundární jednotka</string>
     <string name="settings_language">Jazyk</string>
-    <string name="settings_scan_clipboard">Check clipboard</string>
-    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
+    <string name="settings_scan_clipboard">Zkontrolovat schránku</string>
+    <string name="settings_scan_clipboard_summary">Automaticky zkontrolovat schránku na data, které dokáže Zap zpracovat.</string>
     <string name="settings_hapticPin">Hmatová zpětná vazba PIN</string>
     <string name="settings_systemLanguage">Systémový jazyk</string>
     <string name="settings_manageChannels">Správa Lightning kanálů</string>
@@ -225,7 +226,7 @@
     <string name="error_paymentRequestExpired">Tato platební žádost vypršela.</string>
     <string name="error_useTestnetRequest">Jste připojeni k TESTNETu. Použijte adresy nebo žádosti o platbu TESTNETu.</string>
     <string name="error_useMainnetRequest">Jste připojeni k MAINNETu. Použijte adresy nebo žádosti o platbu MAINNETu.</string>
-    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
+    <string name="error_useRegtestRequest">Jste připojeni k síti REGTEST. Použijte REGTEST adresy nebo žádosti o platbu.</string>
     <string name="error_cameraPermissionRequired">Chcete-li skenovat QR-kódy, musíte Zapu povolit používání kamery.</string>
     <string name="error_emptyClipboardPayment">Schránka neobsahuje žádné platební údaje.</string>
     <string name="error_emptyClipboardConnect">Schránka neobsahuje žádná data připojení.</string>
@@ -239,11 +240,11 @@
     <string name="error_connection_invalid_host_or_port">Poskytovaný host nebo port je neplatný.</string>
     <string name="error_connection_invalid_macaroon2">Přístup byl odepřen! \n\nMacaroon je neplatný.</string>
     <string name="error_connection_server_unreachable">Čas vypršel.\nServer neodpovídá.\n\n- Ujistěte se, že máte dobré připojení k internetu\n\n- Ujistěte se, že server běží a má stále následující IP:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
-    <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
-    <string name="error_connection_unknown">Connection failed.</string>
+    <string name="error_connection_host_verification_failed">Ověření názvu hostitele se nezdařilo.\n \nNázev hostitele vašeho připojení se neshoduje s názvem hostitele uvedeným v certifikátu.\n\nMožná budete muset znovu vytvořit svůj certifikát. Před opětovným vytvořením se ujistěte, že je název hostitele přidán do lnd.conf jako tlsextradomain.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Hostitele (%1$s) nelze rozeznat. \n\nAktualizujte nastavení připojení k peněžence, pokud je nyní váš node dosažitelný pod jinou adresou nebo jiným jménem hostitele.</string>
+    <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.\n\n- ujistěte se, že na vašem serveru běží démon LND.\n\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
+    <string name="error_connection_network_unreachable">Nelze se dostat k hostiteli.\n\nZkontrolujte, zda jste připojení k internetu.</string>
+    <string name="error_connection_unknown">Připojení se nezdařilo.</string>
     <string name="error_connection_tor_unreachable">Tor připojení se nezdařilo.\n Ujistěte se, že:\n\n- Orbot běží\n\n- Orbot je v režimu VPN\n\n- Zap je v seznamu aktivovaných aplikací Orbotu.</string>
     <string name="error_connection_wallet_locked">Odemkněte prosím peněženku.</string>
     <string name="error_connection_btcpay_invalid_json">Syntaxe JSON konfiguračního souboru BTCPay Serveru je neplatná.</string>
@@ -376,10 +377,12 @@
     <string name="identity_explanation">Toto je vaše identita v lightning síti!\nOstatní s vámo mohou otevřít kanál, pokud naskenují tento QR kód.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Veřejné</string>
-    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
-    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
-    <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
-    <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
-    <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
-    <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
+    <string name="regtest_blockexplorer_unavailable">V režimu REGTEST nejsou průzkumníci bloků k dispozici.</string>
+    <string name="clipboard_error_heading">Data schránky byla nalezena, ale jsou neplatná:</string>
+    <string name="clipboard_scan_payment">Schránka obsahuje informace o platbě. Chcete provést platbu?</string>
+    <string name="clipboard_scan_lnurl">Schránka obsahuje data LNURL. Chcete ji použít?</string>
+    <string name="clipboard_scan_node_pubkey">Schránka obsahuje veřejný klíč uzlu. Chcete otevřít kanál?</string>
+    <string name="clipboard_scan_connect">Schránka obsahuje data připojení. Chcete přidat novou peněženku?</string>
+    <string name="third_party_licenses">Third-party licenses</string>
+    <string name="licenses">Licenses</string>
 </resources>
