@@ -159,15 +159,15 @@
     <string name="send_lightningPayment">Enviar pagamento pela rede Lightning</string>
     <string name="send_onChainPayment">Enviar pagamento pela rede Bitcoin</string>
     <string name="send_sendPayment">Enviar pagamento</string>
-    <string name="send_success">Pagamento\nbem sucedido</string>
+    <string name="send_success">Pagamento\nrealizado com sucesso</string>
     <string name="send_fail">Pagamento\nfalhou</string>
-    <string name="receive_generateRequest">Cobrar</string>
-    <string name="receive_generateRequest_failed">Geração de cobrança falhou.</string>
-    <string name="receive_lightning_request">Cobrança via rede Lightning</string>
-    <string name="receive_on_chain_request">Cobrança via rede Bitcoin</string>
+    <string name="receive_generateRequest">Solicitar</string>
+    <string name="receive_generateRequest_failed">Falha ao gerar solicitação de pagamento.</string>
+    <string name="receive_lightning_request">Solicitação via rede Lightning</string>
+    <string name="receive_on_chain_request">Solicitação via rede Bitcoin</string>
     <string name="receive_noActiveChannels">Para poder receber Bitcoin pela rede Lightning, você precisa primeiro abrir canais.</string>
     <string name="receive_noIncomeBalance">Para poder receber Bitcoin pela rede Lightning, pelo menos um dos seus canais precisa ter fundos no lado da contraparte.\n\nPara conseguir isso, você precisa gastar algo na rede Lightning primeiro.\n\nNa área de gerenciar canais, você pode sempre ver o quanto é capaz de enviar ou receber pela rede Lightning.</string>
-    <string name="receive_requestFullfilled">Cobrança\npaga</string>
+    <string name="receive_requestFullfilled">Pagamento\nrecebido</string>
     <string name="guardian_doNotShowAgain">Não mostrar novamente.</string>
     <string name="guardian_Title">Atenção</string>
     <string name="guardian_reset">Todos os avisos de segurança são ativados novamente.</string>
@@ -223,13 +223,13 @@
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
     <string name="error_notAPaymentRequest">Invalid payment information.\n\nPlease use a Bitcoin address or Lightning payment request to initiate a payment.</string>
-    <string name="error_paymentRequestExpired">Esta cobrança de pagamento expirou.</string>
+    <string name="error_paymentRequestExpired">Esta solicitação de pagamento expirou.</string>
     <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
     <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>
     <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
     <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
-    <string name="error_emptyClipboardPayment">Sua área de transferência não contém nenhum dado de pagamento.</string>
-    <string name="error_emptyClipboardConnect">Sua área de transferência não contém nenhum dado de conexão.</string>
+    <string name="error_emptyClipboardPayment">Sua área de transferência não contém dados de pagamento.</string>
+    <string name="error_emptyClipboardConnect">Sua área de transferência não contém dados de conexão.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
     <string name="error_connection_unsupported_format">Unsupported connection format.\nPor favor, use um dos seguintes formatos:\n\n- String Lndconnect (lndconnect://...)\n- Conexão de BtcPay Server (config=...)\n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
@@ -244,7 +244,7 @@
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
-    <string name="error_connection_unknown">Connection failed.</string>
+    <string name="error_connection_unknown">Falha na conexão.</string>
     <string name="error_connection_tor_unreachable">Falha na conexão do Tor.\n Por favor, certifique-se de que:\n\n- Orbot esteja sendo executado\n\n- Orbot esteja no modo VPN\n\n- O Zap está na lista de aplicativos ativados do Orbot.</string>
     <string name="error_connection_wallet_locked">Desbloqueie a carteira.</string>
     <string name="error_connection_btcpay_invalid_json">A sintaxe JSON da configuração do servidor BTCPay é inválida.</string>
@@ -308,7 +308,7 @@
     <string name="biometricPrompt_title">Biometric Authentication</string>
     <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
     <string name="invoice_detail">Invoice Detail</string>
-    <string name="transaction_detail">Transaction Detail</string>
+    <string name="transaction_detail">Detalhes da transação</string>
     <string name="app_reset_title">Please note</string>
     <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
     <string name="tor_install_orbot">You are trying to connect to a tor node. To use Zap with tor you have to install Orbot.\n\nDo you want to install Orbot now?</string>
@@ -321,7 +321,7 @@
     <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
-    <string name="wallet_name">Wallet Name</string>
+    <string name="wallet_name">Nome da carteira</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="change_data">Change data</string>
@@ -353,12 +353,12 @@
     <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
     <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
-    <string name="drawer_menu_wallets">Wallets</string>
-    <string name="drawer_menu_channels">Channels</string>
+    <string name="drawer_menu_wallets">Carteiras</string>
+    <string name="drawer_menu_channels">Canais</string>
     <string name="drawer_menu_backup">Backup</string>
-    <string name="drawer_menu_buy">Buy Bitcoin</string>
+    <string name="drawer_menu_buy">Comprar Bitcoin</string>
     <string name="drawer_no_wallet">No Wallet</string>
-    <string name="support_contribute_description">Help improving Zap.</string>
+    <string name="support_contribute_description">Ajude a melhorar a Zap.</string>
     <string name="support_issue_description">Found a bug? Let us know!</string>
     <string name="support_privacy_description">We care about your privacy.</string>
     <string name="support_help_description">Visit our documentation.</string>
