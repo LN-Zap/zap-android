@@ -28,7 +28,6 @@ public class InvoiceUtil {
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_TESTNET = new ArrayList<>(Arrays.asList("m", "n", "2", "tb1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_REGTEST = new ArrayList<>(Arrays.asList("m", "n", "2", "bcrt1"));
     private static int INVOICE_LIGHTNING_MIN_LENGTH = 6;
-    private static int ADDRESS_ON_CHAIN_MIN_LENGTH = 5;
 
 
     public static boolean isLightningInvoice(@NonNull String data) {
@@ -40,14 +39,18 @@ public class InvoiceUtil {
     }
 
     public static boolean isBitcoinAddress(@NonNull String data) {
-        if (data.isEmpty() || data.length() < ADDRESS_ON_CHAIN_MIN_LENGTH) {
+        if (data.isEmpty()) {
             return false;
         }
-        ArrayList<String> prefixes = new ArrayList<>();
-        prefixes.addAll(ADDRESS_PREFIX_ONCHAIN_MAINNET);
-        prefixes.addAll(ADDRESS_PREFIX_ONCHAIN_TESTNET);
-        prefixes.addAll(ADDRESS_PREFIX_ONCHAIN_REGTEST);
-        return hasPrefix(prefixes, data);
+        return (isBase58Address(data) || isBech32Address(data));
+    }
+
+    public static boolean isBase58Address(String input) {
+        return input.matches("^[123mn][a-km-zA-HJ-NP-Z1-9]{25,34}$");
+    }
+
+    public static boolean isBech32Address(String input) {
+        return input.matches("^((bc1|tb1|bcrt1)[ac-hj-np-z02-9]{11,71}|(BC1|TB1|BCRT1)[AC-HJ-NP-Z02-9]{11,71})$");
     }
 
     public static void readInvoice(Context ctx, CompositeDisposable compositeDisposable, String data, OnReadInvoiceCompletedListener listener) {
@@ -214,7 +217,6 @@ public class InvoiceUtil {
         if (data.isEmpty()) {
             return false;
         }
-        boolean hasPrefix = false;
         for (String prefix : prefixes) {
             if (data.length() >= prefix.length()) {
                 if (data.substring(0, prefix.length()).equalsIgnoreCase(prefix)) {
