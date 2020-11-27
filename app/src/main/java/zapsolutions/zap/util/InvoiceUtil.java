@@ -3,9 +3,11 @@ package zapsolutions.zap.util;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
+import com.google.common.net.UrlEscapers;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -115,6 +117,7 @@ public class InvoiceUtil {
 
                     long onChainInvoiceAmount = 0L;
                     String onChainInvoiceMessage = null;
+                    String lightningInvoice = null;
 
                     // Fetch params
                     if (bitcoinURI.getQuery() != null) {
@@ -127,9 +130,12 @@ public class InvoiceUtil {
                             if (param[0].equals("message")) {
                                 onChainInvoiceMessage = param[1];
                             }
+                            if (param[0].equals("lightning")) {
+                                lightningInvoice = param[1];
+                            }
                         }
                     }
-                    validateOnChainAddress(ctx, listener, onChainAddress, onChainInvoiceAmount, onChainInvoiceMessage);
+                    validateOnChainAddress(ctx, listener, onChainAddress, onChainInvoiceAmount, onChainInvoiceMessage, lightningInvoice);
 
                 } catch (URISyntaxException e) {
                     ZapLog.w(LOG_TAG, "URI could not be parsed");
@@ -139,33 +145,33 @@ public class InvoiceUtil {
 
             } else {
                 // We also don't have a bitcoin invoice, check if the data is a valid bitcoin address
-                validateOnChainAddress(ctx, listener, data, 0L, null);
+                validateOnChainAddress(ctx, listener, data, 0L, null, null);
             }
 
         }
 
     }
 
-    private static void validateOnChainAddress(Context ctx, OnReadInvoiceCompletedListener listener, String address, long amount, String message) {
+    private static void validateOnChainAddress(Context ctx, OnReadInvoiceCompletedListener listener, String address, long amount, String message, String lightningInvoice) {
         if (address != null && isBitcoinAddress(address)) {
             switch (Wallet.getInstance().getNetwork()) {
                 case MAINNET:
                     if (hasPrefix(ADDRESS_PREFIX_ONCHAIN_MAINNET, address)) {
-                        listener.onValidBitcoinInvoice(address, amount, message);
+                        listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
                     } else {
                         listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
                     }
                     break;
                 case TESTNET:
                     if (hasPrefix((ArrayList<String>) ADDRESS_PREFIX_ONCHAIN_TESTNET, address)) {
-                        listener.onValidBitcoinInvoice(address, amount, message);
+                        listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
                     } else {
                         listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
                     }
                     break;
                 case REGTEST:
                     if (hasPrefix((ArrayList<String>) ADDRESS_PREFIX_ONCHAIN_REGTEST, address)) {
-                        listener.onValidBitcoinInvoice(address, amount, message);
+                        listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
                     } else {
                         listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM);
                     }
@@ -205,6 +211,31 @@ public class InvoiceUtil {
 
     }
 
+    private static String appendParameter(String base, String name, String value) {
+        if (!base.contains("?"))
+            return base + "?" + name + "=" + value;
+        else
+            return base + "&" + name + "=" + value;
+    }
+
+    public static String generateBitcoinInvoice(@NonNull String address, @Nullable String amount, @Nullable String message, @Nullable String lightningInvoice) {
+        String bitcoinInvoice = UriUtil.generateBitcoinUri(address);
+
+        if (amount != null)
+            if (!(amount.isEmpty() || amount.equals("0")))
+                bitcoinInvoice = InvoiceUtil.appendParameter(bitcoinInvoice, "amount", amount);
+        if (message != null)
+            if (!message.isEmpty()) {
+                String escapedMessage = UrlEscapers.urlPathSegmentEscaper().escape(message);
+                bitcoinInvoice = appendParameter(bitcoinInvoice, "message", escapedMessage);
+            }
+        if (lightningInvoice != null)
+            if (!lightningInvoice.isEmpty())
+                bitcoinInvoice = appendParameter(bitcoinInvoice, "lightning", message);
+
+        return bitcoinInvoice;
+    }
+
     private static boolean hasPrefix(@NonNull String prefix, @NonNull String data) {
         if (data.isEmpty() || data.length() < prefix.length()) {
             return false;
@@ -230,7 +261,7 @@ public class InvoiceUtil {
     public interface OnReadInvoiceCompletedListener {
         void onValidLightningInvoice(PayReq paymentRequest, String invoice);
 
-        void onValidBitcoinInvoice(String address, long amount, String message);
+        void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
 
         void onError(String error, int duration);
 

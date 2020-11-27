@@ -44,8 +44,8 @@ import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.RemoteConfiguration;
-import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.CustomViewPager;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
@@ -63,6 +63,8 @@ import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.BitcoinStringAnalyzer;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.ExchangeRateUtil;
+import zapsolutions.zap.util.InvoiceUtil;
+import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PinScreenUtil;
@@ -442,7 +444,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         App.getAppContext().connectionToLNDEstablished = true;
 
         // Warn the user if an old LND version is used.
-        if (Wallet.getInstance().getLNDVersion().compareTo(new Version("0.11"))<0) {
+        if (Wallet.getInstance().getLNDVersion().compareTo(new Version("0.11")) < 0) {
             new UserGuardian(this).securityOldLndVersion("v0.11.0-beta");
         }
 
@@ -542,18 +544,55 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         });
     }
 
-    private void analyzeString(String input) {
+    public void analyzeString(String input) {
         BitcoinStringAnalyzer.analyze(HomeActivity.this, compositeDisposable, input, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
             public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice);
+                SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, null);
                 sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message) {
-                SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
-                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+                if (lightningInvoice == null) {
+                    SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                    sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                } else {
+                    InvoiceUtil.readInvoice(HomeActivity.this, compositeDisposable, lightningInvoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
+                        @Override
+                        public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+                            if (Wallet.getInstance().getMaxLightningSendAmount() < paymentRequest.getNumSatoshis()) {
+                                // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
+                                SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                            } else {
+                                String amountString = MonetaryUtil.getInstance().convertSatoshiToBitcoin(String.valueOf(amount));
+                                String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
+                                SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
+                                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                            }
+                        }
+
+                        @Override
+                        public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+                            // never reached
+                        }
+
+                        @Override
+                        public void onError(String error, int duration) {
+                            // If the added lightning parameter contains an invalid lightning invoice, we fall back to the onChain invoice.
+                            SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                            sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                        }
+
+                        @Override
+                        public void onNoInvoiceData() {
+                            // If the added lightning parameter contains an invalid lightning invoice, we fall back to the onChain invoice.
+                            SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                            sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                        }
+                    });
+                }
             }
 
             @Override

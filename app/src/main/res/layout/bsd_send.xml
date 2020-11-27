@@ -431,6 +431,25 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/fallbackButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/bg_clickable_item"
+            android:visibility="gone"
+            android:enabled="false"
+            android:text="@string/send_SendOnChainInstead"
+            android:textAllCaps="false"
+            android:textColor="@color/lightningOrange"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/okButton"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
             android:id="@+id/okButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

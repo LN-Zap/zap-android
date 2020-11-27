@@ -180,6 +180,7 @@
     <string name="send_sendPayment">Send payment</string>
     <string name="send_success">Payment\nsuccessful</string>
     <string name="send_fail">Payment\nfailed</string>
+    <string name="send_SendOnChainInstead">Send On-Chain</string>
 
 
     <string name="receive_generateRequest">Generate Request</string>
