@@ -270,7 +270,9 @@ public class UserGuardian {
             }
             dlg.show();
         } else {
-            mListener.onGuardianConfirmed();
+            if (mListener != null) {
+                mListener.onGuardianConfirmed();
+            }
         }
     }
 
