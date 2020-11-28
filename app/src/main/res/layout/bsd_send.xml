@@ -432,7 +432,7 @@
 
         <Button
             android:id="@+id/fallbackButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
@@ -445,13 +445,13 @@
             android:textAllCaps="false"
             android:textColor="@color/lightningOrange"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/okButton"
-            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/okButton"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/okButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
@@ -464,8 +464,8 @@
             android:textColor="@color/lightningOrange"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fallbackButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

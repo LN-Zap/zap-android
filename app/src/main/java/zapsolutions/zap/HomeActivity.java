@@ -581,6 +581,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         @Override
                         public void onError(String error, int duration) {
                             // If the added lightning parameter contains an invalid lightning invoice, we fall back to the onChain invoice.
+                            ZapLog.d(LOG_TAG, "Falling back to onChain Invoice: " + error);
                             SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
                             sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
                         }
