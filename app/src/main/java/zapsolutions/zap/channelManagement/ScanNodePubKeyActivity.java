@@ -158,7 +158,7 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message) {
+            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
                 showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
             }
 

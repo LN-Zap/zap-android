@@ -478,6 +478,27 @@ public class MonetaryUtil {
         }
     }
 
+    /**
+     * Converts the given satoshis to bitcoin currency.
+     *
+     * @param satoshiValue
+     * @return String without grouping and maximum fractions of 8 digits
+     */
+    public String convertSatoshiToBitcoin(String satoshiValue) {
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        DecimalFormat df = (DecimalFormat) nf;
+        df.setGroupingUsed(false);
+        df.setMaximumFractionDigits(8);
+
+        if (satoshiValue == null || satoshiValue.equals("")) {
+            return "0";
+        } else {
+                double value = Double.parseDouble(satoshiValue);
+                double result = (value / 1e8);
+                return df.format(result);
+        }
+    }
+
 
     /**
      * Checks if a numerical currency input is valid

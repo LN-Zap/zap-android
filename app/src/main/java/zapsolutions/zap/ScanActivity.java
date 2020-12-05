@@ -91,7 +91,7 @@ public class ScanActivity extends BaseScannerActivity {
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message) {
+            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
                 readableDataFound(data);
             }
 

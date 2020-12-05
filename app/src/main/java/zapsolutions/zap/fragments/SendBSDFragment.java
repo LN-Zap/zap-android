@@ -46,6 +46,7 @@ import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
@@ -69,6 +70,7 @@ public class SendBSDFragment extends RxBSDFragment {
     private ImageView mIvBsdIcon;
     private ConstraintLayout mIconAnchor;
     private TextView mTvTitle;
+    private String mFallbackOnChainInvoice;
 
     private View mSendAmountView;
     private EditText mEtAmount;
@@ -84,6 +86,7 @@ public class SendBSDFragment extends RxBSDFragment {
     private View mProgressScreen;
     private View mFinishedScreen;
     private Button mOkButton;
+    private Button mFallbackButton;
     private ImageView mProgressFinishedIcon;
     private ImageView mIvProgressPaymentTypeIcon;
     private ImageView mIvFinishedPaymentTypeIcon;
@@ -109,11 +112,12 @@ public class SendBSDFragment extends RxBSDFragment {
     private float mLnFeePercentCalculated;
     private float mLnFeePercentSettingLimit;
 
-    public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice) {
+    public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice, String fallbackOnChainInvoice) {
         Intent intent = new Intent();
         intent.putExtra("onChain", false);
         intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
         intent.putExtra("lnInvoice", invoice);
+        intent.putExtra("fallbackOnChainInvoice", fallbackOnChainInvoice);
         SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
         sendBottomSheetDialog.setArguments(intent.getExtras());
         return sendBottomSheetDialog;
@@ -150,6 +154,7 @@ public class SendBSDFragment extends RxBSDFragment {
 
                 mLnPaymentRequest = paymentRequest;
                 mLnInvoice = args.getString("lnInvoice");
+                mFallbackOnChainInvoice = args.getString("fallbackOnChainInvoice");
             } catch (InvalidProtocolBufferException e) {
                 throw new RuntimeException("Invalid payment request forwarded." + e.getMessage());
             }
@@ -183,6 +188,7 @@ public class SendBSDFragment extends RxBSDFragment {
         mProgressScreen = view.findViewById(R.id.paymentProgressLayout);
         mFinishedScreen = view.findViewById(R.id.paymentFinishedLayout);
         mOkButton = view.findViewById(R.id.okButton);
+        mFallbackButton = view.findViewById(R.id.fallbackButton);
         mProgressFinishedIcon = view.findViewById(R.id.progressFinishedIcon);
         mIvProgressPaymentTypeIcon = view.findViewById(R.id.progressPaymentTypeIcon);
         mIvFinishedPaymentTypeIcon = view.findViewById(R.id.finishedPaymentTypeIcon);
@@ -520,6 +526,14 @@ public class SendBSDFragment extends RxBSDFragment {
             }
         });
 
+        mFallbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity) getActivity()).analyzeString(mFallbackOnChainInvoice);
+                dismiss();
+            }
+        });
+
         return view;
     }
 
@@ -638,7 +652,6 @@ public class SendBSDFragment extends RxBSDFragment {
         mBtnSend.setEnabled(false);
         mBtnManageChannels.setEnabled(false);
         mEtAmount.setEnabled(false);
-        mNumpad.setEnabled(false);
 
         // Animate out
 
@@ -790,6 +803,11 @@ public class SendBSDFragment extends RxBSDFragment {
 
         mFinishedScreen.startAnimation(animateIn);
 
+
+        if (!mOnChain) {
+            mFallbackButton.setEnabled(true);
+            mFallbackButton.setVisibility(View.VISIBLE);
+        }
         // Enable Ok button
         mOkButton.setEnabled(true);
     }

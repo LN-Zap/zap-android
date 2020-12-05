@@ -85,7 +85,7 @@ public class ClipBoardUtil {
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message) {
+            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
                 showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
             }
 

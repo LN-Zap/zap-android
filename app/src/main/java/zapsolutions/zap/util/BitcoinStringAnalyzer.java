@@ -128,8 +128,8 @@ public class BitcoinStringAnalyzer {
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message) {
-                listener.onValidBitcoinInvoice(address, amount, message);
+            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+                listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
             }
 
             @Override
@@ -149,7 +149,7 @@ public class BitcoinStringAnalyzer {
     public interface OnDataDecodedListener {
         void onValidLightningInvoice(PayReq paymentRequest, String invoice);
 
-        void onValidBitcoinInvoice(String address, long amount, String message);
+        void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
 
         void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse);
 

@@ -22,6 +22,7 @@ import net.glxn.qrgen.android.QRCode;
 
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.util.ClipBoardUtil;
+import zapsolutions.zap.util.InvoiceUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.UriUtil;
@@ -84,17 +85,8 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
 
 
             // Generate on-chain request data to encode
+            mDataToEncode = InvoiceUtil.generateBitcoinInvoice(mAddress, mAmount, mMemo, null);
 
-            mDataToEncode = UriUtil.generateBitcoinUri(mAddress);
-            mMemo = UrlEscapers.urlPathSegmentEscaper().escape(mMemo);
-
-            // Append amount and memo to the invoice
-            if (mAmount != null)
-                if (!(mAmount.isEmpty() || mAmount.equals("0")))
-                    mDataToEncode = appendParameter(mDataToEncode, "amount", mAmount);
-            if (mMemo != null)
-                if (!mMemo.isEmpty())
-                    mDataToEncode = appendParameter(mDataToEncode, "message", mMemo);
         } else {
             // Generate lightning request data to encode
             mDataToEncode = UriUtil.generateLightningUri(mLnInvoice);
@@ -191,13 +183,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             }
         });
 
-    }
-
-    private String appendParameter(String base, String name, String value) {
-        if (!base.contains("?"))
-            return base + "?" + name + "=" + value;
-        else
-            return base + "&" + name + "=" + value;
     }
 
     @Override
