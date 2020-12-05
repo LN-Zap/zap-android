@@ -477,6 +477,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
                         .setValue(value)
                         .setMemo(mEtMemo.getText().toString())
                         .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
+                        .setPrivate(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
                         .build();
 
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
