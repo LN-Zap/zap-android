@@ -804,7 +804,7 @@ public class SendBSDFragment extends RxBSDFragment {
         mFinishedScreen.startAnimation(animateIn);
 
 
-        if (!mOnChain) {
+        if (!mOnChain && mFallbackOnChainInvoice != null) {
             mFallbackButton.setEnabled(true);
             mFallbackButton.setVisibility(View.VISIBLE);
         }
