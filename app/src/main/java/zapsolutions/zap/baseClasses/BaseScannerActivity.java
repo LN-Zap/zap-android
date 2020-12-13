@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,6 +42,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     private TextView mTvPermissionRequired;
     private Button mButtonPaste;
     private Button mButtonHelp;
+    private View mQrBorder;
 
     protected DecoratedBarcodeView mQRCodeScannerView;
     private String mLastText;
@@ -77,6 +79,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         super.onCreate(state);
         setContentView(R.layout.activity_qr_code_scanner);
         setupToolbar();
+        mQrBorder = findViewById(R.id.zxing_viewfinder_border);
 
         mQRCodeScannerView = findViewById(R.id.barcode_scanner);
         Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
@@ -221,6 +224,10 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         int rectLength = (int) metrics.scaledDensity * length;
         mQRCodeScannerView.getBarcodeView().setFramingRectSize(new Size(rectLength, rectLength));
+        ViewGroup.LayoutParams layoutParams = mQrBorder.getLayoutParams();
+        layoutParams.width = (int) metrics.scaledDensity * (length + 5);
+        layoutParams.height = (int) metrics.scaledDensity * (length + 5);
+        mQrBorder.setLayoutParams(layoutParams);
     }
 
     /**

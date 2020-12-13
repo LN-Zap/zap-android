@@ -11,6 +11,13 @@
         android:layout_height="match_parent"
         app:zxing_scanner_layout="@layout/custom_barcode_scanner" />
 
+    <View
+        android:id="@+id/zxing_viewfinder_border"
+        android:layout_width="285dp"
+        android:layout_height="285dp"
+        android:layout_gravity="center"
+        android:background="@drawable/qr_frame" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -93,9 +100,9 @@
             android:id="@+id/scannerInstructions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="360dp"
             android:background="@android:color/transparent"
             android:orientation="horizontal"
+            android:paddingBottom="360dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
