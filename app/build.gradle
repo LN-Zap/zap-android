@@ -159,10 +159,11 @@ protobuf {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // QR-Code scanner: ToDo: check if this is secure
-    implementation 'me.dm7.barcodescanner:zbar:1.9.13'
+    // QR-Code scanner:
+    implementation('com.journeyapps:zxing-android-embedded:4.1.0') { transitive = false }
+    implementation 'com.google.zxing:core:3.3.0' // 3.4.0 requires minSdk 24
 
-    // QR-Code generator: ToDo: check if this is secure
+    // QR-Code generator:
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
     // Library to restart app
