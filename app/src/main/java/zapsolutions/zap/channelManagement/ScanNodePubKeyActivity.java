@@ -129,7 +129,7 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
         super.onButtonPasteClick();
 
         try {
-            String clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext());
+            String clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext(),true);
             processUserData(clipboardContent);
         } catch (NullPointerException e) {
             showError(getResources().getString(R.string.error_emptyClipboardConnect), RefConstants.ERROR_DURATION_SHORT);

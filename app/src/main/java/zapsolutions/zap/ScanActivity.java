@@ -46,7 +46,7 @@ public class ScanActivity extends BaseScannerActivity {
         super.onButtonPasteClick();
 
         try {
-            readData(ClipBoardUtil.getPrimaryContent(getApplicationContext()));
+            readData(ClipBoardUtil.getPrimaryContent(getApplicationContext(), true));
         } catch (NullPointerException e) {
             showError(getResources().getString(R.string.error_emptyClipboardPayment), RefConstants.ERROR_DURATION_SHORT);
         }
