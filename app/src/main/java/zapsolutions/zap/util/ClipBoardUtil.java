@@ -39,9 +39,17 @@ public class ClipBoardUtil {
         }
     }
 
-    public static String getPrimaryContent(Context context) throws NullPointerException {
+    public static String getPrimaryContent(Context context, boolean addToScanHistory) throws NullPointerException {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
-        return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+        String data = clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+
+        if (addToScanHistory) {
+            // Make sure the data just pasted from the clipboard does not trigger a clipboard scan popup.
+            // This prevents a popup directly after a new wallet was setup using paste.
+            String clipboardContentHash = UtilFunctions.sha256Hash(data);
+            PrefsUtil.edit().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
+        }
+        return data;
     }
 
 
@@ -52,12 +60,12 @@ public class ClipBoardUtil {
         }
 
         try {
-            getPrimaryContent(context);
+            getPrimaryContent(context, false);
         } catch (NullPointerException e) {
             return;
         }
 
-        String clipboardContent = getPrimaryContent(context);
+        String clipboardContent = getPrimaryContent(context, false);
         String clipboardContentHash = UtilFunctions.sha256Hash(clipboardContent);
 
         if (PrefsUtil.getPrefs().getString(PrefsUtil.LAST_CLIPBOARD_SCAN, "").equals(clipboardContentHash)) {
@@ -146,7 +154,7 @@ public class ClipBoardUtil {
         AlertDialog.Builder adb = new AlertDialog.Builder(context)
                 .setMessage(question)
                 .setCancelable(true)
-                .setPositiveButton(R.string.continue_string, (dialog, whichButton) -> listener.onProceed(getPrimaryContent(context)))
+                .setPositiveButton(R.string.continue_string, (dialog, whichButton) -> listener.onProceed(getPrimaryContent(context, false)))
                 .setNegativeButton(R.string.no, (dialog, which) -> {
                 });
 
