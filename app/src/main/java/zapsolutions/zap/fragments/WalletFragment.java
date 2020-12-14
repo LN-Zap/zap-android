@@ -288,6 +288,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SetupActivity.class);
                 intent.putExtra(RefConstants.SETUP_MODE, SetupActivity.FULL_SETUP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });

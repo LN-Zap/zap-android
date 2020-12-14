@@ -55,6 +55,7 @@ public class ManageWalletsActivity extends BaseAppCompatActivity {
             public void onClick(View view) {
                 // Add a new wallet
                 Intent intent = new Intent(ManageWalletsActivity.this, SetupActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });

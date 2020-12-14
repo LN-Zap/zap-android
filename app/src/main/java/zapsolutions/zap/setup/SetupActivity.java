@@ -1,5 +1,6 @@
 package zapsolutions.zap.setup;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -60,7 +61,11 @@ public class SetupActivity extends BaseAppCompatActivity implements PinActivityI
     }
 
     private void showConnectChoice() {
-        changeFragment(new ConnectFragment());
+        // The choice is skipped right now. Instead we immediately go to the scan activity
+        //changeFragment(new ConnectFragment());
+
+        Intent intent = new Intent(SetupActivity.this, ConnectRemoteNodeActivity.class);
+        startActivity(intent);
     }
 
     private void changeFragment(Fragment fragment) {
