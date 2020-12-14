@@ -162,9 +162,11 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, show the camera view.
                     mTvPermissionRequired.setVisibility(View.GONE);
+                    mBtnFlashlight.setEnabled(true);
                 } else {
                     // Permission denied, show required permission message.
                     mTvPermissionRequired.setVisibility(View.VISIBLE);
+                    mBtnFlashlight.setEnabled(false);
                 }
             }
         }
