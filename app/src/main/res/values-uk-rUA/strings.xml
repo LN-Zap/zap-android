@@ -86,9 +86,9 @@
     <string name="continue_string">Продовжити</string>
     <string name="withdraw">Вивести</string>
     <string name="unknown">Невідомо</string>
-    <string name="scan">Scan</string>
-    <string name="settings">Settings</string>
-    <string name="support">Support</string>
+    <string name="scan">Просканувати</string>
+    <string name="settings">Налаштування</string>
+    <string name="support">Підтримка</string>
     <string name="contribute">Contribute</string>
     <string name="privacy">Privacy</string>
     <string name="payee">Payee</string>
@@ -161,6 +161,7 @@
     <string name="send_sendPayment">Надіслати оплату</string>
     <string name="send_success">Оплата\nуспішно</string>
     <string name="send_fail">Оплата\nне вдалося виконати</string>
+    <string name="send_SendOnChainInstead">Send On-Chain</string>
     <string name="receive_generateRequest">Створити запит</string>
     <string name="receive_generateRequest_failed">Запит на створення не вдалося виконати</string>
     <string name="receive_lightning_request">Lightning запит</string>
@@ -219,6 +220,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Термін дії Lightning запиту</string>
     <string name="settings_lnFeeLimitTitle">Ліміт Lightning платіжної комісії</string>
+    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
     <string name="error">Помилка</string>
     <string name="error_blockExplorer_title">Блок-провідник</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Ваш вибраний наразі блок провідників (%1$s) не підтримує%2$s. \nЗайдіть у налаштування та виберіть інший провідник блоків для продовження."</string>
@@ -365,8 +367,8 @@
     <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
     <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
-    <string name="drawer_menu_wallets">Wallets</string>
-    <string name="drawer_menu_channels">Channels</string>
+    <string name="drawer_menu_wallets">Гаманці</string>
+    <string name="drawer_menu_channels">Канали</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Buy Bitcoin</string>
     <string name="drawer_no_wallet">No Wallet</string>

@@ -161,6 +161,7 @@
     <string name="send_sendPayment">Изпращане на плащането</string>
     <string name="send_success">Плащането\nуспешно</string>
     <string name="send_fail">Плащането\nнеуспешно</string>
+    <string name="send_SendOnChainInstead">Изпрати On-Chain</string>
     <string name="receive_generateRequest">Създай заявка</string>
     <string name="receive_generateRequest_failed">Създаването на заявка неуспешно.</string>
     <string name="receive_lightning_request">Lightning Заявка</string>
@@ -182,7 +183,7 @@
     <string name="guardian_notReadyForMainnet">Вие сте на MAINNET с истински Биткойн!\nZap Android е в ранна фаза на разработка. Може да загубите средства!\n\n Ако не искате да поемете този риск, превключете на testnet междувременно.</string>
     <string name="guardian_remoteConnect">Сигурни ли сте, че искате да се свържете с\n\n%1$s\n\nМоля проверете адреса внимателно.</string>
     <string name="guardian_blockExplorer">Като преглеждате информация с Block Explorer, вашият IP адрес бива изложен. Ако желаете да увеличите анонимността си, не използвайте тази опция или отидите в настройки и изберете Block Explorer, който поддържа Tor.</string>
-    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
+    <string name="guardian_oldLndVersion_remote">Моля ъпдейтнете. \n\nНодът, към който сте свързани, използва стара версия на LND. Версиите под %1$s вече не са активно поддържани.</string>
     <string name="settings_category_general">Общи</string>
     <string name="settings_category_security">Сигурност</string>
     <string name="settings_category_help">Помощ</string>
@@ -219,6 +220,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Срок за Lightning заявка</string>
     <string name="settings_lnFeeLimitTitle">Лимит на Таксите за Lightning плащания</string>
+    <string name="settings_lnPrivateChannelHints">Включвай насоки за рутиране за частни канали във фактурите</string>
     <string name="error">Грешка</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Избраният от Вас block explorer (%1$s) не поддържа %2$s. \nМоля отидете в настройки и изберете друг, за да продължите."</string>
@@ -371,6 +373,6 @@
     <string name="clipboard_scan_lnurl">Кипбордът Ви съдържа LNURL данни. Искате ли да ги използвате?</string>
     <string name="clipboard_scan_node_pubkey">Клипбордът Ви съдържа публичен ключ на нод. Искате ли да отворите канал?</string>
     <string name="clipboard_scan_connect">Клипбордът Ви съдържа данни за свързване. Искате ли да добавите нов портфейл?</string>
-    <string name="third_party_licenses">Third-party licenses</string>
-    <string name="licenses">Licenses</string>
+    <string name="third_party_licenses">Лицензи от трети лица</string>
+    <string name="licenses">Лицензи</string>
 </resources>

@@ -161,6 +161,7 @@
     <string name="send_sendPayment">Zahlung senden</string>
     <string name="send_success">Zahlung\nerfolgreich</string>
     <string name="send_fail">Zahlung\nfehlgeschlagen</string>
+    <string name="send_SendOnChainInstead">On-Chain senden</string>
     <string name="receive_generateRequest">Anfrage generieren</string>
     <string name="receive_generateRequest_failed">Generieren der Anfrage fehlgeschlagen.</string>
     <string name="receive_lightning_request">Lightning Zahlungsanfrage</string>
@@ -219,6 +220,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Verfallzeit für Lightning Anfragen</string>
     <string name="settings_lnFeeLimitTitle">Gebührenlimit für Lightning Zahlungen</string>
+    <string name="settings_lnPrivateChannelHints">Route Hints für private Kanäle in Rechnungen aufnehmen</string>
     <string name="error">Fehler</string>
     <string name="error_blockExplorer_title">Block-Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Der momentan ausgewählte Block-Explorer (%1$s) unterstützt das %2$s nicht. \nBitte wähle in den Einstellungen einen anderen Block-Explorer um fortzufahren."</string>
@@ -335,7 +337,7 @@
     <string name="no_wallets">Keine Wallets</string>
     <string name="spinner_manage_wallets">Verwalten…</string>
     <string name="wallet_added">Wallet wurde hinzugefügt.</string>
-    <string name="wallet_already_exists">Diese Wallet existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zur den Wallet Details.</string>
+    <string name="wallet_already_exists">Diese Wallet existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zu den Wallet Details.</string>
     <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>
     <string name="lnurl_withdraw_fail">Abhebung\nfehlgeschlagen</string>
     <string name="lnurl_decoding_no_lnurl_data">Die Daten enthalten keine gültige LNURL.</string>

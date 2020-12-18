@@ -161,6 +161,7 @@
     <string name="send_sendPayment">Invia pagamento</string>
     <string name="send_success">Pagamento\ncompletato</string>
     <string name="send_fail">Pagamento\nfallito</string>
+    <string name="send_SendOnChainInstead">Send On-Chain</string>
     <string name="receive_generateRequest">Genera richiesta</string>
     <string name="receive_generateRequest_failed">Generazione richiesta non riuscita.</string>
     <string name="receive_lightning_request">Richiesta Lightning</string>
@@ -219,6 +220,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Scadenza Richiesta Lightning</string>
     <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
+    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
     <string name="error">Errore</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Hai selezionato un block explorer (%1$s) che non supporta %2$s. \nVa' in impostazioni e scegli un altro block explorer per continuare."</string>
