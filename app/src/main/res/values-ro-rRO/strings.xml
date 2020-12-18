@@ -161,6 +161,7 @@
     <string name="send_sendPayment">Trimite plată</string>
     <string name="send_success">Plată\nreușită</string>
     <string name="send_fail">Plată\nnereușită</string>
+    <string name="send_SendOnChainInstead">Send On-Chain</string>
     <string name="receive_generateRequest">Generează cerere</string>
     <string name="receive_generateRequest_failed">Nu s-a reușit generarea cererii.</string>
     <string name="receive_lightning_request">Cerere de plată Lightning</string>
@@ -219,6 +220,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Expirarea cererii de plată Lightning</string>
     <string name="settings_lnFeeLimitTitle">Limită taxă pentru plăți Lightning</string>
+    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
     <string name="error">Eroare</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Exploratorul de blocuri selectat (%1$s) nu suportă %2$s.\nIntră în setări și selectează un alt explorator de blocuri pentru a continua."</string>

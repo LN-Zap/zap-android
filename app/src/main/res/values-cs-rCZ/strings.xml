@@ -161,6 +161,7 @@
     <string name="send_sendPayment">Odeslat platbu</string>
     <string name="send_success">Platba\nje úspěšná</string>
     <string name="send_fail">Platba\nselhala</string>
+    <string name="send_SendOnChainInstead">Send On-Chain</string>
     <string name="receive_generateRequest">Vygenerovat požadavek</string>
     <string name="receive_generateRequest_failed">Generování požadavku se nezdařilo.</string>
     <string name="receive_lightning_request">Lightning požadavek</string>
@@ -182,7 +183,7 @@
     <string name="guardian_notReadyForMainnet">Jste na MAINNETu se skutečnými bitcoiny!\nZap Android je v počáteční fázi vývoje. Můžete ztratit finanční prostředky!\n\nPokud toto riziko nechcete podstoupit, mezitím přepněte na testovací síť.</string>
     <string name="guardian_remoteConnect">Opravdu se chcete připojit k \n\n%1$s\n\nProsím pečlivě zkontrolujte název hostitele.</string>
     <string name="guardian_blockExplorer">Vyhledáním informací pomocí aplikace Block Explorer se vaše IP adresa odhalí. Pokud chcete zvýšit anonymitu, neměli byste ji používat, nebo přejděte na nastavení a vyberte Průzkumník bloků, který podporuje Tor.</string>
-    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
+    <string name="guardian_oldLndVersion_remote">Aktualizujte prosím.\n\nUzel, ke kterému jste připojeni, používá starou verzi LND. Verze pod %1$s již nejsou aktivně podporovány.</string>
     <string name="settings_category_general">Obecné</string>
     <string name="settings_category_security">Zabezpečení</string>
     <string name="settings_category_help">Pomoc</string>
@@ -219,6 +220,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning požadavek vyprší</string>
     <string name="settings_lnFeeLimitTitle">Limit poplatku Lightning platby</string>
+    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
     <string name="error">Chyba</string>
     <string name="error_blockExplorer_title">Blok Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Váš aktuálně vybraný průzkumník bloků (%1$s) nepodporuje %2$s. \nPřejděte na nastavení a pokračujte volbou jiného průzkumníku bloků."</string>
@@ -383,6 +385,6 @@
     <string name="clipboard_scan_lnurl">Schránka obsahuje data LNURL. Chcete ji použít?</string>
     <string name="clipboard_scan_node_pubkey">Schránka obsahuje veřejný klíč uzlu. Chcete otevřít kanál?</string>
     <string name="clipboard_scan_connect">Schránka obsahuje data připojení. Chcete přidat novou peněženku?</string>
-    <string name="third_party_licenses">Third-party licenses</string>
-    <string name="licenses">Licenses</string>
+    <string name="third_party_licenses">Licence třetích stran</string>
+    <string name="licenses">Licence</string>
 </resources>

@@ -161,6 +161,7 @@
     <string name="send_sendPayment">Verzend betaling</string>
     <string name="send_success">Betaling\nsuccesvol</string>
     <string name="send_fail">Betaling\nmislukt</string>
+    <string name="send_SendOnChainInstead">Send On-Chain</string>
     <string name="receive_generateRequest">Genereer Verzoek</string>
     <string name="receive_generateRequest_failed">Verzoek genereren mislukt.</string>
     <string name="receive_lightning_request">Lightning Verzoek</string>
@@ -219,6 +220,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightningverzoek Verlooptijd</string>
     <string name="settings_lnFeeLimitTitle">Lightningbetaling Vergoedingslimiet</string>
+    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
     <string name="error">Foutmelding</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Je hebt de (%1$s) Block Explorer geselecteerd, die geen %2$s ondersteunt. \nGa naar de instellingen en kies een andere block explorer om door te gaan."</string>

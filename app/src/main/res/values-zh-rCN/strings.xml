@@ -161,6 +161,7 @@
     <string name="send_sendPayment">付款</string>
     <string name="send_success">支付成功</string>
     <string name="send_fail">支付失败</string>
+    <string name="send_SendOnChainInstead">Send On-Chain</string>
     <string name="receive_generateRequest">Generate Request</string>
     <string name="receive_generateRequest_failed">Request generation failed.</string>
     <string name="receive_lightning_request">Lightning Request</string>
@@ -219,6 +220,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
     <string name="settings_lnFeeLimitTitle">闪电网络路由费上限</string>
+    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
     <string name="error">错误</string>
     <string name="error_blockExplorer_title">区块浏览器</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"你当前选择的区块浏览器 (%1$s)并不支持 %2$s. \n请在设置中重新选择然后继续."</string>
