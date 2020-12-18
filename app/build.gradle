@@ -47,6 +47,8 @@ android {
         unitTests.returnDefaultValues = true
     }
 
+    // Deactivated for now, as it makes no difference anymore. This will have to be reenabled for local LND
+    /*
     splits {
 
         // Configures multiple APKs based on ABI.
@@ -71,6 +73,7 @@ android {
         exclude "lib/mips/**"
         exclude "lib/mips64/**"
     }
+     */
 }
 
 // Execute this manually
@@ -119,8 +122,13 @@ android.applicationVariants.all { variant ->
             // Assigns the new version code to versionCodeOverride, which changes the version code
             // for only the output APK, not for the variant itself. Skipping this step simply
             // causes Gradle to use the value of variant.versionCode for the APK.
+            // We will have to start at 4000, 5000, etc when we reenable splitting
             output.versionCodeOverride =
-                    baseAbiVersionCode * 1000 + variant.versionCode
+                    baseAbiVersionCode * 1000 + 3000 + variant.versionCode
+        } else {
+            // The baseAbi version has to start at 3000+ as we had split versions before.
+            output.versionCodeOverride =
+                    3000 + variant.versionCode
         }
     }
 }
