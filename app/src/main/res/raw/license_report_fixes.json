@@ -32,5 +32,20 @@
       }
     ],
     "dependency": "com.android.volley:volley:1.1.1"
+  },
+  {
+    "project": "zxing-android-embedded",
+    "description": null,
+    "version": "4.1.0",
+    "developers": [],
+    "url": "https://github.com/journeyapps/zxing-android-embedded",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.journeyapps:zxing-android-embedded:4.1.0"
   }
 ]
