@@ -21,7 +21,7 @@ import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 
 public class BitcoinStringAnalyzer {
 
-    public static boolean isLnUrl(String inputString){
+    public static boolean isLnUrl(String inputString) {
         try {
             URL url = new URL(inputString);
             String query = url.getQuery();

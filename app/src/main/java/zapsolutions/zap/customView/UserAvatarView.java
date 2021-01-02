@@ -96,8 +96,8 @@ public class UserAvatarView extends ConstraintLayout {
         if (mNodeUris != null) {
             if (mNodeUris.length > 1) {
                 for (int i = 0; i < mNodeUris.length; i++) {
-                    if (mNodeUris[i].getHost() != null ) {
-                        if(mNodeUris[i].isTorUri() == tor) {
+                    if (mNodeUris[i].getHost() != null) {
+                        if (mNodeUris[i].isTorUri() == tor) {
                             showIdentity(i);
                             return;
                         }

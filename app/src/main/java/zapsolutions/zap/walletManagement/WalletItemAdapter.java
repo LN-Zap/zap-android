@@ -3,11 +3,13 @@ package zapsolutions.zap.walletManagement;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.recyclerview.widget.RecyclerView;
-import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 
 import java.util.List;
+
+import zapsolutions.zap.R;
+import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 
 
 public class WalletItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

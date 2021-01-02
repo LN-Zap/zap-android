@@ -11,8 +11,8 @@ public abstract class HistoryListItem implements Comparable<HistoryListItem> {
 
     abstract public int getType();
 
-    public boolean equalsWithSameContent(Object o){
-        if (!equals(o)){
+    public boolean equalsWithSameContent(Object o) {
+        if (!equals(o)) {
             return false;
         }
 
@@ -42,7 +42,7 @@ public abstract class HistoryListItem implements Comparable<HistoryListItem> {
         if (o == null || getClass() != o.getClass()) return false;
         HistoryListItem that = (HistoryListItem) o;
 
-        if (this.getType() != that.getType()){
+        if (this.getType() != that.getType()) {
             return false;
         }
 

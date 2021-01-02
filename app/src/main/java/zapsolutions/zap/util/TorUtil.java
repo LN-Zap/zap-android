@@ -33,7 +33,7 @@ public class TorUtil {
         }
     }
 
-    public static int getTorTimeoutMultiplier(){
+    public static int getTorTimeoutMultiplier() {
         if (isCurrentConnectionTor()) {
             return RefConstants.TOR_TIMEOUT_MULTIPLIER;
         } else {

@@ -6,7 +6,7 @@ import zapsolutions.zap.lnurl.LnUrlResponse;
 
 /**
  * This class helps to work with the received response from a LNURL-withdraw request.
- *
+ * <p>
  * Please refer to step 3 in the following reference:
  * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-withdraw.md
  */

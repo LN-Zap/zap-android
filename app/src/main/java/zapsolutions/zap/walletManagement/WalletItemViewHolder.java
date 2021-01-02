@@ -6,8 +6,10 @@ import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.util.OnSingleClickListener;
@@ -38,7 +40,7 @@ public class WalletItemViewHolder extends RecyclerView.ViewHolder {
     public void bindRemoteWalletItem(WalletConfig walletConfig) {
 
         // Set Icon
-        if (walletConfig.getType().equals(WalletConfig.WALLET_TYPE_LOCAL)){
+        if (walletConfig.getType().equals(WalletConfig.WALLET_TYPE_LOCAL)) {
             mIcon.setImageResource(R.drawable.ic_local_black_24dp);
         } else {
             mIcon.setImageResource(R.drawable.ic_remote_black_24dp);
@@ -46,7 +48,7 @@ public class WalletItemViewHolder extends RecyclerView.ViewHolder {
         mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
 
         // Set current active icon visibility
-        if (walletConfig.getId().equals(PrefsUtil.getCurrentWalletConfig())){
+        if (walletConfig.getId().equals(PrefsUtil.getCurrentWalletConfig())) {
             mCurrentActiveIcon.setVisibility(View.VISIBLE);
         } else {
             mCurrentActiveIcon.setVisibility(View.GONE);
