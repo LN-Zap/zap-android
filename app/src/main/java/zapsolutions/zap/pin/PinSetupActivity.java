@@ -7,10 +7,14 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
+import zapsolutions.zap.util.KeystoreUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TimeOutUtil;
@@ -59,16 +63,24 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
 
     public void pinConfirmed(String value) {
 
-        // save pin hash in preferences
+        // save pin hash in encrypted prefs
+        try {
+            PrefsUtil.editEncryptedPrefs()
+                    .putString(PrefsUtil.PIN_HASH, UtilFunctions.pinHash(value))
+                    .commit();
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+
+        // save pin length in preferences
         PrefsUtil.edit()
-                .putString(PrefsUtil.PIN_HASH, UtilFunctions.pinHash(value))
                 .putInt(PrefsUtil.PIN_LENGTH, value.length())
                 .commit();
 
 
         if (mSetupMode == ADD_PIN) {
             try {
-                new Cryptography(this).addPinActiveKey();
+                new KeystoreUtil().addPinActiveKey();
             } catch (Exception e) {
                 e.printStackTrace();
             }

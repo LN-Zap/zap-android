@@ -10,7 +10,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "zapsolutions.zap"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 26
         versionName "0.3.8-beta"
@@ -201,6 +201,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.biometric:biometric:1.0.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
     implementation 'com.google.android.material:material:1.2.1'
 
     // Libraries for tests

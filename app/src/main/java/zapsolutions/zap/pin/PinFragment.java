@@ -25,12 +25,14 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.util.BiometricUtil;
+import zapsolutions.zap.util.KeystoreUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ScrambledNumpad;
@@ -313,9 +315,13 @@ public class PinFragment extends Fragment {
         mBtnPinRemove.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrefsUtil.edit().remove(PrefsUtil.PIN_HASH).commit();
                 try {
-                    new Cryptography(getActivity()).removePinActiveKey();
+                    PrefsUtil.editEncryptedPrefs().remove(PrefsUtil.PIN_HASH).commit();
+                } catch (GeneralSecurityException | IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    new KeystoreUtil().removePinActiveKey();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -467,7 +473,11 @@ public class PinFragment extends Fragment {
         if (mMode == ENTER_MODE) {
             String userEnteredPin = mUserInput.toString();
             String hashedInput = UtilFunctions.pinHash(userEnteredPin);
-            correct = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
+            try {
+                correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
+            } catch (GeneralSecurityException | IOException e) {
+                e.printStackTrace();
+            }
         }
 
         if (mMode == CONFIRM_MODE) {

@@ -11,10 +11,11 @@ public class RefConstants {
 
     History:
     16: Biometrics and new Cryptography using Android Keystore
-    17: Removed deviceID usage
-    18: Wallet name based WalletConfigs -> UUID based WalletConfigs
+    17: Removed deviceID usage (0.2.5-alpha)
+    18: Wallet name based WalletConfigs -> UUID based WalletConfigs (0.3.0-beta)
+    19: Androidx.security implementation (0.3.9-beta)
     */
-    public static final int CURRENT_SETTINGS_VERSION = 18;
+    public static final int CURRENT_SETTINGS_VERSION = 19;
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
     public static final int NUM_HASH_ITERATIONS = 5000;
