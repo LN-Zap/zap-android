@@ -29,7 +29,7 @@ public class InvoiceUtil {
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_MAINNET = new ArrayList<>(Arrays.asList("1", "3", "bc1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_TESTNET = new ArrayList<>(Arrays.asList("m", "n", "2", "tb1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_REGTEST = new ArrayList<>(Arrays.asList("m", "n", "2", "bcrt1"));
-    private static int INVOICE_LIGHTNING_MIN_LENGTH = 6;
+    private static final int INVOICE_LIGHTNING_MIN_LENGTH = 6;
 
 
     public static boolean isLightningInvoice(@NonNull String data) {

@@ -60,8 +60,6 @@ public class Bech32 {
             if (checkLength) {
                 throw new Exception("bech32 input too long");
             }
-        } else {
-            ;
         }
 
         String s = bech.substring(pos + 1);

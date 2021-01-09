@@ -2,7 +2,7 @@ package zapsolutions.zap.util;
 
 public class Version implements Comparable<Version> {
 
-    private String mVersion;
+    private final String mVersion;
 
     public final String get() {
         return this.mVersion;

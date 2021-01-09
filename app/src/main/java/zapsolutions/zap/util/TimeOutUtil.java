@@ -7,7 +7,6 @@ public class TimeOutUtil {
     private boolean canBeRestarted = true;
 
     private TimeOutUtil() {
-        ;
     }
 
     public static TimeOutUtil getInstance() {
