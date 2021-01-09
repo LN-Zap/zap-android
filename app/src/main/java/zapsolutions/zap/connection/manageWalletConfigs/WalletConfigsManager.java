@@ -7,23 +7,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.ZapLog;
 
@@ -42,12 +31,10 @@ public class WalletConfigsManager {
 
     private WalletConfigsManager() {
 
-        String encrypted = PrefsUtil.getPrefs().getString(PrefsUtil.WALLET_CONFIGS, "");
-
         String decrypted = null;
         try {
-            decrypted = new Cryptography(App.getAppContext()).decryptData(encrypted);
-        } catch (Exception e) {
+            decrypted = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.WALLET_CONFIGS, "");
+        } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
 
@@ -315,24 +302,14 @@ public class WalletConfigsManager {
      * Saves the current state of wallet configs encrypted to default shared preferences.
      * Always use this after you have changed anything on the configurations.
      *
+     * @throws GeneralSecurityException
      * @throws IOException
-     * @throws CertificateException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws UnrecoverableEntryException
-     * @throws InvalidAlgorithmParameterException
-     * @throws NoSuchPaddingException
-     * @throws NoSuchProviderException
-     * @throws BadPaddingException
-     * @throws KeyStoreException
-     * @throws IllegalBlockSizeException
      */
-    public void apply() throws IOException, CertificateException, NoSuchAlgorithmException, InvalidKeyException, UnrecoverableEntryException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchProviderException, BadPaddingException, KeyStoreException, IllegalBlockSizeException {
+    public void apply() throws GeneralSecurityException, IOException {
         // Convert JSON object to string
         String jsonString = new Gson().toJson(mWalletConfigsJson);
 
         // Save the new WalletConfigurations in encrypted prefs
-        String encrypted = new Cryptography(App.getAppContext()).encryptData(jsonString);
-        PrefsUtil.edit().putString(PrefsUtil.WALLET_CONFIGS, encrypted).commit();
+        PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.WALLET_CONFIGS, jsonString).commit();
     }
 }

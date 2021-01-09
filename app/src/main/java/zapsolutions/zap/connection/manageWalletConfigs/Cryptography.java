@@ -43,6 +43,8 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.x500.X500Principal;
 
+// ToDo: Deprecated! Remove this class soon. It is just used for backwards compatibility right now.
+
 /*
 MIT License: https://opensource.org/licenses/MIT
 Copyright 2017 Diederik Hattingh

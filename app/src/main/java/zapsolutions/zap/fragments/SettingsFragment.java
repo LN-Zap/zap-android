@@ -33,6 +33,7 @@ import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.pin.PinSetupActivity;
 import zapsolutions.zap.util.AppUtil;
+import zapsolutions.zap.util.KeystoreUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -162,6 +163,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 PrefsUtil.edit().clear().commit();
                 try {
                     new Cryptography(App.getAppContext()).removeKeys();
+                    new KeystoreUtil().removePinActiveKey();
                 } catch (KeyStoreException e) {
                     e.printStackTrace();
                 } catch (CertificateException e) {

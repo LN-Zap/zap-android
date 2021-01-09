@@ -3,6 +3,11 @@ package zapsolutions.zap.util;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.customView.OnChainFeeView;
@@ -32,7 +37,6 @@ public class PrefsUtil {
     public static final String SCAN_CLIPBOARD = "scanClipboard";
 
     // wallet config preferences references
-    public static final String PREFS_ENCRYPTED = "prefs_encrypted";
     public static final String WALLET_CONFIGS = "wallet_configs";
     public static final String RANDOM_SOURCE = "random_source";
 
@@ -41,18 +45,38 @@ public class PrefsUtil {
 
 
     // Access to default shared prefs
-
     public static SharedPreferences getPrefs() {
         return PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
     }
 
     public static SharedPreferences.Editor edit() {
-        return PreferenceManager.getDefaultSharedPreferences(App.getAppContext()).edit();
+        return getPrefs().edit();
     }
 
+    // Access encrypted preferences
+    public static SharedPreferences getEncryptedPrefs() throws GeneralSecurityException, IOException {
+
+        MasterKey masterKey = new MasterKey.Builder(App.getAppContext())
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build();
+
+        String sharedPrefsFile = "zap_secure_preferences";
+        SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                App.getAppContext(),
+                sharedPrefsFile,
+                masterKey,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        );
+
+        return sharedPreferences;
+    }
+
+    public static SharedPreferences.Editor editEncryptedPrefs() throws GeneralSecurityException, IOException {
+        return getEncryptedPrefs().edit();
+    }
 
     // Shortcuts to often used preferences
-
     public static boolean preventScreenRecording() {
         return getPrefs().getBoolean(PREVENT_SCREEN_RECORDING, true);
     }
@@ -78,7 +102,12 @@ public class PrefsUtil {
     }
 
     public static boolean isPinEnabled() {
-        return !getPrefs().getString(PIN_HASH, "").isEmpty();
+        try {
+            return getEncryptedPrefs().contains(PIN_HASH);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return true;
+        }
     }
 
     public static String getFirstCurrency() {

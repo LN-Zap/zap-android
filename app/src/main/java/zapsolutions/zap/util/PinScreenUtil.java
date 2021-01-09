@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.pin.PinEntryActivity;
 
@@ -24,14 +23,15 @@ public class PinScreenUtil {
                 // Check if pin is active according to key store
                 boolean isPinActive = false;
                 try {
-                    isPinActive = new Cryptography(activity).isPinActive();
+                    isPinActive = new KeystoreUtil().isPinActive();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 // Only allow access if pin is not active in key store!
                 if (isPinActive) {
-                    // According to the key store, the pin is still active. This happens if the pin got deleted from the prefs without also removing the keystore entry.
+                    // According to the key store, the pin is still active. This happens if the pin got deleted from the prefs file without also removing the keystore entry.
+                    // Basically this would be the case if the PIN hash was removed in a different way than from the apps settings menu. (For example with a file explorer on a rooted device)
                     new AlertDialog.Builder(activity)
                             .setMessage(R.string.error_pin_deactivation_attempt)
                             .setCancelable(false)

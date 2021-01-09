@@ -22,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -316,7 +318,12 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         // Check if PIN was correct
         String userEnteredPin = mUserInput.toString();
         String hashedInput = UtilFunctions.pinHash(userEnteredPin);
-        boolean correct = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
+        boolean correct = false;
+        try {
+            correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
         if (correct) {
             TimeOutUtil.getInstance().restartTimer();
 

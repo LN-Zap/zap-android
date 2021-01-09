@@ -1,6 +1,8 @@
 package zapsolutions.zap.util;
 
+import java.io.IOException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -8,9 +10,6 @@ import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-
-import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 
 public class UtilFunctions {
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
@@ -46,12 +45,16 @@ public class UtilFunctions {
 
     public static String getZapsalt() {
 
-        if (!PrefsUtil.getPrefs().contains(PrefsUtil.RANDOM_SOURCE)) {
-            createRandomSource();
+        try {
+            if (!PrefsUtil.getEncryptedPrefs().contains(PrefsUtil.RANDOM_SOURCE)) {
+                createRandomSource();
+            }
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
         }
         String salt = "";
         try {
-            String decrypted = new Cryptography(App.getAppContext()).decryptData(PrefsUtil.getPrefs().getString(PrefsUtil.RANDOM_SOURCE, ""));
+            String decrypted = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.RANDOM_SOURCE, "");
             salt = "zap" + decrypted;
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,8 +67,7 @@ public class UtilFunctions {
         try {
             SecureRandom random = new SecureRandom();
             int randomNumber = random.nextInt();
-            String encrypted = new Cryptography(App.getAppContext()).encryptData(String.valueOf(randomNumber));
-            PrefsUtil.edit().putString(PrefsUtil.RANDOM_SOURCE, encrypted).commit();
+            PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.RANDOM_SOURCE, String.valueOf(randomNumber)).commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
