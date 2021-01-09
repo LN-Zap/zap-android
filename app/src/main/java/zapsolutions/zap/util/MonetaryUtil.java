@@ -493,9 +493,9 @@ public class MonetaryUtil {
         if (satoshiValue == null || satoshiValue.equals("")) {
             return "0";
         } else {
-                double value = Double.parseDouble(satoshiValue);
-                double result = (value / 1e8);
-                return df.format(result);
+            double value = Double.parseDouble(satoshiValue);
+            double result = (value / 1e8);
+            return df.format(result);
         }
     }
 

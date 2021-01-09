@@ -4,12 +4,12 @@ package zapsolutions.zap.util;
  * This class helps to organize the various types of balances.
  */
 public class Balances {
-    private long mOnChainBalanceTotal;
-    private long mOnChainBalanceConfirmed;
-    private long mOnChainBalanceUnconfirmed;
-    private long mChannelBalance;
-    private long mChannelBalancePendingOpen;
-    private long mChannelBalanceLimbo;
+    private final long mOnChainBalanceTotal;
+    private final long mOnChainBalanceConfirmed;
+    private final long mOnChainBalanceUnconfirmed;
+    private final long mChannelBalance;
+    private final long mChannelBalancePendingOpen;
+    private final long mChannelBalanceLimbo;
 
     public Balances(long onChainTotal, long onChainConfirmed,
                     long onChainUnconfirmed, long channelBalance,

@@ -42,9 +42,11 @@ public class WalletConfig extends RemoteConfiguration implements Comparable<Wall
         this.cert = cert;
     }
 
-    public boolean isLocal() {return this.type.equals(WALLET_TYPE_LOCAL);}
+    public boolean isLocal() {
+        return this.type.equals(WALLET_TYPE_LOCAL);
+    }
 
-    public WalletConfig (String id) {
+    public WalletConfig(String id) {
         this.id = id;
     }
 
@@ -75,7 +77,7 @@ public class WalletConfig extends RemoteConfiguration implements Comparable<Wall
 
     @Override
     public int hashCode() {
-        if (this.id !=null) {
+        if (this.id != null) {
             return this.id.hashCode();
         } else {
             return this.alias.hashCode();

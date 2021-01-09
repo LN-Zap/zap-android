@@ -124,7 +124,7 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
         mAddress.setOnClickListener(view -> new BlockExplorer().showAddress(mTransaction.getDestAddresses(0), getActivity()));
         mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mTransaction.getTxHash()));
         mAddressCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Address", mTransaction.getDestAddresses(0)));
-        if (mTransaction.getNumConfirmations() < 7){
+        if (mTransaction.getNumConfirmations() < 7) {
             mConfirmations.setText(String.valueOf(mTransaction.getNumConfirmations()));
         } else {
             mConfirmations.setText("6+");

@@ -21,7 +21,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         setDisplayMode(true);
 
-        if (onChainTransactionItem.getOnChainTransaction().getNumConfirmations() == 0){
+        if (onChainTransactionItem.getOnChainTransaction().getNumConfirmations() == 0) {
             setDisplayMode(false);
         }
 

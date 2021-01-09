@@ -2,10 +2,10 @@
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:layoutDescription="@xml/user_avatar_motion_scene"
+    android:id="@+id/userAvatarMotionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/userAvatarMotionLayout"
+    app:layoutDescription="@xml/user_avatar_motion_scene"
     tools:context="zapsolutions.zap.IdentityActivity">
 
     <ImageView

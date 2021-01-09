@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
  * This class is used to handle typical URIs in the bitcoin space.
  */
 public class UriUtil {
-    public static String URI_PREFIX_LIGHTNING = "lightning:";
-    public static String URI_PREFIX_BITCOIN = "bitcoin:";
-    public static String URI_PREFIX_LNDCONNECT = "lndconnect://";
+    public static final String URI_PREFIX_LIGHTNING = "lightning:";
+    public static final String URI_PREFIX_BITCOIN = "bitcoin:";
+    public static final String URI_PREFIX_LNDCONNECT = "lndconnect://";
 
     public static String generateLightningUri(@NonNull String data) {
         if (isLightningUri(data)) {
@@ -46,12 +46,12 @@ public class UriUtil {
         return hasPrefix(URI_PREFIX_LNDCONNECT, data);
     }
 
-    public static String removeURI(@NonNull String data){
+    public static String removeURI(@NonNull String data) {
         if (isLightningUri(data)) {
             return data.substring(URI_PREFIX_LIGHTNING.length());
         } else if (isBitcoinUri(data)) {
             return data.substring(URI_PREFIX_BITCOIN.length());
-        } else if (isLNDConnectUri(data)){
+        } else if (isLNDConnectUri(data)) {
             return data.substring(URI_PREFIX_LNDCONNECT.length());
         } else {
             return data;

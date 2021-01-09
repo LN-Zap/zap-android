@@ -6,43 +6,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class helps to defend against some attack vectors.
- * It securely randomizes the positions at which the digits of the numpad will be shown.
+ * This class helps to protect the PIN.
+ * It is used to securely randomizes the digits on the numpad.
+ * This makes it impossible for an attacker to guess a PIN
+ * by observing the finger motion of a user.
  */
 public class ScrambledNumpad {
 
-    private List<SimpleImmutableEntry<Integer, Integer>> mNumpad;
-    private List<Integer> mPositions;
+    private final List<SimpleImmutableEntry<Integer, Integer>> mNumpad;
 
     public ScrambledNumpad() {
-
-        mPositions = new ArrayList<>();
-        mPositions.add(0);
-        mPositions.add(1);
-        mPositions.add(2);
-        mPositions.add(3);
-        mPositions.add(4);
-        mPositions.add(5);
-        mPositions.add(6);
-        mPositions.add(7);
-        mPositions.add(8);
-        mPositions.add(9);
-
-        mNumpad = new ArrayList<>();
-
-        SecureRandom random = new SecureRandom();
-
+        List<Integer> positions;
+        positions = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-
-            int randomPos = random.nextInt(mPositions.size());
-            SimpleImmutableEntry<Integer, Integer> pair = new SimpleImmutableEntry<>(i, mPositions.get(randomPos));
-            mPositions.remove(randomPos);
-            mNumpad.add(pair);
-
+            positions.add(i);
         }
-
+        mNumpad = new ArrayList<>();
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < 10; i++) {
+            int randomPos = random.nextInt(positions.size());
+            SimpleImmutableEntry<Integer, Integer> pair = new SimpleImmutableEntry<>(i, positions.get(randomPos));
+            positions.remove(randomPos);
+            mNumpad.add(pair);
+        }
     }
-
 
     public List<SimpleImmutableEntry<Integer, Integer>> getNumpad() {
         return mNumpad;
