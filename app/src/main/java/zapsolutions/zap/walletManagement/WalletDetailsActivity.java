@@ -97,7 +97,7 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, mId).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_WALLET_CONFIG, mId).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
@@ -215,7 +215,7 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
         if (PrefsUtil.getCurrentWalletConfig().equals(mId)) {
             Wallet.getInstance().reset();
             LndConnection.getInstance().closeConnection();
-            PrefsUtil.edit().remove(PrefsUtil.CURRENT_WALLET_CONFIG).commit();
+            PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_WALLET_CONFIG).commit();
             Intent intent = new Intent(WalletDetailsActivity.this, LandingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

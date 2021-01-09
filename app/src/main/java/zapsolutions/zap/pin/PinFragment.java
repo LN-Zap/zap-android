@@ -218,7 +218,7 @@ public class PinFragment extends Fragment {
                 // Go to next step
                 if (mMode == ENTER_MODE) {
 
-                    PrefsUtil.edit().putInt("numPINFails", 0)
+                    PrefsUtil.editPrefs().putInt("numPINFails", 0)
                             .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
 
                     ((PinActivityInterface) getActivity()).correctPinEntered();
@@ -266,7 +266,7 @@ public class PinFragment extends Fragment {
                             });
                     Dialog dlg = adb.create();
                     // Apply FLAG_SECURE to dialog to prevent screen recording
-                    if (PrefsUtil.preventScreenRecording()) {
+                    if (PrefsUtil.isScreenRecordingPrevented()) {
                         dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                     }
                     dlg.show();
@@ -488,7 +488,7 @@ public class PinFragment extends Fragment {
             // Go to next step
             if (mMode == ENTER_MODE) {
 
-                PrefsUtil.edit().putInt("numPINFails", 0)
+                PrefsUtil.editPrefs().putInt("numPINFails", 0)
                         .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
                 ((PinActivityInterface) getActivity()).correctPinEntered();
@@ -499,7 +499,7 @@ public class PinFragment extends Fragment {
             if (mMode == ENTER_MODE) {
                 mNumFails++;
 
-                PrefsUtil.edit().putInt("numPINFails", mNumFails)
+                PrefsUtil.editPrefs().putInt("numPINFails", mNumFails)
                         .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
                 final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
@@ -523,7 +523,7 @@ public class PinFragment extends Fragment {
                     Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
 
                     // Save timestamp. This way the delay can also be forced upon restart of the activity.
-                    PrefsUtil.edit().putLong("failedLoginTimestamp", System.currentTimeMillis()).apply();
+                    PrefsUtil.editPrefs().putLong("failedLoginTimestamp", System.currentTimeMillis()).apply();
 
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {

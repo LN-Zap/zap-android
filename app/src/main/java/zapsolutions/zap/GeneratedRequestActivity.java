@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.google.common.net.UrlEscapers;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import net.glxn.qrgen.android.QRCode;
@@ -116,7 +115,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PrefsUtil.preventScreenRecording()) {
+                if (PrefsUtil.isScreenRecordingPrevented()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();
@@ -154,7 +153,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PrefsUtil.preventScreenRecording()) {
+                if (PrefsUtil.isScreenRecordingPrevented()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();

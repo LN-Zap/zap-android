@@ -78,7 +78,7 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         View view = inflater.inflate(R.layout.bsd_open_channel, container);
 
         // Apply FLAG_SECURE to dialog to prevent screen recording
-        if (PrefsUtil.preventScreenRecording()) {
+        if (PrefsUtil.isScreenRecordingPrevented()) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
 

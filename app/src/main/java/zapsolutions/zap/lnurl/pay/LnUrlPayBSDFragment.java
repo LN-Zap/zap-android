@@ -144,7 +144,7 @@ public class LnUrlPayBSDFragment extends RxBSDFragment {
         View view = inflater.inflate(R.layout.bsd_lnurl_pay, container);
 
         // Apply FLAG_SECURE to dialog to prevent screen recording
-        if (PrefsUtil.preventScreenRecording()) {
+        if (PrefsUtil.isScreenRecordingPrevented()) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -520,7 +520,7 @@ public class LnUrlPayBSDFragment extends RxBSDFragment {
                     });
             Dialog dlg = adb.create();
             // Apply FLAG_SECURE to dialog to prevent screen recording
-            if (PrefsUtil.preventScreenRecording()) {
+            if (PrefsUtil.isScreenRecordingPrevented()) {
                 dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             }
             dlg.show();
@@ -548,7 +548,7 @@ public class LnUrlPayBSDFragment extends RxBSDFragment {
                         });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PrefsUtil.preventScreenRecording()) {
+                if (PrefsUtil.isScreenRecordingPrevented()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();

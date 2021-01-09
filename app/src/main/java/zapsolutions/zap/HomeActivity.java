@@ -501,7 +501,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Update if primary currency has been switched from this or another activity
         if (key.equals(PrefsUtil.PREVENT_SCREEN_RECORDING)) {
-            if (PrefsUtil.preventScreenRecording()) {
+            if (PrefsUtil.isScreenRecordingPrevented()) {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);

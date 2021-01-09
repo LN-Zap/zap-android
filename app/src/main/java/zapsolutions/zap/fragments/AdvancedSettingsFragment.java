@@ -48,7 +48,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         listExchangeRateProvider.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                PrefsUtil.edit().putString(PrefsUtil.EXCHANGE_RATE_PROVIDER, newValue.toString()).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.EXCHANGE_RATE_PROVIDER, newValue.toString()).commit();
                 ExchangeRateUtil.getInstance().getExchangeRates();
                 return true;
             }

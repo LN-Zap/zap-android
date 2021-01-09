@@ -109,7 +109,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                SharedPreferences.Editor editor = PrefsUtil.edit();
+                                SharedPreferences.Editor editor = PrefsUtil.editPrefs();
                                 editor.putString(PrefsUtil.LANGUAGE, newValue.toString());
 
                                 // We have to use commit here, apply would not finish before the app is restarted.
@@ -160,7 +160,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 // We have to use commit here, apply would not finish before the app is restarted.
-                PrefsUtil.edit().clear().commit();
+                PrefsUtil.editPrefs().clear().commit();
                 try {
                     new Cryptography(App.getAppContext()).removeKeys();
                     new KeystoreUtil().removePinActiveKey();

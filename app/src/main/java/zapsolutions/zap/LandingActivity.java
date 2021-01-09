@@ -75,7 +75,7 @@ public class LandingActivity extends BaseAppCompatActivity {
     private void resetApp() {
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             // Reset settings
-            PrefsUtil.edit().clear().commit();
+            PrefsUtil.editPrefs().clear().commit();
 
             new AlertDialog.Builder(LandingActivity.this)
                     .setTitle(R.string.app_reset_title)
@@ -97,7 +97,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             if (encryptedRandomSource != null && !encryptedRandomSource.equals("")) {
                 String decryptedRandomSource = new Cryptography(App.getAppContext()).decryptData(encryptedRandomSource);
                 PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.RANDOM_SOURCE, decryptedRandomSource).commit();
-                PrefsUtil.edit().remove(PrefsUtil.RANDOM_SOURCE).commit();
+                PrefsUtil.editPrefs().remove(PrefsUtil.RANDOM_SOURCE).commit();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +110,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             String pinHash = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "");
             try {
                 PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.PIN_HASH, pinHash).commit();
-                PrefsUtil.edit().remove(PrefsUtil.PIN_HASH).commit();
+                PrefsUtil.editPrefs().remove(PrefsUtil.PIN_HASH).commit();
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
                 resetApp();
@@ -124,7 +124,7 @@ public class LandingActivity extends BaseAppCompatActivity {
         try {
             decryptedWallets = new Cryptography(App.getAppContext()).decryptData(encryptedWallets);
             PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.WALLET_CONFIGS, decryptedWallets).commit();
-            PrefsUtil.edit().remove(PrefsUtil.WALLET_CONFIGS).commit();
+            PrefsUtil.editPrefs().remove(PrefsUtil.WALLET_CONFIGS).commit();
         } catch (Exception e) {
             e.printStackTrace();
             resetApp();
@@ -137,7 +137,7 @@ public class LandingActivity extends BaseAppCompatActivity {
     private void enterWallet() {
 
         // Set new settings version
-        PrefsUtil.edit().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
+        PrefsUtil.editPrefs().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
 
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             PinScreenUtil.askForAccess(this, () -> {
@@ -152,7 +152,7 @@ public class LandingActivity extends BaseAppCompatActivity {
 
         } else {
             // Clear connection data if something is there
-            PrefsUtil.edit().remove(PrefsUtil.WALLET_CONFIGS).commit();
+            PrefsUtil.editPrefs().remove(PrefsUtil.WALLET_CONFIGS).commit();
 
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);

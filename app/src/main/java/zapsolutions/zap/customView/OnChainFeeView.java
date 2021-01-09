@@ -116,7 +116,7 @@ public class OnChainFeeView extends ConstraintLayout {
         }
 
         // Update choice to shared preferences
-        PrefsUtil.edit().putString(PrefsUtil.ON_CHAIN_FEE_TIER, feeTier.name()).apply();
+        PrefsUtil.editPrefs().putString(PrefsUtil.ON_CHAIN_FEE_TIER, feeTier.name()).apply();
     }
 
     public void setFeeTierChangedListener(FeeTierChangedListener feeTierChangedListener) {

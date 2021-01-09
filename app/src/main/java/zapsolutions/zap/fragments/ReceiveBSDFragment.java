@@ -87,7 +87,7 @@ public class ReceiveBSDFragment extends RxBSDFragment {
         View view = inflater.inflate(R.layout.bsd_receive, container);
 
         // Apply FLAG_SECURE to dialog to prevent screen recording
-        if (PrefsUtil.preventScreenRecording()) {
+        if (PrefsUtil.isScreenRecordingPrevented()) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
 
