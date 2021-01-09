@@ -234,7 +234,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PrefsUtil.preventScreenRecording()) {
+                if (PrefsUtil.isScreenRecordingPrevented()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();

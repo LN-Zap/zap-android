@@ -200,7 +200,7 @@ public class WalletConfigsManager {
     public WalletConfig getCurrentWalletConfig() {
         WalletConfig config = getWalletConfigById(PrefsUtil.getCurrentWalletConfig());
         if (config == null && hasAnyConfigs()) {
-            PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, ((WalletConfig) mWalletConfigsJson.mConnections.toArray()[0]).getId()).commit();
+            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_WALLET_CONFIG, ((WalletConfig) mWalletConfigsJson.mConnections.toArray()[0]).getId()).commit();
             return (WalletConfig) mWalletConfigsJson.mConnections.toArray()[0];
         }
         return config;

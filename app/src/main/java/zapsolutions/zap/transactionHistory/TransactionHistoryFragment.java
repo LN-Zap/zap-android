@@ -182,21 +182,21 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                 normalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        PrefsUtil.edit().putBoolean("showNormalTransactions", isChecked).commit();
+                        PrefsUtil.editPrefs().putBoolean("showNormalTransactions", isChecked).commit();
                         updateHistoryDisplayList();
                     }
                 });
                 expiredSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        PrefsUtil.edit().putBoolean("showExpiredRequests", isChecked).commit();
+                        PrefsUtil.editPrefs().putBoolean("showExpiredRequests", isChecked).commit();
                         updateHistoryDisplayList();
                     }
                 });
                 internalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        PrefsUtil.edit().putBoolean("showInternalTransactions", isChecked).commit();
+                        PrefsUtil.editPrefs().putBoolean("showInternalTransactions", isChecked).commit();
                         updateHistoryDisplayList();
                     }
                 });
@@ -209,7 +209,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                 });
                 Dialog dlg = adb.create();
                 // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PrefsUtil.preventScreenRecording()) {
+                if (PrefsUtil.isScreenRecordingPrevented()) {
                     dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
                 dlg.show();

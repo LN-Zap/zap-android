@@ -49,7 +49,7 @@ public class PrefsUtil {
         return PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
     }
 
-    public static SharedPreferences.Editor edit() {
+    public static SharedPreferences.Editor editPrefs() {
         return getPrefs().edit();
     }
 
@@ -77,11 +77,11 @@ public class PrefsUtil {
     }
 
     // Shortcuts to often used preferences
-    public static boolean preventScreenRecording() {
+    public static boolean isScreenRecordingPrevented() {
         return getPrefs().getBoolean(PREVENT_SCREEN_RECORDING, true);
     }
 
-    public static boolean firstCurrencyIsPrimary() {
+    public static boolean isFirstCurrencyPrimary() {
         return getPrefs().getBoolean(FIRST_CURRENCY_IS_PRIMARY, true);
     }
 

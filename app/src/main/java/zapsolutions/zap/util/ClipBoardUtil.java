@@ -35,7 +35,7 @@ public class ClipBoardUtil {
 
             // Make sure the data just copied to clipboard does not trigger a clipboard scan popup
             String clipboardContentHash = UtilFunctions.sha256Hash(data.toString());
-            PrefsUtil.edit().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
+            PrefsUtil.editPrefs().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
         }
     }
 
@@ -47,7 +47,7 @@ public class ClipBoardUtil {
             // Make sure the data just pasted from the clipboard does not trigger a clipboard scan popup.
             // This prevents a popup directly after a new wallet was setup using paste.
             String clipboardContentHash = UtilFunctions.sha256Hash(data);
-            PrefsUtil.edit().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
+            PrefsUtil.editPrefs().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
         }
         return data;
     }
@@ -72,7 +72,7 @@ public class ClipBoardUtil {
             ZapLog.v(LOG_TAG, "Clipboard with same content was checked before");
             return;
         } else {
-            PrefsUtil.edit().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
+            PrefsUtil.editPrefs().putString(PrefsUtil.LAST_CLIPBOARD_SCAN, clipboardContentHash).apply();
         }
 
         ZapLog.v(LOG_TAG, "New Clipboard content found!");
@@ -160,7 +160,7 @@ public class ClipBoardUtil {
 
         Dialog dlg = adb.create();
         // Apply FLAG_SECURE to dialog to prevent screen recording
-        if (PrefsUtil.preventScreenRecording()) {
+        if (PrefsUtil.isScreenRecordingPrevented()) {
             dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
         dlg.show();

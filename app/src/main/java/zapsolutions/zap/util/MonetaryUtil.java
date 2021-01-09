@@ -104,7 +104,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getPrimaryDisplayAmount(long value) {
-        if (PrefsUtil.firstCurrencyIsPrimary()) {
+        if (PrefsUtil.isFirstCurrencyPrimary()) {
             return getFirstCurrencyAmount(value);
         } else {
             return getSecondCurrencyAmount(value);
@@ -118,7 +118,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getPrimaryDisplayUnit() {
-        if (PrefsUtil.firstCurrencyIsPrimary()) {
+        if (PrefsUtil.isFirstCurrencyPrimary()) {
             return getFirstDisplayUnit();
         } else {
             return getSecondDisplayUnit();
@@ -144,7 +144,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getSecondaryDisplayAmount(long value) {
-        if (PrefsUtil.firstCurrencyIsPrimary()) {
+        if (PrefsUtil.isFirstCurrencyPrimary()) {
             return getSecondCurrencyAmount(value);
         } else {
             return getFirstCurrencyAmount(value);
@@ -158,7 +158,7 @@ public class MonetaryUtil {
      * @return formatted string
      */
     public String getSecondaryDisplayUnit() {
-        if (PrefsUtil.firstCurrencyIsPrimary()) {
+        if (PrefsUtil.isFirstCurrencyPrimary()) {
             return getSecondDisplayUnit();
         } else {
             return getFirstDisplayUnit();
@@ -267,10 +267,10 @@ public class MonetaryUtil {
      * Switch which of the currencies (first or second one) is used as primary currency
      */
     public void switchCurrencies() {
-        if (PrefsUtil.firstCurrencyIsPrimary()) {
-            PrefsUtil.edit().putBoolean(PrefsUtil.FIRST_CURRENCY_IS_PRIMARY, false).apply();
+        if (PrefsUtil.isFirstCurrencyPrimary()) {
+            PrefsUtil.editPrefs().putBoolean(PrefsUtil.FIRST_CURRENCY_IS_PRIMARY, false).apply();
         } else {
-            PrefsUtil.edit().putBoolean(PrefsUtil.FIRST_CURRENCY_IS_PRIMARY, true).apply();
+            PrefsUtil.editPrefs().putBoolean(PrefsUtil.FIRST_CURRENCY_IS_PRIMARY, true).apply();
         }
     }
 
@@ -280,7 +280,7 @@ public class MonetaryUtil {
      * @return
      */
     public Currency getPrimaryCurrency() {
-        if (PrefsUtil.firstCurrencyIsPrimary()) {
+        if (PrefsUtil.isFirstCurrencyPrimary()) {
             return mFirstCurrency;
         } else {
             return mSecondCurrency;
@@ -294,7 +294,7 @@ public class MonetaryUtil {
      * @return
      */
     public Currency getSecondaryCurrency() {
-        if (PrefsUtil.firstCurrencyIsPrimary()) {
+        if (PrefsUtil.isFirstCurrencyPrimary()) {
             return mSecondCurrency;
         } else {
             return mFirstCurrency;
@@ -311,7 +311,7 @@ public class MonetaryUtil {
         if (primaryValue == null || primaryValue.equals("")) {
             return "";
         } else {
-            if (PrefsUtil.firstCurrencyIsPrimary()) {
+            if (PrefsUtil.isFirstCurrencyPrimary()) {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mFirstCurrency.getRate() * mSecondCurrency.getRate());
                 DecimalFormat df = TextInputCurrencyFormat(mSecondCurrency);
@@ -340,7 +340,7 @@ public class MonetaryUtil {
         if (primaryValue == null || primaryValue.equals("")) {
             return "0";
         } else {
-            if (PrefsUtil.firstCurrencyIsPrimary()) {
+            if (PrefsUtil.isFirstCurrencyPrimary()) {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mFirstCurrency.getRate());
                 return df.format(result);
@@ -366,7 +366,7 @@ public class MonetaryUtil {
         if (secondaryValue == null || secondaryValue.equals("")) {
             return "0";
         } else {
-            if (PrefsUtil.firstCurrencyIsPrimary()) {
+            if (PrefsUtil.isFirstCurrencyPrimary()) {
                 double value = Double.parseDouble(secondaryValue);
                 double result = (value / mSecondCurrency.getRate());
                 return df.format(result);
@@ -389,7 +389,7 @@ public class MonetaryUtil {
         if (value == 0) {
             return "0";
         } else {
-            if (PrefsUtil.firstCurrencyIsPrimary()) {
+            if (PrefsUtil.isFirstCurrencyPrimary()) {
                 double result = (value * mFirstCurrency.getRate());
                 DecimalFormat df = TextInputCurrencyFormat(mFirstCurrency);
                 return df.format(result);
@@ -412,7 +412,7 @@ public class MonetaryUtil {
         if (value == 0) {
             return "0";
         } else {
-            if (PrefsUtil.firstCurrencyIsPrimary()) {
+            if (PrefsUtil.isFirstCurrencyPrimary()) {
                 double result = (value * mSecondCurrency.getRate());
                 DecimalFormat df = TextInputCurrencyFormat(mSecondCurrency);
                 return df.format(result);
@@ -439,7 +439,7 @@ public class MonetaryUtil {
         if (primaryValue == null || primaryValue.equals("")) {
             return "0";
         } else {
-            if (PrefsUtil.firstCurrencyIsPrimary()) {
+            if (PrefsUtil.isFirstCurrencyPrimary()) {
                 double value = Double.parseDouble(primaryValue);
                 double result = (value / mFirstCurrency.getRate() / 1e8);
                 return df.format(result);
@@ -466,7 +466,7 @@ public class MonetaryUtil {
         if (secondaryValue == null || secondaryValue.equals("")) {
             return "0";
         } else {
-            if (PrefsUtil.firstCurrencyIsPrimary()) {
+            if (PrefsUtil.isFirstCurrencyPrimary()) {
                 double value = Double.parseDouble(secondaryValue);
                 double result = (value / mSecondCurrency.getRate() / 1e8);
                 return df.format(result);

@@ -64,7 +64,7 @@ public class WalletSpinner extends AppCompatSpinner {
                         String selectedWalletId = WalletConfigsManager.getInstance().getAllWalletConfigs(true).get(position).getId();
                         if (!WalletConfigsManager.getInstance().getCurrentWalletConfig().getId().equals(selectedWalletId)) {
                             // Save selected Wallet ID in prefs making it the current wallet.
-                            PrefsUtil.edit().putString(PrefsUtil.CURRENT_WALLET_CONFIG, selectedWalletId).commit();
+                            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_WALLET_CONFIG, selectedWalletId).commit();
 
                             // Update the wallet spinner list, so everything is at it's correct position again.
                             updateList();

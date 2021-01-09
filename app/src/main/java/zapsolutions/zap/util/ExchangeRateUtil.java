@@ -219,7 +219,7 @@ public class ExchangeRateUtil {
 
     private void applyExchangeRatesAndSaveInPreferences(JSONObject exchangeRates) {
 
-        final SharedPreferences.Editor editor = PrefsUtil.edit();
+        final SharedPreferences.Editor editor = PrefsUtil.editPrefs();
         editor.remove(PrefsUtil.AVAILABLE_FIAT_CURRENCIES);
         editor.commit();
 
@@ -274,7 +274,7 @@ public class ExchangeRateUtil {
             String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
             if (currencyCode != null) {
                 if (!PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "").isEmpty()) {
-                    final SharedPreferences.Editor editor = PrefsUtil.edit();
+                    final SharedPreferences.Editor editor = PrefsUtil.editPrefs();
                     editor.putBoolean(PrefsUtil.IS_DEFAULT_CURRENCY_SET, true);
                     editor.putString(PrefsUtil.SECOND_CURRENCY, currencyCode);
                     editor.commit();

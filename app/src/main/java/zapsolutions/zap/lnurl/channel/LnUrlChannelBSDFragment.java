@@ -112,7 +112,7 @@ public class LnUrlChannelBSDFragment extends RxBSDFragment {
         View view = inflater.inflate(R.layout.bsd_lnurl_channel, container);
 
         // Apply FLAG_SECURE to dialog to prevent screen recording
-        if (PrefsUtil.preventScreenRecording()) {
+        if (PrefsUtil.isScreenRecordingPrevented()) {
             getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
 

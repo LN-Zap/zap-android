@@ -56,7 +56,7 @@ public class UserGuardian {
      * Reset all "do not show again" selections.
      */
     public static void reenableAllSecurityWarnings() {
-        PrefsUtil.edit()
+        PrefsUtil.editPrefs()
                 .putBoolean(DIALOG_COPY_TO_CLIPBOARD, true)
                 .putBoolean(DIALOG_PASTE_FROM_CLIPBOARD, true)
                 .putBoolean(DIALOG_DISABLE_SCRAMBLED_PIN, true)
@@ -239,7 +239,7 @@ public class UserGuardian {
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
 
             if (mDontShowAgain.isChecked()) {
-                PrefsUtil.edit().putBoolean(mCurrentDialogName, false).apply();
+                PrefsUtil.editPrefs().putBoolean(mCurrentDialogName, false).apply();
             }
 
             if (mListener != null) {
@@ -265,7 +265,7 @@ public class UserGuardian {
         if (PrefsUtil.getPrefs().getBoolean(mCurrentDialogName, true)) {
             Dialog dlg = adb.create();
             // Apply FLAG_SECURE to dialog to prevent screen recording
-            if (PrefsUtil.preventScreenRecording()) {
+            if (PrefsUtil.isScreenRecordingPrevented()) {
                 dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             }
             dlg.show();

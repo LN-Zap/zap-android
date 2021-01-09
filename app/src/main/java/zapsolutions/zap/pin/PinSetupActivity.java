@@ -13,7 +13,6 @@ import java.security.GeneralSecurityException;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.util.KeystoreUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -73,7 +72,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
         }
 
         // save pin length in preferences
-        PrefsUtil.edit()
+        PrefsUtil.editPrefs()
                 .putInt(PrefsUtil.PIN_LENGTH, value.length())
                 .commit();
 

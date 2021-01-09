@@ -148,11 +148,11 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
 
-                PrefsUtil.edit().putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
+                PrefsUtil.editPrefs().putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
 
                 TimeOutUtil.getInstance().restartTimer();
 
-                PrefsUtil.edit().putInt("numPINFails", 0).apply();
+                PrefsUtil.editPrefs().putInt("numPINFails", 0).apply();
 
                 Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -193,7 +193,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                             });
                     Dialog dlg = adb.create();
                     // Apply FLAG_SECURE to dialog to prevent screen recording
-                    if (PrefsUtil.preventScreenRecording()) {
+                    if (PrefsUtil.isScreenRecordingPrevented()) {
                         dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                     }
                     dlg.show();
@@ -327,7 +327,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         if (correct) {
             TimeOutUtil.getInstance().restartTimer();
 
-            PrefsUtil.edit().putInt("numPINFails", 0)
+            PrefsUtil.editPrefs().putInt("numPINFails", 0)
                     .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
 
@@ -337,7 +337,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         } else {
             mNumFails++;
 
-            PrefsUtil.edit().putInt("numPINFails", mNumFails).apply();
+            PrefsUtil.editPrefs().putInt("numPINFails", mNumFails).apply();
 
             final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
             View view = findViewById(R.id.pinInputLayout);
@@ -361,7 +361,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
                 // Save timestamp. This way the delay can also be forced upon app restart.
-                PrefsUtil.edit().putLong("failedLoginTimestamp", System.currentTimeMillis()).apply();
+                PrefsUtil.editPrefs().putLong("failedLoginTimestamp", System.currentTimeMillis()).apply();
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {

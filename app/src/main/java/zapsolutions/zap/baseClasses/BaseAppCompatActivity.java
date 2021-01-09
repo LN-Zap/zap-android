@@ -44,7 +44,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * https://github.com/commonsguy/cwac-security/blob/master/docs/FLAGSECURE.md
      */
     private void initializeScreenRecordingSecurity() {
-        if (PrefsUtil.preventScreenRecording()) {
+        if (PrefsUtil.isScreenRecordingPrevented()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
     }
