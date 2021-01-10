@@ -649,11 +649,11 @@ public class Wallet {
                             broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                         }
                     } else {
-                        ZapLog.d(LOG_TAG, "node Info does not contain any addresses.");
+                        ZapLog.d(LOG_TAG, "Node Info does not contain any addresses.");
                         broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                     }
                 }, throwable -> {
-                    ZapLog.w(LOG_TAG, "Exception in get node info (" + nodeUri.getPubKey() + ") request task: " + throwable.getMessage());
+                    ZapLog.w(LOG_TAG, "Fetching host info failed. Exception in get node info (" + nodeUri.getPubKey() + ") request task: " + throwable.getMessage());
                     broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                 }));
     }
