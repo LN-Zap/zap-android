@@ -600,7 +600,8 @@ public class Wallet {
 
     private void connectPeer(LightningNodeUri nodeUri, long amount) {
         if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
-            broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
+            ZapLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
+            fetchNodeInfoToConnectPeer(nodeUri, amount);
             return;
         }
 
@@ -626,6 +627,34 @@ public class Wallet {
                     } else {
                         broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION, throwable.getMessage());
                     }
+                }));
+    }
+
+    public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, long amount) {
+        NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
+                .setPubKey(nodeUri.getPubKey())
+                .build();
+
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
+                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .subscribe(nodeInfo -> {
+                    if (nodeInfo.getNode().getAddressesCount() > 0) {
+                        String tempUri = nodeUri.getPubKey() + "@" + nodeInfo.getNode().getAddresses(0).getAddr();
+                        LightningNodeUri nodeUriWithHost = LightningParser.parseNodeUri(tempUri);
+                        if (nodeUriWithHost != null) {
+                            ZapLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
+                            connectPeer(nodeUriWithHost, amount);
+                        } else {
+                            ZapLog.d(LOG_TAG, "Failed to parse nodeUri");
+                            broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
+                        }
+                    } else {
+                        ZapLog.d(LOG_TAG, "node Info does not contain any addresses.");
+                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
+                    }
+                }, throwable -> {
+                    ZapLog.w(LOG_TAG, "Exception in get node info (" + nodeUri.getPubKey() + ") request task: " + throwable.getMessage());
+                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                 }));
     }
 
