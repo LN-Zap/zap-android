@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <zapsolutions.zap.customView.ClickableConstraintLayoutGroup
+        android:id="@+id/sendFeeOnChainAmountGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="sendFeeOnChainLabel,sendFeeOnChainAmount, sendFeeSpeed, feeArrowUnitImage"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/sendFeeOnChainLabel"
@@ -13,107 +21,97 @@
         android:text="@string/fee"
         android:textAlignment="viewStart"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/sendFeeOnChainAmountLayout"
+        app:layout_constraintBottom_toBottomOf="@id/sendFeeSpeed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sendFeeOnChainAmountLayout"
+    <TextView
+        android:id="@+id/sendFeeOnChainAmount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#00000000"
+        android:maxLength="50"
+        android:text="@string/fee_not_available"
+        android:textAlignment="textEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/feeArrowUnitImage"
         app:layout_constraintStart_toEndOf="@id/sendFeeOnChainLabel"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/sendFeeOnChainAmount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:maxLength="50"
-            android:text="@string/fee_not_available"
-            android:textAlignment="textEnd"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/feeArrowUnitImage"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/sendFeeSpeed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:maxLength="50"
-            android:text="@string/fee_tier_fast_description"
-            android:textAlignment="textEnd"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@+id/feeArrowUnitImage"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sendFeeOnChainAmount" />
-
-        <ImageView
-            android:id="@+id/feeArrowUnitImage"
-            android:layout_width="24dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingStart="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_down_24dp"
-            app:tint="@color/lightningOrange" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/feeDurationLayout"
+    <TextView
+        android:id="@+id/sendFeeSpeed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:background="#00000000"
+        android:maxLength="50"
+        android:text="@string/fee_tier_fast_description"
+        android:textAlignment="textEnd"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/feeArrowUnitImage"
+        app:layout_constraintStart_toEndOf="@id/sendFeeOnChainLabel"
+        app:layout_constraintTop_toBottomOf="@+id/sendFeeOnChainAmount" />
+
+    <ImageView
+        android:id="@+id/feeArrowUnitImage"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/sendFeeSpeed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_down_24dp"
+        app:tint="@color/lightningOrange" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/feeDurationGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone"
+        app:constraint_referenced_ids="feeSpeedTabLayout,feeDurationText"
+        tools:visibility="visible" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/feeSpeedTabLayout"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_rectangle_seablue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sendFeeOnChainAmountLayout">
+        app:layout_constraintTop_toBottomOf="@id/sendFeeSpeed"
+        app:tabBackground="@drawable/tab_layout"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed"
+        app:tabRippleColor="@null"
+        app:tabSelectedTextColor="@color/seaBlue">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/feeSpeedTabLayout"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:background="@drawable/rounded_rectangle_seablue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabBackground="@drawable/tab_layout"
-            app:tabIndicatorHeight="0dp"
-            app:tabMode="fixed"
-            app:tabRippleColor="@null"
-            app:tabSelectedTextColor="@color/seaBlue">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fee_tier_fast_title" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fee_tier_medium_title" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fee_tier_slow_title" />
-        </com.google.android.material.tabs.TabLayout>
-
-        <TextView
-            android:id="@+id/feeDurationText"
-            android:layout_width="0dp"
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/feeSpeedTabLayout" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="@string/fee_tier_fast_title" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fee_tier_medium_title" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fee_tier_slow_title" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <TextView
+        android:id="@+id/feeDurationText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/feeSpeedTabLayout"
+        tools:text="Estimated duration: 6 hours" />
 
     <ImageView
         android:id="@+id/sendFeeOnChainLineBottom"
@@ -122,6 +120,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/feeDurationLayout"
-        app:srcCompat="@color/gray" />
+        app:layout_constraintTop_toBottomOf="@id/feeDurationText"
+        app:srcCompat="@color/gray"
+        tools:ignore="ContentDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

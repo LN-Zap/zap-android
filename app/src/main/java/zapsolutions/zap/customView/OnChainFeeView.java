@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -23,8 +24,8 @@ public class OnChainFeeView extends ConstraintLayout {
     private TabLayout mTabLayoutSendFeeSpeed;
     private TextView mTvSendFeeDuration;
     private ImageView mFeeArrowUnitImage;
-    private ConstraintLayout mClSendFeeAmountLayout;
-    private ConstraintLayout mClSendFeeDurationLayout;
+    private ClickableConstraintLayoutGroup mGroupSendFeeAmount;
+    private Group mGroupSendFeeDuration;
     private FeeTierChangedListener mFeeTierChangedListener;
     private OnChainFeeView.OnChainFeeTier mOnChainFeeTier;
 
@@ -50,20 +51,20 @@ public class OnChainFeeView extends ConstraintLayout {
         mTvSendFeeSpeed = view.findViewById(R.id.sendFeeSpeed);
         mTabLayoutSendFeeSpeed = view.findViewById(R.id.feeSpeedTabLayout);
         mTvSendFeeDuration = view.findViewById(R.id.feeDurationText);
-        mClSendFeeAmountLayout = view.findViewById(R.id.sendFeeOnChainAmountLayout);
+        mGroupSendFeeAmount = view.findViewById(R.id.sendFeeOnChainAmountGroup);
         mFeeArrowUnitImage = view.findViewById(R.id.feeArrowUnitImage);
 
-        mClSendFeeDurationLayout = view.findViewById(R.id.feeDurationLayout);
+        mGroupSendFeeDuration = view.findViewById(R.id.feeDurationGroup);
 
         // Set tier from shared preferences
         setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
         mTabLayoutSendFeeSpeed.getTabAt(mOnChainFeeTier.ordinal()).select();
 
         // Toggle tier settings view on amount click
-        mClSendFeeAmountLayout.setOnClickListener(new OnSingleClickListener() {
+        mGroupSendFeeAmount.setOnAllClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                boolean isFeeDurationVisible = mClSendFeeDurationLayout.getVisibility() == View.VISIBLE;
+                boolean isFeeDurationVisible = mGroupSendFeeDuration.getVisibility() == View.VISIBLE;
                 toggleFeeTierView(isFeeDurationVisible);
             }
         });
@@ -137,7 +138,7 @@ public class OnChainFeeView extends ConstraintLayout {
     private void toggleFeeTierView(boolean hide) {
         TransitionManager.beginDelayedTransition((ViewGroup) getRootView());
         mFeeArrowUnitImage.setImageResource(hide ? R.drawable.ic_arrow_down_24dp : R.drawable.ic_arrow_up_24dp);
-        mClSendFeeDurationLayout.setVisibility(hide ? View.GONE : View.VISIBLE);
+        mGroupSendFeeDuration.setVisibility(hide ? View.GONE : View.VISIBLE);
     }
 
     /**
