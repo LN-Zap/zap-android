@@ -2,27 +2,39 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@android:id/background">
-        <shape>
-            <corners android:radius="3dip" />
-            <gradient
-                android:angle="270"
-                android:centerColor="@color/seaBlueGradient3"
-                android:centerY="0.75"
-                android:endColor="@color/seaBlueGradient3"
-                android:startColor="@color/seaBlueGradient3" />
-        </shape>
-    </item>
-
-    <item android:id="@android:id/progress">
-        <clip>
+        <rotate
+            android:fromDegrees="180"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="180">
             <shape>
                 <corners android:radius="3dip" />
                 <gradient
-                    android:angle="180"
-                    android:endColor="@color/lightningBlue"
-                    android:startColor="@color/lightningBlueGradient" />
+                    android:angle="270"
+                    android:centerColor="@color/seaBlueGradient3"
+                    android:centerY="0.75"
+                    android:endColor="@color/seaBlueGradient3"
+                    android:startColor="@color/seaBlueGradient3" />
             </shape>
-        </clip>
+        </rotate>
+    </item>
+
+    <item android:id="@android:id/progress">
+        <rotate
+            android:fromDegrees="180"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="180">
+            <clip>
+                <shape>
+                    <corners android:radius="3dip" />
+                    <gradient
+                        android:angle="180"
+                        android:endColor="@color/lightningBlue"
+                        android:startColor="@color/lightningBlueGradient" />
+                </shape>
+            </clip>
+        </rotate>
     </item>
 
 </layer-list>
