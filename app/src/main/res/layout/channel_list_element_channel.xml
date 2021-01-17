@@ -149,7 +149,6 @@
                     android:layout_width="0dp"
                     android:layout_height="6dp"
                     android:layout_marginStart="5dp"
-                    android:layoutDirection="rtl"
                     android:progressDrawable="@drawable/channel_remote_balance_progress_bar"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
