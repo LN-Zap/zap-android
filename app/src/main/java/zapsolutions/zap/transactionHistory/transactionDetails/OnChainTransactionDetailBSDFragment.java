@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,11 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.customView.BSDScrollableMainView;
+import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.util.BlockExplorer;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -24,13 +24,13 @@ import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
-public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragment {
+public class OnChainTransactionDetailBSDFragment extends ZapBSDFragment {
 
     public static final String TAG = OnChainTransactionDetailBSDFragment.class.getName();
     public static final String ARGS_TRANSACTION = "TRANSACTION";
 
+    private BSDScrollableMainView mBSDScrollableMainView;
     private Transaction mTransaction;
-    private TextView mTransactionDescription;
     private TextView mChannelLabel;
     private TextView mChannel;
     private TextView mEventLabel;
@@ -55,8 +55,7 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bsd_on_chain_transaction_detail, container);
 
-        mTransactionDescription = view.findViewById(R.id.transactionDescription);
-
+        mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
         mChannelLabel = view.findViewById(R.id.channelLabel);
         mChannel = view.findViewById(R.id.channel);
         mEventLabel = view.findViewById(R.id.eventLabel);
@@ -76,8 +75,8 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
         mConfrimationsLabel = view.findViewById(R.id.confirmationsLabel);
         mConfirmations = view.findViewById(R.id.confirmations);
 
-        ImageButton closeButton = view.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(view1 -> dismiss());
+        mBSDScrollableMainView.setSeparatorVisibility(true);
+        mBSDScrollableMainView.setOnCloseListener(this::dismiss);
 
         if (getArguments() != null) {
             ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_TRANSACTION);
@@ -139,13 +138,8 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
         }
     }
 
-    @Override
-    public int getTheme() {
-        return R.style.ZapBottomSheetDialogTheme;
-    }
-
     private void bindInternal() {
-        mTransactionDescription.setText(R.string.channel_event);
+        mBSDScrollableMainView.setTitle(R.string.channel_event);
         Long amount = mTransaction.getAmount();
 
         mAddress.setVisibility(View.GONE);
@@ -181,7 +175,7 @@ public class OnChainTransactionDetailBSDFragment extends BottomSheetDialogFragme
     }
 
     private void bindNormalTransaction() {
-        mTransactionDescription.setText(R.string.transaction_detail);
+        mBSDScrollableMainView.setTitle(R.string.transaction_detail);
         mChannel.setVisibility(View.GONE);
         mChannelLabel.setVisibility(View.GONE);
         mEvent.setVisibility(View.GONE);
