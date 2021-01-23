@@ -53,6 +53,8 @@ public class LandingActivity extends BaseAppCompatActivity {
             }
         }
 
+        // Make sure the old lnd message is always shown:
+        PrefsUtil.editPrefs().putBoolean("guardianOldLndVersion", false).apply();
 
         // support for clearing shared preferences, on breaking changes
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
