@@ -1258,23 +1258,38 @@ public class Wallet {
      */
     public long getMaxLightningSendAmount() {
 
-        // ToDo: Calculate differently depending on LND version (consider multi path for LND 0.10 and up)
-
         if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
             return 0;
         }
 
-        long tempMax = 0L;
-        if (mOpenChannelsList != null) {
-            for (Channel c : mOpenChannelsList) {
-                if (c.getActive()) {
-                    if (c.getLocalBalance() > tempMax) {
-                        tempMax = c.getLocalBalance();
+        Version actualLNDVersion = getLNDVersion();
+        Version MppSend = new Version("0.10");
+
+        if (actualLNDVersion.compareTo(MppSend) < 0) {
+            // Mpp send is not supported. Use the maximum local balance of all channels as maximum.
+            long tempMax = 0L;
+            if (mOpenChannelsList != null) {
+                for (Channel c : mOpenChannelsList) {
+                    if (c.getActive()) {
+                        if (c.getLocalBalance() > tempMax) {
+                            tempMax = c.getLocalBalance();
+                        }
                     }
                 }
             }
+            return tempMax;
+        } else {
+            // Mpp is supported. Use the sum of the local balances of all channels as maximum.
+            long tempMax = 0L;
+            if (mOpenChannelsList != null) {
+                for (Channel c : mOpenChannelsList) {
+                    if (c.getActive()) {
+                        tempMax = tempMax + c.getLocalBalance();
+                    }
+                }
+            }
+            return tempMax;
         }
-        return tempMax;
     }
 
     public boolean isSyncedToChain() {
