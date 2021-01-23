@@ -1,8 +1,5 @@
 package zapsolutions.zap.fragments;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -10,46 +7,40 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
-import androidx.transition.ChangeBounds;
-import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.customView.BSDProgressView;
+import zapsolutions.zap.customView.BSDResultView;
 import zapsolutions.zap.customView.NumpadView;
+import zapsolutions.zap.customView.BSDScrollableMainView;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
-import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 
-public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements Wallet.ChannelOpenUpdateListener {
+public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.ChannelOpenUpdateListener {
 
     public static final String TAG = OpenChannelBSDFragment.class.getName();
     public static final String ARGS_NODE_URI = "NODE_URI";
-    private ConstraintLayout mRootLayout;
+
+    private BSDScrollableMainView mBSDScrollableMainView;
+    private BSDResultView mResultView;
+    private BSDProgressView mProgressView;
+    private ConstraintLayout mContentTopLayout;
+    private ConstraintLayout mOpenChannelInputLayout;
     private NumpadView mNumpad;
     private EditText mEtAmount;
     private TextView mTvUnit;
@@ -58,17 +49,6 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     private TextView mTvNodeAlias;
     private TextView mTvOnChainFunds;
     private LightningNodeUri mLightningNodeUri;
-    private View mFinishedScreen;
-    private View mProgressScreen;
-    private ImageView mProgressFinishedIcon;
-    private ImageView mIvProgressPaymentTypeIcon;
-    private View mProgressBar;
-    private View mLocalAmountsInputView;
-    private View mNodeLayout;
-    private Button mOkButton;
-    private ImageView mIvBsdIcon;
-    private TextView mTvFinishedText;
-    private TextView mTvFinishedTextDetail;
     private String mValueBeforeUnitSwitch;
     private boolean mUseValueBeforeUnitSwitch = true;
 
@@ -77,48 +57,30 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bsd_open_channel, container);
 
-        // Apply FLAG_SECURE to dialog to prevent screen recording
-        if (PrefsUtil.isScreenRecordingPrevented()) {
-            getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-        }
-
-        mRootLayout = view.findViewById(R.id.rootLayout);
+        mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
+        mResultView = view.findViewById(R.id.resultLayout);
+        mContentTopLayout = view.findViewById(R.id.contentTopLayout);
+        mProgressView = view.findViewById(R.id.paymentProgressLayout);
+        mOpenChannelInputLayout = view.findViewById(R.id.openChannelInputLayout);
         mNumpad = view.findViewById(R.id.numpadView);
         mTvNodeAlias = view.findViewById(R.id.nodeAliasText);
         mTvOnChainFunds = view.findViewById(R.id.onChainFunds);
-        mIvBsdIcon = view.findViewById(R.id.bsdIcon);
-        Wallet.getInstance().registerChannelOpenUpdateListener(this);
-
-        if (getArguments() != null) {
-            mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
-
-            setAlias(mLightningNodeUri);
-        }
-
-        mProgressScreen = view.findViewById(R.id.openChannelProgressLayout);
-
-        mTvFinishedText = view.findViewById(R.id.finishedText);
-        mTvFinishedTextDetail = view.findViewById(R.id.finishedTextDetail);
-
-        mFinishedScreen = view.findViewById(R.id.openChannelFinishedLayout);
-        mProgressFinishedIcon = view.findViewById(R.id.progressFinishedIcon);
-        mIvProgressPaymentTypeIcon = view.findViewById(R.id.progressPaymentTypeIcon);
-        mProgressBar = view.findViewById(R.id.progressBar);
-        mLocalAmountsInputView = view.findViewById(R.id.localAmountInputsView);
-        mNodeLayout = view.findViewById(R.id.nodeLayout);
-        mOkButton = view.findViewById(R.id.okButton);
         mEtAmount = view.findViewById(R.id.localAmount);
         mTvUnit = view.findViewById(R.id.localAmountUnit);
         mOpenChannelButton = view.findViewById(R.id.openChannelButton);
 
+        mBSDScrollableMainView.setOnCloseListener(this::dismiss);
+        mBSDScrollableMainView.setTitleIconVisibility(true);
+        mBSDScrollableMainView.setTitle(R.string.channel_open);
+        mResultView.setOnOkListener(this::dismiss);
         mNumpad.bindEditText(mEtAmount);
 
-        mOkButton.setOnClickListener(v -> dismiss());
+        Wallet.getInstance().registerChannelOpenUpdateListener(this);
 
-        // Action when clicked on "x" (close) button
-        ImageButton btnCloseBSD = view.findViewById(R.id.closeButton);
-        btnCloseBSD.setOnClickListener(v -> dismiss());
-
+        if (getArguments() != null) {
+            mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
+            setAlias(mLightningNodeUri);
+        }
 
         setAvailableFunds();
 
@@ -226,8 +188,8 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
                     return;
                 }
 
+                switchToProgressScreen();
                 Wallet.getInstance().openChannel(mLightningNodeUri, userInputAmount);
-                switchToSendProgressScreen();
             }
         });
 
@@ -243,17 +205,6 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         // set unit to current primary unit
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
 
-        // redraw layout when height is available, otherwise it won't be shown completely
-        getDialog().setOnShowListener(dialog -> {
-            BottomSheetDialog d = (BottomSheetDialog) dialog;
-            FrameLayout bottomSheet = d.findViewById(R.id.design_bottom_sheet);
-            if (bottomSheet != null) {
-                CoordinatorLayout coordinatorLayout = (CoordinatorLayout) bottomSheet.getParent();
-                BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-                bottomSheetBehavior.setPeekHeight(bottomSheet.getHeight());
-                coordinatorLayout.getParent().requestLayout();
-            }
-        });
         return view;
     }
 
@@ -276,153 +227,31 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
         }
     }
 
-    private void switchToSendProgressScreen() {
-
-        // make previous buttons and edit texts unclickable
-        mNumpad.setEnabled(false);
-        mOpenChannelButton.setEnabled(false);
-        mEtAmount.setEnabled(false);
-        mNumpad.setEnabled(false);
-
-        // Animate out
-        AlphaAnimation animateOut = new AlphaAnimation(1.0f, 0f);
-        animateOut.setDuration(200);
-        animateOut.setFillAfter(true);
-
-        mLocalAmountsInputView.startAnimation(animateOut);
-        mNumpad.startAnimation(animateOut);
-        mOpenChannelButton.startAnimation(animateOut);
-        mNodeLayout.startAnimation(animateOut);
-        mIvBsdIcon.startAnimation(animateOut);
-        // Set size of progress finished icon to 0
-        mProgressFinishedIcon.setScaleX(0);
-        mProgressFinishedIcon.setScaleY(0);
-
-        // Animate in
-        mProgressScreen.setAlpha(1.0f);
-        AlphaAnimation animateIn = new AlphaAnimation(0f, 1.0f);
-        animateIn.setDuration(200);
-        animateIn.setStartOffset(200);
-        animateIn.setFillAfter(true);
-        mProgressScreen.startAnimation(animateIn);
-
+    private void switchToProgressScreen() {
+        mProgressView.setVisibility(View.VISIBLE);
+        mOpenChannelInputLayout.setVisibility(View.INVISIBLE);
+        mProgressView.startSpinning();
+        mBSDScrollableMainView.animateTitleOut();
     }
 
     private void switchToFailedScreen(String error) {
-
-        // Animate Layout changes
-        ConstraintSet csRoot = new ConstraintSet();
-        csRoot.clone(mRootLayout);
-        csRoot.connect(mProgressScreen.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        csRoot.setVerticalBias(mProgressScreen.getId(), 0.0f);
-
-        Transition transition = new ChangeBounds();
-        transition.setInterpolator(new DecelerateInterpolator(3));
-        transition.setDuration(1000);
-        //transition.setStartDelay(200);
-        TransitionManager.beginDelayedTransition(mRootLayout, transition);
-        csRoot.applyTo(mRootLayout);
-
-        // Animate finished Icon switch
-        mProgressFinishedIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_failed_circle_black_60dp));
-        mProgressFinishedIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
-        ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(mProgressFinishedIcon, "scaleX", 0f, 1f);
-        ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(mProgressFinishedIcon, "scaleY", 0f, 1f);
-        scaleUpX.setDuration(500);
-        scaleUpY.setDuration(500);
-
-        AnimatorSet scaleUpIcon = new AnimatorSet();
-        scaleUpIcon.play(scaleUpX).with(scaleUpY);
-        scaleUpIcon.start();
-
-        ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(mProgressBar, "scaleX", 1f, 0f);
-        ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(mProgressBar, "scaleY", 1f, 0f);
-        ObjectAnimator scaleDownX2 = ObjectAnimator.ofFloat(mIvProgressPaymentTypeIcon, "scaleX", 1f, 0f);
-        ObjectAnimator scaleDownY2 = ObjectAnimator.ofFloat(mIvProgressPaymentTypeIcon, "scaleY", 1f, 0f);
-        scaleDownX.setDuration(500);
-        scaleDownY.setDuration(500);
-        scaleDownX2.setDuration(500);
-        scaleDownY2.setDuration(500);
-
-        AnimatorSet scaleDownIcon = new AnimatorSet();
-        scaleDownIcon.play(scaleDownX).with(scaleDownY).with(scaleDownX2).with(scaleDownY2);
-        scaleDownIcon.start();
+        mProgressView.spinningFinished(false);
+        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
+        mOpenChannelInputLayout.setVisibility(View.GONE);
+        mResultView.setVisibility(View.VISIBLE);
 
         // Set failed states
-        mTvFinishedText.setText(getString(R.string.channel_open_error));
-        mTvFinishedText.setTextColor(getResources().getColor(R.color.superRed));
-        mTvFinishedTextDetail.setText(error);
-
-        // Animate in
-        mFinishedScreen.setAlpha(1.0f);
-        AlphaAnimation animateIn = new AlphaAnimation(0f, 1.0f);
-        animateIn.setDuration(300);
-        animateIn.setStartOffset(300);
-        animateIn.setFillAfter(true);
-
-        mFinishedScreen.startAnimation(animateIn);
-
-        mOkButton.setEnabled(true);
+        mResultView.setHeading(R.string.channel_open_error, false);
+        mResultView.setDetailsText(error);
     }
 
     private void switchToSuccessScreen() {
-
-
-        // Animate Layout changes
-        ConstraintSet csRoot = new ConstraintSet();
-        csRoot.clone(mRootLayout);
-        csRoot.connect(mProgressScreen.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        csRoot.setVerticalBias(mProgressScreen.getId(), 0.0f);
-
-        Transition transition = new ChangeBounds();
-        transition.setInterpolator(new DecelerateInterpolator(3));
-        transition.setDuration(1000);
-        //transition.setStartDelay(200);
-        TransitionManager.beginDelayedTransition(mRootLayout, transition);
-        csRoot.applyTo(mRootLayout);
-
-
-        // Animate finished Icon switch
-        ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(mProgressFinishedIcon, "scaleX", 0f, 1f);
-        ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(mProgressFinishedIcon, "scaleY", 0f, 1f);
-        scaleUpX.setDuration(500);
-        scaleUpY.setDuration(500);
-
-        AnimatorSet scaleUpIcon = new AnimatorSet();
-        //scaleUpIcon.setInterpolator(new AnticipateOvershootInterpolator(1.0f));
-        scaleUpIcon.play(scaleUpX).with(scaleUpY);
-        scaleUpIcon.start();
-
-        ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(mProgressBar, "scaleX", 1f, 0f);
-        ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(mProgressBar, "scaleY", 1f, 0f);
-        ObjectAnimator scaleDownX2 = ObjectAnimator.ofFloat(mIvProgressPaymentTypeIcon, "scaleX", 1f, 0f);
-        ObjectAnimator scaleDownY2 = ObjectAnimator.ofFloat(mIvProgressPaymentTypeIcon, "scaleY", 1f, 0f);
-        scaleDownX.setDuration(500);
-        scaleDownY.setDuration(500);
-        scaleDownX2.setDuration(500);
-        scaleDownY2.setDuration(500);
-
-        AnimatorSet scaleDownIcon = new AnimatorSet();
-        //scaleUpIcon.setInterpolator(new AnticipateOvershootInterpolator(1.0f));
-        scaleDownIcon.play(scaleDownX).with(scaleDownY).with(scaleDownX2).with(scaleDownY2);
-        scaleDownIcon.start();
-
-        mTvFinishedText.setText(R.string.success);
-        mTvFinishedTextDetail.setText(R.string.channel_open_success);
-
-        // Animate in
-
-        mFinishedScreen.setAlpha(1.0f);
-        AlphaAnimation animateIn = new AlphaAnimation(0f, 1.0f);
-        animateIn.setDuration(300);
-        animateIn.setStartOffset(300);
-        animateIn.setFillAfter(true);
-
-
-        mFinishedScreen.startAnimation(animateIn);
-
-        // Enable Ok button
-        mOkButton.setEnabled(true);
+        mProgressView.spinningFinished(true);
+        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
+        mOpenChannelInputLayout.setVisibility(View.GONE);
+        mResultView.setVisibility(View.VISIBLE);
+        mResultView.setHeading(R.string.success, true);
+        mResultView.setDetailsText(R.string.channel_open_success);
     }
 
     private void setAvailableFunds() {
@@ -442,11 +271,6 @@ public class OpenChannelBSDFragment extends BottomSheetDialogFragment implements
     public void onDestroy() {
         Wallet.getInstance().unregisterChannelOpenUpdateListener(this);
         super.onDestroy();
-    }
-
-    @Override
-    public int getTheme() {
-        return R.style.ZapBottomSheetDialogTheme;
     }
 
     @Override

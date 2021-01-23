@@ -1,0 +1,208 @@
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+    <Transition
+        android:id="@+id/startSpinningTransition"
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/spinning"
+        motion:duration="300"
+        motion:motionInterpolator="easeInOut">
+
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:motionTarget="@+id/progressTypeIcon"
+                motion:framePosition="0"
+                android:alpha="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/progressTypeIcon"
+                motion:framePosition="100"
+                android:alpha="1" />
+            <KeyAttribute
+                motion:motionTarget="@+id/progressCircle"
+                motion:framePosition="0"
+                android:alpha="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/progressCircle"
+                motion:framePosition="100"
+                android:alpha="1" />
+        </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        android:id="@+id/endSpinningTransition"
+        motion:constraintSetStart="@+id/spinning"
+        motion:constraintSetEnd="@+id/end"
+        motion:duration="500"
+        motion:motionInterpolator="easeInOut">
+
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:motionTarget="@+id/progressTypeIcon"
+                motion:framePosition="0"
+                android:alpha="1" />
+            <KeyAttribute
+                motion:motionTarget="@+id/progressTypeIcon"
+                motion:framePosition="50"
+                android:alpha="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/progressTypeIcon"
+                motion:framePosition="100"
+                android:alpha="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/progressCircle"
+                motion:framePosition="0"
+                android:alpha="1" />
+            <KeyAttribute
+                motion:motionTarget="@+id/progressCircle"
+                motion:framePosition="50"
+                android:alpha="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/progressCircle"
+                motion:framePosition="100"
+                android:alpha="0" />
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@id/progressTypeIcon">
+            <Layout
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="1.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="1.0" />
+        </Constraint>
+        <Constraint android:id="@id/progressCircle">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="1.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="1.0" />
+        </Constraint>
+        <Constraint android:id="@id/progressResultIcon">
+            <Layout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="0.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="0.0" />
+        </Constraint>
+
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/spinning">
+        <Constraint android:id="@id/progressTypeIcon">
+            <Layout
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="1.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="1.0" />
+        </Constraint>
+        <Constraint android:id="@id/progressCircle">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="1.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="1.0" />
+        </Constraint>
+        <Constraint android:id="@id/progressResultIcon">
+            <Layout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="0.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="0.0" />
+        </Constraint>
+
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/progressTypeIcon">
+            <Layout
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                motion:layout_constraintBottom_toTopOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="0.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="0.0" />
+        </Constraint>
+        <Constraint android:id="@id/progressCircle">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                motion:layout_constraintBottom_toTopOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="0.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="0.0" />
+        </Constraint>
+        <Constraint android:id="@id/progressResultIcon">
+            <Layout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                motion:layout_constraintBottom_toTopOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="scaleX"
+                motion:customFloatValue="1.0" />
+            <CustomAttribute
+                motion:attributeName="scaleY"
+                motion:customFloatValue="1.0" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

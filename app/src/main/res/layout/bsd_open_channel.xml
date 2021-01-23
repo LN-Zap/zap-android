@@ -1,389 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheets">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/rootLayout"
+    <zapsolutions.zap.customView.BSDScrollableMainView
+        android:id="@+id/scrollableBottomSheet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/backgroundLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_bottom_sheets"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/anchor">
-
-            <ImageButton
-                android:id="@+id/closeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:tint="@color/gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_close_black_24dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageView
-            android:id="@+id/bsdIcon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_icon_modal_lightning" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/anchor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxHeight="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/bsdIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/bsdIcon"
-            app:layout_constraintVertical_bias="0.5">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/titleLayout"
+            android:id="@+id/contentTopLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bsdIcon">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/bsdTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="10dp"
-                android:text="@string/channel_open"
-                android:textSize="22sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/nodeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingStart="30dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleLayout">
-
-            <ImageView
-                android:id="@+id/lineNode"
+            <zapsolutions.zap.customView.BSDResultView
+                android:id="@+id/resultLayout"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@color/gray" />
-
-            <TextView
-                android:id="@+id/nodeAliasLabel"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:text="@string/node"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/nodeAliasText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:paddingTop="5dp"
-                android:singleLine="true"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nodeAliasLabel"
-                tools:text="192.168.0.1 (02a40ff73c1a2c6469b95e7cc544876e9a3b1d73737af8be10330652923b67db7f)" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- Dummy item to prevent EditText from receiving focus -->
-        <LinearLayout
-            android:id="@+id/dummyLayout"
-            android:layout_width="0px"
-            android:layout_height="0px"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/localAmountInputsView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="30dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nodeLayout">
-
-            <EditText
-                android:id="@+id/localAmount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:background="#00000000"
-                android:ems="10"
-                android:inputType="numberDecimal"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:textAlignment="textEnd"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@id/onChainFunds"
-                app:layout_constraintEnd_toStartOf="@+id/sendUnitLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/line"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@color/gray" />
-
-            <ImageView
-                android:id="@+id/line2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@color/gray" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/onChainFunds"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/openChannelInputLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="Available: 21,000,000 sats" />
-
-            <LinearLayout
-                android:id="@+id/sendUnitLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@id/onChainFunds"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/localAmount"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/localAmountSwitchUnitImage"
-                    android:layout_width="18dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:paddingStart="4dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/nodeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:paddingStart="30dp"
                     android:paddingTop="5dp"
-                    app:srcCompat="@drawable/ic_swap_vert_black_24dp"
-                    app:tint="@color/lightningOrange" />
+                    android:paddingEnd="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <zapsolutions.zap.customView.NonClippingTextView
-                    android:id="@+id/localAmountUnit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="30sp"
-                    android:textStyle="italic"
-                    tools:text="UNIT" />
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/lineNode"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@color/gray" />
 
-            <TextView
-                android:id="@+id/localAmountLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:ems="10"
-                android:maxLength="50"
-                android:text="@string/amount"
-                android:textAlignment="viewStart"
-                android:textSize="22sp"
-                app:layout_constraintBottom_toTopOf="@id/onChainFunds"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/nodeAliasLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:text="@string/node"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/nodeAliasText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:paddingTop="5dp"
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/nodeAliasLabel"
+                        tools:text="192.168.0.1 (02a40ff73c1a2c6469b95e7cc544876e9a3b1d73737af8be10330652923b67db7f)" />
 
-        <zapsolutions.zap.customView.NumpadView
-            android:id="@+id/numpadView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/localAmountInputsView" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/openChannelButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_clickable_item"
-            android:text="@string/channel_open"
-            android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/numpadView" />
+                <!-- Dummy item to prevent EditText from receiving focus -->
+                <LinearLayout
+                    android:id="@+id/dummyLayout"
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/openChannelProgressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/anchor"
-            app:layout_constraintVertical_bias="0.5">
-
-            <ImageView
-                android:id="@+id/progressPaymentTypeIcon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
-                app:tint="@color/white" />
-
-            <ImageView
-                android:id="@+id/progressFinishedIcon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_check_circle_black_60dp"
-                app:tint="@color/superGreen" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="@android:style/Widget.Holo.ProgressBar.Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminateTint="@color/superGreen"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/openChannelFinishedLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:alpha="0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-            <Button
-                android:id="@+id/okButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/bg_clickable_item"
-                android:enabled="false"
-                android:text="@string/ok"
-                android:textAllCaps="false"
-                android:textColor="@color/lightningOrange"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/finishedLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/finishedText"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/localAmountInputsView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/superGreen"
-                    android:textSize="36sp" />
+                    android:paddingStart="30dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/nodeLayout">
 
-                <ImageView
-                    android:id="@+id/finishedPaymentTypeIcon"
-                    android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/localAmount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:background="#00000000"
+                        android:ems="10"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:textAlignment="textEnd"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toTopOf="@id/onChainFunds"
+                        app:layout_constraintEnd_toStartOf="@+id/sendUnitLayout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@color/gray" />
+
+                    <ImageView
+                        android:id="@+id/line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:srcCompat="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/onChainFunds"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="Available: 21,000,000 sats" />
+
+                    <LinearLayout
+                        android:id="@+id/sendUnitLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toTopOf="@id/onChainFunds"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/localAmount"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/localAmountSwitchUnitImage"
+                            android:layout_width="18dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingStart="4dp"
+                            android:paddingTop="5dp"
+                            app:srcCompat="@drawable/ic_swap_vert_black_24dp"
+                            app:tint="@color/lightningOrange" />
+
+                        <zapsolutions.zap.customView.NonClippingTextView
+                            android:id="@+id/localAmountUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textSize="30sp"
+                            android:textStyle="italic"
+                            tools:text="UNIT" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/localAmountLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:ems="10"
+                        android:maxLength="50"
+                        android:text="@string/amount"
+                        android:textAlignment="viewStart"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toTopOf="@id/onChainFunds"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <zapsolutions.zap.customView.NumpadView
+                    android:id="@+id/numpadView"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
-                    app:tint="@color/white" />
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginBottom="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/localAmountInputsView" />
 
-                <TextView
-                    android:id="@+id/finishedTextDetail"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/openChannelButton"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/bg_clickable_item"
+                    android:text="@string/channel_open"
+                    android:textAllCaps="false"
+                    android:textColor="@color/lightningOrange"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/numpadView" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </zapsolutions.zap.customView.BSDScrollableMainView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <zapsolutions.zap.customView.BSDProgressView
+        android:id="@+id/paymentProgressLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

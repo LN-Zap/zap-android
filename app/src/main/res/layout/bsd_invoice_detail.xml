@@ -1,171 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<zapsolutions.zap.customView.BSDScrollableMainView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollableBottomSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_bottom_sheets"
-    android:padding="10dp">
+    android:clipToPadding="false"
+    android:paddingHorizontal="10dp">
 
-    <ImageButton
-        android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="?selectableItemBackgroundBorderless"
-        android:tint="@color/gray"
-        app:layout_constraintBottom_toTopOf="@+id/separator_1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/transactionDescription"
-        app:srcCompat="@drawable/ic_close_black_24dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/transactionDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLength="25"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Transaction Description" />
+        <ImageView
+            android:id="@+id/requestQRCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35000002" />
 
+        <TextView
+            android:id="@+id/amountLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/requestQRCode"
+            tools:text="Amount:" />
 
-    <ImageView
-        android:id="@+id/separator_1"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transactionDescription"
-        app:srcCompat="@color/gray" />
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/amountLabel"
+            app:layout_constraintTop_toBottomOf="@id/requestQRCode"
+            tools:text="10 sat" />
 
-    <ImageView
-        android:id="@+id/requestQRCode"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="10dp"
-        android:adjustViewBounds="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separator_1"
-        app:layout_constraintVertical_bias="0.35000002" />
+        <TextView
+            android:id="@+id/memoLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/amount"
+            tools:text="Verwendungszweck:" />
 
-    <TextView
-        android:id="@+id/amountLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/requestQRCode"
-        tools:text="Amount:" />
+        <TextView
+            android:id="@+id/memo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/memoLabel"
+            app:layout_constraintTop_toBottomOf="@+id/amount"
+            tools:text="Some description!" />
 
-    <TextView
-        android:id="@+id/amount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
-        android:textAlignment="viewEnd"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/amountLabel"
-        app:layout_constraintTop_toBottomOf="@id/requestQRCode"
-        tools:text="10 sat" />
+        <TextView
+            android:id="@+id/dateLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memo"
+            tools:text="Date:" />
 
-    <TextView
-        android:id="@+id/memoLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amount"
-        tools:text="Verwendungszweck:" />
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dateLabel"
+            app:layout_constraintTop_toBottomOf="@+id/memo"
+            tools:text="Yesterday" />
 
-    <TextView
-        android:id="@+id/memo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
-        android:textAlignment="viewEnd"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/memoLabel"
-        app:layout_constraintTop_toBottomOf="@+id/amount"
-        tools:text="Some description!" />
+        <TextView
+            android:id="@+id/expiryLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date"
+            tools:text="Expiry:" />
 
-    <TextView
-        android:id="@+id/dateLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/memo"
-        tools:text="Date:" />
+        <TextView
+            android:id="@+id/expiry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/expiryLabel"
+            app:layout_constraintTop_toBottomOf="@+id/date"
+            tools:text="10 min 5 sec remaining" />
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
-        android:textAlignment="viewEnd"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/dateLabel"
-        app:layout_constraintTop_toBottomOf="@+id/memo"
-        tools:text="Yesterday" />
+        <View
+            android:id="@+id/spacer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/expiry">
 
-    <TextView
-        android:id="@+id/expiryLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date"
-        tools:text="Expiry:" />
+        </View>
 
-    <TextView
-        android:id="@+id/expiry"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
-        android:textAlignment="viewEnd"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/expiryLabel"
-        app:layout_constraintTop_toBottomOf="@+id/date"
-        tools:text="10 min 5 sec remaining" />
-
-    <View
-        android:id="@+id/spacer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/expiry">
-
-    </View>
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</zapsolutions.zap.customView.BSDScrollableMainView>

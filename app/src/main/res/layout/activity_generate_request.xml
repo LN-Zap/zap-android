@@ -27,7 +27,7 @@
                 android:layout_height="50dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="5dp"
-                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
+                app:srcCompat="@drawable/ic_nav_wallet_black_24dp"
                 app:tint="@color/white" />
 
             <TextView
@@ -191,7 +191,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
-                app:srcCompat="@drawable/ic_nav_wallet_balck_24dp"
+                app:srcCompat="@drawable/ic_nav_wallet_black_24dp"
                 app:tint="@color/white" />
 
             <TextView

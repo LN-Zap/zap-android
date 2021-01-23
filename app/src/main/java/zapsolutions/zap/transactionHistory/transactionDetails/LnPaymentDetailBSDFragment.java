@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,18 +18,19 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.fragments.RxBSDFragment;
+import zapsolutions.zap.customView.BSDScrollableMainView;
+import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.TimeFormatUtil;
 import zapsolutions.zap.util.ZapLog;
 
-public class LnPaymentDetailBSDFragment extends RxBSDFragment {
+public class LnPaymentDetailBSDFragment extends ZapBSDFragment {
 
     public static final String TAG = LnPaymentDetailBSDFragment.class.getName();
     public static final String ARGS_TRANSACTION = "TRANSACTION";
 
-    private TextView mTransactionDescription;
+    private BSDScrollableMainView mBSDScrollableMainView;
     private TextView mAmountLabel;
     private TextView mAmount;
     private TextView mMemoLabel;
@@ -48,7 +48,7 @@ public class LnPaymentDetailBSDFragment extends RxBSDFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bsd_payment_detail, container);
 
-        mTransactionDescription = view.findViewById(R.id.transactionDescription);
+        mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
         mAmountLabel = view.findViewById(R.id.amountLabel);
         mAmount = view.findViewById(R.id.amount);
         mMemoLabel = view.findViewById(R.id.memoLabel);
@@ -61,8 +61,8 @@ public class LnPaymentDetailBSDFragment extends RxBSDFragment {
         mPreimage = view.findViewById(R.id.preimage);
         mPreimageCopyIcon = view.findViewById(R.id.preimageCopyIcon);
 
-        ImageButton closeButton = view.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(view1 -> dismiss());
+        mBSDScrollableMainView.setSeparatorVisibility(true);
+        mBSDScrollableMainView.setOnCloseListener(this::dismiss);
 
         if (getArguments() != null) {
             ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_TRANSACTION);
@@ -91,7 +91,7 @@ public class LnPaymentDetailBSDFragment extends RxBSDFragment {
         String preimageLabel = getString(R.string.preimage) + ":";
         mPreimageLabel.setText(preimageLabel);
 
-        mTransactionDescription.setText(R.string.transaction_detail);
+        mBSDScrollableMainView.setTitle(R.string.transaction_detail);
 
         mAmount.setText("- " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getValue()));
         mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getFee()));
@@ -124,10 +124,5 @@ public class LnPaymentDetailBSDFragment extends RxBSDFragment {
                         mMemoLabel.setVisibility(View.GONE);
                     }
                 }, throwable -> ZapLog.d(TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
-    }
-
-    @Override
-    public int getTheme() {
-        return R.style.ZapBottomSheetDialogTheme;
     }
 }

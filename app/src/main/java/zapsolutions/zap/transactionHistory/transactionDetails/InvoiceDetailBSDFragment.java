@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -25,6 +23,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.customView.BSDScrollableMainView;
+import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.TimeFormatUtil;
@@ -32,12 +32,12 @@ import zapsolutions.zap.util.UriUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
-public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
+public class InvoiceDetailBSDFragment extends ZapBSDFragment {
 
     public static final String TAG = InvoiceDetailBSDFragment.class.getName();
     public static final String ARGS_TRANSACTION = "TRANSACTION";
 
-    private TextView mTransactionDescription;
+    private BSDScrollableMainView mBSDScrollableMainView;
     private TextView mAmountLabel;
     private TextView mAmount;
     private TextView mMemoLabel;
@@ -53,7 +53,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bsd_invoice_detail, container);
 
-        mTransactionDescription = view.findViewById(R.id.transactionDescription);
+        mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
         mAmountLabel = view.findViewById(R.id.amountLabel);
         mAmount = view.findViewById(R.id.amount);
         mMemoLabel = view.findViewById(R.id.memoLabel);
@@ -64,8 +64,8 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
         mExpiry = view.findViewById(R.id.expiry);
         mQRCodeView = view.findViewById(R.id.requestQRCode);
 
-        ImageButton closeButton = view.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(view1 -> dismiss());
+        mBSDScrollableMainView.setSeparatorVisibility(true);
+        mBSDScrollableMainView.setOnCloseListener(this::dismiss);
 
         if (getArguments() != null) {
             ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_TRANSACTION);
@@ -139,7 +139,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
     }
 
     private void bindOpenInvoice(Invoice invoice) {
-        mTransactionDescription.setText(R.string.invoice_detail);
+        mBSDScrollableMainView.setTitle(R.string.invoice_detail);
 
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getValue()));
 
@@ -170,7 +170,7 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
     }
 
     private void bindPayedInvoice(Invoice invoice) {
-        mTransactionDescription.setText(R.string.transaction_detail);
+        mBSDScrollableMainView.setTitle(R.string.transaction_detail);
         mExpiryLabel.setVisibility(View.GONE);
         mExpiry.setVisibility(View.GONE);
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getAmtPaidSat()));
@@ -178,14 +178,10 @@ public class InvoiceDetailBSDFragment extends BottomSheetDialogFragment {
     }
 
     private void bindExpiredInvoice(Invoice invoice) {
-        mTransactionDescription.setText(R.string.invoice_detail);
+        mBSDScrollableMainView.setTitle(R.string.invoice_detail);
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getValue()));
         mExpiry.setText(R.string.expired);
         mQRCodeView.setVisibility(View.GONE);
     }
 
-    @Override
-    public int getTheme() {
-        return R.style.ZapBottomSheetDialogTheme;
-    }
 }
