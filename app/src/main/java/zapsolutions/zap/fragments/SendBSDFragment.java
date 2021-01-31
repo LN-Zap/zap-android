@@ -489,7 +489,7 @@ public class SendBSDFragment extends ZapBSDFragment {
         } else {
             // Fallback to multi path payment as no route was found
 
-            SendPaymentRequest mppSendRequest = PaymentUtil.prepareMPPPayment(mLnPaymentRequest);
+            SendPaymentRequest mppSendRequest = PaymentUtil.prepareMPPPayment(mLnPaymentRequest, mLnInvoice);
 
             PaymentUtil.sendMppPayment(mppSendRequest, getCompositeDisposable(), new PaymentUtil.OnMPPPaymentResult() {
                 @Override

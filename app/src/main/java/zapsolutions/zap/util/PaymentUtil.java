@@ -132,17 +132,11 @@ public class PaymentUtil {
                 }));
     }
 
-    public static SendPaymentRequest prepareMPPPayment(PayReq paymentRequest) {
-        return prepareMPPPayment(paymentRequest.getDestination(), paymentRequest.getPaymentHash(), paymentRequest.getNumSatoshis());
-    }
-
-    public static SendPaymentRequest prepareMPPPayment(String destination, String paymentHash, long amountSat) {
-        long feeLimit = calculateAbsoluteFeeLimit(amountSat);
+    public static SendPaymentRequest prepareMPPPayment(PayReq paymentRequest, String invoice) {
+        long feeLimit = calculateAbsoluteFeeLimit(paymentRequest.getNumSatoshis());
         return SendPaymentRequest.newBuilder()
-                .setDest(byteStringFromHex(destination))
-                .setAmt(amountSat)
+                .setPaymentRequest(invoice)
                 .setFeeLimitSat(feeLimit)
-                .setPaymentHash(byteStringFromHex(paymentHash))
                 .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * RefConstants.TOR_TIMEOUT_MULTIPLIER)
                 .setMaxParts(RefConstants.LN_MAX_PARTS)
                 .build();
@@ -159,7 +153,9 @@ public class PaymentUtil {
         if (sendPaymentRequest == null)
             result.onError("SendPaymentRequest was null", null, RefConstants.ERROR_DURATION_MEDIUM);
 
-        ZapLog.d(LOG_TAG, "Trying to send mpp lightning payment with " + sendPaymentRequest.getFeeLimitSat() + " sat fee limit...");
+        ZapLog.d(LOG_TAG, "Trying to send mpp lightning payment...");
+
+        ZapLog.v(LOG_TAG, "The settings for the payment are:\n" + sendPaymentRequest.toString());
 
         compositeDisposable.add(LndConnection.getInstance().getRouterService().sendPaymentV2(sendPaymentRequest)
                 .subscribe(payment -> {
@@ -191,8 +187,8 @@ public class PaymentUtil {
      * We always allow a fee of at least 3 sats, to ensure also small payments have a chance.
      * For payments of over 100 sat we apply the user settings, for payments lower, we use the square root of the amount to send.
      *
-     * @param amountSatToSend
-     * @return
+     * @param amountSatToSend Amount that should be send with the transaction
+     * @return maixmum number of sats in fee
      */
     public static long calculateAbsoluteFeeLimit(long amountSatToSend) {
         long absFee;

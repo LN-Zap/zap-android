@@ -1231,7 +1231,7 @@ public class Wallet {
                 for (Channel c : mOpenChannelsList) {
                     if (c.getActive()) {
                         if (c.getRemoteBalance() > tempMax) {
-                            tempMax = c.getRemoteBalance();
+                            tempMax = Math.max(c.getRemoteBalance() - c.getRemoteConstraints().getChanReserveSat(), 0);
                         }
                     }
                 }
@@ -1243,7 +1243,7 @@ public class Wallet {
             if (mOpenChannelsList != null) {
                 for (Channel c : mOpenChannelsList) {
                     if (c.getActive()) {
-                        tempMax = tempMax + c.getRemoteBalance();
+                        tempMax = tempMax + Math.max(c.getRemoteBalance() - c.getRemoteConstraints().getChanReserveSat(), 0);
                     }
                 }
             }
@@ -1272,7 +1272,7 @@ public class Wallet {
                 for (Channel c : mOpenChannelsList) {
                     if (c.getActive()) {
                         if (c.getLocalBalance() > tempMax) {
-                            tempMax = c.getLocalBalance();
+                            tempMax = Math.max(c.getLocalBalance() - c.getLocalConstraints().getChanReserveSat(), 0);
                         }
                     }
                 }
@@ -1284,7 +1284,7 @@ public class Wallet {
             if (mOpenChannelsList != null) {
                 for (Channel c : mOpenChannelsList) {
                     if (c.getActive()) {
-                        tempMax = tempMax + c.getLocalBalance();
+                        tempMax = tempMax + Math.max(c.getLocalBalance() - c.getLocalConstraints().getChanReserveSat(), 0);
                     }
                 }
             }
