@@ -2,6 +2,7 @@ package zapsolutions.zap.util;
 
 import com.github.lightningnetwork.lnd.lnrpc.Failure;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
+import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
 import com.github.lightningnetwork.lnd.lnrpc.Route;
 import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
@@ -165,7 +166,7 @@ public class PaymentUtil {
                         case SUCCEEDED:
                             // updated the history, so it is shown the next time the user views it
                             Wallet.getInstance().updateLightningPaymentHistory();
-                            result.onSuccess();
+                            result.onSuccess(payment);
                             break;
                         case FAILED:
                             result.onError(payment.getFailureReason().toString(), payment.getFailureReason(), RefConstants.ERROR_DURATION_MEDIUM);
@@ -229,7 +230,7 @@ public class PaymentUtil {
     }
 
     public interface OnMPPPaymentResult {
-        void onSuccess();
+        void onSuccess(Payment payment);
 
         void onError(String error, PaymentFailureReason reason, int duration);
     }

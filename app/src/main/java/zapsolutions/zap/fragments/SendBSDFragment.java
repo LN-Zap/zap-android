@@ -27,6 +27,7 @@ import androidx.transition.TransitionManager;
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Failure;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
+import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
 import com.github.lightningnetwork.lnd.lnrpc.Route;
 import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
@@ -493,7 +494,7 @@ public class SendBSDFragment extends ZapBSDFragment {
 
             PaymentUtil.sendMppPayment(mppSendRequest, getCompositeDisposable(), new PaymentUtil.OnMPPPaymentResult() {
                 @Override
-                public void onSuccess() {
+                public void onSuccess(Payment payment) {
                     mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
                 }
 
@@ -683,7 +684,7 @@ public class SendBSDFragment extends ZapBSDFragment {
                 String feePercentageString = " (" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
                 long fee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
                 String feeString = MonetaryUtil.getInstance().getPrimaryDisplayAmount(fee) + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
-                feeString = "up to " + feeString + feePercentageString;
+                feeString = R.string.maximum_abbreviation + " " + feeString + feePercentageString;
                 setCalculatedFeeAmount(feeString);
             }
 
