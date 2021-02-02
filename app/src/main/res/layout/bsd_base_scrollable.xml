@@ -52,8 +52,8 @@
         android:maxLength="25"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="22sp"
         android:textAlignment="center"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleIcon"
@@ -80,7 +80,6 @@
         android:paddingBottom="10dp"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="200dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title">
 
