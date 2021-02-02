@@ -116,4 +116,10 @@ public interface LndLightningService {
     Observable<com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot> subscribeChannelBackups(com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.BakeMacaroonResponse> bakeMacaroon(com.github.lightningnetwork.lnd.lnrpc.BakeMacaroonRequest request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.ListMacaroonIDsResponse> listMacaroonIDs(com.github.lightningnetwork.lnd.lnrpc.ListMacaroonIDsRequest request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.DeleteMacaroonIDResponse> deleteMacaroonID(com.github.lightningnetwork.lnd.lnrpc.DeleteMacaroonIDRequest request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.ListPermissionsResponse> listPermissions(com.github.lightningnetwork.lnd.lnrpc.ListPermissionsRequest request);
 }

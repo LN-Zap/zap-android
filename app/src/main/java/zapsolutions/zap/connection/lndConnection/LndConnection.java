@@ -16,18 +16,22 @@ import zapsolutions.zap.lnd.LndInvoicesService;
 import zapsolutions.zap.lnd.LndLightningService;
 import zapsolutions.zap.lnd.LndRouterService;
 import zapsolutions.zap.lnd.LndSignerService;
+import zapsolutions.zap.lnd.LndVersionerService;
 import zapsolutions.zap.lnd.LndWalletKitService;
 import zapsolutions.zap.lnd.LndWalletUnlockerService;
 import zapsolutions.zap.lnd.LndWatchtowerClientService;
+import zapsolutions.zap.lnd.LndWatchtowerService;
 import zapsolutions.zap.lnd.RemoteLndAutopilotService;
 import zapsolutions.zap.lnd.RemoteLndChainNotifierService;
 import zapsolutions.zap.lnd.RemoteLndInvoicesService;
 import zapsolutions.zap.lnd.RemoteLndLightningService;
 import zapsolutions.zap.lnd.RemoteLndRouterService;
 import zapsolutions.zap.lnd.RemoteLndSignerService;
+import zapsolutions.zap.lnd.RemoteLndVersionerService;
 import zapsolutions.zap.lnd.RemoteLndWalletKitService;
 import zapsolutions.zap.lnd.RemoteLndWalletUnlockerService;
 import zapsolutions.zap.lnd.RemoteLndWatchtowerClientService;
+import zapsolutions.zap.lnd.RemoteLndWatchtowerService;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -47,8 +51,10 @@ public class LndConnection {
     private LndLightningService mLndLightningService;
     private LndRouterService mLndRouterService;
     private LndSignerService mLndSignerService;
+    private LndVersionerService mLndVersionerService;
     private LndWalletKitService mLndWalletKitService;
     private LndWalletUnlockerService mLndWalletUnlockerService;
+    private LndWatchtowerService mLndWatchtowerService;
     private LndWatchtowerClientService mLndWatchtowerClientService;
     private WalletConfig mConnectionConfig;
     private boolean isConnected = false;
@@ -88,6 +94,10 @@ public class LndConnection {
         return mLndSignerService;
     }
 
+    public LndVersionerService getVersionerService() {
+        return mLndVersionerService;
+    }
+
     public LndWalletKitService getWalletKitService() {
         return mLndWalletKitService;
     }
@@ -96,7 +106,11 @@ public class LndConnection {
         return mLndWalletUnlockerService;
     }
 
-    public LndWatchtowerClientService getWatchtowerService() {
+    public LndWatchtowerService getWatchtowerService() {
+        return mLndWatchtowerService;
+    }
+
+    public LndWatchtowerClientService getWatchtowerClientService() {
         return mLndWatchtowerClientService;
     }
 
@@ -134,7 +148,9 @@ public class LndConnection {
         mLndLightningService = new RemoteLndLightningService(mSecureChannel, mMacaroon);
         mLndRouterService = new RemoteLndRouterService(mSecureChannel, mMacaroon);
         mLndSignerService = new RemoteLndSignerService(mSecureChannel, mMacaroon);
+        mLndVersionerService = new RemoteLndVersionerService(mSecureChannel, mMacaroon);
         mLndWalletKitService = new RemoteLndWalletKitService(mSecureChannel, mMacaroon);
+        mLndWatchtowerService = new RemoteLndWatchtowerService(mSecureChannel, mMacaroon);
         mLndWatchtowerClientService = new RemoteLndWatchtowerClientService(mSecureChannel, mMacaroon);
         mLndWalletUnlockerService = new RemoteLndWalletUnlockerService(mSecureChannel, mMacaroon);
     }

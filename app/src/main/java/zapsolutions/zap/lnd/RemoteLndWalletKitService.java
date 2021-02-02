@@ -79,4 +79,14 @@ public class RemoteLndWalletKitService implements LndWalletKitService {
         return DefaultSingle.createDefault(emitter -> asyncStub.labelTransaction(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.FundPsbtResponse> fundPsbt(com.github.lightningnetwork.lnd.walletrpc.FundPsbtRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.fundPsbt(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.FinalizePsbtResponse> finalizePsbt(com.github.lightningnetwork.lnd.walletrpc.FinalizePsbtRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.finalizePsbt(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
 }
