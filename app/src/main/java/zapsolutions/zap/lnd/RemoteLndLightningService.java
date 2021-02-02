@@ -280,4 +280,19 @@ public class RemoteLndLightningService implements LndLightningService {
         return DefaultSingle.createDefault(emitter -> asyncStub.bakeMacaroon(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.ListMacaroonIDsResponse> listMacaroonIDs(com.github.lightningnetwork.lnd.lnrpc.ListMacaroonIDsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listMacaroonIDs(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.DeleteMacaroonIDResponse> deleteMacaroonID(com.github.lightningnetwork.lnd.lnrpc.DeleteMacaroonIDRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.deleteMacaroonID(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.ListPermissionsResponse> listPermissions(com.github.lightningnetwork.lnd.lnrpc.ListPermissionsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listPermissions(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
 }
