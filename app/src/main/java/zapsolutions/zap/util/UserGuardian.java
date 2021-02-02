@@ -203,7 +203,7 @@ public class UserGuardian {
      */
     public void securityOldLndVersion(String versionName) {
         mCurrentDialogName = DIALOG_OLD_LND_VERSION;
-        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        AlertDialog.Builder adb = createDialog(true);
         String message = mContext.getResources().getString(R.string.guardian_oldLndVersion_remote, versionName);
         adb.setMessage(message);
         showGuardianDialog(adb);
@@ -225,7 +225,7 @@ public class UserGuardian {
      * except the message.
      * This helps keeping the dialog functions organized and simple.
      *
-     * @param hasCancelOption wether it has a cancle option or not
+     * @param hasCancelOption whether it has a cancel option or not
      * @return returns a preconfigured AlertDialog.Builder which can be further configured later
      */
     private AlertDialog.Builder createDontShowAgainDialog(Boolean hasCancelOption) {
@@ -242,6 +242,32 @@ public class UserGuardian {
                 PrefsUtil.editPrefs().putBoolean(mCurrentDialogName, false).apply();
             }
 
+            if (mListener != null) {
+                // Execute interface callback on "OK"
+                mListener.onGuardianConfirmed();
+            }
+        });
+        if (hasCancelOption) {
+            adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
+            });
+        }
+        return adb;
+    }
+
+    /**
+     * Create a dialog that is already set up
+     * except the message.
+     * This helps keeping the dialog functions organized and simple.
+     *
+     * @param hasCancelOption whether it has a cancel option or not
+     * @return returns a preconfigured AlertDialog.Builder which can be further configured later
+     */
+    private AlertDialog.Builder createDialog(Boolean hasCancelOption) {
+        AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
+        LayoutInflater adbInflater = LayoutInflater.from(mContext);
+        View titleView = adbInflater.inflate(R.layout.guardian_title, null);
+        adb.setCustomTitle(titleView);
+        adb.setPositiveButton(R.string.ok, (dialog, which) -> {
             if (mListener != null) {
                 // Execute interface callback on "OK"
                 mListener.onGuardianConfirmed();

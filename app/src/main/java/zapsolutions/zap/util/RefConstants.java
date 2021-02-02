@@ -58,6 +58,9 @@ public class RefConstants {
     If the payment amount is above this threshold, the user setting will be considered. */
     public static final int LN_PAYMENT_FEE_THRESHOLD = 100;
 
+    // Max number of paths to use for multi path payments (mpp)
+    public static final int LN_MAX_PARTS = 10;
+
     // URLS
     public static final String URL_HELP = "https://docs.zaphq.io/docs-android-getting-started";
     public static final String URL_PRIVACY = "https://zaphq.io/privacy";

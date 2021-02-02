@@ -99,6 +99,7 @@
     <string name="open">Open</string>
     <string name="search">Search</string>
     <string name="confirmations">Confirmations</string>
+    <string name="maximum_abbreviation">max</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -304,6 +305,10 @@
     <string name="error_pin_deactivation_attempt">It looks like someone tried to deactivate your PIN. The App will close now.\nYou can reinstall the app and use the recovery process to regain access to your funds.</string>
     <string name="error_empty_wallet_name">An empty name is not allowed.</string>
     <string name="error_invalid_bitcoin_request">Invalid bitcoin request.</string>
+    <string name="error_payment_invalid_details">The payment details did not match the details specified by the invoice you are trying to pay.</string>
+    <string name="error_payment_timeout">Timeout. No route could be found in the specified time.</string>
+    <string name="error_payment_no_route">No route could be found for the desired payment. Opening new lightning channels might solve the problem.</string>
+    <string name="error_payment_insufficient_balance">Your balance is insufficient to fulfill the payment.</string>
 
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>

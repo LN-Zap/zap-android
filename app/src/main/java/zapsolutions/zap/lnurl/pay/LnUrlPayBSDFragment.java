@@ -27,11 +27,14 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
+import com.github.lightningnetwork.lnd.lnrpc.Payment;
+import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
 import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
-import com.github.lightningnetwork.lnd.lnrpc.SendResponse;
+import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.google.gson.Gson;
 
 import java.net.MalformedURLException;
@@ -49,11 +52,12 @@ import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
-import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.customView.BSDScrollableMainView;
+import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.PaymentUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TorUtil;
@@ -300,6 +304,9 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
                             }
                         });
 
+                // Make sure this request is executed only once and it doesn't timeout to fast.
+                lnUrlRequest.setRetryPolicy(new DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
                 // Send request to LNURL service
                 HttpClient.getInstance().addToRequestQueue(lnUrlRequest, "LnUrlSecondPayRequest");
             }
@@ -366,29 +373,30 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
             getCompositeDisposable().add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
                     .timeout(RefConstants.TIMEOUT_SHORT * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(invoice -> {
-                        ZapLog.v(LOG_TAG, invoice.toString());
+                    .subscribe(payReq -> {
+                        ZapLog.v(LOG_TAG, payReq.toString());
 
-                        if (invoice.getTimestamp() + invoice.getExpiry() < System.currentTimeMillis() / 1000) {
+                        if (payReq.getTimestamp() + payReq.getExpiry() < System.currentTimeMillis() / 1000) {
                             // Show error: payment request expired.
                             ZapLog.e(LOG_TAG, "LNURL: Payment request expired.");
                             switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                        } else if (invoice.getNumSatoshis() == 0) {
+                        } else if (payReq.getNumSatoshis() == 0) {
                             // Disable 0 sat invoices
                             ZapLog.e(LOG_TAG, "LNURL: 0 sat payments are not allowed.");
                             switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                        } else if (invoice.getNumSatoshis() != mFinalChosenAmount) {
+                        } else if (payReq.getNumSatoshis() != mFinalChosenAmount) {
                             ZapLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
                             switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                        } else if (!invoice.getDescriptionHash().equals(mPaymentData.getMetadataHash())) {
+                        } else if (!payReq.getDescriptionHash().equals(mPaymentData.getMetadataHash())) {
                             ZapLog.e(LOG_TAG, "LNURL: The hash in the invoice does not match the hash of from the metadata send before.");
                             switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
                         } else {
                             SendRequest sendRequest = SendRequest.newBuilder()
                                     .setPaymentRequest(lnUrlPaySecondResponse.getPaymentRequest())
                                     .build();
+                            SendPaymentRequest sendPaymentRequest = PaymentUtil.prepareMPPPayment(payReq, lnUrlPaySecondResponse.getPaymentRequest());
 
-                            sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendRequest);
+                            sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendPaymentRequest);
                         }
                     }, throwable -> {
                         // If LND can't decode the payment request, show the error LND throws (always english)
@@ -399,41 +407,48 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
     }
 
 
-    private void sendPayment(LnUrlPaySuccessAction successAction, SendRequest sendRequest) {
+    private void sendPayment(LnUrlPaySuccessAction successAction, SendPaymentRequest sendPaymentRequest) {
 
         ZapLog.d(LOG_TAG, "Trying to send lightning payment...");
 
-        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().sendPaymentSync(sendRequest)
-                .subscribe(sendResponse -> {
-                    // updated the history, so it is shown the next time the user views it
-                    Wallet.getInstance().updateLightningPaymentHistory();
+        PaymentUtil.sendMppPayment(sendPaymentRequest, getCompositeDisposable(), new PaymentUtil.OnMPPPaymentResult() {
+            @Override
+            public void onSuccess(Payment payment) {
+                mHandler.postDelayed(() -> executeSuccessAction(successAction, payment), 300);
+            }
 
-                    ZapLog.d(LOG_TAG, sendResponse.toString());
-
-                    // show success animation
-                    mHandler.postDelayed(() -> {
-                        if (sendResponse.getPaymentError().equals("")) {
-                            executeSuccessAction(successAction, sendResponse);
-                        } else {
-                            String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ": ";
-                            String error = errorPrefix + sendResponse.getPaymentError();
-                            switchToFailedScreen(error);
-                        }
-
-                    }, 300);
-                }, throwable -> {
-                    ZapLog.d(LOG_TAG, "Exception in send payment task.");
-                    ZapLog.d(LOG_TAG, throwable.getMessage());
-
-                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                    String errorMessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
-                    mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
-
-                }));
+            @Override
+            public void onError(String error, PaymentFailureReason reason, int duration) {
+                String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                String errorMessage;
+                if (reason != null) {
+                    switch (reason) {
+                        case FAILURE_REASON_TIMEOUT:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
+                            break;
+                        case FAILURE_REASON_NO_ROUTE:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route);
+                            break;
+                        case FAILURE_REASON_INSUFFICIENT_BALANCE:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
+                            break;
+                        case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
+                            break;
+                        default:
+                            errorMessage = errorPrefix + "\n\n" + error;
+                            break;
+                    }
+                } else {
+                    errorMessage = error.replace("UNKNOWN:", errorPrefix);
+                }
+                mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
+            }
+        });
     }
 
 
-    private void executeSuccessAction(LnUrlPaySuccessAction successAction, SendResponse sendResponse) {
+    private void executeSuccessAction(LnUrlPaySuccessAction successAction, Payment payment) {
 
         mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mFinalChosenAmount));
 
@@ -479,7 +494,7 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
             // Decrypt ciphertext with payment preimage
             ZapLog.d(LOG_TAG, "SuccessAction: Aes.");
             try {
-                String decrypted = decrypt(successAction.getCiphertext(), sendResponse.getPaymentPreimage().toByteArray(), successAction.getIv());
+                String decrypted = decrypt(successAction.getCiphertext(), payment.getPaymentPreimageBytes().toByteArray(), successAction.getIv());
                 ZapLog.d(LOG_TAG, "Decrypted secret is: " + decrypted);
                 mTvSuccessActionText.setVisibility(View.GONE);
 
