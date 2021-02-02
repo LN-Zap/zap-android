@@ -189,7 +189,7 @@ public class PaymentUtil {
      * For payments of over 100 sat we apply the user settings, for payments lower, we use the square root of the amount to send.
      *
      * @param amountSatToSend Amount that should be send with the transaction
-     * @return maixmum number of sats in fee
+     * @return maximum number of sats in fee
      */
     public static long calculateAbsoluteFeeLimit(long amountSatToSend) {
         long absFee;
