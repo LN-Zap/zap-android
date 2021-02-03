@@ -105,6 +105,42 @@
             app:layout_constraintTop_toBottomOf="@+id/fee"
             tools:text="Yesterday" />
 
+        <TextView
+            android:id="@+id/payeeLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date"
+            tools:text="Payee:" />
+
+        <TextView
+            android:id="@+id/payee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@id/payeeCopyIcon"
+            app:layout_constraintStart_toEndOf="@id/payeeLabel"
+            app:layout_constraintTop_toBottomOf="@+id/date"
+            tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+        <ImageView
+            android:id="@+id/payeeCopyIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:background="@null"
+            android:paddingStart="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/payee"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/payee"
+            app:srcCompat="@drawable/ic_content_copy_black_24dp"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/preimageLabel"
@@ -112,9 +148,10 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:textSize="15sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/date"
-            tools:text="Transaction ID:" />
+            app:layout_constraintTop_toBottomOf="@+id/payee"
+            tools:text="Preimage:" />
 
         <TextView
             android:id="@+id/preimage"
@@ -126,9 +163,10 @@
             android:singleLine="true"
             android:textAlignment="viewEnd"
             android:textSize="15sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/preimageCopyIcon"
             app:layout_constraintStart_toEndOf="@id/preimageLabel"
-            app:layout_constraintTop_toBottomOf="@+id/date"
+            app:layout_constraintTop_toBottomOf="@+id/payee"
             tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
 
         <ImageView
@@ -137,6 +175,7 @@
             android:layout_height="20dp"
             android:background="@null"
             android:paddingStart="20dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/preimage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/preimage"

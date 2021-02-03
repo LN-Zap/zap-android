@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.github.lightningnetwork.lnd.lnrpc.Hop;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.google.protobuf.ByteString;
@@ -31,6 +32,9 @@ public class LnPaymentDetailBSDFragment extends ZapBSDFragment {
     public static final String ARGS_TRANSACTION = "TRANSACTION";
 
     private BSDScrollableMainView mBSDScrollableMainView;
+    private TextView mPayeeLabel;
+    private TextView mPayee;
+    private ImageView mPayeeCopyIcon;
     private TextView mAmountLabel;
     private TextView mAmount;
     private TextView mMemoLabel;
@@ -49,6 +53,9 @@ public class LnPaymentDetailBSDFragment extends ZapBSDFragment {
         View view = inflater.inflate(R.layout.bsd_payment_detail, container);
 
         mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
+        mPayeeLabel = view.findViewById(R.id.payeeLabel);
+        mPayee = view.findViewById(R.id.payee);
+        mPayeeCopyIcon = view.findViewById(R.id.payeeCopyIcon);
         mAmountLabel = view.findViewById(R.id.amountLabel);
         mAmount = view.findViewById(R.id.amount);
         mMemoLabel = view.findViewById(R.id.memoLabel);
@@ -80,11 +87,13 @@ public class LnPaymentDetailBSDFragment extends ZapBSDFragment {
 
         Payment payment = Payment.parseFrom(transactionString);
 
+        String payeeLabel = getString(R.string.payee) + ":";
+        mPayeeLabel.setText(payeeLabel);
         String amountLabel = getString(R.string.amount) + ":";
         mAmountLabel.setText(amountLabel);
         String memoLabel = getString(R.string.memo) + ":";
         mMemoLabel.setText(memoLabel);
-        String feeLabel = getString(R.string.fee);
+        String feeLabel = getString(R.string.fee) + ":";
         mFeeLabel.setText(feeLabel);
         String dateLabel = getString(R.string.date) + ":";
         mDateLabel.setText(dateLabel);
@@ -93,12 +102,17 @@ public class LnPaymentDetailBSDFragment extends ZapBSDFragment {
 
         mBSDScrollableMainView.setTitle(R.string.transaction_detail);
 
-        mAmount.setText("- " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getValue()));
+        Hop lastHop = payment.getHtlcs(0).getRoute().getHops(payment.getHtlcs(0).getRoute().getHopsCount() - 1);
+        String payee = lastHop.getPubKey();
+
+        mPayee.setText(payee);
+        mPayeeCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payee", payee));
+        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getValue()));
         mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getFee()));
         mPreimage.setText(payment.getPaymentPreimage());
         mPreimageCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payment Preimage", payment.getPaymentPreimage()));
-
         mDate.setText(TimeFormatUtil.formatTimeAndDateLong(payment.getCreationDate(), getActivity()));
+
 
         if (!payment.getPaymentRequest().isEmpty()) {
             // This will only be true for payments done with LND 0.7.0-beta and later
