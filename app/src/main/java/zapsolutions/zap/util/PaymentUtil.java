@@ -1,6 +1,7 @@
 package zapsolutions.zap.util;
 
 import com.github.lightningnetwork.lnd.lnrpc.Failure;
+import com.github.lightningnetwork.lnd.lnrpc.Feature;
 import com.github.lightningnetwork.lnd.lnrpc.Hop;
 import com.github.lightningnetwork.lnd.lnrpc.MPPRecord;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
@@ -15,6 +16,7 @@ import com.google.protobuf.ByteString;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -32,10 +34,10 @@ public class PaymentUtil {
 
 
     public static SendPaymentRequest preparePaymentProbe(PayReq paymentRequest) {
-        return preparePaymentProbe(paymentRequest.getDestination(), paymentRequest.getNumSatoshis(), paymentRequest.getPaymentAddr(), paymentRequest.getRouteHintsList());
+        return preparePaymentProbe(paymentRequest.getDestination(), paymentRequest.getNumSatoshis(), paymentRequest.getPaymentAddr(), paymentRequest.getRouteHintsList(), paymentRequest.getFeaturesMap());
     }
 
-    public static SendPaymentRequest preparePaymentProbe(String destination, long amountSat, @Nullable ByteString paymentAddress, @Nullable List<RouteHint> routeHints) {
+    public static SendPaymentRequest preparePaymentProbe(String destination, long amountSat, @Nullable ByteString paymentAddress, @Nullable List<RouteHint> routeHints, @Nullable Map<Integer, Feature> destFeatures) {
         // The paymentHash will be replaced with a random hash. This way we can create a fake payment.
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[PAYMENT_HASH_BYTE_LENGTH];
@@ -52,6 +54,11 @@ public class PaymentUtil {
                 .setMaxParts(1); // We are looking for a direct path. Probing using MPP isn’t really possible at the moment.
         if (paymentAddress != null) {
             sprb.setPaymentAddr(paymentAddress);
+        }
+        if (destFeatures != null && !destFeatures.isEmpty()) {
+            for (Map.Entry<Integer, Feature> entry : destFeatures.entrySet()) {
+                sprb.addDestFeaturesValue(entry.getKey());
+            }
         }
         if (routeHints != null && !routeHints.isEmpty()) {
             sprb.addAllRouteHints(routeHints);

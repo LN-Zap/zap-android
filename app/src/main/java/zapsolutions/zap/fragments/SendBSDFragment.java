@@ -584,7 +584,7 @@ public class SendBSDFragment extends ZapBSDFragment {
                 } catch (NumberFormatException e) {
 
                 }
-                SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest.getDestination(), sendAmount, mLnPaymentRequest.getPaymentAddr(), mLnPaymentRequest.getRouteHintsList());
+                SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest.getDestination(), sendAmount, mLnPaymentRequest.getPaymentAddr(), mLnPaymentRequest.getRouteHintsList(), mLnPaymentRequest.getFeaturesMap());
                 sendPaymentProbe(probeRequest);
             } else {
                 SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest);
