@@ -17,11 +17,20 @@ public class UtilFunctions {
     private static final String LOG_TAG = UtilFunctions.class.getName();
 
     public static String sha256Hash(String data) {
-        // TODO: Add keyStretching function to secure against brute force
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
             return bytesToHex(hash);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public static byte[] sha256HashByte(byte[] data) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return digest.digest(data);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
