@@ -394,7 +394,7 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
                             SendRequest sendRequest = SendRequest.newBuilder()
                                     .setPaymentRequest(lnUrlPaySecondResponse.getPaymentRequest())
                                     .build();
-                            SendPaymentRequest sendPaymentRequest = PaymentUtil.prepareMPPPayment(payReq, lnUrlPaySecondResponse.getPaymentRequest());
+                            SendPaymentRequest sendPaymentRequest = PaymentUtil.prepareMultiPathPayment(payReq, lnUrlPaySecondResponse.getPaymentRequest());
 
                             sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendPaymentRequest);
                         }
@@ -411,7 +411,7 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
 
         ZapLog.d(LOG_TAG, "Trying to send lightning payment...");
 
-        PaymentUtil.sendMppPayment(sendPaymentRequest, getCompositeDisposable(), new PaymentUtil.OnMPPPaymentResult() {
+        PaymentUtil.sendPayment(sendPaymentRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
             @Override
             public void onSuccess(Payment payment) {
                 mHandler.postDelayed(() -> executeSuccessAction(successAction, payment), 300);

@@ -490,9 +490,9 @@ public class SendBSDFragment extends ZapBSDFragment {
         } else {
             // Fallback to multi path payment as no route was found
 
-            SendPaymentRequest mppSendRequest = PaymentUtil.prepareMPPPayment(mLnPaymentRequest, mLnInvoice);
+            SendPaymentRequest mppSendRequest = PaymentUtil.prepareMultiPathPayment(mLnPaymentRequest, mLnInvoice);
 
-            PaymentUtil.sendMppPayment(mppSendRequest, getCompositeDisposable(), new PaymentUtil.OnMPPPaymentResult() {
+            PaymentUtil.sendPayment(mppSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
                 @Override
                 public void onSuccess(Payment payment) {
                     mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
@@ -583,7 +583,7 @@ public class SendBSDFragment extends ZapBSDFragment {
                 } catch (NumberFormatException e) {
 
                 }
-                SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest.getDestination(), sendAmount);
+                SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest.getDestination(), sendAmount, mLnPaymentRequest.getPaymentAddr(), mLnPaymentRequest.getRouteHintsList());
                 sendPaymentProbe(probeRequest);
             } else {
                 SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest);
@@ -684,7 +684,7 @@ public class SendBSDFragment extends ZapBSDFragment {
                 String feePercentageString = " (" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
                 long fee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
                 String feeString = MonetaryUtil.getInstance().getPrimaryDisplayAmount(fee) + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
-                feeString = R.string.maximum_abbreviation + " " + feeString + feePercentageString;
+                feeString = getString(R.string.maximum_abbreviation) + " " + feeString + feePercentageString;
                 setCalculatedFeeAmount(feeString);
             }
 
