@@ -119,6 +119,7 @@ public class SendBSDFragment extends ZapBSDFragment {
             mFixedAmount = args.getLong("onChainAmount");
             mOnChainAddress = args.getString("onChainAddress");
             mMemo = args.getString("onChainMessage");
+            mOnChainFeeView.initialSetup();
         } else {
             PayReq paymentRequest;
             try {
@@ -599,7 +600,7 @@ public class SendBSDFragment extends ZapBSDFragment {
         mSendButtonEnabled_feeCalculate = false;
         updateSendButtonState();
         if (mOnChain) {
-            // On chain fee calculation is very fast, no need for progress indication
+            mOnChainFeeView.onCalculating();
         } else {
             mLightningFeeView.onCalculating();
         }

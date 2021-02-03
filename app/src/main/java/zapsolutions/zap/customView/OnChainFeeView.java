@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -20,6 +21,7 @@ import zapsolutions.zap.util.PrefsUtil;
 public class OnChainFeeView extends ConstraintLayout {
 
     private TextView mTvSendFeeAmount;
+    private ProgressBar mPbCalculateFee;
     private TextView mTvSendFeeSpeed;
     private TabLayout mTabLayoutSendFeeSpeed;
     private TextView mTvSendFeeDuration;
@@ -48,6 +50,7 @@ public class OnChainFeeView extends ConstraintLayout {
         View view = inflate(getContext(), R.layout.view_onchain_fee, this);
 
         mTvSendFeeAmount = view.findViewById(R.id.sendFeeOnChainAmount);
+        mPbCalculateFee = view.findViewById(R.id.sendFeeOnChainProgressBar);
         mTvSendFeeSpeed = view.findViewById(R.id.sendFeeSpeed);
         mTabLayoutSendFeeSpeed = view.findViewById(R.id.feeSpeedTabLayout);
         mTvSendFeeDuration = view.findViewById(R.id.feeDurationText);
@@ -55,10 +58,6 @@ public class OnChainFeeView extends ConstraintLayout {
         mFeeArrowUnitImage = view.findViewById(R.id.feeArrowUnitImage);
 
         mGroupSendFeeDuration = view.findViewById(R.id.feeDurationGroup);
-
-        // Set tier from shared preferences
-        setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
-        mTabLayoutSendFeeSpeed.getTabAt(mOnChainFeeTier.ordinal()).select();
 
         // Toggle tier settings view on amount click
         mGroupSendFeeAmount.setOnAllClickListener(new OnSingleClickListener() {
@@ -68,9 +67,6 @@ public class OnChainFeeView extends ConstraintLayout {
                 toggleFeeTierView(isFeeDurationVisible);
             }
         });
-
-        // Set initial block target time
-        setBlockTargetTime(mOnChainFeeTier.getConfirmationBlockTarget());
 
         // Listen for tier change by user
         mTabLayoutSendFeeSpeed.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -99,8 +95,27 @@ public class OnChainFeeView extends ConstraintLayout {
         });
     }
 
+    // This stuff has to be outside of init(), otherwise the preview does not work in Android Studio
+    public void initialSetup() {
+        // Set tier from shared preferences
+        setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
+        mTabLayoutSendFeeSpeed.getTabAt(mOnChainFeeTier.ordinal()).select();
+
+        // Set initial block target time
+        setBlockTargetTime(mOnChainFeeTier.getConfirmationBlockTarget());
+    }
+
     public OnChainFeeTier getFeeTier() {
         return mOnChainFeeTier;
+    }
+
+    /**
+     * Show progress bar while calculating fee
+     */
+    public void onCalculating() {
+        mTvSendFeeAmount.setText(null);
+        mPbCalculateFee.setVisibility(View.VISIBLE);
+        mTvSendFeeAmount.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -126,10 +141,14 @@ public class OnChainFeeView extends ConstraintLayout {
 
     public void onFeeSuccess(String amount) {
         mTvSendFeeAmount.setText(amount);
+        mTvSendFeeAmount.setVisibility(View.VISIBLE);
+        mPbCalculateFee.setVisibility(View.GONE);
     }
 
     public void onFeeFailure() {
         mTvSendFeeAmount.setText(R.string.fee_not_available);
+        mTvSendFeeAmount.setVisibility(View.VISIBLE);
+        mPbCalculateFee.setVisibility(View.GONE);
     }
 
     /**
