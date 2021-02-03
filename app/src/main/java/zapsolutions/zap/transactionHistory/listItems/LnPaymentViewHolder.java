@@ -33,7 +33,7 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
         setAmount(lnPaymentItem.getPayment().getValueSat() * -1, true);
         setFee(lnPaymentItem.getPayment().getFee(), true);
 
-        if (lnPaymentItem.getMemo() == null) {
+        if (lnPaymentItem.getMemo() == null || lnPaymentItem.getMemo().isEmpty()) {
             setSecondaryDescription("", false);
         } else {
             setSecondaryDescription(lnPaymentItem.getMemo(), true);
