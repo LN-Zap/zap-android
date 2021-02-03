@@ -569,7 +569,7 @@ public class Wallet {
                 }, throwable -> ZapLog.e(LOG_TAG, "Exception in payment request task: " + throwable.getMessage())));
     }
 
-    public void openChannel(LightningNodeUri nodeUri, long amount) {
+    public void openChannel(LightningNodeUri nodeUri, long amount, int targetConf) {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(listPeersResponse -> {
@@ -583,10 +583,10 @@ public class Wallet {
 
                     if (connected) {
                         ZapLog.d(LOG_TAG, "Already connected to peer, trying to open channel...");
-                        openChannelConnected(nodeUri, amount);
+                        openChannelConnected(nodeUri, amount, targetConf);
                     } else {
                         ZapLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
-                        connectPeer(nodeUri, amount);
+                        connectPeer(nodeUri, amount, targetConf);
                     }
                 }, throwable -> {
                     ZapLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
@@ -598,10 +598,10 @@ public class Wallet {
                 }));
     }
 
-    private void connectPeer(LightningNodeUri nodeUri, long amount) {
+    private void connectPeer(LightningNodeUri nodeUri, long amount, int targetConf) {
         if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
             ZapLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
-            fetchNodeInfoToConnectPeer(nodeUri, amount);
+            fetchNodeInfoToConnectPeer(nodeUri, amount, targetConf);
             return;
         }
 
@@ -614,7 +614,7 @@ public class Wallet {
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(connectPeerResponse -> {
                     ZapLog.d(LOG_TAG, "Successfully connected to peer, trying to open channel...");
-                    openChannelConnected(nodeUri, amount);
+                    openChannelConnected(nodeUri, amount, targetConf);
                 }, throwable -> {
                     ZapLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
 
@@ -630,7 +630,7 @@ public class Wallet {
                 }));
     }
 
-    public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, long amount) {
+    public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, long amount, int targetConf) {
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(nodeUri.getPubKey())
                 .build();
@@ -643,7 +643,7 @@ public class Wallet {
                         LightningNodeUri nodeUriWithHost = LightningParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
                             ZapLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
-                            connectPeer(nodeUriWithHost, amount);
+                            connectPeer(nodeUriWithHost, amount, targetConf);
                         } else {
                             ZapLog.d(LOG_TAG, "Failed to parse nodeUri");
                             broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
@@ -658,11 +658,13 @@ public class Wallet {
                 }));
     }
 
-    private void openChannelConnected(LightningNodeUri nodeUri, long amount) {
+    private void openChannelConnected(LightningNodeUri nodeUri, long amount, int targetConf) {
         byte[] nodeKeyBytes = hexStringToByteArray(nodeUri.getPubKey());
         OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
                 .setNodePubkey(ByteString.copyFrom(nodeKeyBytes))
-                .setLocalFundingAmount(amount).build();
+                .setTargetConf(targetConf)
+                .setLocalFundingAmount(amount)
+                .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().openChannel(openChannelRequest)
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
@@ -686,9 +688,13 @@ public class Wallet {
     public void closeChannel(String channelPoint, boolean force) {
         ChannelPoint point = ChannelPoint.newBuilder()
                 .setFundingTxidStr(channelPoint.substring(0, channelPoint.indexOf(':')))
-                .setOutputIndex(Character.getNumericValue(channelPoint.charAt(channelPoint.length() - 1))).build();
+                .setOutputIndex(Character.getNumericValue(channelPoint.charAt(channelPoint.length() - 1)))
+                .build();
 
-        CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder().setChannelPoint(point).setForce(force).build();
+        CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder()
+                .setChannelPoint(point)
+                .setForce(force)
+                .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().closeChannel(closeChannelRequest)
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)

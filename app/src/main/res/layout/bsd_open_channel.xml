@@ -199,6 +199,17 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <zapsolutions.zap.customView.OnChainFeeView
+                        android:id="@+id/sendFeeOnChainLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="30dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/localAmountInputsView"/>
+
                     <zapsolutions.zap.customView.NumpadView
                         android:id="@+id/numpadView"
                         android:layout_width="0dp"
@@ -207,10 +218,9 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="25dp"
                         android:layout_marginBottom="15dp"
-                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/localAmountInputsView" />
+                        app:layout_constraintTop_toBottomOf="@id/sendFeeOnChainLayout" />
 
                     <Button
                         android:id="@+id/openChannelButton"

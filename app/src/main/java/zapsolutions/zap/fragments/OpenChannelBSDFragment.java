@@ -18,18 +18,22 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
+import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
-import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.customView.BSDScrollableMainView;
+import zapsolutions.zap.customView.NumpadView;
+import zapsolutions.zap.customView.OnChainFeeView;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.Wallet;
+import zapsolutions.zap.util.ZapLog;
 
 public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.ChannelOpenUpdateListener {
 
@@ -50,6 +54,7 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
     private TextView mTvOnChainFunds;
     private LightningNodeUri mLightningNodeUri;
     private String mValueBeforeUnitSwitch;
+    private OnChainFeeView mOnChainFeeView;
     private boolean mUseValueBeforeUnitSwitch = true;
 
     @Nullable
@@ -68,12 +73,18 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
         mEtAmount = view.findViewById(R.id.localAmount);
         mTvUnit = view.findViewById(R.id.localAmountUnit);
         mOpenChannelButton = view.findViewById(R.id.openChannelButton);
+        mOnChainFeeView = view.findViewById(R.id.sendFeeOnChainLayout);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
         mBSDScrollableMainView.setTitle(R.string.channel_open);
         mResultView.setOnOkListener(this::dismiss);
         mNumpad.bindEditText(mEtAmount);
+
+        mOnChainFeeView.initialSetup();
+        mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> {
+            calculateFee();
+        });
 
         Wallet.getInstance().registerChannelOpenUpdateListener(this);
 
@@ -109,6 +120,13 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
                                       int count) {
                 // validate input
                 mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
+
+                // calculate fees
+                if (mAmountValid) {
+                    calculateFee();
+                } else {
+                    setFeeFailure();
+                }
             }
         });
 
@@ -189,7 +207,7 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
                 }
 
                 switchToProgressScreen();
-                Wallet.getInstance().openChannel(mLightningNodeUri, userInputAmount);
+                Wallet.getInstance().openChannel(mLightningNodeUri, userInputAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
             }
         });
 
@@ -311,5 +329,73 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
             default:
                 return getString(R.string.error_channel_open, message);
         }
+    }
+
+
+    private void calculateFee() {
+        setCalculatingFee();
+        long sendAmount = 0L;
+        try {
+            sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+        } catch (NumberFormatException ignored) {
+        }
+        estimateOnChainFee(sendAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+    }
+
+    /**
+     * Show progress while calculating fee
+     */
+    private void setCalculatingFee() {
+        mOnChainFeeView.onCalculating();
+    }
+
+    /**
+     * Show the calculated fee
+     */
+    private void setCalculatedFeeAmount(String amount) {
+        mOnChainFeeView.onFeeSuccess(amount);
+    }
+
+    /**
+     * Show fee calculation failure
+     */
+    private void setFeeFailure() {
+        mOnChainFeeView.onFeeFailure();
+    }
+
+
+    /**
+     * This function is used to calculate the expected on chain fee.
+     */
+    private void estimateOnChainFee(long amount, int targetConf) {
+
+        // We choose a dummy bech32 address. The fee amount depends only on the address type.
+        String address;
+        switch (Wallet.getInstance().getNetwork()) {
+            case TESTNET:
+                address = "tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx";
+                break;
+            case REGTEST:
+                address = "bcrt1qsdtedxkv2mdgtstsv9fhyq03dsv9dyu5qmeh2w";
+                break;
+            default:
+                address = "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"; // Mainnet
+        }
+
+
+        // let LND estimate fee
+        EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
+                .putAddrToAmount(address, amount)
+                .setTargetConf(targetConf)
+                .build();
+
+        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
+                .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat())),
+                        throwable -> {
+                            ZapLog.w(TAG, "Exception in fee estimation request task.");
+                            ZapLog.w(TAG, throwable.getMessage());
+                            setFeeFailure();
+                        }));
+
     }
 }
