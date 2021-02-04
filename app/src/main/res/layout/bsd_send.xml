@@ -68,6 +68,46 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@color/gray" />
 
+                    <TextView
+                        android:id="@+id/payeeSourceLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:maxLength="50"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="9dp"
+                        android:text="@string/payee"
+                        android:textAlignment="viewStart"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line" />
+
+                    <TextView
+                        android:id="@+id/sendPayee"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:paddingStart="15dp"
+                        android:paddingTop="9dp"
+                        android:paddingBottom="9dp"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/payeeSourceLabel"
+                        app:layout_constraintTop_toBottomOf="@id/line"
+                        tools:text="Alice (0238834839...)" />
+
+                    <ImageView
+                        android:id="@+id/line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/payeeSourceLabel"
+                        app:srcCompat="@color/gray" />
+
                     <!-- Dummy item to prevent EditText from receiving focus -->
                     <LinearLayout
                         android:layout_width="0px"
@@ -89,7 +129,7 @@
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/line2" />
 
                     <EditText
                         android:id="@+id/sendAmount"
@@ -103,10 +143,9 @@
                         android:paddingEnd="0dp"
                         android:textAlignment="textEnd"
                         android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/sendUnitLayout"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/line2" />
 
                     <LinearLayout
                         android:id="@+id/sendUnitLayout"
@@ -114,11 +153,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toEndOf="@+id/sendAmount"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@id/line2">
 
                         <zapsolutions.zap.customView.NonClippingTextView
                             android:id="@+id/sendUnit"
@@ -141,7 +178,7 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/line2"
+                        android:id="@+id/line3"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -176,7 +213,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="30dp"
                         android:visibility="gone"
-                        tools:visibility="gone" />
+                        tools:visibility="visible" />
 
                 </RelativeLayout>
 
@@ -222,6 +259,7 @@
                     android:layout_marginEnd="25dp"
                     android:layout_marginBottom="15dp"
                     android:visibility="gone"
+                    tools:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/sendMemoTopLayout" />

@@ -70,6 +70,7 @@ public class SendBSDFragment extends ZapBSDFragment {
     private NumpadView mNumpad;
     private Button mBtnSend;
     private Button mFallbackButton;
+    private TextView mPayee;
 
     private PayReq mLnPaymentRequest;
     private String mLnInvoice;
@@ -119,7 +120,6 @@ public class SendBSDFragment extends ZapBSDFragment {
             mFixedAmount = args.getLong("onChainAmount");
             mOnChainAddress = args.getString("onChainAddress");
             mMemo = args.getString("onChainMessage");
-            mOnChainFeeView.initialSetup();
         } else {
             PayReq paymentRequest;
             try {
@@ -148,6 +148,7 @@ public class SendBSDFragment extends ZapBSDFragment {
         mNumpad = view.findViewById(R.id.numpadView);
         mBtnSend = view.findViewById(R.id.sendButton);
         mFallbackButton = view.findViewById(R.id.fallbackButton);
+        mPayee = view.findViewById(R.id.sendPayee);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
@@ -242,6 +243,8 @@ public class SendBSDFragment extends ZapBSDFragment {
 
 
         if (mOnChain) {
+            mPayee.setText(mOnChainAddress);
+            mOnChainFeeView.initialSetup();
 
             mOnChainFeeView.setVisibility(View.VISIBLE);
             mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> {
@@ -332,6 +335,7 @@ public class SendBSDFragment extends ZapBSDFragment {
         } else {
 
             // Lightning Payment
+            mPayee.setText(mLnPaymentRequest.getDestination());
 
             mLightningFeeView.setVisibility(View.VISIBLE);
             mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_lightning);
