@@ -54,6 +54,9 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
     private ProgressBar mBalanceBarRemote;
     private TextView mLocalBalance;
     private TextView mRemoteBalance;
+    private TextView mChannelVisibilityLabel;
+    private TextView mChannelVisibility;
+    private ImageView mChannelVisibilitySeparatorLine;
     private TextView mFundingTx;
     private Button mCloseChannelButton;
 
@@ -82,6 +85,9 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
         mBalanceBarRemote = view.findViewById(R.id.balanceBarRemote);
         mLocalBalance = view.findViewById(R.id.localBalance);
         mRemoteBalance = view.findViewById(R.id.remoteBalance);
+        mChannelVisibilityLabel = view.findViewById(R.id.channelVisibilityLabel);
+        mChannelVisibility = view.findViewById(R.id.channelVisibility);
+        mChannelVisibilitySeparatorLine = view.findViewById(R.id.separator_4);
         mFundingTx = view.findViewById(R.id.fundingTxText);
         mChannelDetailsLayout = view.findViewById(R.id.channelDetailsLayout);
         mClosingTxLayout = view.findViewById(R.id.closingTxLayout);
@@ -144,6 +150,7 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
         Wallet.getInstance().registerChannelCloseUpdateListener(this);
         mChannelPoint = channel.getChannelPoint();
 
+        showChannelVisibility(channel.getPrivate());
         showClosingButton(!channel.getActive(), channel.getCsvDelay());
 
         if (channel.getActive()) {
@@ -220,6 +227,13 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
 
         mLocalBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(local));
         mRemoteBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(remote));
+    }
+
+    private void showChannelVisibility(boolean isPrivate) {
+        mChannelVisibilityLabel.setVisibility(View.VISIBLE);
+        mChannelVisibility.setVisibility(View.VISIBLE);
+        mChannelVisibilitySeparatorLine.setVisibility(View.VISIBLE);
+        mChannelVisibility.setText(isPrivate ? R.string.channel_visibility_private : R.string.channel_visibility_public);
     }
 
     private void showClosingTransaction(String closingTransaction) {

@@ -569,7 +569,7 @@ public class Wallet {
                 }, throwable -> ZapLog.e(LOG_TAG, "Exception in payment request task: " + throwable.getMessage())));
     }
 
-    public void openChannel(LightningNodeUri nodeUri, long amount, int targetConf) {
+    public void openChannel(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(listPeersResponse -> {
@@ -583,10 +583,10 @@ public class Wallet {
 
                     if (connected) {
                         ZapLog.d(LOG_TAG, "Already connected to peer, trying to open channel...");
-                        openChannelConnected(nodeUri, amount, targetConf);
+                        openChannelConnected(nodeUri, amount, targetConf, isPrivate);
                     } else {
                         ZapLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
-                        connectPeer(nodeUri, amount, targetConf);
+                        connectPeer(nodeUri, amount, targetConf, isPrivate);
                     }
                 }, throwable -> {
                     ZapLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
@@ -598,10 +598,10 @@ public class Wallet {
                 }));
     }
 
-    private void connectPeer(LightningNodeUri nodeUri, long amount, int targetConf) {
+    private void connectPeer(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
         if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
             ZapLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
-            fetchNodeInfoToConnectPeer(nodeUri, amount, targetConf);
+            fetchNodeInfoToConnectPeer(nodeUri, amount, targetConf, isPrivate);
             return;
         }
 
@@ -614,7 +614,7 @@ public class Wallet {
                 .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(connectPeerResponse -> {
                     ZapLog.d(LOG_TAG, "Successfully connected to peer, trying to open channel...");
-                    openChannelConnected(nodeUri, amount, targetConf);
+                    openChannelConnected(nodeUri, amount, targetConf, isPrivate);
                 }, throwable -> {
                     ZapLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
 
@@ -630,7 +630,7 @@ public class Wallet {
                 }));
     }
 
-    public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, long amount, int targetConf) {
+    public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(nodeUri.getPubKey())
                 .build();
@@ -643,7 +643,7 @@ public class Wallet {
                         LightningNodeUri nodeUriWithHost = LightningParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
                             ZapLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
-                            connectPeer(nodeUriWithHost, amount, targetConf);
+                            connectPeer(nodeUriWithHost, amount, targetConf, isPrivate);
                         } else {
                             ZapLog.d(LOG_TAG, "Failed to parse nodeUri");
                             broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
@@ -658,11 +658,12 @@ public class Wallet {
                 }));
     }
 
-    private void openChannelConnected(LightningNodeUri nodeUri, long amount, int targetConf) {
+    private void openChannelConnected(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
         byte[] nodeKeyBytes = hexStringToByteArray(nodeUri.getPubKey());
         OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
                 .setNodePubkey(ByteString.copyFrom(nodeKeyBytes))
                 .setTargetConf(targetConf)
+                .setPrivate(isPrivate)
                 .setLocalFundingAmount(amount)
                 .build();
 

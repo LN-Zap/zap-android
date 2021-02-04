@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
 import zapsolutions.zap.lnurl.LnUrlResponse;
+import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.Wallet;
@@ -60,6 +63,7 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
     private ConstraintLayout mContentTopLayout;
     private View mInfoView;
     private TextView mServiceName;
+    private CheckBox mPrivateCheckbox;
 
     private LnUrlChannelResponse mLnUrlChannelResponse;
 
@@ -86,6 +90,8 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
         mServiceName = view.findViewById(R.id.serviceName);
         mInfoView = view.findViewById(R.id.infoView);
         mProgressView = view.findViewById(R.id.paymentProgressLayout);
+        mPrivateCheckbox = view.findViewById(R.id.privateCheckBox);
+
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(false);
@@ -112,6 +118,9 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
                 Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
             }
         });
+
+        ImageButton privateHelpButton = view.findViewById(R.id.privateHelpButton);
+        privateHelpButton.setOnClickListener(view1 -> HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_private_channels));
 
         mResultView.setOnOkListener(this::dismiss);
 
@@ -190,7 +199,7 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
                 .setCallback(mLnUrlChannelResponse.getCallback())
                 .setK1(mLnUrlChannelResponse.getK1())
                 .setRemoteId(Wallet.getInstance().getIdentityPubKey())
-                .setIsPrivate(false)
+                .setIsPrivate(mPrivateCheckbox.isChecked())
                 .build();
 
         ZapLog.v(TAG, lnUrlFinalOpenChannelRequest.requestAsString());

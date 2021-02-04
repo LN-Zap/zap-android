@@ -163,6 +163,10 @@
     <string name="channel_open">Open Channel</string>
     <string name="channel_open_success">Channel opening successfully initiated</string>
     <string name="channel_open_error">Channel open error</string>
+    <string name="private_channel">Private channel</string>
+    <string name="channel_visibility_private">private</string>
+    <string name="channel_visibility_public">public</string>
+    <string name="channel_visibility">Visibility</string>
 
 
     <string name="setup_connect_heading">How do you want to use ZAP?</string>
@@ -375,6 +379,7 @@
     <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
+    <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
 
     <string name="wallet_name">Wallet Name</string>
     <string name="delete">Delete</string>

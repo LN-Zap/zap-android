@@ -67,11 +67,32 @@
                     app:layout_constraintTop_toBottomOf="@id/infoQuestion"
                     tools:text="LNURL Service" />
 
+                <CheckBox
+                    android:id="@+id/privateCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/private_channel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/serviceName" />
+
+                <ImageButton
+                    android:id="@+id/privateHelpButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:tint="@color/gray"
+                    app:layout_constraintStart_toEndOf="@id/privateCheckBox"
+                    app:layout_constraintTop_toTopOf="@id/privateCheckBox"
+                    app:srcCompat="@drawable/ic_help_black_24dp" />
+
                 <Button
                     android:id="@+id/openButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/bg_clickable_item"
                     android:text="@string/channel_open"
@@ -81,7 +102,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/serviceName" />
+                    app:layout_constraintTop_toBottomOf="@id/privateCheckBox" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
