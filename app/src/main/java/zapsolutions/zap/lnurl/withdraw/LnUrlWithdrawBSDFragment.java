@@ -35,10 +35,11 @@ import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
-import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.customView.BSDScrollableMainView;
+import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.util.MonetaryUtil;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -267,6 +268,7 @@ public class LnUrlWithdrawBSDFragment extends ZapBSDFragment {
                         .setValue(value)
                         .setMemo(mWithdrawData.getDefaultDescription())
                         .setExpiry(60L) // in seconds
+                        .setPrivate(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
                         .build();
 
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)

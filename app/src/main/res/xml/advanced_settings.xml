@@ -63,11 +63,14 @@
             android:title="@string/settings_lnFeeLimitTitle"
             app:iconSpaceReserved="false" />
 
+        <!--
+        This should be on in 99% of cases, so we do not expose it for now.
         <SwitchPreference
             android:defaultValue="true"
             android:key="includePrivateChannelHints"
             android:title="@string/settings_lnPrivateChannelHints"
             app:iconSpaceReserved="false" />
+        -->
 
     </PreferenceCategory>
 

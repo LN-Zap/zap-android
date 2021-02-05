@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ import zapsolutions.zap.customView.BSDScrollableMainView;
 import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.customView.OnChainFeeView;
 import zapsolutions.zap.lightning.LightningNodeUri;
+import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.Wallet;
@@ -55,6 +58,7 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
     private LightningNodeUri mLightningNodeUri;
     private String mValueBeforeUnitSwitch;
     private OnChainFeeView mOnChainFeeView;
+    private CheckBox mPrivateCheckbox;
     private boolean mUseValueBeforeUnitSwitch = true;
 
     @Nullable
@@ -74,6 +78,7 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
         mTvUnit = view.findViewById(R.id.localAmountUnit);
         mOpenChannelButton = view.findViewById(R.id.openChannelButton);
         mOnChainFeeView = view.findViewById(R.id.sendFeeOnChainLayout);
+        mPrivateCheckbox = view.findViewById(R.id.privateCheckBox);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
@@ -94,6 +99,8 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
         }
 
         setAvailableFunds();
+        ImageButton privateHelpButton = view.findViewById(R.id.privateHelpButton);
+        privateHelpButton.setOnClickListener(view1 -> HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_private_channels));
 
         // Input validation for the amount field.
         mEtAmount.addTextChangedListener(new TextWatcher() {
@@ -207,7 +214,7 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
                 }
 
                 switchToProgressScreen();
-                Wallet.getInstance().openChannel(mLightningNodeUri, userInputAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+                Wallet.getInstance().openChannel(mLightningNodeUri, userInputAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
             }
         });
 

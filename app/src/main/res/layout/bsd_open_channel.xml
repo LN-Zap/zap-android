@@ -208,7 +208,55 @@
                         android:layout_marginEnd="30dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/localAmountInputsView"/>
+                        app:layout_constraintTop_toBottomOf="@id/localAmountInputsView" />
+
+                    <TextView
+                        android:id="@+id/channelVisibilityLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="10dp"
+                        android:paddingTop="5dp"
+                        android:text="@string/channel_visibility"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sendFeeOnChainLayout" />
+
+                    <CheckBox
+                        android:id="@+id/privateCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="10dp"
+                        android:layoutDirection="rtl"
+                        android:text="@string/channel_visibility_private"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sendFeeOnChainLayout" />
+
+                    <ImageButton
+                        android:id="@+id/privateHelpButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="30dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:tint="@color/gray"
+                        app:layout_constraintStart_toEndOf="@id/channelVisibilityLabel"
+                        app:layout_constraintTop_toTopOf="@id/privateCheckBox"
+                        app:srcCompat="@drawable/ic_help_black_24dp" />
+
+                    <ImageView
+                        android:id="@+id/lineVisibility"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/privateCheckBox"
+                        app:srcCompat="@color/gray" />
 
                     <zapsolutions.zap.customView.NumpadView
                         android:id="@+id/numpadView"
@@ -220,7 +268,7 @@
                         android:layout_marginBottom="15dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/sendFeeOnChainLayout" />
+                        app:layout_constraintTop_toBottomOf="@id/lineVisibility" />
 
                     <Button
                         android:id="@+id/openChannelButton"
