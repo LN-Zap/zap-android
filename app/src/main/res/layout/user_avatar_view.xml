@@ -33,7 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/bg_avatar_circle"
-        android:src="@drawable/ic_person_24"
+        android:src="@drawable/unknown_avatar"
         app:layout_constraintBottom_toBottomOf="@+id/guidelineBottom"
         app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeft"

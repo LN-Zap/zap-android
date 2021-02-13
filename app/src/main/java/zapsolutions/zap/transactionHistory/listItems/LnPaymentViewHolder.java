@@ -3,8 +3,11 @@ package zapsolutions.zap.transactionHistory.listItems;
 import android.content.SharedPreferences;
 import android.view.View;
 
+import com.github.lightningnetwork.lnd.lnrpc.Hop;
+
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
+import zapsolutions.zap.contacts.ContactsManager;
 
 public class LnPaymentViewHolder extends TransactionViewHolder {
 
@@ -27,9 +30,18 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         setDisplayMode(true);
 
+        Hop lastHop = lnPaymentItem.getPayment().getHtlcs(0).getRoute().getHops(lnPaymentItem.getPayment().getHtlcs(0).getRoute().getHopsCount() - 1);
+        String payee = lastHop.getPubKey();
+
+        String payeeName = ContactsManager.getInstance().getNameByNodePubKey(payee);
+        if (payee.equals(payeeName)) {
+            setPrimaryDescription(mContext.getResources().getString(R.string.sent));
+        } else {
+            setPrimaryDescription(payeeName);
+        }
+
         setIcon(TransactionIcon.LIGHTNING);
         setTimeOfDay(lnPaymentItem.mCreationDate);
-        setPrimaryDescription(mContext.getResources().getString(R.string.sent));
         setAmount(lnPaymentItem.getPayment().getValueSat() * -1, true);
         setFee(lnPaymentItem.getPayment().getFee(), true);
 

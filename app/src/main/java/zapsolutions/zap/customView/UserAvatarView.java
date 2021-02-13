@@ -6,9 +6,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.github.michaelwuensch.avathorlibrary.AvathorFactory;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import net.glxn.qrgen.android.QRCode;
@@ -62,7 +64,7 @@ public class UserAvatarView extends ConstraintLayout {
         mNodeUris = nodeUris;
         mIsQRCodeIncluded = includeQRCode;
 
-        /*
+
         if (mIsQRCodeIncluded) {
             mIvQRCode.setOnClickListener(new OnClickListener() {
                 @Override
@@ -86,7 +88,6 @@ public class UserAvatarView extends ConstraintLayout {
                 }
             });
         }
-        */
 
         showAvatar();
         showIdentity(true);
@@ -124,19 +125,7 @@ public class UserAvatarView extends ConstraintLayout {
                 }
 
                 // Load user Avatar
-                /*
-                Glide.with(getContext())
-                        .setDefaultRequestOptions(new RequestOptions().timeout(15000))
-                        .load(UserAvatarUtil.getAvatarUrl(mNodeUris[mCurrentUriId].getPubKey()))
-                        .placeholder(R.drawable.ic_person_24)
-                        //.circleCrop()
-                        .into(mIvUserAvatar);
-
-                if (includeQRCode) {
-
-
-                }
-                 */
+                mIvUserAvatar.setImageBitmap(AvathorFactory.getAvathor(getContext(), mNodeUris[mCurrentUriId].getPubKey()));
             }
         }
     }

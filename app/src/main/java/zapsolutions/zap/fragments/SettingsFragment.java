@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -162,15 +163,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 // We have to use commit here, apply would not finish before the app is restarted.
                 PrefsUtil.editPrefs().clear().commit();
                 try {
+                    PrefsUtil.editEncryptedPrefs().clear().commit();
+                } catch (GeneralSecurityException | IOException e) {
+                    e.printStackTrace();
+                }
+                try {
                     new Cryptography(App.getAppContext()).removeKeys();
                     new KeystoreUtil().removePinActiveKey();
-                } catch (KeyStoreException e) {
-                    e.printStackTrace();
-                } catch (CertificateException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
                 getActivity().finishAffinity();

@@ -375,34 +375,36 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
      * This function is used to calculate the expected on chain fee.
      */
     private void estimateOnChainFee(long amount, int targetConf) {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            // We choose a dummy bech32 address. The fee amount depends only on the address type.
+            String address;
+            switch (Wallet.getInstance().getNetwork()) {
+                case TESTNET:
+                    address = "tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx";
+                    break;
+                case REGTEST:
+                    address = "bcrt1qsdtedxkv2mdgtstsv9fhyq03dsv9dyu5qmeh2w";
+                    break;
+                default:
+                    address = "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"; // Mainnet
+            }
 
-        // We choose a dummy bech32 address. The fee amount depends only on the address type.
-        String address;
-        switch (Wallet.getInstance().getNetwork()) {
-            case TESTNET:
-                address = "tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx";
-                break;
-            case REGTEST:
-                address = "bcrt1qsdtedxkv2mdgtstsv9fhyq03dsv9dyu5qmeh2w";
-                break;
-            default:
-                address = "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"; // Mainnet
+
+            // let LND estimate fee
+            EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
+                    .putAddrToAmount(address, amount)
+                    .setTargetConf(targetConf)
+                    .build();
+
+            getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
+                    .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat())),
+                            throwable -> {
+                                ZapLog.w(TAG, "Exception in fee estimation request task.");
+                                ZapLog.w(TAG, throwable.getMessage());
+                                setFeeFailure();
+                            }));
+        } else {
+            setFeeFailure();
         }
-
-
-        // let LND estimate fee
-        EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
-                .putAddrToAmount(address, amount)
-                .setTargetConf(targetConf)
-                .build();
-
-        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
-                .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat())),
-                        throwable -> {
-                            ZapLog.w(TAG, "Exception in fee estimation request task.");
-                            ZapLog.w(TAG, throwable.getMessage());
-                            setFeeFailure();
-                        }));
-
     }
 }

@@ -14,6 +14,7 @@ android {
         targetSdkVersion 30
         versionCode 26
         versionName "0.3.8-beta"
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         setProperty("archivesBaseName", "zap-android-" + versionName + "(" + versionCode + ")")
     }
@@ -180,6 +181,9 @@ dependencies {
     // HTTP library to perform API interaction
     implementation 'com.android.volley:volley:1.1.1'
 
+    // Library for the avatar images
+    implementation 'com.github.michaelWuensch:avathor-android-library:1.1.0'
+
     // gRPC implementation to communicate with lnd
     implementation 'io.grpc:grpc-okhttp:1.34.1'
     implementation 'io.grpc:grpc-protobuf-lite:1.34.1'
@@ -194,15 +198,16 @@ dependencies {
     // Asynchronous programming library
     implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
 
+
     // Basic Android libraries
-    implementation 'androidx.appcompat:appcompat:1.1.0' // updating breaks switching languages
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.security:security-crypto:1.1.0-alpha03"
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
 
     // Libraries for tests
     testImplementation 'org.json:json:20200518'

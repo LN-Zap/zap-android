@@ -130,6 +130,20 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name=".contacts.ScanContactActivity"
+            android:label="@string/add_contact"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="zapsolutions.zap.contacts.ManageContactsActivity"
+            android:label="@string/activity_manage_contacts"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="zapsolutions.zap.contacts.ContactDetailsActivity"
+            android:label="@string/activity_contact_details"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="zapsolutions.zap.licenses.LicensesActivity"
             android:label="@string/third_party_licenses"
             android:screenOrientation="portrait"

@@ -19,8 +19,8 @@
 
         <ImageView
             android:id="@+id/drawerMenuButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="?selectableItemBackgroundBorderless"
@@ -35,6 +35,7 @@
             android:id="@+id/walletSpinner"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
             android:background="@null"
             android:dropDownWidth="180dp"
             android:popupBackground="@drawable/bg_wallet_spinner_popup"
@@ -73,8 +74,8 @@
 
         <ImageView
             android:id="@+id/historyButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="?selectableItemBackgroundBorderless"
@@ -101,7 +102,7 @@
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
+            android:paddingBottom="10dp"
             android:textAlignment="textEnd"
             android:textColor="@color/gray"
             android:textSize="20sp"
@@ -112,19 +113,19 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/ic_cloudlightning"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/scanButton"
+            app:layout_constraintBottom_toTopOf="@+id/sendButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.45" />
+            app:layout_constraintVertical_bias="0.4" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/BalanceLayout"
@@ -134,11 +135,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/scanButton"
+            app:layout_constraintBottom_toTopOf="@+id/sendButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.45">
+            app:layout_constraintVertical_bias="0.4">
 
             <LinearLayout
                 android:id="@+id/BalancePrimaryLayout"
@@ -212,15 +213,38 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+
+        <LinearLayout
             android:id="@+id/scanButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/button_scan_ripple"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/sendButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:elevation="2dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_scan_qr_code_18dp"
+                app:tint="@color/white" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/sendButton"
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button_send_ripple"
-            android:text="@string/scan"
+            android:text="@string/send"
             android:textAllCaps="false"
             android:textColor="@color/lightningOrange"
             android:textSize="18sp"
@@ -244,7 +268,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.74"
-            app:layout_constraintStart_toEndOf="@+id/scanButton" />
+            app:layout_constraintStart_toEndOf="@+id/sendButton" />
 
         <ImageView
             android:id="@+id/switchButtonImage"
@@ -273,7 +297,7 @@
             android:paddingEnd="15dp"
             android:text="@string/demo_setupWalletBtn"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/receiveButton"
+            app:layout_constraintBottom_toTopOf="@+id/scanButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/BalanceLayout" />

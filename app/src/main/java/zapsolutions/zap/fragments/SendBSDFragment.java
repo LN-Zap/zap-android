@@ -38,6 +38,7 @@ import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
 import zapsolutions.zap.customView.BSDScrollableMainView;
@@ -86,9 +87,12 @@ public class SendBSDFragment extends ZapBSDFragment {
     private Route mRoute;
     long mCalculatedFee;
     double mCalculatedFeePercent;
+    private String mKeysendPubkey;
+    private boolean mIsKeysend;
 
     public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice, String fallbackOnChainInvoice) {
         Intent intent = new Intent();
+        intent.putExtra("keysend", false);
         intent.putExtra("onChain", false);
         intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
         intent.putExtra("lnInvoice", invoice);
@@ -100,10 +104,21 @@ public class SendBSDFragment extends ZapBSDFragment {
 
     public static SendBSDFragment createOnChainDialog(String address, long amount, String message) {
         Intent intent = new Intent();
+        intent.putExtra("keysend", false);
         intent.putExtra("onChain", true);
         intent.putExtra("onChainAddress", address);
         intent.putExtra("onChainAmount", amount);
         intent.putExtra("onChainMessage", message);
+        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+        sendBottomSheetDialog.setArguments(intent.getExtras());
+        return sendBottomSheetDialog;
+    }
+
+    public static SendBSDFragment createKeysendDialog(String pubkey) {
+        Intent intent = new Intent();
+        intent.putExtra("onChain", false);
+        intent.putExtra("keysend", true);
+        intent.putExtra("keysendPubkey", pubkey);
         SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
         sendBottomSheetDialog.setArguments(intent.getExtras());
         return sendBottomSheetDialog;
@@ -115,20 +130,26 @@ public class SendBSDFragment extends ZapBSDFragment {
 
         Bundle args = getArguments();
         mOnChain = args.getBoolean("onChain");
+        mIsKeysend = args.getBoolean("keysend");
 
         if (mOnChain) {
             mFixedAmount = args.getLong("onChainAmount");
             mOnChainAddress = args.getString("onChainAddress");
             mMemo = args.getString("onChainMessage");
         } else {
-            PayReq paymentRequest;
-            try {
-                paymentRequest = PayReq.parseFrom(args.getByteArray("lnPaymentRequest"));
-                mLnPaymentRequest = paymentRequest;
-                mLnInvoice = args.getString("lnInvoice");
-                mFallbackOnChainInvoice = args.getString("fallbackOnChainInvoice");
-            } catch (InvalidProtocolBufferException e) {
-                throw new RuntimeException("Invalid payment request forwarded." + e.getMessage());
+            if (mIsKeysend) {
+                mKeysendPubkey = args.getString("keysendPubkey");
+            } else {
+                PayReq paymentRequest;
+                try {
+                    paymentRequest = PayReq.parseFrom(args.getByteArray("lnPaymentRequest"));
+
+                    mLnPaymentRequest = paymentRequest;
+                    mLnInvoice = args.getString("lnInvoice");
+                    mFallbackOnChainInvoice = args.getString("fallbackOnChainInvoice");
+                } catch (InvalidProtocolBufferException e) {
+                    throw new RuntimeException("Invalid payment request forwarded." + e.getMessage());
+                }
             }
         }
 
@@ -335,7 +356,6 @@ public class SendBSDFragment extends ZapBSDFragment {
         } else {
 
             // Lightning Payment
-            mPayee.setText(mLnPaymentRequest.getDestination());
 
             mLightningFeeView.setVisibility(View.VISIBLE);
             mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_lightning);
@@ -343,20 +363,20 @@ public class SendBSDFragment extends ZapBSDFragment {
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mBSDScrollableMainView.setTitle(R.string.send_lightningPayment);
 
-            if (mLnPaymentRequest.getDescription() == null || mLnPaymentRequest.getDescription().isEmpty()) {
+            if (mIsKeysend) {
+                mPayee.setText(ContactsManager.getInstance().getNameByNodePubKey(mKeysendPubkey));
+            } else {
+                mPayee.setText(ContactsManager.getInstance().getNameByNodePubKey(mLnPaymentRequest.getDestination()));
+            }
+
+            if (mIsKeysend || mLnPaymentRequest.getDescription() == null || mLnPaymentRequest.getDescription().isEmpty()) {
                 mMemoView.setVisibility(View.GONE);
             } else {
                 mMemoView.setVisibility(View.VISIBLE);
                 mEtMemo.setText(mLnPaymentRequest.getDescription());
             }
 
-            if (mLnPaymentRequest.getNumSatoshis() != 0) {
-                // A specific amount was requested. We are not allowed to change the amount
-                mFixedAmount = mLnPaymentRequest.getNumSatoshis();
-                mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
-                mEtAmount.clearFocus();
-                mEtAmount.setFocusable(false);
-            } else {
+            if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
                 // No specific amount was requested. Let User input an amount.
                 mNumpad.setVisibility(View.VISIBLE);
                 mSendButtonEnabled_input = false;
@@ -366,6 +386,12 @@ public class SendBSDFragment extends ZapBSDFragment {
                     // We have to call this delayed, as otherwise it will still bring up the softKeyboard
                     mEtAmount.requestFocus();
                 }, 200);
+            } else {
+                // A specific amount was requested. We are not allowed to change the amount
+                mFixedAmount = mLnPaymentRequest.getNumSatoshis();
+                mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                mEtAmount.clearFocus();
+                mEtAmount.setFocusable(false);
             }
 
 
@@ -376,17 +402,23 @@ public class SendBSDFragment extends ZapBSDFragment {
 
                     if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
 
+                        long paymentAmount;
+                        if (mIsKeysend) {
+                            paymentAmount = getAmountFromInput();
+                        } else {
+                            paymentAmount = mLnPaymentRequest.getNumSatoshis();
+                        }
                         // sanity check for fees
                         if (mCalculatedFee != -1) {
                             if (mCalculatedFeePercent >= 1f) {
                                 // fee higher or equal to payment amount
-                                String feeLimitString = getString(R.string.fee_limit_exceeded_payment, mCalculatedFee, mLnPaymentRequest.getNumSatoshis());
+                                String feeLimitString = getString(R.string.fee_limit_exceeded_payment, mCalculatedFee, paymentAmount);
                                 showFeeAlertDialog(feeLimitString);
                                 return;
                             }
-                            if (mLnPaymentRequest.getNumSatoshis() > RefConstants.LN_PAYMENT_FEE_THRESHOLD)
+                            if (paymentAmount > RefConstants.LN_PAYMENT_FEE_THRESHOLD)
                                 if (mCalculatedFeePercent > PaymentUtil.getRelativeSettingsFeeLimit()) {
-                                    // fee higher or equal to payment amount
+                                    // fee higher than allowed in settings
                                     String feeLimitString = getString(R.string.fee_limit_exceeded, mCalculatedFeePercent * 100, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
                                     showFeeAlertDialog(feeLimitString);
                                     return;
@@ -460,44 +492,17 @@ public class SendBSDFragment extends ZapBSDFragment {
     private void sendLightningPayment() {
         switchToSendProgressScreen();
 
-        if (mLnPaymentRequest.getNumSatoshis() == 0) {
+        if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
             mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()))));
         } else {
             mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mLnPaymentRequest.getNumSatoshis()));
         }
 
-        if (mRoute != null) {
-            PaymentUtil.sendToRoute(mLnPaymentRequest.getPaymentHash(), mRoute, getCompositeDisposable(), new PaymentUtil.OnSendToRouteResult() {
-                @Override
-                public void onSuccess() {
-                    mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
-                }
+        if (mIsKeysend) {
 
-                @Override
-                public void onError(String error, Failure reason, int duration) {
-                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                    String errorMessage;
-                    if (reason != null) {
-                        switch (reason.getCode()) {
-                            case INCORRECT_OR_UNKNOWN_PAYMENT_DETAILS:
-                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
-                                break;
-                            default:
-                                errorMessage = errorPrefix + "\n\n" + error;
-                                break;
-                        }
-                    } else {
-                        errorMessage = error.replace("UNKNOWN:", errorPrefix);
-                    }
-                    mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
-                }
-            });
-        } else {
-            // Fallback to multi path payment as no route was found
+            SendPaymentRequest keysendSendRequest = PaymentUtil.prepareKeySendPayment(mKeysendPubkey, getAmountFromInput());
 
-            SendPaymentRequest mppSendRequest = PaymentUtil.prepareMultiPathPayment(mLnPaymentRequest, mLnInvoice);
-
-            PaymentUtil.sendPayment(mppSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
+            PaymentUtil.sendPayment(keysendSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
                 @Override
                 public void onSuccess(Payment payment) {
                     mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
@@ -519,7 +524,7 @@ public class SendBSDFragment extends ZapBSDFragment {
                                 errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
                                 break;
                             case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
-                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
+                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_keysend_not_enabled_on_remote);
                                 break;
                             default:
                                 errorMessage = errorPrefix + "\n\n" + error;
@@ -531,6 +536,75 @@ public class SendBSDFragment extends ZapBSDFragment {
                     mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
                 }
             });
+        } else {
+
+            if (mRoute != null) {
+
+                PaymentUtil.sendToRoute(mLnPaymentRequest.getPaymentHash(), mRoute, getCompositeDisposable(), new PaymentUtil.OnSendToRouteResult() {
+                    @Override
+                    public void onSuccess() {
+                        mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
+                    }
+
+                    @Override
+                    public void onError(String error, Failure reason, int duration) {
+                        String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                        String errorMessage;
+                        if (reason != null) {
+                            switch (reason.getCode()) {
+                                case INCORRECT_OR_UNKNOWN_PAYMENT_DETAILS:
+                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
+                                    break;
+                                default:
+                                    errorMessage = errorPrefix + "\n\n" + error;
+                                    break;
+                            }
+                        } else {
+                            errorMessage = error.replace("UNKNOWN:", errorPrefix);
+                        }
+                        mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
+                    }
+                });
+            } else {
+                // Fallback to multi path payment as no route was found
+
+                SendPaymentRequest mppSendRequest = PaymentUtil.prepareMultiPathPayment(mLnPaymentRequest, mLnInvoice);
+
+                PaymentUtil.sendPayment(mppSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
+                    @Override
+                    public void onSuccess(Payment payment) {
+                        mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
+                    }
+
+                    @Override
+                    public void onError(String error, PaymentFailureReason reason, int duration) {
+                        String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                        String errorMessage;
+                        if (reason != null) {
+                            switch (reason) {
+                                case FAILURE_REASON_TIMEOUT:
+                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
+                                    break;
+                                case FAILURE_REASON_NO_ROUTE:
+                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route);
+                                    break;
+                                case FAILURE_REASON_INSUFFICIENT_BALANCE:
+                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
+                                    break;
+                                case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
+                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
+                                    break;
+                                default:
+                                    errorMessage = errorPrefix + "\n\n" + error;
+                                    break;
+                            }
+                        } else {
+                            errorMessage = error.replace("UNKNOWN:", errorPrefix);
+                        }
+                        mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
+                    }
+                });
+            }
         }
     }
 
@@ -565,35 +639,38 @@ public class SendBSDFragment extends ZapBSDFragment {
     }
 
     private void calculateFee() {
-        setCalculatingFee();
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            setCalculatingFee();
 
-        if (mOnChain) {
-            long sendAmount = 0L;
-            if (mFixedAmount != 0L) {
-                sendAmount = mFixedAmount;
-            } else {
-                try {
-                    sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                } catch (NumberFormatException e) {
-
-                }
-            }
-
-            estimateOnChainFee(mOnChainAddress, sendAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
-        } else {
-            if (mLnPaymentRequest.getNumSatoshis() == 0) {
+            if (mOnChain) {
                 long sendAmount = 0L;
-                try {
-                    sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                } catch (NumberFormatException e) {
+                if (mFixedAmount != 0L) {
+                    sendAmount = mFixedAmount;
+                } else {
+                    try {
+                        sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                    } catch (NumberFormatException e) {
 
+                    }
                 }
-                SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest.getDestination(), sendAmount, mLnPaymentRequest.getPaymentAddr(), mLnPaymentRequest.getRouteHintsList(), mLnPaymentRequest.getFeaturesMap());
-                sendPaymentProbe(probeRequest);
+
+                estimateOnChainFee(mOnChainAddress, sendAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
             } else {
-                SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest);
-                sendPaymentProbe(probeRequest);
+                if (mIsKeysend) {
+                    long sendAmount = getAmountFromInput();
+                    SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mKeysendPubkey, sendAmount, null, null, null);
+                    sendPaymentProbe(probeRequest);
+                } else if (mLnPaymentRequest.getNumSatoshis() == 0) {
+                    long sendAmount = getAmountFromInput();
+                    SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest.getDestination(), sendAmount, mLnPaymentRequest.getPaymentAddr(), mLnPaymentRequest.getRouteHintsList(), mLnPaymentRequest.getFeaturesMap());
+                    sendPaymentProbe(probeRequest);
+                } else {
+                    SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest);
+                    sendPaymentProbe(probeRequest);
+                }
             }
+        } else {
+            setFeeFailure();
         }
     }
 
@@ -700,5 +777,15 @@ public class SendBSDFragment extends ZapBSDFragment {
                 setFeeFailure();
             }
         });
+    }
+
+    private long getAmountFromInput() {
+        long sendAmount = 0L;
+        try {
+            sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+        } catch (NumberFormatException e) {
+
+        }
+        return sendAmount;
     }
 }

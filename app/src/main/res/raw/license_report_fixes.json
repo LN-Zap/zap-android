@@ -47,5 +47,22 @@
       }
     ],
     "dependency": "com.journeyapps:zxing-android-embedded:4.1.0"
+  },
+  {
+    "project": "Avathor-Android-Library",
+    "description": "Avatar images for the bitcoin lightning network.",
+    "version": "1.1.0",
+    "developers": [
+      "Michael Wünsch"
+    ],
+    "url": "https://github.com/michaelWuensch/avathor-android-library",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "MIT License",
+        "license_url": "https://api.github.com/licenses/mit"
+      }
+    ],
+    "dependency": "com.github.michaelWuensch:avathor-android-library:1.0.0"
   }
 ]

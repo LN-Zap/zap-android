@@ -95,6 +95,8 @@
     <string name="open">Open</string>
     <string name="search">Search</string>
     <string name="confirmations">Confirmations</string>
+    <string name="maximum_abbreviation">max</string>
+    <string name="send">Send</string>
     <string name="activity_receive">Ricevi</string>
     <string name="activity_send">Paga</string>
     <string name="activity_connectRemoteNode">Connetti a nodo remoto</string>
@@ -103,6 +105,10 @@
     <string name="activity_advanced_settings">Impostazioni Avanzate</string>
     <string name="activity_wallet_details">Wallet Details</string>
     <string name="activity_identity">Identity</string>
+    <string name="activity_manage_contacts">Manage Contacts</string>
+    <string name="activity_manage_contacts_send_mode">Send to…</string>
+    <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
+    <string name="activity_contact_details">Contact Details</string>
     <string name="navigation_wallet">Portafogli</string>
     <string name="navigation_history">Storico</string>
     <string name="navigation_settings">Impostazioni</string>
@@ -149,6 +155,10 @@
     <string name="channel_open">Open Channel</string>
     <string name="channel_open_success">Channel opening successfully initiated</string>
     <string name="channel_open_error">Channel open error</string>
+    <string name="private_channel">Private channel</string>
+    <string name="channel_visibility_private">private</string>
+    <string name="channel_visibility_public">public</string>
+    <string name="channel_visibility">Visibility</string>
     <string name="setup_connect_heading">How do you want to use ZAP?</string>
     <string name="setup_connect_local_description">Create a wallet on this phone.</string>
     <string name="setup_connect_local_button">Create Wallet</string>
@@ -156,6 +166,7 @@
     <string name="setup_connect_remote_button">Connect to Remote Node</string>
     <string name="demo_setupWalletBtn">Setup Wallet</string>
     <string name="demo_setupWalletFirst">You first have to setup a wallet.</string>
+    <string name="demo_setupWalletFirstAvatar">You first have to setup a wallet, before you can see your identity and your avatar.</string>
     <string name="send_lightningPayment">Invia pagamento lightning</string>
     <string name="send_onChainPayment">Invia pagamento on-chain</string>
     <string name="send_sendPayment">Invia pagamento</string>
@@ -270,6 +281,12 @@
     <string name="error_pin_deactivation_attempt">It looks like someone tried to deactivate your PIN. The App will close now.\nYou can reinstall the app and use the recovery process to regain access to your funds.</string>
     <string name="error_empty_wallet_name">An empty name is not allowed.</string>
     <string name="error_invalid_bitcoin_request">Invalid bitcoin request.</string>
+    <string name="error_payment_invalid_details">The payment details did not match the details specified by the invoice you are trying to pay.</string>
+    <string name="error_payment_timeout">Timeout. No route could be found.</string>
+    <string name="error_payment_no_route">No route could be found for the desired payment. Opening new lightning channels might solve the problem.</string>
+    <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
+    <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
+    <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuto</item>
         <item quantity="other">%d Minuti</item>
@@ -320,9 +337,12 @@
     <string name="nfc_type_not_supported">Unsupported NFC type</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes containing the following are valid:\n\n- Bitcoin Address\n- Bitcoin Payment Request\n- Lightning Payment Request</string>
     <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
+    <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
+    <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
     <string name="wallet_name">Wallet Name</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
@@ -357,6 +377,7 @@
     <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Wallets</string>
     <string name="drawer_menu_channels">Channels</string>
+    <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Buy Bitcoin</string>
     <string name="drawer_no_wallet">No Wallet</string>
@@ -364,9 +385,9 @@
     <string name="support_issue_description">Found a bug? Let us know!</string>
     <string name="support_privacy_description">We care about your privacy.</string>
     <string name="support_help_description">Visit our documentation.</string>
-    <string name="identity_explanation">This is your identity on the lightning network!\nOthers can open a channel with you if they scan this QR-Code.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Public</string>
+    <string name="identity_tap_on_avatar">Tap on your Avatar to reveal your identity!</string>
     <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
     <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
     <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
@@ -375,4 +396,11 @@
     <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
     <string name="third_party_licenses">Third-party licenses</string>
     <string name="licenses">Licenses</string>
+    <string name="choose_action">Choose action</string>
+    <string name="add_contact">Add contact</string>
+    <string name="send_money">Send money</string>
+    <string name="contact_name">Contact name</string>
+    <string name="contact_already_exists">This person is already in your contacts!</string>
+    <string name="no_contacts">No contacts</string>
+    <string name="manual_send_input_hint">Address or payment data</string>
 </resources>

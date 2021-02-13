@@ -19,6 +19,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
+import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.customView.BSDScrollableMainView;
 import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.util.ClipBoardUtil;
@@ -105,7 +106,7 @@ public class LnPaymentDetailBSDFragment extends ZapBSDFragment {
         Hop lastHop = payment.getHtlcs(0).getRoute().getHops(payment.getHtlcs(0).getRoute().getHopsCount() - 1);
         String payee = lastHop.getPubKey();
 
-        mPayee.setText(payee);
+        mPayee.setText(ContactsManager.getInstance().getNameByNodePubKey(payee));
         mPayeeCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payee", payee));
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getValue()));
         mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getFee()));

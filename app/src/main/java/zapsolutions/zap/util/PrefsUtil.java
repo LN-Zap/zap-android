@@ -35,9 +35,11 @@ public class PrefsUtil {
     public static final String SECOND_CURRENCY = "secondCurrency";
     public static final String LAST_CLIPBOARD_SCAN = "lastClipboardScan";
     public static final String SCAN_CLIPBOARD = "scanClipboard";
+    public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
 
     // wallet config preferences references
     public static final String WALLET_CONFIGS = "wallet_configs";
+    public static final String CONTACTS = "contacts";
     public static final String RANDOM_SOURCE = "random_source";
 
     // default values

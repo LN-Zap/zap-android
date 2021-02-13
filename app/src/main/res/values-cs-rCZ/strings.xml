@@ -95,6 +95,8 @@
     <string name="open">Otevřít</string>
     <string name="search">Hledat</string>
     <string name="confirmations">Potvrzení</string>
+    <string name="maximum_abbreviation">max</string>
+    <string name="send">Send</string>
     <string name="activity_receive">Příjmout</string>
     <string name="activity_send">Zaplatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
@@ -103,6 +105,10 @@
     <string name="activity_advanced_settings">Pokročilé nastavení</string>
     <string name="activity_wallet_details">Detaily peněženky</string>
     <string name="activity_identity">Identita</string>
+    <string name="activity_manage_contacts">Manage Contacts</string>
+    <string name="activity_manage_contacts_send_mode">Send to…</string>
+    <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
+    <string name="activity_contact_details">Contact Details</string>
     <string name="navigation_wallet">Peněženka</string>
     <string name="navigation_history">Historie</string>
     <string name="navigation_settings">Nastavení</string>
@@ -149,6 +155,10 @@
     <string name="channel_open">Otevřít kanál</string>
     <string name="channel_open_success">Otevření kanálu bylo úspěšně zahájeno</string>
     <string name="channel_open_error">Chyba otevření kanálu</string>
+    <string name="private_channel">Private channel</string>
+    <string name="channel_visibility_private">private</string>
+    <string name="channel_visibility_public">public</string>
+    <string name="channel_visibility">Visibility</string>
     <string name="setup_connect_heading">Jak chcete používat ZAP?</string>
     <string name="setup_connect_local_description">Vytvořit peněženku na tomto telefonu.</string>
     <string name="setup_connect_local_button">Vytvořit peněženku</string>
@@ -156,12 +166,13 @@
     <string name="setup_connect_remote_button">Připojit se ke vzdálenému uzlu</string>
     <string name="demo_setupWalletBtn">Nastavení peněženky</string>
     <string name="demo_setupWalletFirst">Nejprve musíte nastavit peněženku.</string>
+    <string name="demo_setupWalletFirstAvatar">You first have to setup a wallet, before you can see your identity and your avatar.</string>
     <string name="send_lightningPayment">Odeslat lightning platbu</string>
     <string name="send_onChainPayment">Odeslat on-chain platbu</string>
     <string name="send_sendPayment">Odeslat platbu</string>
     <string name="send_success">Platba\nje úspěšná</string>
     <string name="send_fail">Platba\nselhala</string>
-    <string name="send_SendOnChainInstead">Send On-Chain</string>
+    <string name="send_SendOnChainInstead">Odeslat On-Chain platbu</string>
     <string name="receive_generateRequest">Vygenerovat požadavek</string>
     <string name="receive_generateRequest_failed">Generování požadavku se nezdařilo.</string>
     <string name="receive_lightning_request">Lightning požadavek</string>
@@ -220,7 +231,7 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning požadavek vyprší</string>
     <string name="settings_lnFeeLimitTitle">Limit poplatku Lightning platby</string>
-    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
+    <string name="settings_lnPrivateChannelHints">Zahrnout do faktur nápovědu pro soukromé kanály</string>
     <string name="error">Chyba</string>
     <string name="error_blockExplorer_title">Blok Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Váš aktuálně vybraný průzkumník bloků (%1$s) nepodporuje %2$s. \nPřejděte na nastavení a pokračujte volbou jiného průzkumníku bloků."</string>
@@ -270,6 +281,12 @@
     <string name="error_pin_deactivation_attempt">Vypadá to, že se někdo pokusil deaktivovat váš kód PIN. Aplikace se nyní zavře.\nMůžete aplikaci znovu nainstalovat a pomocí procesu obnovy získat zpět přístup ke svým prostředkům.</string>
     <string name="error_empty_wallet_name">Prázdné jméno není povoleno.</string>
     <string name="error_invalid_bitcoin_request">Neplatný bitcoin požadavek.</string>
+    <string name="error_payment_invalid_details">The payment details did not match the details specified by the invoice you are trying to pay.</string>
+    <string name="error_payment_timeout">Timeout. No route could be found.</string>
+    <string name="error_payment_no_route">No route could be found for the desired payment. Opening new lightning channels might solve the problem.</string>
+    <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
+    <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
+    <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuta</item>
         <item quantity="few">%d Minuty</item>
@@ -332,9 +349,12 @@
     <string name="nfc_type_not_supported">Nepodporovaný typ NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-kódy obsahující následující informace jsou platné: \n\n- Bitcoinová adresa\n- Žádost o bitcoin platbu\n- Žádost o lightning platbu</string>
     <string name="help_dialog_scanNodePublicKey">Platí QR-kódy obsahující následující:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:\n\n- Lndconnect řetězec (lndconnect://...)\n- BtcPay Server připojení (config=...)\n- Celý obsah vašeho BTCPay Server config souboru</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ okamžité\n+ nízké poplatky\n- není vždy možné\n\nIdeální pro malé transakce.\nPoužívejte, kdykoli je to možné.\n\n\nOn-Chain:\n\n+ vždy možné\n-pomalejší\n- vyšší poplatky\n\nDobré pro velké transakce.\nPoužijte, pokud není možné použít Lightning.</string>
     <string name="help_dialog_scanGeneric">Zde je povoleno cokoli.\nVyhledejte pouze QR kód a Zap automaticky určí, která akce bude provedena v závislosti na datech.</string>
+    <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
+    <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
     <string name="wallet_name">Název peněženky</string>
     <string name="delete">Smazat</string>
     <string name="rename">Přejmenovat</string>
@@ -369,6 +389,7 @@
     <string name="rest_port">REST (port 8080) není podporován.\n\nChcete změnit port na 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Peněženky</string>
     <string name="drawer_menu_channels">Kanály</string>
+    <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Záloha</string>
     <string name="drawer_menu_buy">Koupit bitcoiny</string>
     <string name="drawer_no_wallet">Žádná peněženka</string>
@@ -376,9 +397,9 @@
     <string name="support_issue_description">Našli jste chybu? Dej nám vědět!</string>
     <string name="support_privacy_description">Záleží nám na vašem soukromí.</string>
     <string name="support_help_description">Navštivte naši dokumentaci.</string>
-    <string name="identity_explanation">Toto je vaše identita v lightning síti!\nOstatní s vámo mohou otevřít kanál, pokud naskenují tento QR kód.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Veřejné</string>
+    <string name="identity_tap_on_avatar">Tap on your Avatar to reveal your identity!</string>
     <string name="regtest_blockexplorer_unavailable">V režimu REGTEST nejsou průzkumníci bloků k dispozici.</string>
     <string name="clipboard_error_heading">Data schránky byla nalezena, ale jsou neplatná:</string>
     <string name="clipboard_scan_payment">Schránka obsahuje informace o platbě. Chcete provést platbu?</string>
@@ -387,4 +408,11 @@
     <string name="clipboard_scan_connect">Schránka obsahuje data připojení. Chcete přidat novou peněženku?</string>
     <string name="third_party_licenses">Licence třetích stran</string>
     <string name="licenses">Licence</string>
+    <string name="choose_action">Choose action</string>
+    <string name="add_contact">Add contact</string>
+    <string name="send_money">Send money</string>
+    <string name="contact_name">Contact name</string>
+    <string name="contact_already_exists">This person is already in your contacts!</string>
+    <string name="no_contacts">No contacts</string>
+    <string name="manual_send_input_hint">Address or payment data</string>
 </resources>
