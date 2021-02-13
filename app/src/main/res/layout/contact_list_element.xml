@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transactionRootView"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/bg_clickable_item"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="5dp"
+    android:paddingEnd="10dp">
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/userAvatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_weight="0"
+        android:elevation="2dp"
+        app:roundPercent="1"
+        app:srcCompat="@drawable/ic_person_24" />
+
+    <TextView
+        android:id="@+id/contactName"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="20dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="18sp"
+        tools:text="Name" />
+
+</LinearLayout>

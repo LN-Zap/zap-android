@@ -10,6 +10,10 @@
             android:id="@+id/drawerChannels"
             android:icon="@drawable/ic_open_channel_24"
             android:title="@string/drawer_menu_channels" />
+        <item
+            android:id="@+id/drawerContacts"
+            android:icon="@drawable/ic_person_24"
+            android:title="@string/drawer_menu_contacts" />
         <!--
         <item
             android:id="@+id/drawerBackup"

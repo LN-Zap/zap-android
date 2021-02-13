@@ -159,10 +159,27 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
         adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // This gets overridden below.
+                // We need to do this to validate the input without closing the dialog.
+            }
+        });
+        adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = adb.create();
+        dialog.show();
+        Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 if (input.getText().toString().trim().isEmpty()) {
                     Toast.makeText(WalletDetailsActivity.this, R.string.error_empty_wallet_name, Toast.LENGTH_LONG).show();
-                    mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                    showWalletNameInput();
                 } else {
                     WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
                     walletConfigsManager.renameWalletConfig(WalletConfigsManager.getInstance().getWalletConfigById(mId), input.getText().toString());
@@ -179,17 +196,6 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
                 }
             }
         });
-        adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                dialog.cancel();
-            }
-        });
-
-        adb.show();
-
     }
 
     private WalletConfig getWalletConfig() {

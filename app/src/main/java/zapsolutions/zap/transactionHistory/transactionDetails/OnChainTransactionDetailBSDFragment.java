@@ -180,7 +180,7 @@ public class OnChainTransactionDetailBSDFragment extends ZapBSDFragment {
         mChannelLabel.setVisibility(View.GONE);
         mEvent.setVisibility(View.GONE);
         mEventLabel.setVisibility(View.GONE);
-        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mTransaction.getAmount()).replace("-", "- "));
+        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mTransaction.getAmount()).replace("-", ""));
 
         Long amount = mTransaction.getAmount();
 

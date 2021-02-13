@@ -20,8 +20,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     protected void attachBaseContext(Context ctx) {
         // Set the correct locale
         super.attachBaseContext(LocaleUtil.setLocale(ctx));
-
-
+        applyOverrideConfiguration(ctx.getResources().getConfiguration());
     }
 
     @Override

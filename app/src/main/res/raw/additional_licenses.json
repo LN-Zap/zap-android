@@ -15,5 +15,65 @@
       }
     ],
     "dependency": "com.jaredsburrows:gradle-license-plugin:0.8.80"
+  },
+  {
+    "project": "Artwork: Robots, Backgrounds",
+    "description": null,
+    "developers": [
+      "Zikri Kader"
+    ],
+    "year": null,
+    "licenses": [
+      {
+        "license": "CC-BY-3.0",
+        "license_url": "https://creativecommons.org/licenses/by/3.0/"
+      }
+    ],
+    "dependency": "robots"
+  },
+  {
+    "project": "Artwork: Aliens",
+    "description": null,
+    "developers": [
+      "Hrvoje Novakovic"
+    ],
+    "year": null,
+    "licenses": [
+      {
+        "license": "CC-BY-3.0",
+        "license_url": "https://creativecommons.org/licenses/by/3.0/"
+      }
+    ],
+    "dependency": "aliens"
+  },
+  {
+    "project": "Artwork: Animals (Cats & Birds)",
+    "description": null,
+    "developers": [
+      "David Revoy"
+    ],
+    "year": null,
+    "licenses": [
+      {
+        "license": "CC-BY-4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "dependency": "animals"
+  },
+  {
+    "project": "Artwork: Humans",
+    "description": null,
+    "developers": [
+      "Pablo Stanley"
+    ],
+    "year": null,
+    "licenses": [
+      {
+        "license": "Free for personal and commercial use",
+        "license_url": "https://avataaars.com/"
+      }
+    ],
+    "dependency": "humans"
   }
 ]

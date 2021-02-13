@@ -1,22 +1,28 @@
 # Zap Android
 
-[![Screenshot of Zap Android app](docs/screenshot.png)](https://zap.jackmallers.com)
+[![Screenshot of Zap Android app](docs/screenshot.png)](https://zaphq.io/)
 
 Native android lightning wallet focused on user experience and ease of use ⚡️
+
+At the moment Zap Android can only be used as a remote control for one or more LND Nodes. Running LND in neutrino mode directly on the phone will be available later.
+
+One possible way to get started is using [Umbrel](https://getumbrel.com/) to run LND on a raspberry pi and then connect Zap Android to that node.
 
 ## Features
 
 **Wallet**
 - [x] Manage multiple wallets
+- [x] Contacts
 - [x] Fiat currency prices
 - [x] Support for Bech32 and P2SH addresses
 - [x] BTC, mBTC, bit & Satoshi units
 - [x] Open `lightning:` & `bitcoin:` urls
 - [x] Available in many languages
-- [ ] Resend failed lightning transactions
 - [x] LNURL support (pay, withdraw & channel)
+- [x] Send funds without an invoice (keysend)
 - [x] Transaction filter
 - [x] Read NFC tags
+- [x] [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor) 
 
 **Security**
 - [x] PIN protected access
@@ -24,7 +30,7 @@ Native android lightning wallet focused on user experience and ease of use ⚡�
 - [x] Protection against screen recording
 - [x] Option to hide total balance
 - [x] User guardian system (warns the user when he is about to do potentially dangerous actions)
-- [ ] Certificate pinning
+- [x] [Reproducible build](https://walletscrutiny.com/android/zapsolutions.zap/)
 
 **Lightning**
 - [x] Channel Management

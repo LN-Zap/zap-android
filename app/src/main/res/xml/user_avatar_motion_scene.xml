@@ -1,9 +1,9 @@
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
     <Transition
-        motion:constraintSetEnd="@+id/start"
-        motion:constraintSetStart="@+id/end"
-        motion:duration="250"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="300"
         motion:motionInterpolator="easeInOut">
 
     </Transition>

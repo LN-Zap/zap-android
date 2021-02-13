@@ -6,13 +6,10 @@
     android:layout_height="176dp"
     android:background="@color/seaBlue">
 
-    <ImageView
-        android:id="@+id/Logo"
+    <zapsolutions.zap.customView.UserAvatarView
+        android:id="@+id/userAvatarView"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        android:src="@drawable/ic_cloudlightning"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +29,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Logo" />
+        app:layout_constraintTop_toBottomOf="@id/userAvatarView" />
 
     <Button
         android:id="@+id/headerButton"

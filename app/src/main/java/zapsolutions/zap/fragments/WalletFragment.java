@@ -32,6 +32,7 @@ import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.contacts.ManageContactsActivity;
 import zapsolutions.zap.customView.WalletSpinner;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.util.Balances;
@@ -72,6 +73,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ImageView mDrawerMenuButton;
     private TextView mWalletNameWidthDummy;
     private ImageView mStatusDot;
+    private Button mBtnSetup;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -110,6 +112,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mWalletSpinner = view.findViewById(R.id.walletSpinner);
         mDrawerMenuButton = view.findViewById(R.id.drawerMenuButton);
         mWalletNameWidthDummy = view.findViewById(R.id.walletNameWidthDummy);
+        mBtnSetup = view.findViewById(R.id.setupWallet);
 
         // Show loading screen
         showLoading();
@@ -268,6 +271,18 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
+        // Action when clicked on "send"
+        Button btnSend = view.findViewById(R.id.sendButton);
+        btnSend.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                Intent intent = new Intent(getActivity(), ManageContactsActivity.class);
+                intent.putExtra(ManageContactsActivity.EXTRA_CONTACT_ACTIVITY_MODE, ManageContactsActivity.MODE_SEND);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+
         // Action when clicked on "receive"
         Button btnReceive = view.findViewById(R.id.receiveButton);
         btnReceive.setOnClickListener(new OnSingleClickListener() {
@@ -279,11 +294,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // Action when clicked on "setup wallet"
-        Button btnSetup = view.findViewById(R.id.setupWallet);
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-            btnSetup.setVisibility(View.INVISIBLE);
+            mBtnSetup.setVisibility(View.INVISIBLE);
         }
-        btnSetup.setOnClickListener(new View.OnClickListener() {
+        mBtnSetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SetupActivity.class);
@@ -568,5 +582,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onWalletLoaded() {
         walletLoadingCompleted();
+        mWalletSpinner.updateList();
+        mWalletSpinner.setVisibility(View.VISIBLE);
+        mStatusDot.setVisibility(View.VISIBLE);
+        updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+        mBtnSetup.setVisibility(View.INVISIBLE);
     }
 }

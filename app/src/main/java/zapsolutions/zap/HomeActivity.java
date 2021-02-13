@@ -47,7 +47,12 @@ import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.contacts.ContactDetailsActivity;
+import zapsolutions.zap.contacts.ManageContactsActivity;
+import zapsolutions.zap.contacts.ScanContactActivity;
 import zapsolutions.zap.customView.CustomViewPager;
+import zapsolutions.zap.customView.UserAvatarView;
+import zapsolutions.zap.fragments.ChooseNodeActionBSDFragment;
 import zapsolutions.zap.fragments.OpenChannelBSDFragment;
 import zapsolutions.zap.fragments.SendBSDFragment;
 import zapsolutions.zap.fragments.WalletFragment;
@@ -141,6 +146,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
                         startActivity(intent);
                     }
+                } else {
+                    Toast.makeText(HomeActivity.this, R.string.demo_setupWalletFirstAvatar, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -636,11 +643,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             @Override
             public void onValidNodeUri(LightningNodeUri nodeUri) {
-                OpenChannelBSDFragment openChannelBSDFragment = new OpenChannelBSDFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(OpenChannelBSDFragment.ARGS_NODE_URI, nodeUri);
-                openChannelBSDFragment.setArguments(bundle);
-                openChannelBSDFragment.show(getSupportFragmentManager(), OpenChannelBSDFragment.TAG);
+                ChooseNodeActionBSDFragment chooseNodeActionBSDFragment = ChooseNodeActionBSDFragment.createChooseActionDialog(nodeUri);
+                chooseNodeActionBSDFragment.show(getSupportFragmentManager(), "choseNodeActionDialog");
             }
 
             @Override
@@ -659,11 +663,36 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == HomeActivity.RESULT_CODE_GENERIC_SCAN) {
-            // This gets executed if readable data was found using the generic scanner
-            if (data != null) {
-                analyzeString(data.getExtras().getString(ScanActivity.EXTRA_GENERIC_SCAN_DATA));
-            }
+        switch (resultCode) {
+            case HomeActivity.RESULT_CODE_GENERIC_SCAN:
+                // This gets executed if readable data was found using the generic scanner
+                if (data != null) {
+                    analyzeString(data.getExtras().getString(ScanActivity.EXTRA_GENERIC_SCAN_DATA));
+                }
+                break;
+            case ContactDetailsActivity.RESPONSE_CODE_OPEN_CHANNEL:
+                if (data != null) {
+                    LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
+                    OpenChannelBSDFragment openChannelBSDFragment = new OpenChannelBSDFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(OpenChannelBSDFragment.ARGS_NODE_URI, nodeUri);
+                    openChannelBSDFragment.setArguments(bundle);
+                    openChannelBSDFragment.show(getSupportFragmentManager(), OpenChannelBSDFragment.TAG);
+                    if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                        mDrawer.closeDrawer(GravityCompat.START);
+                    }
+                }
+                break;
+            case ContactDetailsActivity.RESPONSE_CODE_SEND_MONEY:
+                if (data != null) {
+                    LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
+                    SendBSDFragment sendBSDFragment = SendBSDFragment.createKeysendDialog(nodeUri.getPubKey());
+                    sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                    if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                        mDrawer.closeDrawer(GravityCompat.START);
+                    }
+                }
+                break;
         }
     }
 
@@ -673,13 +702,19 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
                 @Override
                 public void onSaved(String id) {
-                    new AlertDialog.Builder(HomeActivity.this)
-                            .setMessage(R.string.wallet_added)
-                            .setCancelable(true)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                }
-                            }).show();
+                    if(WalletConfigsManager.getInstance().getAllWalletConfigs(false).size() == 1){
+                        // This was the first wallet that was added. Open it immediatelly.
+                        mPagerAdapter.getWalletFragment().showLoading();
+                        openWallet();
+                    } else {
+                        new AlertDialog.Builder(HomeActivity.this)
+                                .setMessage(R.string.wallet_added)
+                                .setCancelable(true)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                    }
+                                }).show();
+                    }
                 }
 
                 @Override
@@ -713,6 +748,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Intent intentWallets = new Intent(this, ManageWalletsActivity.class);
                 startActivity(intentWallets);
                 break;
+            case R.id.drawerContacts:
+                Intent intentContacts = new Intent(this, ManageContactsActivity.class);
+                intentContacts.putExtra(ManageContactsActivity.EXTRA_CONTACT_ACTIVITY_MODE, ManageContactsActivity.MODE_MANAGE);
+                startActivityForResult(intentContacts, 0);
+                break;
                 /*
             case R.id.drawerBackup:
                 Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
@@ -736,6 +776,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     public void updateDrawerNavigationMenu() {
+        UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
+        userAvatarView.setupWithNodeUri(Wallet.getInstance().getNodeUris()[0], false);
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
         userWalletName.setText(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
         TextView lndVersion = findViewById(R.id.lndVersion);
@@ -744,6 +786,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     public void resetDrawerNavigationMenu() {
+        UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
+        userAvatarView.reset();
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
         userWalletName.setText(getResources().getString(R.string.drawer_no_wallet));
         TextView lndVersion = findViewById(R.id.lndVersion);

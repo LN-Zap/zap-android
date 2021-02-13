@@ -95,6 +95,8 @@
     <string name="open">Öffnen</string>
     <string name="search">Suchen</string>
     <string name="confirmations">Bestätigungen</string>
+    <string name="maximum_abbreviation">max</string>
+    <string name="send">Senden</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -103,6 +105,10 @@
     <string name="activity_advanced_settings">Erweiterte Einstellungen</string>
     <string name="activity_wallet_details">Wallet Details</string>
     <string name="activity_identity">Identität</string>
+    <string name="activity_manage_contacts">Kontakte verwalten</string>
+    <string name="activity_manage_contacts_send_mode">Senden an…</string>
+    <string name="activity_manage_contacts_open_channel_mode">Kanal öffnen mit…</string>
+    <string name="activity_contact_details">Kontaktdetails</string>
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Verlauf</string>
     <string name="navigation_settings">Einstellungen</string>
@@ -149,6 +155,10 @@
     <string name="channel_open">Kanal öffnen</string>
     <string name="channel_open_success">Öffnung des Kanals erfolgreich eingeleitet</string>
     <string name="channel_open_error">Fehler beim Öffnen</string>
+    <string name="private_channel">Privater Kanal</string>
+    <string name="channel_visibility_private">privat</string>
+    <string name="channel_visibility_public">öffentlich</string>
+    <string name="channel_visibility">Sichtbarkeit</string>
     <string name="setup_connect_heading">Wie möchtest du Zap verwenden?</string>
     <string name="setup_connect_local_description">Eine Wallet auf diesem Smartphone erstellen.</string>
     <string name="setup_connect_local_button">Wallet erstellen</string>
@@ -156,6 +166,7 @@
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
     <string name="demo_setupWalletBtn">Wallet einrichten</string>
     <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
+    <string name="demo_setupWalletFirstAvatar">Du musst zuerst eine Wallet einrichten, bevor du deine Identität und deinen Avatar sehen kannst.</string>
     <string name="send_lightningPayment">Lightning Zahlung senden</string>
     <string name="send_onChainPayment">On-chain Zahlung senden</string>
     <string name="send_sendPayment">Zahlung senden</string>
@@ -270,6 +281,12 @@
     <string name="error_pin_deactivation_attempt">Es sieht so aus, als ob jemand versucht hat, deine PIN zu deaktivieren. Die App wird nun beendet.\nDu kannst die App neu installieren und den Wiederherstellungsprozess nutzen, um wieder Zugriff auf dein Guthaben zu erhalten.</string>
     <string name="error_empty_wallet_name">Ein leerer Name ist nicht erlaubt.</string>
     <string name="error_invalid_bitcoin_request">Ungültige Bitcoinanfrage.</string>
+    <string name="error_payment_invalid_details">Die Zahlungsdetails stimmen nicht mit den in der Zahlungsanfrage gefordert Details überein.</string>
+    <string name="error_payment_timeout">Zeitüberschreitung. Es konnte keine Route gefunden werden.</string>
+    <string name="error_payment_no_route">Für die gewünschte Zahlung konnte keine Route gefunden werden. Das Problem könnte eventuell durch das Öffnen neuer Kanäle behoben werden.</string>
+    <string name="error_payment_insufficient_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
+    <string name="error_payment_keysend_not_enabled_on_remote">Bitte stelle sicher, dass der Empfänger die \"Keysend\" Funktion aktiviert hat.</string>
+    <string name="error_only_payment_data_allowed">Nur Zahlungsdaten sind hier erlaubt.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>
@@ -320,9 +337,12 @@
     <string name="nfc_type_not_supported">Dieser NFC Typ wird nicht unterstützt</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Bitcoin Adresse\n- Bitcoin Zahlungsanfrage\n- Lightning Zahlungsanfrage</string>
     <string name="help_dialog_scanNodePublicKey">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="help_dialog_scanContact">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und Zap wird automatisch die entsprechende Aktion ausführen.</string>
+    <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.\nBenutze nur dann private Kanäle, wenn dein Knoten auf einem mobilen Gerät läuft, oder wenn er regelmäßig offline ist.</string>
+    <string name="help_dialog_identity">Das ist deine Identität im Lighting Netzwerk.\n\nWenn du auf den Avatar tippst, wird dir ein QR-Code angezeigt.\nAndere können diesen Code scannen und dich zu ihren Kontakten hinzufügen, Kanäle mit dir öffenen, oder dir Geld senden.\n\nDieser Avatar ist einzigartig.\nEr wurde automatisch basierend auf deinem öffentlichen Schlüssel generiert und kann nicht geändert werden.</string>
     <string name="wallet_name">Name der Wallet</string>
     <string name="delete">Löschen</string>
     <string name="rename">Umbenennen</string>
@@ -357,6 +377,7 @@
     <string name="rest_port">REST (Port 8080) wird nicht unterstützt.\n\nMöchtest du den Port auf 10009 (gRPC) ändern?</string>
     <string name="drawer_menu_wallets">Wallets</string>
     <string name="drawer_menu_channels">Kanäle</string>
+    <string name="drawer_menu_contacts">Kontakte</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Bitcoin kaufen</string>
     <string name="drawer_no_wallet">Keine Wallet</string>
@@ -364,9 +385,9 @@
     <string name="support_issue_description">Du hast einen Fehler gefunden? Lass es uns wissen!</string>
     <string name="support_privacy_description">Uns ist deine Privatsphäre wichtig.</string>
     <string name="support_help_description">Schau dir unsere Dokumentation an.</string>
-    <string name="identity_explanation">Das bist du im Lightning-Netzwerk!\nAndere können einen Kanal mit dir öffnen, wenn sie diesen QR-Code scannen.</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Öffentlich</string>
+    <string name="identity_tap_on_avatar">Tippe auf deinen Avatar um deine Identität zu zeigen!</string>
     <string name="regtest_blockexplorer_unavailable">Block-Explorer sind im REGTEST Modus nicht verfügbar.</string>
     <string name="clipboard_error_heading">Ungültige Daten in der Zwischenablage gefunden:</string>
     <string name="clipboard_scan_payment">Die Zwischenablage enthält Zahlungsinformationen. Möchtest du eine Zahlung durchführen?</string>
@@ -375,4 +396,11 @@
     <string name="clipboard_scan_connect">Die Zwischenablage enthält Verbindungsinformationen. Möchtest du eine neue Wallet hinzufügen?</string>
     <string name="third_party_licenses">Drittanbieter-Lizenzen</string>
     <string name="licenses">Lizenzen</string>
+    <string name="choose_action">Aktion wählen</string>
+    <string name="add_contact">Kontakt hinzufügen</string>
+    <string name="send_money">Geld senden</string>
+    <string name="contact_name">Name des Kontakts</string>
+    <string name="contact_already_exists">Diese Person ist bereits in deinen Kontakten!</string>
+    <string name="no_contacts">Keine Kontakte</string>
+    <string name="manual_send_input_hint">Addresse oder Zahlungsdaten</string>
 </resources>

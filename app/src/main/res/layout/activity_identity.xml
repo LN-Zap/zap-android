@@ -38,37 +38,35 @@
     <zapsolutions.zap.customView.IdentitySwitchView
         android:id="@+id/identityTypeSwitcher"
         android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_height="32dp"
         android:layout_marginTop="25dp"
-        app:layout_constraintBottom_toTopOf="@id/hintButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userAvatarView" />
 
-    <Button
-        android:id="@+id/hintButton"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="#00000000"
-        android:elevation="0dp"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/identityTypeSwitcher" />
 
     <TextView
-        android:id="@+id/publicKey"
+        android:id="@+id/identityString"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="@string/identity_explanation"
+        android:ellipsize="end"
+        android:maxLines="3"
         android:textColor="@color/gray"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/identityTypeSwitcher"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tapHint"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/identity_tap_on_avatar"
+        android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/identityTypeSwitcher"
