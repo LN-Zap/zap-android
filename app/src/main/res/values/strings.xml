@@ -114,6 +114,7 @@
     <string name="activity_manage_contacts_send_mode">Send to…</string>
     <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
     <string name="activity_contact_details">Contact Details</string>
+    <string name="activity_manual_setup">Connection Data</string>
 
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">History</string>

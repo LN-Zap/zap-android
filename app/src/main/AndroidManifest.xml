@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="zapsolutions.zap">
+
+    <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+
     <queries>
         <!-- Specific apps Zap interacts with -->
         <package android:name="org.torproject.android" />
@@ -15,10 +18,8 @@
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.NFC" />
 
-    <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
-
     <application
-        android:name="zapsolutions.zap.baseClasses.App"
+        android:name=".baseClasses.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -26,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="zapsolutions.zap.LandingActivity"
+            android:name=".LandingActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait">
@@ -36,7 +37,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -47,11 +47,12 @@
                 <data android:scheme="bitcoin" />
                 <data android:scheme="lightning" />
                 <data android:scheme="lndconnect" />
-
             </intent-filter>
             <intent-filter>
+
                 <!-- Makes Zap startable from NFC Tags containing a bitcoin or lightning uri -->
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="bitcoin" />
@@ -60,58 +61,58 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="zapsolutions.zap.HomeActivity"
+            android:name=".HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="zapsolutions.zap.ScanActivity"
+            android:name=".ScanActivity"
             android:label="@string/scan"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name="zapsolutions.zap.GeneratedRequestActivity"
+            android:name=".GeneratedRequestActivity"
             android:label="@string/activity_receive"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.setup.SetupActivity"
+            android:name=".setup.SetupActivity"
             android:label="Setup"
             android:screenOrientation="portrait" />
         <activity
-            android:name="zapsolutions.zap.pin.PinSetupActivity"
+            android:name=".pin.PinSetupActivity"
             android:label="Setup"
             android:screenOrientation="portrait" />
         <activity
-            android:name="zapsolutions.zap.setup.ConnectRemoteNodeActivity"
+            android:name=".setup.ConnectRemoteNodeActivity"
             android:label="@string/activity_connectRemoteNode"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name="zapsolutions.zap.pin.PinEntryActivity"
+            android:name=".pin.PinEntryActivity"
             android:label="PIN"
             android:screenOrientation="portrait" />
         <activity
-            android:name="zapsolutions.zap.channelManagement.ManageChannelsActivity"
+            android:name=".channelManagement.ManageChannelsActivity"
             android:label="@string/activity_manage_channels"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.walletManagement.ManageWalletsActivity"
+            android:name=".walletManagement.ManageWalletsActivity"
             android:label="@string/activity_manage_wallets"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/navigation_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.AdvancedSettingsActivity"
+            android:name=".AdvancedSettingsActivity"
             android:label="@string/activity_advanced_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.SupportActivity"
+            android:name=".SupportActivity"
             android:label="@string/support"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
@@ -125,7 +126,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.walletManagement.WalletDetailsActivity"
+            android:name=".walletManagement.WalletDetailsActivity"
             android:label="@string/activity_wallet_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
@@ -134,20 +135,26 @@
             android:label="@string/add_contact"
             android:screenOrientation="portrait" />
         <activity
-            android:name="zapsolutions.zap.contacts.ManageContactsActivity"
+            android:name=".contacts.ManageContactsActivity"
             android:label="@string/activity_manage_contacts"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.contacts.ContactDetailsActivity"
+            android:name=".contacts.ContactDetailsActivity"
             android:label="@string/activity_contact_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="zapsolutions.zap.licenses.LicensesActivity"
+            android:name=".licenses.LicensesActivity"
             android:label="@string/third_party_licenses"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".setup.ManualSetup"
+            android:label="@string/activity_manual_setup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustPan" />
 
         <meta-data
             android:name="android.nfc.disable_beam_default"
