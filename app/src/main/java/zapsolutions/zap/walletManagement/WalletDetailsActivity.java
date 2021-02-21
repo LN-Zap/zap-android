@@ -22,7 +22,7 @@ import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
-import zapsolutions.zap.setup.ConnectRemoteNodeActivity;
+import zapsolutions.zap.setup.ManualSetup;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.Wallet;
@@ -86,8 +86,9 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
             changeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(WalletDetailsActivity.this, ConnectRemoteNodeActivity.class);
+                    Intent intent = new Intent(WalletDetailsActivity.this, ManualSetup.class);
                     intent.putExtra(ManageWalletsActivity.WALLET_ID, mId);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 }
             });

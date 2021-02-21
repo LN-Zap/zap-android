@@ -70,6 +70,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/portEditText" />
 
+        <TextView
+            android:id="@+id/macaroonLabelDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="2dp"
+            android:text="(Hex)"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/macaroonLabel"
+            app:layout_constraintStart_toEndOf="@id/macaroonLabel"
+            tools:ignore="HardcodedText" />
+
         <EditText
             android:id="@+id/macaroonEditText"
             android:layout_width="match_parent"
@@ -94,6 +108,20 @@
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/macaroonEditText" />
+
+        <TextView
+            android:id="@+id/certificateLabelDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="2dp"
+            android:text="(Base64 Url)"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/certificateLabel"
+            app:layout_constraintStart_toEndOf="@id/certificateLabel"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/certificateEditText"
