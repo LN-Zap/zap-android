@@ -136,7 +136,7 @@ public class UserAvatarView extends ConstraintLayout {
         mCurrentUriId = 0;
         mIvUserAvatar.setOnClickListener(null);
         mIvQRCode.setOnClickListener(null);
-        mIvUserAvatar.setImageResource(R.drawable.ic_person_24);
+        mIvUserAvatar.setImageResource(R.drawable.unknown_avatar);
     }
 
     private void showQRCode() {

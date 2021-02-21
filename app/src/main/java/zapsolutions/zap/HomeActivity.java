@@ -143,8 +143,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             public void onSingleClick(View v) {
                 if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
                     if (Wallet.getInstance().isConnectedToLND()) {
-                        Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
-                        startActivity(intent);
+                        if (Wallet.getInstance().getNodeUris().length > 0) {
+                            Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(HomeActivity.this, R.string.error_wallet_not_yet_ready, Toast.LENGTH_LONG).show();
+                        }
                     }
                 } else {
                     Toast.makeText(HomeActivity.this, R.string.demo_setupWalletFirstAvatar, Toast.LENGTH_LONG).show();
