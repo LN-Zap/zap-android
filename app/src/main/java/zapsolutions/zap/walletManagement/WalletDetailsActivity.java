@@ -22,7 +22,7 @@ import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
-import zapsolutions.zap.setup.ConnectRemoteNodeActivity;
+import zapsolutions.zap.setup.ManualSetup;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.Wallet;
@@ -78,16 +78,25 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
             TextView tvMacaroon = findViewById(R.id.macaroon);
             tvMacaroon.setText(getWalletConfig().getMacaroon());
             TextView tvCertificateLabel = findViewById(R.id.certLabel);
-            tvCertificateLabel.setText(getResources().getString(R.string.certificate) + ":");
-            TextView tvCertificate = findViewById(R.id.cert);
-            tvCertificate.setText(getWalletConfig().getCert());
+            if (getWalletConfig().getCert() != null) {
+                tvCertificateLabel.setText(getResources().getString(R.string.certificate) + ":");
+                tvCertificateLabel.setVisibility(View.VISIBLE);
+                TextView tvCertificate = findViewById(R.id.cert);
+                tvCertificate.setVisibility(View.VISIBLE);
+                tvCertificate.setText(getWalletConfig().getCert());
+            } else {
+                tvCertificateLabel.setVisibility(View.GONE);
+                TextView tvCertificate = findViewById(R.id.cert);
+                tvCertificate.setVisibility(View.GONE);
+            }
 
             Button changeBtn = findViewById(R.id.buttonChangeConnection);
             changeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(WalletDetailsActivity.this, ConnectRemoteNodeActivity.class);
+                    Intent intent = new Intent(WalletDetailsActivity.this, ManualSetup.class);
                     intent.putExtra(ManageWalletsActivity.WALLET_ID, mId);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 }
             });
