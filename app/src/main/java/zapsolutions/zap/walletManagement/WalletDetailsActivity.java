@@ -78,9 +78,17 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
             TextView tvMacaroon = findViewById(R.id.macaroon);
             tvMacaroon.setText(getWalletConfig().getMacaroon());
             TextView tvCertificateLabel = findViewById(R.id.certLabel);
-            tvCertificateLabel.setText(getResources().getString(R.string.certificate) + ":");
-            TextView tvCertificate = findViewById(R.id.cert);
-            tvCertificate.setText(getWalletConfig().getCert());
+            if (getWalletConfig().getCert() != null) {
+                tvCertificateLabel.setText(getResources().getString(R.string.certificate) + ":");
+                tvCertificateLabel.setVisibility(View.VISIBLE);
+                TextView tvCertificate = findViewById(R.id.cert);
+                tvCertificate.setVisibility(View.VISIBLE);
+                tvCertificate.setText(getWalletConfig().getCert());
+            } else {
+                tvCertificateLabel.setVisibility(View.GONE);
+                TextView tvCertificate = findViewById(R.id.cert);
+                tvCertificate.setVisibility(View.GONE);
+            }
 
             Button changeBtn = findViewById(R.id.buttonChangeConnection);
             changeBtn.setOnClickListener(new View.OnClickListener() {

@@ -116,7 +116,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="2dp"
-            android:text="(Base64 Url)"
+            android:text="(Base64URL)"
             android:textColor="@color/gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/certificateLabel"
