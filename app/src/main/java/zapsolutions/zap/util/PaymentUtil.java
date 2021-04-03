@@ -95,7 +95,7 @@ public class PaymentUtil {
                         case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
                             Route route = payment.getHtlcs(0).getRoute();
 
-                            // For LND prior to 0.12 we have to edit the last hop of the route we to include the payment address in the mpp record.
+                            // For LND prior to 0.12 we have to edit the last hop of the route to include the payment address in the mpp record.
                             // If we wouldn't edit the route and use it later in SendToRoute, LND versions prior to 0.12.0 would not be able to send payments to 0.12.0 and above.
                             Hop oldLastHop = route.getHops(route.getHopsCount() - 1);
                             MPPRecord mppRecord = MPPRecord.newBuilder()
@@ -202,6 +202,15 @@ public class PaymentUtil {
                 .putDestCustomRecords(KEYSEND_PREIMAGE_RECORD, ByteString.copyFrom(preimage))
                 .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * RefConstants.TOR_TIMEOUT_MULTIPLIER)
                 .setMaxParts(1) // KeySend does not support multi path payments
+                .build();
+    }
+
+    public static SendPaymentRequest prepareSinglePathPayment(String invoice, long feeLimit) {
+        return SendPaymentRequest.newBuilder()
+                .setPaymentRequest(invoice)
+                .setFeeLimitSat(feeLimit)
+                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * RefConstants.TOR_TIMEOUT_MULTIPLIER)
+                .setMaxParts(1)
                 .build();
     }
 

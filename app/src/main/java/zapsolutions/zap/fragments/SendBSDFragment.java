@@ -553,8 +553,8 @@ public class SendBSDFragment extends ZapBSDFragment {
                         if (reason != null) {
                             switch (reason.getCode()) {
                                 case INCORRECT_OR_UNKNOWN_PAYMENT_DETAILS:
-                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
-                                    break;
+                                    sendToRouteFallback();
+                                    return;
                                 default:
                                     errorMessage = errorPrefix + "\n\n" + error;
                                     break;
@@ -606,6 +606,49 @@ public class SendBSDFragment extends ZapBSDFragment {
                 });
             }
         }
+    }
+
+    private void sendToRouteFallback(){
+        // This fallback will be used if the sendToRoute command returns incorrect payment details.
+        // There seems to be a bug for some users where this occurs, but we were not able to reproduce this yet.
+        // So for now we use a fallback to a working method.
+
+        ZapLog.w(LOG_TAG, "SendToRoute failed. Using fallback.");
+        SendPaymentRequest singlePathSendRequest = PaymentUtil.prepareSinglePathPayment(mLnInvoice, mCalculatedFee);
+        PaymentUtil.sendPayment(singlePathSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
+            @Override
+            public void onSuccess(Payment payment) {
+                mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
+            }
+
+            @Override
+            public void onError(String error, PaymentFailureReason reason, int duration) {
+                String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                String errorMessage;
+                if (reason != null) {
+                    switch (reason) {
+                        case FAILURE_REASON_TIMEOUT:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
+                            break;
+                        case FAILURE_REASON_NO_ROUTE:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route);
+                            break;
+                        case FAILURE_REASON_INSUFFICIENT_BALANCE:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
+                            break;
+                        case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
+                            break;
+                        default:
+                            errorMessage = errorPrefix + "\n\n" + error;
+                            break;
+                    }
+                } else {
+                    errorMessage = error.replace("UNKNOWN:", errorPrefix);
+                }
+                mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
+            }
+        });
     }
 
     private void switchToSendProgressScreen() {
