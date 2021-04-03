@@ -613,8 +613,8 @@ public class SendBSDFragment extends ZapBSDFragment {
         // There seems to be a bug for some users where this occurs, but we were not able to reproduce this yet.
         // So for now we use a fallback to a working method.
 
+        ZapLog.w(LOG_TAG, "SendToRoute failed. Using fallback.");
         SendPaymentRequest singlePathSendRequest = PaymentUtil.prepareSinglePathPayment(mLnInvoice, mCalculatedFee);
-
         PaymentUtil.sendPayment(singlePathSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
             @Override
             public void onSuccess(Payment payment) {
