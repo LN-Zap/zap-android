@@ -78,7 +78,7 @@
     <string name="scan_qr_code">Scansiona QR-Code</string>
     <string name="node">Node</string>
     <string name="funds_available">Disponibile: %s</string>
-    <string name="amount_invalid">L'importo non è valido.</string>
+    <string name="amount_invalid">L'importo non &#232; valido.</string>
     <string name="success">Successo</string>
     <string name="suggested_peers">Peer Suggeriti</string>
     <string name="none">None</string>
@@ -256,7 +256,7 @@
     <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
-    <string name="error_connection_network_unreachable">Impossibile raggiungere l'host .\n\nControlla che hai connessione.</string>
+    <string name="error_connection_network_unreachable">Impossibile raggiungere l &#96; host .\n\nControlla che hai connessione.</string>
     <string name="error_connection_unknown">Connessione fallita.</string>
     <string name="error_connection_tor_unreachable">Tor connection failed.\n Please make sure that:\n\n- Orbot is running\n\n- Orbot is in VPN Mode\n\n- Zap is in Orbot\'s list of activated apps.</string>
     <string name="error_connection_wallet_locked">Si prega di sbloccare il portafoglio.</string>
@@ -273,18 +273,18 @@
     <string name="error_channel_open_pending_max">Il numero di canali in sospeso supera il massimo.</string>
     <string name="error_channel_open_timeout">Impossibile aprire il canale entro la scadenza.</string>
     <string name="error_channel_open">Impossibile aprire il canale con il nodo connesso: %s</string>
-    <string name="error_get_peers">Impossibile recuperare l'elenco dei peer.</string>
+    <string name="error_get_peers">Impossibile recuperare l &#96; elenco dei peer.</string>
     <string name="error_get_peers_timeout">Non è stato possibile recuperare i peer entro la scadenza.</string>
     <string name="error_channel_close_offline">Il Peer è offline. È consentita solo la chiusura forzata.</string>
     <string name="error_channel_close_timeout">Impossibile chiudere il canale entro la scadenza.</string>
     <string name="error_channel_close">Impossibile chiudere il canale: %s</string>
-    <string name="error_pin_deactivation_attempt">Sembra che qualcuno abbia cercato di disattivare il tuo PIN. L'app si chiuderà ora.\nPuoi reinstallare l'app e utilizzare il processo di ripristino per riottenere l'accesso ai tuoi fondi.</string>
+    <string name="error_pin_deactivation_attempt">Sembra che qualcuno abbia cercato di disattivare il tuo PIN. L &#96; app si chiuderà ora.\nPuoi reinstallare l'app e utilizzare il processo di ripristino per riottenere l'accesso ai tuoi fondi.</string>
     <string name="error_empty_wallet_name">Un nome vuoto non è consentito.</string>
     <string name="error_invalid_bitcoin_request">Richiesta bitcoin non valida.</string>
     <string name="error_payment_invalid_details">I dettagli del pagamento non corrispondono ai dettagli specificati dalla fattura che stai tentando di pagare.</string>
     <string name="error_payment_timeout">Tempo scaduto. Impossibile trovare un percorso.</string>
-    <string name="error_payment_no_route">Impossibile trovare un percorso per il pagamento desiderato. L'apertura di nuovi canali Lightning potrebbe risolvere il problema..</string>
-    <string name="error_payment_insufficient_balance">L'importo da pagare è maggiore di quello che puoi inviare tramite il lightning con i tuoi attuali canali aperti.</string>
+    <string name="error_payment_no_route">Impossibile trovare un percorso per il pagamento desiderato. L &#96; apertura di nuovi canali Lightning potrebbe risolvere il problema..</string>
+    <string name="error_payment_insufficient_balance">L'importo da pagare &#232; maggiore di quello che puoi inviare tramite il lightning con i tuoi attuali canali aperti.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Assicurati che il destinatario abbia abilitato la funzione keyend.</string>
     <string name="error_only_payment_data_allowed">Qui sono consentiti solo i dati di pagamento.</string>
     <plurals name="duration_minute">
@@ -361,20 +361,20 @@
     <string name="lnurl_withdraw_success">Ritiro\nriuscito</string>
     <string name="lnurl_withdraw_fail">Ritiro\nfallito</string>
     <string name="lnurl_decoding_no_lnurl_data">I dati non contengono un LNURL valido.</string>
-    <string name="lnurl_withdraw_insufficient_channel_balance">TL'importo del prelievo è maggiore di quello che puoi ricevere su un lightning con i tuoi attuali canali aperti.</string>
+    <string name="lnurl_withdraw_insufficient_channel_balance">Importo del prelievo &#233; maggiore di quello che puoi ricevere su un lightning con i tuoi attuali canali aperti.</string>
     <string name="lnurl_unsupported_type">Tipo di LNURL non supportato</string>
     <string name="lnurl_service_not_responding">%s non sta rispondendo</string>
     <string name="lnurl_service">Servizi</string>
     <string name="lnurl_service_provided_invalid_data">Il Servizio con cui stai interagendo ha fornito dati non validi.</string>
     <string name="lnurl_channel_opening_question">Vuoi veramente aprire un canale con:</string>
     <string name="lnurl_channel_pending_hint">Il canale si sta aprendo. Questo potrebbe richiedere del tempo.\nPuoi controllare lo stato dei canali nella panoramica dei tuoi canali.</string>
-    <string name="lnurl_pay_insufficient_channel_balance">L'importo da pagare è maggiore di quello che puoi inviare tramite lightning  con i tuoi attuali canali aperti.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">L &#96; importo da pagare &#232; maggiore di quello che puoi inviare tramite lightning  con i tuoi attuali canali aperti.</string>
     <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s ha inviato una richiesta di pagamento non valida.</string>
     <string name="lnurl_pay_success_secret_decrypt_error">Il tuo pagamento è andato a buon fine, ma il segreto che hai ricevuto non può essere decifrato.</string>
-    <string name="lnurl_pay_save_url">IMPORTANT:\nL'URL è stato copiato negli appunti. Per favore salvalo se ne hai bisogno in seguito. Questa finestra di dialogo non verrà più mostrata.</string>
-    <string name="lnurl_pay_save_secret">IMPORTANT:\nIl codice è stato copiato negli appunti. Per favore salvalo se ne hai bisogno in seguito. Questa finestra di dialogo non verrà più mostrata.</string>
+    <string name="lnurl_pay_save_url">IMPORTANT:\nL &#232; URL &#233; stato copiato negli appunti. Per favore salvalo se ne hai bisogno in seguito. Questa finestra di dialogo non verr&#224; pi&#249; mostrata.</string>
+    <string name="lnurl_pay_save_secret">IMPORTANT:\nIl codice &#233; stato copiato negli appunti. Per favore salvalo se ne hai bisogno in seguito. Questa finestra di dialogo non verr&#224; pi&#249; mostrata.</string>
     <string name="string_analyzer_unrecognized_data">Dati non riconosciuti.</string>
-    <string name="rest_port">REST (port 8080) non è supportata.\n\nVuoi cambiare la porta in 10009 (gRPC)?</string>
+    <string name="rest_port">REST (port 8080) non &#233; supportata.\n\nVuoi cambiare la porta in 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Portafogli</string>
     <string name="drawer_menu_channels">Canali</string>
     <string name="drawer_menu_contacts">Contatti</string>
@@ -396,7 +396,7 @@
     <string name="clipboard_scan_connect">Gli appunti contengono i dati di connessione. Vuoi aggiungere un nuovo portafoglio?</string>
     <string name="third_party_licenses">Licenze di terze parti</string>
     <string name="licenses">Licenze</string>
-    <string name="choose_action">Scegli un'azione</string>
+    <string name="choose_action">Scegli un &#96; azione</string>
     <string name="add_contact">Aggiungi contatto</string>
     <string name="send_money">Manda soldi</string>
     <string name="contact_name">Nome del contatto</string>
