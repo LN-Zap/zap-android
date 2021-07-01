@@ -78,7 +78,7 @@
     <string name="scan_qr_code">Scansiona QR-Code</string>
     <string name="node">Node</string>
     <string name="funds_available">Disponibile: %s</string>
-    <string name="amount_invalid">L'importo non &#232; valido.</string>
+    <string name="amount_invalid">L	&#39; importo non &#232; valido.</string>
     <string name="success">Successo</string>
     <string name="suggested_peers">Peer Suggeriti</string>
     <string name="none">None</string>
@@ -278,13 +278,13 @@
     <string name="error_channel_close_offline">Il Peer è offline. È consentita solo la chiusura forzata.</string>
     <string name="error_channel_close_timeout">Impossibile chiudere il canale entro la scadenza.</string>
     <string name="error_channel_close">Impossibile chiudere il canale: %s</string>
-    <string name="error_pin_deactivation_attempt">Sembra che qualcuno abbia cercato di disattivare il tuo PIN. L &#96; app si chiuderà ora.\nPuoi reinstallare l'app e utilizzare il processo di ripristino per riottenere l'accesso ai tuoi fondi.</string>
+    <string name="error_pin_deactivation_attempt">Sembra che qualcuno abbia cercato di disattivare il tuo PIN. L &#96; app si chiuder&#224; ora.\nPuoi reinstallare l &#39; app e utilizzare il processo di ripristino per riottenere l &#39; accesso ai tuoi fondi.</string>
     <string name="error_empty_wallet_name">Un nome vuoto non è consentito.</string>
     <string name="error_invalid_bitcoin_request">Richiesta bitcoin non valida.</string>
     <string name="error_payment_invalid_details">I dettagli del pagamento non corrispondono ai dettagli specificati dalla fattura che stai tentando di pagare.</string>
     <string name="error_payment_timeout">Tempo scaduto. Impossibile trovare un percorso.</string>
     <string name="error_payment_no_route">Impossibile trovare un percorso per il pagamento desiderato. L &#96; apertura di nuovi canali Lightning potrebbe risolvere il problema..</string>
-    <string name="error_payment_insufficient_balance">L'importo da pagare &#232; maggiore di quello che puoi inviare tramite il lightning con i tuoi attuali canali aperti.</string>
+    <string name="error_payment_insufficient_balance">L	&#39; importo da pagare &#232; maggiore di quello che puoi inviare tramite il lightning con i tuoi attuali canali aperti.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Assicurati che il destinatario abbia abilitato la funzione keyend.</string>
     <string name="error_only_payment_data_allowed">Qui sono consentiti solo i dati di pagamento.</string>
     <plurals name="duration_minute">
