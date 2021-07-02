@@ -81,7 +81,7 @@
     <string name="amount_invalid">L\'importo non &#232; valido.</string>
     <string name="success">Successo</string>
     <string name="suggested_peers">Peer Suggeriti</string>
-    <string name="none">None</string>
+    <string name="none">Nessuna</string>
     <string name="install">Installa</string>
     <string name="continue_string">Continua</string>
     <string name="withdraw">Ritirare</string>
@@ -95,7 +95,7 @@
     <string name="open">Apperto</string>
     <string name="search">Cerca</string>
     <string name="confirmations">Conferme</string>
-    <string name="maximum_abbreviation">max</string>
+    <string name="maximum_abbreviation">mass</string>
     <string name="send">Manda</string>
     <string name="activity_receive">Ricevi</string>
     <string name="activity_send">Paga</string>
@@ -221,7 +221,7 @@
     <string name="settings_changePin">Cambia/Rimuovi PIN</string>
     <string name="settings_addPin">Proteggi con PIN</string>
     <string name="settings_removePin">Rimuovi PIN</string>
-    <string name="settings_blockExplorer">Block Explorer</string>
+    <string name="settings_blockExplorer">Esplora blocchi</string>
     <string name="settings_blockExplorer_tor_toast">È richiesto Tor Browser per Android.</string>
     <string name="settings_addressType">Tipologia Indirizzo Bitcoin</string>
     <string name="settings_exchangeRateProvider">Fornitore di tassi di cambio</string>
@@ -233,8 +233,8 @@
     <string name="settings_lnFeeLimitTitle">Limite della commissione di pagamento Lightning</string>
     <string name="settings_lnPrivateChannelHints">Includi suggerimenti di percorso per i canali privati nelle fatture</string>
     <string name="error">Errore</string>
-    <string name="error_blockExplorer_title">Block Explorer</string>
-    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Hai selezionato un block explorer (%1$s) che non supporta %2$s. \nVa' in impostazioni e scegli un altro block explorer per continuare."</string>
+    <string name="error_blockExplorer_title">Esplora Blocchi</string>
+    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Nome del block explorer selezionato block, %2$s: 'mainnet' or 'testnet'">"Hai selezionato un block explorer (%1$s) che non supporta %2$s. \nVa' in impostazioni e scegli un altro block explorer per continuare."</string>
     <string name="error_notAPaymentRequest">Infomazione di pagamento non valida.\n\nUsa un indirizzo Bitcoin o una richiesta di pagamento Lightning per avviare un pagamento.</string>
     <string name="error_paymentRequestExpired">Questa richiesta di pagamento è scaduta.</string>
     <string name="error_useTestnetRequest">Sei connesso alla TESTNET. Utilizza indirizzi TESTNET o richieste di pagamento.</string>
@@ -254,8 +254,8 @@
     <string name="error_connection_invalid_macaroon2">Accesso negato!\n\nMacaroon non valido.</string>
     <string name="error_connection_server_unreachable">Timeout.\nIl server non risponde.\n\n- Assicurati di disporre di una buona connessione Internet\n\n- Assicurati che il server sia in esecuzione e abbia ancora il seguente IP:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) non puo essere contattato.\n\nAggiorna le impostazioni di connessione del tuo portafoglio se il tuo nodo è ora raggiungibile con un indirizzo o un nome host diverso.</string>
+    <string name="error_connection_lnd_unavailable">Impossibile collegarsi a LND.\n\n- assicurati che il daemon LND sia in esecuzione sul tuo server.\n\n- assicurati che il port forwarding sia attivo. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Impossibile raggiungere l &#96; host .\n\nControlla che hai connessione.</string>
     <string name="error_connection_unknown">Connessione fallita.</string>
     <string name="error_connection_tor_unreachable">Tor connection failed.\n Please make sure that:\n\n- Orbot is running\n\n- Orbot is in VPN Mode\n\n- Zap is in Orbot\'s list of activated apps.</string>
@@ -263,13 +263,13 @@
     <string name="error_connection_btcpay_invalid_json">La sintassi JSON della configurazione del server BTCPay non è valida.</string>
     <string name="error_connection_btcpay_invalid_config">La configurazione del server BTCPay non contiene una configurazione GRPC BTC.</string>
     <string name="error_wrong_password">Password errata</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">The wallet needs to be setup to open a channel.</string>
+    <string name="error_lightning_uri_invalid">Formato invalido.\nSi prega di utilizzare uno dei seguenti:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="error_channel_open_wallet_setup">Il portafoglio deve essere configurato per aprire un canale.</string>
     <string name="error_connect_peer">Non è possibile stabilire una connesione col peer.</string>
     <string name="error_connect_peer_refused">Connessione rifiutata dal peer.</string>
-    <string name="error_connect_peer_self">Cannot make connection to self.</string>
+    <string name="error_connect_peer_self">Impossibile stabilire una connessione con se stessi.</string>
     <string name="error_connect_peer_no_host">Impossibile connetersi al host senza indirizzo IP o host.</string>
-    <string name="error_connect_peer_timeout">Could not connect to peer within deadline.</string>
+    <string name="error_connect_peer_timeout">Impossibile connettersi al peer entro la scadenza.</string>
     <string name="error_channel_open_pending_max">Il numero di canali in sospeso supera il massimo.</string>
     <string name="error_channel_open_timeout">Impossibile aprire il canale entro la scadenza.</string>
     <string name="error_channel_open">Impossibile aprire il canale con il nodo connesso: %s</string>
@@ -319,10 +319,10 @@
     <string name="fee_tier_fast_description">Transazione Veloce</string>
     <string name="fee_estimated_duration">Consegna stimata: %1$s</string>
     <string name="fee_not_available">n/A</string>
-    <string name="fee_limit_title">Fee Limit Alert</string>
-    <string name="fee_limit_threshold">Fee limit for payments above %1$d sats: %2$s</string>
-    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
-    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
+    <string name="fee_limit_title">Avviso sui limiti di commissione</string>
+    <string name="fee_limit_threshold">Limite di commissione per i pagamenti di cui sopra %1$d sats: %2$s</string>
+    <string name="fee_limit_exceeded">La commissione per questo pagamento (%1$.1f%%) supera il limite specificato nelle impostazioni (%2$.0f%%).\n\nVuoi davvero pagare questa fattura?</string>
+    <string name="fee_limit_exceeded_payment">La commissione per questo pagamento (%1$d sats) sarà superiore all'importo del pagamento (%2$d sats).\n\nVuoi davvero pagare questa fattura?</string>
     <string name="unlock_wallet">Sblocca Wallet</string>
     <string name="biometricPrompt_title">Autenticazione Biometrica</string>
     <string name="biometricNotSetup">Per utilizzare questa funzione, devi configurare l\'autenticazione biometrica nelle impostazioni del tuo sistema Android.</string>
@@ -330,16 +330,16 @@
     <string name="transaction_detail">Dettagli Transazione</string>
     <string name="app_reset_title">Notare che</string>
     <string name="app_reset_message">L\'app è stata ripristinata poiché l\'ultimo aggiornamento ha incluso alcune modifiche strutturali.\nPurtroppo dovrai ripetere il processo di installazione.</string>
-    <string name="tor_install_orbot">You are trying to connect to a tor node. To use Zap with tor you have to install Orbot.\n\nDo you want to install Orbot now?</string>
-    <string name="tor_fdroid_info">If Zap fails to find Orbot in the next step, make sure you have added and enabled the Guardian Project repository in F-Droid and try again.</string>
-    <string name="tor_download_fdroid">You need an App Store to download Orbot. Please first download F-Droid.</string>
-    <string name="tor_add_repo">Add Repository</string>
-    <string name="nfc_type_not_supported">Unsupported NFC type</string>
-    <string name="help_dialog_scanPaymentRequest">QR-Codes containing the following are valid:\n\n- Bitcoin Address\n- Bitcoin Payment Request\n- Lightning Payment Request</string>
-    <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
-    <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
+    <string name="tor_install_orbot">Stai provando a connetterti a un nodo tor. Per usare Zap con tor devi installare Orbot.\n\nVuoi installare Orbot ora?</string>
+    <string name="tor_fdroid_info">Se Zap non riesce a trovare Orbot nel passaggio successivo, assicurati di aver aggiunto e abilitato il repository Guardian Project in F-Droid e riprova.</string>
+    <string name="tor_download_fdroid">Hai bisogno di un App Store per scaricare Orbot. Per prima cosa, scarica F-Droid.</string>
+    <string name="tor_add_repo">Aggiungi repository</string>
+    <string name="nfc_type_not_supported">Tipo NFC non supportato</string>
+    <string name="help_dialog_scanPaymentRequest">QR-Codes contenenti quanto segue sono validi:\n\n- Indirizzo Bitcoin \n- Richiesta di Pagamento Bitcoin \n- Richiesta Pagamento Lightning</string>
+    <string name="help_dialog_scanNodePublicKey">QR-Codes contenenti quanto segue sono validi:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="help_dialog_scanContact">QR-Codes contenenti quanto segue sono validi:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes contenenti quanto segue sono validi:\n\n- Stringa di connessioneLND (lndconnect://...)\n- Connessione al server BtcPay (config=...)\n- Contenuto completo del tuo file di configurazione del server BTCPay</string>
+    <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ \n+ commissioni basse\\n- not possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
     <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
     <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
