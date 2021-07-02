@@ -339,11 +339,11 @@
     <string name="help_dialog_scanNodePublicKey">QR-Codes contenenti quanto segue sono validi:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanContact">QR-Codes contenenti quanto segue sono validi:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes contenenti quanto segue sono validi:\n\n- Stringa di connessioneLND (lndconnect://...)\n- Connessione al server BtcPay (config=...)\n- Contenuto completo del tuo file di configurazione del server BTCPay</string>
-    <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ \n+ commissioni basse\\n- not possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
-    <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
-    <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
-    <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
-    <string name="wallet_name">Wallet Name</string>
+    <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ \n+ commissioni basse\\n- non sempre possibile\n\nPerfetto per piccole transazioni.\nUtilizzare quando possibile.\n\n\nOn-Chain:\n\n+ sempre possibile\n- lento\n- commissioni alte\n\nBuono per grandi transazioni.\nUsalo quando Lightning non è possibile.</string>
+    <string name="help_dialog_scanGeneric">Tutto è permesso qui.\nBasta scansionare un QR-Code e Zap determinerà automaticamente quale azione intraprendere in base ai dati.</string>
+    <string name="help_dialog_private_channels">I canali privati non sono più sicuri, semplicemente non sono visibili per la rete.\nUtilizza i canali privati solo quando il tuo nodo è in esecuzione su un dispositivo mobile o è spesso offline.</string>
+    <string name="help_dialog_identity">Questa è la tua identità sulla rete lightning.\n\nQuando tocchi l'immagine del tuo avatar, rivelerai un QR-Code.\nAltri possono scansionare quel codice e aggiungerti ai loro contatti, aprire canali con il tuo o inviarti denaro.\n\nQuesto avatar è unico.\nÈ stato generato automaticamente in base alla tua chiave pubblica e non può essere modificato.</string>
+    <string name="wallet_name">Nome Portafoglio</string>
     <string name="delete">Elimina</string>
     <string name="rename">Rinominare</string>
     <string name="change_data">Modifica dati</string>
@@ -354,7 +354,7 @@
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificato</string>
     <string name="confirm_wallet_deletion">Vuoi veramente eliminare questo portafoglio?</string>
-    <string name="no_wallets">No wallets</string>
+    <string name="no_wallets">Nessun Portafoglio</string>
     <string name="spinner_manage_wallets">Gestisci…</string>
     <string name="wallet_added">Portafoglio aggiunto.</string>
     <string name="wallet_already_exists">Questo portafoglio esiste già.\nSe vuoi aggiornare i suoi dati di connessione, vai alla pagina dei dettagli dei portafogli.</string>
