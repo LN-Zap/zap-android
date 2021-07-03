@@ -48,10 +48,15 @@ public class InvoiceUtil {
     }
 
     public static boolean isBase58Address(String input) {
+        // This is not a full validation. It just checks if only valid characters are used and if the length is correct. The checksum is not verified.
+        // The full validation is done by LND when interacting with the address.
         return input.matches("^[123mn][a-km-zA-HJ-NP-Z1-9]{25,34}$");
     }
 
     public static boolean isBech32Address(String input) {
+        // This is not a full validation. It just checks if only valid characters are used and if the length is correct. The checksum is not verified.
+        // The simplified validation works for both Bech32 (BIP173) and Bech32m (BIP 350)
+        // The full validation is done by LND when interacting with the address.
         return input.matches("^((bc1|tb1|bcrt1)[ac-hj-np-z02-9]{11,71}|(BC1|TB1|BCRT1)[AC-HJ-NP-Z02-9]{11,71})$");
     }
 
