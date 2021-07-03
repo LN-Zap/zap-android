@@ -4,9 +4,9 @@
 
 Native android lightning wallet focused on user experience and ease of use ⚡️
 
-At the moment Zap Android can only be used as a remote control for one or more LND Nodes. Running LND in neutrino mode directly on the phone will be available later.
+Zap Android works as a remote control for one or more of your LND Nodes. Running LND in neutrino mode directly on the phone might be available later.
 
-One possible way to get started is using [Umbrel](https://getumbrel.com/) to run LND on a raspberry pi and then connect Zap Android to that node.
+The easiest way to get started is using [Umbrel](https://getumbrel.com/) to run LND on a raspberry pi and then connect Zap Android to that node.
 
 ## Features
 
