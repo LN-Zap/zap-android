@@ -76,7 +76,7 @@
     <string name="event">Evento</string>
     <string name="channel_event">Evento Canale</string>
     <string name="scan_qr_code">Scansiona QR-Code</string>
-    <string name="node">Node</string>
+    <string name="node">Nodo</string>
     <string name="funds_available">Disponibile: %s</string>
     <string name="amount_invalid">L\'importo non &#232; valido.</string>
     <string name="success">Successo</string>
@@ -194,7 +194,7 @@
     <string name="guardian_notReadyForMainnet">Sei sulla MAINNET con dei veri Bitcoin!\nZap Android è in fase di sviluppo iniziale. Potresti perdere fondi!\n\nSe non vuoi correre questo rischio, nel frattempo passa alla testnet.</string>
     <string name="guardian_remoteConnect">Sei sicuro di voler connetterti a \n\n%1$s\n\n Controlla attentamente il nome host.</string>
     <string name="guardian_blockExplorer">Cercando le informazioni con un Block Explorer, il tuo indirizzo IP viene scoperto. Se vuoi aumentare il tuo anonimato, non dovresti usarlo o andare alle impostazioni e scegliere un Block Explorer che supporti Tor.</string>
-    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
+    <string name="guardian_oldLndVersion_remote">Per favore Aggiornare.\n\nIl nodo a cui sei connesso esegue una vecchia versione di LND. Le versioni sotto %1$s non sono più supportate.</string>
     <string name="settings_category_general">Generale</string>
     <string name="settings_category_security">Sicurezza</string>
     <string name="settings_category_help">Aiuto</string>
@@ -239,7 +239,7 @@
     <string name="error_paymentRequestExpired">Questa richiesta di pagamento è scaduta.</string>
     <string name="error_useTestnetRequest">Sei connesso alla TESTNET. Utilizza indirizzi TESTNET o richieste di pagamento.</string>
     <string name="error_useMainnetRequest">Sei connesso alla MAINNET. Utilizza indirizzi MAINNET o richieste di pagamento.</string>
-    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
+    <string name="error_useRegtestRequest">Sei connesso al network REGTEST. Si prega di utilizzare REGTEST indirizzi o richieste di pagamento.</string>
     <string name="error_cameraPermissionRequired">Per scansionare codici QR devi abilitare Zap ad utilizzare la fotocamera.</string>
     <string name="error_emptyClipboardPayment">I tuoi appunti non contengono dati di pagamento.</string>
     <string name="error_emptyClipboardConnect">I tuoi appunti non contengono dati di connessione.</string>
@@ -258,7 +258,7 @@
     <string name="error_connection_lnd_unavailable">Impossibile collegarsi a LND.\n\n- assicurati che il daemon LND sia in esecuzione sul tuo server.\n\n- assicurati che il port forwarding sia attivo. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Impossibile raggiungere l &#96; host .\n\nControlla che hai connessione.</string>
     <string name="error_connection_unknown">Connessione fallita.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please make sure that:\n\n- Orbot is running\n\n- Orbot is in VPN Mode\n\n- Zap is in Orbot\'s list of activated apps.</string>
+    <string name="error_connection_tor_unreachable">Connessione Tor fallita.\n Per favore assicurati che:\n\n- Orbot &#232; in esecuzione\n\n- Orbot è in modalità VPN\n\n- Zap &#232; nell\'elenco delle app attivate di Orbot.</string>
     <string name="error_connection_wallet_locked">Si prega di sbloccare il portafoglio.</string>
     <string name="error_connection_btcpay_invalid_json">La sintassi JSON della configurazione del server BTCPay non è valida.</string>
     <string name="error_connection_btcpay_invalid_config">La configurazione del server BTCPay non contiene una configurazione GRPC BTC.</string>
@@ -348,7 +348,7 @@
     <string name="rename">Rinominare</string>
     <string name="change_data">Modifica dati</string>
     <string name="open_wallet">Apri portafoglio</string>
-    <string name="connectionData">Connection data</string>
+    <string name="connectionData">Connessione Dati</string>
     <string name="host">Host</string>
     <string name="port">Porta</string>
     <string name="macaroon">Macaroon</string>
@@ -380,7 +380,7 @@
     <string name="drawer_menu_contacts">Contatti</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Compra Bitcoin</string>
-    <string name="drawer_no_wallet">No Wallet</string>
+    <string name="drawer_no_wallet">Nessun Portafoglio</string>
     <string name="support_contribute_description">Aiuta a migliorare Zap.</string>
     <string name="support_issue_description">Hai trovato un bug? faccelo sapere!</string>
     <string name="support_privacy_description">A noi ci importa della tua privacy.</string>
