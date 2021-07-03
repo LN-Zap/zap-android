@@ -1,37 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- //////////////// Notice for translators ////////////////////
-
     First of all, thanks for taking the time to translate this wallet!
-
-
     Here are a few tips to help you while translating:
-
     Parameters:
     Some strings have parameters, which allows them to show different content.
     Parameters look like this:   %1$s  ,  %2$d  ,  ...
     Every string with parameters has an explanation as comment in the string tag.
     With this information you should be able to move the parameter to the correct place in your
     translated string.
-
-
     New line:
     \n is used to make a new line.
     Avoid putting a space before and after \n as this will lead to a space at the end and the
     beginning of a line.
     Correct example:  This is my first line.\nAnd this is my second.
-
-
     Special Characters:
     Escape every '  or  " you want to have in your text with a backslash.
     Correct example:  I want to emphasize \"this\" and \'this\' word.
-
     Escape every % with %
     Correct example:   5 is 10%% of 50
-
     &  =  &amp;
     <  =  &lt;
     >  =  &gt;
-
     -->
 <resources>
     <string name="ok">OKE</string>
@@ -71,7 +60,7 @@
     <string name="expired">Verlopen</string>
     <string name="remaining">resterend</string>
     <string name="address">Adres</string>
-    <string name="transactionID">Transactie ID</string>
+    <string name="transactionID">Transactie-ID</string>
     <string name="channel">Kanaal</string>
     <string name="event">Gebeurtenis</string>
     <string name="channel_event">Kanaalgebeurtenis</string>
@@ -84,31 +73,31 @@
     <string name="none">Geen</string>
     <string name="install">Installeer</string>
     <string name="continue_string">Doorgaan</string>
-    <string name="withdraw">Withdraw</string>
-    <string name="unknown">Unknown</string>
+    <string name="withdraw">Opnemen</string>
+    <string name="unknown">Onbekend</string>
     <string name="scan">Scan</string>
-    <string name="settings">Settings</string>
+    <string name="settings">Instellingen</string>
     <string name="support">Support</string>
-    <string name="contribute">Contribute</string>
+    <string name="contribute">Bijdragen</string>
     <string name="privacy">Privacy</string>
-    <string name="payee">Payee</string>
+    <string name="payee">Ontvanger</string>
     <string name="open">Open</string>
-    <string name="search">Search</string>
-    <string name="confirmations">Confirmations</string>
+    <string name="search">Zoeken</string>
+    <string name="confirmations">Bevestigingen</string>
     <string name="maximum_abbreviation">max</string>
-    <string name="send">Send</string>
+    <string name="send">Verzend</string>
     <string name="activity_receive">Ontvang</string>
     <string name="activity_send">Betaal</string>
     <string name="activity_connectRemoteNode">Verbind met externe node</string>
-    <string name="activity_manage_channels">Lightning Channels</string>
+    <string name="activity_manage_channels">Lightningkanalen</string>
     <string name="activity_manage_wallets">Beheer Wallets</string>
     <string name="activity_advanced_settings">Geavanceerde Instellingen</string>
     <string name="activity_wallet_details">Walletdetails</string>
-    <string name="activity_identity">Identity</string>
-    <string name="activity_manage_contacts">Manage Contacts</string>
-    <string name="activity_manage_contacts_send_mode">Send to…</string>
-    <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
-    <string name="activity_contact_details">Contact Details</string>
+    <string name="activity_identity">Identiteit</string>
+    <string name="activity_manage_contacts">Beheer Contacten</string>
+    <string name="activity_manage_contacts_send_mode">Verzend naar…</string>
+    <string name="activity_manage_contacts_open_channel_mode">Open kanaal met…</string>
+    <string name="activity_contact_details">Contactdetails</string>
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Geschiedenis</string>
     <string name="navigation_settings">Instellingen</string>
@@ -120,7 +109,7 @@
     <string name="pin_confirm_new">Nieuwe PIN bevestigen</string>
     <string name="pin_entered_wrong">Verkeerde PIN</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Wacht %1$s seconden.</string>
-    <string name="pin_changed">PIN changed!</string>
+    <string name="pin_changed">PIN veranderd!</string>
     <string name="requested_payment">Verzocht</string>
     <string name="request_expired">Verlopen</string>
     <string name="internal">Interne</string>
@@ -154,11 +143,11 @@
     <string name="channel_close_time">Sluitingsvertraging</string>
     <string name="channel_open">Open Kanaal</string>
     <string name="channel_open_success">Kanaal openen is succesvol geïnitieerd</string>
-    <string name="channel_open_error">Kanaalopening foutmelding</string>
-    <string name="private_channel">Private channel</string>
-    <string name="channel_visibility_private">private</string>
-    <string name="channel_visibility_public">public</string>
-    <string name="channel_visibility">Visibility</string>
+    <string name="channel_open_error">Kanaalopeningsfoutmelding</string>
+    <string name="private_channel">Privékanaal</string>
+    <string name="channel_visibility_private">privé</string>
+    <string name="channel_visibility_public">publiek</string>
+    <string name="channel_visibility">Zichtbaarheid</string>
     <string name="setup_connect_heading">Hoe wil je ZAP gebruiken?</string>
     <string name="setup_connect_local_description">Maak een wallet op deze telefoon.</string>
     <string name="setup_connect_local_button">Maak Wallet</string>
@@ -166,19 +155,19 @@
     <string name="setup_connect_remote_button">Maak verbinding met eigen node</string>
     <string name="demo_setupWalletBtn">Wallet Instellen</string>
     <string name="demo_setupWalletFirst">Je moet eerst een wallet instellen.</string>
-    <string name="demo_setupWalletFirstAvatar">You first have to setup a wallet, before you can see your identity and your avatar.</string>
+    <string name="demo_setupWalletFirstAvatar">Je moet eerst een wallet instellen, voordat je je identiteit en avatar kan zien.</string>
     <string name="send_lightningPayment">Verzend lightningbetaling</string>
     <string name="send_onChainPayment">Verzend on-chainbetaling</string>
     <string name="send_sendPayment">Verzend betaling</string>
     <string name="send_success">Betaling\nsuccesvol</string>
     <string name="send_fail">Betaling\nmislukt</string>
-    <string name="send_SendOnChainInstead">Send On-Chain</string>
+    <string name="send_SendOnChainInstead">Verstuur On-Chain</string>
     <string name="receive_generateRequest">Genereer Verzoek</string>
     <string name="receive_generateRequest_failed">Verzoek genereren mislukt.</string>
-    <string name="receive_lightning_request">Lightning Verzoek</string>
-    <string name="receive_on_chain_request">On-Chain Verzoek</string>
-    <string name="receive_noActiveChannels">Om Bitcoin over het lightning-netwerk te ontvangen, moet je eerst kanalen openen.</string>
-    <string name="receive_noIncomeBalance">Om Bitcoin over het lightning-netwerk te ontvangen, moet tenminste één van je kanalen wat saldo hebben bij je tegenpartij.\n\nOm dat te bereiken, moet je eerst iets uitgeven op het lightning-netwerk.\n\n In het &amp; beheer kanalen&amp;-gedeelte kan je altijd zien hoeveel je kan verzenden en ontvangen op het lightning-netwerk.</string>
+    <string name="receive_lightning_request">Lightningverzoek</string>
+    <string name="receive_on_chain_request">On-Chainverzoek</string>
+    <string name="receive_noActiveChannels">Om Bitcoin over het Lightningnetwerk te ontvangen, moet je eerst kanalen openen.</string>
+    <string name="receive_noIncomeBalance">Om Bitcoin over het Lightningnetwerk te ontvangen, moet tenminste één van je kanalen wat saldo hebben bij je tegenpartij.\n\nOm dat te bereiken, moet je eerst iets uitgeven op het Lightningnetwerk.\n\n In het &amp; beheer kanalen&amp;-gedeelte kan je altijd zien hoeveel je kan verzenden en ontvangen op het Lightningnetwerk.</string>
     <string name="receive_requestFullfilled">Betalingsverzoek\nbetaald</string>
     <string name="guardian_doNotShowAgain">Laat niet opnieuw zien.</string>
     <string name="guardian_Title">Attentie</string>
@@ -188,30 +177,30 @@
     <string name="guardian_pasteFromClipboard">Controleer altijd de laatste 3 tot 5 cijfers wanneer je vanaf het klembord plakt. Een frauduleuze app heeft missschien het adres op de achtergrond veranderd zonder dat je het door had.</string>
     <string name="guardian_disableScrambledPin">Als het niet gehusseld is, is het makkelijk om je PIN te raden door naar je vingerbewegingen te kijken.</string>
     <string name="guardian_disableScreenProtection">Als je schermopnamens toestaat, kan frauduleuze software mogelijk een video opnemen of screenshots maken terwijl je Zap gebruikt. We raden aan om dit alleen te deactiveren als je een video wilt opnemen of een screenshot wilt maken.</string>
-    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Je staat op het punt om %1$s%% aan networkvergoedingen te betalen.\n\nMogelijke oplossing:\n- probeer een lightning-betaling\n- kies een lagere vergoeding, wacht langer\n- probeer later opnieuw\n- stuur een groter bedrag\n\nWil je toch doorgaan?</string>
-    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Je hebt een bedrag in fiatwaarde verzocht, maar je wisselkoersdata is oud (%1$s uur geleden opgevraagd).\nZorg ervoor dat je een internetverbinding hebt of overweeg om rechtstreeks Bitcoin te verzoeken.\n\nWil je toch doorgaan?</string>
-    <string name="guardian_tooMuchMoney">Gefeliciteerd, je hebt een behoorlijke hoeveelheid Bitcoin!\nHoud in gedachte dat Zap een Hot Wallet is.\nWe doen ons best om deze wallet veilig te houden, maar voor je eigen veiligheid, raden we je aan om Cold Wallets of Hardware Wallets te overwegen om je meeste spaargeld te bewaren.</string>
-    <string name="guardian_notReadyForMainnet">Je zit op het MAINNET met echte Bitcoin!\nZap Android zit in een vroeg ontwikkelstadium. Je raak misschien geld kwijt!\n\nAls je dat risico niet wilt lopen, schakel dan in de tussentijd over naar het testnet.</string>
+    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Je staat op het punt om %1$s%% aan netwerkvergoedingen te betalen.\n\nMogelijke oplossing:\n- probeer een Lightningbetaling\n- kies een lagere vergoeding, wacht langer\n- probeer later opnieuw\n- stuur een groter bedrag\n\nWil je toch doorgaan?</string>
+    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Je hebt een bedrag in fiatwaarde verzocht, maar je wisselkoersdata is oud (%1$s uur geleden opgevraagd).\nZorg ervoor dat je een internetverbinding hebt of overweeg om rechtstreeks bitcoin te verzoeken.\n\nWil je toch doorgaan?</string>
+    <string name="guardian_tooMuchMoney">Gefeliciteerd, je hebt een behoorlijke hoeveelheid bitcoin!\nHoud in gedachte dat Zap een Hot Wallet is.\nWe doen ons best om deze wallet veilig te houden, maar voor je eigen veiligheid, raden we je aan om Cold Wallets of Hardware Wallets te overwegen om je meeste spaargeld te bewaren.</string>
+    <string name="guardian_notReadyForMainnet">Je zit op het MAINNET met echte bitcoin!\nZap Android zit in een vroeg ontwikkelstadium. Je raak misschien geld kwijt!\n\nAls je dat risico niet wilt lopen, schakel dan in de tussentijd over naar het testnet.</string>
     <string name="guardian_remoteConnect">Weet je zeker dat je wilt verbinden met \n\n%1$s\n\nControleer zorgvuldig de hostnaam.</string>
-    <string name="guardian_blockExplorer">Door informatie op te zoeken in een block explorer raakt je IP-Adres blootgesteld. Als je je anonimiteit wilt vergroten, zou je het eigenlijk niet moeten gebruiken of zou je bij de instellingen een block explorer moeten kiezen die Tor ondersteunt.</string>
-    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
+    <string name="guardian_blockExplorer">Door informatie op te zoeken in een blockexplorer raakt je IP-Adres blootgesteld. Als je je anonimiteit wilt vergroten, zou je het eigenlijk niet moeten gebruiken of zou je bij de instellingen een blockexplorer moeten kiezen die Tor ondersteunt.</string>
+    <string name="guardian_oldLndVersion_remote">Update a.u.b.\n\nDe node waarmee je verbonden bent gebruikt een oude versie van LND. Versies onder %1$s worden niet meer ondersteunt.</string>
     <string name="settings_category_general">Algemeen</string>
     <string name="settings_category_security">Beveiliging</string>
     <string name="settings_category_help">Hulp</string>
     <string name="settings_category_advanced">Geavanceerd</string>
-    <string name="settings_btcUnit">Bitcoin-eenheid</string>
-    <string name="settings_currency">Tweede Eenheid</string>
+    <string name="settings_btcUnit">Bitcoineenheid</string>
+    <string name="settings_currency">Fiateenheid</string>
     <string name="settings_language">Taal</string>
-    <string name="settings_scan_clipboard">Check clipboard</string>
-    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
+    <string name="settings_scan_clipboard">Klembord controleren</string>
+    <string name="settings_scan_clipboard_summary">Automatisch het klembord controleren op data die Zap kan gebruiken.</string>
     <string name="settings_hapticPin">Haptische PIN-feedback</string>
-    <string name="settings_systemLanguage">Systeem Taal</string>
-    <string name="settings_manageChannels">Beheer Lightningkanalen</string>
-    <string name="settings_scramblePin">Hussel PIN-scherm</string>
-    <string name="settings_preventScreenRecording">Voorkom Schermopnames</string>
-    <string name="settings_hideTotalBalance">Verberg totale saldo</string>
+    <string name="settings_systemLanguage">Systeemtaal</string>
+    <string name="settings_manageChannels">Lightningkanalen beheren</string>
+    <string name="settings_scramblePin">PIN-scherm husselen</string>
+    <string name="settings_preventScreenRecording">Schermopnames voorkomen</string>
+    <string name="settings_hideTotalBalance">Totale saldo verbergen</string>
     <string name="settings_hideTotalBalance_explanation">Wanneer geactivateerd, tik op het Zap logo op het thuisscherm om je totale saldo te onthullen.</string>
-    <string name="settings_resetSecurityWarnings">Reset Beveiligingswaarschuwing</string>
+    <string name="settings_resetSecurityWarnings">Beveiligingswaarschuwing resetten</string>
     <string name="settings_help">Hulp nodig?</string>
     <string name="settings_reportIssue">Meld een Probleem</string>
     <string name="settings_about">Over Zap</string>
@@ -221,7 +210,7 @@
     <string name="settings_changePin">Verander/Verwijder PIN</string>
     <string name="settings_addPin">Beveilig met PIN</string>
     <string name="settings_removePin">Verwijder PIN</string>
-    <string name="settings_blockExplorer">Block Explorer</string>
+    <string name="settings_blockExplorer">Blockexplorer</string>
     <string name="settings_blockExplorer_tor_toast">Tor Browser voor Android is vereist.</string>
     <string name="settings_addressType">Bitcoinadrestype</string>
     <string name="settings_exchangeRateProvider">Wisselkoersprovider</string>
@@ -229,17 +218,17 @@
         <item>Compatibiliteit (P2PSH)</item>
         <item>Native (Bech32)</item>
     </string-array>
-    <string name="settings_lnRequestExpiryTitle">Lightningverzoek Verlooptijd</string>
-    <string name="settings_lnFeeLimitTitle">Lightningbetaling Vergoedingslimiet</string>
-    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
+    <string name="settings_lnRequestExpiryTitle">Lightningverzoek-verlooptijd</string>
+    <string name="settings_lnFeeLimitTitle">Lightningbetaling-vergoedingslimiet</string>
+    <string name="settings_lnPrivateChannelHints">Routehints voor privékanalen opnemen in betalingsverzoeken</string>
     <string name="error">Foutmelding</string>
-    <string name="error_blockExplorer_title">Block Explorer</string>
-    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Je hebt de (%1$s) Block Explorer geselecteerd, die geen %2$s ondersteunt. \nGa naar de instellingen en kies een andere block explorer om door te gaan."</string>
+    <string name="error_blockExplorer_title">Blockexplorer</string>
+    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Je hebt de (%1$s) blockexplorer geselecteerd, die geen %2$s ondersteunt. \nGa naar de instellingen en kies een andere blockexplorer om door te gaan."</string>
     <string name="error_notAPaymentRequest">Ongeldige betalingsinformatie.\n\nKies een Bitcoinadres of Lightningbetalingsverzoek om de betaling te initiëren.</string>
     <string name="error_paymentRequestExpired">Dit betalingsverzoek is verlopen.</string>
-    <string name="error_useTestnetRequest">Je bent verbonden met het TESTNET. Gebruik een TESTNET-adres of betalingsverzoek.</string>
-    <string name="error_useMainnetRequest">Je bent verbonden met het MAINNET. Gebruik een MAINNET-adres of betalingsverzoek.</string>
-    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
+    <string name="error_useTestnetRequest">Je bent verbonden met het TESTNET. Gebruik een TESTNETadres of betalingsverzoek.</string>
+    <string name="error_useMainnetRequest">Je bent verbonden met het MAINNET. Gebruik een MAINNETadres of betalingsverzoek.</string>
+    <string name="error_useRegtestRequest">Je bent verbonden met het REGTESTnetwerk. Gebruik een REGTESTadres of betalingsverzoek.</string>
     <string name="error_cameraPermissionRequired">Om QR-Codes te scannen heeft Zap toestemming nodig om de camera te gebruiken.</string>
     <string name="error_emptyClipboardPayment">Je klembord bevat geen betalingsdata.</string>
     <string name="error_emptyClipboardConnect">Je klembord bevat geen verbindingsdata.</string>
@@ -253,19 +242,19 @@
     <string name="error_connection_invalid_host_or_port">De verstrekte host of poort is ongeldig.</string>
     <string name="error_connection_invalid_macaroon2">Toegang geweigerd!\n\nDe macaroon is ongeldig.</string>
     <string name="error_connection_server_unreachable">Timeout.\nDe server reageert niet.\n\n-Zorg ervoor dat je een goede internetverbinding hebt\n\n- Zorg er voor dat de server draait de nog steeds de volgende IP heeft:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
-    <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
-    <string name="error_connection_unknown">Connection failed.</string>
+    <string name="error_connection_host_verification_failed">Hostnaamverificatie mislukt.\n\nDe hostnaam van je verbinding komt niet overeen met de hostnaam in het certificaat.\n\n Je moet misschien je certificaat opnieuw maken. Zorg ervoor dat de hostnaam is toegevoegd aan de lnd.conf als tlsextradomain voordat je deze opnieuw maakt.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) kan niet worden opgelost.\n\nWerk je wallet-verbindingsinstellingen bij als je node nu bereikbaar is onder een ander adres of andere hostnaam.</string>
+    <string name="error_connection_lnd_unavailable">Kan geen verbinding maken met LND.\n\n- zorg ervoor dat de LND daemon draait op je server.\n\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)</string>
+    <string name="error_connection_network_unreachable">Kan de host niet bereiken.\n\nZorg ervoor dat je een internetverbinding hebt.</string>
+    <string name="error_connection_unknown">Verbinding mislukt.</string>
     <string name="error_connection_tor_unreachable">Tor-verbinding mislukt.\n Zorg ervoor dat:\n\n- Orbot draait\n\n- Orbot in VPN Mode staat\n\n- Zap in Orbot\'s lijst van geactiveerde apps staat.</string>
     <string name="error_connection_wallet_locked">Ontgrendel de wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON-syntax van de BTCPay-serverconfiguratie is ongeldig.</string>
     <string name="error_connection_btcpay_invalid_config">De BTCPay serverconfiguratie bevat geen BTC GRPC-configuratie.</string>
     <string name="error_wrong_password">Verkeerd wachtwoord</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="error_lightning_uri_invalid">Ongeldig format.\nGebruik een van de volgende:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">De wallet moet ingesteld zijn om een kanaal te kunnen openen.</string>
-    <string name="error_connect_peer">Kon geen verbinding maken met de peer node.</string>
+    <string name="error_connect_peer">Kon geen verbinding maken met de peernode.</string>
     <string name="error_connect_peer_refused">Verbinding geweigerd door de peer.</string>
     <string name="error_connect_peer_self">Kon geen verbinding met jezelf maken.</string>
     <string name="error_connect_peer_no_host">Kon geen verbinding met de node maken zonder ip-adres of host.</string>
@@ -280,13 +269,13 @@
     <string name="error_channel_close">Kon het kanaal niet sluiten: %s</string>
     <string name="error_pin_deactivation_attempt">Het lijkt er op dat iemand heeft geprobeerd om je PIN te deactiveren. De app zal nu afsluiten.\nJe kan de app opnieuw installeren en het herstelproces gebruiken om toegang tot je geld te krijgen.</string>
     <string name="error_empty_wallet_name">Een lege naam is niet toegestaan.</string>
-    <string name="error_invalid_bitcoin_request">Invalid bitcoin request.</string>
-    <string name="error_payment_invalid_details">The payment details did not match the details specified by the invoice you are trying to pay.</string>
-    <string name="error_payment_timeout">Timeout. No route could be found.</string>
-    <string name="error_payment_no_route">No route could be found for the desired payment. Opening new lightning channels might solve the problem.</string>
-    <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
-    <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
-    <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
+    <string name="error_invalid_bitcoin_request">Ongeldig bitcoinverzoek.</string>
+    <string name="error_payment_invalid_details">De betalingsgegevens komen niet overeen met de gegevens op het betalingsverzoek die je probeert te betalen.</string>
+    <string name="error_payment_timeout">Timeout. Kan geen route vinden.</string>
+    <string name="error_payment_no_route">Er is geen route gevonden voor de gewenste betaling. Het openen van nieuwe Lightningkanalen kan het probleem oplossen.</string>
+    <string name="error_payment_insufficient_balance">Het te betalen bedrag is groter dan wat je via Lightning kunt verzenden met je huidige open kanalen.</string>
+    <string name="error_payment_keysend_not_enabled_on_remote">Zorg ervoor dat de ontvanger de keysendfunctie heeft ingeschakeld.</string>
+    <string name="error_only_payment_data_allowed">Alleen betalingsdata is hier toegestaan.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuut</item>
         <item quantity="other">%d Minuten</item>
@@ -336,14 +325,14 @@
     <string name="tor_add_repo">Voeg Repository toe</string>
     <string name="nfc_type_not_supported">Niet ondersteund NFC-type</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes die het volgende bevatten zijn geldig:\n\n- Bitcoinadres\n- Bitcoin Betalingsverzoek\n- Lightning Betalingsverzoek</string>
-    <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanNodePublicKey">QR-Codes die het volgende bevatten zijn geldig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Kanaal</string>
+    <string name="help_dialog_scanContact">QR-Codes die het volgende bevatten zijn geldig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes die het volgende bevatten zijn geldig:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server verbinding (config=...)\n- Volledige inhoud van je BTCPay Server configfile</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ onmiddelijk\n+ lage vergoedingen\n- niet altijd mogelijk\n\nPerfect voor kleine transacties.\nGebruik wanneer mogelijk.\n\n\nOn-Chain:\n\n+ altijd mogelijk\n- langzamer\n- hogere vergoedingen\n\nGoed voor grote transacties.\nGebruik dit wanneer Lightning niet mogelijk is.</string>
-    <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
-    <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
-    <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
-    <string name="wallet_name">Wallet Naam</string>
+    <string name="help_dialog_scanGeneric">Alles is hier toegestaan.\nScan gewoon een QR-code en Zap bepaalt automatisch welke actie moet worden ondernomen, afhankelijk van de gegevens.</string>
+    <string name="help_dialog_private_channels">Privékanalen zijn niet veiliger, ze zijn alleen niet zichtbaar voor het netwerk.\nGebruik alleen privékanalen wanneer je node op een mobiel apparaat wordt gebruikt of vaak offline is.</string>
+    <string name="help_dialog_identity">Dit is je identiteit op het Lightningnetwerk.\n\nWanneer u op je avatar-afbeelding tikt, onthul je een QR-code.\nAnderen kunnen die code scannen en je toevoegen aan hun contacten, kanalen met je openen of geld naar je sturen.\n\nDeze avatar is uniek.\nHet is automatisch gegenereerd op basis van je publieke sleutel en kan niet worden gewijzigd.</string>
+    <string name="wallet_name">Walletnaam</string>
     <string name="delete">Verwijder</string>
     <string name="rename">Hernoem</string>
     <string name="change_data">Verander data</string>
@@ -356,51 +345,51 @@
     <string name="confirm_wallet_deletion">Wil je deze wallet echt verwijderen?</string>
     <string name="no_wallets">Geen wallets</string>
     <string name="spinner_manage_wallets">Beheer…</string>
-    <string name="wallet_added">Wallet has been added.</string>
-    <string name="wallet_already_exists">This wallet already exists.\nIf you want to update its connection data, please go to the wallets detail page.</string>
-    <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
-    <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>
-    <string name="lnurl_decoding_no_lnurl_data">The data does not contain a valid LNURL.</string>
-    <string name="lnurl_withdraw_insufficient_channel_balance">The withdraw amount is bigger than what you can receive over lightning with your current open channels.</string>
-    <string name="lnurl_unsupported_type">Unsupported LNURL type</string>
-    <string name="lnurl_service_not_responding">%s is not responding</string>
+    <string name="wallet_added">Wallet is toegevoegd.</string>
+    <string name="wallet_already_exists">Deze wallet bestaat al.\nAls je de verbindingsgegevens wilt bijwerken, ga dan naar de walletdetailpagina.</string>
+    <string name="lnurl_withdraw_success">Opname\nsuccesvol</string>
+    <string name="lnurl_withdraw_fail">Opname\nmislukt</string>
+    <string name="lnurl_decoding_no_lnurl_data">Deze data bevat geen geldige LNURL.</string>
+    <string name="lnurl_withdraw_insufficient_channel_balance">Het opnamebedrag is groter dan wat u via Lightning kunt ontvangen met je huidige open kanalen.</string>
+    <string name="lnurl_unsupported_type">Niet-ondersteund LNURL-type</string>
+    <string name="lnurl_service_not_responding">%s reageert niet</string>
     <string name="lnurl_service">Service</string>
-    <string name="lnurl_service_provided_invalid_data">The Service you are interacting with provided invalid data.</string>
-    <string name="lnurl_channel_opening_question">Do you really want to open a channel with:</string>
-    <string name="lnurl_channel_pending_hint">The channel is opening. This may take a while.\nYou can check the channels state in your channels overview.</string>
-    <string name="lnurl_pay_insufficient_channel_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
-    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s sent an invalid payment request.</string>
-    <string name="lnurl_pay_success_secret_decrypt_error">Your payment was successful, but the secret that you received could not be decrypted.</string>
-    <string name="lnurl_pay_save_url">IMPORTANT:\nThe URL has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
-    <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
-    <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
-    <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
+    <string name="lnurl_service_provided_invalid_data">De service waarmee je communiceert, heeft ongeldige gegevens verstrekt.</string>
+    <string name="lnurl_channel_opening_question">Wil je echt een kanaal openen met:</string>
+    <string name="lnurl_channel_pending_hint">Het kanaal is aan het openen. Dit duurt misschien even.\nJe kunt het kanaalstatus bekijken in je kanaaloverzicht.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">Het te betalen bedrag is groter dan wat je via Lightning kunt verzenden met je huidige open kanalen</string>
+    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s heeft een ongeldig betalingsverzoek verzonden.</string>
+    <string name="lnurl_pay_success_secret_decrypt_error">Je betaling is gelukt, maar het geheim dat je hebt ontvangen, kon niet worden ontsleuteld.</string>
+    <string name="lnurl_pay_save_url">IMPORTANT:\nDe URL is gekopieerd naar je klembord. Bewaar het als je het later nodig hebt. Dit dialoogvenster wordt niet meer weergegeven.</string>
+    <string name="lnurl_pay_save_secret">IMPORTANT:\nDe code is gekopieerd naar je klembord. Bewaar het als je het later nodig hebt. Dit dialoogvenster wordt niet meer weergegeven.</string>
+    <string name="string_analyzer_unrecognized_data">Niet-herkende data.</string>
+    <string name="rest_port">REST (port 8080) is niet ondersteund.\n\nWil je de port veranderen naar 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Wallets</string>
-    <string name="drawer_menu_channels">Channels</string>
-    <string name="drawer_menu_contacts">Contacts</string>
+    <string name="drawer_menu_channels">Kanalen</string>
+    <string name="drawer_menu_contacts">Contacten</string>
     <string name="drawer_menu_backup">Backup</string>
-    <string name="drawer_menu_buy">Buy Bitcoin</string>
-    <string name="drawer_no_wallet">No Wallet</string>
-    <string name="support_contribute_description">Help improving Zap.</string>
-    <string name="support_issue_description">Found a bug? Let us know!</string>
-    <string name="support_privacy_description">We care about your privacy.</string>
-    <string name="support_help_description">Visit our documentation.</string>
+    <string name="drawer_menu_buy">Koop bitcoin</string>
+    <string name="drawer_no_wallet">Geen Wallet</string>
+    <string name="support_contribute_description">Help Zap verbeteren.</string>
+    <string name="support_issue_description">Bug gevonden? Laat het ons weten!</string>
+    <string name="support_privacy_description">We geven om je privacy.</string>
+    <string name="support_help_description">Bekijk onze documentatie.</string>
     <string name="identity_switch_tor">Tor</string>
-    <string name="identity_switch_public">Public</string>
-    <string name="identity_tap_on_avatar">Tap on your Avatar to reveal your identity!</string>
-    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
-    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
-    <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
-    <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
-    <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
-    <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
-    <string name="third_party_licenses">Third-party licenses</string>
-    <string name="licenses">Licenses</string>
-    <string name="choose_action">Choose action</string>
-    <string name="add_contact">Add contact</string>
-    <string name="send_money">Send money</string>
-    <string name="contact_name">Contact name</string>
-    <string name="contact_already_exists">This person is already in your contacts!</string>
-    <string name="no_contacts">No contacts</string>
-    <string name="manual_send_input_hint">Address or payment data</string>
+    <string name="identity_switch_public">Publiek</string>
+    <string name="identity_tap_on_avatar">Tik op je avatar om je identiteit te onthullen!</string>
+    <string name="regtest_blockexplorer_unavailable">Blockexplorers zijn niet beschikbaar in REGTEST-modus.</string>
+    <string name="clipboard_error_heading">Klemborddata gevonden, maar het is ongeldig:</string>
+    <string name="clipboard_scan_payment">Je klembord bevat betalingsinformatie. Wil je een betaling starten?</string>
+    <string name="clipboard_scan_lnurl">Je klembord bevat LNURL-data. Wil je het gebruiken?</string>
+    <string name="clipboard_scan_node_pubkey">Je klembord bevat een openbare sleutel van een node. Wil je een kanaal openen?</string>
+    <string name="clipboard_scan_connect">Je klembord bevat verbindingsdata. Wil je een nieuwe wallet toevoegen?</string>
+    <string name="third_party_licenses">Third-party licenties</string>
+    <string name="licenses">Licenties</string>
+    <string name="choose_action">Kies actie</string>
+    <string name="add_contact">Voeg contact toe</string>
+    <string name="send_money">Verzend geld</string>
+    <string name="contact_name">Contactnaam</string>
+    <string name="contact_already_exists">Deze persoon staat al in je contacten!</string>
+    <string name="no_contacts">Geen contacten</string>
+    <string name="manual_send_input_hint">Adres of betalingsdata</string>
 </resources>
