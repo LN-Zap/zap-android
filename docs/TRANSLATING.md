@@ -7,6 +7,11 @@
 5. Translate the missing strings.
 6. Celebrate yourself for supporting a free open source project! This step is MANDATORY!
 
+## Alternative:
+
+If you are dedicated and do the complete translation of the app, you can also submit a pull request directly.
+Incomplete translation pull requests will be rejected as merging and syncing with crowdin causes unnecessary work for the maintainers.
+So if you just want to translate a few strings, please use crowdin.
 
 ## When will my translation be visible in the app?
 
