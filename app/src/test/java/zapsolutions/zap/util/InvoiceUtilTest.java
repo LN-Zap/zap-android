@@ -33,7 +33,8 @@ public class InvoiceUtilTest {
         // example addresses taken from: https://en.bitcoin.it/wiki/List_of_address_prefixes
         assertTrue(InvoiceUtil.isBitcoinAddress("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4")); //bech32, mainnet, lower case
         assertTrue(InvoiceUtil.isBitcoinAddress("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4".toUpperCase())); //bech32, mainnet, upper case
-        assertTrue(InvoiceUtil.isBitcoinAddress("tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx")); //bech32, mestnet, lower case
+        assertTrue(InvoiceUtil.isBitcoinAddress("bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0")); //bech32m, mainnet (example from BIP 350)
+        assertTrue(InvoiceUtil.isBitcoinAddress("tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx")); //bech32, testnet, lower case
         assertTrue(InvoiceUtil.isBitcoinAddress("bcrt1q6rhpng9evdsfnn833a4f4vej0asu6dk5srld6x")); //bech32, regtest, lower case
         assertTrue(InvoiceUtil.isBitcoinAddress("17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem")); //base58, mainnet, P2PKH
         assertTrue(InvoiceUtil.isBitcoinAddress("mipcBbFg9gMiCh81Kj8tqqdgoZub1ZJRfn")); //base58, testnet, P2PKH
