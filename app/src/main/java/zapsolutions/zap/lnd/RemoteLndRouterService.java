@@ -51,6 +51,21 @@ public class RemoteLndRouterService implements LndRouterService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.routerrpc.XImportMissionControlResponse> xImportMissionControl(com.github.lightningnetwork.lnd.routerrpc.XImportMissionControlRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.xImportMissionControl(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.routerrpc.GetMissionControlConfigResponse> getMissionControlConfig(com.github.lightningnetwork.lnd.routerrpc.GetMissionControlConfigRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getMissionControlConfig(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.routerrpc.SetMissionControlConfigResponse> setMissionControlConfig(com.github.lightningnetwork.lnd.routerrpc.SetMissionControlConfigRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.setMissionControlConfig(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.routerrpc.QueryProbabilityResponse> queryProbability(com.github.lightningnetwork.lnd.routerrpc.QueryProbabilityRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.queryProbability(request, new RemoteLndSingleObserver<>(emitter)));
     }
@@ -73,6 +88,11 @@ public class RemoteLndRouterService implements LndRouterService {
     @Override
     public Observable<com.github.lightningnetwork.lnd.routerrpc.PaymentStatus> trackPayment(com.github.lightningnetwork.lnd.routerrpc.TrackPaymentRequest request) {
         return DefaultObservable.createDefault(emitter -> asyncStub.trackPayment(request, new RemoteLndStreamObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.routerrpc.UpdateChanStatusResponse> updateChanStatus(com.github.lightningnetwork.lnd.routerrpc.UpdateChanStatusRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.updateChanStatus(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
 }

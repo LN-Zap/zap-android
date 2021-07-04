@@ -19,6 +19,12 @@ public interface LndRouterService {
 
     Single<com.github.lightningnetwork.lnd.routerrpc.QueryMissionControlResponse> queryMissionControl(com.github.lightningnetwork.lnd.routerrpc.QueryMissionControlRequest request);
 
+    Single<com.github.lightningnetwork.lnd.routerrpc.XImportMissionControlResponse> xImportMissionControl(com.github.lightningnetwork.lnd.routerrpc.XImportMissionControlRequest request);
+
+    Single<com.github.lightningnetwork.lnd.routerrpc.GetMissionControlConfigResponse> getMissionControlConfig(com.github.lightningnetwork.lnd.routerrpc.GetMissionControlConfigRequest request);
+
+    Single<com.github.lightningnetwork.lnd.routerrpc.SetMissionControlConfigResponse> setMissionControlConfig(com.github.lightningnetwork.lnd.routerrpc.SetMissionControlConfigRequest request);
+
     Single<com.github.lightningnetwork.lnd.routerrpc.QueryProbabilityResponse> queryProbability(com.github.lightningnetwork.lnd.routerrpc.QueryProbabilityRequest request);
 
     Single<com.github.lightningnetwork.lnd.routerrpc.BuildRouteResponse> buildRoute(com.github.lightningnetwork.lnd.routerrpc.BuildRouteRequest request);
@@ -30,4 +36,6 @@ public interface LndRouterService {
     Observable<com.github.lightningnetwork.lnd.routerrpc.PaymentStatus> trackPayment(com.github.lightningnetwork.lnd.routerrpc.TrackPaymentRequest request);
 
     // skipped HtlcInterceptor
+
+    Single<com.github.lightningnetwork.lnd.routerrpc.UpdateChanStatusResponse> updateChanStatus(com.github.lightningnetwork.lnd.routerrpc.UpdateChanStatusRequest request);
 }

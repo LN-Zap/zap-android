@@ -16,6 +16,7 @@ import zapsolutions.zap.lnd.LndInvoicesService;
 import zapsolutions.zap.lnd.LndLightningService;
 import zapsolutions.zap.lnd.LndRouterService;
 import zapsolutions.zap.lnd.LndSignerService;
+import zapsolutions.zap.lnd.LndStateService;
 import zapsolutions.zap.lnd.LndVersionerService;
 import zapsolutions.zap.lnd.LndWalletKitService;
 import zapsolutions.zap.lnd.LndWalletUnlockerService;
@@ -27,6 +28,7 @@ import zapsolutions.zap.lnd.RemoteLndInvoicesService;
 import zapsolutions.zap.lnd.RemoteLndLightningService;
 import zapsolutions.zap.lnd.RemoteLndRouterService;
 import zapsolutions.zap.lnd.RemoteLndSignerService;
+import zapsolutions.zap.lnd.RemoteLndStateService;
 import zapsolutions.zap.lnd.RemoteLndVersionerService;
 import zapsolutions.zap.lnd.RemoteLndWalletKitService;
 import zapsolutions.zap.lnd.RemoteLndWalletUnlockerService;
@@ -51,6 +53,7 @@ public class LndConnection {
     private LndLightningService mLndLightningService;
     private LndRouterService mLndRouterService;
     private LndSignerService mLndSignerService;
+    private LndStateService mLndStateService;
     private LndVersionerService mLndVersionerService;
     private LndWalletKitService mLndWalletKitService;
     private LndWalletUnlockerService mLndWalletUnlockerService;
@@ -92,6 +95,10 @@ public class LndConnection {
 
     public LndSignerService getSignerService() {
         return mLndSignerService;
+    }
+
+    public LndStateService getStateService() {
+        return mLndStateService;
     }
 
     public LndVersionerService getVersionerService() {
@@ -148,6 +155,7 @@ public class LndConnection {
         mLndLightningService = new RemoteLndLightningService(mSecureChannel, mMacaroon);
         mLndRouterService = new RemoteLndRouterService(mSecureChannel, mMacaroon);
         mLndSignerService = new RemoteLndSignerService(mSecureChannel, mMacaroon);
+        mLndStateService = new RemoteLndStateService(mSecureChannel, mMacaroon);
         mLndVersionerService = new RemoteLndVersionerService(mSecureChannel, mMacaroon);
         mLndWalletKitService = new RemoteLndWalletKitService(mSecureChannel, mMacaroon);
         mLndWatchtowerService = new RemoteLndWatchtowerService(mSecureChannel, mMacaroon);
