@@ -170,6 +170,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                 }
             }
         }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     public void setupToolbar() {

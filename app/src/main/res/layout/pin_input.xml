@@ -313,7 +313,7 @@
             android:layout_marginBottom="10dp"
             android:background="@color/deepSeaBlue"
             android:src="@drawable/ic_fingerprint_black_48dp"
-            android:tint="@color/white" />
+            app:tint="@color/white" />
 
         <Button
             android:id="@+id/pinNumpad0"
@@ -343,7 +343,7 @@
             android:layout_marginBottom="10dp"
             android:background="@color/deepSeaBlue"
             android:src="@drawable/ic_backspace_black_36dp"
-            android:tint="@color/white" />
+            app:tint="@color/white" />
 
 
     </GridLayout>
@@ -359,7 +359,7 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/rounded_rectangle_green"
         android:src="@drawable/ic_done_black_36dp"
-        android:tint="@color/white" />
+        app:tint="@color/white" />
 
     <Button
         android:id="@+id/pinRemove"

@@ -14,10 +14,10 @@
         android:layout_marginTop="13dp"
         android:layout_marginEnd="10dp"
         android:background="?selectableItemBackgroundBorderless"
-        android:tint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_close_black_24dp" />
+        app:srcCompat="@drawable/ic_close_black_24dp"
+        app:tint="@color/gray" />
 
     <ImageButton
         android:id="@+id/helpButton"
@@ -26,11 +26,11 @@
         android:layout_marginTop="13dp"
         android:layout_marginEnd="10dp"
         android:background="?selectableItemBackgroundBorderless"
-        android:tint="@color/gray"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/closeButton"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_help_black_24dp"
+        app:tint="@color/gray"
         tools:visibility="visible" />
 
     <ImageView
