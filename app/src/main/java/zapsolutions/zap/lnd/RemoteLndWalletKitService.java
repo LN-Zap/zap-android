@@ -30,6 +30,11 @@ public class RemoteLndWalletKitService implements LndWalletKitService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.ListLeasesResponse> listLeases(com.github.lightningnetwork.lnd.walletrpc.ListLeasesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listLeases(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.signrpc.KeyDescriptor> deriveNextKey(com.github.lightningnetwork.lnd.walletrpc.KeyReq request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.deriveNextKey(request, new RemoteLndSingleObserver<>(emitter)));
     }
@@ -42,6 +47,21 @@ public class RemoteLndWalletKitService implements LndWalletKitService {
     @Override
     public Single<com.github.lightningnetwork.lnd.walletrpc.AddrResponse> nextAddr(com.github.lightningnetwork.lnd.walletrpc.AddrRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.nextAddr(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.ListAccountsResponse> listAccounts(com.github.lightningnetwork.lnd.walletrpc.ListAccountsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listAccounts(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.ImportAccountResponse> importAccount(com.github.lightningnetwork.lnd.walletrpc.ImportAccountRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.importAccount(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.ImportPublicKeyResponse> importPublicKey(com.github.lightningnetwork.lnd.walletrpc.ImportPublicKeyRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.importPublicKey(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
     @Override
