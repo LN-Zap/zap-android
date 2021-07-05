@@ -28,8 +28,6 @@ public class UserGuardian {
     private static final String DIALOG_DISABLE_SCREEN_PROTECTION = "guardianDisableScreenProtection";
     private static final String DIALOG_HIGH_ONCHAIN_FEE = "guardianHighOnCainFees";
     private static final String DIALOG_OLD_EXCHANGE_RATE = "guardianOldExchangeRate";
-    private static final String DIALOG_TOO_MUCH_MONEY = "guardianTooMuchMoney";
-    private static final String DIALOG_MAINNET_NOT_READY = "guardianMainnetNotReady";
     private static final String DIALOG_REMOTE_CONNECT = "guardianRemoteConnect";
     private static final String DIALOG_BLOCK_EXPLORER = "guardianBlockExplorer";
     private static final String DIALOG_OLD_LND_VERSION = "guardianOldLndVersion";
@@ -63,8 +61,6 @@ public class UserGuardian {
                 .putBoolean(DIALOG_DISABLE_SCREEN_PROTECTION, true)
                 .putBoolean(DIALOG_HIGH_ONCHAIN_FEE, true)
                 .putBoolean(DIALOG_OLD_EXCHANGE_RATE, true)
-                .putBoolean(DIALOG_TOO_MUCH_MONEY, true)
-                .putBoolean(DIALOG_MAINNET_NOT_READY, true)
                 .putBoolean(DIALOG_REMOTE_CONNECT, true)
                 .putBoolean(DIALOG_BLOCK_EXPLORER, true)
                 .putBoolean(DIALOG_OLD_LND_VERSION, true)
@@ -119,16 +115,6 @@ public class UserGuardian {
     }
 
     /**
-     * Warn the user about using the wallet on mainnet, while it is still not secure.
-     */
-    public void securityMainnetNotReady() {
-        mCurrentDialogName = DIALOG_MAINNET_NOT_READY;
-        AlertDialog.Builder adb = createDontShowAgainDialog(false);
-        adb.setMessage(R.string.guardian_notReadyForMainnet);
-        showGuardianDialog(adb);
-    }
-
-    /**
      * Warn the user to not disable scrambled pin input.
      */
     public void securityScrambledPin() {
@@ -174,16 +160,6 @@ public class UserGuardian {
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         String ageString = String.format("%.1f", age / 3600);
         adb.setMessage(mContext.getResources().getString(R.string.guardian_oldExchangeRate, ageString));
-        showGuardianDialog(adb);
-    }
-
-    /**
-     * Warn the user if he stores large amounts of Bitcoin in his wallet.
-     */
-    public void securityTooMuchMoney() {
-        mCurrentDialogName = DIALOG_TOO_MUCH_MONEY;
-        AlertDialog.Builder adb = createDontShowAgainDialog(false);
-        adb.setMessage(R.string.guardian_tooMuchMoney);
         showGuardianDialog(adb);
     }
 

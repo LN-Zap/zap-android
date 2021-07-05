@@ -111,7 +111,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private boolean mInfoChangeListenerRegistered;
     private boolean mLndConnectionTestListenerRegistered;
     private boolean mWalletLoadedListener;
-    private boolean mMainnetWarningShownOnce;
     private boolean mIsFirstUnlockAttempt = true;
     private AlertDialog mUnlockDialog;
     private NfcAdapter mNfcAdapter;
@@ -415,15 +414,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     @Override
     public void onInfoUpdated(boolean connected) {
-        if ((WalletConfigsManager.getInstance().hasAnyConfigs())) {
-            if (Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET && Wallet.getInstance().isConnectedToLND()) {
-                if (!mMainnetWarningShownOnce) {
-                    // Show mainnet not ready warning
-                    new UserGuardian(this).securityMainnetNotReady();
-                    mMainnetWarningShownOnce = true;
-                }
-            }
-        }
+
     }
 
     @Override
@@ -706,7 +697,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
                 @Override
                 public void onSaved(String id) {
-                    if(WalletConfigsManager.getInstance().getAllWalletConfigs(false).size() == 1){
+                    if (WalletConfigsManager.getInstance().getAllWalletConfigs(false).size() == 1) {
                         // This was the first wallet that was added. Open it immediatelly.
                         mPagerAdapter.getWalletFragment().showLoading();
                         openWallet();
