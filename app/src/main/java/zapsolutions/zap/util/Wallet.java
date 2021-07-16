@@ -1091,7 +1091,7 @@ public class Wallet {
      *
      * @return pubKey of the Node the channel is linked to
      */
-    private String getNodePubKeyFromChannelTransaction(Transaction transaction) {
+    public String getNodePubKeyFromChannelTransaction(Transaction transaction) {
 
         // open channels
         if (mOpenChannelsList != null) {

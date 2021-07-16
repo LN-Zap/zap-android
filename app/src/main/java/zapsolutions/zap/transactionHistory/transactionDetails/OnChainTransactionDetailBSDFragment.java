@@ -15,6 +15,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.customView.BSDScrollableMainView;
 import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.util.BlockExplorer;
@@ -31,8 +32,8 @@ public class OnChainTransactionDetailBSDFragment extends ZapBSDFragment {
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private Transaction mTransaction;
-    private TextView mChannelLabel;
-    private TextView mChannel;
+    private TextView mNodeLabel;
+    private TextView mNode;
     private TextView mEventLabel;
     private TextView mEvent;
     private TextView mAmountLabel;
@@ -56,8 +57,8 @@ public class OnChainTransactionDetailBSDFragment extends ZapBSDFragment {
         View view = inflater.inflate(R.layout.bsd_on_chain_transaction_detail, container);
 
         mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
-        mChannelLabel = view.findViewById(R.id.channelLabel);
-        mChannel = view.findViewById(R.id.channel);
+        mNodeLabel = view.findViewById(R.id.nodeLabel);
+        mNode = view.findViewById(R.id.node);
         mEventLabel = view.findViewById(R.id.eventLabel);
         mEvent = view.findViewById(R.id.event);
         mAmountLabel = view.findViewById(R.id.amountLabel);
@@ -97,8 +98,8 @@ public class OnChainTransactionDetailBSDFragment extends ZapBSDFragment {
     private void bindOnChainTransaction(ByteString transactionString) throws InvalidProtocolBufferException {
         mTransaction = Transaction.parseFrom(transactionString);
 
-        String channelLabel = getString(R.string.channel) + ":";
-        mChannelLabel.setText(channelLabel);
+        String nodeLabel = getString(R.string.node) + ":";
+        mNodeLabel.setText(nodeLabel);
         String eventLabel = getString(R.string.event) + ":";
         mEventLabel.setText(eventLabel);
         String amountLabel = getString(R.string.amount) + ":";
@@ -155,8 +156,13 @@ public class OnChainTransactionDetailBSDFragment extends ZapBSDFragment {
             mFeeLabel.setVisibility(View.GONE);
         }
 
-        String alias = Wallet.getInstance().getNodeAliasFromChannelTransaction(mTransaction, getActivity());
-        mChannel.setText(alias);
+        String alias;
+        if (ContactsManager.getInstance().doesContactExist(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction))) {
+            alias = ContactsManager.getInstance().getNameByNodePubKey(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction));
+        } else {
+            alias = Wallet.getInstance().getNodeAliasFromChannelTransaction(mTransaction, getActivity());
+        }
+        mNode.setText(alias);
 
         switch (amount.compareTo(0L)) {
             case 0:
@@ -176,8 +182,8 @@ public class OnChainTransactionDetailBSDFragment extends ZapBSDFragment {
 
     private void bindNormalTransaction() {
         mBSDScrollableMainView.setTitle(R.string.transaction_detail);
-        mChannel.setVisibility(View.GONE);
-        mChannelLabel.setVisibility(View.GONE);
+        mNode.setVisibility(View.GONE);
+        mNodeLabel.setVisibility(View.GONE);
         mEvent.setVisibility(View.GONE);
         mEventLabel.setVisibility(View.GONE);
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mTransaction.getAmount()).replace("-", ""));

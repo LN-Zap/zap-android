@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.Wallet;
@@ -46,7 +47,11 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setName(String channelRemotePubKey) {
-        mRemoteName.setText(Wallet.getInstance().getNodeAliasFromPubKey(channelRemotePubKey, mContext));
+        if (ContactsManager.getInstance().doesContactExist(channelRemotePubKey)) {
+            mRemoteName.setText(ContactsManager.getInstance().getNameByNodePubKey(channelRemotePubKey));
+        } else {
+            mRemoteName.setText(Wallet.getInstance().getNodeAliasFromPubKey(channelRemotePubKey, mContext));
+        }
     }
 
     void setBalances(long local, long remote, long capacity) {

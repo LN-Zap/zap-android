@@ -14,17 +14,17 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/channelLabel"
+            android:id="@+id/nodeLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Channel:" />
+            tools:text="Node:" />
 
         <TextView
-            android:id="@+id/channel"
+            android:id="@+id/node"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
@@ -34,7 +34,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/amountLabel"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Channel Name" />
+            tools:text="Node Name" />
 
         <TextView
             android:id="@+id/eventLabel"
@@ -43,7 +43,7 @@
             android:paddingTop="10dp"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/channel"
+            app:layout_constraintTop_toBottomOf="@id/node"
             tools:text="Event:" />
 
         <TextView
@@ -56,7 +56,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/amountLabel"
-            app:layout_constraintTop_toBottomOf="@id/channel"
+            app:layout_constraintTop_toBottomOf="@id/node"
             tools:text="close" />
 
         <TextView
