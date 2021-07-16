@@ -94,21 +94,30 @@ public class PaymentUtil {
                     switch (payment.getFailureReason()) {
                         case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
                             Route route = payment.getHtlcs(0).getRoute();
+                            Route finalRoute;
 
-                            // For LND prior to 0.12 we have to edit the last hop of the route to include the payment address in the mpp record.
-                            // If we wouldn't edit the route and use it later in SendToRoute, LND versions prior to 0.12.0 would not be able to send payments to 0.12.0 and above.
-                            Hop oldLastHop = route.getHops(route.getHopsCount() - 1);
-                            MPPRecord mppRecord = MPPRecord.newBuilder()
-                                    .setPaymentAddr(probeSendRequest.getPaymentAddr())
-                                    .setTotalAmtMsat(oldLastHop.getAmtToForwardMsat())
-                                    .build();
-                            Hop modifiedLastHop = Hop.newBuilder(oldLastHop)
-                                    .setTlvPayload(true)
-                                    .setMppRecord(mppRecord)
-                                    .build();
-                            Route finalRoute = Route.newBuilder(route)
-                                    .setHops(route.getHopsCount() - 1, modifiedLastHop)
-                                    .build();
+                            Version actualLNDVersion = Wallet.getInstance().getLNDVersion();
+                            Version PaymentAddressSupport = new Version("0.12");
+
+                            // ToDo: Remove later as this is deprecated
+                            if (actualLNDVersion.compareTo(PaymentAddressSupport) < 0) {
+                                // For LND prior to 0.12 we have to edit the last hop of the route to include the payment address in the mpp record.
+                                // If we wouldn't edit the route and use it later in SendToRoute, LND versions prior to 0.12.0 would not be able to send payments to 0.12.0 and above.
+                                Hop oldLastHop = route.getHops(route.getHopsCount() - 1);
+                                MPPRecord mppRecord = MPPRecord.newBuilder()
+                                        .setPaymentAddr(probeSendRequest.getPaymentAddr())
+                                        .setTotalAmtMsat(oldLastHop.getAmtToForwardMsat())
+                                        .build();
+                                Hop modifiedLastHop = Hop.newBuilder(oldLastHop)
+                                        .setTlvPayload(true)
+                                        .setMppRecord(mppRecord)
+                                        .build();
+                                finalRoute = Route.newBuilder(route)
+                                        .setHops(route.getHopsCount() - 1, modifiedLastHop)
+                                        .build();
+                            } else {
+                                finalRoute = route;
+                            }
 
                             long feeSats = 0;
                             if (finalRoute.getTotalFeesMsat() % 1000 == 0) {

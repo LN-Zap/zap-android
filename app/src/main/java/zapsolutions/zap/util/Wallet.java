@@ -1228,34 +1228,16 @@ public class Wallet {
             return 0;
         }
 
-        Version actualLNDVersion = getLNDVersion();
-        Version MppReceive = new Version("0.9");
-
-        if (actualLNDVersion.compareTo(MppReceive) < 0) {
-            // Mpp receive is not supported. Use the maximum remote balance of all channels as maximum.
-            long tempMax = 0L;
-            if (mOpenChannelsList != null) {
-                for (Channel c : mOpenChannelsList) {
-                    if (c.getActive()) {
-                        if (c.getRemoteBalance() > tempMax) {
-                            tempMax = Math.max(c.getRemoteBalance() - c.getRemoteConstraints().getChanReserveSat(), 0);
-                        }
-                    }
+        // Mpp is supported. Use the sum of the remote balances of all channels as maximum.
+        long tempMax = 0L;
+        if (mOpenChannelsList != null) {
+            for (Channel c : mOpenChannelsList) {
+                if (c.getActive()) {
+                    tempMax = tempMax + Math.max(c.getRemoteBalance() - c.getRemoteConstraints().getChanReserveSat(), 0);
                 }
             }
-            return tempMax;
-        } else {
-            // Mpp is supported. Use the sum of the remote balances of all channels as maximum.
-            long tempMax = 0L;
-            if (mOpenChannelsList != null) {
-                for (Channel c : mOpenChannelsList) {
-                    if (c.getActive()) {
-                        tempMax = tempMax + Math.max(c.getRemoteBalance() - c.getRemoteConstraints().getChanReserveSat(), 0);
-                    }
-                }
-            }
-            return tempMax;
         }
+        return tempMax;
     }
 
     /**
@@ -1269,34 +1251,16 @@ public class Wallet {
             return 0;
         }
 
-        Version actualLNDVersion = getLNDVersion();
-        Version MppSend = new Version("0.10");
-
-        if (actualLNDVersion.compareTo(MppSend) < 0) {
-            // Mpp send is not supported. Use the maximum local balance of all channels as maximum.
-            long tempMax = 0L;
-            if (mOpenChannelsList != null) {
-                for (Channel c : mOpenChannelsList) {
-                    if (c.getActive()) {
-                        if (c.getLocalBalance() > tempMax) {
-                            tempMax = Math.max(c.getLocalBalance() - c.getLocalConstraints().getChanReserveSat(), 0);
-                        }
-                    }
+        // Mpp is supported. Use the sum of the local balances of all channels as maximum.
+        long tempMax = 0L;
+        if (mOpenChannelsList != null) {
+            for (Channel c : mOpenChannelsList) {
+                if (c.getActive()) {
+                    tempMax = tempMax + Math.max(c.getLocalBalance() - c.getLocalConstraints().getChanReserveSat(), 0);
                 }
             }
-            return tempMax;
-        } else {
-            // Mpp is supported. Use the sum of the local balances of all channels as maximum.
-            long tempMax = 0L;
-            if (mOpenChannelsList != null) {
-                for (Channel c : mOpenChannelsList) {
-                    if (c.getActive()) {
-                        tempMax = tempMax + Math.max(c.getLocalBalance() - c.getLocalConstraints().getChanReserveSat(), 0);
-                    }
-                }
-            }
-            return tempMax;
         }
+        return tempMax;
     }
 
     public boolean isSyncedToChain() {
