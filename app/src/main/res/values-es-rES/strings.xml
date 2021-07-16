@@ -109,6 +109,7 @@
     <string name="activity_manage_contacts_send_mode">Send to…</string>
     <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
     <string name="activity_contact_details">Contact Details</string>
+    <string name="activity_manual_setup">Connection Data</string>
     <string name="navigation_wallet">Billetera</string>
     <string name="navigation_history">Historia</string>
     <string name="navigation_settings">Configuración</string>
@@ -190,8 +191,6 @@
     <string name="guardian_disableScreenProtection">Si activas el grabado de pantalla, algún programa malicioso podria grabar un video o tomar capturas de la pantalla mientras usas Zap. Recomendamos que mantengas esto desactivado solo mientras vayas a capturar la pantalla.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Estás a punto de pagar %1$s%% en tarifa de red.\n\nPosibles soluciones:\n- trata de enviar un pago vía lightning\n- selecciona una tarifa menor, espera mas\n- inténtalo mas tarde \n- transacciona con un monto mayor\n\nDeseas continuar de todos modos?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Has solicitado un monto en fíat, pero tu tasa de cambio es antigua (obtenida hace %1$s horas atras).\nAsegúrate de tener conexión a internet o considera la opción de solicitar un monto directamente en Bitcoin.\n\nDeseas continuar de todos modos?</string>
-    <string name="guardian_tooMuchMoney">Felicidades, parece que tienes una buena cantidad de Bitcoin! Por favor recuerda que Zap es una \"Billetera Caliente\". Hacemos lo mejor para mantener a la billetera segura, pero por tu propia seguridad, te recomendamos que consideres el uso de Billeteras Frias o en Hardware para almacenar montos considerables.</string>
-    <string name="guardian_notReadyForMainnet">Estas en la MAINNET con Bitcoin de verdad! Zap Android está en una fase muy temprana de desarrollo. Podrias perder fondos! Si no deseas asumir este riesgo, cámbiate a la testnet por mientras.</string>
     <string name="guardian_remoteConnect">Estás seguro que quieres conectarte con \n\n%1$s\n\n Por favor verifica la dirección con cuidado.</string>
     <string name="guardian_blockExplorer">Al buscar información con un explorador de bloques público, su dirección IP queda expuesta. Si desea aumentar su anonimato, debe evitar usarlo o como alternativa puede ir a la configuración y elegir un explorador de bloques que sea compatible con Tor.</string>
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
@@ -287,6 +286,7 @@
     <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
+    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minutos</item>

@@ -109,6 +109,7 @@
     <string name="activity_manage_contacts_send_mode">Poslat komu…</string>
     <string name="activity_manage_contacts_open_channel_mode">Otevřít kanál s…</string>
     <string name="activity_contact_details">Kontaktní údaje</string>
+    <string name="activity_manual_setup">Connection Data</string>
     <string name="navigation_wallet">Peněženka</string>
     <string name="navigation_history">Historie</string>
     <string name="navigation_settings">Nastavení</string>
@@ -190,8 +191,6 @@
     <string name="guardian_disableScreenProtection">Pokud povolíte nahrávání obrazovky, může být škodlivý software schopen nahrávat video nebo pořizovat snímky obrazovky, když používáte Zap. Doporučujeme deaktivovat pouze v případě, že chcete nahrát video nebo pořídit snímek obrazovky.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Chystáte se zaplatit %1$s%% v síťových poplatcích.\n\nMožná řešení:\n- zkuste místo toho Lightning platbu\n- vyberte nižší poplatek, počkejte déle\n- zkuste znovu později\n- převeďte větší množství\n\nChcete přesto pokračovat?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Částku jste požadovali jako hodnotu fiat, ale vaše data směnného kurzu jsou stará (načtena před%1$s hodinami).\nUjistěte se, že máte připojení k internetu nebo zvažte žádost přímo v bitcoinech.\n\nChcete přesto pokračovat?</string>
-    <string name="guardian_tooMuchMoney">Gratulujeme, zdá se, že máte pěknou hromádku bitcoinů!\nMějte na paměti, že Zap je Hot peněženka.\nSnažíme se udržet tuto peněženku v bezpečí, ale pro vaši vlastní bezpečnost doporučujeme zvážit Cold peněženky nebo hardwarové peněženky pro ukládání vašich hlavních úspor.</string>
-    <string name="guardian_notReadyForMainnet">Jste na MAINNETu se skutečnými bitcoiny!\nZap Android je v počáteční fázi vývoje. Můžete ztratit finanční prostředky!\n\nPokud toto riziko nechcete podstoupit, mezitím přepněte na testovací síť.</string>
     <string name="guardian_remoteConnect">Opravdu se chcete připojit k \n\n%1$s\n\nProsím pečlivě zkontrolujte název hostitele.</string>
     <string name="guardian_blockExplorer">Vyhledáním informací pomocí aplikace Block Explorer se vaše IP adresa odhalí. Pokud chcete zvýšit anonymitu, neměli byste ji používat, nebo přejděte na nastavení a vyberte Průzkumník bloků, který podporuje Tor.</string>
     <string name="guardian_oldLndVersion_remote">Aktualizujte prosím.\n\nUzel, ke kterému jste připojeni, používá starou verzi LND. Verze pod %1$s již nejsou aktivně podporovány.</string>
@@ -287,6 +286,7 @@
     <string name="error_payment_insufficient_balance">Částka k zaplacení je větší než to, co můžete poslat přes lightning se svými současnými otevřenými kanály.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Ujistěte se, že příjemce povolil funkci keyend.</string>
     <string name="error_only_payment_data_allowed">Zde jsou povoleny pouze údaje o platbě.</string>
+    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuta</item>
         <item quantity="few">%d Minuty</item>

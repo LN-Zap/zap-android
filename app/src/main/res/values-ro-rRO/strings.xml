@@ -109,6 +109,7 @@
     <string name="activity_manage_contacts_send_mode">Send to…</string>
     <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
     <string name="activity_contact_details">Contact Details</string>
+    <string name="activity_manual_setup">Connection Data</string>
     <string name="navigation_wallet">Portofel</string>
     <string name="navigation_history">Istorie</string>
     <string name="navigation_settings">Setări</string>
@@ -190,8 +191,6 @@
     <string name="guardian_disableScreenProtection">Dacă permiți înregistrarea ecranului, softuri răutăcioase ar putea să înregistreze un clip video sau să facă poze în timp de utilizezi Zap. Recomandăm să dezactivezi aceasta doar atunci când dorești să înregistrezi un clip video sau să faci o captură de ecran.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Ești pe cale să plătești %1$s%% pentru taxe de rețea.\n\nSoluții posibile:\n- încearcă o plată Lightning în schimb\n- selectează o plată mai mică, vei aștepta mai mult\n- încearcă mai târziu\n- tranzacționează o sumă mai mare\n\nDorești să continui oricum?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Ai cerut o sumă în fiat, însă informațiile despre rata de schimb sunt vechi (obținute cu %1$s ore în urmă).\nAsigură-te că ai o conexiune la internet sau consideră să primești direct în Bitcoin.\n\nDorești să continui oricum?</string>
-    <string name="guardian_tooMuchMoney">Felicitări, se pare că ai o grămadă bună de Bitcoin!\nTine minte că Zap este un Hot Wallet.\nNe stăruim să ținem acest portofel sigur, însă pentru securitatea ta, îți recomandăm să utilizezi Cold Wallets sau Hardware Wallets pentru a-ți păstra economiile semnificative.</string>
-    <string name="guardian_notReadyForMainnet">Ești pe MAINNET cu Bitcoin adevărat!\nZap Android este în fază timpurie de dezvoltare. Ai putea să pierzi bani!\n\nDacă nu dorești să-ți asumi acest risc, treci pe testnet între timp.</string>
     <string name="guardian_remoteConnect">Ești sigur că dorești să te conectezi la \n\n%1$s\n\nVerifică atent numele de gazdă.</string>
     <string name="guardian_blockExplorer">Atunci când cauți informații cu un Block Explorer adresa ta IP este expusă. Dacă dorești să-ți mărești anonimitatea nu utiliza această funcție sau alege un Block Explorer care suportă Tor.</string>
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
@@ -287,6 +286,7 @@
     <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
+    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minut</item>
         <item quantity="few">%d Minute</item>
