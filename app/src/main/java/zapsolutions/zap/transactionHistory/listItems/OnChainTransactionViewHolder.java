@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.view.View;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.util.Wallet;
 
 
@@ -58,7 +59,12 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     // Doing it this way looks nicer than having 0 for amount and the fee in small.
                     setAmount(fee * -1, true);
                     setPrimaryDescription(mContext.getString(R.string.opened_channel));
-                    String aliasOpened = Wallet.getInstance().getNodeAliasFromChannelTransaction(onChainTransactionItem.getOnChainTransaction(), mContext);
+                    String aliasOpened;
+                    if (ContactsManager.getInstance().doesContactExist(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()))) {
+                        aliasOpened = ContactsManager.getInstance().getNameByNodePubKey(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
+                    } else {
+                        aliasOpened = Wallet.getInstance().getNodeAliasFromChannelTransaction(onChainTransactionItem.getOnChainTransaction(), mContext);
+                    }
                     setSecondaryDescription(aliasOpened, true);
                     break;
             }

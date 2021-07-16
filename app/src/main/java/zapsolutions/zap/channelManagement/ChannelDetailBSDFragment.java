@@ -25,6 +25,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import zapsolutions.zap.R;
+import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
 import zapsolutions.zap.customView.BSDScrollableMainView;
@@ -142,7 +143,11 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
 
     private void bindOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
         Channel channel = Channel.parseFrom(channelString);
-        mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(channel.getRemotePubkey(), getContext()));
+        if (ContactsManager.getInstance().doesContactExist(channel.getRemotePubkey())) {
+            mNodeAlias.setText(ContactsManager.getInstance().getNameByNodePubKey(channel.getRemotePubkey()));
+        } else {
+            mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(channel.getRemotePubkey(), getContext()));
+        }
         mRemotePubKey.setText(channel.getRemotePubkey());
         mFundingTx.setText(channel.getChannelPoint().substring(0, channel.getChannelPoint().indexOf(':')));
 
@@ -212,7 +217,11 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
     }
 
     private void setBasicInformation(@NonNull String remoteNodePublicKey, @NonNull String remotePubKey, int statusDot, @NonNull String channelPoint) {
-        mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(remoteNodePublicKey, getContext()));
+        if (ContactsManager.getInstance().doesContactExist(remoteNodePublicKey)) {
+            mNodeAlias.setText(ContactsManager.getInstance().getNameByNodePubKey(remoteNodePublicKey));
+        } else {
+            mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(remoteNodePublicKey, getContext()));
+        }
         mRemotePubKey.setText(remotePubKey);
         mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), statusDot)));
         mFundingTx.setText(channelPoint.substring(0, channelPoint.indexOf(':')));
