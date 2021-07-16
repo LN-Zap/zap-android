@@ -109,6 +109,7 @@
     <string name="activity_manage_contacts_send_mode">Send to…</string>
     <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
     <string name="activity_contact_details">Contact Details</string>
+    <string name="activity_manual_setup">Connection Data</string>
     <string name="navigation_wallet">Гаманець</string>
     <string name="navigation_history">Історія</string>
     <string name="navigation_settings">Налаштування</string>
@@ -190,8 +191,6 @@
     <string name="guardian_disableScreenProtection">Якщо ви дозволите запис екрану, шкідливе програмне забезпечення може бути здатний записувати відео або робити скріншоти під час використання Zap. Ми рекомендуємо відключити це тільки в той час, коли ви хочете записати відео або зробити скріншот.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Ви збираєтесь платити%1$s%% комісію за мережу.\n\nМожливі рішення:\n- спробуйте lightning платіж замість \n- виберіть меншу плату, довше зачекайте\n- спробуйте пізніше\n- перевірте більшу кількість\n\nВи бажаєте продовжити?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Ви запитували суму як фіатну вартість, але ваші дані обмінного курсу старі (отримані %1$s годин тому).\nПереконайтесь, що у вас є підключення до Інтернету, або розглядайте запит безпосередньо в Bitcoin.\n\nВи все-таки хочете продовжувати?</string>
-    <string name="guardian_tooMuchMoney">Вітаємо, у вас, здається, є гарний стек Bitcoin!\nЗауважте, що Zap - це гарячий гаманець.\nМи робимо все можливе, щоб цей гаманець був захищеним, але задля власної безпеки радимо розглянути «Холодні гаманці» або «Гаманці обладнання», щоб зберігати основні заощадження.</string>
-    <string name="guardian_notReadyForMainnet">Ви в\n ГОЛОВНІЙ МЕРЕЖІ зі справжніми біткойнами!\nZap Android знаходиться на стадії ранньої розробки. Ви можете втратити кошти!\n\nЯкщо ви не хочете ризикувати, перейдіть до т естової мережі.</string>
     <string name="guardian_remoteConnect">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nБудь ласка, уважно перевірте ім\'я хоста.</string>
     <string name="guardian_blockExplorer">Переглядаючи інформацію за допомогою диспетчера блоків, ваш IP-адреса розкривається. Якщо ви хочете збільшити свою анонімність, вам слід або не використовувати її, або перейти до налаштувань і вибрати Блочний Дослідник, який підтримує Тог.</string>
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
@@ -287,6 +286,7 @@
     <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
+    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d хвилина</item>
         <item quantity="few">%d хвилин</item>

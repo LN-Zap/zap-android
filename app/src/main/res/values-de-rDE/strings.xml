@@ -109,6 +109,7 @@
     <string name="activity_manage_contacts_send_mode">Senden an…</string>
     <string name="activity_manage_contacts_open_channel_mode">Kanal öffnen mit…</string>
     <string name="activity_contact_details">Kontaktdetails</string>
+    <string name="activity_manual_setup">Connection Data</string>
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Verlauf</string>
     <string name="navigation_settings">Einstellungen</string>
@@ -190,8 +191,6 @@
     <string name="guardian_disableScreenProtection">Wenn du Bildschirmaufnahmen ermöglichst, könnte bösartige Software unbemerkt Videos oder Screenshots aufnehmen, während du Zap nutzt. Wir empfehlen deshalb diese Funktion nur dann vorübergehend zu deaktivieren, wenn du selbst ein Video oder Screenshot aufnehmen möchtest.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Du wirst %1$s%% als Netzwerkgebühr bezahlen, wenn du fortfährst.\n\nMögliche Lösungen:\n- Zahle mit dem Lightning Netzwerk\n- Wähle eine niedrigere Gebühr und warte länger\n- Versuche es später nochaml\n- Sende einen größeren Betrag\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Du hast einen Fiat Betrag angefordert, aber dein Umrechnungskurs ist nicht mehr aktuell. (Zuletzt aktualisiert vor %1$s Stunden)\nStelle sicher, dass du eine Internetverbindung hast, oder fordere den Betrag direkt in Bitcoin an.\n\nMöchtest du trotzdem fortfahren?</string>
-    <string name="guardian_tooMuchMoney">Glückwunsch, du scheinst eine menge Bitcoin zu haben!\nBitte denk daran, dass Zap eine Hot-Wallet ist.\nWir geben unser Bestes, diese Wallet sicher zu halten.\nTrotzdem empfehlen wir für den Großteil deines Vermögens Cold-Wallets oder Hardware-Wallets in Betracht zu ziehen.</string>
-    <string name="guardian_notReadyForMainnet">Du bist mit dem MAINNET verbunden!\nZap Android is noch in einer frühen Entwicklungsphase. Du könntest echtes Geld verlieren!\n\nFalls du dieses Risiko nicht auf dich nehmen willst, wechsle solange ins Testnet.</string>
     <string name="guardian_remoteConnect">Willst du eine Verbindung mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
     <string name="guardian_blockExplorer">Durch die Verwendung eines Block-Explorers wird deine IP-Adresse für die Betreiber sichtbar. Wenn du deine Anonymität erhöhen möchtest, solltest du dieses Funktion entweder nicht nutzen, oder in den Einstellungen einen Block-Explorer auswählen, der Tor unterstütz.</string>
     <string name="guardian_oldLndVersion_remote">Bitte aktualisieren.\n\nDie Node mit der du verbunden bist, führt eine alte Version von LND aus. Versionen, die älter sind als %1$s, werden nicht mehr aktiv unterstützt.</string>
@@ -287,6 +286,7 @@
     <string name="error_payment_insufficient_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Bitte stelle sicher, dass der Empfänger die \"Keysend\" Funktion aktiviert hat.</string>
     <string name="error_only_payment_data_allowed">Nur Zahlungsdaten sind hier erlaubt.</string>
+    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>
@@ -342,7 +342,7 @@
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und Zap wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.\nBenutze nur dann private Kanäle, wenn dein Knoten auf einem mobilen Gerät läuft, oder wenn er regelmäßig offline ist.</string>
-    <string name="help_dialog_identity">Das ist deine Identität im Lighting Netzwerk.\n\nWenn du auf den Avatar tippst, wird dir ein QR-Code angezeigt.\nAndere können diesen Code scannen und dich zu ihren Kontakten hinzufügen, Kanäle mit dir öffenen, oder dir Geld senden.\n\nDieser Avatar ist einzigartig.\nEr wurde automatisch basierend auf deinem öffentlichen Schlüssel generiert und kann nicht geändert werden.</string>
+    <string name="help_dialog_identity">Das ist deine Identität im Lighting Netzwerk.\n\nWenn du auf den Avatar tippst, wird dir ein QR-Code angezeigt.\nAndere können diesen Code scannen und dich zu ihren Kontakten hinzufügen, Kanäle mit dir öffnen, oder dir Geld senden.\n\nDieser Avatar ist einzigartig.\nEr wurde automatisch basierend auf deinem öffentlichen Schlüssel generiert und kann nicht geändert werden.</string>
     <string name="wallet_name">Name der Wallet</string>
     <string name="delete">Löschen</string>
     <string name="rename">Umbenennen</string>

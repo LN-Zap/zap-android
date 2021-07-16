@@ -109,6 +109,7 @@
     <string name="activity_manage_contacts_send_mode">Manda a…</string>
     <string name="activity_manage_contacts_open_channel_mode">Apri canale con…</string>
     <string name="activity_contact_details">Dettagli di contatto</string>
+    <string name="activity_manual_setup">Connection Data</string>
     <string name="navigation_wallet">Portafogli</string>
     <string name="navigation_history">Storico</string>
     <string name="navigation_settings">Impostazioni</string>
@@ -190,8 +191,6 @@
     <string name="guardian_disableScreenProtection">Consentendo la registrazione dello schermo, software malevoli potrebbero essere in grado di registrare un video o effettuare screenshot mentre utilizzi Zap. Raccomandiamo di disattivarlo solo mentre vuoi registrare un video o effettuare uno screenshot.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Stai per pagare %1$s%% in tasse di network.\n\nSoluzioni possibili:\n\n- prova un pagamento lightning\n- seleziona tasse minori, attendi di più\n- prova di nuovo più tardi\n- effettua una transazione maggiore\n\nVuoi continuare comunque?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Hai richiesto un importo in valuta fiat, ma i dati sul tasso di cambio non sono aggiornati (recuperate %1$s ore fa).\nAssicurati di essere connesso ad internet o considera di richiedere direttamente in Bitcoin.\n\nVuoi continuare comunque?</string>
-    <string name="guardian_tooMuchMoney">Complimenti, sembra che tu abbia una bella pila di Bitcoin!\nTieni presente che Zap è un Hot Wallet.\nFacciamo del nostro meglio per mantenere sicuro questo portafoglio, ma per motivi di sicurezza, ti consigliamo di prendere in considerazione Hardware o Cold Wallet per conservare i tuoi maggiori risparmi.</string>
-    <string name="guardian_notReadyForMainnet">Sei sulla MAINNET con dei veri Bitcoin!\nZap Android è in fase di sviluppo iniziale. Potresti perdere fondi!\n\nSe non vuoi correre questo rischio, nel frattempo passa alla testnet.</string>
     <string name="guardian_remoteConnect">Sei sicuro di voler connetterti a \n\n%1$s\n\n Controlla attentamente il nome host.</string>
     <string name="guardian_blockExplorer">Cercando le informazioni con un Block Explorer, il tuo indirizzo IP viene scoperto. Se vuoi aumentare il tuo anonimato, non dovresti usarlo o andare alle impostazioni e scegliere un Block Explorer che supporti Tor.</string>
     <string name="guardian_oldLndVersion_remote">Per favore Aggiornare.\n\nIl nodo a cui sei connesso esegue una vecchia versione di LND. Le versioni sotto %1$s non sono più supportate.</string>
@@ -234,7 +233,7 @@
     <string name="settings_lnPrivateChannelHints">Includi suggerimenti di percorso per i canali privati nelle fatture</string>
     <string name="error">Errore</string>
     <string name="error_blockExplorer_title">Esplora Blocchi</string>
-    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Nome del block explorer selezionato block, %2$s: 'mainnet' or 'testnet'">"Hai selezionato un block explorer (%1$s) che non supporta %2$s. \nVa' in impostazioni e scegli un altro block explorer per continuare."</string>
+    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Hai selezionato un block explorer (%1$s) che non supporta %2$s. \nVa' in impostazioni e scegli un altro block explorer per continuare."</string>
     <string name="error_notAPaymentRequest">Infomazione di pagamento non valida.\n\nUsa un indirizzo Bitcoin o una richiesta di pagamento Lightning per avviare un pagamento.</string>
     <string name="error_paymentRequestExpired">Questa richiesta di pagamento è scaduta.</string>
     <string name="error_useTestnetRequest">Sei connesso alla TESTNET. Utilizza indirizzi TESTNET o richieste di pagamento.</string>
@@ -287,6 +286,7 @@
     <string name="error_payment_insufficient_balance">L\' importo da pagare &#232; maggiore di quello che puoi inviare tramite il lightning con i tuoi attuali canali aperti.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Assicurati che il destinatario abbia abilitato la funzione keyend.</string>
     <string name="error_only_payment_data_allowed">Qui sono consentiti solo i dati di pagamento.</string>
+    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuto</item>
         <item quantity="other">%d Minuti</item>

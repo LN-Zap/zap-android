@@ -109,6 +109,7 @@
     <string name="activity_manage_contacts_send_mode">Send to…</string>
     <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
     <string name="activity_contact_details">Contact Details</string>
+    <string name="activity_manual_setup">Connection Data</string>
     <string name="navigation_wallet">Portefeuille</string>
     <string name="navigation_history">Historique</string>
     <string name="navigation_settings">Réglages</string>
@@ -190,8 +191,6 @@
     <string name="guardian_disableScreenProtection">Si vous autorisez les captures d\'écran, des logiciels malicieux pourraient avoir la possibilité d\'enregistrer votre utilisation de Zap. Nous vous recommandons de désactiver cette option uniquement lorsque vous souhaitez prendre une capture d\'écran.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Vous êtes sur le point de payer %1$s%% en frais.\n\nSolutions possibles :\n- essayer un paiement Lightning à la place\n- sélectionner un frais moins élevé et attendre plus longtemps\n- réessayer plus tard\n- envoyer un plus gros montant\n\nVoulez-vous continuer malgré cela ?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Vous avez demandé un montant en valeur fiduciaire, mais votre taux de change est ancien (récupéré il y a %1$s heures).\nAssurez-vous d\'être connecté à Internet ou essayez de demander un montant en Bitcoin.\n\nVoulez-vous continuer malgré cela ?</string>
-    <string name="guardian_tooMuchMoney">Félicitations, vous semblez avoir accumulé un bon pactole !\nGardez cependant en tête que Zap est un hot wallet.\nNous faisons de notre mieux pour garantir l\'intégrité de votre portefeuille, mais pour votre propre sécurité, nous vous recommandons d\'utiliser un hardware wallet pour stocker vos économies conséquentes.</string>
-    <string name="guardian_notReadyForMainnet">Vous êtes sur le réseau Mainnet, avec de vrais bitcoin !\nZap Android est en phase de développement précoce, vous risquez de perdre des fonds !\n\nSi vous ne souhaitez pas prendre ce risque, basculez sur le réseau Testnet à la place.</string>
     <string name="guardian_remoteConnect">Êtes-vous sûr de vouloir vous connecter à \n\n%1$s\n\nVeuillez vérifier cet hôte avec prudence.</string>
     <string name="guardian_blockExplorer">En consultant des informations sur un explorateur de blocs, votre adresse IP est dévoilée. Si vous souhaitez préserver votre anonymat, vous ne devriez par en utiliser un, ou en utiliser un qui prend en charge Tor.</string>
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
@@ -287,6 +286,7 @@
     <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
+    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
