@@ -33,7 +33,8 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
 
     private static final String LOG_TAG = GeneratedRequestActivity.class.getName();
 
-    private String mDataToEncode;
+    private String mDataToEncodeInQRCode;
+    private String mDataToCopyOrShare;
     private boolean mOnChain;
     private String mAddress;
     private String mMemo;
@@ -84,17 +85,23 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
 
 
             // Generate on-chain request data to encode
-            mDataToEncode = InvoiceUtil.generateBitcoinInvoice(mAddress, mAmount, mMemo, null);
+            mDataToEncodeInQRCode = InvoiceUtil.generateBitcoinInvoice(mAddress, mAmount, mMemo, null);
+            if ((mAmount.isEmpty() || mAmount.equals("") || mAmount.equals("0")) && (mMemo.isEmpty() || mMemo.equals(""))) {
+                mDataToCopyOrShare = mAddress;
+            } else {
+                mDataToCopyOrShare = mDataToEncodeInQRCode;
+            }
 
         } else {
             // Generate lightning request data to encode
-            mDataToEncode = UriUtil.generateLightningUri(mLnInvoice);
+            mDataToEncodeInQRCode = UriUtil.generateLightningUri(mLnInvoice);
+            mDataToCopyOrShare = mDataToEncodeInQRCode;
         }
 
 
         // Generate "QR-Code"
         Bitmap bmpQRCode = QRCode
-                .from(mDataToEncode)
+                .from(mDataToEncodeInQRCode)
                 .withSize(750, 750)
                 .withErrorCorrection(ErrorCorrectionLevel.L)
                 .bitmap();
@@ -107,7 +114,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             public boolean onLongClick(View v) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(GeneratedRequestActivity.this)
                         .setTitle(R.string.details)
-                        .setMessage(mDataToEncode)
+                        .setMessage(mDataToEncodeInQRCode)
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -131,7 +138,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             public void onClick(View v) {
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, mDataToEncode);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mDataToCopyOrShare);
                 shareIntent.setType("text/plain");
                 String title = getResources().getString(R.string.shareDialogTitle);
                 startActivity(Intent.createChooser(shareIntent, title));
@@ -145,7 +152,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             public void onClick(View v) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(GeneratedRequestActivity.this)
                         .setTitle(R.string.details)
-                        .setMessage(mDataToEncode)
+                        .setMessage(mDataToEncodeInQRCode)
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -168,8 +175,8 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
                 // Ask user to confirm risks about clipboard manipulation
                 new UserGuardian(GeneratedRequestActivity.this, () -> {
                     // Copy data to clipboard
-                    ClipBoardUtil.copyToClipboard(getApplicationContext(), "Address", mDataToEncode);
-                }).securityCopyToClipboard(mDataToEncode, mOnChain ? UserGuardian.CLIPBOARD_DATA_TYPE_ONCHAIN : UserGuardian.CLIPBOARD_DATA_TYPE_LIGHTNING);
+                    ClipBoardUtil.copyToClipboard(getApplicationContext(), "Request", mDataToCopyOrShare);
+                }).securityCopyToClipboard(mDataToCopyOrShare, mOnChain ? UserGuardian.CLIPBOARD_DATA_TYPE_ONCHAIN : UserGuardian.CLIPBOARD_DATA_TYPE_LIGHTNING);
             }
         });
 
