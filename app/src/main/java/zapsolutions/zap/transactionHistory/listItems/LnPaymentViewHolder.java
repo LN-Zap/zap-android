@@ -1,6 +1,5 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
-import android.content.SharedPreferences;
 import android.view.View;
 
 import com.github.lightningnetwork.lnd.lnrpc.Hop;
@@ -56,9 +55,8 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("firstCurrencyIsPrimary")) {
-            bindLnPaymentItem(mLnPaymentItem);
-        }
+    public void refreshViewHolder() {
+        bindLnPaymentItem(mLnPaymentItem);
+        super.refreshViewHolder();
     }
 }

@@ -812,8 +812,8 @@ public class Wallet {
 
             compositeDisposable.add(Observable.range(0, channelNodesList.size())
                     .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
-                    .doOnNext(integer -> fetchNodeInfoFromLND(channelNodesList.get(integer)))
-                    .doOnComplete(this::broadcastChannelsUpdated).subscribe());
+                    .doOnNext(integer -> fetchNodeInfoFromLND(channelNodesList.get(integer), integer == channelNodesList.size() - 1))
+                    .subscribe());
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
@@ -835,7 +835,7 @@ public class Wallet {
      *
      * @param pubkey
      */
-    public void fetchNodeInfoFromLND(String pubkey) {
+    public void fetchNodeInfoFromLND(String pubkey, boolean broadcastChannelUpdate) {
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(pubkey)
                 .build();
@@ -845,6 +845,10 @@ public class Wallet {
                 .subscribe(nodeInfo -> {
                     ZapLog.v(LOG_TAG, "Fetched Node info from " + nodeInfo.getNode().getAlias());
                     mNodeInfos.add(nodeInfo);
+
+                    if (broadcastChannelUpdate) {
+                        broadcastChannelsUpdated();
+                    }
                 }, throwable -> ZapLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage())));
     }
 
