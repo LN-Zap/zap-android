@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.github.lightningnetwork.lnd.lnrpc.Hop;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
@@ -37,6 +38,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.HistoryItemViewHolder;
 import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
@@ -462,13 +464,33 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
             String text;
             switch (item.getType()) {
                 case HistoryListItem.TYPE_LN_INVOICE:
-                    text = ((LnInvoiceItem) item).getInvoice().getMemo() + MonetaryUtil.getInstance().getPrimaryDisplayAmount(((LnInvoiceItem) item).getInvoice().getValue());
+                    String invoiceMemo = ((LnInvoiceItem) item).getInvoice().getMemo();
+                    String invoiceAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((LnInvoiceItem) item).getInvoice().getValue());
+                    text = invoiceMemo + invoiceAmount;
                     break;
                 case HistoryListItem.TYPE_LN_PAYMENT:
-                    text = ((LnPaymentItem) item).getMemo() + MonetaryUtil.getInstance().getPrimaryDisplayAmount(((LnPaymentItem) item).getPayment().getValueSat());
+                    String paymentMemo = ((LnPaymentItem) item).getMemo();
+                    String paymentAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((LnPaymentItem) item).getPayment().getValueSat());
+
+                    Hop lastHop = ((LnPaymentItem) item).getPayment().getHtlcs(0).getRoute().getHops(((LnPaymentItem) item).getPayment().getHtlcs(0).getRoute().getHopsCount() - 1);
+                    String payeePubKey = lastHop.getPubKey();
+                    String payeeName = "";
+                    if (ContactsManager.getInstance().doesContactExist(payeePubKey)) {
+                        payeeName = ContactsManager.getInstance().getNameByNodePubKey(payeePubKey);
+                    }
+                    text = paymentMemo + paymentAmount + payeeName;
                     break;
                 case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
-                    text = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
+                    String transactionAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
+                    // Searching for the nodeNames will probably have bad performance when there are a lot of Channels, Contacts & Transactions.
+                    String nodePubKey = Wallet.getInstance().getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
+                    String nodeName;
+                    if (ContactsManager.getInstance().doesContactExist(nodePubKey)) {
+                        nodeName = ContactsManager.getInstance().getNameByNodePubKey(nodePubKey);
+                    } else {
+                        nodeName = Wallet.getInstance().getNodeAliasFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction(), getContext());
+                    }
+                    text = transactionAmount + nodeName;
                     break;
                 default:
                     text = "";
