@@ -1,6 +1,5 @@
 package zapsolutions.zap.transactionHistory.listItems;
 
-import android.content.SharedPreferences;
 import android.view.View;
 
 import zapsolutions.zap.R;
@@ -83,9 +82,8 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("firstCurrencyIsPrimary")) {
-            bindLnInvoiceItem(mLnInvoiceItem);
-        }
+    public void refreshViewHolder() {
+        bindLnInvoiceItem(mLnInvoiceItem);
+        super.refreshViewHolder();
     }
 }

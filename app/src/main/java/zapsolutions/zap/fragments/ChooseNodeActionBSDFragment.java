@@ -54,7 +54,7 @@ public class ChooseNodeActionBSDFragment extends ZapBSDFragment {
         bsdScrollableMainView.setTitle(R.string.choose_action);
 
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-            Wallet.getInstance().fetchNodeInfoFromLND(mNodeUri.getPubKey());
+            Wallet.getInstance().fetchNodeInfoFromLND(mNodeUri.getPubKey(), false);
         }
 
         // Check if this node is already a contact.

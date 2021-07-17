@@ -3,6 +3,7 @@ package zapsolutions.zap.transactionHistory;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
+import zapsolutions.zap.transactionHistory.listItems.HistoryItemViewHolder;
 import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
 import zapsolutions.zap.transactionHistory.listItems.LnInvoiceItem;
 import zapsolutions.zap.transactionHistory.listItems.LnPaymentItem;
@@ -53,7 +55,7 @@ import zapsolutions.zap.util.ZapLog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, Wallet.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getName();
 
@@ -145,6 +147,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Register listeners
         Wallet.getInstance().registerHistoryListener(this);
         Wallet.getInstance().registerInvoiceSubscriptionListener(this);
+        Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
+        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
 
         // use a linear layout manager
@@ -216,17 +220,16 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
             }
         });
 
-
         return view;
     }
 
     @Override
     public void onDestroyView() {
         mCompositeDisposable.dispose();
-
         super.onDestroyView();
     }
 
+    // This method is used if the data set of the list changed. E.g. new transactions appeared, etc.
     public void updateHistoryDisplayList() {
 
         // Save state, we want to keep the scroll offset after the update.
@@ -330,6 +333,24 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
     }
 
+    // The redraw method is used to redraw the view holders on an unchanged data set
+    // This is for example important if we want to change the displayed currency or when we have new information about node names that we didn't have before.
+    public void redrawHistoryList() {
+
+        // Redraw all view Holders visible on the screen.
+        for (int i = 0; i < mRecyclerView.getAdapter().getItemCount(); i++) {
+            HistoryItemViewHolder holder = (HistoryItemViewHolder) mRecyclerView.findViewHolderForAdapterPosition(i);
+            if (holder != null) {
+                holder.refreshViewHolder();
+            }
+        }
+
+        // Flush the cached items that are not currently visible on the screen as these were not redrawn by the function above.
+        // The cache is activated again to keep good performance.
+        mRecyclerView.setItemViewCacheSize(-1); // setting to 0 still left one not redrawn. -1 actually works.
+        mRecyclerView.setItemViewCacheSize(2); // 2 is the default value
+    }
+
     public void resetHistoryFragment() {
         mHistoryItems.clear();
         mAdapter.notifyDataSetChanged();
@@ -355,12 +376,15 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         // Unregister listeners
         Wallet.getInstance().unregisterHistoryListener(this);
         Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
+        Wallet.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
+        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onRefresh() {
         if (WalletConfigsManager.getInstance().hasAnyConfigs() && Wallet.getInstance().isInfoFetched()) {
             Wallet.getInstance().fetchLNDTransactionHistory();
+            redrawHistoryList();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -465,4 +489,15 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         return filteredItemList;
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("firstCurrencyIsPrimary")) {
+            redrawHistoryList();
+        }
+    }
+
+    @Override
+    public void onChannelsUpdated() {
+        redrawHistoryList();
+    }
 }

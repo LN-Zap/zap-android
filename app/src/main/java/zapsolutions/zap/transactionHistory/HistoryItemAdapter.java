@@ -14,7 +14,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.DateLineViewHolder;
-import zapsolutions.zap.transactionHistory.listItems.HistoryItemViewHolder;
 import zapsolutions.zap.transactionHistory.listItems.HistoryListItem;
 import zapsolutions.zap.transactionHistory.listItems.LnInvoiceItem;
 import zapsolutions.zap.transactionHistory.listItems.LnInvoiceViewHolder;
@@ -128,22 +127,6 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             default:
                 throw new IllegalStateException("Unknown history list item type: " + type);
         }
-    }
-
-    @Override
-    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
-        if (holder instanceof HistoryItemViewHolder) {
-            ((HistoryItemViewHolder) holder).registerPrefListener();
-        }
-        super.onViewAttachedToWindow(holder);
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
-        if (holder instanceof HistoryItemViewHolder) {
-            ((HistoryItemViewHolder) holder).unregisterPrefListener();
-        }
-        super.onViewDetachedFromWindow(holder);
     }
 
     public void replaceAll(List<HistoryListItem> items) {
