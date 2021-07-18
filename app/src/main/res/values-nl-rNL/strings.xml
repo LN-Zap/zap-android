@@ -97,6 +97,7 @@
     <string name="confirmations">Bevestigingen</string>
     <string name="maximum_abbreviation">max</string>
     <string name="send">Verzend</string>
+    <string name="notConnected">Not connected</string>
     <string name="activity_receive">Ontvang</string>
     <string name="activity_send">Betaal</string>
     <string name="activity_connectRemoteNode">Verbind met externe node</string>
@@ -380,7 +381,6 @@
     <string name="drawer_menu_contacts">Contacten</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Koop bitcoin</string>
-    <string name="drawer_no_wallet">Geen Wallet</string>
     <string name="support_contribute_description">Help Zap verbeteren.</string>
     <string name="support_issue_description">Bug gevonden? Laat het ons weten!</string>
     <string name="support_privacy_description">We geven om je privacy.</string>

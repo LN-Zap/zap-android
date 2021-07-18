@@ -97,6 +97,7 @@
     <string name="confirmations">Potvrzení</string>
     <string name="maximum_abbreviation">max</string>
     <string name="send">Odeslat</string>
+    <string name="notConnected">Not connected</string>
     <string name="activity_receive">Příjmout</string>
     <string name="activity_send">Zaplatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
@@ -392,7 +393,6 @@
     <string name="drawer_menu_contacts">Kontakty</string>
     <string name="drawer_menu_backup">Záloha</string>
     <string name="drawer_menu_buy">Koupit bitcoiny</string>
-    <string name="drawer_no_wallet">Žádná peněženka</string>
     <string name="support_contribute_description">Pomozte vylepšit Zap.</string>
     <string name="support_issue_description">Našli jste chybu? Dej nám vědět!</string>
     <string name="support_privacy_description">Záleží nám na vašem soukromí.</string>
