@@ -97,6 +97,7 @@
     <string name="confirmations">Bestätigungen</string>
     <string name="maximum_abbreviation">max</string>
     <string name="send">Senden</string>
+    <string name="notConnected">Not connected</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -380,7 +381,6 @@
     <string name="drawer_menu_contacts">Kontakte</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Bitcoin kaufen</string>
-    <string name="drawer_no_wallet">Keine Wallet</string>
     <string name="support_contribute_description">Hilf mit Zap zu verbessern.</string>
     <string name="support_issue_description">Du hast einen Fehler gefunden? Lass es uns wissen!</string>
     <string name="support_privacy_description">Uns ist deine Privatsphäre wichtig.</string>

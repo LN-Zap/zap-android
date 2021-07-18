@@ -118,7 +118,7 @@ public class Wallet {
     private boolean mUpdatingHistory = false;
     private Network mNetwork;
     private boolean mConnectionCheckInProgress = false;
-    private String mLNDVersionString = "not connected";
+    private String mLNDVersionString;
     private Handler mHandler = new Handler();
     private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
     private DebounceHandler mBalancesDebounceHandler = new DebounceHandler();
@@ -173,7 +173,6 @@ public class Wallet {
         mNetwork = null;
         mIdentityPubKey = null;
         mNodeUris = null;
-        mLNDVersionString = "not connected";
         mHandler.removeCallbacksAndMessages(null);
         App.getAppContext().connectionToLNDEstablished = false;
         mChannelsUpdateDebounceHandler.shutdown();
@@ -1276,7 +1275,11 @@ public class Wallet {
     }
 
     public String getLNDVersionString() {
-        return mLNDVersionString;
+        if (isConnectedToLND()) {
+            return mLNDVersionString;
+        } else {
+            return App.getAppContext().getString(R.string.notConnected);
+        }
     }
 
     public Version getLNDVersion() {

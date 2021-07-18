@@ -97,6 +97,7 @@
     <string name="confirmations">Потвърждения</string>
     <string name="maximum_abbreviation">max</string>
     <string name="send">Send</string>
+    <string name="notConnected">Not connected</string>
     <string name="activity_receive">Получаване</string>
     <string name="activity_send">Изпращане</string>
     <string name="activity_connectRemoteNode">Свързване с отдалечен нод</string>
@@ -380,7 +381,6 @@
     <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Резерв.Копие</string>
     <string name="drawer_menu_buy">Купете Биткойн</string>
-    <string name="drawer_no_wallet">Няма портфейли</string>
     <string name="support_contribute_description">Помогнете за подобряването на Zap.</string>
     <string name="support_issue_description">Намерихте бъг? Кажете ни!</string>
     <string name="support_privacy_description">Грижим се за Вашата поверителност.</string>

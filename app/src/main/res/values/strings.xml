@@ -101,6 +101,7 @@
     <string name="confirmations">Confirmations</string>
     <string name="maximum_abbreviation">max</string>
     <string name="send">Send</string>
+    <string name="notConnected">Not connected</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -431,7 +432,6 @@
     <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Buy Bitcoin</string>
-    <string name="drawer_no_wallet">No Wallet</string>
 
     <string name="support_contribute_description">Help improving Zap.</string>
     <string name="support_issue_description">Found a bug? Let us know!</string>
