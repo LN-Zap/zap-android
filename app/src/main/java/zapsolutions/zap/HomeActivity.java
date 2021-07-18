@@ -784,7 +784,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
         userAvatarView.reset();
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
-        userWalletName.setText(getResources().getString(R.string.drawer_no_wallet));
+        userWalletName.setText(getResources().getString(R.string.notConnected));
         TextView lndVersion = findViewById(R.id.lndVersion);
         String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
         lndVersion.setText(lndVersionString);
