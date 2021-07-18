@@ -267,7 +267,7 @@ public class LnUrlWithdrawBSDFragment extends ZapBSDFragment {
                 Invoice asyncInvoiceRequest = Invoice.newBuilder()
                         .setValue(value)
                         .setMemo(mWithdrawData.getDefaultDescription())
-                        .setExpiry(60L) // in seconds
+                        .setExpiry(300L) // in seconds
                         .setPrivate(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
                         .build();
 
