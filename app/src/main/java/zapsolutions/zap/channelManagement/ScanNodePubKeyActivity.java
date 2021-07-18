@@ -64,8 +64,9 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
         mAdapter = new LightningNodeRecyclerAdapter(suggestedLightningNodes, this);
         mRecyclerViewPeers.setAdapter(mAdapter);
 
-        setScannerRect(200);
-        getSuggestedPeers();
+        // The suggested nodes are disabled for now, as the list is not maintained
+        // setScannerRect(200);
+        // getSuggestedPeers();
     }
 
     public void getSuggestedPeers() {
