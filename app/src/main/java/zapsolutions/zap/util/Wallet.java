@@ -1294,6 +1294,10 @@ public class Wallet {
         return mConnectedToLND;
     }
 
+    public void setLNDAsDisconnected(){
+        mConnectedToLND = false;
+    }
+
     public String getIdentityPubKey() {
         return mIdentityPubKey;
     }
