@@ -34,6 +34,7 @@ import zapsolutions.zap.lnd.RemoteLndWalletKitService;
 import zapsolutions.zap.lnd.RemoteLndWalletUnlockerService;
 import zapsolutions.zap.lnd.RemoteLndWatchtowerClientService;
 import zapsolutions.zap.lnd.RemoteLndWatchtowerService;
+import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -194,6 +195,7 @@ public class LndConnection {
         try {
             if (mSecureChannel.shutdownNow().awaitTermination(1, TimeUnit.SECONDS)) {
                 ZapLog.d(LOG_TAG, "LND channel shutdown successfully...");
+                Wallet.getInstance().setLNDAsDisconnected();
             } else {
                 ZapLog.e(LOG_TAG, "LND channel shutdown failed...");
             }

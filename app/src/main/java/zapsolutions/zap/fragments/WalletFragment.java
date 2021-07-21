@@ -142,15 +142,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        // Update status dot
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-            mStatusDot.setVisibility(View.VISIBLE);
-            updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
-        } else {
-            mStatusDot.setVisibility(View.GONE);
-        }
-
-
         mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation arg0) {
@@ -439,6 +430,14 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     public void onResume() {
         super.onResume();
 
+        // Update status dot
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            mStatusDot.setVisibility(View.VISIBLE);
+            updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+        } else {
+            mStatusDot.setVisibility(View.GONE);
+        }
+
         // Register listeners
         if (!mPreferenceChangeListenerRegistered) {
             PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
@@ -528,7 +527,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
         } else {
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.lightningOrange)));
+            if ( Wallet.getInstance().isConnectedToLND()) {
+                mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superGreen)));
+
+            } else {
+                mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.lightningOrange)));
+            }
         }
     }
 
