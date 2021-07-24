@@ -190,8 +190,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             public void onPageSelected(int position) {
                 if (position == 0) {
                     // Close search on history fragment if we go to main fragment
-                    mPagerAdapter.getHistoryFragment().getSearchView().setQuery("", false);
-                    mPagerAdapter.getHistoryFragment().getSearchView().setIconified(true); // close the search editor and show search icon again
+                    if (mPagerAdapter != null && mPagerAdapter.getHistoryFragment() != null) {
+                        mPagerAdapter.getHistoryFragment().getSearchView().setQuery("", false);
+                        mPagerAdapter.getHistoryFragment().getSearchView().setIconified(true); // close the search editor and show search icon again
+                    }
                 }
             }
 
