@@ -813,6 +813,11 @@ public class Wallet {
                     .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
                     .doOnNext(integer -> fetchNodeInfoFromLND(channelNodesList.get(integer), integer == channelNodesList.size() - 1))
                     .subscribe());
+
+            if (channelNodesList.size() == 0) {
+                broadcastChannelsUpdated();
+            }
+
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
