@@ -3,20 +3,23 @@ package zapsolutions.zap.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
-
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.HttpClient;
+import zapsolutions.zap.connection.HttpClientOk;
 
 public class ExchangeRateUtil {
 
@@ -51,62 +54,94 @@ public class ExchangeRateUtil {
                 !PrefsUtil.getPrefs().contains(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)) {
 
             String provider = PrefsUtil.getPrefs().getString(PrefsUtil.EXCHANGE_RATE_PROVIDER, BLOCKCHAIN_INFO);
-            JsonObjectRequest request;
+
 
             switch (provider) {
                 case BLOCKCHAIN_INFO:
-                    request = getBlockchainInfoRequest();
+                    sendBlockchainInfoRequest();
                     break;
                 case COINBASE:
-                    request = getCoinbaseRequest();
+                    sendCoinbaseRequest();
                     break;
                 default:
-                    request = getBlockchainInfoRequest();
+                    sendBlockchainInfoRequest();
             }
 
-            if (request != null) {
-                // Adding request to request queue
-                HttpClient.getInstance().addToRequestQueue(request, "rateRequest");
-                ZapLog.v(LOG_TAG, "Exchange rate request initiated");
-            }
+            ZapLog.v(LOG_TAG, "Exchange rate request initiated");
         }
     }
 
 
     /**
-     * Creates a Request that fetches fiat exchange rate data from "blockchain.info".
+     * Creates and sends a request that fetches fiat exchange rate data from "blockchain.info".
      * When executed this request saves the result in shared preferences and
      * updates the currentCurrency of the MonetaryUtil Singleton.
-     *
-     * @return JsonObjectRequest
      */
-    private JsonObjectRequest getBlockchainInfoRequest() {
-        JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://blockchain.info/ticker", null,
-                response -> {
-                    ZapLog.v(LOG_TAG, "Received exchange rates from blockchain.info");
-                    JSONObject responseRates = parseBlockchainInfoResponse(response);
-                    applyExchangeRatesAndSaveInPreferences(responseRates);
-                }, error -> ZapLog.w(LOG_TAG, "Fetching exchange rates from blockchain.info failed"));
+    private void sendBlockchainInfoRequest() {
 
-        return rateRequest;
+        Request rateRequest = new Request.Builder()
+                .url("https://blockchain.info/ticker")
+                .build();
+
+        HttpClientOk.getInstance().getClient().newCall(rateRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                ZapLog.w(LOG_TAG, "Fetching exchange rates from blockchain.info failed");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                ZapLog.v(LOG_TAG, "Received exchange rates from blockchain.info");
+                String responseData = response.body().string();
+                JSONObject responseJson = null;
+                try {
+                    responseJson = new JSONObject(responseData);
+                } catch (JSONException e) {
+                    ZapLog.w(LOG_TAG, "blockchain.info response could not be parsed as json");
+                    e.printStackTrace();
+                }
+                if (responseJson != null) {
+                    JSONObject responseRates = parseBlockchainInfoResponse(responseJson);
+                    applyExchangeRatesAndSaveInPreferences(responseRates);
+                }
+            }
+        });
     }
 
     /**
-     * Creates a Request that fetches fiat exchange rate data from Coinbase.
+     * Creates and sends a request that fetches fiat exchange rate data from Coinbase.
      * When executed this request saves the result in shared preferences and
      * updates the currentCurrency of the MonetaryUtil Singleton.
-     *
-     * @return JsonObjectRequest
      */
-    private JsonObjectRequest getCoinbaseRequest() {
-        JsonObjectRequest rateRequest = new JsonObjectRequest(Request.Method.GET, "https://api.coinbase.com/v2/exchange-rates?currency=BTC", null,
-                response -> {
-                    ZapLog.v(LOG_TAG, "Received exchange rates from coinbase");
-                    JSONObject responseRates = parseCoinbaseResponse(response);
-                    applyExchangeRatesAndSaveInPreferences(removeNonFiat(responseRates));
-                }, error -> ZapLog.w(LOG_TAG, "Fetching exchange rates from coinbase failed"));
+    private void sendCoinbaseRequest() {
 
-        return rateRequest;
+        Request rateRequest = new Request.Builder()
+                .url("https://api.coinbase.com/v2/exchange-rates?currency=BTC")
+                .build();
+
+        HttpClientOk.getInstance().getClient().newCall(rateRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                ZapLog.w(LOG_TAG, "Fetching exchange rates from coinbase failed");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                ZapLog.v(LOG_TAG, "Received exchange rates from coinbase");
+                String responseData = response.body().string();
+                JSONObject responseJson = null;
+                try {
+                    responseJson = new JSONObject(responseData);
+                } catch (JSONException e) {
+                    ZapLog.w(LOG_TAG, "Coinbase response could not be parsed as json");
+                    e.printStackTrace();
+                }
+                if (responseJson != null) {
+                    JSONObject responseRates = parseCoinbaseResponse(responseJson);
+                    applyExchangeRatesAndSaveInPreferences(responseRates);
+                }
+            }
+        });
     }
 
     /**
