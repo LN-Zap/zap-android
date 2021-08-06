@@ -1,21 +1,17 @@
 package zapsolutions.zap.connection;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
-import zapsolutions.zap.baseClasses.App;
+import okhttp3.OkHttpClient;
 
 /**
  * Singleton to handle the volley http RequestQueue
  */
 public class HttpClient {
     private static HttpClient mHttpClientInstance;
-    private RequestQueue mRequestQueue;
+    private OkHttpClient mHttpClient;
 
 
     private HttpClient() {
-        mRequestQueue = Volley.newRequestQueue(App.getAppContext());
+        mHttpClient = new OkHttpClient();
     }
 
 
@@ -26,21 +22,7 @@ public class HttpClient {
         return mHttpClientInstance;
     }
 
-
-    public RequestQueue getRequestQueue() {
-        return mRequestQueue;
-    }
-
-
-    public <T> void addToRequestQueue(Request<T> req, String tag) {
-        req.setTag(tag);
-        getRequestQueue().add(req);
-    }
-
-
-    public void cancelPendingRequests(Object tag) {
-        if (mRequestQueue != null) {
-            mRequestQueue.cancelAll(tag);
-        }
+    public OkHttpClient getClient() {
+        return mHttpClient;
     }
 }

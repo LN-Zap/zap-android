@@ -3,6 +3,8 @@ package zapsolutions.zap.lnurl.channel;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
 import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
 import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
@@ -27,6 +26,9 @@ import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.google.gson.Gson;
 import com.google.protobuf.ByteString;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -34,6 +36,9 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
@@ -204,22 +209,41 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
 
         ZapLog.v(TAG, lnUrlFinalOpenChannelRequest.requestAsString());
 
-        StringRequest lnUrlRequest = new StringRequest(Request.Method.GET, lnUrlFinalOpenChannelRequest.requestAsString(),
-                response -> {
-                    ZapLog.v(TAG, response);
-                    validateFinalResponse(response);
-                },
-                error -> {
-                    ZapLog.e(TAG, "Final request failed");
-                    switchToFailedScreen("Final request failed");
+
+        okhttp3.Request lnUrlRequest = new okhttp3.Request.Builder()
+                .url(lnUrlFinalOpenChannelRequest.requestAsString())
+                .build();
+
+        HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
+            // We need to make sure the results are executed on the UI Thread to prevent crashes.
+            Handler threadHandler = new Handler(Looper.getMainLooper());
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                threadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ZapLog.e(TAG, "Final request failed");
+                        switchToFailedScreen("Final request failed");
+                    }
                 });
+            }
 
-        // Make sure this request is executed only once and it doesn't timeout to fast.
-        // If this is not done, then it can happen that Zap shows an error although everything was executed.
-        lnUrlRequest.setRetryPolicy(new DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        // Send final request to LNURL service
-        HttpClient.getInstance().addToRequestQueue(lnUrlRequest, "LnUrlFinalChannelRequest");
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                threadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ZapLog.v(TAG, response.body().string());
+                            validateFinalResponse(response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void validateFinalResponse(@NonNull String openChannelResponse) {
