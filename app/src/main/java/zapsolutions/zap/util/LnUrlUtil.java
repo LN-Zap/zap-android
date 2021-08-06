@@ -17,7 +17,7 @@ import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.HttpClientOk;
+import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.lnurl.LnUrlResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
@@ -66,7 +66,7 @@ public class LnUrlUtil {
                     .url(decodedLnUrl)
                     .build();
 
-            HttpClientOk.getInstance().getClient().newCall(lnurlRequest).enqueue(new Callback() {
+            HttpClient.getInstance().getClient().newCall(lnurlRequest).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     URL url = null;

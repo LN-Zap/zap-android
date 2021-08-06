@@ -19,7 +19,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.HttpClientOk;
+import zapsolutions.zap.connection.HttpClient;
 
 public class ExchangeRateUtil {
 
@@ -83,7 +83,7 @@ public class ExchangeRateUtil {
                 .url("https://blockchain.info/ticker")
                 .build();
 
-        HttpClientOk.getInstance().getClient().newCall(rateRequest).enqueue(new Callback() {
+        HttpClient.getInstance().getClient().newCall(rateRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 ZapLog.w(LOG_TAG, "Fetching exchange rates from blockchain.info failed");
@@ -119,7 +119,7 @@ public class ExchangeRateUtil {
                 .url("https://api.coinbase.com/v2/exchange-rates?currency=BTC")
                 .build();
 
-        HttpClientOk.getInstance().getClient().newCall(rateRequest).enqueue(new Callback() {
+        HttpClient.getInstance().getClient().newCall(rateRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 ZapLog.w(LOG_TAG, "Fetching exchange rates from coinbase failed");

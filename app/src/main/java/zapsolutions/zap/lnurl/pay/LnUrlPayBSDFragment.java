@@ -53,7 +53,7 @@ import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.HttpClientOk;
+import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
@@ -302,7 +302,7 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
                         .url(lnUrlSecondPayRequest.requestAsString())
                         .build();
 
-                HttpClientOk.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
+                HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
                     // We need to make sure the results are executed on the UI Thread to prevent crashes.
                     Handler threadHandler = new Handler(Looper.getMainLooper());
 

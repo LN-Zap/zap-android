@@ -3,13 +3,20 @@ package zapsolutions.zap.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.RemoteConfiguration;
@@ -30,12 +37,38 @@ public class RemoteConnectUtil {
         } else if (data.startsWith("config=")) {
             // URL to BTCPayConfigJson
             String configUrl = data.replace("config=", "");
-            StringRequest btcPayConfigRequest = new StringRequest(Request.Method.GET, configUrl,
-                    response -> decodeBtcPay(ctx, response, listener),
-                    error -> listener.onError(ctx.getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT));
 
-            ZapLog.d(LOG_TAG, "Fetching BTCPay config...");
-            HttpClient.getInstance().addToRequestQueue(btcPayConfigRequest, "BTCPayConfigRequest");
+            Request btcPayConfigRequest = new Request.Builder()
+                    .url(configUrl)
+                    .build();
+
+            HttpClient.getInstance().getClient().newCall(btcPayConfigRequest).enqueue(new Callback() {
+                Handler threadHandler = new Handler(Looper.getMainLooper());
+
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    threadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onError(ctx.getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT);
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    threadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                decodeBtcPay(ctx, response.body().string(), listener);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
         } else if (BTCPayConfigParser.isValidJson(data)) {
             // Valid BTCPay JSON
             decodeBtcPay(ctx, data, listener);
