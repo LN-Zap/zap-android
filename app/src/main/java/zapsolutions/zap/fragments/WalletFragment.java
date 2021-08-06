@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -344,27 +345,33 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void updateTotalBalanceDisplay() {
 
-        // Adapt unit text size depending on its length
-        if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2) {
-            mTvPrimaryBalanceUnit.setTextSize(20);
-        } else {
-            mTvPrimaryBalanceUnit.setTextSize(32);
-        }
+        Handler threadHandler = new Handler(Looper.getMainLooper());
 
-        Balances balances;
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-            balances = Wallet.getInstance().getBalances();
-        } else {
-            balances = Wallet.getInstance().getDemoBalances();
-        }
+        threadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                // Adapt unit text size depending on its length
+                if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2) {
+                    mTvPrimaryBalanceUnit.setTextSize(20);
+                } else {
+                    mTvPrimaryBalanceUnit.setTextSize(32);
+                }
 
-        mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.total()));
-        mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-        mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
-        mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
+                Balances balances;
+                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                    balances = Wallet.getInstance().getBalances();
+                } else {
+                    balances = Wallet.getInstance().getDemoBalances();
+                }
 
-        ZapLog.v(LOG_TAG, "Total balance display updated");
+                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.total()));
+                mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
+                mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
+                ZapLog.v(LOG_TAG, "Total balance display updated");
+            }
+        });
     }
 
     @Override
@@ -527,7 +534,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
         } else {
-            if ( Wallet.getInstance().isConnectedToLND()) {
+            if (Wallet.getInstance().isConnectedToLND()) {
                 mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superGreen)));
 
             } else {

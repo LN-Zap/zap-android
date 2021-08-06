@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -27,9 +28,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
@@ -37,6 +35,9 @@ import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
 import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -47,8 +48,12 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.HttpClient;
+import zapsolutions.zap.connection.HttpClientOk;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
@@ -293,22 +298,43 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
 
                 ZapLog.v(LOG_TAG, "Sent following request to service: " + lnUrlSecondPayRequest.requestAsString());
 
-                StringRequest lnUrlRequest = new StringRequest(Request.Method.GET, lnUrlSecondPayRequest.requestAsString(),
-                        response -> validateSecondResponse(response),
-                        error -> {
-                            if (mServiceURLString != null) {
-                                switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, mServiceURLString));
-                            } else {
-                                String host = getResources().getString(R.string.host);
-                                switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
+                okhttp3.Request lnUrlRequest = new Request.Builder()
+                        .url(lnUrlSecondPayRequest.requestAsString())
+                        .build();
+
+                HttpClientOk.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
+                    // We need to make sure the results are executed on the UI Thread to prevent crashes.
+                    Handler threadHandler = new Handler(Looper.getMainLooper());
+
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        threadHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mServiceURLString != null) {
+                                    switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, mServiceURLString));
+                                } else {
+                                    String host = getResources().getString(R.string.host);
+                                    switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
+                                }
                             }
                         });
+                    }
 
-                // Make sure this request is executed only once and it doesn't timeout to fast.
-                lnUrlRequest.setRetryPolicy(new DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-                // Send request to LNURL service
-                HttpClient.getInstance().addToRequestQueue(lnUrlRequest, "LnUrlSecondPayRequest");
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        threadHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    validateSecondResponse(response.body().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
 
