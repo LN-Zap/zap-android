@@ -193,7 +193,7 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Ви збираєтесь платити%1$s%% комісію за мережу.\n\nМожливі рішення:\n- спробуйте lightning платіж замість \n- виберіть меншу плату, довше зачекайте\n- спробуйте пізніше\n- перевірте більшу кількість\n\nВи бажаєте продовжити?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Ви запитували суму як фіатну вартість, але ваші дані обмінного курсу старі (отримані %1$s годин тому).\nПереконайтесь, що у вас є підключення до Інтернету, або розглядайте запит безпосередньо в Bitcoin.\n\nВи все-таки хочете продовжувати?</string>
     <string name="guardian_remoteConnect">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nБудь ласка, уважно перевірте ім\'я хоста.</string>
-    <string name="guardian_blockExplorer">Переглядаючи інформацію за допомогою диспетчера блоків, ваш IP-адреса розкривається. Якщо ви хочете збільшити свою анонімність, вам слід або не використовувати її, або перейти до налаштувань і вибрати Блочний Дослідник, який підтримує Тог.</string>
+    <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While Zap anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
     <string name="settings_category_general">Загальне</string>
     <string name="settings_category_security">Безпека</string>
@@ -202,6 +202,8 @@
     <string name="settings_btcUnit">Біткоїнова одиниця</string>
     <string name="settings_currency">Вторинна одиниця</string>
     <string name="settings_language">Мова</string>
+    <string name="settings_tor">Tor</string>
+    <string name="settings_tor_summary">Anonymize all traffic using the Tor network.</string>
     <string name="settings_scan_clipboard">Check clipboard</string>
     <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
     <string name="settings_hapticPin">Гаптичний зворотний зв\'язок з ПІН</string>
@@ -258,10 +260,12 @@
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
-    <string name="error_connection_tor_unreachable">Підключення Tor не вдалося.\n Переконайтеся, що:\n\n- Orbot працює\n\n- Orbot перебуває у режимі VPN\n\n- Zap знаходиться у списку активованих програм Orbot.</string>
+    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
+    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Будь ласка, розблокуйте гаманець.</string>
     <string name="error_connection_btcpay_invalid_json">Синтаксис JSON конфігурації сервера BTCPay недійсний.</string>
     <string name="error_connection_btcpay_invalid_config">Конфігурація сервера BTCPay не містить конфігурацію BTC GRPC.</string>
+    <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
     <string name="error_wrong_password">Невірний пароль</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Для відкриття каналу потрібно налаштувати гаманець.</string>
@@ -343,10 +347,6 @@
     <string name="transaction_detail">Деталі транзакції</string>
     <string name="app_reset_title">Майте на увазі</string>
     <string name="app_reset_message">Додаток було скинуто, оскільки останнє оновлення включало деякі структурні зміни.\nНа жаль, вам доведеться повторно пройти процес налаштування.</string>
-    <string name="tor_install_orbot">Ви намагаєтеся підключитися до вузла Tor. Щоб використовувати Zap з Tor, ви повинні встановити Orbot.\n\nВи хочете встановити Orbot зараз?</string>
-    <string name="tor_fdroid_info">Якщо Zap не зможе знайти Orbot на наступному кроці, переконайтеся, що ви додали та включили сховище проекту Guardian у F-Droid та повторіть спробу.</string>
-    <string name="tor_download_fdroid">Щоб завантажити Orbot, вам потрібен App Store. Спочатку скачайте F-Droid.</string>
-    <string name="tor_add_repo">Додати сховище</string>
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
     <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
