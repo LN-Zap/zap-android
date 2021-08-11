@@ -25,8 +25,9 @@ The easiest way to get started is using [Umbrel](https://getumbrel.com/) to run 
 - [x] [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor) 
 - [x] Bitcoin only
 
-**Security**
+**Security & Privacy**
 - [x] Non-custodial
+- [x] Tor support
 - [x] PIN protected access
 - [x] Scrambled PIN by default
 - [x] Protection against screen recording
