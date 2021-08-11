@@ -29,8 +29,8 @@ public class UserGuardian {
     private static final String DIALOG_HIGH_ONCHAIN_FEE = "guardianHighOnCainFees";
     private static final String DIALOG_OLD_EXCHANGE_RATE = "guardianOldExchangeRate";
     private static final String DIALOG_REMOTE_CONNECT = "guardianRemoteConnect";
-    private static final String DIALOG_BLOCK_EXPLORER = "guardianBlockExplorer";
     private static final String DIALOG_OLD_LND_VERSION = "guardianOldLndVersion";
+    private static final String DIALOG_EXTERNAL_LINK = "guardianExternalLink";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -62,8 +62,8 @@ public class UserGuardian {
                 .putBoolean(DIALOG_HIGH_ONCHAIN_FEE, true)
                 .putBoolean(DIALOG_OLD_EXCHANGE_RATE, true)
                 .putBoolean(DIALOG_REMOTE_CONNECT, true)
-                .putBoolean(DIALOG_BLOCK_EXPLORER, true)
                 .putBoolean(DIALOG_OLD_LND_VERSION, true)
+                .putBoolean(DIALOG_EXTERNAL_LINK,true)
                 .apply();
     }
 
@@ -188,10 +188,10 @@ public class UserGuardian {
     /**
      * Warn the user about accessing a transaction or address with a non tor block explorer.
      */
-    public void privacyBlockExplorer() {
-        mCurrentDialogName = DIALOG_BLOCK_EXPLORER;
+    public void privacyExternalLink() {
+        mCurrentDialogName = DIALOG_EXTERNAL_LINK;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
-        adb.setMessage(R.string.guardian_blockExplorer);
+        adb.setMessage(R.string.guardian_externalLink);
         showGuardianDialog(adb);
     }
 
