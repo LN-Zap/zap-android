@@ -9,6 +9,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +37,13 @@ import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.contacts.ManageContactsActivity;
 import zapsolutions.zap.customView.WalletSpinner;
 import zapsolutions.zap.setup.SetupActivity;
+import zapsolutions.zap.tor.TorManager;
 import zapsolutions.zap.util.Balances;
 import zapsolutions.zap.util.ExchangeRateUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -52,7 +53,7 @@ import zapsolutions.zap.util.ZapLog;
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
         Wallet.BalanceListener, Wallet.InfoListener, Wallet.LndConnectionTestListener,
-        Wallet.WalletLoadedListener, ExchangeRateUtil.ExchangeRateListener {
+        Wallet.WalletLoadedListener, ExchangeRateUtil.ExchangeRateListener, TorManager.TorErrorListener {
 
     private static final String LOG_TAG = WalletFragment.class.getName();
 
@@ -82,6 +83,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private boolean mExchangeRateListenerRegistered = false;
     private boolean mLndConnectionTestListenerRegistered = false;
     private boolean mWalletLoadedListenerRegistered = false;
+    private boolean mTorErrorListenerRegistred = false;
 
     public WalletFragment() {
         // Required empty public constructor
@@ -305,21 +307,24 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         btnReconnect.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(getActivity())) {
-                    TorUtil.askToInstallOrbotIfMissing(getActivity());
-                } else {
-                    mWalletConnectedLayout.setVisibility(View.GONE);
-                    mWalletNotConnectedLayout.setVisibility(View.GONE);
-                    mLoadingWalletLayout.setVisibility(View.VISIBLE);
-
-                    // We delay the execution, to make it obvious to the user the button press had an effect.
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                showLoading();
+                updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+                // We delay the execution, to make it obvious to the user the button press had an effect.
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (PrefsUtil.isTorEnabled()) {
+                            if (TorManager.getInstance().isProxyRunning()) {
+                                LndConnection.getInstance().reconnect();
+                            } else {
+                                TorManager.getInstance().restartTor();
+                            }
+                        } else {
+                            // Start lnd connection
                             Wallet.getInstance().testLndConnectionAndLoadWallet();
                         }
-                    }, 200);
-                }
+                    }
+                }, 200);
             }
         });
 
@@ -437,6 +442,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     public void onResume() {
         super.onResume();
 
+        if (PrefsUtil.isTorEnabled() && !TorManager.getInstance().isProxyRunning()) {
+            showLoading();
+        }
+
         // Update status dot
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             mStatusDot.setVisibility(View.VISIBLE);
@@ -470,6 +479,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             Wallet.getInstance().registerWalletLoadedListener(this);
             mWalletLoadedListenerRegistered = true;
         }
+        if (!mTorErrorListenerRegistred) {
+            TorManager.getInstance().registerTorErrorListener(this);
+            mTorErrorListenerRegistred = true;
+        }
 
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             mWalletSpinner.updateList();
@@ -495,6 +508,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         Wallet.getInstance().unregisterLndConnectionTestListener(this);
         ExchangeRateUtil.getInstance().unregisterExchangeRateListener(this);
         Wallet.getInstance().unregisterWalletLoadedListener(this);
+        TorManager.getInstance().unregisterTorErrorListener(this);
     }
 
     public void showErrorAfterNotUnlocked() {
@@ -515,6 +529,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mWalletConnectedLayout.setVisibility(View.GONE);
         mWalletNotConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.VISIBLE);
+        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.lightningOrange)));
     }
 
     private void hideBalance() {
@@ -530,15 +545,24 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     private void updateStatusDot(String walletAlias) {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        if (PrefsUtil.isTorEnabled()) {
+            mStatusDot.setImageResource(R.drawable.tor_icon);
+            mStatusDot.getLayoutParams().height = (int) metrics.scaledDensity * 20;
+            mStatusDot.getLayoutParams().width = (int) metrics.scaledDensity * 20;
+        } else {
+            mStatusDot.setImageResource(R.drawable.ic_status_dot_black_24dp);
+            mStatusDot.getLayoutParams().height = (int) metrics.scaledDensity * 8;
+            mStatusDot.getLayoutParams().width = (int) metrics.scaledDensity * 8;
+        }
+        mStatusDot.requestLayout();
+
         mWalletNameWidthDummy.setText(walletAlias);
         if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superRed)));
         } else {
             if (Wallet.getInstance().isConnectedToLND()) {
                 mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.superGreen)));
-
-            } else {
-                mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.lightningOrange)));
             }
         }
     }
@@ -570,6 +594,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     mTvConnectError.setText(getString(R.string.error_connection_host_unresolvable, LndConnection.getInstance().getConnectionConfig().getHost()));
                 } else if (error == Wallet.LndConnectionTestListener.ERROR_NETWORK_UNREACHABLE) {
                     mTvConnectError.setText(R.string.error_connection_network_unreachable);
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_CERTIFICATE_NOT_TRUSTED) {
+                    mTvConnectError.setText(R.string.error_connection_invalid_certificate);
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_INTERNAL) {
+                    mTvConnectError.setText(R.string.error_connection_internal_server);
                 }
             }
         } else {
@@ -591,6 +619,11 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     @Override
+    public void onLndConnectionTestStarted() {
+        showLoading();
+    }
+
+    @Override
     public void onWalletLoaded() {
         walletLoadingCompleted();
         mWalletSpinner.updateList();
@@ -598,5 +631,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mStatusDot.setVisibility(View.VISIBLE);
         updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
         mBtnSetup.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onTorBootstrappingFailed() {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            onInfoUpdated(false);
+            mTvConnectError.setText(R.string.error_connection_tor_bootstrapping);
+        } else {
+            onInfoUpdated(true);
+        }
     }
 }

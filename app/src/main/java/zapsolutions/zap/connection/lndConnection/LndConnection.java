@@ -34,6 +34,8 @@ import zapsolutions.zap.lnd.RemoteLndWalletKitService;
 import zapsolutions.zap.lnd.RemoteLndWalletUnlockerService;
 import zapsolutions.zap.lnd.RemoteLndWatchtowerClientService;
 import zapsolutions.zap.lnd.RemoteLndWatchtowerService;
+import zapsolutions.zap.tor.TorManager;
+import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -143,12 +145,20 @@ public class LndConnection {
         }
 
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
-        mSecureChannel = OkHttpChannelBuilder
-                .forAddress(host, port)
-                .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                .sslSocketFactory(LndSSLSocketFactory.create(mConnectionConfig)) // null = default SSLSocketFactory
-                .build();
-
+        if (PrefsUtil.isTorEnabled()) {
+            mSecureChannel = OkHttpChannelBuilder
+                    .forAddress(host, port)
+                    .proxyDetector(new ZapTorProxyDetector(TorManager.getInstance().getProxyPort()))//
+                    .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
+                    .sslSocketFactory(LndSSLSocketFactory.create(mConnectionConfig)) // null = default SSLSocketFactory
+                    .build();
+        } else {
+            mSecureChannel = OkHttpChannelBuilder
+                    .forAddress(host, port)
+                    .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
+                    .sslSocketFactory(LndSSLSocketFactory.create(mConnectionConfig)) // null = default SSLSocketFactory
+                    .build();
+        }
 
         mLndAutopilotService = new RemoteLndAutopilotService(mSecureChannel, mMacaroon);
         mLndChainNotifierService = new RemoteLndChainNotifierService(mSecureChannel, mMacaroon);
@@ -170,6 +180,7 @@ public class LndConnection {
             ZapLog.d(LOG_TAG, "Starting LND connection...(Open Http Channel)");
             readSavedConnectionInfo();
             generateChannelAndStubs();
+            Wallet.getInstance().testLndConnectionAndLoadWallet();
         }
 
     }
@@ -181,6 +192,13 @@ public class LndConnection {
         }
 
         isConnected = false;
+    }
+
+    public void reconnect() {
+        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            closeConnection();
+            openConnection();
+        }
     }
 
     public boolean isConnected() {

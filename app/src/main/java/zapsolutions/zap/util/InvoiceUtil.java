@@ -19,6 +19,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
+import zapsolutions.zap.tor.TorManager;
 
 public class InvoiceUtil {
     private static final String LOG_TAG = InvoiceUtil.class.getName();
@@ -193,7 +194,7 @@ public class InvoiceUtil {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
-                .timeout(RefConstants.TIMEOUT_SHORT * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_SHORT * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(paymentRequest -> {
                     ZapLog.v(LOG_TAG, paymentRequest.toString());

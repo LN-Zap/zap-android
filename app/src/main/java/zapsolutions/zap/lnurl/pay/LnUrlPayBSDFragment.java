@@ -60,12 +60,12 @@ import zapsolutions.zap.customView.BSDResultView;
 import zapsolutions.zap.customView.BSDScrollableMainView;
 import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.fragments.ZapBSDFragment;
+import zapsolutions.zap.tor.TorManager;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.PaymentUtil;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -397,7 +397,7 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
                     .build();
 
             getCompositeDisposable().add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
-                    .timeout(RefConstants.TIMEOUT_SHORT * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                    .timeout(RefConstants.TIMEOUT_SHORT * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(payReq -> {
                         ZapLog.v(LOG_TAG, payReq.toString());

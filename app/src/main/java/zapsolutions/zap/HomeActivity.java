@@ -64,6 +64,7 @@ import zapsolutions.zap.lnurl.pay.LnUrlPayBSDFragment;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
+import zapsolutions.zap.tor.TorManager;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.BitcoinStringAnalyzer;
 import zapsolutions.zap.util.ClipBoardUtil;
@@ -77,7 +78,6 @@ import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.TimeOutUtil;
-import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.UriUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Version;
@@ -124,7 +124,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         //NFC
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -299,16 +298,22 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     public void openWallet() {
-        // Start lnd connection
+
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);
 
-            LndConnection.getInstance().openConnection();
+            if (PrefsUtil.isTorEnabled()) {
+                // After Tor is successfully started, it will automatically open the lnd connection
+                TorManager.getInstance().startTor();
 
-            if (TorUtil.isCurrentConnectionTor() && !TorUtil.isOrbotInstalled(this)) {
-                TorUtil.askToInstallOrbotIfMissing(this);
+                // If the TorProxy is still running, as we for example just minimized the app for a moment,
+                // the event to open the lnd connection does not fire. Therefore we do it manually in that case.
+                if (TorManager.getInstance().isProxyRunning()) {
+                    LndConnection.getInstance().openConnection();
+                }
             } else {
-                Wallet.getInstance().testLndConnectionAndLoadWallet();
+                // Start lnd connection
+                LndConnection.getInstance().openConnection();
             }
         }
 
@@ -468,6 +473,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         updateDrawerNavigationMenu();
 
         setupLNDInfoSchedule();
+    }
+
+    @Override
+    public void onLndConnectionTestStarted() {
+
     }
 
     private AlertDialog buildUnlockDialog() {
@@ -700,7 +710,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 @Override
                 public void onSaved(String id) {
                     if (WalletConfigsManager.getInstance().getAllWalletConfigs(false).size() == 1) {
-                        // This was the first wallet that was added. Open it immediatelly.
+                        // This was the first wallet that was added. Open it immediately.
                         mPagerAdapter.getWalletFragment().showLoading();
                         openWallet();
                     } else {

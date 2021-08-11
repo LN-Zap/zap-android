@@ -3,6 +3,8 @@ package zapsolutions.zap.tor;
 import androidx.annotation.NonNull;
 
 import io.matthewnelson.topl_service_base.TorPortInfo;
+import zapsolutions.zap.connection.HttpClient;
+import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.util.ZapLog;
 
 public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_base.TorServiceEventBroadcaster {
@@ -11,13 +13,27 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
 
     @Override
     public void broadcastPortInformation(TorPortInfo torPortInfo) {
-        ZapLog.d(LOG_TAG, "Port " + torPortInfo.getHttpPort());
+        ZapLog.d(LOG_TAG, "PortInfo: " + torPortInfo.getHttpPort());
 
+        if (torPortInfo.getHttpPort() != null) {
+
+            int port = Integer.valueOf(torPortInfo.getHttpPort().split(":")[1]);
+            TorManager.getInstance().setIsProxyRunning(true);
+            TorManager.getInstance().setProxyPort(port);
+
+            // restart HTTP Client
+            HttpClient.getInstance().restartHttpClient();
+
+            // restart LND Connection
+            LndConnection.getInstance().reconnect();
+        } else {
+            TorManager.getInstance().setIsProxyRunning(false);
+        }
     }
 
     @Override
-    public void broadcastBandwidth(@NonNull String s, @NonNull String s1) {
-        ZapLog.v(LOG_TAG, "bandwidth: " + s + ", " + s1);
+    public void broadcastBandwidth(@NonNull String download, @NonNull String upload) {
+        ZapLog.v(LOG_TAG, "bandwidth: " + download + ", " + upload);
     }
 
     @Override
@@ -31,13 +47,16 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
     }
 
     @Override
-    public void broadcastLogMessage(String s) {
-        ZapLog.d(LOG_TAG, "log message: " + s);
+    public void broadcastLogMessage(String message) {
+        ZapLog.d(LOG_TAG, message);
     }
 
     @Override
-    public void broadcastNotice(@NonNull String s) {
-        ZapLog.d(LOG_TAG, "broadcast notice: " + s);
+    public void broadcastNotice(@NonNull String notice) {
+        ZapLog.v(LOG_TAG, notice);
+        if (notice.startsWith("WARN|BaseEventListener|Problem bootstrapping.")) {
+            TorManager.getInstance().broadcastTorError();
+        }
     }
 
     @Override

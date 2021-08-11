@@ -50,9 +50,9 @@ import zapsolutions.zap.fragments.ZapBSDFragment;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
 import zapsolutions.zap.lnurl.LnUrlResponse;
+import zapsolutions.zap.tor.TorManager;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.RefConstants;
-import zapsolutions.zap.util.TorUtil;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -144,7 +144,7 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
         }
 
         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
-                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(listPeersResponse -> {
                     boolean connected = false;
@@ -179,7 +179,7 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
         ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
 
         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(connectPeerResponse -> {
                     ZapLog.v(TAG, "Successfully connected to peer");

@@ -62,6 +62,7 @@ import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
+import zapsolutions.zap.tor.TorManager;
 
 import static zapsolutions.zap.util.UtilFunctions.hexStringToByteArray;
 
@@ -117,7 +118,6 @@ public class Wallet {
     private boolean mPaymentsUpdated = false;
     private boolean mUpdatingHistory = false;
     private Network mNetwork;
-    private boolean mConnectionCheckInProgress = false;
     private String mLNDVersionString;
     private Handler mHandler = new Handler();
     private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
@@ -159,7 +159,6 @@ public class Wallet {
         mPendingForceClosedChannelsList = null;
         mPendingWaitingCloseChannelsList = null;
 
-        mConnectionCheckInProgress = false;
         mTransactionUpdated = false;
         mInvoicesUpdated = false;
         mPaymentsUpdated = false;
@@ -186,112 +185,121 @@ public class Wallet {
     public void testLndConnectionAndLoadWallet() {
         // Retrieve info from LND with gRPC (async)
 
-        if (!mConnectionCheckInProgress) {
+        mIsWalletReady = false;
+        mBalancesFetched = false;
+        mChannelsFetched = false;
 
-            mConnectionCheckInProgress = true;
-            mIsWalletReady = false;
-            mBalancesFetched = false;
-            mChannelsFetched = false;
+        ZapLog.d(LOG_TAG, "LND connection test.");
 
-            ZapLog.d(LOG_TAG, "LND connection test.");
+        broadcastLndConnectionTestStarted();
 
-            compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                    .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
-                    .subscribe(infoResponse -> {
-                        ZapLog.d(LOG_TAG, "LND is reachable.");
-                        // Save the received data.
-                        mSyncedToChain = infoResponse.getSyncedToChain();
-                        if (mNetwork == null) {
-                            for (int i = 0; i < infoResponse.getChainsCount(); i++) {
-                                if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
-                                    mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
-                                    break;
-                                }
+        compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(infoResponse -> {
+                    ZapLog.d(LOG_TAG, "LND is reachable.");
+                    // Save the received data.
+                    mSyncedToChain = infoResponse.getSyncedToChain();
+                    if (mNetwork == null) {
+                        for (int i = 0; i < infoResponse.getChainsCount(); i++) {
+                            if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
+                                mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
+                                break;
                             }
                         }
-                        mLNDVersionString = infoResponse.getVersion();
-                        mInfoFetched = true;
-                        mConnectedToLND = true;
-                        mConnectionCheckInProgress = false;
-                        mIdentityPubKey = infoResponse.getIdentityPubkey();
-                        if (mNodeUris == null) {
-                            mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
-                            for (int i = 0; i < infoResponse.getUrisCount(); i++) {
-                                mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
-                            }
+                    }
+                    mLNDVersionString = infoResponse.getVersion();
+                    mInfoFetched = true;
+                    mConnectedToLND = true;
+                    mIdentityPubKey = infoResponse.getIdentityPubkey();
+                    if (mNodeUris == null) {
+                        mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
+                        for (int i = 0; i < infoResponse.getUrisCount(); i++) {
+                            mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
                         }
-                        broadcastLndConnectionTestResult(true, -1);
-                    }, throwable -> {
-                        mConnectionCheckInProgress = false;
+                    }
+                    broadcastLndConnectionTestResult(true, -1);
+                }, throwable -> {
 
-                        if (throwable.getMessage().toLowerCase().contains("unavailable") && !throwable.getMessage().toLowerCase().contains(".onion")) {
-                            ZapLog.e(LOG_TAG, "LND Service unavailable");
-                            if (throwable.getCause() != null) {
-                                if (throwable.getCause().getMessage().toLowerCase().contains("cannot verify hostname")) {
-                                    // This is the case if:
-                                    // - The hostname used to initiate the lnd connection (the hostname from the lndconnect string) does not match with the hostname in the provided certificate.
-                                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_VERIFICATION);
-                                } else if (throwable.getCause().getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    // This is the case if:
-                                    // - We have an internet or network connection, but the desired host is not resolvable.
-                                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
-                                } else if (throwable.getCause().getMessage().toLowerCase().contains("enetunreach")) {
-                                    // This is the case if:
-                                    // - We have no internet or network connection at all.
-                                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_NETWORK_UNREACHABLE);
-                                } else if (throwable.getCause().getMessage().toLowerCase().contains("econnrefused")) {
-                                    // This is the case if:
-                                    // - LND daemon is not running
-                                    // - An incorrect port is used
-                                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
-                                } else {
-                                    // Unknown error. Print what gets returned directly, always english.
-                                    broadcastLndConnectionTestResult(throwable.getCause().getMessage());
-                                }
+                    if (throwable.getMessage().toLowerCase().contains("unavailable") && !throwable.getMessage().toLowerCase().contains(".onion")) {
+                        ZapLog.e(LOG_TAG, "LND Service unavailable");
+                        if (throwable.getCause() != null) {
+                            if (throwable.getCause().getMessage().toLowerCase().contains("cannot verify hostname")) {
+                                // This is the case if:
+                                // - The hostname used to initiate the lnd connection (the hostname from the lndconnect string) does not match with the hostname in the provided certificate.
+                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_VERIFICATION);
+                            } else if (throwable.getCause().getMessage().toLowerCase().contains("unable to resolve host")) {
+                                // This is the case if:
+                                // - We have an internet or network connection, but the desired host is not resolvable.
+                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
+                            } else if (throwable.getCause().getMessage().toLowerCase().contains("enetunreach")) {
+                                // This is the case if:
+                                // - We have no internet or network connection at all.
+                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_NETWORK_UNREACHABLE);
+                            } else if (throwable.getCause().getMessage().toLowerCase().contains("econnrefused")) {
+                                // This is the case if:
+                                // - LND daemon is not running
+                                // - An incorrect port is used
+                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
+                            } else if (throwable.getCause().getMessage().toLowerCase().contains("trust anchor")) {
+                                // This is the case if:
+                                // - tor is not used and no certificate is provided or a wrong certificate is provided
+                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_CERTIFICATE_NOT_TRUSTED);
                             } else {
                                 // Unknown error. Print what gets returned directly, always english.
-                                broadcastLndConnectionTestResult(throwable.getMessage());
+                                broadcastLndConnectionTestResult(throwable.getCause().getMessage());
                             }
-                        } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
+                        } else if (throwable.getMessage().toLowerCase().contains("404") && PrefsUtil.isTorEnabled()) {
                             // This is the case if:
-                            // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
-                            ZapLog.e(LOG_TAG, "Cannot reach remote");
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TIMEOUT);
-                        } else if (throwable.getMessage().toLowerCase().contains("unimplemented")) {
+                            // - Tor is turned on, but the host cannot be resolved
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
+                        } else if (throwable.getMessage().toLowerCase().contains("500") && PrefsUtil.isTorEnabled()) {
                             // This is the case if:
-                            // - The wallet is locked
-                            ZapLog.e(LOG_TAG, "Wallet is locked!");
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
-                        } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
-                            // This is the case if:
-                            // - The macaroon is invalid
-                            ZapLog.e(LOG_TAG, "Macaroon is invalid!");
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
-                        } else if (throwable.getMessage().contains("UNKNOWN")) {
-                            // This is the case if:
-                            // - The macaroon has wrong encoding
-                            ZapLog.e(LOG_TAG, "Macaroon is invalid!");
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
-                        } else if (throwable.getMessage().contains(".onion")) {
-                            // This is the case if:
-                            // - Orbot is not running or not in vpn mode and the user tries to connect to a tor node.
-                            ZapLog.e(LOG_TAG, "Cannot resolve onion address!");
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TOR);
-                        } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
-                            ZapLog.e(LOG_TAG, "Test if LND is reachable was interrupted.");
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERRUPTED);
+                            // - Tor is turned on and an incorrect port is used.
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL);
                         } else {
                             // Unknown error. Print what gets returned directly, always english.
-                            ZapLog.e(LOG_TAG, "Unknown connection error..");
                             broadcastLndConnectionTestResult(throwable.getMessage());
                         }
-                        ZapLog.e(LOG_TAG, throwable.getMessage());
-                        if (throwable.getCause() != null) {
-                            ZapLog.e(LOG_TAG, throwable.getCause().getMessage());
-                            throwable.getCause().printStackTrace();
-                        }
-                    }));
-        }
+                    } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
+                        // This is the case if:
+                        // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
+                        ZapLog.e(LOG_TAG, "Cannot reach remote");
+                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TIMEOUT);
+                    } else if (throwable.getMessage().toLowerCase().contains("unimplemented")) {
+                        // This is the case if:
+                        // - The wallet is locked
+                        ZapLog.e(LOG_TAG, "Wallet is locked!");
+                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
+                    } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
+                        // This is the case if:
+                        // - The macaroon is invalid
+                        ZapLog.e(LOG_TAG, "Macaroon is invalid!");
+                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
+                    } else if (throwable.getMessage().contains("UNKNOWN")) {
+                        // This is the case if:
+                        // - The macaroon has wrong encoding
+                        ZapLog.e(LOG_TAG, "Macaroon is invalid!");
+                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
+                    } else if (throwable.getMessage().contains(".onion")) {
+                        // This is the case if:
+                        // - Tor is not active in the settings and the user tries to connect to a tor node.
+                        ZapLog.e(LOG_TAG, "Cannot resolve onion address!");
+                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TOR);
+                    } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
+                        ZapLog.e(LOG_TAG, "Test if LND is reachable was interrupted.");
+                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERRUPTED);
+                    } else {
+                        // Unknown error. Print what gets returned directly, always english.
+                        ZapLog.e(LOG_TAG, "Unknown connection error..");
+                        broadcastLndConnectionTestResult(throwable.getMessage());
+                    }
+                    ZapLog.e(LOG_TAG, throwable.getMessage());
+                    if (throwable.getCause() != null) {
+                        ZapLog.e(LOG_TAG, throwable.getCause().getMessage());
+                        throwable.getCause().printStackTrace();
+                    }
+                }));
+
     }
 
     /**
@@ -400,38 +408,40 @@ public class Wallet {
      */
     public void fetchInfoFromLND() {
         // Retrieve info from LND with gRPC (async)
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                .subscribe(infoResponse -> {
+        if (LndConnection.getInstance().getLightningService() != null) {
+            compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
+                    .subscribe(infoResponse -> {
 
-                    // Save the received data.
-                    mSyncedToChain = infoResponse.getSyncedToChain();
-                    mLNDVersionString = infoResponse.getVersion();
-                    mIdentityPubKey = infoResponse.getIdentityPubkey();
-                    if (mNetwork == null) {
-                        for (int i = 0; i < infoResponse.getChainsCount(); i++) {
-                            if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
-                                mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
-                                break;
+                        // Save the received data.
+                        mSyncedToChain = infoResponse.getSyncedToChain();
+                        mLNDVersionString = infoResponse.getVersion();
+                        mIdentityPubKey = infoResponse.getIdentityPubkey();
+                        if (mNetwork == null) {
+                            for (int i = 0; i < infoResponse.getChainsCount(); i++) {
+                                if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
+                                    mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (mNodeUris == null) {
-                        mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
-                        for (int i = 0; i < infoResponse.getUrisCount(); i++) {
-                            mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
+                        if (mNodeUris == null) {
+                            mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
+                            for (int i = 0; i < infoResponse.getUrisCount(); i++) {
+                                mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
+                            }
                         }
-                    }
-                    mInfoFetched = true;
-                    mConnectedToLND = true;
+                        mInfoFetched = true;
+                        mConnectedToLND = true;
 
-                    broadcastInfoUpdate(true);
-                }, throwable -> {
-                    if (throwable.getMessage().toLowerCase().contains("unavailable")) {
-                        mConnectedToLND = false;
-                        broadcastInfoUpdate(false);
-                    }
-                    ZapLog.w(LOG_TAG, "Exception in fetch info task: " + throwable.getMessage());
-                }));
+                        broadcastInfoUpdate(true);
+                    }, throwable -> {
+                        if (throwable.getMessage().toLowerCase().contains("unavailable")) {
+                            mConnectedToLND = false;
+                            broadcastInfoUpdate(false);
+                        }
+                        ZapLog.w(LOG_TAG, "Exception in fetch info task: " + throwable.getMessage());
+                    }));
+        }
     }
 
     public void simulateFetchInfoForDemo(boolean connected) {
@@ -570,7 +580,7 @@ public class Wallet {
 
     public void openChannel(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
-                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(listPeersResponse -> {
                     boolean connected = false;
                     for (Peer node : listPeersResponse.getPeersList()) {
@@ -610,7 +620,7 @@ public class Wallet {
         ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(connectPeerResponse -> {
                     ZapLog.d(LOG_TAG, "Successfully connected to peer, trying to open channel...");
                     openChannelConnected(nodeUri, amount, targetConf, isPrivate);
@@ -635,7 +645,7 @@ public class Wallet {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(nodeInfo -> {
                     if (nodeInfo.getNode().getAddressesCount() > 0) {
                         String tempUri = nodeUri.getPubKey() + "@" + nodeInfo.getNode().getAddresses(0).getAddr();
@@ -667,7 +677,7 @@ public class Wallet {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().openChannel(openChannelRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(openStatusUpdate -> {
                     ZapLog.d(LOG_TAG, "Open channel update: " + openStatusUpdate.getUpdateCase().getNumber());
@@ -697,7 +707,7 @@ public class Wallet {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().closeChannel(closeChannelRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .firstOrError()
                 .subscribe(closeStatusUpdate -> {
                     ZapLog.d(LOG_TAG, "Closing channel update: " + closeStatusUpdate.getUpdateCase().getNumber());
@@ -845,7 +855,7 @@ public class Wallet {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorUtil.getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(nodeInfo -> {
                     ZapLog.v(LOG_TAG, "Fetched Node info from " + nodeInfo.getNode().getAlias());
                     mNodeInfos.add(nodeInfo);
@@ -1299,7 +1309,7 @@ public class Wallet {
         return mConnectedToLND;
     }
 
-    public void setLNDAsDisconnected(){
+    public void setLNDAsDisconnected() {
         mConnectedToLND = false;
     }
 
@@ -1347,6 +1357,12 @@ public class Wallet {
     public void broadcastLndConnectionTestResult(String errorMessage) {
         for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
             listener.onLndConnectError(errorMessage);
+        }
+    }
+
+    public void broadcastLndConnectionTestStarted() {
+        for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
+            listener.onLndConnectionTestStarted();
         }
     }
 
@@ -1593,12 +1609,16 @@ public class Wallet {
         int ERROR_HOST_VERIFICATION = 6;
         int ERROR_HOST_UNRESOLVABLE = 7;
         int ERROR_NETWORK_UNREACHABLE = 8;
+        int ERROR_CERTIFICATE_NOT_TRUSTED = 9;
+        int ERROR_INTERNAL = 10;
 
         void onLndConnectError(int error);
 
         void onLndConnectError(String error);
 
         void onLndConnectSuccess();
+
+        void onLndConnectionTestStarted();
     }
 
     public interface WalletLoadedListener {

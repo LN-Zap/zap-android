@@ -105,8 +105,7 @@ public class ZapTorSettings extends ApplicationDefaultTorSettings {
 
     @Override
     public String getHttpTunnelPort() {
-        return "33591";
-        //return PortOption.AUTO;
+        return PortOption.AUTO;
     }
 
     @Override

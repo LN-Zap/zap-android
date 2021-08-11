@@ -293,10 +293,12 @@
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please make sure that:\n\n- Orbot is running\n\n- Orbot is in VPN Mode\n\n- Zap is in Orbot\'s list of activated apps.</string>
+    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
+    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
+    <string name="error_connection_internal_server">The node was reachable but returned an internal error. This error might be caused by using a wrong port.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">The wallet needs to be setup to open a channel.</string>
@@ -376,11 +378,6 @@
     <string name="transaction_detail">Transaction Detail</string>
     <string name="app_reset_title">Please note</string>
     <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
-
-    <string name="tor_install_orbot">You are trying to connect to a tor node. To use Zap with tor you have to install Orbot.\n\nDo you want to install Orbot now?</string>
-    <string name="tor_fdroid_info">If Zap fails to find Orbot in the next step, make sure you have added and enabled the Guardian Project repository in F-Droid and try again.</string>
-    <string name="tor_download_fdroid">You need an App Store to download Orbot. Please first download F-Droid.</string>
-    <string name="tor_add_repo">Add Repository</string>
 
     <string name="nfc_type_not_supported">Unsupported NFC type</string>
 

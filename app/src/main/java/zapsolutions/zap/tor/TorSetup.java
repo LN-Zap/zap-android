@@ -38,11 +38,11 @@ public class TorSetup {
                 "Zap tor service",
                 21
         )
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setCustomColor(R.color.lightningOrange)
                 .enableTorRestartButton()
                 .enableTorStopButton()
-                .showNotification(true);
+                .showNotification(false);
     }
 
     private static BackgroundManager.Builder.Policy generateBackgroundManagerPolicy() {
