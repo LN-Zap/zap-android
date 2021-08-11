@@ -226,6 +226,8 @@
     <string name="settings_btcUnit">Bitcoin Unit</string>
     <string name="settings_currency">Second Unit</string>
     <string name="settings_language">Language</string>
+    <string name="settings_tor">Tor</string>
+    <string name="settings_tor_summary">Anonymize all traffic using the Tor network.</string>
     <string name="settings_scan_clipboard">Check clipboard</string>
     <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
