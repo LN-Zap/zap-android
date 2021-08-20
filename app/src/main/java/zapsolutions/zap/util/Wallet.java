@@ -863,7 +863,12 @@ public class Wallet {
                     if (broadcastChannelUpdate) {
                         broadcastChannelsUpdated();
                     }
-                }, throwable -> ZapLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage())));
+                }, throwable -> {
+                    if (broadcastChannelUpdate) {
+                        broadcastChannelsUpdated();
+                    }
+                    ZapLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage());
+                }));
     }
 
 
