@@ -46,6 +46,6 @@
         "license_url": "https://api.github.com/licenses/mit"
       }
     ],
-    "dependency": "com.github.michaelWuensch:avathor-android-library:1.0.0"
+    "dependency": "com.github.michaelWuensch:avathor-android-library:1.1.0"
   }
 ]
