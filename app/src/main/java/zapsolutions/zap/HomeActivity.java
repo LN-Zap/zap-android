@@ -226,7 +226,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         public void run() {
                             ExchangeRateUtil.getInstance().getExchangeRates();
                         }
-                    }, 0, RefConstants.EXCHANGE_RATE_PERIOD, RefConstants.EXCHANGE_RATE_PERIOD_UNIT);
+                    }, 10, RefConstants.EXCHANGE_RATE_PERIOD, RefConstants.EXCHANGE_RATE_PERIOD_UNIT);
         }
 
     }
