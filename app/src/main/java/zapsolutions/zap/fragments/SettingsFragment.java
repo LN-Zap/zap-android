@@ -33,6 +33,7 @@ import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.pin.PinSetupActivity;
+import zapsolutions.zap.tor.TorManager;
 import zapsolutions.zap.util.AppUtil;
 import zapsolutions.zap.util.KeystoreUtil;
 import zapsolutions.zap.util.MonetaryUtil;
@@ -46,6 +47,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private static final String LOG_TAG = SettingsFragment.class.getName();
 
     private SwitchPreference mSwHideTotalBalance;
+    private SwitchPreference mSwTor;
     private ListPreference mListCurrency;
     private Preference mPinPref;
     private ListPreference mListLanguage;
@@ -214,6 +216,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 } else {
                     return true;
                 }
+            }
+        });
+
+        // On tor changed
+        mSwTor = findPreference("isTorEnabled");
+        mSwTor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean newState = Boolean.valueOf(newValue.toString());
+                // we have to update this preferences value here, otherwhise the value of the preference would be updated AFTER the reconnection has taken place.
+                mSwTor.setChecked(newState);
+
+                TorManager.getInstance().switchTorState(newState);
+
+                return true;
             }
         });
     }

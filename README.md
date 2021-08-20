@@ -11,7 +11,7 @@ The easiest way to get started is using [Umbrel](https://getumbrel.com/) to run 
 ## Features
 
 **Wallet**
-- [x] Manage multiple wallets
+- [x] Manage multiple wallets/nodes
 - [x] Contacts
 - [x] Fiat currency prices
 - [x] Support for Bech32 and P2SH addresses
@@ -23,15 +23,16 @@ The easiest way to get started is using [Umbrel](https://getumbrel.com/) to run 
 - [x] Transaction filter
 - [x] Read NFC tags
 - [x] [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor) 
-- [x] Bitcoin only
+- [x] Bitcoin only, no shitcoins!
 
-**Security**
+**Security & Privacy**
 - [x] Non-custodial
+- [x] Tor support
 - [x] PIN protected access
 - [x] Scrambled PIN by default
 - [x] Protection against screen recording
 - [x] Option to hide total balance
-- [x] User guardian system (warns the user when he is about to do potentially dangerous actions)
+- [x] User guardian system (Zap warns users when they are about to perform potentially dangerous or privacy leaking actions)
 - [x] [Reproducible build](https://walletscrutiny.com/android/zapsolutions.zap/)
 
 **Lightning**
@@ -79,7 +80,6 @@ And if you want to build the app yourself take a look at the [Installation Guide
 
 ## Maintainers
 - [Michael Wünsch](https://github.com/michaelWuensch)
-- [raph](https://github.com/raphBTC)
 
 ## License
 

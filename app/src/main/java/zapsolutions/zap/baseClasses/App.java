@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import zapsolutions.zap.tor.TorSetup;
 import zapsolutions.zap.util.LocaleUtil;
 import zapsolutions.zap.util.ZapLog;
 
@@ -35,6 +36,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Prepare the Tor Service
+        TorSetup.generateTorServiceControllerBuilder(this).build();
     }
 
     @Override

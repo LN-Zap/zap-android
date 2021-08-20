@@ -69,11 +69,11 @@ public class BlockExplorer {
                 break;
         }
 
-        if (explorer.equals("Blockstream (v3 Tor)")) {
-            startBlockExplorer();
-        } else {
+        if (PrefsUtil.isTorEnabled()) {
             // Ask user to confirm risking privacy issues
-            new UserGuardian(mContext, this::startBlockExplorer).privacyBlockExplorer();
+            new UserGuardian(mContext, this::startBlockExplorer).privacyExternalLink();
+        } else {
+            startBlockExplorer();
         }
     }
 
@@ -128,11 +128,11 @@ public class BlockExplorer {
                 break;
         }
 
-        if (explorer.equals("Blockstream (v3 Tor)")) {
-            startBlockExplorer();
-        } else {
+        if (PrefsUtil.isTorEnabled()) {
             // Ask user to confirm risking privacy issues
-            new UserGuardian(mContext, this::startBlockExplorer).privacyBlockExplorer();
+            new UserGuardian(mContext, this::startBlockExplorer).privacyExternalLink();
+        } else {
+            startBlockExplorer();
         }
     }
 

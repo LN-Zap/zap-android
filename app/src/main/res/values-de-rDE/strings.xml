@@ -97,7 +97,7 @@
     <string name="confirmations">Bestätigungen</string>
     <string name="maximum_abbreviation">max</string>
     <string name="send">Senden</string>
-    <string name="notConnected">Not connected</string>
+    <string name="notConnected">Nicht verbunden</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -110,7 +110,7 @@
     <string name="activity_manage_contacts_send_mode">Senden an…</string>
     <string name="activity_manage_contacts_open_channel_mode">Kanal öffnen mit…</string>
     <string name="activity_contact_details">Kontaktdetails</string>
-    <string name="activity_manual_setup">Connection Data</string>
+    <string name="activity_manual_setup">Verbindungsdaten</string>
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Verlauf</string>
     <string name="navigation_settings">Einstellungen</string>
@@ -193,7 +193,7 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Du wirst %1$s%% als Netzwerkgebühr bezahlen, wenn du fortfährst.\n\nMögliche Lösungen:\n- Zahle mit dem Lightning Netzwerk\n- Wähle eine niedrigere Gebühr und warte länger\n- Versuche es später nochaml\n- Sende einen größeren Betrag\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Du hast einen Fiat Betrag angefordert, aber dein Umrechnungskurs ist nicht mehr aktuell. (Zuletzt aktualisiert vor %1$s Stunden)\nStelle sicher, dass du eine Internetverbindung hast, oder fordere den Betrag direkt in Bitcoin an.\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_remoteConnect">Willst du eine Verbindung mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
-    <string name="guardian_blockExplorer">Durch die Verwendung eines Block-Explorers wird deine IP-Adresse für die Betreiber sichtbar. Wenn du deine Anonymität erhöhen möchtest, solltest du dieses Funktion entweder nicht nutzen, oder in den Einstellungen einen Block-Explorer auswählen, der Tor unterstütz.</string>
+    <string name="guardian_externalLink">Du bist dabei, einen Link mit sensiblen Informationen in deinem Browser zu öffnen. Während Zap den kompletten Netzwerkverkehr mit Hilfe des Tor Netzwerks anonymisiert, tut das dein Browser nicht. Wenn du diese Daten privat halten möchtest, benutze einen Tor Browser um den Link zu öffnen.</string>
     <string name="guardian_oldLndVersion_remote">Bitte aktualisieren.\n\nDie Node mit der du verbunden bist, führt eine alte Version von LND aus. Versionen, die älter sind als %1$s, werden nicht mehr aktiv unterstützt.</string>
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_security">Sicherheit</string>
@@ -202,6 +202,8 @@
     <string name="settings_btcUnit">Bitcoin Einheit</string>
     <string name="settings_currency">Zweite Einheit</string>
     <string name="settings_language">Sprache</string>
+    <string name="settings_tor">Tor</string>
+    <string name="settings_tor_summary">Anonymisiert den gesamten Datenverkehr über das Tor Netzwerk.</string>
     <string name="settings_scan_clipboard">Zwischenablage scannen</string>
     <string name="settings_scan_clipboard_summary">Automatisch Daten in der Zwischenablage erkennen, die Zap verarbeiten kann.</string>
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
@@ -258,10 +260,12 @@
     <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND daemon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
     <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
-    <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte stelle sicher, dass:\n\n- Orbot läuft\n\n- Orbot im VPN Modus ist\n\n- Zap in Orbot\'s Liste der aktivierten Apps ist.</string>
+    <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte aktiviere Tor in den Einstellungen.</string>
+    <string name="error_connection_tor_bootstrapping">Tor konnte nicht gestartet werden.\n\nZap Android unterstützt nun Tor standardmäßig. Falls du Orbot nutzt, entferne Bitte Zap aus der Liste der Tor-aktivierten Apps, oder beende Orbot ganz.</string>
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
+    <string name="error_connection_internal_server">Die Node ist erreichbar, aber antwortet mit einem internen Fehler. Dieser Fehler wird eventuell durch einen falschen Port verursacht.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
     <string name="error_lightning_uri_invalid">Ungültiges Format.\nBitte verwende eines der folgenden Formate:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Die Wallet muss eingerichtet sein, um einen Kanal zu öffnen.</string>
@@ -287,7 +291,7 @@
     <string name="error_payment_insufficient_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Bitte stelle sicher, dass der Empfänger die \"Keysend\" Funktion aktiviert hat.</string>
     <string name="error_only_payment_data_allowed">Nur Zahlungsdaten sind hier erlaubt.</string>
-    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
+    <string name="error_wallet_not_yet_ready">Deine Wallet ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>
@@ -331,10 +335,6 @@
     <string name="transaction_detail">Transaktionsdetails</string>
     <string name="app_reset_title">Hinweis</string>
     <string name="app_reset_message">Die App wurde zurückgesetzt, da die letzte Aktualisierung strukturelle Änderungen vorgenommen hat.\nLeider musst du die Wallet deshalb erneut einrichten.</string>
-    <string name="tor_install_orbot">Du versuchst dich mit einem Tor Knoten zu verbinden. Um mit Zap Tor zu verwenden, musst du Orbot installieren.\n\nWillst du Orbot jetzt installieren?</string>
-    <string name="tor_fdroid_info">Wenn Zap im nächsten Schritt Orbot nicht finden kann, stelle sicher, dass das Guardian Project Repository in F-Droid hinzugefügt und aktiviert ist. Versuche es dann erneut.</string>
-    <string name="tor_download_fdroid">Du benötigst einen App Store um Orbot herunterzuladen. Bitte lade zuerst F-Droid herunter.</string>
-    <string name="tor_add_repo">Repository hinzufügen</string>
     <string name="nfc_type_not_supported">Dieser NFC Typ wird nicht unterstützt</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Bitcoin Adresse\n- Bitcoin Zahlungsanfrage\n- Lightning Zahlungsanfrage</string>
     <string name="help_dialog_scanNodePublicKey">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>

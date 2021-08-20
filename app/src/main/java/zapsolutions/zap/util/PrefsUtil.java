@@ -119,4 +119,8 @@ public class PrefsUtil {
     public static String getSecondCurrency() {
         return getPrefs().getString(SECOND_CURRENCY, "USD");
     }
+
+    public static boolean isTorEnabled() {
+        return getPrefs().getBoolean("isTorEnabled", true);
+    }
 }

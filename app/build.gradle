@@ -184,6 +184,10 @@ dependencies {
     // Library for the avatar images
     implementation 'com.github.michaelWuensch:avathor-android-library:1.1.0'
 
+    // Tor implementation
+    implementation "io.matthewnelson.topl-android:tor-binary:0.4.6.5"
+    implementation "io.matthewnelson.topl-android:topl-service:2.1.1"
+
     // gRPC implementation to communicate with lnd
     implementation 'io.grpc:grpc-okhttp:1.39.0'
     implementation 'io.grpc:grpc-protobuf-lite:1.39.0'
