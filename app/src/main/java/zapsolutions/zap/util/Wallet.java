@@ -117,7 +117,7 @@ public class Wallet {
     private boolean mInvoicesUpdated = false;
     private boolean mPaymentsUpdated = false;
     private boolean mUpdatingHistory = false;
-    private Network mNetwork;
+    private Network mNetwork = Network.MAINNET;
     private String mLNDVersionString;
     private Handler mHandler = new Handler();
     private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
@@ -169,7 +169,7 @@ public class Wallet {
         mChannelsFetched = false;
         mIsWalletReady = false;
         mSyncedToChain = false;
-        mNetwork = null;
+        mNetwork = Network.MAINNET;
         mIdentityPubKey = null;
         mNodeUris = null;
         mHandler.removeCallbacksAndMessages(null);
@@ -199,14 +199,14 @@ public class Wallet {
                     ZapLog.d(LOG_TAG, "LND is reachable.");
                     // Save the received data.
                     mSyncedToChain = infoResponse.getSyncedToChain();
-                    if (mNetwork == null) {
-                        for (int i = 0; i < infoResponse.getChainsCount(); i++) {
-                            if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
-                                mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
-                                break;
-                            }
+
+                    for (int i = 0; i < infoResponse.getChainsCount(); i++) {
+                        if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
+                            mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
+                            break;
                         }
                     }
+
                     mLNDVersionString = infoResponse.getVersion();
                     mInfoFetched = true;
                     mConnectedToLND = true;
@@ -416,14 +416,14 @@ public class Wallet {
                         mSyncedToChain = infoResponse.getSyncedToChain();
                         mLNDVersionString = infoResponse.getVersion();
                         mIdentityPubKey = infoResponse.getIdentityPubkey();
-                        if (mNetwork == null) {
-                            for (int i = 0; i < infoResponse.getChainsCount(); i++) {
-                                if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
-                                    mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
-                                    break;
-                                }
+
+                        for (int i = 0; i < infoResponse.getChainsCount(); i++) {
+                            if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
+                                mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
+                                break;
                             }
                         }
+
                         if (mNodeUris == null) {
                             mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
                             for (int i = 0; i < infoResponse.getUrisCount(); i++) {
@@ -863,7 +863,12 @@ public class Wallet {
                     if (broadcastChannelUpdate) {
                         broadcastChannelsUpdated();
                     }
-                }, throwable -> ZapLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage())));
+                }, throwable -> {
+                    if (broadcastChannelUpdate) {
+                        broadcastChannelsUpdated();
+                    }
+                    ZapLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage());
+                }));
     }
 
 
@@ -1290,7 +1295,7 @@ public class Wallet {
     }
 
     public String getLNDVersionString() {
-        if (isConnectedToLND()) {
+        if (isConnectedToLND() && mLNDVersionString != null) {
             return mLNDVersionString;
         } else {
             return App.getAppContext().getString(R.string.notConnected);

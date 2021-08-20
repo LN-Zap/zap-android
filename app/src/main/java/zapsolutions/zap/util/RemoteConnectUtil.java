@@ -32,6 +32,10 @@ public class RemoteConnectUtil {
     private static final String LOG_TAG = RemoteConnectUtil.class.getName();
 
     public static void decodeConnectionString(Context ctx, String data, OnRemoteConnectDecodedListener listener) {
+        if (data == null) {
+            listener.onNoConnectData();
+            return;
+        }
         if (UriUtil.isLNDConnectUri(data)) {
             decodeLndConnectString(ctx, data, listener);
         } else if (data.startsWith("config=")) {

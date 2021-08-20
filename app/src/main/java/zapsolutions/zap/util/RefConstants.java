@@ -45,8 +45,8 @@ public class RefConstants {
     public static final int ACCESS_TIMEOUT = 10;
 
     // Schedule intervals
-    public static final int EXCHANGE_RATE_PERIOD = 3;
-    public static final TimeUnit EXCHANGE_RATE_PERIOD_UNIT = TimeUnit.MINUTES;
+    public static final int EXCHANGE_RATE_PERIOD = 90;
+    public static final TimeUnit EXCHANGE_RATE_PERIOD_UNIT = TimeUnit.SECONDS;
 
     // Haptic vibration
     public static final int VIBRATE_SHORT = 50;
