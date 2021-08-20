@@ -1295,7 +1295,7 @@ public class Wallet {
     }
 
     public String getLNDVersionString() {
-        if (isConnectedToLND()) {
+        if (isConnectedToLND() && mLNDVersionString != null) {
             return mLNDVersionString;
         } else {
             return App.getAppContext().getString(R.string.notConnected);
