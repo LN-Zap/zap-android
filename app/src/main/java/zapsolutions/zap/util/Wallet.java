@@ -253,9 +253,15 @@ public class Wallet {
                             // - Tor is turned on, but the host cannot be resolved
                             broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
                         } else if (throwable.getMessage().toLowerCase().contains("500") && PrefsUtil.isTorEnabled()) {
-                            // This is the case if:
-                            // - Tor is turned on and an incorrect port is used.
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL);
+                            if (LndConnection.getInstance().getConnectionConfig().isTor()) {
+                                // This is the case if:
+                                // - Tor is turned on and an incorrect port is used.
+                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL);
+                            } else {
+                                // This is the case if:
+                                // - happened for a user that used wireguard and connected to a clearnet node. Disabling tor solved connection issues.
+                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL_CLEARNET);
+                            }
                         } else {
                             // Unknown error. Print what gets returned directly, always english.
                             broadcastLndConnectionTestResult(throwable.getMessage());
@@ -1616,6 +1622,7 @@ public class Wallet {
         int ERROR_NETWORK_UNREACHABLE = 8;
         int ERROR_CERTIFICATE_NOT_TRUSTED = 9;
         int ERROR_INTERNAL = 10;
+        int ERROR_INTERNAL_CLEARNET = 11;
 
         void onLndConnectError(int error);
 
