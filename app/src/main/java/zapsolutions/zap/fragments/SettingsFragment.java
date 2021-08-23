@@ -29,8 +29,6 @@ import java.util.List;
 import zapsolutions.zap.AdvancedSettingsActivity;
 import zapsolutions.zap.BuildConfig;
 import zapsolutions.zap.R;
-import zapsolutions.zap.baseClasses.App;
-import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.pin.PinSetupActivity;
 import zapsolutions.zap.tor.TorManager;
@@ -170,7 +168,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     e.printStackTrace();
                 }
                 try {
-                    new Cryptography(App.getAppContext()).removeKeys();
                     new KeystoreUtil().removePinActiveKey();
                 } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
                     e.printStackTrace();

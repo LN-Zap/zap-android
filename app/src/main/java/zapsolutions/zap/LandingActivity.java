@@ -6,12 +6,8 @@ import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.manageWalletConfigs.Cryptography;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.setup.ConnectRemoteNodeActivity;
 import zapsolutions.zap.util.NfcUtil;
@@ -60,11 +56,7 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
             int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
             if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
-                if (ver == 18) {
-                    transferEncryptedData();
-                } else {
-                    resetApp();
-                }
+                resetApp();
             } else {
                 enterWallet();
             }
@@ -89,51 +81,6 @@ public class LandingActivity extends BaseAppCompatActivity {
         } else {
             enterWallet();
         }
-    }
-
-    private void transferEncryptedData() {
-
-        // Transfer random source for PIN salt:
-        String encryptedRandomSource = PrefsUtil.getPrefs().getString(PrefsUtil.RANDOM_SOURCE, "");
-        try {
-            if (encryptedRandomSource != null && !encryptedRandomSource.equals("")) {
-                String decryptedRandomSource = new Cryptography(App.getAppContext()).decryptData(encryptedRandomSource);
-                PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.RANDOM_SOURCE, decryptedRandomSource).commit();
-                PrefsUtil.editPrefs().remove(PrefsUtil.RANDOM_SOURCE).commit();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            resetApp();
-            return;
-        }
-
-        // Transfer PIN hash:
-        if (PrefsUtil.getPrefs().contains(PrefsUtil.PIN_HASH)) {
-            String pinHash = PrefsUtil.getPrefs().getString(PrefsUtil.PIN_HASH, "");
-            try {
-                PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.PIN_HASH, pinHash).commit();
-                PrefsUtil.editPrefs().remove(PrefsUtil.PIN_HASH).commit();
-            } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
-                resetApp();
-                return;
-            }
-        }
-
-        // Transfer Wallet configs:
-        String encryptedWallets = PrefsUtil.getPrefs().getString(PrefsUtil.WALLET_CONFIGS, "");
-        String decryptedWallets = null;
-        try {
-            decryptedWallets = new Cryptography(App.getAppContext()).decryptData(encryptedWallets);
-            PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.WALLET_CONFIGS, decryptedWallets).commit();
-            PrefsUtil.editPrefs().remove(PrefsUtil.WALLET_CONFIGS).commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            resetApp();
-            return;
-        }
-
-        enterWallet();
     }
 
     private void enterWallet() {
