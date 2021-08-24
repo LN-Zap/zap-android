@@ -598,6 +598,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     mTvConnectError.setText(R.string.error_connection_invalid_certificate);
                 } else if (error == Wallet.LndConnectionTestListener.ERROR_INTERNAL) {
                     mTvConnectError.setText(R.string.error_connection_internal_server);
+                } else if (error == Wallet.LndConnectionTestListener.ERROR_INTERNAL_CLEARNET) {
+                    mTvConnectError.setText(R.string.error_connection_internal_server_clearnet);
                 }
             }
         } else {
