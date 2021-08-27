@@ -103,6 +103,12 @@ public class NumpadView extends ConstraintLayout {
         });
     }
 
+    public void clearInput(){
+        if (mEditText != null) {
+            mEditText.getEditableText().clear();
+        }
+    }
+
     public void removeOneDigit() {
         if (mEditText != null) {
             boolean selection = mEditText.getSelectionStart() != mEditText.getSelectionEnd();

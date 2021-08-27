@@ -215,7 +215,13 @@ public class SendBSDFragment extends ZapBSDFragment {
                         }
                     }
 
-                    long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                    long currentValue = 0L;
+                    try {
+                        currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                    } catch (NumberFormatException e) {
+                        mNumpad.clearInput();
+                    }
+
                     if (currentValue > maxSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.superRed));
                         String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxSendable);
