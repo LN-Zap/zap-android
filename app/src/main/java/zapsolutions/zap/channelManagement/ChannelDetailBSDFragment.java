@@ -2,6 +2,7 @@ package zapsolutions.zap.channelManagement;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
@@ -137,6 +138,18 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
         remotePublicKeyIcon.setOnClickListener(view1 -> ClipBoardUtil.copyToClipboard(getContext(), "remotePubKey", mRemotePubKey.getText()));
         fundingTxIcon.setOnClickListener(view1 -> ClipBoardUtil.copyToClipboard(getContext(), "fundingTransaction", mFundingTx.getText()));
         mFundingTx.setOnClickListener(view1 -> new BlockExplorer().showTransaction(mFundingTx.getText().toString(), getActivity()));
+
+        mBSDScrollableMainView.setMoreButtonVisibility(true);
+        mBSDScrollableMainView.setOnMoreListener(new BSDScrollableMainView.OnMoreListener() {
+            @Override
+            public void onMore() {
+                if (getArguments() != null) {
+                    Intent intent = new Intent(getActivity(), AdvancedChannelDetailsActivity.class);
+                    intent.putExtras(getArguments());
+                    getActivity().startActivity(intent);
+                }
+            }
+        });
 
         return view;
     }
