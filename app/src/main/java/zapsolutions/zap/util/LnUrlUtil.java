@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -96,7 +97,14 @@ public class LnUrlUtil {
     }
 
     private static void interpretLnUrlReadResponse(@NonNull String response, OnLnUrlReadListener listener, Context ctx) {
-        LnUrlResponse lnUrlResponse = new Gson().fromJson(response, LnUrlResponse.class);
+        LnUrlResponse lnUrlResponse;
+        try {
+            lnUrlResponse = new Gson().fromJson(response, LnUrlResponse.class);
+        } catch (JsonSyntaxException e) {
+            ZapLog.e(LOG_TAG, "LNURL was successfully decoded, but the response when actually calling the decoded LNURL was not readable as JSON.");
+            listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+            return;
+        }
 
         if (lnUrlResponse.hasError()) {
             ZapLog.w(LOG_TAG, "LNURL: Request invalid. Reason: " + lnUrlResponse.getReason());
