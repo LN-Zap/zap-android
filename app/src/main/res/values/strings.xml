@@ -468,7 +468,7 @@
 
     <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
     <string name="advanced_channel_details_activity">Activity</string>
-    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100% means that more funds traveled through the channel than its capacity. This metric is designed to show how effective a given channel is.</string>
+    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100% means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
     <string name="advanced_channel_details_lifetime">Lifetime</string>
     <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
     <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
@@ -479,10 +479,10 @@
     <string name="advanced_channel_details_local_routing_fee">Local Routing Fee</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee (in msat) and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe fee rate depends on the amount of the transaction.</string>
     <string name="advanced_channel_details_remote_routing_fee">Remote Routing Fee</string>
-    <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel.</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
     <string name="advanced_channel_details_local_channel_reserve">Local Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance in order to prevent you from cheating your channel partner. This makes sure you will always have something to lose in case of unfair behaviour.</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance in order to prevent it from cheating you. This makes sure the other node will always have something to lose in case of unfair behaviour.</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
 
 </resources>

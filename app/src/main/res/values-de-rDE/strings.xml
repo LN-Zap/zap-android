@@ -266,6 +266,7 @@
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_connection_internal_server">Die Node ist erreichbar, aber antwortet mit einem internen Fehler. Dieser Fehler wird eventuell durch einen falschen Port verursacht.</string>
+    <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es auch helfen Tor in den Einstellungen auszuschalten.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
     <string name="error_lightning_uri_invalid">Ungültiges Format.\nBitte verwende eines der folgenden Formate:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Die Wallet muss eingerichtet sein, um einen Kanal zu öffnen.</string>
@@ -292,6 +293,10 @@
     <string name="error_payment_keysend_not_enabled_on_remote">Bitte stelle sicher, dass der Empfänger die \"Keysend\" Funktion aktiviert hat.</string>
     <string name="error_only_payment_data_allowed">Nur Zahlungsdaten sind hier erlaubt.</string>
     <string name="error_wallet_not_yet_ready">Deine Wallet ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
+    <plurals name="duration_second">
+        <item quantity="one">%d Second</item>
+        <item quantity="other">%d Sekunden</item>
+    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>
@@ -403,4 +408,22 @@
     <string name="contact_already_exists">Diese Person ist bereits in deinen Kontakten!</string>
     <string name="no_contacts">Keine Kontakte</string>
     <string name="manual_send_input_hint">Addresse oder Zahlungsdaten</string>
+    <string name="advanced_channel_details_explanation_capacity">Das gesamte Guthaben in diesem Kanal. Durch manche Einschränkungen (wie z.B. Schließungsgebühr oder Rücklage) kannst du nicht alles ausgeben.</string>
+    <string name="advanced_channel_details_activity">Aktivität</string>
+    <string name="advanced_channel_details_explanation_activity">Die Gesamtsumme aus gesendeten und erhaltenen Beträgen im Verhältnis zur Kapazität des Kanals. Eine Aktivität von über 100% bedeuted, dass mehr Guthaben durch den Kanal geflossen ist, als er halten kann. Dieser Messwert ist dafür gemacht, die Effektivität eines Kanals zu bewerten.</string>
+    <string name="advanced_channel_details_lifetime">Alter</string>
+    <string name="advanced_channel_details_explanation_lifetime">Diese Information zeigt, wie lange der Kanal bereits existiert.</string>
+    <string name="advanced_channel_details_explanation_visibility">Ein Kanal kann öffentlich oder privat sein. Private Kanäle sind nicht sicherer, sie sind nur nicht für deas Netzwerk sichtbar.</string>
+    <string name="advanced_channel_details_commit_fee">Schließungsgebühr</string>
+    <string name="advanced_channel_details_explanation_commit_fee">Der Betrag an Gebühren, der beim Schließen des Kanals bezahlt werden muss. Dieser Betrag ändert sich über die Zeit, da er abhängig von den Transaktionsgebühren des Bitcoin Basisnetzwerks ist.</string>
+    <string name="advanced_channel_details_time_lock">Blockierungsdauer</string>
+    <string name="advanced_channel_details_explanation_time_lock">Im Falle einer unkooperativen Kanalschließung (force close), sagt die Blockierungsdauer, wie viele Blöcke du warten musst, bevor du wieder auf dein Geld zugreifen kannst.</string>
+    <string name="advanced_channel_details_local_routing_fee">Durchleitungsvergütung</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">Die Vergütung, die du erhältst, wenn du eine Transaktion über diesen Kanal weiterleitest. Die Gesamtsumme, die du erhältst, setzt sich aus der Basisgebühr (in msat) und der Gebührenrate zusammen.\n Die Basisgebühr is das, was du für jede Transaktion bekommst, egal um welchen Betrag es sich bei der Transaktion handelt.\nÜber die Gebührenrate bekommst du eine Vergütung, die abhängig vom Betrag der Transaktion ist.</string>
+    <string name="advanced_channel_details_remote_routing_fee">Weiterleitungsgebühr</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">Die Gebühren, die dein Kanalpartner erhält, wenn er eine Transaktion weiterleitet. Diese Gebühr fällt nur bei Transaktionsweiterleitungen an. Du musst nichts bezahlen, wenn du diesen Kanal für deine ausgehenden Transaktionen verwendest.</string>
+    <string name="advanced_channel_details_local_channel_reserve">Rücklage (du)</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">Der minimale Betrag den du im Guthaben des Kanals zurücklegen musst. Du kannst diesen Betrag nicht ausgeben. Das stellt sicher, dass du immer etwas zu verlieren hast, falls du versuchen würdest, deinen Kanalpartner zu betrügen.</string>
+    <string name="advanced_channel_details_remote_channel_reserve">Rücklage (Partner)</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">Der minimale Betrag den dein Kanalpartner im Guthaben des Kanals zurücklegen muss. Das stellt sicher, dass dein Kanalpartner immer etwas zu verlieren hat, falls er versuchen würde, dich zu betrügen.</string>
 </resources>
