@@ -424,7 +424,7 @@
     <string name="manual_send_input_hint">Adresa nebo platební údaje</string>
     <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
     <string name="advanced_channel_details_activity">Activity</string>
-    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100% means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
+    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100\% means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
     <string name="advanced_channel_details_lifetime">Lifetime</string>
     <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
     <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>

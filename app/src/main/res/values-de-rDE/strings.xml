@@ -410,7 +410,7 @@
     <string name="manual_send_input_hint">Addresse oder Zahlungsdaten</string>
     <string name="advanced_channel_details_explanation_capacity">Das gesamte Guthaben in diesem Kanal. Durch manche Einschränkungen (wie z.B. Schließungsgebühr oder Rücklage) kannst du nicht alles ausgeben.</string>
     <string name="advanced_channel_details_activity">Aktivität</string>
-    <string name="advanced_channel_details_explanation_activity">Die Gesamtsumme aus gesendeten und erhaltenen Beträgen im Verhältnis zur Kapazität des Kanals. Eine Aktivität von über 100% bedeuted, dass mehr Guthaben durch den Kanal geflossen ist, als er halten kann. Dieser Messwert ist dafür gemacht, die Effektivität eines Kanals zu bewerten.</string>
+    <string name="advanced_channel_details_explanation_activity">Die Gesamtsumme aus gesendeten und erhaltenen Beträgen im Verhältnis zur Kapazität des Kanals. Eine Aktivität von über 100\% bedeutet, dass mehr Guthaben durch den Kanal geflossen ist, als er halten kann. Dieser Messwert ist dafür gemacht, die Effektivität eines Kanals zu bewerten.</string>
     <string name="advanced_channel_details_lifetime">Alter</string>
     <string name="advanced_channel_details_explanation_lifetime">Diese Information zeigt, wie lange der Kanal bereits existiert.</string>
     <string name="advanced_channel_details_explanation_visibility">Ein Kanal kann öffentlich oder privat sein. Private Kanäle sind nicht sicherer, sie sind nur nicht für deas Netzwerk sichtbar.</string>
