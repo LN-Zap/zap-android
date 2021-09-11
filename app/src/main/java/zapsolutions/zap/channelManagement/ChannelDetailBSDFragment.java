@@ -2,9 +2,9 @@ package zapsolutions.zap.channelManagement;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,7 +129,7 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
                         break;
                 }
             } catch (InvalidProtocolBufferException | NullPointerException exception) {
-                Log.e(TAG, "Failed to parse channel.", exception);
+                ZapLog.e(TAG, "Failed to parse channel.", exception);
                 dismiss();
             }
         }
@@ -138,11 +138,23 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
         fundingTxIcon.setOnClickListener(view1 -> ClipBoardUtil.copyToClipboard(getContext(), "fundingTransaction", mFundingTx.getText()));
         mFundingTx.setOnClickListener(view1 -> new BlockExplorer().showTransaction(mFundingTx.getText().toString(), getActivity()));
 
+        mBSDScrollableMainView.setOnMoreListener(new BSDScrollableMainView.OnMoreListener() {
+            @Override
+            public void onMore() {
+                if (getArguments() != null) {
+                    Intent intent = new Intent(getActivity(), AdvancedChannelDetailsActivity.class);
+                    intent.putExtras(getArguments());
+                    getActivity().startActivity(intent);
+                }
+            }
+        });
+
         return view;
     }
 
     private void bindOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
         Channel channel = Channel.parseFrom(channelString);
+        mBSDScrollableMainView.setMoreButtonVisibility(true);
         if (ContactsManager.getInstance().doesContactExist(channel.getRemotePubkey())) {
             mNodeAlias.setText(ContactsManager.getInstance().getNameByNodePubKey(channel.getRemotePubkey()));
         } else {
@@ -170,6 +182,7 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
 
     private void bindPendingOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
         PendingChannelsResponse.PendingOpenChannel pendingOpenChannel = PendingChannelsResponse.PendingOpenChannel.parseFrom(channelString);
+        mBSDScrollableMainView.setMoreButtonVisibility(false);
 
         setBasicInformation(pendingOpenChannel.getChannel().getRemoteNodePub(),
                 pendingOpenChannel.getChannel().getRemoteNodePub(),
@@ -181,6 +194,8 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
 
     private void bindWaitingCloseChannel(ByteString channelString) throws InvalidProtocolBufferException {
         PendingChannelsResponse.WaitingCloseChannel waitingCloseChannel = PendingChannelsResponse.WaitingCloseChannel.parseFrom(channelString);
+        mBSDScrollableMainView.setMoreButtonVisibility(false);
+
         setBasicInformation(waitingCloseChannel.getChannel().getRemoteNodePub(),
                 waitingCloseChannel.getChannel().getRemoteNodePub(),
                 R.color.superRed,
@@ -191,6 +206,7 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
 
     private void bindPendingCloseChannel(ByteString channelString) throws InvalidProtocolBufferException {
         PendingChannelsResponse.ClosedChannel pendingCloseChannel = PendingChannelsResponse.ClosedChannel.parseFrom(channelString);
+        mBSDScrollableMainView.setMoreButtonVisibility(false);
 
         showClosingTransaction(pendingCloseChannel.getClosingTxid());
 
@@ -204,6 +220,7 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
 
     private void bindForceClosingChannel(ByteString channelString) throws InvalidProtocolBufferException {
         PendingChannelsResponse.ForceClosedChannel forceClosedChannel = PendingChannelsResponse.ForceClosedChannel.parseFrom(channelString);
+        mBSDScrollableMainView.setMoreButtonVisibility(false);
 
         showClosingTransaction(forceClosedChannel.getClosingTxid());
 

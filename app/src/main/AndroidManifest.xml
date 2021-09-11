@@ -28,6 +28,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".LandingActivity"
             android:label="@string/app_name"
@@ -157,6 +158,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".channelManagement.AdvancedChannelDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
 
         <meta-data
             android:name="android.nfc.disable_beam_default"

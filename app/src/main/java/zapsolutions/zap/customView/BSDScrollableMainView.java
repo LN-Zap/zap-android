@@ -17,11 +17,13 @@ import zapsolutions.zap.R;
 public class BSDScrollableMainView extends ConstraintLayout {
     private NestedScrollView mContentView;
     private ImageButton mHelpButton;
+    private ImageButton mMoreButton;
     private ImageView mSeparatorLine;
     private ImageView mTitleIcon;
     private TextView mTitle;
     private OnCloseListener mOnCloseListener;
     private OnHelpListener mOnHelpListener;
+    private OnMoreListener mOnMoreListener;
 
     public BSDScrollableMainView(Context context) {
         super(context);
@@ -45,7 +47,6 @@ public class BSDScrollableMainView extends ConstraintLayout {
         //Get a reference to the layout where you want children to be placed
         mContentView = findViewById(R.id.content);
 
-
         mTitle = findViewById(R.id.title);
         mTitleIcon = findViewById(R.id.titleIcon);
         mSeparatorLine = findViewById(R.id.separatorLine);
@@ -64,6 +65,13 @@ public class BSDScrollableMainView extends ConstraintLayout {
                 mOnHelpListener.onHelp();
         });
 
+        //MoreButton
+        mMoreButton = findViewById(R.id.moreButton);
+        mMoreButton.setOnClickListener(view1 -> {
+            if (mOnMoreListener != null)
+                mOnMoreListener.onMore();
+        });
+
     }
 
     public void setTitle(String title) {
@@ -80,6 +88,10 @@ public class BSDScrollableMainView extends ConstraintLayout {
 
     public void setHelpButtonVisibility(boolean visible) {
         mHelpButton.setVisibility(visible ? VISIBLE : GONE);
+    }
+
+    public void setMoreButtonVisibility(boolean visible) {
+        mMoreButton.setVisibility(visible ? VISIBLE : GONE);
     }
 
     public void setTitleIcon(int resID) {
@@ -119,11 +131,19 @@ public class BSDScrollableMainView extends ConstraintLayout {
         mOnHelpListener = listener;
     }
 
+    public void setOnMoreListener(OnMoreListener listener) {
+        mOnMoreListener = listener;
+    }
+
     public interface OnCloseListener {
         void onClosed();
     }
 
     public interface OnHelpListener {
         void onHelp();
+    }
+
+    public interface OnMoreListener {
+        void onMore();
     }
 }

@@ -266,6 +266,7 @@
     <string name="error_connection_btcpay_invalid_json">Синтаксис JSON конфігурації сервера BTCPay недійсний.</string>
     <string name="error_connection_btcpay_invalid_config">Конфігурація сервера BTCPay не містить конфігурацію BTC GRPC.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
+    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
     <string name="error_wrong_password">Невірний пароль</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Для відкриття каналу потрібно налаштувати гаманець.</string>
@@ -292,6 +293,12 @@
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
     <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
+    <plurals name="duration_second">
+        <item quantity="one">%d Second</item>
+        <item quantity="few">%d Seconds</item>
+        <item quantity="many">%d Seconds</item>
+        <item quantity="other">%d Seconds</item>
+    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d хвилина</item>
         <item quantity="few">%d хвилин</item>
@@ -415,4 +422,22 @@
     <string name="contact_already_exists">This person is already in your contacts!</string>
     <string name="no_contacts">No contacts</string>
     <string name="manual_send_input_hint">Address or payment data</string>
+    <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
+    <string name="advanced_channel_details_activity">Activity</string>
+    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100\% means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
+    <string name="advanced_channel_details_lifetime">Lifetime</string>
+    <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
+    <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
+    <string name="advanced_channel_details_commit_fee">Commit Fee</string>
+    <string name="advanced_channel_details_explanation_commit_fee">The amount to be paid in fees when closing the channel. This can change over time as the fees are subject to the transaction fees of the bitcoin base layer.</string>
+    <string name="advanced_channel_details_time_lock">Time Lock</string>
+    <string name="advanced_channel_details_explanation_time_lock">In the event of an uncooperative close (force close) of this channel, the time lock is the number of blocks you will have to wait before you can access your funds again.</string>
+    <string name="advanced_channel_details_local_routing_fee">Local Routing Fee</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee (in msat) and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
+    <string name="advanced_channel_details_remote_routing_fee">Remote Routing Fee</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
+    <string name="advanced_channel_details_local_channel_reserve">Local Channel Reserve</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
+    <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
 </resources>
