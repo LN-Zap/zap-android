@@ -237,7 +237,7 @@
     <string name="error">Eroare</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Exploratorul de blocuri selectat (%1$s) nu suportă %2$s.\nIntră în setări și selectează un alt explorator de blocuri pentru a continua."</string>
-    <string name="error_notAPaymentRequest">Informație de plată nevalabilă.\n\nUtilizează o adresă Bitcoin sau o cerere de plată Lightning pentru a iniția o plată.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Cererea de plată a expirat.</string>
     <string name="error_useTestnetRequest">Ești conectat la TESTNET. Utilizează adrese sau cereri de plată TESTNET.</string>
     <string name="error_useMainnetRequest">Ești conectat la MAINNET. Utilizează adrese sau cereri de plată MAINNET.</string>

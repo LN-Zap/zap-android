@@ -237,7 +237,7 @@
     <string name="error">Erro</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
-    <string name="error_notAPaymentRequest">Invalid payment information.\n\nPlease use a Bitcoin address or Lightning payment request to initiate a payment.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Esta cobrança de pagamento expirou.</string>
     <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
     <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>

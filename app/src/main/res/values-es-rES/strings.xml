@@ -237,7 +237,7 @@
     <string name="error">Error</string>
     <string name="error_blockExplorer_title">Explorador de Bloques</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"El explorador de bloques que tienes actualmente seleccionado (%1$s) no soporta %2$s.\nPor favor ve a las configuraciones y elige otro explorador para continuar."</string>
-    <string name="error_notAPaymentRequest">Datos de pago inválidos.\nUtilice una dirección Bitcoin o una solicitud de pago para Lightning para iniciar la transferencia.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Esta solicitud de pago ha expirado.</string>
     <string name="error_useTestnetRequest">Estás conectado a la TESTNET. Por favor usa direcciones y solicitudes de pago para TESTNET.</string>
     <string name="error_useMainnetRequest">Estás conectado a la MAINNET. Por favor usa direcciones o solicitudes de pago para MAINNET.</string>

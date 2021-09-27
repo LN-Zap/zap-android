@@ -237,7 +237,7 @@
     <string name="error">错误</string>
     <string name="error_blockExplorer_title">区块浏览器</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"你当前选择的区块浏览器 (%1$s)并不支持 %2$s. \n请在设置中重新选择然后继续."</string>
-    <string name="error_notAPaymentRequest">Invalid payment information.\n\nPlease use a Bitcoin address or Lightning payment request to initiate a payment.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">This payment request expired.</string>
     <string name="error_useTestnetRequest">你正连接的是TESTNET，请使用TESTNET的地址或收款请求。</string>
     <string name="error_useMainnetRequest">你正连接的是 MAINNET，请使用 MAINNET的地址或收款请求。</string>

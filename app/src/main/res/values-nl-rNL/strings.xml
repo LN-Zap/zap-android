@@ -237,7 +237,7 @@
     <string name="error">Foutmelding</string>
     <string name="error_blockExplorer_title">Blockexplorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Je hebt de (%1$s) blockexplorer geselecteerd, die geen %2$s ondersteunt. \nGa naar de instellingen en kies een andere blockexplorer om door te gaan."</string>
-    <string name="error_notAPaymentRequest">Ongeldige betalingsinformatie.\n\nKies een Bitcoinadres of Lightningbetalingsverzoek om de betaling te initiëren.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Dit betalingsverzoek is verlopen.</string>
     <string name="error_useTestnetRequest">Je bent verbonden met het TESTNET. Gebruik een TESTNETadres of betalingsverzoek.</string>
     <string name="error_useMainnetRequest">Je bent verbonden met het MAINNET. Gebruik een MAINNETadres of betalingsverzoek.</string>

@@ -237,7 +237,7 @@
     <string name="error">Chyba</string>
     <string name="error_blockExplorer_title">Blok Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Váš aktuálně vybraný průzkumník bloků (%1$s) nepodporuje %2$s. \nPřejděte na nastavení a pokračujte volbou jiného průzkumníku bloků."</string>
-    <string name="error_notAPaymentRequest">Neplatné informace o platbě.\n\nNa zahájení platby použijte bitcoinovou adresu nebo Lightning.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Tato platební žádost vypršela.</string>
     <string name="error_useTestnetRequest">Jste připojeni k TESTNETu. Použijte adresy nebo žádosti o platbu TESTNETu.</string>
     <string name="error_useMainnetRequest">Jste připojeni k MAINNETu. Použijte adresy nebo žádosti o platbu MAINNETu.</string>

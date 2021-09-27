@@ -237,7 +237,7 @@
     <string name="error">Помилка</string>
     <string name="error_blockExplorer_title">Блок-провідник</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Ваш вибраний наразі блок провідників (%1$s) не підтримує%2$s. \nЗайдіть у налаштування та виберіть інший провідник блоків для продовження."</string>
-    <string name="error_notAPaymentRequest">Невірна платіжна інформація.\n\nБудь ласка, використовуйте адресу Bitcoin або Lightning платіжний запит про ініціювання платежу.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Термін дії цього запиту на оплату закінчився.</string>
     <string name="error_useTestnetRequest">Ви підключені до тестової мережі. Будь ласка, використовуйте адреси тестової мережі або запити на оплату.</string>
     <string name="error_useMainnetRequest">Ви підключені до головної мережі. Будь ласка, використовуйте адреси головної мережі або запити на оплату.</string>
