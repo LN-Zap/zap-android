@@ -237,7 +237,7 @@
     <string name="error">Грешка</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Избраният от Вас block explorer (%1$s) не поддържа %2$s. \nМоля отидете в настройки и изберете друг, за да продължите."</string>
-    <string name="error_notAPaymentRequest">Невалидна информация за плащане.\n\nМоля използвайте Биткойн адрес или Lightning заявка, за да започнете плащане.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Тази заявка за плащане е изтекла.</string>
     <string name="error_useTestnetRequest">Свързани сте с TESTNET. Моля използвайте TESTNET адреси или заявки за плащания.</string>
     <string name="error_useMainnetRequest">Свързани сте с MAINNET. Моля използвайте MAINNET адреси или заявки за плащания.</string>

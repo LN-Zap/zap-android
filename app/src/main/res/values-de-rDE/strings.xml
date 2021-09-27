@@ -237,7 +237,7 @@
     <string name="error">Fehler</string>
     <string name="error_blockExplorer_title">Block-Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Der momentan ausgewählte Block-Explorer (%1$s) unterstützt das %2$s nicht. \nBitte wähle in den Einstellungen einen anderen Block-Explorer um fortzufahren."</string>
-    <string name="error_notAPaymentRequest">Ungültige Zahlungsinformationen.\n\nBitte verwende eine Bitcoin Adresse oder eine Lightning Zahlungsanfrage um eine Zahlung durchzuführen.</string>
+    <string name="error_zeroAmountPaymentRequest">Das ist eine Zahlungsanfrage ohne Betrag. Zap unterstützt keine Zahlungsanfrage ohne Betrag aufgrund von Sicherheitsbedenken in diesem Zusammenhang.</string>
     <string name="error_paymentRequestExpired">Die Zahlungsanfrage is abgelaufen.</string>
     <string name="error_useTestnetRequest">Du bist mit dem TESTNET verbunden. Bitte verwende TESTNET Adressen oder Zahlungsanfragen.</string>
     <string name="error_useMainnetRequest">Du bist mit dem MAINNET verbunden. Bitte verwende MAINNET Adressen oder Zahlungsanfragen.</string>
