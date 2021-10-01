@@ -14,7 +14,7 @@ import zapsolutions.zap.util.UtilFunctions;
  * This class helps to work with the received response from a LNURL-pay request.
  * <p>
  * Please refer to step 3 in the following reference:
- * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-pay.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/06.md
  */
 public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
 

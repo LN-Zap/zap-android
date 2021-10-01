@@ -3,8 +3,9 @@ package zapsolutions.zap.lnurl.pay;
 import java.io.Serializable;
 
 /**
- * Please refer to step 6 in the following reference:
- * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-pay.md
+ * Please refer to the following references:
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/09.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/10.md
  */
 public class LnUrlPaySuccessAction implements Serializable {
 

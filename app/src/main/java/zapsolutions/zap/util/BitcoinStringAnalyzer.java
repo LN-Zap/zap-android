@@ -14,6 +14,8 @@ import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
+import zapsolutions.zap.lnurl.LnUrlReader;
+import zapsolutions.zap.lnurl.LnurlDecoder;
 import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
@@ -43,7 +45,7 @@ public class BitcoinStringAnalyzer {
     }
 
     private static void checkIfLnUrl(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        LnUrlUtil.readLnUrl(ctx, inputString, new LnUrlUtil.OnLnUrlReadListener() {
+        LnUrlReader.readLnUrl(ctx, inputString, new LnUrlReader.OnLnUrlReadListener() {
             @Override
             public void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
                 listener.onValidLnUrlWithdraw(withdrawResponse);

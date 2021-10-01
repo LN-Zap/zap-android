@@ -8,7 +8,7 @@ import zapsolutions.zap.lnurl.LnUrlResponse;
  * This class helps to work with the received response from a LNURL-channel request.
  * <p>
  * Please refer to step 3 in the following reference:
- * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-channel.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/02.md
  */
 public class LnUrlChannelResponse extends LnUrlResponse implements Serializable {
 
