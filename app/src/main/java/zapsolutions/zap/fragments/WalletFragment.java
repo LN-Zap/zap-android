@@ -25,8 +25,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.ScanActivity;
@@ -400,6 +398,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     @Override
+    public void onExchangeRateUpdateFailed(int error, int duration) {
+        if (error == ExchangeRateUtil.ExchangeRateListener.ERROR_CLOUDFLARE_BLOCKED_TOR) {
+            showError(getString(R.string.error_tor_exchange_rate), duration);
+        }
+    }
+
+    @Override
     public void onBalanceUpdated() {
         updateTotalBalanceDisplay();
     }
@@ -568,11 +573,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     private void showError(String message, int duration) {
-        Snackbar msg = Snackbar.make(getActivity().findViewById(R.id.mainContent), message, Snackbar.LENGTH_LONG);
-        View sbView = msg.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.superRed));
-        msg.setDuration(duration);
-        msg.show();
+        if (((HomeActivity) getActivity()) != null) {
+            ((HomeActivity) getActivity()).showError(message, duration);
+        }
     }
 
     @Override
