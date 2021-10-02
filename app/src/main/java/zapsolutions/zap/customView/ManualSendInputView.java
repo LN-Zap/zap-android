@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -27,6 +28,7 @@ public class ManualSendInputView extends ConstraintLayout {
 
     private Button mBtnContinue;
     private EditText mEditText;
+    private ProgressBar mSpinner;
     private OnResultListener mListener;
     private CompositeDisposable mCompositeDisposable;
     private String mData;
@@ -52,6 +54,7 @@ public class ManualSendInputView extends ConstraintLayout {
 
         mEditText = view.findViewById(R.id.sendInput);
         mBtnContinue = view.findViewById(R.id.continueButton);
+        mSpinner = view.findViewById(R.id.spinner);
     }
 
     public void setupView(CompositeDisposable cd) {
@@ -60,6 +63,8 @@ public class ManualSendInputView extends ConstraintLayout {
             @Override
             public void onClick(View view) {
                 mData = mEditText.getText().toString();
+                mSpinner.setVisibility(VISIBLE);
+                mBtnContinue.setVisibility(INVISIBLE);
                 /* We are not allowed to access LNURL links twice.
                 Therefore we first have to check if it is a LNURL and then hand over to the HomeActivity.
                 Executing the rest twice doesn't harm anyone.
@@ -104,6 +109,11 @@ public class ManualSendInputView extends ConstraintLayout {
                     }
 
                     @Override
+                    public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
+                        mListener.onValid(mData);
+                    }
+
+                    @Override
                     public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
                         invalidInput();
                     }
@@ -120,12 +130,12 @@ public class ManualSendInputView extends ConstraintLayout {
 
                     @Override
                     public void onError(String error, int duration) {
-                        mListener.onError(error, duration);
+                        errorReadingData(error, duration);
                     }
 
                     @Override
                     public void onNoReadableData() {
-                        mListener.onError(getContext().getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
+                        errorReadingData(getContext().getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
                     }
                 });
             }
@@ -142,7 +152,15 @@ public class ManualSendInputView extends ConstraintLayout {
         void onError(String error, int duration);
     }
 
+    private void errorReadingData(String error, int duration) {
+        mListener.onError(error, duration);
+        mBtnContinue.setVisibility(VISIBLE);
+        mSpinner.setVisibility(INVISIBLE);
+    }
+
     private void invalidInput() {
         mListener.onError(getContext().getString(R.string.error_only_payment_data_allowed), RefConstants.ERROR_DURATION_MEDIUM);
+        mBtnContinue.setVisibility(VISIBLE);
+        mSpinner.setVisibility(INVISIBLE);
     }
 }

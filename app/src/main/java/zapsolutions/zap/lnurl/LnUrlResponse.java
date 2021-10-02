@@ -43,7 +43,7 @@ public class LnUrlResponse implements Serializable {
         if (status == null) {
             return false;
         }
-        return status.equals("ERROR");
+        return status.toLowerCase().equals("error");
     }
 
     public boolean isWithdraw() {

@@ -639,6 +639,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
+            public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
+                LnUrlPayBSDFragment lnUrlPayBSDFragment = LnUrlPayBSDFragment.createLnUrlPayDialog(payResponse);
+                lnUrlPayBSDFragment.show(getSupportFragmentManager(), "lnurlPayBottomSheetDialog");
+            }
+
+            @Override
             public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
                 addWallet(remoteConfiguration);
             }

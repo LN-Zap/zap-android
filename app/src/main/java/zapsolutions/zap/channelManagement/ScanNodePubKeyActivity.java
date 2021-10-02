@@ -104,6 +104,11 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
             }
 
             @Override
+            public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
+                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+            }
+
+            @Override
             public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
                 showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
             }

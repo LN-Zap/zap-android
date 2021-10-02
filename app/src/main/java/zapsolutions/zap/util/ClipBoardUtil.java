@@ -123,6 +123,11 @@ public class ClipBoardUtil {
             }
 
             @Override
+            public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
+                showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
+            }
+
+            @Override
             public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
                 showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
             }
