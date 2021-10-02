@@ -60,7 +60,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void showError(String message, int duration) {
+    public void showError(String message, int duration) {
         Snackbar msg = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
         View sbView = msg.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.superRed));

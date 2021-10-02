@@ -99,6 +99,9 @@ public class ExchangeRateUtil {
                 } catch (JSONException e) {
                     ZapLog.w(LOG_TAG, "blockchain.info response could not be parsed as json");
                     e.printStackTrace();
+                    if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass")) {
+                        broadcastExchangeRateUpdateFailed(ExchangeRateListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
+                    }
                 }
                 if (responseJson != null) {
                     JSONObject responseRates = parseBlockchainInfoResponse(responseJson);
@@ -135,6 +138,9 @@ public class ExchangeRateUtil {
                 } catch (JSONException e) {
                     ZapLog.w(LOG_TAG, "Coinbase response could not be parsed as json");
                     e.printStackTrace();
+                    if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass")) {
+                        broadcastExchangeRateUpdateFailed(ExchangeRateListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
+                    }
                 }
                 if (responseJson != null) {
                     JSONObject responseRates = parseCoinbaseResponse(responseJson);
@@ -343,6 +349,12 @@ public class ExchangeRateUtil {
         }
     }
 
+    private void broadcastExchangeRateUpdateFailed(int error, int duration) {
+        for (ExchangeRateUtil.ExchangeRateListener listener : mExchangeRateListeners) {
+            listener.onExchangeRateUpdateFailed(error, duration);
+        }
+    }
+
     public void registerExchangeRateListener(ExchangeRateUtil.ExchangeRateListener listener) {
         mExchangeRateListeners.add(listener);
     }
@@ -352,7 +364,12 @@ public class ExchangeRateUtil {
     }
 
     public interface ExchangeRateListener {
+
+        int ERROR_CLOUDFLARE_BLOCKED_TOR = 0;
+
         void onExchangeRatesUpdated();
+
+        void onExchangeRateUpdateFailed(int error, int duration);
     }
 
 }
