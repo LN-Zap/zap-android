@@ -235,8 +235,9 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
                     @Override
                     public void run() {
                         try {
-                            ZapLog.v(TAG, response.body().string());
-                            validateFinalResponse(response.body().string());
+                            String responseData = response.body().string();
+                            ZapLog.v(TAG, responseData);
+                            validateFinalResponse(responseData);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
