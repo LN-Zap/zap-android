@@ -20,6 +20,7 @@ The easiest way to get started is using [Umbrel](https://getumbrel.com/) to run 
 - [x] Available in many languages
 - [x] LNURL support (pay, withdraw & channel)
 - [x] Send funds without an invoice (keysend)
+- [x] Send funds to lightning addresses (email like addresses)
 - [x] Transaction filter
 - [x] Read NFC tags
 - [x] [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor) 

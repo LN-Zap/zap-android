@@ -118,6 +118,11 @@ public class ScanActivity extends BaseScannerActivity {
             }
 
             @Override
+            public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
+                readableDataFound(data);
+            }
+
+            @Override
             public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
                 readableDataFound(data);
             }

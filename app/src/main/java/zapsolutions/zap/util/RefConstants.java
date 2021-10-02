@@ -40,6 +40,7 @@ public class RefConstants {
     public static final int ERROR_DURATION_SHORT = 3000;
     public static final int ERROR_DURATION_MEDIUM = 5000;
     public static final int ERROR_DURATION_LONG = 8000;
+    public static final int ERROR_DURATION_VERY_LONG = 12000;
 
     // Number of seconds after moving the app to background until the app gets locked.
     public static final int ACCESS_TIMEOUT = 10;

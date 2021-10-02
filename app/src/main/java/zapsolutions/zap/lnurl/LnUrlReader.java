@@ -103,7 +103,16 @@ public class LnUrlReader {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    interpretLnUrlReadResponse(response.body().string(), listener, ctx);
+                    URL url = null;
+                    try {
+                        url = new URL(decodedLnUrl);
+                        String host = url.getHost();
+                        interpretLnUrlReadResponse(response.body().string(), listener, ctx, host);
+                    } catch (MalformedURLException error) {
+                        listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+                        error.printStackTrace();
+                    }
+
                 }
             });
         } catch (IllegalArgumentException e) {
@@ -115,13 +124,17 @@ public class LnUrlReader {
         }
     }
 
-    private static void interpretLnUrlReadResponse(@NonNull String response, OnLnUrlReadListener listener, Context ctx) {
+    private static void interpretLnUrlReadResponse(@NonNull String response, OnLnUrlReadListener listener, Context ctx, String host) {
         LnUrlResponse lnUrlResponse;
         try {
             lnUrlResponse = new Gson().fromJson(response, LnUrlResponse.class);
         } catch (JsonSyntaxException e) {
             ZapLog.e(LOG_TAG, "LNURL was successfully decoded, but the response when actually calling the decoded LNURL was not readable as JSON.");
-            listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+            if (response.toLowerCase().contains("cloudflare") && response.toLowerCase().contains("captcha-bypass")) {
+                listener.onError(ctx.getResources().getString(R.string.error_tor_blocked_lnurl, host), RefConstants.ERROR_DURATION_VERY_LONG);
+            } else {
+                listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+            }
             return;
         }
 
@@ -129,25 +142,30 @@ public class LnUrlReader {
             ZapLog.w(LOG_TAG, "LNURL: Request invalid. Reason: " + lnUrlResponse.getReason());
             listener.onError(lnUrlResponse.getReason(), RefConstants.ERROR_DURATION_MEDIUM);
         } else {
-            if (lnUrlResponse.isWithdraw()) {
-                ZapLog.d(LOG_TAG, "LNURL: valid withdraw data received...");
-                LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(response, LnUrlWithdrawResponse.class);
-                listener.onValidLnUrlWithdraw(lnUrlWithdrawResponse);
-            } else if (lnUrlResponse.isPayRequest()) {
-                ZapLog.d(LOG_TAG, "LNURL: valid pay request data received...");
-                LnUrlPayResponse lnUrlPayResponse = new Gson().fromJson(response, LnUrlPayResponse.class);
-                listener.onValidLnUrlPay(lnUrlPayResponse);
-            } else if (lnUrlResponse.isChannelRequest()) {
-                ZapLog.d(LOG_TAG, "LNURL: valid channel request data received...");
-                LnUrlChannelResponse lnUrlChannelResponse = new Gson().fromJson(response, LnUrlChannelResponse.class);
-                listener.onValidLnUrlChannel(lnUrlChannelResponse);
-            } else if (lnUrlResponse.isHostedChannelRequest()) {
-                ZapLog.d(LOG_TAG, "LNURL: valid hosted channel request data received...");
-                LnUrlHostedChannelResponse lnUrlHostedChannelResponse = new Gson().fromJson(response, LnUrlHostedChannelResponse.class);
-                listener.onValidLnUrlHostedChannel(lnUrlHostedChannelResponse);
-            } else {
-                ZapLog.w(LOG_TAG, "LNURL: valid but unsupported data received...");
-                listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
+            try {
+                if (lnUrlResponse.isWithdraw()) {
+                    ZapLog.d(LOG_TAG, "LNURL: valid withdraw data received...");
+                    LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(response, LnUrlWithdrawResponse.class);
+                    listener.onValidLnUrlWithdraw(lnUrlWithdrawResponse);
+                } else if (lnUrlResponse.isPayRequest()) {
+                    ZapLog.d(LOG_TAG, "LNURL: valid pay request data received...");
+                    ZapLog.w(LOG_TAG, response);
+                    LnUrlPayResponse lnUrlPayResponse = new Gson().fromJson(response, LnUrlPayResponse.class);
+                    listener.onValidLnUrlPay(lnUrlPayResponse);
+                } else if (lnUrlResponse.isChannelRequest()) {
+                    ZapLog.d(LOG_TAG, "LNURL: valid channel request data received...");
+                    LnUrlChannelResponse lnUrlChannelResponse = new Gson().fromJson(response, LnUrlChannelResponse.class);
+                    listener.onValidLnUrlChannel(lnUrlChannelResponse);
+                } else if (lnUrlResponse.isHostedChannelRequest()) {
+                    ZapLog.d(LOG_TAG, "LNURL: valid hosted channel request data received...");
+                    LnUrlHostedChannelResponse lnUrlHostedChannelResponse = new Gson().fromJson(response, LnUrlHostedChannelResponse.class);
+                    listener.onValidLnUrlHostedChannel(lnUrlHostedChannelResponse);
+                } else {
+                    ZapLog.w(LOG_TAG, "LNURL: valid but unsupported data received...");
+                    listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
+                }
+            } catch (Exception e) {
+                listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
             }
         }
     }

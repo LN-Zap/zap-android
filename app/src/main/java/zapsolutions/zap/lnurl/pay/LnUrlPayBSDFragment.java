@@ -233,8 +233,11 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
             }
         });
 
-
-        if (mServiceURLString != null) {
+        if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_IDENTIFIER) != null) {
+            mTvPayee.setText(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_IDENTIFIER));
+        } else if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_EMAIL) != null) {
+            mTvPayee.setText(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_EMAIL));
+        } else if (mServiceURLString != null) {
             mTvPayee.setText(mServiceURLString);
         } else {
             mTvPayee.setText(R.string.unknown);
@@ -327,7 +330,8 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
                             @Override
                             public void run() {
                                 try {
-                                    validateSecondResponse(response.body().string());
+                                    String responseContent = response.body().string();
+                                    validateSecondResponse(responseContent);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -387,6 +391,11 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
         ZapLog.d(LOG_TAG, "Second pay response: " + secondPayResponse);
 
         LnUrlPaySecondResponse lnUrlPaySecondResponse = new Gson().fromJson(secondPayResponse, LnUrlPaySecondResponse.class);
+
+        if (lnUrlPaySecondResponse == null) {
+            switchToFailedScreen(getResources().getString(R.string.lnurl_invalid_response));
+            return;
+        }
 
         if (lnUrlPaySecondResponse.hasError()) {
             ZapLog.d(LOG_TAG, "LNURL: Failed to pay. " + lnUrlPaySecondResponse.getReason());

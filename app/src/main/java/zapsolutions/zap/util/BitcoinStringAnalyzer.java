@@ -19,6 +19,7 @@ import zapsolutions.zap.lnurl.LnurlDecoder;
 import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
+import zapsolutions.zap.lnurl.staticInternetIdentifier.StaticInternetIdentifier;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
 
 public class BitcoinStringAnalyzer {
@@ -141,7 +142,27 @@ public class BitcoinStringAnalyzer {
 
             @Override
             public void onNoInvoiceData() {
-                // No Invoice or Address either, we have unrecognizable data
+                checkIfStaticInternetIdentifier(ctx, compositeDisposable, inputString, listener);
+            }
+        });
+    }
+
+    private static void checkIfStaticInternetIdentifier(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
+        StaticInternetIdentifier.checkIfValidStaticInternetIdentifier(ctx, inputString, new StaticInternetIdentifier.OnStaticIdentifierChecked() {
+
+            @Override
+            public void onValidInternetIdentifier(LnUrlPayResponse lnUrlPayResponse) {
+                listener.onValidInternetIdentifier(lnUrlPayResponse);
+            }
+
+            @Override
+            public void onError(String error, int duration) {
+                listener.onError(error, duration);
+            }
+
+            @Override
+            public void onNoStaticInternetIdentifierData() {
+                // No Lightning Address either, we have unrecognizable data
                 listener.onNoReadableData();
             }
         });
@@ -162,6 +183,8 @@ public class BitcoinStringAnalyzer {
         void onValidLnUrlPay(LnUrlPayResponse payResponse);
 
         void onValidLnUrlAuth(URL url);
+
+        void onValidInternetIdentifier(LnUrlPayResponse payResponse);
 
         void onValidLndConnectString(RemoteConfiguration remoteConfiguration);
 
