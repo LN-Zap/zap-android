@@ -240,11 +240,11 @@ public class LnUrlPayBSDFragment extends ZapBSDFragment {
             mTvPayee.setText(R.string.unknown);
         }
 
-        if (mPaymentData.getMetadata(LnUrlPayResponse.METADATA_TEXT) == null) {
+        if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT) == null) {
             mDescriptionView.setVisibility(View.GONE);
         } else {
             mDescriptionView.setVisibility(View.VISIBLE);
-            mEtDescription.setText(mPaymentData.getMetadata(LnUrlPayResponse.METADATA_TEXT));
+            mEtDescription.setText(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT));
         }
 
         if (mPaymentData.getMinSendable() == mPaymentData.getMaxSendable()) {
