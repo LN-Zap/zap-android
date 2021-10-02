@@ -1,4 +1,4 @@
-package zapsolutions.zap.util;
+package zapsolutions.zap.lnurl;
 
 import android.content.Context;
 
@@ -19,35 +19,54 @@ import okhttp3.Request;
 import okhttp3.Response;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
-import zapsolutions.zap.lnurl.LnUrlResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
+import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.UtilFunctions;
+import zapsolutions.zap.util.ZapLog;
 
-public class LnUrlUtil {
-    private static final String LOG_TAG = LnUrlUtil.class.getName();
+/**
+ * This class examines a string if it is a valid lnurl.
+ * The result can be obtained by the OnLnUrlReadListener interface.
+ * <p>
+ * Relevant specifications:
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/02.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/03.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/04.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/06.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/07.md
+ */
+
+public class LnUrlReader {
+    private static final String LOG_TAG = LnUrlReader.class.getName();
 
     public static void readLnUrl(Context ctx, String data, OnLnUrlReadListener listener) {
-        // Extract fallback LNURL from URL if one is present
         try {
+            // Extract fallback LNURL from URL if one is present
+            // Please refer to the following specification:
+            // https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md
             URL url = new URL(data);
             String query = url.getQuery();
-            if (query != null && query.contains("lightning=LNURL1")) {
+            if (query != null && query.toLowerCase().contains("lightning=lnurl1")) {
                 data = UtilFunctions.getQueryParam(url, "lightning");
             }
         } catch (MalformedURLException ignored) {
         }
 
-        // Check the full data or the extracted LNURL from above to see if it is a valid LNURL
         try {
+            // Check the full data or the extracted LNURL from above to see if it is a valid LNURL
             String decodedLnUrl = LnurlDecoder.decode(data);
             ZapLog.v(LOG_TAG, "Decoded LNURL: " + decodedLnUrl);
-            // Check if it has a query param called login. In this case do not make a GET request as the AuthFlow works different.
             URL decodedUrl = null;
             try {
                 decodedUrl = new URL(decodedLnUrl);
                 String query = decodedUrl.getQuery();
+                // Check if it has a query param called login. In this case do not make a GET request as the AuthFlow works different.
+                // Please refer to the following specification:
+                // https://github.com/fiatjaf/lnurl-rfc/blob/luds/04.md
                 if (query != null && query.contains("tag=login")) {
                     String k1 = UtilFunctions.getQueryParam(decodedUrl, "k1");
                     if (k1 != null && k1.length() == 64 && UtilFunctions.isHex(k1)) {

@@ -2,6 +2,8 @@ package zapsolutions.zap.util;
 
 import org.junit.Test;
 
+import zapsolutions.zap.lnurl.LnurlDecoder;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 

@@ -1,11 +1,11 @@
 package zapsolutions.zap.lnurl.pay;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.List;
 
 import zapsolutions.zap.lnurl.LnUrlResponse;
 import zapsolutions.zap.util.UtilFunctions;
@@ -14,7 +14,7 @@ import zapsolutions.zap.util.UtilFunctions;
  * This class helps to work with the received response from a LNURL-pay request.
  * <p>
  * Please refer to step 3 in the following reference:
- * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-pay.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/06.md
  */
 public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
 
@@ -42,22 +42,31 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
         return minSendable;
     }
 
-    public String getMetadata(String metadataName) {
-        List<String[]> list = getMetadataAsList();
-        for (String[] stringArray : list) {
-            if (stringArray[0].equals(metadataName)) {
-                return stringArray[1];
+    public String getMetadataAsString(String metadataName) {
+        JsonArray[] list = getMetadataAsList();
+        for (JsonArray jsonArray : list) {
+            if (jsonArray.get(0).getAsString().equals(metadataName)) {
+                return jsonArray.get(1).getAsString();
             }
         }
         return null;
     }
 
-    private List<String[]> getMetadataAsList() {
+    public JsonArray getMetadataAsJsonArray(String metadataName) {
+        JsonArray[] list = getMetadataAsList();
+        for (JsonArray jsonArray : list) {
+            if (jsonArray.get(0).getAsString().equals(metadataName)) {
+                return jsonArray;
+            }
+        }
+        return null;
+    }
+
+    private JsonArray[] getMetadataAsList() {
         Gson gson = new Gson();
-        Type listType = new TypeToken<List<String[]>>() {
+        Type listType = new TypeToken<JsonArray[]>() {
         }.getType();
-        List<String[]> list = gson.fromJson(metadata, listType);
-        return list;
+        return gson.fromJson(metadata, listType);
     }
 
     public String getMetadataHash() {

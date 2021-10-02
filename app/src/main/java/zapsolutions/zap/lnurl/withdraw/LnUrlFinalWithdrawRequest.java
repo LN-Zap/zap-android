@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
  * This class helps to construct the final withdraw request after the negotiation has happened.
  * <p>
  * Please refer to step 5 in the following reference:
- * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-withdraw.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/03.md
  */
 public class LnUrlFinalWithdrawRequest {
 

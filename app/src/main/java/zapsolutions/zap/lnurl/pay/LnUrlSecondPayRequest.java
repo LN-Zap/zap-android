@@ -10,7 +10,7 @@ import zapsolutions.zap.util.UtilFunctions;
  * This class helps to construct the second pay request.
  * <p>
  * Please refer to step 5 in the following reference:
- * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-pay.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/06.md
  */
 public class LnUrlSecondPayRequest {
 

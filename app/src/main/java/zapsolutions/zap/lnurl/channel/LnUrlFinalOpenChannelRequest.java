@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
  * This class helps to construct the final withdraw request after the negotiation has happened.
  * <p>
  * Please refer to step 5 in the following reference:
- * https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-channel.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/02.md
  */
 public class LnUrlFinalOpenChannelRequest {
 
@@ -14,6 +14,7 @@ public class LnUrlFinalOpenChannelRequest {
     private String mK1;
     private String mRemoteId;
     private boolean mIsPrivate;
+    private boolean mCancel;
 
     private LnUrlFinalOpenChannelRequest(String callback, String k1, String remoteId, boolean isPrivate) {
         mCallback = callback;
@@ -38,10 +39,18 @@ public class LnUrlFinalOpenChannelRequest {
         return mIsPrivate;
     }
 
+    public boolean getCancel() {
+        return mCancel;
+    }
+
     public String requestAsString() {
         String isPrivate = mIsPrivate ? "1" : "0";
         String paramStart = mCallback.contains("?") ? "&" : "?";
-        return mCallback + paramStart + "k1=" + mK1 + "&remoteid=" + mRemoteId + "&private=" + isPrivate;
+        if (mCancel) {
+            return mCallback + paramStart + "k1=" + mK1 + "&remoteid=" + mRemoteId + "&cancel=1";
+        } else {
+            return mCallback + paramStart + "k1=" + mK1 + "&remoteid=" + mRemoteId + "&private=" + isPrivate;
+        }
     }
 
 
@@ -50,6 +59,7 @@ public class LnUrlFinalOpenChannelRequest {
         private String mK1;
         private String mRemoteId;
         private boolean mIsPrivate = false;
+        private boolean mCancel = false;
 
         public Builder setCallback(@NonNull String callback) {
             this.mCallback = callback;
@@ -71,6 +81,12 @@ public class LnUrlFinalOpenChannelRequest {
 
         public Builder setIsPrivate(@NonNull boolean isPrivate) {
             this.mIsPrivate = isPrivate;
+
+            return this;
+        }
+
+        public Builder setCancel(@NonNull boolean cancel) {
+            this.mCancel = cancel;
 
             return this;
         }

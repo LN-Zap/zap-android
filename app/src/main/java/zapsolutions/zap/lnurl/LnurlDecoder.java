@@ -1,23 +1,33 @@
-package zapsolutions.zap.util;
+package zapsolutions.zap.lnurl;
+
+import zapsolutions.zap.util.Bech32;
+import zapsolutions.zap.util.UriUtil;
+
+/**
+ * This class manages the decoding of bech32 encoded lnurls.
+ *
+ * Please refer to the following specification:
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md
+ */
 
 public class LnurlDecoder {
 
-    public static String decode(String lnurl) throws NoLnUrlDataException {
+    public static String decode(String data) throws NoLnUrlDataException {
 
-        if (lnurl == null) {
+        if (data == null) {
             throw new NoLnUrlDataException("LNURL decoding failed: The data to decode is not a LNURL");
         }
 
         // Remove the "lightning:" uri scheme if it is present
-        lnurl = UriUtil.removeURI(lnurl);
+        data = UriUtil.removeURI(data);
 
-        if (lnurl.length() < 5 || !lnurl.substring(0, 5).toLowerCase().equals("lnurl")) {
+        if (data.length() < 6 || !data.substring(0, 6).toLowerCase().equals("lnurl1")) {
             throw new NoLnUrlDataException("LNURL decoding failed: The data to decode is not a LNURL");
         }
 
         String decodedLnurl = null;
         try {
-            byte[] decodedBech32 = Bech32.bech32Decode(lnurl, false).second;
+            byte[] decodedBech32 = Bech32.bech32Decode(data, false).second;
             byte[] regroupedBytes = Bech32.regroupBytes(decodedBech32);
 
             decodedLnurl = new String(regroupedBytes);
