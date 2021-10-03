@@ -614,7 +614,14 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     public void onLndConnectError(String error) {
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             onInfoUpdated(false);
-            String errorMessage = getString(R.string.error_connection_unknown) + "\n\n" + error;
+            String errorMessage;
+            if (error.toLowerCase().contains("shutdown") && error.toLowerCase().contains("channel")) {
+                // We explicitly filter this error message out, as it is confusing for users.
+                // They might think lightning channels are getting closed, while in reality the message is about the grpc channel
+                errorMessage = getString(R.string.error_lnd_connection_failed);
+            } else {
+                errorMessage = getString(R.string.error_connection_unknown) + "\n\n" + error;
+            }
             mTvConnectError.setText(errorMessage);
         }
     }
