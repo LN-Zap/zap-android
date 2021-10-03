@@ -293,6 +293,10 @@
     <string name="error_payment_keysend_not_enabled_on_remote">Ujistěte se, že příjemce povolil funkci keyend.</string>
     <string name="error_only_payment_data_allowed">Zde jsou povoleny pouze údaje o platbě.</string>
     <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
+    <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
+    <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
     <plurals name="duration_second">
         <item quantity="one">%d Second</item>
         <item quantity="few">%d Seconds</item>
@@ -393,6 +397,7 @@
     <string name="lnurl_pay_success_secret_decrypt_error">Vaše platba byla úspěšná, ale tajemství, které jste obdrželi, nebylo možné dešifrovat.</string>
     <string name="lnurl_pay_save_url">DŮLEŽITÉ: \nURL byla zkopírována do vaší schránky. Uložte ji, pokud ji budete potřebovat později. Tento dialog se znovu nezobrazí.</string>
     <string name="lnurl_pay_save_secret">DŮLEŽITÉ:\nKód byl zkopírován do vaší schránky. Uložte ho, pokud ho budete potřebovat později. Tento dialog se znovu nezobrazí.</string>
+    <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
     <string name="string_analyzer_unrecognized_data">Nerozpoznaná data.</string>
     <string name="rest_port">REST (port 8080) není podporován.\n\nChcete změnit port na 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Peněženky</string>

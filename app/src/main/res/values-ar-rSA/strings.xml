@@ -293,6 +293,10 @@
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
     <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
+    <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
+    <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
     <plurals name="duration_second">
         <item quantity="zero">%d Seconds</item>
         <item quantity="one">%d Second</item>
@@ -407,6 +411,7 @@
     <string name="lnurl_pay_success_secret_decrypt_error">Your payment was successful, but the secret that you received could not be decrypted.</string>
     <string name="lnurl_pay_save_url">IMPORTANT:\nThe URL has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
     <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
+    <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
     <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Wallets</string>

@@ -293,6 +293,10 @@
     <string name="error_payment_keysend_not_enabled_on_remote">Zorg ervoor dat de ontvanger de keysendfunctie heeft ingeschakeld.</string>
     <string name="error_only_payment_data_allowed">Alleen betalingsdata is hier toegestaan.</string>
     <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
+    <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
+    <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
     <plurals name="duration_second">
         <item quantity="one">%d Second</item>
         <item quantity="other">%d Seconds</item>
@@ -379,6 +383,7 @@
     <string name="lnurl_pay_success_secret_decrypt_error">Je betaling is gelukt, maar het geheim dat je hebt ontvangen, kon niet worden ontsleuteld.</string>
     <string name="lnurl_pay_save_url">IMPORTANT:\nDe URL is gekopieerd naar je klembord. Bewaar het als je het later nodig hebt. Dit dialoogvenster wordt niet meer weergegeven.</string>
     <string name="lnurl_pay_save_secret">IMPORTANT:\nDe code is gekopieerd naar je klembord. Bewaar het als je het later nodig hebt. Dit dialoogvenster wordt niet meer weergegeven.</string>
+    <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
     <string name="string_analyzer_unrecognized_data">Niet-herkende data.</string>
     <string name="rest_port">REST (port 8080) is niet ondersteund.\n\nWil je de port veranderen naar 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Wallets</string>

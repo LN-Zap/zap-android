@@ -151,7 +151,7 @@
     <string name="channel_close_success">Kanalschließung erfolgreich eingeleitet</string>
     <string name="channel_close_force">Kanalschließung erzwingen</string>
     <string name="channel_close_error">Fehler beim Schließen</string>
-    <string name="channel_close_confirmation">Willst du wirklich den Kanal mit\n\n%s\n schließen?</string>
+    <string name="channel_close_confirmation">Willst du wirklich den Kanal mit\n\n%s\n\nschließen?</string>
     <string name="channel_close_force_confirmation">Willst du wirklich die Kanalschließung mit\n\n%1$s\n\n erzwingen?\nDein Geld wird für %2$s blockiert sein.</string>
     <string name="channel_close_time">Zeit bis zur Schließung</string>
     <string name="channel_open">Kanal öffnen</string>
@@ -293,6 +293,10 @@
     <string name="error_payment_keysend_not_enabled_on_remote">Bitte stelle sicher, dass der Empfänger die \"Keysend\" Funktion aktiviert hat.</string>
     <string name="error_only_payment_data_allowed">Nur Zahlungsdaten sind hier erlaubt.</string>
     <string name="error_wallet_not_yet_ready">Deine Wallet ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s scheint Anfragen aus dem Tor Netzwerk zu blockieren. Du kannst versuchen Tor in den Einstellungen auszuschalten oder den Dienst zu kontaktieren damit sie ihre Cloudflare Einstellungen ändern.</string>
+    <string name="error_tor_exchange_rate">Die Wechselkurse konnten nicht aktualisiert werden. Der Dienst, den du verwendest, scheint Anfragen aus dem Tor Netzwerk zu blockieren. Versuche den Wechselkursanbieter in den erweiterten Einstellungen zu ändern.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Die Antwort von %1$s konnte nicht gelesen werden.</string>
+    <string name="error_lnd_connection_failed">Die Verbindung zu LND ist fehlgeschlagen. Bitte versuche es erneut.</string>
     <plurals name="duration_second">
         <item quantity="one">%d Sekunde</item>
         <item quantity="other">%d Sekunden</item>
@@ -379,6 +383,7 @@
     <string name="lnurl_pay_success_secret_decrypt_error">Die Zahlung war erfolgreich, aber das Geheimnis, das du erhalten hast, konnte nicht entschlüsselt werden.</string>
     <string name="lnurl_pay_save_url">WICHTIG:\nDie URL wurde in die Zwischenablage kopiert. Bitte speicher sie ab, falls du sie später nochmal brauchst. Dieses Fenster wird nicht nocheinmal angezeigt.</string>
     <string name="lnurl_pay_save_secret">WICHTIG:\nDer Code wurde in die Zwischenablage kopiert. Bitte speicher ihn ab, falls du ihn später nochmal brauchst. Dieses Fenster wird nicht nocheinmal angezeigt.</string>
+    <string name="lnurl_invalid_response">Der Dienst hat mit einer ungültigen Antwort geantwortet.</string>
     <string name="string_analyzer_unrecognized_data">Unbekannte Daten.</string>
     <string name="rest_port">REST (Port 8080) wird nicht unterstützt.\n\nMöchtest du den Port auf 10009 (gRPC) ändern?</string>
     <string name="drawer_menu_wallets">Wallets</string>
