@@ -1052,6 +1052,12 @@ public class Wallet {
      */
     public boolean isTransactionInternal(Transaction transaction) {
 
+        // This is faster especially for nodes with lots of channels
+        if (hasInternalTransactionLabel(transaction)) {
+            return true;
+        }
+
+        // ToDo: looping through all channels can be removed later. But this is still necessary for Nodes that run since LND versions prior to LND 0.11
         // open channels
         if (mOpenChannelsList != null) {
             for (Channel c : mOpenChannelsList) {
@@ -1112,6 +1118,25 @@ public class Wallet {
             }
         }
 
+        return false;
+    }
+
+    /**
+     * This function determines if according to the label this is a internal transaction.
+     * The labelTypes are derived from: https://github.com/lightningnetwork/lnd/blob/master/labels/labels.go
+     *
+     * @param transaction
+     * @return
+     */
+    public boolean hasInternalTransactionLabel(Transaction transaction) {
+        String[] labelType = {":openchannel", ":closechannel", ":justicetx", ":sweep"};
+        if (transaction.getLabel() != null && !transaction.getLabel().isEmpty()) {
+            for (String label : labelType) {
+                if (transaction.getLabel().toLowerCase().contains(label)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
