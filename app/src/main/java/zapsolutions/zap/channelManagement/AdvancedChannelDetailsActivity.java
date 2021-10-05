@@ -161,24 +161,24 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
                             // Our node is Node1
                             if (chanInfoResponse.hasNode1Policy()) {
                                 BigDecimal localFeeRate = BigDecimal.valueOf((double) (chanInfoResponse.getNode1Policy().getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                                String localFee = chanInfoResponse.getNode1Policy().getFeeBaseMsat() + " msat\n" + localFeeRate.toPlainString() + " %";
+                                String localFee = chanInfoResponse.getNode1Policy().getFeeBaseMsat() + " msat\n+ " + localFeeRate.toPlainString() + " %";
                                 mDetailLocalRoutingFee.setValue(localFee);
                             }
                             if (chanInfoResponse.hasNode2Policy()) {
                                 BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (chanInfoResponse.getNode2Policy().getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                                String remoteFee = chanInfoResponse.getNode2Policy().getFeeBaseMsat() + " msat\n" + remoteFeeRate.toPlainString() + " %";
+                                String remoteFee = chanInfoResponse.getNode2Policy().getFeeBaseMsat() + " msat\n+ " + remoteFeeRate.toPlainString() + " %";
                                 mDetailRemoteRoutingFee.setValue(remoteFee);
                             }
                         } else {
                             // Our node is Node2
                             if (chanInfoResponse.hasNode1Policy()) {
                                 BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (chanInfoResponse.getNode1Policy().getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                                String remoteFee = chanInfoResponse.getNode1Policy().getFeeBaseMsat() + " msat\n" + remoteFeeRate.toPlainString() + " %";
+                                String remoteFee = chanInfoResponse.getNode1Policy().getFeeBaseMsat() + " msat\n+ " + remoteFeeRate.toPlainString() + " %";
                                 mDetailRemoteRoutingFee.setValue(remoteFee);
                             }
                             if (chanInfoResponse.hasNode2Policy()) {
                                 BigDecimal localFeeRate = BigDecimal.valueOf((double) (chanInfoResponse.getNode2Policy().getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                                String localFee = chanInfoResponse.getNode2Policy().getFeeBaseMsat() + " msat\n" + localFeeRate.toPlainString() + " %";
+                                String localFee = chanInfoResponse.getNode2Policy().getFeeBaseMsat() + " msat\n+ " + localFeeRate.toPlainString() + " %";
                                 mDetailLocalRoutingFee.setValue(localFee);
                             }
                         }
