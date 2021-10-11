@@ -116,6 +116,7 @@
     <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
     <string name="activity_contact_details">Contact Details</string>
     <string name="activity_manual_setup">Connection Data</string>
+    <string name="activity_backup">Backup</string>
 
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">History</string>
@@ -490,4 +491,15 @@
     <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
 
+    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of Zap.\n\nThis backup only contains the following data:\n\n- Connection data for your nodes\n- Contacts</string>
+    <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
+    <string name="backup_data_confirm_headline">Please Confirm</string>
+    <string name="backup_data_confirm">I confirm</string>
+    <string name="backup_data_restore_description">Restore your connected nodes and contacts.\nIf your nodes are no longer accessible, this restore process will not help you regain access to your funds.</string>
+    <string name="backup_data_create_headline">Backup</string>
+    <string name="backup_data_restore_headline">Restore</string>
+    <string name="backup_data_password_enter">Enter your password</string>
+    <string name="backup_data_password_confirm">Confirm your password</string>
+    <string name="backup_data_password_empty">The password must not be empty.</string>
+    <string name="backup_data_password_mismatch">The passwords are not identical.</string>
 </resources>

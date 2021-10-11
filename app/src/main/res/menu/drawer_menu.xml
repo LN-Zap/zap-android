@@ -14,12 +14,7 @@
             android:id="@+id/drawerContacts"
             android:icon="@drawable/ic_person_24"
             android:title="@string/drawer_menu_contacts" />
-        <!--
-        <item
-            android:id="@+id/drawerBackup"
-            android:icon="@drawable/ic_baseline_lock_24"
-            android:title="@string/drawer_menu_backup" />
-        -->
+
         <item
             android:id="@+id/drawerSettings"
             android:icon="@drawable/ic_nav_settings_black_24dp"
@@ -34,6 +29,10 @@
             android:title="@string/drawer_menu_buy" />
     </group>
      -->
+    <item
+        android:id="@+id/drawerBackup"
+        android:icon="@drawable/ic_outline_save_24"
+        android:title="@string/drawer_menu_backup" />
 
     <item
         android:id="@+id/drawerSupport"

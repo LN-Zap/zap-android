@@ -162,6 +162,11 @@
             android:name=".channelManagement.AdvancedChannelDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".backup.BackupActivity"
+            android:label="@string/activity_backup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
 
         <meta-data
             android:name="android.nfc.disable_beam_default"

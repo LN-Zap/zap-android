@@ -40,6 +40,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import zapsolutions.zap.backup.BackupActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
@@ -766,11 +767,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 intentContacts.putExtra(ManageContactsActivity.EXTRA_CONTACT_ACTIVITY_MODE, ManageContactsActivity.MODE_MANAGE);
                 startActivityForResult(intentContacts, 0);
                 break;
-                /*
             case R.id.drawerBackup:
-                Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+                Intent intentBackup = new Intent(this, BackupActivity.class);
+                startActivity(intentBackup);
                 break;
-                 */
             case R.id.drawerSettings:
                 Intent intentSettings = new Intent(this, SettingsActivity.class);
                 startActivity(intentSettings);
