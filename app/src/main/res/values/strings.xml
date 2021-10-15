@@ -502,4 +502,5 @@
     <string name="backup_data_password_confirm">Confirm your password</string>
     <string name="backup_data_password_empty">The password must not be empty.</string>
     <string name="backup_data_password_mismatch">The passwords are not identical.</string>
+    <string name="backup_data_error_writing_file">Error writing backup file.</string>
 </resources>

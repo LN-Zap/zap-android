@@ -50,6 +50,13 @@ public class DataBackupPagerAdapter extends PagerAdapter {
                     mBackupAction.onCreateBackupStarted();
                 }
             });
+            Button buttonRestoreBackup = backupView.findViewById(R.id.data_backup_intro_restore_button);
+            buttonRestoreBackup.setOnClickListener(new OnSingleClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mBackupAction.onRestoreBackupStarted();
+                }
+            });
         } else if (position == 1) {
             // backup create confirm
             backupView = inflater.inflate(R.layout.view_data_backup_confirm, container, false);

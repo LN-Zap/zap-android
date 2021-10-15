@@ -1,17 +1,33 @@
 package zapsolutions.zap.backup;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+
+import com.google.common.io.ByteStreams;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.customView.CustomViewPager;
+import zapsolutions.zap.util.EncryptionUtil;
+import zapsolutions.zap.util.ZapLog;
 
 
 public class DataBackupFragment extends Fragment implements DataBackupPagerAdapter.BackupAction {
@@ -57,12 +73,14 @@ public class DataBackupFragment extends Fragment implements DataBackupPagerAdapt
 
     @Override
     public void onCreateBackupPasswordEntered() {
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        openSaveFileDialog("ZapBackup_" + timeStamp);
         mViewPager.setCurrentItem(3);
     }
 
     @Override
     public void onRestoreBackupStarted() {
-
+        openOpenFileDialog();
     }
 
     @Override
@@ -73,6 +91,67 @@ public class DataBackupFragment extends Fragment implements DataBackupPagerAdapt
     @Override
     public void onFinish() {
         getActivity().finish();
+    }
+
+    ActivityResultLauncher<Intent> saveDialogResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data.getData() != null) {
+                        try {
+                            OutputStream fileOutputStream = getActivity().getContentResolver().openOutputStream(data.getData());
+                            byte[] backup = DataBackupUtil.createBackup("pw");
+                            fileOutputStream.write(backup);
+                            fileOutputStream.close();
+                            ZapLog.d(TAG, "Backup file creation was successful.");
+                        } catch (IOException | NullPointerException e) {
+                            e.printStackTrace();
+                            ZapLog.w(TAG, "Error writing backup file.");
+                            Toast.makeText(getActivity(), getString(R.string.backup_data_error_writing_file), Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), getString(R.string.backup_data_error_writing_file), Toast.LENGTH_LONG).show();
+                        ZapLog.w(TAG, "The result data was empty. Unable to create backup.");
+                        getActivity().finish();
+                    }
+                }
+            });
+
+    ActivityResultLauncher<Intent> openDialogResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    Uri uri = data.getData();
+
+                    try {
+                        InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+                        byte[] encryptedBackupBytes = ByteStreams.toByteArray(inputStream);
+                        byte[] decryptedBackupBytes = EncryptionUtil.PasswordDecryptData(encryptedBackupBytes, "pw");
+                        String decryptedBackup = new String(decryptedBackupBytes, StandardCharsets.UTF_8);
+                        getActivity().finish();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+    public void openSaveFileDialog(String title) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/zdb");
+        intent.putExtra(Intent.EXTRA_TITLE, title + ".zdb");
+        saveDialogResultLauncher.launch(intent);
+    }
+
+    public void openOpenFileDialog() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/zdb");
+        openDialogResultLauncher.launch(intent);
     }
 }
 
