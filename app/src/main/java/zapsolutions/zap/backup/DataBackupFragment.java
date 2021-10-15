@@ -131,6 +131,7 @@ public class DataBackupFragment extends Fragment implements DataBackupPagerAdapt
                         byte[] encryptedBackupBytes = ByteStreams.toByteArray(inputStream);
                         byte[] decryptedBackupBytes = EncryptionUtil.PasswordDecryptData(encryptedBackupBytes, "pw");
                         String decryptedBackup = new String(decryptedBackupBytes, StandardCharsets.UTF_8);
+                        DataBackupUtil.restoreBackup(decryptedBackup);
                         getActivity().finish();
                     } catch (IOException e) {
                         e.printStackTrace();
