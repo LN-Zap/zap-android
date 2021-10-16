@@ -6,17 +6,17 @@
     android:padding="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/creatingBackupFinished"
+        android:id="@+id/restoringBackupFinished"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/creatingBackupSuccess"
+            android:id="@+id/restoringBackupSuccess"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/data_backup_create_finish_button"
+            app:layout_constraintBottom_toTopOf="@id/data_backup_restore_finish_button"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -26,7 +26,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/data_backup_finish_title_success"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/ic_baseline_archive_24"
+                app:srcCompat="@drawable/ic_baseline_restore_24"
                 app:tint="@color/lightningOrange" />
 
             <TextView
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
-                android:text="@string/backup_data_create_success"
+                android:text="@string/backup_data_restore_success"
                 android:textColor="@color/white"
                 android:textSize="32sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -46,11 +46,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/creatingBackupFailed"
+            android:id="@+id/restoringBackupFailed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/data_backup_create_finish_button"
+            app:layout_constraintBottom_toTopOf="@id/data_backup_restore_finish_button"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
-                android:text="@string/backup_data_create_failed"
+                android:text="@string/backup_data_restore_failed_title"
                 android:textColor="@color/white"
                 android:textSize="32sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -76,11 +76,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/data_backup_finish_description_failed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:text="@string/backup_data_restore_failed_description"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/data_backup_finish_title_failed" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/data_backup_create_finish_button"
+            android:id="@+id/data_backup_restore_finish_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_clickable_item"
@@ -94,7 +106,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/creatingBackupProgress"
+        android:id="@+id/restoringBackupProgress"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -105,7 +117,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/backup_data_creation_process"
+            android:text="@string/backup_data_restore_process"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

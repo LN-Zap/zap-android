@@ -15,19 +15,24 @@ import androidx.viewpager.widget.PagerAdapter;
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.OnSingleClickListener;
 
-public class DataBackupPagerAdapter extends PagerAdapter {
+public class DataBackupCreatePagerAdapter extends PagerAdapter {
 
     private Context mContext;
     private BackupAction mBackupAction;
 
-    public DataBackupPagerAdapter(Context context, BackupAction backupAction) {
+    private View mBackupCreationProcess;
+    private View mBackupCreationFinished;
+    private View mBackupCreationSuccess;
+    private View mBackupCreationFailed;
+
+    public DataBackupCreatePagerAdapter(Context context, BackupAction backupAction) {
         mContext = context;
         mBackupAction = backupAction;
     }
 
     @Override
     public int getCount() {
-        return 4; // 4 words and final confirmation
+        return 3;
     }
 
     @Override
@@ -41,23 +46,6 @@ public class DataBackupPagerAdapter extends PagerAdapter {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
         View backupView;
         if (position == 0) {
-            // intro
-            backupView = inflater.inflate(R.layout.view_data_backup_intro, container, false);
-            Button buttonStartBackup = backupView.findViewById(R.id.data_backup_intro_create_button);
-            buttonStartBackup.setOnClickListener(new OnSingleClickListener() {
-                @Override
-                public void onSingleClick(View v) {
-                    mBackupAction.onCreateBackupStarted();
-                }
-            });
-            Button buttonRestoreBackup = backupView.findViewById(R.id.data_backup_intro_restore_button);
-            buttonRestoreBackup.setOnClickListener(new OnSingleClickListener() {
-                @Override
-                public void onSingleClick(View v) {
-                    mBackupAction.onRestoreBackupStarted();
-                }
-            });
-        } else if (position == 1) {
             // backup create confirm
             backupView = inflater.inflate(R.layout.view_data_backup_confirm, container, false);
 
@@ -84,14 +72,13 @@ public class DataBackupPagerAdapter extends PagerAdapter {
                     // Before we finish we remove the seed from the preferences
                     // this will also trigger a notification update
                     mBackupAction.onConfirmed();
-                    mBackupAction.showKeyboard();
                 }
             });
-        } else if (position == 2) {
+        } else if (position == 1) {
             // password
-            backupView = inflater.inflate(R.layout.view_data_backup_create, container, false);
+            backupView = inflater.inflate(R.layout.view_data_backup_password, container, false);
 
-            Button buttonCreate = backupView.findViewById(R.id.data_backup_create_button);
+            Button buttonCreate = backupView.findViewById(R.id.data_backup_continue_button);
             EditText pw1 = backupView.findViewById(R.id.pw1_input);
             EditText pw2 = backupView.findViewById(R.id.pw2_input);
 
@@ -101,9 +88,11 @@ public class DataBackupPagerAdapter extends PagerAdapter {
                 @Override
                 public void onSingleClick(View v) {
                     if (pw1.getText().toString().equals(pw2.getText().toString())) {
-                        if (pw1.getText().toString().length() > 0) {
-                            mBackupAction.hideKeyboard();
-                            mBackupAction.onCreateBackupPasswordEntered();
+                        if (pw1.getText().toString().length() > 7) {
+                            String password = pw1.getText().toString();
+                            pw1.setText("");
+                            pw2.setText("");
+                            mBackupAction.onCreateBackupPasswordEntered(password);
                         } else {
                             Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_empty), Toast.LENGTH_SHORT).show();
                         }
@@ -115,6 +104,11 @@ public class DataBackupPagerAdapter extends PagerAdapter {
         } else {
             // finished
             backupView = inflater.inflate(R.layout.view_data_backup_create_finish, container, false);
+
+            mBackupCreationProcess = backupView.findViewById(R.id.creatingBackupProgress);
+            mBackupCreationFinished = backupView.findViewById(R.id.creatingBackupFinished);
+            mBackupCreationSuccess = backupView.findViewById(R.id.creatingBackupSuccess);
+            mBackupCreationFailed = backupView.findViewById(R.id.creatingBackupFailed);
 
             Button finishButton = backupView.findViewById(R.id.data_backup_create_finish_button);
             finishButton.setOnClickListener(new OnSingleClickListener() {
@@ -129,6 +123,16 @@ public class DataBackupPagerAdapter extends PagerAdapter {
         return backupView;
     }
 
+    public void setBackupCreationFinished(boolean success) {
+        mBackupCreationProcess.setVisibility(View.GONE);
+        mBackupCreationFinished.setVisibility(View.VISIBLE);
+        if (success) {
+            mBackupCreationSuccess.setVisibility(View.VISIBLE);
+        } else {
+            mBackupCreationFailed.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
@@ -136,15 +140,7 @@ public class DataBackupPagerAdapter extends PagerAdapter {
 
     interface BackupAction {
 
-        void hideKeyboard();
-
-        void showKeyboard();
-
-        void onCreateBackupStarted();
-
-        void onCreateBackupPasswordEntered();
-
-        void onRestoreBackupStarted();
+        void onCreateBackupPasswordEntered(String password);
 
         void onConfirmed();
 

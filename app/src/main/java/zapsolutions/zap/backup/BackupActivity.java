@@ -24,10 +24,10 @@ public class BackupActivity extends BaseAppCompatActivity {
         mFragmentManager = getSupportFragmentManager();
 
 
-        if (mFragmentManager.findFragmentByTag(DataBackupFragment.TAG) == null) {
+        if (mFragmentManager.findFragmentByTag(DataBackupCreateFragment.TAG) == null) {
             FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-            DataBackupFragment fragment = new DataBackupFragment();
-            fragmentTransaction.add(R.id.content_frame, fragment, DataBackupFragment.TAG);
+            DataBackupIntroFragment fragment = new DataBackupIntroFragment();
+            fragmentTransaction.add(R.id.content_frame, fragment, DataBackupCreateFragment.TAG);
             fragmentTransaction.commit();
         }
     }

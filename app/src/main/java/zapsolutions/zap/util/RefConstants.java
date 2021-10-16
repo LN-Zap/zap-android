@@ -33,7 +33,7 @@ public class RefConstants {
     public static final int PIN_DELAY_TIME = 30;
 
     // Data backup settings
-    public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 100000;
+    public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
 
     // API request timeouts (in seconds)
     public static final int TIMEOUT_SHORT = 5;
