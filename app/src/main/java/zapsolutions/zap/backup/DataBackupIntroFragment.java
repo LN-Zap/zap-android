@@ -36,7 +36,11 @@ public class DataBackupIntroFragment extends Fragment {
         buttonStartBackup.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                ((BackupActivity) getActivity()).changeFragment(new DataBackupCreateFragment());
+                if (DataBackupUtil.isThereAnythingToBackup()) {
+                    ((BackupActivity) getActivity()).changeFragment(new DataBackupCreateFragment());
+                } else {
+                    Toast.makeText(getActivity(), R.string.backup_data_no_data, Toast.LENGTH_LONG).show();
+                }
             }
         });
         Button buttonRestoreBackup = view.findViewById(R.id.data_backup_intro_restore_button);

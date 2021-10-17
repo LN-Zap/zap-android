@@ -510,5 +510,6 @@
     <string name="backup_data_restore_failed_title">Restoring failed</string>
     <string name="backup_data_restore_failed_description">Most likely you entered an invalid password.</string>
     <string name="backup_data_open_backupfile_error">Unable to open the selected file.</string>
+    <string name="backup_data_no_data">No data to backup.</string>
 
 </resources>

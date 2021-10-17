@@ -54,7 +54,7 @@ public class DataBackupUtil {
         return encryptedBackupBytes;
     }
 
-    public boolean isThereAnythingToBackup() {
+    public static boolean isThereAnythingToBackup() {
         return WalletConfigsManager.getInstance().hasAnyConfigs() || ContactsManager.getInstance().hasAnyContacts();
     }
 
