@@ -62,7 +62,7 @@ public class DataBackupUtil {
         DataBackup dataBackup = new Gson().fromJson(backupJsonString, DataBackup.class);
 
         // restore wallets
-        if (dataBackup.getWalletConfigs().length > 0) {
+        if (dataBackup.getWalletConfigs() != null && dataBackup.getWalletConfigs().length > 0) {
             WalletConfigsManager.getInstance().removeAllWalletConfigs();
             for (WalletConfig walletConfig : dataBackup.getWalletConfigs()) {
                 try {
@@ -76,7 +76,7 @@ public class DataBackupUtil {
         }
 
         // restore contacts
-        if (dataBackup.getContacts().length > 0) {
+        if (dataBackup.getContacts() != null && dataBackup.getContacts().length > 0) {
             ContactsManager.getInstance().removeAllContacts();
             for (Contact contact : dataBackup.getContacts()) {
                 try {
