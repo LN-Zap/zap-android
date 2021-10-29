@@ -15,6 +15,7 @@ public class CustomViewPager extends ViewPager {
     private FixedSpeedScroller mScroller = null;
 
     private boolean isSwipeable = true;
+    private boolean mForceNoSwipe = false;
 
     public CustomViewPager(Context context) {
         super(context);
@@ -30,12 +31,19 @@ public class CustomViewPager extends ViewPager {
         isSwipeable = swipeable;
     }
 
+    public void setForceNoSwipe(boolean forceNoSwipe) {
+        mForceNoSwipe = forceNoSwipe;
+    }
+
     // lets us disable scrolling
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_UP) {
             // Always reenable swiping on an up event
             isSwipeable = true;
+        }
+        if (mForceNoSwipe) {
+            return false;
         }
         if (isSwipeable) {
             return super.onTouchEvent(ev);
@@ -98,5 +106,15 @@ public class CustomViewPager extends ViewPager {
         public void setScrollDuration(int duration) {
             mDuration = duration;
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        return !mForceNoSwipe && super.onInterceptTouchEvent(event);
+    }
+
+    @Override
+    public boolean canScrollHorizontally(int direction) {
+        return !mForceNoSwipe && super.canScrollHorizontally(direction);
     }
 }

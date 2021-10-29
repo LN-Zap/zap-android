@@ -18,6 +18,8 @@ public class RefConstants {
     public static final int CURRENT_SETTINGS_VERSION = 19;
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
+
+    // PIN settings
     public static final int NUM_HASH_ITERATIONS = 5000;
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +31,10 @@ public class RefConstants {
     public static final int PIN_MAX_LENGTH = 10;
     public static final int PIN_MAX_FAILS = 3;
     public static final int PIN_DELAY_TIME = 30;
+
+    // Data backup settings
+    public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
+    public static final int DATA_BACKUP_VERSION = 0;
 
     // API request timeouts (in seconds)
     public static final int TIMEOUT_SHORT = 5;

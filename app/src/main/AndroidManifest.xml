@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="zapsolutions.zap">
-
-    <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
-
-    <queries>
-        <!-- Specific apps Zap interacts with -->
-        <package android:name="org.torproject.android" />
-        <package android:name="org.fdroid.fdroid" />
-    </queries>
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -160,6 +151,11 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".channelManagement.AdvancedChannelDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".backup.BackupActivity"
+            android:label="@string/activity_backup"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
 
