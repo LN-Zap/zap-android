@@ -18,9 +18,12 @@ import com.google.common.io.ByteStreams;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.OnSingleClickListener;
+import zapsolutions.zap.util.UtilFunctions;
 
 
 public class DataBackupIntroFragment extends Fragment {
@@ -63,8 +66,13 @@ public class DataBackupIntroFragment extends Fragment {
 
                     try {
                         InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
-                        byte[] encryptedBackupBytes = ByteStreams.toByteArray(inputStream);
-                        ((BackupActivity) getActivity()).changeFragment(DataBackupRestoreFragment.newInstance(encryptedBackupBytes));
+                        byte[] fileBytes = ByteStreams.toByteArray(inputStream);
+                        byte[] fileIdentifierBytes = Arrays.copyOfRange(fileBytes, 0, 10);
+                        boolean validFile = new String(fileIdentifierBytes, StandardCharsets.UTF_8).equals(DataBackupUtil.BACKUP_FILE_IDENTIFIER);
+                        byte[] backupVersionBytes = Arrays.copyOfRange(fileBytes, 10, 14);
+                        int backupVersion = UtilFunctions.intFromByteArray(backupVersionBytes);
+                        byte[] encryptedBackupBytes = Arrays.copyOfRange(fileBytes, 14, fileBytes.length);
+                        ((BackupActivity) getActivity()).changeFragment(DataBackupRestoreFragment.newInstance(encryptedBackupBytes, validFile, backupVersion));
                     } catch (IOException e) {
                         e.printStackTrace();
                         Toast.makeText(getContext(), R.string.backup_data_open_backupfile_error, Toast.LENGTH_LONG).show();
@@ -76,7 +84,7 @@ public class DataBackupIntroFragment extends Fragment {
     public void openOpenFileDialog() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/zdb");
+        intent.setType("*/*");
         openDialogResultLauncher.launch(intent);
     }
 }

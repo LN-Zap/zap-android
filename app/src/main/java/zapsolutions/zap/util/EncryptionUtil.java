@@ -26,9 +26,9 @@ public class EncryptionUtil {
      * This functions encrypts a message using a password based AES Encryption.
      * <p>
      * It creates a cipher message that contains a 4 bit integer representing the iterations count for the password hashing, followed by a 12 bit salt, followed by a 16 bit initialization vector, followed by the encrypted message.
-     * The random salt makes sure that even the use of the same password will always result in a different key. This will make pregenerated rainbow tables for brute force attacks impossible.
+     * The random salt makes sure that even the use of the same password will always result in a different key. This will make pre-generated rainbow tables for brute force attacks impossible.
      * The random initialization vector makes sure that even with the same key the encrypted message will be different.
-     * To also slow down brute force attacks, the function allowes to define how many times (iterations) the password will be hashed. Use a value that is as high as possible without annoying the user.
+     * To also slow down brute force attacks, the function allows to define how many times (iterations) the password will be hashed. Use a value that is as high as possible without annoying the user.
      *
      * @param dataToEncrypt
      * @param password
@@ -37,7 +37,7 @@ public class EncryptionUtil {
     public static byte[] PasswordEncryptData(byte[] dataToEncrypt, String password, int iterations) {
         try {
             // convert iterations to byte array
-            byte[] iterationsByte = intToByteArray(iterations);
+            byte[] iterationsByte = UtilFunctions.intToByteArray(iterations);
 
             // generate salt
             byte[] salt = new byte[12];
@@ -60,7 +60,7 @@ public class EncryptionUtil {
             outputStream.write(iv);
             outputStream.write(encryptedData);
             return outputStream.toByteArray();
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | IOException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | IOException | IllegalArgumentException e) {
             e.printStackTrace();
             ZapLog.e(TAG, "Error encrypting data.");
         }
@@ -77,7 +77,7 @@ public class EncryptionUtil {
     public static byte[] PasswordDecryptData(byte[] dataToDecrypt, String password) {
         try {
             // extract iterations, salt, initialization vector & message from dataToDecrypt
-            int iterations = intFromByteArray(Arrays.copyOfRange(dataToDecrypt, 0, 4));
+            int iterations = UtilFunctions.intFromByteArray(Arrays.copyOfRange(dataToDecrypt, 0, 4));
             byte[] salt = Arrays.copyOfRange(dataToDecrypt, 4, 16);
             byte[] iv = Arrays.copyOfRange(dataToDecrypt, 16, 32);
             byte[] message = Arrays.copyOfRange(dataToDecrypt, 32, dataToDecrypt.length);
@@ -89,33 +89,18 @@ public class EncryptionUtil {
             // decrypt the message
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
             return cipher.doFinal(message);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | IllegalArgumentException e) {
             e.printStackTrace();
             ZapLog.e(TAG, "Error decrypting data.");
         }
         return null;
     }
 
-    private static SecretKey generateSecretKey(char[] password, byte[] salt, int iterations) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static SecretKey generateSecretKey(char[] password, byte[] salt, int iterations) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalArgumentException {
         PBEKeySpec pbeKeySpec = new PBEKeySpec(password, salt, iterations);
         SecretKeyFactory secretKeyFactory;
         secretKeyFactory = SecretKeyFactory.getInstance(ENCRYPTION_ALGORITHM);
         return secretKeyFactory.generateSecret(pbeKeySpec);
     }
 
-    // packing an array of 4 bytes to an int, big endian
-    static int intFromByteArray(byte[] bytes) {
-        return ((bytes[0] & 0xFF) << 24) |
-                ((bytes[1] & 0xFF) << 16) |
-                ((bytes[2] & 0xFF) << 8) |
-                ((bytes[3] & 0xFF) << 0);
-    }
-
-    static byte[] intToByteArray(int value) {
-        return new byte[]{
-                (byte) (value >> 24),
-                (byte) (value >> 16),
-                (byte) (value >> 8),
-                (byte) value};
-    }
 }

@@ -34,6 +34,7 @@ public class RefConstants {
 
     // Data backup settings
     public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
+    public static final int DATA_BACKUP_VERSION = 0;
 
     // API request timeouts (in seconds)
     public static final int TIMEOUT_SHORT = 5;

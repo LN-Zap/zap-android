@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class DataBackupRestorePagerAdapter extends PagerAdapter {
     private View mBackupRestoringFinished;
     private View mBackupRestoringSuccess;
     private View mBackupRestoringFailed;
+    private TextView mBackupRestoringFailedDescription;
 
     public DataBackupRestorePagerAdapter(Context context, BackupAction backupAction) {
         mContext = context;
@@ -79,6 +81,7 @@ public class DataBackupRestorePagerAdapter extends PagerAdapter {
             mBackupRestoringFinished = backupView.findViewById(R.id.restoringBackupFinished);
             mBackupRestoringSuccess = backupView.findViewById(R.id.restoringBackupSuccess);
             mBackupRestoringFailed = backupView.findViewById(R.id.restoringBackupFailed);
+            mBackupRestoringFailedDescription = backupView.findViewById(R.id.data_backup_finish_description_failed);
 
             Button finishButton = backupView.findViewById(R.id.data_backup_restore_finish_button);
             finishButton.setOnClickListener(new OnSingleClickListener() {
@@ -93,13 +96,14 @@ public class DataBackupRestorePagerAdapter extends PagerAdapter {
         return backupView;
     }
 
-    public void setBackupRestoreFinished(boolean success) {
+    public void setBackupRestoreFinished(boolean success, int message) {
         mBackupRestoringProcess.setVisibility(View.GONE);
         mBackupRestoringFinished.setVisibility(View.VISIBLE);
         if (success) {
             mBackupRestoringSuccess.setVisibility(View.VISIBLE);
         } else {
             mBackupRestoringFailed.setVisibility(View.VISIBLE);
+            mBackupRestoringFailedDescription.setText(mContext.getString(message));
         }
     }
 

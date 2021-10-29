@@ -16,23 +16,30 @@ import java.nio.charset.StandardCharsets;
 import zapsolutions.zap.R;
 import zapsolutions.zap.customView.CustomViewPager;
 import zapsolutions.zap.util.EncryptionUtil;
+import zapsolutions.zap.util.RefConstants;
 
 
 public class DataBackupRestoreFragment extends Fragment implements DataBackupRestorePagerAdapter.BackupAction {
 
     public static final String TAG = DataBackupRestoreFragment.class.getName();
     private static final String EXTRA_ENCRYPTED_BACKUP_BYTES = "encryptedBackupBytes";
+    private static final String EXTRA_BACKUP_VALID_FILE = "dataBackupValidFile";
+    private static final String EXTRA_BACKUP_VERSION = "dataBackupVersion";
 
     private CustomViewPager mViewPager;
     private DataBackupRestorePagerAdapter mAdapter;
     private byte[] mEncryptedBackupBytes;
+    private boolean mBackupFileValid;
+    private int mBackupVersion;
     private Handler mHandler;
     private String mTempPassword;
 
-    public static DataBackupRestoreFragment newInstance(byte[] encryptedBackupBytes) {
+    public static DataBackupRestoreFragment newInstance(byte[] encryptedBackupBytes, boolean validFile, int backupVersion) {
         DataBackupRestoreFragment fragment = new DataBackupRestoreFragment();
         Intent intent = new Intent();
         intent.putExtra(EXTRA_ENCRYPTED_BACKUP_BYTES, encryptedBackupBytes);
+        intent.putExtra(EXTRA_BACKUP_VALID_FILE, validFile);
+        intent.putExtra(EXTRA_BACKUP_VERSION, backupVersion);
         fragment.setArguments(intent.getExtras());
         return fragment;
     }
@@ -44,6 +51,8 @@ public class DataBackupRestoreFragment extends Fragment implements DataBackupRes
 
         Bundle args = getArguments();
         mEncryptedBackupBytes = args.getByteArray(EXTRA_ENCRYPTED_BACKUP_BYTES);
+        mBackupFileValid = args.getBoolean(EXTRA_BACKUP_VALID_FILE);
+        mBackupVersion = args.getInt(EXTRA_BACKUP_VERSION);
         mViewPager = view.findViewById(R.id.data_backup_viewpager);
 
         mAdapter = new DataBackupRestorePagerAdapter(getContext(), this);
@@ -52,7 +61,17 @@ public class DataBackupRestoreFragment extends Fragment implements DataBackupRes
         mHandler = new Handler();
 
         mHandler.postDelayed(() -> {
-            showKeyboard();
+            if (mBackupFileValid) {
+                if (mBackupVersion > RefConstants.DATA_BACKUP_VERSION) {
+                    mAdapter.setBackupRestoreFinished(false, R.string.backup_data_version_too_old);
+                    mViewPager.setCurrentItem(2);
+                } else {
+                    showKeyboard();
+                }
+            } else {
+                mAdapter.setBackupRestoreFinished(false, R.string.backup_data_invalid_file_chosen);
+                mViewPager.setCurrentItem(2);
+            }
         }, 500);
 
         return view;
@@ -87,10 +106,10 @@ public class DataBackupRestoreFragment extends Fragment implements DataBackupRes
             mTempPassword = "";
             if (decryptedBackupBytes != null) {
                 String decryptedBackup = new String(decryptedBackupBytes, StandardCharsets.UTF_8);
-                DataBackupUtil.restoreBackup(decryptedBackup);
-                mAdapter.setBackupRestoreFinished(true);
+                DataBackupUtil.restoreBackup(decryptedBackup, mBackupVersion);
+                mAdapter.setBackupRestoreFinished(true, 0);
             } else {
-                mAdapter.setBackupRestoreFinished(false);
+                mAdapter.setBackupRestoreFinished(false, R.string.backup_data_restore_failed_description);
             }
         }, 500);
     }

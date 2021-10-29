@@ -21,6 +21,7 @@ import java.util.Date;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.customView.CustomViewPager;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
 
 
@@ -112,7 +113,7 @@ public class DataBackupCreateFragment extends Fragment implements DataBackupCrea
         mHandler.postDelayed(() -> {
             hideKeyboard();
             try {
-                byte[] backup = DataBackupUtil.createBackup(mTempPassword);
+                byte[] backup = DataBackupUtil.createBackup(mTempPassword, RefConstants.DATA_BACKUP_VERSION);
                 mTempPassword = "";
                 outputStream.write(backup);
                 outputStream.close();

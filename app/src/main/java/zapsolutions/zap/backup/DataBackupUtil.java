@@ -2,6 +2,7 @@ package zapsolutions.zap.backup;
 
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -23,9 +24,13 @@ import zapsolutions.zap.contacts.Contact;
 import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.util.EncryptionUtil;
 import zapsolutions.zap.util.RefConstants;
+import zapsolutions.zap.util.UtilFunctions;
 
 public class DataBackupUtil {
-    public static byte[] createBackup(String password) {
+
+    public static final String BACKUP_FILE_IDENTIFIER = "ZapBackup:";
+
+    public static byte[] createBackup(String password, int backupVersion) {
         String backupJson = "{";
         // Contacts
         if (ContactsManager.getInstance().hasAnyContacts()) {
@@ -50,44 +55,57 @@ public class DataBackupUtil {
         // Encrypt backup
         byte[] encryptedBackupBytes = EncryptionUtil.PasswordEncryptData(backupBytes, password, RefConstants.DATA_BACKUP_NUM_HASH_ITERATIONS);
 
+        // Construct final backup. (10 bytes file identifier + 4 bytes backupVersion + encrypted backup)
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(BACKUP_FILE_IDENTIFIER.getBytes(StandardCharsets.UTF_8));
+            outputStream.write(UtilFunctions.intToByteArray(backupVersion));
+            outputStream.write(encryptedBackupBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // Return final backup as UTF-8 string
-        return encryptedBackupBytes;
+        return outputStream.toByteArray();
     }
 
     public static boolean isThereAnythingToBackup() {
         return WalletConfigsManager.getInstance().hasAnyConfigs() || ContactsManager.getInstance().hasAnyContacts();
     }
 
-    public static boolean restoreBackup(String backupJsonString) {
-        DataBackup dataBackup = new Gson().fromJson(backupJsonString, DataBackup.class);
+    public static boolean restoreBackup(String backup, int backupVersion) {
 
-        // restore wallets
-        if (dataBackup.getWalletConfigs() != null && dataBackup.getWalletConfigs().length > 0) {
-            WalletConfigsManager.getInstance().removeAllWalletConfigs();
-            for (WalletConfig walletConfig : dataBackup.getWalletConfigs()) {
-                try {
-                    WalletConfigsManager.getInstance().addWalletConfig(walletConfig.getAlias(), walletConfig.getType(), walletConfig.getHost(), walletConfig.getPort(), walletConfig.getCert(), walletConfig.getMacaroon());
-                    WalletConfigsManager.getInstance().apply();
-                } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
-                    return false;
+        if (backupVersion == 0) {
+            DataBackup dataBackup = new Gson().fromJson(backup, DataBackup.class);
+
+            // restore wallets
+            if (dataBackup.getWalletConfigs() != null && dataBackup.getWalletConfigs().length > 0) {
+                WalletConfigsManager.getInstance().removeAllWalletConfigs();
+                for (WalletConfig walletConfig : dataBackup.getWalletConfigs()) {
+                    try {
+                        WalletConfigsManager.getInstance().addWalletConfig(walletConfig.getAlias(), walletConfig.getType(), walletConfig.getHost(), walletConfig.getPort(), walletConfig.getCert(), walletConfig.getMacaroon());
+                        WalletConfigsManager.getInstance().apply();
+                    } catch (GeneralSecurityException | IOException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
                 }
             }
-        }
 
-        // restore contacts
-        if (dataBackup.getContacts() != null && dataBackup.getContacts().length > 0) {
-            ContactsManager.getInstance().removeAllContacts();
-            for (Contact contact : dataBackup.getContacts()) {
-                try {
-                    ContactsManager.getInstance().addContact(contact.getNodePubKey(), contact.getAlias());
-                    ContactsManager.getInstance().apply();
-                } catch (IOException | CertificateException | NoSuchAlgorithmException | InvalidKeyException | UnrecoverableEntryException | InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException | BadPaddingException | KeyStoreException | IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                    return false;
+            // restore contacts
+            if (dataBackup.getContacts() != null && dataBackup.getContacts().length > 0) {
+                ContactsManager.getInstance().removeAllContacts();
+                for (Contact contact : dataBackup.getContacts()) {
+                    try {
+                        ContactsManager.getInstance().addContact(contact.getNodePubKey(), contact.getAlias());
+                        ContactsManager.getInstance().apply();
+                    } catch (IOException | CertificateException | NoSuchAlgorithmException | InvalidKeyException | UnrecoverableEntryException | InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException | BadPaddingException | KeyStoreException | IllegalBlockSizeException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
                 }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 }
