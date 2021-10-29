@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="zapsolutions.zap">
 
-    <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
-
     <queries>
         <!-- Specific apps Zap interacts with -->
         <package android:name="org.torproject.android" />
