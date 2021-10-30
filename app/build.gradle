@@ -175,7 +175,7 @@ dependencies {
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
     // Library to restart app
-    implementation 'com.jakewharton:process-phoenix:2.0.0'
+    implementation 'com.jakewharton:process-phoenix:2.1.2'
 
     // HTTP library to perform API interaction
     implementation "com.squareup.okhttp3:okhttp:4.9.0"

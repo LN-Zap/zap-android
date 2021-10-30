@@ -513,8 +513,10 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("firstCurrencyIsPrimary")) {
-            redrawHistoryList();
+        if (key != null) {
+            if (key.equals("firstCurrencyIsPrimary")) {
+                redrawHistoryList();
+            }
         }
     }
 

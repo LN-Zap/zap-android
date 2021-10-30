@@ -379,15 +379,17 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // Update if primary currency has been switched from this or another activity
-        if (key.equals("firstCurrencyIsPrimary")) {
-            updateTotalBalanceDisplay();
-        }
-        if (key.equals("hideTotalBalance")) {
-            if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
-                hideBalance();
-            } else {
-                showBalance();
+        if (key != null) {
+            // Update if primary currency has been switched from this or another activity
+            if (key.equals("firstCurrencyIsPrimary")) {
+                updateTotalBalanceDisplay();
+            }
+            if (key.equals("hideTotalBalance")) {
+                if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
+                    hideBalance();
+                } else {
+                    showBalance();
+                }
             }
         }
     }
