@@ -3,23 +3,31 @@ package zapsolutions.zap.contacts;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
 
 public class Contact implements Comparable<Contact>, Serializable {
 
-
-    private String nodePubKey;
+    private String id;
+    private String contactData;
     private String alias;
+    private ContactType contactType;
 
-    public Contact(String nodePubKey, String alias) {
-        this.nodePubKey = nodePubKey;
+    public Contact(String id, ContactType contactType, String contactData, String alias) {
+        this.id = id;
+        this.contactType = contactType;
+        this.contactData = contactData;
         this.alias = alias;
     }
 
-    public String getNodePubKey() {
-        return this.nodePubKey;
+    public String getId() {
+        return this.id;
+    }
+
+    public String getContactData() {
+        return this.contactData;
     }
 
     public String getAlias() {
@@ -30,8 +38,12 @@ public class Contact implements Comparable<Contact>, Serializable {
         this.alias = alias;
     }
 
+    public ContactType getContactType() {
+        return this.contactType;
+    }
+
     public LightningNodeUri getAsNodeUri() {
-        return LightningParser.parseNodeUri(nodePubKey);
+        return LightningParser.parseNodeUri(contactData);
     }
 
 
@@ -50,11 +62,28 @@ public class Contact implements Comparable<Contact>, Serializable {
             return false;
         }
         Contact contact = (Contact) obj;
-        return contact.getNodePubKey().equals(this.getNodePubKey());
+        return contact.getContactData().equals(this.getContactData());
     }
 
     @Override
     public int hashCode() {
-        return this.nodePubKey.hashCode();
+        if (this.id == null) {
+            // Create the UUID for the new config
+            this.id = UUID.randomUUID().toString();
+        }
+        return this.id.hashCode();
+    }
+
+    public enum ContactType {
+        NODEPUBKEY,
+        LNADDRESS;
+
+        public static Contact.ContactType parseFromString(String enumAsString) {
+            try {
+                return valueOf(enumAsString);
+            } catch (Exception ex) {
+                return NODEPUBKEY;
+            }
+        }
     }
 }

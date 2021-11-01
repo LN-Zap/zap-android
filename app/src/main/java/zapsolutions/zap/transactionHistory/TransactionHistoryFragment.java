@@ -475,8 +475,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                     Hop lastHop = ((LnPaymentItem) item).getPayment().getHtlcs(0).getRoute().getHops(((LnPaymentItem) item).getPayment().getHtlcs(0).getRoute().getHopsCount() - 1);
                     String payeePubKey = lastHop.getPubKey();
                     String payeeName = "";
-                    if (ContactsManager.getInstance().doesContactExist(payeePubKey)) {
-                        payeeName = ContactsManager.getInstance().getNameByNodePubKey(payeePubKey);
+                    if (ContactsManager.getInstance().doesContactDataExist(payeePubKey)) {
+                        payeeName = ContactsManager.getInstance().getNameByContactData(payeePubKey);
                     }
                     text = paymentMemo + paymentAmount + payeeName;
                     break;
@@ -485,8 +485,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                     // Searching for the nodeNames will probably have bad performance when there are a lot of Channels, Contacts & Transactions.
                     String nodePubKey = Wallet.getInstance().getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
                     String nodeName;
-                    if (ContactsManager.getInstance().doesContactExist(nodePubKey)) {
-                        nodeName = ContactsManager.getInstance().getNameByNodePubKey(nodePubKey);
+                    if (ContactsManager.getInstance().doesContactDataExist(nodePubKey)) {
+                        nodeName = ContactsManager.getInstance().getNameByContactData(nodePubKey);
                     } else {
                         nodeName = Wallet.getInstance().getNodeAliasFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction(), getContext());
                     }

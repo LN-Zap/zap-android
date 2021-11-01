@@ -94,8 +94,8 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
     private void bindOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
         Channel channel = Channel.parseFrom(channelString);
-        if (ContactsManager.getInstance().doesContactExist(channel.getRemotePubkey())) {
-            mAlias = ContactsManager.getInstance().getNameByNodePubKey(channel.getRemotePubkey());
+        if (ContactsManager.getInstance().doesContactDataExist(channel.getRemotePubkey())) {
+            mAlias = ContactsManager.getInstance().getNameByContactData(channel.getRemotePubkey());
         } else {
             mAlias = Wallet.getInstance().getNodeAliasFromPubKey(channel.getRemotePubkey(), AdvancedChannelDetailsActivity.this);
         }

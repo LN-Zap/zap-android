@@ -137,13 +137,13 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
 
                 ContactsManager cm = ContactsManager.getInstance();
-                if (cm.doesContactExist(nodeUri.getPubKey())) {
+                if (cm.doesContactDataExist(nodeUri.getPubKey())) {
                     Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
                 } else {
                     cm.showContactNameInputDialog(this, nodeUri.getPubKey(), new ContactsManager.OnNameConfirmedListener() {
                         @Override
                         public void onNameAccepted() {
-                            mAdapter.add(cm.getContactByNodePubKey(nodeUri.getPubKey()));
+                            mAdapter.add(cm.getContactByContactData(nodeUri.getPubKey()));
                             mEmptyListText.setVisibility(View.GONE);
                         }
 

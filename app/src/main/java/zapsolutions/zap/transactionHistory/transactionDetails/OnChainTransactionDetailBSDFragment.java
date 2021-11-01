@@ -157,8 +157,8 @@ public class OnChainTransactionDetailBSDFragment extends ZapBSDFragment {
         }
 
         String alias;
-        if (ContactsManager.getInstance().doesContactExist(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction))) {
-            alias = ContactsManager.getInstance().getNameByNodePubKey(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction));
+        if (ContactsManager.getInstance().doesContactDataExist(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction))) {
+            alias = ContactsManager.getInstance().getNameByContactData(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction));
         } else {
             alias = Wallet.getInstance().getNodeAliasFromChannelTransaction(mTransaction, getActivity());
         }

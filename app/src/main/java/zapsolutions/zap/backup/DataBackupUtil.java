@@ -96,7 +96,7 @@ public class DataBackupUtil {
                 ContactsManager.getInstance().removeAllContacts();
                 for (Contact contact : dataBackup.getContacts()) {
                     try {
-                        ContactsManager.getInstance().addContact(contact.getNodePubKey(), contact.getAlias());
+                        ContactsManager.getInstance().addContact(contact.getContactType(), contact.getContactData(), contact.getAlias());
                         ContactsManager.getInstance().apply();
                     } catch (IOException | CertificateException | NoSuchAlgorithmException | InvalidKeyException | UnrecoverableEntryException | InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException | BadPaddingException | KeyStoreException | IllegalBlockSizeException e) {
                         e.printStackTrace();

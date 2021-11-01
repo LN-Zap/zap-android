@@ -370,9 +370,9 @@ public class SendBSDFragment extends ZapBSDFragment {
             mBSDScrollableMainView.setTitle(R.string.send_lightningPayment);
 
             if (mIsKeysend) {
-                mPayee.setText(ContactsManager.getInstance().getNameByNodePubKey(mKeysendPubkey));
+                mPayee.setText(ContactsManager.getInstance().getNameByContactData(mKeysendPubkey));
             } else {
-                mPayee.setText(ContactsManager.getInstance().getNameByNodePubKey(mLnPaymentRequest.getDestination()));
+                mPayee.setText(ContactsManager.getInstance().getNameByContactData(mLnPaymentRequest.getDestination()));
             }
 
             if (mIsKeysend || mLnPaymentRequest.getDescription() == null || mLnPaymentRequest.getDescription().isEmpty()) {

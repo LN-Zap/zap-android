@@ -47,8 +47,8 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setName(String channelRemotePubKey) {
-        if (ContactsManager.getInstance().doesContactExist(channelRemotePubKey)) {
-            mRemoteName.setText(ContactsManager.getInstance().getNameByNodePubKey(channelRemotePubKey));
+        if (ContactsManager.getInstance().doesContactDataExist(channelRemotePubKey)) {
+            mRemoteName.setText(ContactsManager.getInstance().getNameByContactData(channelRemotePubKey));
         } else {
             mRemoteName.setText(Wallet.getInstance().getNodeAliasFromPubKey(channelRemotePubKey, mContext));
         }

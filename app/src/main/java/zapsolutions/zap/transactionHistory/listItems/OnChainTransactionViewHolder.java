@@ -59,8 +59,8 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     setAmount(fee * -1, true);
                     setPrimaryDescription(mContext.getString(R.string.opened_channel));
                     String aliasOpened;
-                    if (ContactsManager.getInstance().doesContactExist(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()))) {
-                        aliasOpened = ContactsManager.getInstance().getNameByNodePubKey(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
+                    if (ContactsManager.getInstance().doesContactDataExist(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()))) {
+                        aliasOpened = ContactsManager.getInstance().getNameByContactData(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
                     } else {
                         aliasOpened = Wallet.getInstance().getNodeAliasFromChannelTransaction(onChainTransactionItem.getOnChainTransaction(), mContext);
                     }

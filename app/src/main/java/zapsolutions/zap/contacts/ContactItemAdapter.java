@@ -27,12 +27,12 @@ public class ContactItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public boolean areContentsTheSame(Contact oldContact, Contact newContact) {
-            return oldContact.getAlias().equals(newContact.getNodePubKey());
+            return oldContact.getAlias().equals(newContact.getContactData());
         }
 
         @Override
         public boolean areItemsTheSame(Contact contact1, Contact contact2) {
-            return contact1.getNodePubKey().equals(contact2.getNodePubKey());
+            return contact1.getContactData().equals(contact2.getContactData());
         }
 
         @Override

@@ -28,6 +28,7 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -35,7 +36,9 @@ import javax.crypto.NoSuchPaddingException;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.Wallet;
+import zapsolutions.zap.util.ZapLog;
 
 /**
  * This SINGLETON class is used to load and save contacts.
@@ -59,6 +62,13 @@ public class ContactsManager {
 
         if (isValidJson(decrypted)) {
             mContactsJson = new Gson().fromJson(decrypted, ContactsJson.class);
+            if (hasAnyContacts()) {
+                if (mContactsJson.version < RefConstants.CONTACTS_JSON_VERSION) {
+                    convertContacts(decrypted, mContactsJson.version);
+                }
+            } else {
+                mContactsJson = createEmptyContactsJson();
+            }
         } else {
             mContactsJson = createEmptyContactsJson();
         }
@@ -107,7 +117,7 @@ public class ContactsManager {
     }
 
     private ContactsJson createEmptyContactsJson() {
-        return new Gson().fromJson("{\"contacts\":[]}", ContactsJson.class);
+        return new Gson().fromJson("{\"contacts\":[], \"version\":" + RefConstants.CONTACTS_JSON_VERSION + "}", ContactsJson.class);
     }
 
     /**
@@ -123,12 +133,17 @@ public class ContactsManager {
     /**
      * Checks if a contact already exists.
      *
-     * @param nodePubKey
+     * @param contactData
      * @return
      */
-    public boolean doesContactExist(@NonNull String nodePubKey) {
-        Contact tempContact = new Contact(nodePubKey, null);
-        return doesContactExist(tempContact);
+    public boolean doesContactDataExist(@NonNull String contactData) {
+        List<Contact> contactList = getAllContacts();
+        for (Contact contact : contactList) {
+            if (contact.getContactData().equals(contactData)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -138,10 +153,13 @@ public class ContactsManager {
      *
      * @param alias Name of the contact
      */
-    public Contact addContact(@NonNull String nodePubKey, @NonNull String alias) {
+    public Contact addContact(Contact.ContactType contactType, @NonNull String contactData, @NonNull String alias) {
+
+        // Create the UUID for the new config
+        String id = UUID.randomUUID().toString();
 
         // Create the config
-        Contact contact = new Contact(nodePubKey, alias);
+        Contact contact = new Contact(id, contactType, contactData, alias);
 
         // Add the config to our configurations array
         boolean contactAdded = mContactsJson.addContact(contact);
@@ -156,25 +174,25 @@ public class ContactsManager {
     /**
      * Load a Contact by its node public key.
      *
-     * @param nodePubKey pubkey of the contact
+     * @param contactData pubkey of the contact
      * @return Returns null if no contact is found
      */
-    public Contact getContactByNodePubKey(@NonNull String nodePubKey) {
-        return mContactsJson.getContactByNodePubKey(nodePubKey);
+    public Contact getContactByContactData(@NonNull String contactData) {
+        return mContactsJson.getContactByContactData(contactData);
     }
 
     /**
      * Returns the contact alias for a given node pubkey. Returns the node pubkey if no contact with that key exists.
      *
-     * @param nodePubkey pubkey of the contact
+     * @param contactData pubkey of the contact
      * @return Name if it exist, pubkey if it doesn exist
      */
-    public String getNameByNodePubKey(@NonNull String nodePubkey) {
-        Contact contact = getContactByNodePubKey(nodePubkey);
+    public String getNameByContactData(@NonNull String contactData) {
+        Contact contact = getContactByContactData(contactData);
         if (contact != null) {
             return contact.getAlias();
         } else {
-            return nodePubkey;
+            return contactData;
         }
     }
 
@@ -250,8 +268,8 @@ public class ContactsManager {
         ContactsManager cm = ContactsManager.getInstance();
 
         final EditText input = viewInflated.findViewById(R.id.input);
-        if (cm.doesContactExist(nodePubKey)) {
-            input.setText(cm.getContactByNodePubKey(nodePubKey).getAlias());
+        if (cm.doesContactDataExist(nodePubKey)) {
+            input.setText(cm.getContactByContactData(nodePubKey).getAlias());
         } else {
             String nodeAlias = Wallet.getInstance().getNodeAliasFromPubKey(nodePubKey, ctx);
             if (nodeAlias != ctx.getResources().getString(R.string.channel_no_alias)) {
@@ -292,10 +310,10 @@ public class ContactsManager {
                 if (input.getText().toString().trim().isEmpty()) {
                     Toast.makeText(ctx, R.string.error_empty_wallet_name, Toast.LENGTH_LONG).show();
                 } else {
-                    if (cm.doesContactExist(nodePubKey)) {
-                        cm.renameContact(cm.getContactByNodePubKey(nodePubKey), input.getText().toString());
+                    if (cm.doesContactDataExist(nodePubKey)) {
+                        cm.renameContact(cm.getContactByContactData(nodePubKey), input.getText().toString());
                     } else {
-                        cm.addContact(nodePubKey, input.getText().toString());
+                        cm.addContact(Contact.ContactType.NODEPUBKEY, nodePubKey, input.getText().toString());
                     }
                     try {
                         cm.apply();
@@ -345,5 +363,29 @@ public class ContactsManager {
         void onNameAccepted();
 
         void onCancelled();
+    }
+
+    public void convertContacts(String contactsJson, int oldVersion) {
+        //convert from version 0 to 1
+        if (oldVersion == 0 && RefConstants.CONTACTS_JSON_VERSION == 1) {
+            String modifiedJson = contactsJson.replaceAll("nodePubKey", "contactData");
+            modifiedJson = modifiedJson.substring(0, modifiedJson.length() - 1);
+            String[] parts = modifiedJson.split("\\}");
+            String combined = "";
+            for (int i = 0; i < parts.length - 1; i++) {
+                // Create the UUID for the new config
+                String id = UUID.randomUUID().toString();
+                combined = combined + parts[i] + ",\"contactType\":\"NODEPUBKEY\",\"id\":\"" + id + "\"}";
+            }
+            combined = combined + "],\"version\":" + RefConstants.CONTACTS_JSON_VERSION + "}";
+            mContactsJson = new Gson().fromJson(combined, ContactsJson.class);
+            try {
+                apply();
+                ZapLog.d(LOG_TAG, "Successfully updated contacts from version 0 to 1.");
+            } catch (IOException | CertificateException | NoSuchAlgorithmException | InvalidKeyException | UnrecoverableEntryException | InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException | BadPaddingException | KeyStoreException | IllegalBlockSizeException e) {
+                e.printStackTrace();
+                mContactsJson = createEmptyContactsJson();
+            }
+        }
     }
 }

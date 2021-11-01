@@ -11,6 +11,9 @@ public class WalletConfigsJson {
     @SerializedName("connections")
     Set<WalletConfig> mConnections;
 
+    @SerializedName("version")
+    int version;
+
     public WalletConfig getConnectionById(@NonNull String id) {
         for (WalletConfig walletConnectionConfig : mConnections) {
             if (walletConnectionConfig.getId().equals(id)) {
