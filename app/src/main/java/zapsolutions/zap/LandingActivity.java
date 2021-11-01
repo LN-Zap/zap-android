@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
@@ -70,6 +73,11 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
             // Reset settings
             PrefsUtil.editPrefs().clear().commit();
+            try {
+                PrefsUtil.editEncryptedPrefs().clear().commit();
+            } catch (GeneralSecurityException | IOException e) {
+                e.printStackTrace();
+            }
 
             new AlertDialog.Builder(LandingActivity.this)
                     .setTitle(R.string.app_reset_title)
