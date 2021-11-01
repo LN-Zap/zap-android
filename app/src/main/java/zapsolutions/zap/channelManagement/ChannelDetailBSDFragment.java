@@ -155,8 +155,8 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
     private void bindOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
         Channel channel = Channel.parseFrom(channelString);
         mBSDScrollableMainView.setMoreButtonVisibility(true);
-        if (ContactsManager.getInstance().doesContactExist(channel.getRemotePubkey())) {
-            mNodeAlias.setText(ContactsManager.getInstance().getNameByNodePubKey(channel.getRemotePubkey()));
+        if (ContactsManager.getInstance().doesContactDataExist(channel.getRemotePubkey())) {
+            mNodeAlias.setText(ContactsManager.getInstance().getNameByContactData(channel.getRemotePubkey()));
         } else {
             mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(channel.getRemotePubkey(), getContext()));
         }
@@ -234,8 +234,8 @@ public class ChannelDetailBSDFragment extends ZapBSDFragment implements Wallet.C
     }
 
     private void setBasicInformation(@NonNull String remoteNodePublicKey, @NonNull String remotePubKey, int statusDot, @NonNull String channelPoint) {
-        if (ContactsManager.getInstance().doesContactExist(remoteNodePublicKey)) {
-            mNodeAlias.setText(ContactsManager.getInstance().getNameByNodePubKey(remoteNodePublicKey));
+        if (ContactsManager.getInstance().doesContactDataExist(remoteNodePublicKey)) {
+            mNodeAlias.setText(ContactsManager.getInstance().getNameByContactData(remoteNodePublicKey));
         } else {
             mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(remoteNodePublicKey, getContext()));
         }

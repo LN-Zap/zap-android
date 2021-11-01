@@ -32,7 +32,7 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
         Hop lastHop = lnPaymentItem.getPayment().getHtlcs(0).getRoute().getHops(lnPaymentItem.getPayment().getHtlcs(0).getRoute().getHopsCount() - 1);
         String payee = lastHop.getPubKey();
 
-        String payeeName = ContactsManager.getInstance().getNameByNodePubKey(payee);
+        String payeeName = ContactsManager.getInstance().getNameByContactData(payee);
         if (payee.equals(payeeName)) {
             setPrimaryDescription(mContext.getResources().getString(R.string.sent));
         } else {

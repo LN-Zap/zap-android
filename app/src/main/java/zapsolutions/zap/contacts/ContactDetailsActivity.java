@@ -51,10 +51,10 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
         mTvPublicKey = findViewById(R.id.publicKey);
 
 
-        mDataToEncode = mContact.getNodePubKey();
-        mUserAvatarView.setupWithNodeUri(new LightningNodeUri.Builder().setPubKey(mContact.getNodePubKey()).build(), true);
+        mDataToEncode = mContact.getContactData();
+        mUserAvatarView.setupWithNodeUri(new LightningNodeUri.Builder().setPubKey(mContact.getContactData()).build(), true);
         mBtnContactName.setText(mContact.getAlias());
-        mTvPublicKey.setText(mContact.getNodePubKey());
+        mTvPublicKey.setText(mContact.getContactData());
 
         // Action when clicked on contact name
         mBtnContactName.setOnClickListener(new OnSingleClickListener() {
@@ -120,10 +120,10 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
 
     private void rename() {
         ContactsManager cm = ContactsManager.getInstance();
-        cm.showContactNameInputDialog(ContactDetailsActivity.this, mContact.getNodePubKey(), new ContactsManager.OnNameConfirmedListener() {
+        cm.showContactNameInputDialog(ContactDetailsActivity.this, mContact.getContactData(), new ContactsManager.OnNameConfirmedListener() {
             @Override
             public void onNameAccepted() {
-                mContact = cm.getContactByNodePubKey(mContact.getNodePubKey());
+                mContact = cm.getContactByContactData(mContact.getContactData());
                 mBtnContactName.setText(mContact.getAlias());
             }
 

@@ -238,8 +238,8 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
         String alias;
         if (lightningNodeUri.getNickname() != null) {
             alias = lightningNodeUri.getNickname();
-        } else if (ContactsManager.getInstance().doesContactExist(lightningNodeUri.getPubKey())) {
-            alias = ContactsManager.getInstance().getNameByNodePubKey(lightningNodeUri.getPubKey());
+        } else if (ContactsManager.getInstance().doesContactDataExist(lightningNodeUri.getPubKey())) {
+            alias = ContactsManager.getInstance().getNameByContactData(lightningNodeUri.getPubKey());
         } else if (!Wallet.getInstance().getNodeAliasFromPubKey(lightningNodeUri.getPubKey(), getContext()).contains(getResources().getString(R.string.channel_no_alias))) {
             // alias found in peers
             alias = Wallet.getInstance().getNodeAliasFromPubKey(lightningNodeUri.getPubKey(), getContext());

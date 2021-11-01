@@ -11,9 +11,21 @@ public class ContactsJson {
     @SerializedName("contacts")
     Set<Contact> mContacts;
 
-    public Contact getContactByNodePubKey(@NonNull String nodePubKey) {
+    @SerializedName("version")
+    int version;
+
+    public Contact getContactByContactData(@NonNull String contactData) {
         for (Contact contact : mContacts) {
-            if (contact.getNodePubKey().equals(nodePubKey)) {
+            if (contact.getContactData().equals(contactData)) {
+                return contact;
+            }
+        }
+        return null;
+    }
+
+    public Contact getContactById(@NonNull String id) {
+        for (Contact contact : mContacts) {
+            if (contact.getId().equals(id)) {
                 return contact;
             }
         }
@@ -38,7 +50,7 @@ public class ContactsJson {
 
     boolean renameContact(Contact contact, @NonNull String newAlias) {
         if (doesContactExist(contact)) {
-            Contact tempContact = getContactByNodePubKey(contact.getNodePubKey());
+            Contact tempContact = getContactById(contact.getId());
             tempContact.setAlias(newAlias);
             mContacts.remove(contact);
             mContacts.add(tempContact);

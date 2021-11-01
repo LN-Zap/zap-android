@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import zapsolutions.zap.util.PrefsUtil;
+import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -88,7 +89,7 @@ public class WalletConfigsManager {
     }
 
     private WalletConfigsJson createEmptyWalletConfigsJson() {
-        return new Gson().fromJson("{\"connections\":[]}", WalletConfigsJson.class);
+        return new Gson().fromJson("{\"connections\":[], \"version\":" + RefConstants.WALLET_CONFIG_JSON_VERSION + "}", WalletConfigsJson.class);
     }
 
     /**

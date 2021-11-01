@@ -59,7 +59,7 @@ public class ChooseNodeActionBSDFragment extends ZapBSDFragment {
 
         // Check if this node is already a contact.
         ContactsManager cm = ContactsManager.getInstance();
-        if (cm.doesContactExist(mNodeUri.getPubKey())) {
+        if (cm.doesContactDataExist(mNodeUri.getPubKey())) {
             // hide add contact button
             btnAddContact.setVisibility(View.GONE);
             firstOrLine.setVisibility(View.GONE);
@@ -72,7 +72,7 @@ public class ChooseNodeActionBSDFragment extends ZapBSDFragment {
                 @Override
                 public void onNameAccepted() {
                     Intent intent = new Intent(getActivity(), ContactDetailsActivity.class);
-                    intent.putExtra(ManageContactsActivity.EXTRA_CONTACT, cm1.getContactByNodePubKey(mNodeUri.getPubKey()));
+                    intent.putExtra(ManageContactsActivity.EXTRA_CONTACT, cm1.getContactByContactData(mNodeUri.getPubKey()));
                     startActivityForResult(intent, 0);
                     dismiss();
                 }

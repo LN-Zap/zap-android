@@ -106,7 +106,7 @@ public class LnPaymentDetailBSDFragment extends ZapBSDFragment {
         Hop lastHop = payment.getHtlcs(0).getRoute().getHops(payment.getHtlcs(0).getRoute().getHopsCount() - 1);
         String payee = lastHop.getPubKey();
 
-        mPayee.setText(ContactsManager.getInstance().getNameByNodePubKey(payee));
+        mPayee.setText(ContactsManager.getInstance().getNameByContactData(payee));
         mPayeeCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payee", payee));
         mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getValue()));
         mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getFee()));

@@ -34,7 +34,7 @@ public class ContactItemViewHolder extends RecyclerView.ViewHolder {
     public void bindContactItem(Contact contact) {
 
         // Set User Avatar
-        mUserAvatar.setImageBitmap(AvathorFactory.getAvathor(mContext, contact.getNodePubKey()));
+        mUserAvatar.setImageBitmap(AvathorFactory.getAvathor(mContext, contact.getContactData()));
 
         // Set Contact Name
         mContactName.setText(contact.getAlias());
