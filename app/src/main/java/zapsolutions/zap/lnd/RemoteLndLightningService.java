@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndLightningService implements LndLightningService {
 
-    private LightningGrpc.LightningStub asyncStub;
+    private final LightningGrpc.LightningStub asyncStub;
 
     public RemoteLndLightningService(Channel channel, CallCredentials callCredentials) {
         asyncStub = LightningGrpc.newStub(channel).withCallCredentials(callCredentials);
@@ -131,6 +131,11 @@ public class RemoteLndLightningService implements LndLightningService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.BatchOpenChannelResponse> batchOpenChannel(com.github.lightningnetwork.lnd.lnrpc.BatchOpenChannelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.batchOpenChannel(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.lnrpc.FundingStateStepResp> fundingStateStep(com.github.lightningnetwork.lnd.lnrpc.FundingTransitionMsg request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.fundingStateStep(request, new RemoteLndSingleObserver<>(emitter)));
     }
@@ -183,6 +188,11 @@ public class RemoteLndLightningService implements LndLightningService {
     @Override
     public Single<com.github.lightningnetwork.lnd.lnrpc.ListPaymentsResponse> listPayments(com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.listPayments(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.DeletePaymentResponse> deletePayment(com.github.lightningnetwork.lnd.lnrpc.DeletePaymentRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.deletePayment(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
     @Override
@@ -293,6 +303,21 @@ public class RemoteLndLightningService implements LndLightningService {
     @Override
     public Single<com.github.lightningnetwork.lnd.lnrpc.ListPermissionsResponse> listPermissions(com.github.lightningnetwork.lnd.lnrpc.ListPermissionsRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.listPermissions(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.CheckMacPermResponse> checkMacaroonPermissions(com.github.lightningnetwork.lnd.lnrpc.CheckMacPermRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.checkMacaroonPermissions(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.SendCustomMessageResponse> sendCustomMessage(com.github.lightningnetwork.lnd.lnrpc.SendCustomMessageRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.sendCustomMessage(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Observable<com.github.lightningnetwork.lnd.lnrpc.CustomMessage> subscribeCustomMessages(com.github.lightningnetwork.lnd.lnrpc.SubscribeCustomMessagesRequest request) {
+        return DefaultObservable.createDefault(emitter -> asyncStub.subscribeCustomMessages(request, new RemoteLndStreamObserver<>(emitter)));
     }
 
 }

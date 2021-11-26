@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "lnrpc.proto";
+import "lightning.proto";
 import "signer.proto";
 
 package walletrpc;
@@ -287,6 +287,16 @@ message AddrRequest {
     default wallet account is used.
     */
     string account = 1;
+
+    /*
+    The type of address to derive.
+    */
+    AddressType type = 2;
+
+    /*
+    Whether a change address should be derived.
+    */
+    bool change = 3;
 }
 message AddrResponse {
     /*

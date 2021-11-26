@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndInvoicesService implements LndInvoicesService {
 
-    private InvoicesGrpc.InvoicesStub asyncStub;
+    private final InvoicesGrpc.InvoicesStub asyncStub;
 
     public RemoteLndInvoicesService(Channel channel, CallCredentials callCredentials) {
         asyncStub = InvoicesGrpc.newStub(channel).withCallCredentials(callCredentials);
@@ -33,6 +33,11 @@ public class RemoteLndInvoicesService implements LndInvoicesService {
     @Override
     public Single<com.github.lightningnetwork.lnd.invoicesrpc.SettleInvoiceResp> settleInvoice(com.github.lightningnetwork.lnd.invoicesrpc.SettleInvoiceMsg request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.settleInvoice(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.Invoice> lookupInvoiceV2(com.github.lightningnetwork.lnd.invoicesrpc.LookupInvoiceMsg request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.lookupInvoiceV2(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
 }

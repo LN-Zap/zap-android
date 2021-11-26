@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndWalletUnlockerService implements LndWalletUnlockerService {
 
-    private WalletUnlockerGrpc.WalletUnlockerStub asyncStub;
+    private final WalletUnlockerGrpc.WalletUnlockerStub asyncStub;
 
     public RemoteLndWalletUnlockerService(Channel channel, CallCredentials callCredentials) {
         asyncStub = WalletUnlockerGrpc.newStub(channel).withCallCredentials(callCredentials);

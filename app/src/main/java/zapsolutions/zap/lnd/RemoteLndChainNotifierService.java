@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Observable;
 
 public class RemoteLndChainNotifierService implements LndChainNotifierService {
 
-    private ChainNotifierGrpc.ChainNotifierStub asyncStub;
+    private final ChainNotifierGrpc.ChainNotifierStub asyncStub;
 
     public RemoteLndChainNotifierService(Channel channel, CallCredentials callCredentials) {
         asyncStub = ChainNotifierGrpc.newStub(channel).withCallCredentials(callCredentials);

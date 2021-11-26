@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndWatchtowerService implements LndWatchtowerService {
 
-    private WatchtowerGrpc.WatchtowerStub asyncStub;
+    private final WatchtowerGrpc.WatchtowerStub asyncStub;
 
     public RemoteLndWatchtowerService(Channel channel, CallCredentials callCredentials) {
         asyncStub = WatchtowerGrpc.newStub(channel).withCallCredentials(callCredentials);
