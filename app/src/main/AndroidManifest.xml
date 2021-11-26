@@ -22,6 +22,7 @@
 
         <activity
             android:name=".LandingActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait">
@@ -44,7 +45,7 @@
             </intent-filter>
             <intent-filter>
 
-                <!-- Makes Zap startable from NFC Tags containing a bitcoin or lightning uri -->
+                <!-- Enables Zap to be started from NFC Tags containing a bitcoin or lightning uri -->
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
