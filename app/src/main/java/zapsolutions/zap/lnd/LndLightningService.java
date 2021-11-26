@@ -51,6 +51,8 @@ public interface LndLightningService {
 
     Observable<com.github.lightningnetwork.lnd.lnrpc.OpenStatusUpdate> openChannel(com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest request);
 
+    Single<com.github.lightningnetwork.lnd.lnrpc.BatchOpenChannelResponse> batchOpenChannel(com.github.lightningnetwork.lnd.lnrpc.BatchOpenChannelRequest request);
+
     Single<com.github.lightningnetwork.lnd.lnrpc.FundingStateStepResp> fundingStateStep(com.github.lightningnetwork.lnd.lnrpc.FundingTransitionMsg request);
 
     // skipped ChannelAcceptor
@@ -78,6 +80,8 @@ public interface LndLightningService {
     Single<com.github.lightningnetwork.lnd.lnrpc.PayReq> decodePayReq(com.github.lightningnetwork.lnd.lnrpc.PayReqString request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.ListPaymentsResponse> listPayments(com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.DeletePaymentResponse> deletePayment(com.github.lightningnetwork.lnd.lnrpc.DeletePaymentRequest request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.DeleteAllPaymentsResponse> deleteAllPayments(com.github.lightningnetwork.lnd.lnrpc.DeleteAllPaymentsRequest request);
 
@@ -122,4 +126,12 @@ public interface LndLightningService {
     Single<com.github.lightningnetwork.lnd.lnrpc.DeleteMacaroonIDResponse> deleteMacaroonID(com.github.lightningnetwork.lnd.lnrpc.DeleteMacaroonIDRequest request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.ListPermissionsResponse> listPermissions(com.github.lightningnetwork.lnd.lnrpc.ListPermissionsRequest request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.CheckMacPermResponse> checkMacaroonPermissions(com.github.lightningnetwork.lnd.lnrpc.CheckMacPermRequest request);
+
+    // skipped RegisterRPCMiddleware
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.SendCustomMessageResponse> sendCustomMessage(com.github.lightningnetwork.lnd.lnrpc.SendCustomMessageRequest request);
+
+    Observable<com.github.lightningnetwork.lnd.lnrpc.CustomMessage> subscribeCustomMessages(com.github.lightningnetwork.lnd.lnrpc.SubscribeCustomMessagesRequest request);
 }

@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndSignerService implements LndSignerService {
 
-    private SignerGrpc.SignerStub asyncStub;
+    private final SignerGrpc.SignerStub asyncStub;
 
     public RemoteLndSignerService(Channel channel, CallCredentials callCredentials) {
         asyncStub = SignerGrpc.newStub(channel).withCallCredentials(callCredentials);

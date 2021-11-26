@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.SingleEmitter;
  */
 public class RemoteLndSingleObserver<V> implements StreamObserver<V> {
 
-    private SingleEmitter<V> mEmitter;
+    private final SingleEmitter<V> mEmitter;
 
     RemoteLndSingleObserver(SingleEmitter<V> emitter) {
         mEmitter = emitter;

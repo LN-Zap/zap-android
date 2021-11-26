@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.ObservableEmitter;
  */
 public class RemoteLndStreamObserver<V> implements StreamObserver<V> {
 
-    private ObservableEmitter<V> mEmitter;
+    private final ObservableEmitter<V> mEmitter;
 
     RemoteLndStreamObserver(ObservableEmitter<V> emitter) {
         mEmitter = emitter;
