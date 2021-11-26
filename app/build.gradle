@@ -7,11 +7,11 @@ apply plugin: 'com.google.protobuf'
 import com.android.build.OutputFile
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "zapsolutions.zap"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 32
         versionName "0.5.2-beta"
         vectorDrawables.useSupportLibrary = true
@@ -142,7 +142,7 @@ protobuf {
     plugins {
         javalite { artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0" }
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.39.0'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.42.1'
         }
     }
 
@@ -188,9 +188,9 @@ dependencies {
     implementation "io.matthewnelson.topl-android:topl-service:2.1.1"
 
     // gRPC implementation to communicate with lnd
-    implementation 'io.grpc:grpc-okhttp:1.39.0'
-    implementation 'io.grpc:grpc-protobuf-lite:1.39.0'
-    implementation 'io.grpc:grpc-stub:1.39.0'
+    implementation 'io.grpc:grpc-okhttp:1.42.1'
+    implementation 'io.grpc:grpc-protobuf-lite:1.42.1'
+    implementation 'io.grpc:grpc-stub:1.42.1'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     implementation 'com.google.code.gson:gson:2.8.7'
     compileOnly 'com.google.api.grpc:googleapis-common-protos:0.0.3'
@@ -203,8 +203,8 @@ dependencies {
 
 
     // Basic Android libraries
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.biometric:biometric:1.1.0'
