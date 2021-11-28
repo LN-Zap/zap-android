@@ -1,6 +1,8 @@
 package zapsolutions.zap.util;
 
 
+import static zapsolutions.zap.util.UtilFunctions.hexStringToByteArray;
+
 import android.content.Context;
 import android.os.Handler;
 
@@ -18,6 +20,7 @@ import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
+import com.github.lightningnetwork.lnd.lnrpc.GetStateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
@@ -63,8 +66,6 @@ import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
 import zapsolutions.zap.tor.TorManager;
-
-import static zapsolutions.zap.util.UtilFunctions.hexStringToByteArray;
 
 public class Wallet {
 
@@ -178,20 +179,40 @@ public class Wallet {
         mBalancesDebounceHandler.shutdown();
     }
 
+    public void checkIfLndIsUnlockedAndConnect() {
+
+        ZapLog.d(LOG_TAG, "LND connection test.");
+        broadcastLndConnectionTestStarted();
+
+        compositeDisposable.add(LndConnection.getInstance().getStateService().getState(GetStateRequest.newBuilder().build())
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(getStateResponse -> {
+
+                    switch (getStateResponse.getState()) {
+                        case LOCKED:
+                            ZapLog.d("LockState", "Wallet is locked!");
+                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
+                            break;
+                        default:
+                            ZapLog.d("LockState", "Wallet is unlocked.");
+                            loadWallet();
+                    }
+                }, throwable -> {
+                    // If we are unable to determine the wallet state we call the following function that will handle the error messages.
+                    ZapLog.d("LockState", throwable.getMessage());
+                    loadWallet();
+                }));
+    }
+
     /**
      * This will be used on loading. If this request finishes without an error, our connection to LND is established.
      * All listeners registered to LndConnectionTestListener will be informed about the result.
      */
-    public void testLndConnectionAndLoadWallet() {
+    public void loadWallet() {
         // Retrieve info from LND with gRPC (async)
-
         mIsWalletReady = false;
         mBalancesFetched = false;
         mChannelsFetched = false;
-
-        ZapLog.d(LOG_TAG, "LND connection test.");
-
-        broadcastLndConnectionTestStarted();
 
         compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
                 .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
@@ -271,11 +292,6 @@ public class Wallet {
                         // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
                         ZapLog.e(LOG_TAG, "Cannot reach remote");
                         broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TIMEOUT);
-                    } else if (throwable.getMessage().toLowerCase().contains("unimplemented")) {
-                        // This is the case if:
-                        // - The wallet is locked
-                        ZapLog.e(LOG_TAG, "Wallet is locked!");
-                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
                     } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
                         // This is the case if:
                         // - The macaroon is invalid
@@ -330,7 +346,7 @@ public class Wallet {
                     mHandler.postDelayed(() -> {
                         // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
                         // ToDo: Create a routine that retries this until successful
-                        testLndConnectionAndLoadWallet();
+                        loadWallet();
                     }, 10000);
 
                     mHandler.postDelayed(() -> {
