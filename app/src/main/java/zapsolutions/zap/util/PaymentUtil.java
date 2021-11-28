@@ -1,9 +1,8 @@
 package zapsolutions.zap.util;
 
+import com.github.lightningnetwork.lnd.lnrpc.DeletePaymentRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Failure;
 import com.github.lightningnetwork.lnd.lnrpc.Feature;
-import com.github.lightningnetwork.lnd.lnrpc.Hop;
-import com.github.lightningnetwork.lnd.lnrpc.MPPRecord;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
@@ -94,44 +93,23 @@ public class PaymentUtil {
                     switch (payment.getFailureReason()) {
                         case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
                             Route route = payment.getHtlcs(0).getRoute();
-                            Route finalRoute;
-
-                            Version actualLNDVersion = Wallet.getInstance().getLNDVersion();
-                            Version PaymentAddressSupport = new Version("0.12");
-
-                            // ToDo: Remove later as this is deprecated
-                            if (actualLNDVersion.compareTo(PaymentAddressSupport) < 0) {
-                                // For LND prior to 0.12 we have to edit the last hop of the route to include the payment address in the mpp record.
-                                // If we wouldn't edit the route and use it later in SendToRoute, LND versions prior to 0.12.0 would not be able to send payments to 0.12.0 and above.
-                                Hop oldLastHop = route.getHops(route.getHopsCount() - 1);
-                                MPPRecord mppRecord = MPPRecord.newBuilder()
-                                        .setPaymentAddr(probeSendRequest.getPaymentAddr())
-                                        .setTotalAmtMsat(oldLastHop.getAmtToForwardMsat())
-                                        .build();
-                                Hop modifiedLastHop = Hop.newBuilder(oldLastHop)
-                                        .setTlvPayload(true)
-                                        .setMppRecord(mppRecord)
-                                        .build();
-                                finalRoute = Route.newBuilder(route)
-                                        .setHops(route.getHopsCount() - 1, modifiedLastHop)
-                                        .build();
-                            } else {
-                                finalRoute = route;
-                            }
 
                             long feeSats = 0;
-                            if (finalRoute.getTotalFeesMsat() % 1000 == 0) {
-                                feeSats = finalRoute.getTotalFeesMsat() / 1000;
+                            if (route.getTotalFeesMsat() % 1000 == 0) {
+                                feeSats = route.getTotalFeesMsat() / 1000;
                             } else {
-                                feeSats = (finalRoute.getTotalFeesMsat() / 1000) + 1;
+                                feeSats = (route.getTotalFeesMsat() / 1000) + 1;
                             }
-                            result.onSuccess(feeSats, finalRoute, probeSendRequest.getAmt());
+                            result.onSuccess(feeSats, route, probeSendRequest.getAmt());
+                            deletePaymentProbe(compositeDisposable, payment.getPaymentHash());
                             break;
                         case FAILURE_REASON_NO_ROUTE:
                             result.onNoRoute(probeSendRequest.getAmt());
+                            deletePaymentProbe(compositeDisposable, payment.getPaymentHash());
                             break;
                         default:
                             result.onError(payment.getFailureReason().toString(), RefConstants.ERROR_DURATION_MEDIUM);
+                            deletePaymentProbe(compositeDisposable, payment.getPaymentHash());
                     }
 
                 }, throwable -> {
@@ -140,6 +118,31 @@ public class PaymentUtil {
 
                     result.onError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM);
                 }));
+    }
+
+    /**
+     * Used to delete a payment probe. We don't need these stored in the database. They just bloat it.
+     */
+    public static void deletePaymentProbe(CompositeDisposable compositeDisposable, String paymentHash) {
+        Version actualLNDVersion = Wallet.getInstance().getLNDVersion();
+        Version PaymentDeletionSupport = new Version("0.14");
+
+        // ToDo: Remove version check later when versions below 0.14.0 are no longer supported
+        if (actualLNDVersion.compareTo(PaymentDeletionSupport) >= 0) {
+
+            DeletePaymentRequest deletePaymentRequest = DeletePaymentRequest.newBuilder()
+                    .setPaymentHash(byteStringFromHex(paymentHash))
+                    .setFailedHtlcsOnly(false)
+                    .build();
+
+            compositeDisposable.add(LndConnection.getInstance().getLightningService().deletePayment(deletePaymentRequest)
+                    .subscribe(deletePaymentResponse -> {
+                        ZapLog.d(LOG_TAG, "Payment probe deleted.");
+                    }, throwable -> {
+                        ZapLog.e(LOG_TAG, "Exception while deleting payment probe.");
+                        ZapLog.e(LOG_TAG, throwable.getMessage());
+                    }));
+        }
     }
 
     /**
