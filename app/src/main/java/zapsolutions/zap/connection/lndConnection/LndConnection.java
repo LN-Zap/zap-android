@@ -180,7 +180,7 @@ public class LndConnection {
             ZapLog.d(LOG_TAG, "Starting LND connection...(Open Http Channel)");
             readSavedConnectionInfo();
             generateChannelAndStubs();
-            Wallet.getInstance().testLndConnectionAndLoadWallet();
+            Wallet.getInstance().checkIfLndIsUnlockedAndConnect();
         }
 
     }

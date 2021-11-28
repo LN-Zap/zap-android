@@ -319,7 +319,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                             }
                         } else {
                             // Start lnd connection
-                            Wallet.getInstance().testLndConnectionAndLoadWallet();
+                            Wallet.getInstance().checkIfLndIsUnlockedAndConnect();
                         }
                     }
                 }, 200);
