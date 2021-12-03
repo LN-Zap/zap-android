@@ -34,7 +34,7 @@
 
     -->
 <resources>
-    <string name="ok">OKE</string>
+    <string name="ok">OK</string>
     <string name="cancel">Annuleer</string>
     <string name="lightning">Lightning</string>
     <string name="onChain">On-Chain</string>
@@ -88,7 +88,7 @@
     <string name="unknown">Onbekend</string>
     <string name="scan">Scan</string>
     <string name="settings">Instellingen</string>
-    <string name="support">Support</string>
+    <string name="support">Ondersteuning</string>
     <string name="contribute">Bijdragen</string>
     <string name="privacy">Privacy</string>
     <string name="payee">Ontvanger</string>
@@ -97,7 +97,7 @@
     <string name="confirmations">Bevestigingen</string>
     <string name="maximum_abbreviation">max</string>
     <string name="send">Verzend</string>
-    <string name="notConnected">Not connected</string>
+    <string name="notConnected">Geen verbinding</string>
     <string name="activity_receive">Ontvang</string>
     <string name="activity_send">Betaal</string>
     <string name="activity_connectRemoteNode">Verbind met externe node</string>
@@ -110,7 +110,8 @@
     <string name="activity_manage_contacts_send_mode">Verzend naar…</string>
     <string name="activity_manage_contacts_open_channel_mode">Open kanaal met…</string>
     <string name="activity_contact_details">Contactdetails</string>
-    <string name="activity_manual_setup">Connection Data</string>
+    <string name="activity_manual_setup">Verbindingsgegevens</string>
+    <string name="activity_backup">Backup</string>
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Geschiedenis</string>
     <string name="navigation_settings">Instellingen</string>
@@ -193,7 +194,7 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Je staat op het punt om %1$s%% aan netwerkvergoedingen te betalen.\n\nMogelijke oplossing:\n- probeer een Lightningbetaling\n- kies een lagere vergoeding, wacht langer\n- probeer later opnieuw\n- stuur een groter bedrag\n\nWil je toch doorgaan?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Je hebt een bedrag in fiatwaarde verzocht, maar je wisselkoersdata is oud (%1$s uur geleden opgevraagd).\nZorg ervoor dat je een internetverbinding hebt of overweeg om rechtstreeks bitcoin te verzoeken.\n\nWil je toch doorgaan?</string>
     <string name="guardian_remoteConnect">Weet je zeker dat je wilt verbinden met \n\n%1$s\n\nControleer zorgvuldig de hostnaam.</string>
-    <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While Zap anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
+    <string name="guardian_externalLink">Je staat op het punt een link met gevoelige gegevens te openen in je browser. Terwijl Zap al je dataverkeer met het Tor-netwerk anonimiseert, doet je browser dat niet. Als je deze gegevens privé wilt houden, gebruik dan een Tor-browser om de link te openen.</string>
     <string name="guardian_oldLndVersion_remote">Update a.u.b.\n\nDe node waarmee je verbonden bent gebruikt een oude versie van LND. Versies onder %1$s worden niet meer ondersteunt.</string>
     <string name="settings_category_general">Algemeen</string>
     <string name="settings_category_security">Beveiliging</string>
@@ -203,7 +204,7 @@
     <string name="settings_currency">Fiateenheid</string>
     <string name="settings_language">Taal</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymize all traffic using the Tor network.</string>
+    <string name="settings_tor_summary">Anonimiseer alle dataverkeer via het Tor-netwerk.</string>
     <string name="settings_scan_clipboard">Klembord controleren</string>
     <string name="settings_scan_clipboard_summary">Automatisch het klembord controleren op data die Zap kan gebruiken.</string>
     <string name="settings_hapticPin">Haptische PIN-feedback</string>
@@ -231,17 +232,17 @@
         <item>Compatibiliteit (P2PSH)</item>
         <item>Native (Bech32)</item>
     </string-array>
-    <string name="settings_lnRequestExpiryTitle">Lightningverzoek-verlooptijd</string>
-    <string name="settings_lnFeeLimitTitle">Lightningbetaling-vergoedingslimiet</string>
+    <string name="settings_lnRequestExpiryTitle">Lightningverzoek Verlooptijd</string>
+    <string name="settings_lnFeeLimitTitle">Lightningbetaling Vergoedingslimiet</string>
     <string name="settings_lnPrivateChannelHints">Routehints voor privékanalen opnemen in betalingsverzoeken</string>
     <string name="error">Foutmelding</string>
-    <string name="error_blockExplorer_title">Blockexplorer</string>
+    <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Je hebt de (%1$s) blockexplorer geselecteerd, die geen %2$s ondersteunt. \nGa naar de instellingen en kies een andere blockexplorer om door te gaan."</string>
-    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
+    <string name="error_zeroAmountPaymentRequest">Dit is een betalingsverzoek met een nulbedrag. Zap ondersteunt geen betalingsverzoeken met een nulbedrag omwille van mogelijke beveiligingsproblemen.</string>
     <string name="error_paymentRequestExpired">Dit betalingsverzoek is verlopen.</string>
-    <string name="error_useTestnetRequest">Je bent verbonden met het TESTNET. Gebruik een TESTNETadres of betalingsverzoek.</string>
-    <string name="error_useMainnetRequest">Je bent verbonden met het MAINNET. Gebruik een MAINNETadres of betalingsverzoek.</string>
-    <string name="error_useRegtestRequest">Je bent verbonden met het REGTESTnetwerk. Gebruik een REGTESTadres of betalingsverzoek.</string>
+    <string name="error_useTestnetRequest">Je bent verbonden met het TESTNET. Gebruik een TESTNET-adres of betalingsverzoek.</string>
+    <string name="error_useMainnetRequest">Je bent verbonden met het MAINNET. Gebruik een MAINNET-adres of betalingsverzoek.</string>
+    <string name="error_useRegtestRequest">Je bent verbonden met het REGTEST-netwerk. Gebruik een REGTEST-adres of betalingsverzoek.</string>
     <string name="error_cameraPermissionRequired">Om QR-Codes te scannen heeft Zap toestemming nodig om de camera te gebruiken.</string>
     <string name="error_emptyClipboardPayment">Je klembord bevat geen betalingsdata.</string>
     <string name="error_emptyClipboardConnect">Je klembord bevat geen verbindingsdata.</string>
@@ -260,13 +261,13 @@
     <string name="error_connection_lnd_unavailable">Kan geen verbinding maken met LND.\n\n- zorg ervoor dat de LND daemon draait op je server.\n\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Kan de host niet bereiken.\n\nZorg ervoor dat je een internetverbinding hebt.</string>
     <string name="error_connection_unknown">Verbinding mislukt.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
-    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
+    <string name="error_connection_tor_unreachable">Tor-verbinding mislukt.\n Schakel Tor in bij de app-instellingen.</string>
+    <string name="error_connection_tor_bootstrapping">Tor kon niet opstarten.\n\nZap Android ondersteunt nu native Tor. Als u Orbot gebruikt, verwijder dan Zap uit de Tor-geactiveerde lijst van Orbot of sluit Orbot volledig af.</string>
     <string name="error_connection_wallet_locked">Ontgrendel de wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON-syntax van de BTCPay-serverconfiguratie is ongeldig.</string>
     <string name="error_connection_btcpay_invalid_config">De BTCPay serverconfiguratie bevat geen BTC GRPC-configuratie.</string>
-    <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
-    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
+    <string name="error_connection_internal_server">De node is bereikbaar maar retourneert een interne fout. Deze fout kan worden veroorzaakt door het gebruik van een verkeerde poort.</string>
+    <string name="error_connection_internal_server_clearnet">De node is bereikbaar maar retourneert een interne fout. Deze fout kan worden veroorzaakt door het gebruik van een verkeerde poort. Je probeert verbinding te maken met een Node op clearnet, het uitschakelen van Tor in de app-instellingen kan het probleem mogelijks oplossen.</string>
     <string name="error_wrong_password">Verkeerd wachtwoord</string>
     <string name="error_lightning_uri_invalid">Ongeldig format.\nGebruik een van de volgende:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">De wallet moet ingesteld zijn om een kanaal te kunnen openen.</string>
@@ -292,14 +293,14 @@
     <string name="error_payment_insufficient_balance">Het te betalen bedrag is groter dan wat je via Lightning kunt verzenden met je huidige open kanalen.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Zorg ervoor dat de ontvanger de keysendfunctie heeft ingeschakeld.</string>
     <string name="error_only_payment_data_allowed">Alleen betalingsdata is hier toegestaan.</string>
-    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
-    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
-    <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
-    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
-    <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
+    <string name="error_wallet_not_yet_ready">Je wallet is nog niet volledig gesynchroniseerd. Probeer het later opnieuw.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s lijkt verzoeken afkomstig van het Tor-netwerk te blokkeren. Je kunt proberen Tor uit te schakelen in de instellingen of neem contact met de service en vraag hen hun Cloudflare-regels bij te werken.</string>
+    <string name="error_tor_exchange_rate">Wisselkoers kon niet worden opgehaald. De service die u gebruikt lijkt verzoeken van het Tor-netwerk te blokkeren. Probeer om in de geavanceerde instellingen van wisselkoersaanbieder te wisselen.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Het antwoord van %1$s kan niet worden gelezen.</string>
+    <string name="error_lnd_connection_failed">Verbinding met LND mislukt, probeer het opnieuw.</string>
     <plurals name="duration_second">
-        <item quantity="one">%d Second</item>
-        <item quantity="other">%d Seconds</item>
+        <item quantity="one">%d Seconde</item>
+        <item quantity="other">%d Seconden</item>
     </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuut</item>
@@ -332,16 +333,16 @@
     <string name="fee_tier_medium_description">Normale Transactie</string>
     <string name="fee_tier_fast_description">Snelle Transactie</string>
     <string name="fee_estimated_duration">Verwachte Levering: %1$s</string>
-    <string name="fee_not_available">n.v.t.</string>
-    <string name="fee_limit_title">Vergoedingslimiet-waarschuwing</string>
+    <string name="fee_not_available">nvt</string>
+    <string name="fee_limit_title">Vergoedingslimiet Waarschuwing</string>
     <string name="fee_limit_threshold">Vergoedingslimiet voor betalingen boven %1$d sats: %2$s</string>
-    <string name="fee_limit_exceeded">De vergoeding voor deze betaling (%1$.1f%%) overschrijdt het gespecificeerde limiet in the instellingen (%2$.0f%%).\n\nWil je dit betalingsverzoek echt betalen?</string>
+    <string name="fee_limit_exceeded">De vergoeding voor deze betaling (%1$.1f%%) overschrijdt de aangegeven limiet in de instellingen (%2$.0f%%).\n\nWil je toch op dit betalingsverzoek ingaan?</string>
     <string name="fee_limit_exceeded_payment">De vergoeding voor deze betaling (%1$d sats) zal hoger zijn dan de betaling zelf (%2$d sats).\n\nWil je dit betalingsverzoek echt betalen?</string>
     <string name="unlock_wallet">Ontgrendel Wallet</string>
     <string name="biometricPrompt_title">Biometrische Authenticatie</string>
     <string name="biometricNotSetup">Om deze functie te kunnen gebruiken, moet je biometrische authenticatie hebben ingesteld in je Android-systeeminstellingen.</string>
-    <string name="invoice_detail">Betalingsverzoekdetail</string>
-    <string name="transaction_detail">Transactiedetail</string>
+    <string name="invoice_detail">Betalingsverzoek Detail</string>
+    <string name="transaction_detail">Detail Transactie</string>
     <string name="app_reset_title">Houd rekening met</string>
     <string name="app_reset_message">De app is gereset omdat er in de laatste update enkele structurele veranderingen zaten.\nHelaas zal je het instellingsproces opnieuw moeten doorlopen.</string>
     <string name="nfc_type_not_supported">Niet ondersteund NFC-type</string>
@@ -383,7 +384,7 @@
     <string name="lnurl_pay_success_secret_decrypt_error">Je betaling is gelukt, maar het geheim dat je hebt ontvangen, kon niet worden ontsleuteld.</string>
     <string name="lnurl_pay_save_url">IMPORTANT:\nDe URL is gekopieerd naar je klembord. Bewaar het als je het later nodig hebt. Dit dialoogvenster wordt niet meer weergegeven.</string>
     <string name="lnurl_pay_save_secret">IMPORTANT:\nDe code is gekopieerd naar je klembord. Bewaar het als je het later nodig hebt. Dit dialoogvenster wordt niet meer weergegeven.</string>
-    <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
+    <string name="lnurl_invalid_response">De Service antwoordde met een ongeldig antwoord.</string>
     <string name="string_analyzer_unrecognized_data">Niet-herkende data.</string>
     <string name="rest_port">REST (port 8080) is niet ondersteund.\n\nWil je de port veranderen naar 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Wallets</string>
@@ -413,22 +414,44 @@
     <string name="contact_already_exists">Deze persoon staat al in je contacten!</string>
     <string name="no_contacts">Geen contacten</string>
     <string name="manual_send_input_hint">Adres of betalingsdata</string>
-    <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
-    <string name="advanced_channel_details_activity">Activity</string>
-    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100\% means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
-    <string name="advanced_channel_details_lifetime">Lifetime</string>
-    <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
-    <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
-    <string name="advanced_channel_details_commit_fee">Commit Fee</string>
-    <string name="advanced_channel_details_explanation_commit_fee">The amount to be paid in fees when closing the channel. This can change over time as the fees are subject to the transaction fees of the bitcoin base layer.</string>
-    <string name="advanced_channel_details_time_lock">Time Lock</string>
-    <string name="advanced_channel_details_explanation_time_lock">In the event of an uncooperative close (force close) of this channel, the time lock is the number of blocks you will have to wait before you can access your funds again.</string>
-    <string name="advanced_channel_details_local_routing_fee">Local Routing Fee</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee (in msat) and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Remote Routing Fee</string>
-    <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
-    <string name="advanced_channel_details_local_channel_reserve">Local Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
-    <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
+    <string name="advanced_channel_details_explanation_capacity">Het totale bedrag dat in dit kanaal wordt aangehouden. Vanwege bepaalde beperkingen (zoals vastleggingskosten of lokale kanaalreserve) zijn niet alle fondsen besteedbaar.</string>
+    <string name="advanced_channel_details_activity">Activiteit</string>
+    <string name="advanced_channel_details_explanation_activity">Het totale percentage van verzonden en ontvangen fondsen gedeeld door de totale capaciteit van het kanaal. Een kanaal met een activiteit van meer dan 100\% betekent dat er meer geld door het kanaal is gereisd dan het kan bevatten. Deze statistiek is ontworpen om te laten zien hoe effectief een bepaald kanaal is.</string>
+    <string name="advanced_channel_details_lifetime">Levensduur</string>
+    <string name="advanced_channel_details_explanation_lifetime">Dit laat zien hoe lang dit kanaal al bestaat.</string>
+    <string name="advanced_channel_details_explanation_visibility">Een kanaal kan openbaar of privé zijn. Privékanalen zijn niet veiliger, ze zijn alleen niet zichtbaar voor het netwerk.</string>
+    <string name="advanced_channel_details_commit_fee">Vastleggingskosten</string>
+    <string name="advanced_channel_details_explanation_commit_fee">Het bedrag dat aan vergoedingen moet worden betaald bij het sluiten van het kanaal. Dit kan in de loop van de tijd veranderen aangezien de kosten onderhevig zijn aan de transactiekosten van de bitcoin-basisnetwerk.</string>
+    <string name="advanced_channel_details_time_lock">Tijdslot</string>
+    <string name="advanced_channel_details_explanation_time_lock">In het geval van een niet-coöperatieve sluiting (force close) van dit kanaal, is het tijdslot het aantal blokken dat je moet wachten voordat je weer over je geld kunt beschikken.</string>
+    <string name="advanced_channel_details_local_routing_fee">Lokale Routing Vergoeding</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">De vergoeding die je ontvangt als je een transactie via dit kanaal doorstuurt. De totale vergoeding die je ontvangt is de som van de basisvergoeding (in msat) en het ingestelde tarief.\nDe basisvergoeding is wat je krijgt voor elke doorzending, ongeacht het bedrag van de transactie.\nHet precieze bedrag dat wordt ontvangen via het ingestelde tarief hangt af van de grootte van het bedrag van de transactie.</string>
+    <string name="advanced_channel_details_remote_routing_fee">Remote Routing Vergoeding</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">De vergoedingen die een andere node ontvangt wanneer die een transactie via dit kanaal doorstuurt. Dit geldt alleen voor doorstuurtransacties. Je hoeft niets te betalen als je dit kanaal gebruikt voor je eigen transacties.</string>
+    <string name="advanced_channel_details_local_channel_reserve">Lokale Kanaal Reserve</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">Het minimumbedrag dat deze node moet reserveren in dit kanaal. Je kunt dit bedrag niet besteden. Dit zorgt ervoor dat je altijd iets te verliezen hebt als je je kanaalpartner zou proberen te bedriegen.</string>
+    <string name="advanced_channel_details_remote_channel_reserve">Remote Kanaal Reserve</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">Het minimumbedrag dat de andere node moet reserveren in dit kanaal. Dit zorgt ervoor dat de andere node altijd iets te verliezen heeft indien die zou proberen jou te bedriegen.</string>
+    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of Zap.\n\nThis backup only contains the following data:\n\n- Data to connect Zap to your running nodes\n- Contacts</string>
+    <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
+    <string name="backup_data_confirm_headline">Please Confirm</string>
+    <string name="backup_data_confirm">I confirm</string>
+    <string name="backup_data_restore_description">Restore your connected nodes and contacts.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
+    <string name="backup_data_create_headline">Backup</string>
+    <string name="backup_data_restore_headline">Restore</string>
+    <string name="backup_data_password_enter">Enter your password</string>
+    <string name="backup_data_password_confirm">Confirm your password</string>
+    <string name="backup_data_password_empty">The password must have at least 8 characters.</string>
+    <string name="backup_data_password_mismatch">The passwords are not identical.</string>
+    <string name="backup_data_creation_process">Creating backup</string>
+    <string name="backup_data_restore_process">Restoring backup</string>
+    <string name="backup_data_create_success">Backup created</string>
+    <string name="backup_data_restore_success">Backup restored</string>
+    <string name="backup_data_create_failed">Backup failed</string>
+    <string name="backup_data_restore_failed_title">Restoring failed</string>
+    <string name="backup_data_restore_failed_description">Most likely you entered an invalid password.</string>
+    <string name="backup_data_open_backupfile_error">Unable to open the selected file.</string>
+    <string name="backup_data_no_data">No data to backup.</string>
+    <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
+    <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
 </resources>
