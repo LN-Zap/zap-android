@@ -111,6 +111,7 @@
     <string name="activity_manage_contacts_open_channel_mode">Avaa kanava…</string>
     <string name="activity_contact_details">Yhteystiedon tiedot</string>
     <string name="activity_manual_setup">Tietoa yhteydestä</string>
+    <string name="activity_backup">Varmuuskopio</string>
     <string name="navigation_wallet">Lompakko</string>
     <string name="navigation_history">Historia</string>
     <string name="navigation_settings">Asetukset</string>
@@ -238,14 +239,14 @@
     <string name="error_blockExplorer_title">Lohkoselain</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
     <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
-    <string name="error_paymentRequestExpired">This payment request expired.</string>
+    <string name="error_paymentRequestExpired">Tämä maksupyyntö on vanhentunut.</string>
     <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
     <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>
     <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
     <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
     <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
     <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
-    <string name="error_qr_code_result_null">Unable to read QR-Code, please try again.</string>
+    <string name="error_qr_code_result_null">QR-koodi ei luettavissa, ole hyvä ja yritä uudelleen.</string>
     <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use one of the following formats:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="error_unableToFetchBTCPayConfig">Could not fetch configuration from BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
@@ -267,7 +268,7 @@
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
     <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
-    <string name="error_wrong_password">Wrong password</string>
+    <string name="error_wrong_password">Väärä salasana</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">The wallet needs to be setup to open a channel.</string>
     <string name="error_connect_peer">Could not establish connection to peer node.</string>
@@ -431,4 +432,26 @@
     <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
+    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of Zap.\n\nThis backup only contains the following data:\n\n- Data to connect Zap to your running nodes\n- Contacts</string>
+    <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
+    <string name="backup_data_confirm_headline">Please Confirm</string>
+    <string name="backup_data_confirm">I confirm</string>
+    <string name="backup_data_restore_description">Restore your connected nodes and contacts.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
+    <string name="backup_data_create_headline">Backup</string>
+    <string name="backup_data_restore_headline">Restore</string>
+    <string name="backup_data_password_enter">Enter your password</string>
+    <string name="backup_data_password_confirm">Confirm your password</string>
+    <string name="backup_data_password_empty">The password must have at least 8 characters.</string>
+    <string name="backup_data_password_mismatch">The passwords are not identical.</string>
+    <string name="backup_data_creation_process">Creating backup</string>
+    <string name="backup_data_restore_process">Restoring backup</string>
+    <string name="backup_data_create_success">Backup created</string>
+    <string name="backup_data_restore_success">Backup restored</string>
+    <string name="backup_data_create_failed">Backup failed</string>
+    <string name="backup_data_restore_failed_title">Restoring failed</string>
+    <string name="backup_data_restore_failed_description">Most likely you entered an invalid password.</string>
+    <string name="backup_data_open_backupfile_error">Unable to open the selected file.</string>
+    <string name="backup_data_no_data">No data to backup.</string>
+    <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
+    <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
 </resources>

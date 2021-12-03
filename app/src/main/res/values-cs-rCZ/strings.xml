@@ -97,7 +97,7 @@
     <string name="confirmations">Potvrzení</string>
     <string name="maximum_abbreviation">max</string>
     <string name="send">Odeslat</string>
-    <string name="notConnected">Not connected</string>
+    <string name="notConnected">Nepřipojeno</string>
     <string name="activity_receive">Příjmout</string>
     <string name="activity_send">Zaplatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
@@ -110,7 +110,8 @@
     <string name="activity_manage_contacts_send_mode">Poslat komu…</string>
     <string name="activity_manage_contacts_open_channel_mode">Otevřít kanál s…</string>
     <string name="activity_contact_details">Kontaktní údaje</string>
-    <string name="activity_manual_setup">Connection Data</string>
+    <string name="activity_manual_setup">Údaje o připojení</string>
+    <string name="activity_backup">Záloha</string>
     <string name="navigation_wallet">Peněženka</string>
     <string name="navigation_history">Historie</string>
     <string name="navigation_settings">Nastavení</string>
@@ -193,7 +194,7 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Chystáte se zaplatit %1$s%% v síťových poplatcích.\n\nMožná řešení:\n- zkuste místo toho Lightning platbu\n- vyberte nižší poplatek, počkejte déle\n- zkuste znovu později\n- převeďte větší množství\n\nChcete přesto pokračovat?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Částku jste požadovali jako hodnotu fiat, ale vaše data směnného kurzu jsou stará (načtena před%1$s hodinami).\nUjistěte se, že máte připojení k internetu nebo zvažte žádost přímo v bitcoinech.\n\nChcete přesto pokračovat?</string>
     <string name="guardian_remoteConnect">Opravdu se chcete připojit k \n\n%1$s\n\nProsím pečlivě zkontrolujte název hostitele.</string>
-    <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While Zap anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
+    <string name="guardian_externalLink">V prohlížeči se chystáte otevřít odkaz s citlivými údaji. Zatímco Zap anonymizuje veškerý váš provoz pomocí sítě Tor, váš prohlížeč tak nečiní. Pokud chcete zachovat soukromí těchto údajů, použijte k otevření odkazu prohlížeč Tor.</string>
     <string name="guardian_oldLndVersion_remote">Aktualizujte prosím.\n\nUzel, ke kterému jste připojeni, používá starou verzi LND. Verze pod %1$s již nejsou aktivně podporovány.</string>
     <string name="settings_category_general">Obecné</string>
     <string name="settings_category_security">Zabezpečení</string>
@@ -203,7 +204,7 @@
     <string name="settings_currency">Sekundární jednotka</string>
     <string name="settings_language">Jazyk</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymize all traffic using the Tor network.</string>
+    <string name="settings_tor_summary">Anonymizujte veškerý provoz pomocí sítě Tor.</string>
     <string name="settings_scan_clipboard">Zkontrolovat schránku</string>
     <string name="settings_scan_clipboard_summary">Automaticky zkontrolovat schránku na data, které dokáže Zap zpracovat.</string>
     <string name="settings_hapticPin">Hmatová zpětná vazba PIN</string>
@@ -237,7 +238,7 @@
     <string name="error">Chyba</string>
     <string name="error_blockExplorer_title">Blok Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Váš aktuálně vybraný průzkumník bloků (%1$s) nepodporuje %2$s. \nPřejděte na nastavení a pokračujte volbou jiného průzkumníku bloků."</string>
-    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
+    <string name="error_zeroAmountPaymentRequest">Jedná se o žádost o platbu s nulovou částkou. Systém Zap nepodporuje žádosti o platbu s nulovou částkou z bezpečnostních důvodů.</string>
     <string name="error_paymentRequestExpired">Tato platební žádost vypršela.</string>
     <string name="error_useTestnetRequest">Jste připojeni k TESTNETu. Použijte adresy nebo žádosti o platbu TESTNETu.</string>
     <string name="error_useMainnetRequest">Jste připojeni k MAINNETu. Použijte adresy nebo žádosti o platbu MAINNETu.</string>
@@ -260,13 +261,13 @@
     <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.\n\n- ujistěte se, že na vašem serveru běží démon LND.\n\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
     <string name="error_connection_network_unreachable">Nelze se dostat k hostiteli.\n\nZkontrolujte, zda jste připojení k internetu.</string>
     <string name="error_connection_unknown">Připojení se nezdařilo.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
-    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
+    <string name="error_connection_tor_unreachable">Připojení k Toru se nezdařilo.\nZapněte prosím Tor v nastavení aplikací.</string>
+    <string name="error_connection_tor_bootstrapping">Tor se nepodařilo spustit.\n\nZap Android nyní nativně podporuje Tor. Pokud používáte Orbot, odstraňte prosím Zap ze seznamu aktivovaných Torů v Orbotu nebo Orbot úplně vypněte.</string>
     <string name="error_connection_wallet_locked">Odemkněte prosím peněženku.</string>
     <string name="error_connection_btcpay_invalid_json">Syntaxe JSON konfiguračního souboru BTCPay Serveru je neplatná.</string>
     <string name="error_connection_btcpay_invalid_config">Konfigurace BTCPay Serveru neobsahuje konfiguraci BTC GRPC.</string>
-    <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
-    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
+    <string name="error_connection_internal_server">Uzel je dosažitelný, ale vrací interní chybu. Tato chyba může být způsobena použitím nesprávného portu.</string>
+    <string name="error_connection_internal_server_clearnet">Uzel je dosažitelný, ale vrací interní chybu. Tato chyba může být způsobena použitím nesprávného portu. Vzhledem k tomu, že se snažíte připojit k uzlu v síti Clearnet, mohlo by váš problém vyřešit také vypnutí Toru v nastavení aplikace.</string>
     <string name="error_wrong_password">Špatné heslo</string>
     <string name="error_lightning_uri_invalid">Neplatný formát.\nPoužijte jednu z následujících možností:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Aby bylo možné otevřít kanál, je třeba nastavit peněženku.</string>
@@ -292,16 +293,16 @@
     <string name="error_payment_insufficient_balance">Částka k zaplacení je větší než to, co můžete poslat přes lightning se svými současnými otevřenými kanály.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Ujistěte se, že příjemce povolil funkci keyend.</string>
     <string name="error_only_payment_data_allowed">Zde jsou povoleny pouze údaje o platbě.</string>
-    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
-    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
-    <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
-    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
-    <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
+    <string name="error_wallet_not_yet_ready">Vaše peněženka ještě není plně synchronizovaná. Zkuste to prosím později.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">Zdá se, že %1$s blokuje požadavky přicházející ze sítě Tor. Můžete zkusit vypnout Tor v nastavení nebo kontaktovat službu a požádat ji o aktualizaci pravidel cloudflare.</string>
+    <string name="error_tor_exchange_rate">Směnný kurz nebylo možné zjistit. Zdá se, že služba, kterou používáte, blokuje požadavky přicházející ze sítě Tor. Zkuste přepnout poskytovatele směnných kurzů v rozšířeném nastavení.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Odpověď od %1$s se nepodařilo přečíst.</string>
+    <string name="error_lnd_connection_failed">Připojení k LND se nezdařilo, zkuste to prosím znovu.</string>
     <plurals name="duration_second">
-        <item quantity="one">%d Second</item>
-        <item quantity="few">%d Seconds</item>
-        <item quantity="many">%d Seconds</item>
-        <item quantity="other">%d Seconds</item>
+        <item quantity="one">%d Sekunda</item>
+        <item quantity="few">%d Sekundy</item>
+        <item quantity="many">%d Sekund</item>
+        <item quantity="other">%d Sekund</item>
     </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d Minuta</item>
@@ -397,7 +398,7 @@
     <string name="lnurl_pay_success_secret_decrypt_error">Vaše platba byla úspěšná, ale tajemství, které jste obdrželi, nebylo možné dešifrovat.</string>
     <string name="lnurl_pay_save_url">DŮLEŽITÉ: \nURL byla zkopírována do vaší schránky. Uložte ji, pokud ji budete potřebovat později. Tento dialog se znovu nezobrazí.</string>
     <string name="lnurl_pay_save_secret">DŮLEŽITÉ:\nKód byl zkopírován do vaší schránky. Uložte ho, pokud ho budete potřebovat později. Tento dialog se znovu nezobrazí.</string>
-    <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
+    <string name="lnurl_invalid_response">Služba odpověděla neplatnou odpovědí.</string>
     <string name="string_analyzer_unrecognized_data">Nerozpoznaná data.</string>
     <string name="rest_port">REST (port 8080) není podporován.\n\nChcete změnit port na 10009 (gRPC)?</string>
     <string name="drawer_menu_wallets">Peněženky</string>
@@ -427,22 +428,44 @@
     <string name="contact_already_exists">Tato osoba již je ve vašich kontaktech!</string>
     <string name="no_contacts">Žádné kontakty</string>
     <string name="manual_send_input_hint">Adresa nebo platební údaje</string>
-    <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
-    <string name="advanced_channel_details_activity">Activity</string>
-    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100\% means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
-    <string name="advanced_channel_details_lifetime">Lifetime</string>
-    <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
-    <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
-    <string name="advanced_channel_details_commit_fee">Commit Fee</string>
-    <string name="advanced_channel_details_explanation_commit_fee">The amount to be paid in fees when closing the channel. This can change over time as the fees are subject to the transaction fees of the bitcoin base layer.</string>
-    <string name="advanced_channel_details_time_lock">Time Lock</string>
-    <string name="advanced_channel_details_explanation_time_lock">In the event of an uncooperative close (force close) of this channel, the time lock is the number of blocks you will have to wait before you can access your funds again.</string>
-    <string name="advanced_channel_details_local_routing_fee">Local Routing Fee</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee (in msat) and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Remote Routing Fee</string>
-    <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
-    <string name="advanced_channel_details_local_channel_reserve">Local Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
-    <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
+    <string name="advanced_channel_details_explanation_capacity">Celková částka finančních prostředků držených v tomto kanálu. Vzhledem k některým omezením (např. poplatek za závazek nebo místní rezerva kanálu) nelze utratit všechny prostředky.</string>
+    <string name="advanced_channel_details_activity">Aktivita</string>
+    <string name="advanced_channel_details_explanation_activity">Celkové procento odeslaných a přijatých prostředků dělené celkovou kapacitou kanálu. Kanál s aktivitou vyšší než 100\% znamená, že kanálem prošlo více prostředků, než kolik jich může pojmout. Tato metrika má ukázat, jak je daný kanál efektivní.</string>
+    <string name="advanced_channel_details_lifetime">Životnost</string>
+    <string name="advanced_channel_details_explanation_lifetime">Toto ukazuje, jak dlouho již tento kanál existuje.</string>
+    <string name="advanced_channel_details_explanation_visibility">Kanál může být veřejný nebo soukromý. Soukromé kanály nejsou bezpečnější, pouze nejsou viditelné v síti.</string>
+    <string name="advanced_channel_details_commit_fee">Poplatek za závazek</string>
+    <string name="advanced_channel_details_explanation_commit_fee">Částka, která má být zaplacena na poplatcích při uzavření kanálu. Tato částka se může v průběhu času měnit, protože poplatky podléhají transakčním poplatkům základní vrstvy bitcoinu.</string>
+    <string name="advanced_channel_details_time_lock">Časová zámek</string>
+    <string name="advanced_channel_details_explanation_time_lock">V případě nespolupracujícího uzavření (nuceného uzavření) tohoto kanálu je časový zámek počtem bloků, které budete muset počkat, než budete mít opět přístup ke svým prostředkům.</string>
+    <string name="advanced_channel_details_local_routing_fee">Místní směrovací poplatek</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">Poplatky, které obdržíte při předání transakce tímto kanálem. Celkový poplatek, který obdržíte, je součtem základního poplatku (v msat) a sazby poplatku.\nZákladní poplatek je částka, kterou obdržíte za každé přeposlání bez ohledu na výši transakce.\nSuma obdržená prostřednictvím sazby poplatku závisí na výši transakce.</string>
+    <string name="advanced_channel_details_remote_routing_fee">Poplatek za vzdálené směrování</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">Poplatky, které druhý uzel obdrží, když předá transakci tímto kanálem. Platí pouze pro předávání transakcí. Pokud tento kanál použijete pro své transakce, nebudete muset nic platit.</string>
+    <string name="advanced_channel_details_local_channel_reserve">Místní rezerva kanálu</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">Minimální částka, kterou musí tento uzel rezervovat v tomto zůstatku kanálů. Tuto částku nebudete moci utratit. Tím je zajištěno, že vždy budete mít o co přijít, pokud se pokusíte svého partnera v kanálu podvést.</string>
+    <string name="advanced_channel_details_remote_channel_reserve">Rezerva vzdáleného kanálu</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">Minimální částka, kterou musí druhý uzel rezervovat v tomto zůstatku kanálů. Tím je zajištěno, že druhý uzel bude mít vždy co ztratit, pokud se vás pokusí podvést.</string>
+    <string name="backup_data_create_description">Hlavním účelem této zálohy je migrace telefonu. Neobsahuje ani zálohu seedu pro obnovu on-chain prostředků, ani zálohu kanálu pro obnovu lightning prostředků. Zálohy pro obnovu vašich prostředků je třeba vytvořit mimo Zap.\n\nTato záloha obsahuje pouze následující data:\n\n- Data pro připojení Zap k vašim běžícím uzlům\n- Kontakty</string>
+    <string name="backup_data_confirm_description">Již jsem si zálohoval/a svůj seed a své kanály a chápu, že tato záloha NEPOMŮŽE k obnovení mých prostředků.\n\nChápu, že tato záloha stále obsahuje všechny potřebné informace pro přístup k mým prostředkům. V dalším kroku proto použiji bezpečné heslo.</string>
+    <string name="backup_data_confirm_headline">Potvrďte prosím</string>
+    <string name="backup_data_confirm">Potvrzuji</string>
+    <string name="backup_data_restore_description">Obnovte připojené uzly a kontakty.\nJestliže vaše uzly již nejsou online, tento proces obnovení vám nepomůže získat přístup k vašim prostředkům.</string>
+    <string name="backup_data_create_headline">Záloha</string>
+    <string name="backup_data_restore_headline">Obnovení</string>
+    <string name="backup_data_password_enter">Zadejte své heslo</string>
+    <string name="backup_data_password_confirm">Potvrďte své heslo</string>
+    <string name="backup_data_password_empty">Heslo musí mít alespoň 8 znaků.</string>
+    <string name="backup_data_password_mismatch">Hesla se neshodují.</string>
+    <string name="backup_data_creation_process">Vytváření zálohy</string>
+    <string name="backup_data_restore_process">Obnovení zálohy</string>
+    <string name="backup_data_create_success">Záloha vytvořena</string>
+    <string name="backup_data_restore_success">Záloha obnovena</string>
+    <string name="backup_data_create_failed">Zálohování se nezdařilo</string>
+    <string name="backup_data_restore_failed_title">Obnovování se nezdařilo</string>
+    <string name="backup_data_restore_failed_description">Pravděpodobně jste zadali neplatné heslo.</string>
+    <string name="backup_data_open_backupfile_error">Vybraný soubor nelze otevřít.</string>
+    <string name="backup_data_no_data">Žádná data k zálohování.</string>
+    <string name="backup_data_version_too_old">Záloha byla vytvořena pomocí novější verze. Před importem zálohy aplikaci aktualizujte.</string>
+    <string name="backup_data_invalid_file_chosen">Toto není platný zálohovací soubor. Vyberte prosím soubor, který byl vytvořen pomocí této aplikace.</string>
 </resources>
