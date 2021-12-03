@@ -45,9 +45,11 @@ import com.github.lightningnetwork.lnd.routerrpc.HtlcEvent;
 import com.github.lightningnetwork.lnd.routerrpc.SubscribeHtlcEventsRequest;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -238,6 +240,7 @@ public class Wallet {
                             mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
                         }
                     }
+                    readChannelInfoFromCache();
                     broadcastLndConnectionTestResult(true, -1);
                 }, throwable -> {
 
@@ -760,23 +763,10 @@ public class Wallet {
             mPendingForceClosedChannelsList = pendingChannelsResponse.getPendingForceClosingChannelsList();
             mPendingWaitingCloseChannelsList = pendingChannelsResponse.getWaitingCloseChannelsList();
 
-
             // Load NodeInfos for all involved nodes. This allows us to display aliases later.
             Set<String> channelNodes = new HashSet<>();
 
             for (Channel c : mOpenChannelsList) {
-                boolean alreadyFetched = false;
-                for (NodeInfo i : mNodeInfos) {
-                    if (i.getNode().getPubKey().equals(c.getRemotePubkey())) {
-                        alreadyFetched = true;
-                        break;
-                    }
-                }
-                if (!alreadyFetched) {
-                    channelNodes.add(c.getRemotePubkey());
-                }
-            }
-            for (ChannelCloseSummary c : mClosedChannelsList) {
                 boolean alreadyFetched = false;
                 for (NodeInfo i : mNodeInfos) {
                     if (i.getNode().getPubKey().equals(c.getRemotePubkey())) {
@@ -871,7 +861,7 @@ public class Wallet {
      *
      * @param pubkey
      */
-    public void fetchNodeInfoFromLND(String pubkey, boolean broadcastChannelUpdate) {
+    public void fetchNodeInfoFromLND(String pubkey, boolean lastNode) {
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(pubkey)
                 .build();
@@ -882,11 +872,12 @@ public class Wallet {
                     ZapLog.v(LOG_TAG, "Fetched Node info from " + nodeInfo.getNode().getAlias());
                     mNodeInfos.add(nodeInfo);
 
-                    if (broadcastChannelUpdate) {
+                    if (lastNode) {
+                        saveChannelInfoToCache();
                         broadcastChannelsUpdated();
                     }
                 }, throwable -> {
-                    if (broadcastChannelUpdate) {
+                    if (lastNode) {
                         broadcastChannelsUpdated();
                     }
                     ZapLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage());
@@ -1331,6 +1322,45 @@ public class Wallet {
             }
         }
         return tempMax;
+    }
+
+    /**
+     * Used to save channel infos to the shared preferences.
+     * The channel info is stored in a string.
+     * StandardCharsets.ISO_8859_1 is used as it preserves the bytes correctly. (UTF8 would not work)
+     * The byte length is stored in a 4 byte integer followed by the actual data.
+     * This way on reading it can be split at the correct positions.
+     */
+    public void saveChannelInfoToCache() {
+        StringBuilder cache = new StringBuilder();
+        for (NodeInfo i : mNodeInfos) {
+            byte[] nodeInfoLength = UtilFunctions.intToByteArray(i.toByteArray().length);
+            cache.append(new String(nodeInfoLength, StandardCharsets.ISO_8859_1));
+            cache.append(new String(i.toByteArray(), StandardCharsets.ISO_8859_1));
+        }
+        PrefsUtil.editPrefs().putString(PrefsUtil.NODE_INFO_CACHE, cache.toString()).apply();
+        ZapLog.d(LOG_TAG, "Saved NodeInfos to cache.");
+    }
+
+    /**
+     * Loads the node info cache from shared preferences.
+     */
+    public void readChannelInfoFromCache() {
+        mNodeInfos.clear();
+        String cache = PrefsUtil.getPrefs().getString(PrefsUtil.NODE_INFO_CACHE, "");
+        byte[] cacheBytes = cache.getBytes(StandardCharsets.ISO_8859_1);
+        while (cacheBytes.length > 4) {
+            int length = UtilFunctions.intFromByteArray(Arrays.copyOfRange(cacheBytes, 0, 4));
+            try {
+                NodeInfo tempNodeInfo = NodeInfo.parseFrom(Arrays.copyOfRange(cacheBytes, 4, length + 4));
+                mNodeInfos.add(tempNodeInfo);
+            } catch (InvalidProtocolBufferException | ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+                ZapLog.w(LOG_TAG, "Error reading NodeInfo from cache.");
+            }
+            cacheBytes = Arrays.copyOfRange(cacheBytes, length + 4, cacheBytes.length);
+        }
+        ZapLog.d(LOG_TAG, "Loaded NodeInfos from cache.");
     }
 
     public boolean isSyncedToChain() {

@@ -36,6 +36,7 @@ public class PrefsUtil {
     public static final String LAST_CLIPBOARD_SCAN = "lastClipboardScan";
     public static final String SCAN_CLIPBOARD = "scanClipboard";
     public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
+    public static final String NODE_INFO_CACHE = "nodeInfoCache";
 
     // wallet config preferences references
     public static final String WALLET_CONFIGS = "wallet_configs";
