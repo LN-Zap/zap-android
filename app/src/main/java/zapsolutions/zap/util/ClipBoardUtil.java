@@ -1,5 +1,7 @@
 package zapsolutions.zap.util;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
@@ -20,8 +22,6 @@ import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
-
-import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class ClipBoardUtil {
     private static final String LOG_TAG = ClipBoardUtil.class.getName();
@@ -140,6 +140,11 @@ public class ClipBoardUtil {
             @Override
             public void onValidNodeUri(LightningNodeUri nodeUri) {
                 showProceedQuestion(R.string.clipboard_scan_node_pubkey, context, listener);
+            }
+
+            @Override
+            public void onValidURL(String url) {
+                // ignore this. We don't want to annoy the user.
             }
 
             @Override

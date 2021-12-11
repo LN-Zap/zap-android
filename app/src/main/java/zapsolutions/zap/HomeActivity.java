@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +35,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.google.android.material.navigation.NavigationView;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -661,6 +663,25 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             public void onValidNodeUri(LightningNodeUri nodeUri) {
                 ChooseNodeActionBSDFragment chooseNodeActionBSDFragment = ChooseNodeActionBSDFragment.createChooseActionDialog(nodeUri);
                 chooseNodeActionBSDFragment.show(getSupportFragmentManager(), "choseNodeActionDialog");
+            }
+
+            @Override
+            public void onValidURL(String urlAsString) {
+                URL url = null;
+                try {
+                    url = new URL(urlAsString);
+                } catch (MalformedURLException e) {
+                    // never reached
+                }
+                String dialogMessage = getString(R.string.dialog_open_url, url.getProtocol() + "://" + url.getHost() + "/ ...");
+                new AlertDialog.Builder(HomeActivity.this)
+                        .setMessage(dialogMessage)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlAsString));
+                            startActivity(browserIntent);
+                        }).setNegativeButton(R.string.cancel, (dialog, whichButton) -> {
+                }).show();
             }
 
             @Override

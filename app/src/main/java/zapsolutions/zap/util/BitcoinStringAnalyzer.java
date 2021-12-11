@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -162,10 +163,19 @@ public class BitcoinStringAnalyzer {
 
             @Override
             public void onNoStaticInternetIdentifierData() {
-                // No Lightning Address either, we have unrecognizable data
-                listener.onNoReadableData();
+                checkIfValidUrl(ctx, compositeDisposable, inputString, listener);
             }
         });
+    }
+
+    private static void checkIfValidUrl(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
+        try {
+            URL url = new URL(inputString);
+            listener.onValidURL(inputString);
+        } catch (MalformedURLException e) {
+            // No URL either, we have unrecognizable data
+            listener.onNoReadableData();
+        }
     }
 
 
@@ -191,6 +201,8 @@ public class BitcoinStringAnalyzer {
         void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration);
 
         void onValidNodeUri(LightningNodeUri nodeUri);
+
+        void onValidURL(String url);
 
         void onError(String error, int duration);
 

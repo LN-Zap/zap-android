@@ -138,6 +138,11 @@ public class ScanActivity extends BaseScannerActivity {
             }
 
             @Override
+            public void onValidURL(String url) {
+                readableDataFound(data);
+            }
+
+            @Override
             public void onError(String error, int duration) {
                 showError(error, duration);
             }
