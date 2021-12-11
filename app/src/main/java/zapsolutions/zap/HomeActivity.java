@@ -677,10 +677,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 new AlertDialog.Builder(HomeActivity.this)
                         .setMessage(dialogMessage)
                         .setCancelable(true)
-                        .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
+                        .setPositiveButton(R.string.yes, (dialog, whichButton) -> {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlAsString));
                             startActivity(browserIntent);
-                        }).setNegativeButton(R.string.cancel, (dialog, whichButton) -> {
+                        }).setNegativeButton(R.string.no, (dialog, whichButton) -> {
                 }).show();
             }
 
