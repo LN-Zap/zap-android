@@ -129,6 +129,11 @@ public class ManualSendInputView extends ConstraintLayout {
                     }
 
                     @Override
+                    public void onValidURL(String url) {
+                        invalidInput();
+                    }
+
+                    @Override
                     public void onError(String error, int duration) {
                         errorReadingData(error, duration);
                     }

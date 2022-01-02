@@ -124,6 +124,11 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
             }
 
             @Override
+            public void onValidURL(String url) {
+                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+            }
+
+            @Override
             public void onError(String error, int duration) {
                 showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
             }
