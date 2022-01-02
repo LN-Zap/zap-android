@@ -218,6 +218,7 @@
     <string name="guardian_remoteConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
     <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While Zap anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
+    <string name="guardian_zero_amount_invoice">This invoice does not specify an amount. Though very unlikely, invoices without a specific amount can be exploited and the recipient will receive less than expected in that case. If possible use an invoice with a specific amount.</string>
 
 
     <string name="settings_category_general">General</string>

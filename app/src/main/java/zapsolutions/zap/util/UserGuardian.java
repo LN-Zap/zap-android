@@ -31,6 +31,7 @@ public class UserGuardian {
     private static final String DIALOG_REMOTE_CONNECT = "guardianRemoteConnect";
     private static final String DIALOG_OLD_LND_VERSION = "guardianOldLndVersion";
     private static final String DIALOG_EXTERNAL_LINK = "guardianExternalLink";
+    private static final String DIALOG_ZERO_AMOUNT_INVOICE = "guardianZeroAmountInvoice";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -64,6 +65,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_REMOTE_CONNECT, true)
                 .putBoolean(DIALOG_OLD_LND_VERSION, true)
                 .putBoolean(DIALOG_EXTERNAL_LINK,true)
+                .putBoolean(DIALOG_ZERO_AMOUNT_INVOICE, true)
                 .apply();
     }
 
@@ -181,6 +183,17 @@ public class UserGuardian {
         mCurrentDialogName = DIALOG_OLD_LND_VERSION;
         AlertDialog.Builder adb = createDialog(true);
         String message = mContext.getResources().getString(R.string.guardian_oldLndVersion_remote, versionName);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user about possible zero amount invoice exploit.
+     */
+    public void securityZeroAmountInvoice() {
+        mCurrentDialogName = DIALOG_ZERO_AMOUNT_INVOICE;
+        AlertDialog.Builder adb = createDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_zero_amount_invoice);
         adb.setMessage(message);
         showGuardianDialog(adb);
     }

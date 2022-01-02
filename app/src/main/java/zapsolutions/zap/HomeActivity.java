@@ -567,8 +567,19 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BitcoinStringAnalyzer.analyze(HomeActivity.this, compositeDisposable, input, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
             public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, null);
-                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                if (paymentRequest.getNumSatoshis() == 0) {
+                    // Warn about 0 sat invoices
+                    new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onGuardianConfirmed() {
+                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, null);
+                            sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                        }
+                    }).securityZeroAmountInvoice();
+                } else {
+                    SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, null);
+                    sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                }
             }
 
             @Override
@@ -585,10 +596,23 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                                 SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
                                 sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
                             } else {
-                                String amountString = MonetaryUtil.getInstance().convertSatoshiToBitcoin(String.valueOf(amount));
-                                String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
-                                SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
-                                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                if (paymentRequest.getNumSatoshis() == 0) {
+                                    // Warn about 0 sat invoices
+                                    new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+                                        @Override
+                                        public void onGuardianConfirmed() {
+                                            String amountString = MonetaryUtil.getInstance().convertSatoshiToBitcoin(String.valueOf(amount));
+                                            String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
+                                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
+                                            sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                        }
+                                    }).securityZeroAmountInvoice();
+                                } else {
+                                    String amountString = MonetaryUtil.getInstance().convertSatoshiToBitcoin(String.valueOf(amount));
+                                    String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
+                                    SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
+                                    sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                }
                             }
                         }
 
