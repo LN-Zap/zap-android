@@ -96,7 +96,7 @@
     <string name="search">Etsi</string>
     <string name="confirmations">Varmistukset</string>
     <string name="maximum_abbreviation">maksimi</string>
-    <string name="send">Lähetetty</string>
+    <string name="send">Lähetä</string>
     <string name="notConnected">Ei yhdistetty</string>
     <string name="activity_receive">Vastaanota</string>
     <string name="activity_send">Maksa</string>
@@ -142,9 +142,9 @@
     <string name="channel_funding_transaction">Varainsiirrot</string>
     <string name="channel_state_open">avoinna</string>
     <string name="channel_state_offline">offline</string>
-    <string name="channel_state_pending_open">pending open</string>
-    <string name="channel_state_pending_closing">pending close</string>
-    <string name="channel_state_pending_force_closing">pending force close</string>
+    <string name="channel_state_pending_open">odottaa avausta</string>
+    <string name="channel_state_pending_closing">odottaa sulkua</string>
+    <string name="channel_state_pending_force_closing">odottaa pakotettua sulkua</string>
     <string name="channel_state_waiting_close">odottaa sulkemista</string>
     <string name="no_channels">Ei kanavia</string>
     <string name="channel_closing_transaction">Päätetään siirtoa</string>
@@ -153,8 +153,8 @@
     <string name="channel_close_force">Pakota kanavan sulkeminen</string>
     <string name="channel_close_error">Kanavan sulkeminen epäonnistui</string>
     <string name="channel_close_confirmation">Haluatko varmasti suĺkea kanavan \n\n%s\n kanssa?</string>
-    <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
-    <string name="channel_close_time">Closing Time Delay</string>
+    <string name="channel_close_force_confirmation">Oletko varma että haluat sulkea kanavan:\n\n%1$s\n\nVarasi tulevat olemaan jäädytettynä %2$s.</string>
+    <string name="channel_close_time">Sulkemisen viive</string>
     <string name="channel_open">Avaa kanava</string>
     <string name="channel_open_success">Kanavan avaus käynnistetty onnistuneesti</string>
     <string name="channel_open_error">Virhe kanavan avaamisessa</string>
@@ -195,7 +195,7 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">You requested an amount as fiat value, but your exchange rate data is old (retrieved %1$s hours ago).\nMake sure you have an internet connection or consider requesting directly in Bitcoin.\n\nDo you want to continue anyway?</string>
     <string name="guardian_remoteConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
     <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While Zap anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
-    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
+    <string name="guardian_oldLndVersion_remote">Ole hyvä ja päivitä sovellus.\n\nSolmu johon olet yhteydessä käyttää vanhaa LND-versiota. Versiota %1$s aikaisemmat eivät ole aktiivisesti tuettuja.</string>
     <string name="settings_category_general">Yleiset</string>
     <string name="settings_category_security">Turvallisuus</string>
     <string name="settings_category_help">Apua</string>
@@ -241,7 +241,7 @@
     <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Tämä maksupyyntö on vanhentunut.</string>
     <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
-    <string name="error_useMainnetRequest">You are connected to MAINNET. Please use MAINNET addresses or payment requests.</string>
+    <string name="error_useMainnetRequest">Olet yhdistettynä Bitcoin MAINNET-varkkoon. Käytä MAINNET-osoitteita ja maksupyyntöjä.</string>
     <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
     <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
     <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
@@ -250,20 +250,20 @@
     <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use one of the following formats:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="error_unableToFetchBTCPayConfig">Could not fetch configuration from BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
-    <string name="error_connection_invalid_certificate">The certificate is invalid.</string>
+    <string name="error_connection_invalid_certificate">Varmenne ei ole kelvollinen.</string>
     <string name="error_connection_no_macaroon">Your connection information does not contain a macaroon. This is mandatory.</string>
-    <string name="error_connection_invalid_macaroon">The macaroon is invalid.</string>
-    <string name="error_connection_invalid_host_or_port">The provided host or port is invalid.</string>
-    <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
+    <string name="error_connection_invalid_macaroon">Macaroon ei ole kelvollinen.</string>
+    <string name="error_connection_invalid_host_or_port">Annettu host-osoite tai -portti on virheellinen.</string>
+    <string name="error_connection_invalid_macaroon2">Pääsy estetty\n\nMacaroon ei ole kelvollinen.</string>
     <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
-    <string name="error_connection_unknown">Connection failed.</string>
+    <string name="error_connection_unknown">Yhteys epäonnistui.</string>
     <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
     <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
-    <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
+    <string name="error_connection_wallet_locked">Avaathan lompakon.</string>
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
@@ -297,7 +297,7 @@
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
     <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
-    <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
+    <string name="error_lnd_connection_failed">LND-yhteys epäonnistui. Yritäthän uudelleen.</string>
     <plurals name="duration_second">
         <item quantity="one">%d Second</item>
         <item quantity="other">%d Seconds</item>
@@ -365,8 +365,8 @@
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificate</string>
     <string name="confirm_wallet_deletion">Do you really want to delete this wallet?</string>
-    <string name="no_wallets">No wallets</string>
-    <string name="spinner_manage_wallets">Manage…</string>
+    <string name="no_wallets">Lompakkoja ei ole</string>
+    <string name="spinner_manage_wallets">Hallinnoi…</string>
     <string name="wallet_added">Wallet has been added.</string>
     <string name="wallet_already_exists">This wallet already exists.\nIf you want to update its connection data, please go to the wallets detail page.</string>
     <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
@@ -387,17 +387,17 @@
     <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
     <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
-    <string name="drawer_menu_wallets">Wallets</string>
-    <string name="drawer_menu_channels">Channels</string>
-    <string name="drawer_menu_contacts">Contacts</string>
-    <string name="drawer_menu_backup">Backup</string>
-    <string name="drawer_menu_buy">Buy Bitcoin</string>
-    <string name="support_contribute_description">Help improving Zap.</string>
-    <string name="support_issue_description">Found a bug? Let us know!</string>
+    <string name="drawer_menu_wallets">Lompakot</string>
+    <string name="drawer_menu_channels">Kanavat</string>
+    <string name="drawer_menu_contacts">Yhteystiedot</string>
+    <string name="drawer_menu_backup">Varmistus</string>
+    <string name="drawer_menu_buy">Osta Bitcoineja</string>
+    <string name="support_contribute_description">Auta parantamaan Zap:ia.</string>
+    <string name="support_issue_description">Löysitkö virheen? Välitä tieto meille!</string>
     <string name="support_privacy_description">We care about your privacy.</string>
-    <string name="support_help_description">Visit our documentation.</string>
+    <string name="support_help_description">Tutustu dokumentaatioon</string>
     <string name="identity_switch_tor">Tor</string>
-    <string name="identity_switch_public">Public</string>
+    <string name="identity_switch_public">Julkinen</string>
     <string name="identity_tap_on_avatar">Tap on your Avatar to reveal your identity!</string>
     <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
     <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
@@ -406,13 +406,13 @@
     <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
     <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
     <string name="third_party_licenses">Third-party licenses</string>
-    <string name="licenses">Licenses</string>
-    <string name="choose_action">Choose action</string>
-    <string name="add_contact">Add contact</string>
-    <string name="send_money">Send money</string>
-    <string name="contact_name">Contact name</string>
-    <string name="contact_already_exists">This person is already in your contacts!</string>
-    <string name="no_contacts">No contacts</string>
+    <string name="licenses">Lisenssit</string>
+    <string name="choose_action">Valitse toiminto</string>
+    <string name="add_contact">Lisää yearhteystieto</string>
+    <string name="send_money">Lähetä varoja</string>
+    <string name="contact_name">Yhteystiedon nimi</string>
+    <string name="contact_already_exists">Tämä yhteystieto on jo tallennettuna.</string>
+    <string name="no_contacts">Ei yhteystietoja.</string>
     <string name="manual_send_input_hint">Address or payment data</string>
     <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
     <string name="advanced_channel_details_activity">Activity</string>
@@ -434,24 +434,24 @@
     <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
     <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of Zap.\n\nThis backup only contains the following data:\n\n- Data to connect Zap to your running nodes\n- Contacts</string>
     <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
-    <string name="backup_data_confirm_headline">Please Confirm</string>
-    <string name="backup_data_confirm">I confirm</string>
+    <string name="backup_data_confirm_headline">Vahvista, ole hyvä.</string>
+    <string name="backup_data_confirm">Vahvistan</string>
     <string name="backup_data_restore_description">Restore your connected nodes and contacts.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
-    <string name="backup_data_create_headline">Backup</string>
-    <string name="backup_data_restore_headline">Restore</string>
-    <string name="backup_data_password_enter">Enter your password</string>
-    <string name="backup_data_password_confirm">Confirm your password</string>
-    <string name="backup_data_password_empty">The password must have at least 8 characters.</string>
-    <string name="backup_data_password_mismatch">The passwords are not identical.</string>
-    <string name="backup_data_creation_process">Creating backup</string>
-    <string name="backup_data_restore_process">Restoring backup</string>
-    <string name="backup_data_create_success">Backup created</string>
-    <string name="backup_data_restore_success">Backup restored</string>
-    <string name="backup_data_create_failed">Backup failed</string>
-    <string name="backup_data_restore_failed_title">Restoring failed</string>
+    <string name="backup_data_create_headline">Varmista</string>
+    <string name="backup_data_restore_headline">Palauta</string>
+    <string name="backup_data_password_enter">Anna salasanasi</string>
+    <string name="backup_data_password_confirm">Vahvista salasanasi</string>
+    <string name="backup_data_password_empty">Salasanassa tulee olla vähintään kahdeksan merkkiä.</string>
+    <string name="backup_data_password_mismatch">Annetut salasanat eivät ole samoja.</string>
+    <string name="backup_data_creation_process">Luodaan varmistusta</string>
+    <string name="backup_data_restore_process">Palautetaan varmistusta</string>
+    <string name="backup_data_create_success">Varmistus luotu</string>
+    <string name="backup_data_restore_success">Varmistus palautettu</string>
+    <string name="backup_data_create_failed">Varmistus epäonnistui</string>
+    <string name="backup_data_restore_failed_title">Palautus epäonnistui</string>
     <string name="backup_data_restore_failed_description">Most likely you entered an invalid password.</string>
-    <string name="backup_data_open_backupfile_error">Unable to open the selected file.</string>
-    <string name="backup_data_no_data">No data to backup.</string>
+    <string name="backup_data_open_backupfile_error">Valitun tiedoston avaus ei onnistunut.</string>
+    <string name="backup_data_no_data">Varmuuskopioitavaa tietoa ei ole.</string>
     <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
     <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
 </resources>
