@@ -234,21 +234,21 @@
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Salama-pyynnön vanhentuminen</string>
     <string name="settings_lnFeeLimitTitle">Salama-maksun palkkion rajoittaminen</string>
-    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
+    <string name="settings_lnPrivateChannelHints">Sisällytä reititysvinkit yksityisiä kanavia käyttäviin laskuihin</string>
     <string name="error">Virhe</string>
     <string name="error_blockExplorer_title">Lohkoselain</string>
-    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>
-    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
+    <string name="error_blockExplorer_message" comment="Parametrit ovat:  %1$s: Lohkoketju Explorer-nimi, %2$s: 'mainnet' or 'testnet'">"Nyt käytössä oleva lohkoketju Explorer (%1$s) ei tuettuja %2$s. \nMene asetuksiin ja valitse jatkaaksesi toinen lohkoketju Explorer."</string>
+    <string name="error_zeroAmountPaymentRequest">Tämän maksupyynnön summa on nolla. Zap ei tue nolla-summan maksuja, sillä niihin liittyy turvallisuus riskejä.</string>
     <string name="error_paymentRequestExpired">Tämä maksupyyntö on vanhentunut.</string>
-    <string name="error_useTestnetRequest">You are connected to TESTNET. Please use TESTNET addresses or payment requests.</string>
-    <string name="error_useMainnetRequest">Olet yhdistettynä Bitcoin MAINNET-varkkoon. Käytä MAINNET-osoitteita ja maksupyyntöjä.</string>
-    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
-    <string name="error_cameraPermissionRequired">To scan QR-Codes you have to allow Zap to use the camera.</string>
-    <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
-    <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
+    <string name="error_useTestnetRequest">Olet yhdistettynä TESTNET-verkkoon. Käytä TESTNET-osoitteita ja -maksupyyntöjä.</string>
+    <string name="error_useMainnetRequest">Olet yhdistettynä MAINNET-verkkoon. Käytä MAINNET-osoitteita ja -maksupyyntöjä.</string>
+    <string name="error_useRegtestRequest">Olet yhdistettynä REGTEST-verkkoon. Käytä REGTEST-osoitteita ja -maksupyyntöjä.</string>
+    <string name="error_cameraPermissionRequired">Jotta voit lukea QR-koodeja tulee sinun antaa Zap:lle kameran käyttöoikeus.</string>
+    <string name="error_emptyClipboardPayment">Leikepöydällä ei ole maksutietoa.</string>
+    <string name="error_emptyClipboardConnect">Leikepöydällä ei ole yhteystietoa.</string>
     <string name="error_qr_code_result_null">QR-koodi ei luettavissa, ole hyvä ja yritä uudelleen.</string>
-    <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use one of the following formats:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
-    <string name="error_unableToFetchBTCPayConfig">Could not fetch configuration from BTCPay Server.</string>
+    <string name="error_connection_unsupported_format">Tuntematon yhteyden avauksen muoto.\nKäytä jotain seuraavista muodoista:\n\n- Lndconnect-merkkijono (lndconnect://...)\n- BtcPay Server -yhteys (config=...)\n- Sinun BTCPay-palvelimesi täydellinen konfiguraatiotiedosto</string>
+    <string name="error_unableToFetchBTCPayConfig">Konfiguraation hakeminen BTCPay-palvelimelta epäonnistui.</string>
     <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Varmenne ei ole kelvollinen.</string>
     <string name="error_connection_no_macaroon">Your connection information does not contain a macaroon. This is mandatory.</string>
@@ -449,9 +449,9 @@
     <string name="backup_data_restore_success">Varmistus palautettu</string>
     <string name="backup_data_create_failed">Varmistus epäonnistui</string>
     <string name="backup_data_restore_failed_title">Palautus epäonnistui</string>
-    <string name="backup_data_restore_failed_description">Most likely you entered an invalid password.</string>
+    <string name="backup_data_restore_failed_description">Todennäköisesti annoit väärän sakasanan.</string>
     <string name="backup_data_open_backupfile_error">Valitun tiedoston avaus ei onnistunut.</string>
     <string name="backup_data_no_data">Varmuuskopioitavaa tietoa ei ole.</string>
-    <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
-    <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
+    <string name="backup_data_version_too_old">Varmuuskopio oli tehty sovelluksen uudemmalla versiolla. Päivitäthän sovelluksesi ja yritä uudelleen.</string>
+    <string name="backup_data_invalid_file_chosen">Tämä ei ole toimiva varmuuskopio. Valitsethan tiedoston joka oli luotu tässä sovelluksella?</string>
 </resources>
