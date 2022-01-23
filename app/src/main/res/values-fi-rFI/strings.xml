@@ -255,14 +255,14 @@
     <string name="error_connection_invalid_macaroon">Macaroon ei ole kelvollinen.</string>
     <string name="error_connection_invalid_host_or_port">Annettu host-osoite tai -portti on virheellinen.</string>
     <string name="error_connection_invalid_macaroon2">Pääsy estetty\n\nMacaroon ei ole kelvollinen.</string>
-    <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
-    <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
+    <string name="error_connection_server_unreachable">Aikakatkaisu.\nPalvelin ei vastaa.\n\n- Varmista että internet-yhteytesi toimii\n\n- Varmista että palvelin on käynnnissä ja sen IP-osoite on:\n\n%1$s</string>
+    <string name="error_connection_host_verification_failed">Palvelimen nimen varmistus epäonnistui.\n\nAntamasi palvelimen nimi ei täsmää palvelimen antaman varmenteen sisältöön.\n\n Sinun on kenties luotava varmenne uudelleen palvelimella. Varmista että käyttämäsi palvelinmen nimi on lisättynä lnd.conf tlsextradomain -parametriin ennen varmenteen uudelleenluontia.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Palvelimen nimeä (%1$s) ei löydetä.\n\nMuuta lompakon yhteysasetuosi mikä palvelimesi nimi ja/tai osoite on muuttunut.</string>
+    <string name="error_connection_lnd_unavailable">LND-yhteyttä ei saada luotua.\n\n- Varmista että LND prosessi on käynnissä palvelimella.\n\n- varmista että TCP-portin edellenohjaus aktiivinen. (Portti: %1$s)</string>
+    <string name="error_connection_network_unreachable">Palvelimeen ei saada yhteyttä.\n\nVarmista että Internet-yhteydessäsi ei ole häiriöitä.</string>
     <string name="error_connection_unknown">Yhteys epäonnistui.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
-    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
+    <string name="error_connection_tor_unreachable">Tor-yhteys epäonnistui.\n Kytke Tor päälle sovelluksen asetuksista.</string>
+    <string name="error_connection_tor_bootstrapping">Tor käynnistys ei onnistunut.\n\nZap Android sisältää sisäänrakennetun Tor-tuen. Mikäli käytät Orbot -sovellusta, poista Zap Orbotin Tor sovelluslistalta tai poista Orbot kokonaan käytöstä.</string>
     <string name="error_connection_wallet_locked">Avaathan lompakon.</string>
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
@@ -394,7 +394,7 @@
     <string name="drawer_menu_buy">Osta Bitcoineja</string>
     <string name="support_contribute_description">Auta parantamaan Zap:ia.</string>
     <string name="support_issue_description">Löysitkö virheen? Välitä tieto meille!</string>
-    <string name="support_privacy_description">We care about your privacy.</string>
+    <string name="support_privacy_description">Yksityisyytesi on meille täskeää.</string>
     <string name="support_help_description">Tutustu dokumentaatioon</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Julkinen</string>
@@ -449,7 +449,7 @@
     <string name="backup_data_restore_success">Varmistus palautettu</string>
     <string name="backup_data_create_failed">Varmistus epäonnistui</string>
     <string name="backup_data_restore_failed_title">Palautus epäonnistui</string>
-    <string name="backup_data_restore_failed_description">Todennäköisesti annoit väärän sakasanan.</string>
+    <string name="backup_data_restore_failed_description">Todennäköisesti annoit väärän salasanan.</string>
     <string name="backup_data_open_backupfile_error">Valitun tiedoston avaus ei onnistunut.</string>
     <string name="backup_data_no_data">Varmuuskopioitavaa tietoa ei ole.</string>
     <string name="backup_data_version_too_old">Varmuuskopio oli tehty sovelluksen uudemmalla versiolla. Päivitäthän sovelluksesi ja yritä uudelleen.</string>
