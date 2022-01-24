@@ -53,7 +53,7 @@
     <string name="next">Seuraava</string>
     <string name="coming_soon">Tulossa pian...</string>
     <string name="needHelp">Tarvitsetko apua?</string>
-    <string name="offline">offline</string>
+    <string name="offline">ei yhteyttä</string>
     <string name="sent">Lähetetty</string>
     <string name="received">Vastaanotettu</string>
     <string name="today">Tänään</string>
@@ -123,7 +123,7 @@
     <string name="pin_confirm_new">Vahvista uusi PIN</string>
     <string name="pin_entered_wrong">Väärä PIN</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Odota %1$s sekuntia.</string>
-    <string name="pin_changed">PIN vaihdettu!</string>
+    <string name="pin_changed">PIN-koodi on vaihdettu.</string>
     <string name="requested_payment">Pyydetty</string>
     <string name="request_expired">Vanhentunut</string>
     <string name="internal">Sisäinen</string>
@@ -181,7 +181,7 @@
     <string name="receive_lightning_request">Salama-pyyntö</string>
     <string name="receive_on_chain_request">On-Chain Pyyntö</string>
     <string name="receive_noActiveChannels">Vastaanottaaksesi Bitcoinia salamaverkon kautta, sinun pitää ensin avata kanavia.</string>
-    <string name="receive_noIncomeBalance">To receive Bitcoin over the lightning network, at least one of your channels needs some balance on your counterpartys side.\n\nTo achieve that, you have to spend something on lightning network first.\n\nIn the manage channels area you can always see how much you are able to send or receive over the lightning network right now.</string>
+    <string name="receive_noIncomeBalance">Jotta voit vastaanottaa bitcoineja Lightning-verkossa, pitää ainakin yhdessä kanavassa olla varoja vastapuolen päässä. \n\nSaat siirrettyä varoja vastapulen päähän kun lähetät maksun Lightning-verkossa\n\nKavavien hallinta näkymästä näet ajan tasaisen tilanteen, että kuinka paljon voit lähettää ja vastaanottaa varoja Lighting-verkossa. </string>
     <string name="receive_requestFullfilled">Lasku\nmaksettu</string>
     <string name="guardian_doNotShowAgain">Älä näytä uudelleen.</string>
     <string name="guardian_Title">Huomioitavaa</string>
@@ -191,8 +191,8 @@
     <string name="guardian_pasteFromClipboard">Tarkista aina viimeiset 3-5 numeroa kun lopioit leikepöydältä. Haitallinen sovellus on voinut muuttaa osoitetta huomaamatta taustalla.</string>
     <string name="guardian_disableScrambledPin">Mikäli näppäimistö ei ole sekoitettu, on PIN-koodisi nähtävissä sormen liikkeistäsi.</string>
     <string name="guardian_disableScreenProtection">Mikäli sallit näytön talletukset, voivat mahdollliset haittaohjelmat ottaaa kuvia tai nauhoittaa videota näyttösi sisällöstä. Suosittelemme kytkemään asetuksen käyttöön vain  kun haluat ottaa näytöstä kuvia tai videota.</string>
-    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">You are about to pay %1$s%% in network fees.\n\nPossible solutions:\n- try a lightning payment instead\n- select lower fee, wait longer\n- try again later\n- transact a bigger amount\n\nDo you want to continue anyway?</string>
-    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">You requested an amount as fiat value, but your exchange rate data is old (retrieved %1$s hours ago).\nMake sure you have an internet connection or consider requesting directly in Bitcoin.\n\nDo you want to continue anyway?</string>
+    <string name="guardian_highOnChainFee" comment="Parametrit ovat:  %1$s%%: % tapahtuman arvo esim: 13.2%">Olet maksamassa siirtokuluina %1$s%%.\n\nVaihtoehtoisesti:\n- kokeile maksaa Lightning-maksuna\n- aseta matalampi siirtokulu ja odota pidempään,\n- yritä myöhemmin uudelleen\n- tai lähetä suurempi määrä\n\nHaluatko jatkaa nykyisellä siirtokululla?</string>
+    <string name="guardian_oldExchangeRate" comment="Parametrit ovat:  %1$s: tuntimäärä esim: 7.5">Olet antanut määrän fiat-valuutassa, mutta vaihtokurssien tiedot ovat vanhoja (päivitetty viimeksi %1$s tuntia sitten).\nVarmista verkkoyhteytesi toiminta tai pyydä maksua bitcoin-määräisenä.\n\nHaluatko jatkaa fiat-määräisenä?</string>
     <string name="guardian_remoteConnect">Oletko varma että haluat yhdistää \n\n%1$s\n\nVarmista palvelimen osoite huolellisesti.</string>
     <string name="guardian_externalLink">Olet avaamassa selaimessa linkkiä joka sisältää luottamuksellista tietoa. Zap suojaa kaiken liikenteesi kun Tor-yhteydet ovat käytössä. Selaimesi ei näin tee. Käytä Tor-selainta, mikäli haluat säilyttää tämän yhteyden tiedot luottamuksellisina.</string>
     <string name="guardian_oldLndVersion_remote">Ole hyvä ja päivitä sovellus.\n\nSolmu johon olet yhteydessä käyttää vanhaa LND-versiota. Versiota %1$s aikaisemmat eivät ole aktiivisesti tuettuja.</string>
@@ -224,7 +224,7 @@
     <string name="settings_changePin">Vaihda/Poista PIN</string>
     <string name="settings_addPin">Suoja PIN-koodilla</string>
     <string name="settings_removePin">Poista PIN</string>
-    <string name="settings_blockExplorer">Estä Explorer</string>
+    <string name="settings_blockExplorer">Estä selain</string>
     <string name="settings_blockExplorer_tor_toast">Tor-selain Androidille vaaditaan.</string>
     <string name="settings_addressType">Bitcoin osoitteen tyyppi</string>
     <string name="settings_exchangeRateProvider">Vaihtokurssin tarjoaja</string>
@@ -237,7 +237,7 @@
     <string name="settings_lnPrivateChannelHints">Sisällytä reititysvinkit yksityisiä kanavia käyttäviin laskuihin</string>
     <string name="error">Virhe</string>
     <string name="error_blockExplorer_title">Lohkoselain</string>
-    <string name="error_blockExplorer_message" comment="Parametrit ovat:  %1$s: Lohkoketju Explorer-nimi, %2$s: 'mainnet' or 'testnet'">"Nyt käytössä oleva lohkoketju Explorer (%1$s) ei tuettuja %2$s. \nMene asetuksiin ja valitse jatkaaksesi toinen lohkoketju Explorer."</string>
+    <string name="error_blockExplorer_message" comment="Parametrit ovat: %1$s: Lohkoketju Explorer-nimi, %2$s: 'mainnet' or 'testnet'">"Nyt käytössä oleva lohkoketjuselain (%1$s) ei tuettuja %2$s. \nMene asetuksiin ja valitse jatkaaksesi toinen lohkoketjuselain (Explorer)."</string>
     <string name="error_zeroAmountPaymentRequest">Tämän maksupyynnön summa on nolla. Zap ei tue nolla-summan maksuja, sillä niihin liittyy turvallisuus riskejä.</string>
     <string name="error_paymentRequestExpired">Tämä maksupyyntö on vanhentunut.</string>
     <string name="error_useTestnetRequest">Olet yhdistettynä TESTNET-verkkoon. Käytä TESTNET-osoitteita ja -maksupyyntöjä.</string>
@@ -247,9 +247,9 @@
     <string name="error_emptyClipboardPayment">Leikepöydällä ei ole maksutietoa.</string>
     <string name="error_emptyClipboardConnect">Leikepöydällä ei ole yhteystietoa.</string>
     <string name="error_qr_code_result_null">QR-koodi ei luettavissa, ole hyvä ja yritä uudelleen.</string>
-    <string name="error_connection_unsupported_format">Tuntematon yhteyden avauksen muoto.\nKäytä jotain seuraavista muodoista:\n\n- Lndconnect-merkkijono (lndconnect://...)\n- BtcPay Server -yhteys (config=...)\n- Sinun BTCPay-palvelimesi täydellinen konfiguraatiotiedosto</string>
+    <string name="error_connection_unsupported_format">Tuntematon yhteyden avauksen muoto.\nKäytä jotain seuraavista muodoista:\n\n- Lndconnect-merkkijono (lndconnect://...)\n- BtcPay -palvelimen konfiguraatio (config=...)\n- Sinun BTCPay-palvelimesi täydellinen konfiguraatiotiedosto</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguraation hakeminen BTCPay-palvelimelta epäonnistui.</string>
-    <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Virheellinen lndconnect-merkkijono.\nVarmista että käyttämäsi merkkijono on muotoa:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Varmenne ei ole kelvollinen.</string>
     <string name="error_connection_no_macaroon">Pakollinen Macaroon-tieto puuttuu yhteyden määrityksistä.</string>
     <string name="error_connection_invalid_macaroon">Macaroon ei ole kelvollinen.</string>
@@ -265,7 +265,7 @@
     <string name="error_connection_tor_bootstrapping">Tor käynnistys ei onnistunut.\n\nZap Android sisältää sisäänrakennetun Tor-tuen. Mikäli käytät Orbot -sovellusta, poista Zap Orbotin Tor sovelluslistalta tai poista Orbot kokonaan käytöstä.</string>
     <string name="error_connection_wallet_locked">Avaathan lompakon.</string>
     <string name="error_connection_btcpay_invalid_json">BTCPay-palvelimen konfiguraatiotiedot sisältävän JSON muoto on virheelline.</string>
-    <string name="error_connection_btcpay_invalid_config">BTCPay-palveliment konfiguraatio ei sisällä BTC GRPC -määrityksiä.</string>
+    <string name="error_connection_btcpay_invalid_config">BTCPay-palvelimen konfiguraatio ei sisällä BTC GRPC -määrityksiä.</string>
     <string name="error_connection_internal_server">Palvelimeen saadaan yhteys, mutta se vastaa virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti.</string>
     <string name="error_connection_internal_server_clearnet">Palvelimeen saadaan yhteys, mutta se vastaa sisäisellä virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti. Tor-toiminnon poiskytkentä sovelluksen asetuksista voi auttaa, sillä yrität käyttää palvelin yhteyttä suojaamattomassa Internetissä.</string>
     <string name="error_wrong_password">Väärä salasana</string>
@@ -336,24 +336,24 @@
     <string name="fee_not_available">ei tiedossa</string>
     <string name="fee_limit_title">Kulujen hälytysraja</string>
     <string name="fee_limit_threshold">Kulujen raja yli 1$d sats maksuille: %2$s</string>
-    <string name="fee_limit_exceeded">The fee for this payment (%1$.1f%%) exceeds the limit specified in the settings (%2$.0f%%).\n\nDo you really want to pay this invoice?</string>
-    <string name="fee_limit_exceeded_payment">The fee for this payment (%1$d sats) will be higher than the payment amount (%2$d sats).\n\nDo you really want to pay this invoice?</string>
+    <string name="fee_limit_exceeded">Tämän laskun siirtokulut (%1$.1f%%) ylittävät määritellyn enimmäismäärän (%2$.0f%%).\n\nHaluatko varmasti maksaa tämän laskun?</string>
+    <string name="fee_limit_exceeded_payment">Tämän maksun siirtokulut (%1$d sats) ovat enemmän kuin laskun summa (%2$d sats).\n\nHaluatko varmasti maksaa tämän laskun?</string>
     <string name="unlock_wallet">Avaa lompakko</string>
     <string name="biometricPrompt_title">Biometrinen tunnistautuminen</string>
-    <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
+    <string name="biometricNotSetup">Tämän toiminnon käyttäminen edellyttää että olet ottanut käyttöön Android-laitteesi asetuksista Biometrisen tunnistautumisen .</string>
     <string name="invoice_detail">Laskun tiedot</string>
     <string name="transaction_detail">Tapahtumant tiedot</string>
     <string name="app_reset_title">Huomautus</string>
-    <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
+    <string name="app_reset_message">Sovelluksen viimeisin päivitys sisälsi rakenteellisia muutoksia.\nNiistä johtuen sinun on valitettavasti suoritettava käyttöönoton tehtävät uudelleen.</string>
     <string name="nfc_type_not_supported">NFC-tyyppi ei ole tuettu</string>
-    <string name="help_dialog_scanPaymentRequest">QR-Codes containing the following are valid:\n\n- Bitcoin Address\n- Bitcoin Payment Request\n- Lightning Payment Request</string>
-    <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
-    <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
-    <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
-    <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
-    <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
+    <string name="help_dialog_scanPaymentRequest">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- Bitcoin-osoite\n- Bitcoin-maksupyyntö\n- Lightning-lasku</string>
+    <string name="help_dialog_scanNodePublicKey">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="help_dialog_scanContact">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanConnectionInfo">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- Lndconnect-merkkijono (lndconnect://...)\n- BtcPay Server -yhteysconnection (config=...)\n- Full content of your BTCPay Server config file</string>
+    <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ välitön\n+ pienet siirtokulut\n- ei aina mahdollinen\n\nTäydellinen pieniin tapahtumiin.\nKäytä aina kuin mahdollista.\n\n\nOn-Chain:\n\n+ aina mahdollinen\n- hitaampi\n- korkeammat siirtokulut\n\nSoveltuu hyvin isoille siirroille.\nkäytä silloin kun Lightning-tapahtuma ei ole mahdollinen.</string>
+    <string name="help_dialog_scanGeneric">Mitä vain dataa hyväksytään tässä.\nLue QR-koodi ja koodin sisältämän tiedon perusteella sovellus tunnistaa automaattisesti tapahtuman tyypin.</string>
+    <string name="help_dialog_private_channels">Yksityiset kanavat eivät ole julkisia turvallisempia, ne vain eivät näy verkossa muille.\nKäytä yksityisiä kanavia vain kun palvelimesi (node) on mobiililaitteessa tai palvelimesi on usein ilman verkkoyhteyttä tai sammutettuna.</string>
+    <string name="help_dialog_identity">Tämä on sinun identiteettisi Lightning-verkossa.\n\nKun napautat hahmoa, näet identiteetin QR-koodina.\nAnna muiden scannata koodi ja he voivat lisätä sinut yhteystietoihinsa, avata kanavia sinulle päin ja lähettää varoja sinulle.\n\nLuotu hahmo on yksilöllinen.\nSe on luotu julkisen avaimesi (public key) perusteella, eikä sitä voi muokata.</string>
     <string name="wallet_name">Lompakon nimi</string>
     <string name="delete">Poista</string>
     <string name="rename">Vaihda nimi</string>
@@ -372,7 +372,7 @@
     <string name="lnurl_withdraw_success">Nosto\nonnistui</string>
     <string name="lnurl_withdraw_fail">Nosto\nepäonnistui</string>
     <string name="lnurl_decoding_no_lnurl_data">Oikean muotoista LNURL-tietoa ei tunnistettu.</string>
-    <string name="lnurl_withdraw_insufficient_channel_balance">The withdraw amount is bigger than what you can receive over lightning with your current open channels.</string>
+    <string name="lnurl_withdraw_insufficient_channel_balance">Nostetava summa on suurempi kuin avoimien Lightning-kanaviesi kautta vastaanotettavissa oleva maksimäärä.</string>
     <string name="lnurl_unsupported_type">LNURL-tyyppi ei ole tuettu</string>
     <string name="lnurl_service_not_responding">%s ei vastaaa</string>
     <string name="lnurl_service">Palvelu</string>
@@ -399,44 +399,44 @@
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Julkinen</string>
     <string name="identity_tap_on_avatar">Napauta hahmoa nähdäksesi identiteettisi tiedot.</string>
-    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
-    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
-    <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
-    <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
-    <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
-    <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
+    <string name="regtest_blockexplorer_unavailable">Lohkoketjuselaimet eivät ole käytettävissä REGTEST-tilassa.</string>
+    <string name="clipboard_error_heading">Leikepöydältä löytyi tietoa mutta se sitä ei tunnistettu:</string>
+    <string name="clipboard_scan_payment">Leikepöydältä löytyi maksun tiedot. Haluatko siirtyä maksamaan sen?</string>
+    <string name="clipboard_scan_lnurl">Leikepöydältä löytyi LNURL-tiedo. Haluatko käyttää sitä?</string>
+    <string name="clipboard_scan_node_pubkey">Leikepöydältä löytyi palvelimen julkinen avain (node public key). Haluatko avata kanavan palvelimeen?</string>
+    <string name="clipboard_scan_connect">Leikepöydältä löytyi palvelin yhteyden tiedot. Haluatko lisätä uuden lompakon?</string>
     <string name="third_party_licenses">Kolmansien osapuolien käyttöoikeudet</string>
     <string name="licenses">Lisenssit</string>
     <string name="choose_action">Valitse toiminto</string>
-    <string name="add_contact">Lisää yearhteystieto</string>
+    <string name="add_contact">Lisää yhteystieto</string>
     <string name="send_money">Lähetä varoja</string>
     <string name="contact_name">Yhteystiedon nimi</string>
     <string name="contact_already_exists">Tämä yhteystieto on jo tallennettuna.</string>
     <string name="no_contacts">Ei yhteystietoja.</string>
-    <string name="manual_send_input_hint">Address or payment data</string>
-    <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
-    <string name="advanced_channel_details_activity">Activity</string>
-    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100\% means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
-    <string name="advanced_channel_details_lifetime">Lifetime</string>
-    <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
-    <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
-    <string name="advanced_channel_details_commit_fee">Commit Fee</string>
-    <string name="advanced_channel_details_explanation_commit_fee">The amount to be paid in fees when closing the channel. This can change over time as the fees are subject to the transaction fees of the bitcoin base layer.</string>
-    <string name="advanced_channel_details_time_lock">Time Lock</string>
-    <string name="advanced_channel_details_explanation_time_lock">In the event of an uncooperative close (force close) of this channel, the time lock is the number of blocks you will have to wait before you can access your funds again.</string>
-    <string name="advanced_channel_details_local_routing_fee">Local Routing Fee</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee (in msat) and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Remote Routing Fee</string>
-    <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
-    <string name="advanced_channel_details_local_channel_reserve">Local Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
-    <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
-    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of Zap.\n\nThis backup only contains the following data:\n\n- Data to connect Zap to your running nodes\n- Contacts</string>
-    <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
+    <string name="manual_send_input_hint">Osoite tai maksutieto</string>
+    <string name="advanced_channel_details_explanation_capacity">Kanavan kokonaiskapasiteetti. Paikallisesta kanavan sulkukulu- ja saldo-varauksesta johtuen kaikki varat eivät ole käytettävissä</string>
+    <string name="advanced_channel_details_activity">Aktiivisuus</string>
+    <string name="advanced_channel_details_explanation_activity">Prosentteina lähetettyjen ja vastaaanotettujen tapahtumien summa jaettuna kanavan kokonaiskapasiteetilla. Tämä arvo esittää kuinka tehokas kanava on. Jos kanavan aktiivisuus on yli 100\%, tarkoittaa se että, kanavan läpi on välitetty varoja enemman kuin kanavan kapasiteetti on. </string>
+    <string name="advanced_channel_details_lifetime">Kesto</string>
+    <string name="advanced_channel_details_explanation_lifetime">Tämä ilmoittaa kanavan kokonaisiän.</string>
+    <string name="advanced_channel_details_explanation_visibility">Kanava voi olla joko julkinen tai yksityinen. Yksityiset kanavat eivät ole julkisia turvallisempia, ne vain eivät näy verkossa muille.</string>
+    <string name="advanced_channel_details_commit_fee">Sulkukulu</string>
+    <string name="advanced_channel_details_explanation_commit_fee">Sulkukulu veloitetaan kun kanavaa suljettaessa. Tämä määrä voi vaihdella ajanmyötä, sillä summa riippuu Bitcoin On-Chain verkon siirtokulujen tasosta.</string>
+    <string name="advanced_channel_details_time_lock">Aikalukitus</string>
+    <string name="advanced_channel_details_explanation_time_lock">Jos kanava suljetaan yksipuolisesti (uncooperative close / force close), on odotettava tämä määrä lohkoja ennenkuin varat ovat käytettävissäsi.</string>
+    <string name="advanced_channel_details_local_routing_fee">Paikallinen reitityskulu</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">Tämä on korvaus jonka velotat ja saat tämän kanavan kautta välittämistäsi tapahtumista.\nPeruskulun saat jokaisesta välitetystä tapahtumasta, riippumatta tapahtuman summasta.\nSinulle maksettavan määräkulun suuruus riippuu välitettävän tapahtuman summasta.\nSaamasi korvauksen kokonaismäärä on peruskulu (ilmoitettuna 1/1000 satoshina) lisättynä määräkululla.</string>
+    <string name="advanced_channel_details_remote_routing_fee">Vastapuolen reitityskulu</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">Tämä on korvaus jonka vastapuolen palvelin saa sen välittäessä tapahtuman kanavan kautta. Korvaus koskee ainoastaan edelleen välitettäviä tapahtumia. Kun käytät kanavaa omiin tapahtumiisi, ei tätä korvausta veloiteta.</string>
+    <string name="advanced_channel_details_local_channel_reserve">Paikallinen kanava varaus</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">Tämä on vähimmäissaldo, joka palvelimen pitää säilyttää kanavassa kaiken varalta. Ei voi käyttää tätä saldoa. Menetät tämän varauksen saldon, mikäli yrität toimia epärehellisesti kanavan vastapäätä kohtaan.</string>
+    <string name="advanced_channel_details_remote_channel_reserve">Vastapään kanava varaus</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">Tämä on vähimmäissaldo, joka vastapään palvelimen pitää säilyttää kanavassa kaiken varalta. Vastapään palvelin menettää tämän saldon, mikäli yrittää toimia epärehellisesti sinua kohtaan.</string>
+    <string name="backup_data_create_description">Tämän varmistuksen pääasiallinen käyttötarkoitus on matkapuhelin käyttö. Tämä varmistus ei sisällä On-chain lompakkosi palautuslauseketta eikä Lightning-verkon varojen palautukseen tarvittavaa kanavien varmistustiedostoa. Varojen palautukseen tarvittavat varmistukset on tehtävä tämän sovelluksen ulkopuolella.\n\nTämä varmistus sisältää ainoastaan:\n\n- Sovelluksen yhteystiedot käyttämiisi palvelimiin\n- yhteystiedot</string>
+    <string name="backup_data_confirm_description">Olen varmistanut lompakkoni palautuslausekkeen ja kanavien varmistustiedoston. Nyt otettava varmistus EI AUTA PALAUTTAMAAN varojani.\n\nYmmärrän että tämä varmistus antaa pääsyn palvelimelleni ja varoihini. Siksi käytän seuraavassa vaiheessa turvallista salasanaa.</string>
     <string name="backup_data_confirm_headline">Vahvista, ole hyvä.</string>
     <string name="backup_data_confirm">Vahvistan</string>
-    <string name="backup_data_restore_description">Restore your connected nodes and contacts.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
+    <string name="backup_data_restore_description">Palauta lompakkojen palvelinyhteydet ja yhteystiedot.\nMikäli palvelimesi ei ole enää käytettävissä verkosta, ei tämä palautus auta sinua saamaan varojasi takaisin.</string>
     <string name="backup_data_create_headline">Varmista</string>
     <string name="backup_data_restore_headline">Palauta</string>
     <string name="backup_data_password_enter">Anna salasanasi</string>
