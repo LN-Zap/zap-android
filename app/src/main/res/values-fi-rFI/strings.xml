@@ -181,7 +181,7 @@
     <string name="receive_lightning_request">Salama-pyyntö</string>
     <string name="receive_on_chain_request">On-Chain Pyyntö</string>
     <string name="receive_noActiveChannels">Vastaanottaaksesi Bitcoinia salamaverkon kautta, sinun pitää ensin avata kanavia.</string>
-    <string name="receive_noIncomeBalance">Jotta voit vastaanottaa bitcoineja Lightning-verkossa, pitää ainakin yhdessä kanavassa olla varoja vastapuolen päässä. \n\nSaat siirrettyä varoja vastapulen päähän kun lähetät maksun Lightning-verkossa\n\nKavavien hallinta näkymästä näet ajan tasaisen tilanteen, että kuinka paljon voit lähettää ja vastaanottaa varoja Lighting-verkossa. </string>
+    <string name="receive_noIncomeBalance">Jotta voit vastaanottaa bitcoineja Lightning-verkossa, pitää ainakin yhdessä kanavassa olla varoja vastapuolen päässä. \n\nSaat siirrettyä varoja vastapuolen päähän kun lähetät maksun Lightning-verkossa\n\nKavavien hallinta näkymästä näet ajan tasaisen tilanteen, että kuinka paljon voit lähettää ja vastaanottaa varoja Lighting-verkossa. </string>
     <string name="receive_requestFullfilled">Lasku\nmaksettu</string>
     <string name="guardian_doNotShowAgain">Älä näytä uudelleen.</string>
     <string name="guardian_Title">Huomioitavaa</string>
@@ -269,7 +269,7 @@
     <string name="error_connection_internal_server">Palvelimeen saadaan yhteys, mutta se vastaa virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti.</string>
     <string name="error_connection_internal_server_clearnet">Palvelimeen saadaan yhteys, mutta se vastaa sisäisellä virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti. Tor-toiminnon poiskytkentä sovelluksen asetuksista voi auttaa, sillä yrität käyttää palvelin yhteyttä suojaamattomassa Internetissä.</string>
     <string name="error_wrong_password">Väärä salasana</string>
-    <string name="error_lightning_uri_invalid">väärä muoto.\nKäytä jotain seuraavista:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="error_lightning_uri_invalid">Väärä muoto.\nKäytä jotain seuraavista:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_wallet_setup">Lompakko pitää ottaa käyttöön ennen kanavan avaamista..</string>
     <string name="error_connect_peer">Yhteyttä rinnakaiseen palvelimeen ei pystytty muodostamaan.</string>
     <string name="error_connect_peer_refused">Rinnakainen palvelin ei hyväksynyt yhteyttä.</string>
@@ -379,7 +379,7 @@
     <string name="lnurl_service_provided_invalid_data">Käytetty palvelu toimittaa kelvotonta tietoa.</string>
     <string name="lnurl_channel_opening_question">Haluatko varmasti avata kanavan:</string>
     <string name="lnurl_channel_pending_hint">Kanavan avautuu ja se kestää jonkin aikaa.\nVoit tarkistaa kanavien tilan Kanavat-näkymästä.</string>
-    <string name="lnurl_pay_insufficient_channel_balance">Maksusu suuruus ylittää määrän mitä voit lähettää tällä hetkellä olevien Lightning-kanavien kautta.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">Maksun suuruus ylittää määrän, mitä voit lähettää tällä hetkellä olevien Lightning-kanavien kautta.</string>
     <string name="lnurl_pay_received_invalid_payment_request" comment="Parametrit ovat:  %1$s = palvelun nimi (palvelin)">%1$s lähetti virheellisen maksupyynnön.</string>
     <string name="lnurl_pay_success_secret_decrypt_error">Maksusi onnitui, salaiseksi määritettyä saapuvaa vahvistusta ei kyetty avaamaan.</string>
     <string name="lnurl_pay_save_url">TÄRKEÄÄ:\nURL-osoite on kopioitu leikepöydälle. Talleta leikepöydän sisätö mikäli tarvitset sitä myöhemmin. Tätä ilmoitusta ei näytetä uudelleen.</string>
@@ -416,7 +416,7 @@
     <string name="manual_send_input_hint">Osoite tai maksutieto</string>
     <string name="advanced_channel_details_explanation_capacity">Kanavan kokonaiskapasiteetti. Paikallisesta kanavan sulkukulu- ja saldo-varauksesta johtuen kaikki varat eivät ole käytettävissä</string>
     <string name="advanced_channel_details_activity">Aktiivisuus</string>
-    <string name="advanced_channel_details_explanation_activity">Prosentteina lähetettyjen ja vastaaanotettujen tapahtumien summa jaettuna kanavan kokonaiskapasiteetilla. Tämä arvo esittää kuinka tehokas kanava on. Jos kanavan aktiivisuus on yli 100\%, tarkoittaa se että, kanavan läpi on välitetty varoja enemman kuin kanavan kapasiteetti on. </string>
+    <string name="advanced_channel_details_explanation_activity">Prosentteina lähetettyjen ja vastaaanotettujen tapahtumien summa jaettuna kanavan kokonaiskapasiteetilla. Tämä arvo esittää kuinka tehokas kanava on. Jos kanavan aktiivisuus on yli 100\%, tarkoittaa se että, kanavan läpi on välitetty varoja enemman kuin kanavan kapasiteetti on.</string>
     <string name="advanced_channel_details_lifetime">Kesto</string>
     <string name="advanced_channel_details_explanation_lifetime">Tämä ilmoittaa kanavan kokonaisiän.</string>
     <string name="advanced_channel_details_explanation_visibility">Kanava voi olla joko julkinen tai yksityinen. Yksityiset kanavat eivät ole julkisia turvallisempia, ne vain eivät näy verkossa muille.</string>
@@ -428,10 +428,10 @@
     <string name="advanced_channel_details_explanation_local_routing_fee">Tämä on korvaus jonka velotat ja saat tämän kanavan kautta välittämistäsi tapahtumista.\nPeruskulun saat jokaisesta välitetystä tapahtumasta, riippumatta tapahtuman summasta.\nSinulle maksettavan määräkulun suuruus riippuu välitettävän tapahtuman summasta.\nSaamasi korvauksen kokonaismäärä on peruskulu (ilmoitettuna 1/1000 satoshina) lisättynä määräkululla.</string>
     <string name="advanced_channel_details_remote_routing_fee">Vastapuolen reitityskulu</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Tämä on korvaus jonka vastapuolen palvelin saa sen välittäessä tapahtuman kanavan kautta. Korvaus koskee ainoastaan edelleen välitettäviä tapahtumia. Kun käytät kanavaa omiin tapahtumiisi, ei tätä korvausta veloiteta.</string>
-    <string name="advanced_channel_details_local_channel_reserve">Paikallinen kanava varaus</string>
-    <string name="advanced_channel_details_explanation_local_channel_reserve">Tämä on vähimmäissaldo, joka palvelimen pitää säilyttää kanavassa kaiken varalta. Ei voi käyttää tätä saldoa. Menetät tämän varauksen saldon, mikäli yrität toimia epärehellisesti kanavan vastapäätä kohtaan.</string>
-    <string name="advanced_channel_details_remote_channel_reserve">Vastapään kanava varaus</string>
-    <string name="advanced_channel_details_explanation_remote_channel_reserve">Tämä on vähimmäissaldo, joka vastapään palvelimen pitää säilyttää kanavassa kaiken varalta. Vastapään palvelin menettää tämän saldon, mikäli yrittää toimia epärehellisesti sinua kohtaan.</string>
+    <string name="advanced_channel_details_local_channel_reserve">Paikallinen kanavavaraus</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">Tämä on vähimmäissaldo, joka palvelimen pitää säilyttää kanavassa kaiken varalta. Ei voi käyttää tätä saldoa. Menetät tämän varauksen saldon, mikäli yrität toimia epärehellisesti kanavan vastapuolta kohtaan.</string>
+    <string name="advanced_channel_details_remote_channel_reserve">Vastapuolen kanavavaraus</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">Tämä on vähimmäissaldo, joka vastapuolen palvelimen pitää säilyttää kanavassa kaiken varalta. Vastapuoli menettää tämän saldon, mikäli yrittää toimia epärehellisesti sinua kohtaan.</string>
     <string name="backup_data_create_description">Tämän varmistuksen pääasiallinen käyttötarkoitus on matkapuhelin käyttö. Tämä varmistus ei sisällä On-chain lompakkosi palautuslauseketta eikä Lightning-verkon varojen palautukseen tarvittavaa kanavien varmistustiedostoa. Varojen palautukseen tarvittavat varmistukset on tehtävä tämän sovelluksen ulkopuolella.\n\nTämä varmistus sisältää ainoastaan:\n\n- Sovelluksen yhteystiedot käyttämiisi palvelimiin\n- yhteystiedot</string>
     <string name="backup_data_confirm_description">Olen varmistanut lompakkoni palautuslausekkeen ja kanavien varmistustiedoston. Nyt otettava varmistus EI AUTA PALAUTTAMAAN varojani.\n\nYmmärrän että tämä varmistus antaa pääsyn palvelimelleni ja varoihini. Siksi käytän seuraavassa vaiheessa turvallista salasanaa.</string>
     <string name="backup_data_confirm_headline">Vahvista, ole hyvä.</string>
