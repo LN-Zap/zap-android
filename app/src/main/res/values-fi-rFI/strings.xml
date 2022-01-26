@@ -156,7 +156,7 @@
     <string name="channel_close_force_confirmation">Oletko varma että haluat sulkea kanavan:\n\n%1$s\n\nVarasi tulevat olemaan jäädytettynä %2$s.</string>
     <string name="channel_close_time">Sulkemisen viive</string>
     <string name="channel_open">Avaa kanava</string>
-    <string name="channel_open_success">Kanavan avaus käynnistetty onnistuneesti</string>
+    <string name="channel_open_success">Kanavan avaus käynnistetty</string>
     <string name="channel_open_error">Virhe kanavan avaamisessa</string>
     <string name="private_channel">Yksityinen kanava</string>
     <string name="channel_visibility_private">yksityinen</string>
@@ -257,28 +257,28 @@
     <string name="error_connection_invalid_macaroon2">Pääsy estetty\n\nMacaroon ei ole kelvollinen.</string>
     <string name="error_connection_server_unreachable">Aikakatkaisu.\nPalvelin ei vastaa.\n\n- Varmista että internet-yhteytesi toimii\n\n- Varmista että palvelin on käynnnissä ja sen IP-osoite on:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Palvelimen nimen varmistus epäonnistui.\n\nAntamasi palvelimen nimi ei täsmää palvelimen antaman varmenteen sisältöön.\n\n Sinun on kenties luotava varmenne uudelleen palvelimella. Varmista että käyttämäsi palvelinmen nimi on lisättynä lnd.conf tlsextradomain -parametriin ennen varmenteen uudelleenluontia.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Palvelimen nimeä (%1$s) ei löydetä.\n\nMuuta lompakon yhteysasetuosi mikä palvelimesi nimi ja/tai osoite on muuttunut.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Palvelimen nimeä (%1$s) ei löydetä.\n\nMuuta lompakon yhteysasetuksesi mikä solmusi nimi ja/tai osoite on muuttunut.</string>
     <string name="error_connection_lnd_unavailable">LND-yhteyttä ei saada luotua.\n\n- Varmista että LND prosessi on käynnissä palvelimella.\n\n- varmista että TCP-portin edellenohjaus aktiivinen. (Portti: %1$s)</string>
     <string name="error_connection_network_unreachable">Palvelimeen ei saada yhteyttä.\n\nVarmista että Internet-yhteydessäsi ei ole häiriöitä.</string>
     <string name="error_connection_unknown">Yhteys epäonnistui.</string>
     <string name="error_connection_tor_unreachable">Tor-yhteys epäonnistui.\n Kytke Tor päälle sovelluksen asetuksista.</string>
     <string name="error_connection_tor_bootstrapping">Tor käynnistys ei onnistunut.\n\nZap Android sisältää sisäänrakennetun Tor-tuen. Mikäli käytät Orbot -sovellusta, poista Zap Orbotin Tor sovelluslistalta tai poista Orbot kokonaan käytöstä.</string>
     <string name="error_connection_wallet_locked">Avaathan lompakon.</string>
-    <string name="error_connection_btcpay_invalid_json">BTCPay-palvelimen konfiguraatiotiedot sisältävän JSON muoto on virheelline.</string>
+    <string name="error_connection_btcpay_invalid_json">BTCPay-palvelimen konfiguraatiotiedot sisältävän JSON muoto on virheellinen.</string>
     <string name="error_connection_btcpay_invalid_config">BTCPay-palvelimen konfiguraatio ei sisällä BTC GRPC -määrityksiä.</string>
-    <string name="error_connection_internal_server">Palvelimeen saadaan yhteys, mutta se vastaa virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti.</string>
-    <string name="error_connection_internal_server_clearnet">Palvelimeen saadaan yhteys, mutta se vastaa sisäisellä virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti. Tor-toiminnon poiskytkentä sovelluksen asetuksista voi auttaa, sillä yrität käyttää palvelin yhteyttä suojaamattomassa Internetissä.</string>
+    <string name="error_connection_internal_server">Solmuun saadaan yhteys, mutta se vastaa virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti.</string>
+    <string name="error_connection_internal_server_clearnet">Solmuun saadaan yhteys, mutta se vastaa sisäisellä virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti. Tor-toiminnon poiskytkentä sovelluksen asetuksista voi auttaa, sillä yrität ottaa yhteyttä solmuun suojaamattomassa Internetissä.</string>
     <string name="error_wrong_password">Väärä salasana</string>
     <string name="error_lightning_uri_invalid">Väärä muoto.\nKäytä jotain seuraavista:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">Lompakko pitää ottaa käyttöön ennen kanavan avaamista..</string>
-    <string name="error_connect_peer">Yhteyttä rinnakaiseen palvelimeen ei pystytty muodostamaan.</string>
-    <string name="error_connect_peer_refused">Rinnakainen palvelin ei hyväksynyt yhteyttä.</string>
+    <string name="error_channel_open_wallet_setup">Lompakko pitää ottaa käyttöön ennen kanavan avaamista.</string>
+    <string name="error_connect_peer">Yhteyttä rinnakaiseen solmuun ei pystytty muodostamaan.</string>
+    <string name="error_connect_peer_refused">Rinnakainen solmu ei hyväksynyt yhteyttä.</string>
     <string name="error_connect_peer_self">Palvelin ei voi muodostaa yhteyttä itseensä.</string>
-    <string name="error_connect_peer_no_host">Palvelimen IP-osoite tai nimi tarvitaan yhteyden avaamiseen.</string>
+    <string name="error_connect_peer_no_host">Yhteyden avaamiseen tarvitaan solmun IP-osoite tai nimi.</string>
     <string name="error_connect_peer_timeout">Yhteyden avaus rinnakaiseen palvelimeen ei onnistunut määritetyssä ajassa.</string>
     <string name="error_channel_open_pending_max">Odottavien kanavien lukumäärä ylittää enimmäismäärän</string>
     <string name="error_channel_open_timeout">Kanavan avaus ei onnistunut määritetyssä ajassa.</string>
-    <string name="error_channel_open">Kanavan avaus yhdistettyyyn rinnakkaispalvelimeen %s ei onnistunut.</string>
+    <string name="error_channel_open">Kanavan avaus yhdistettyyyn solmuun %s ei onnistunut.</string>
     <string name="error_get_peers">Rinnakkaspalvelimien listan haku epäonnistui.</string>
     <string name="error_get_peers_timeout">Rinnakkaspalvelimia ei voitu hakea äritetyssä ajassa.</string>
     <string name="error_channel_close_offline">Rinnakkaspalvelimeen ei ole yhteyttä. Ainoastaan pakotetu sulkemiset ovat mahdollisia.</string>
@@ -352,7 +352,7 @@
     <string name="help_dialog_scanConnectionInfo">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- Lndconnect-merkkijono (lndconnect://...)\n- BtcPay Server -yhteysconnection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ välitön\n+ pienet siirtokulut\n- ei aina mahdollinen\n\nTäydellinen pieniin tapahtumiin.\nKäytä aina kuin mahdollista.\n\n\nOn-Chain:\n\n+ aina mahdollinen\n- hitaampi\n- korkeammat siirtokulut\n\nSoveltuu hyvin isoille siirroille.\nkäytä silloin kun Lightning-tapahtuma ei ole mahdollinen.</string>
     <string name="help_dialog_scanGeneric">Mitä vain dataa hyväksytään tässä.\nLue QR-koodi ja koodin sisältämän tiedon perusteella sovellus tunnistaa automaattisesti tapahtuman tyypin.</string>
-    <string name="help_dialog_private_channels">Yksityiset kanavat eivät ole julkisia turvallisempia, ne vain eivät näy verkossa muille.\nKäytä yksityisiä kanavia vain kun palvelimesi (node) on mobiililaitteessa tai palvelimesi on usein ilman verkkoyhteyttä tai sammutettuna.</string>
+    <string name="help_dialog_private_channels">Yksityiset kanavat eivät ole julkisia turvallisempia, ne vain eivät näy verkossa muille.\nKäytä yksityisiä kanavia vain kun solmusi toimii on mobiililaitteessa tai se on usein ilman verkkoyhteyttä tai sammutettuna.</string>
     <string name="help_dialog_identity">Tämä on sinun identiteettisi Lightning-verkossa.\n\nKun napautat hahmoa, näet identiteetin QR-koodina.\nAnna muiden scannata koodi ja he voivat lisätä sinut yhteystietoihinsa, avata kanavia sinulle päin ja lähettää varoja sinulle.\n\nLuotu hahmo on yksilöllinen.\nSe on luotu julkisen avaimesi (public key) perusteella, eikä sitä voi muokata.</string>
     <string name="wallet_name">Lompakon nimi</string>
     <string name="delete">Poista</string>
@@ -403,7 +403,7 @@
     <string name="clipboard_error_heading">Leikepöydältä löytyi tietoa mutta se sitä ei tunnistettu:</string>
     <string name="clipboard_scan_payment">Leikepöydältä löytyi maksun tiedot. Haluatko siirtyä maksamaan sen?</string>
     <string name="clipboard_scan_lnurl">Leikepöydältä löytyi LNURL-tiedo. Haluatko käyttää sitä?</string>
-    <string name="clipboard_scan_node_pubkey">Leikepöydältä löytyi palvelimen julkinen avain (node public key). Haluatko avata kanavan palvelimeen?</string>
+    <string name="clipboard_scan_node_pubkey">Leikepöydältä löytyi solmun julkinen avain (public key). Haluatko avata kanavan solmuun?</string>
     <string name="clipboard_scan_connect">Leikepöydältä löytyi palvelin yhteyden tiedot. Haluatko lisätä uuden lompakon?</string>
     <string name="third_party_licenses">Kolmansien osapuolien käyttöoikeudet</string>
     <string name="licenses">Lisenssit</string>
@@ -427,16 +427,16 @@
     <string name="advanced_channel_details_local_routing_fee">Paikallinen reitityskulu</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">Tämä on korvaus jonka velotat ja saat tämän kanavan kautta välittämistäsi tapahtumista.\nPeruskulun saat jokaisesta välitetystä tapahtumasta, riippumatta tapahtuman summasta.\nSinulle maksettavan määräkulun suuruus riippuu välitettävän tapahtuman summasta.\nSaamasi korvauksen kokonaismäärä on peruskulu (ilmoitettuna 1/1000 satoshina) lisättynä määräkululla.</string>
     <string name="advanced_channel_details_remote_routing_fee">Vastapuolen reitityskulu</string>
-    <string name="advanced_channel_details_explanation_remote_routing_fee">Tämä on korvaus jonka vastapuolen palvelin saa sen välittäessä tapahtuman kanavan kautta. Korvaus koskee ainoastaan edelleen välitettäviä tapahtumia. Kun käytät kanavaa omiin tapahtumiisi, ei tätä korvausta veloiteta.</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">Tämä on korvaus jonka vastapuolen solmu saa sen välittäessä tapahtuman kanavan kautta. Korvaus koskee ainoastaan edelleen välitettäviä tapahtumia. Kun käytät kanavaa omiin tapahtumiisi, ei tätä korvausta veloiteta.</string>
     <string name="advanced_channel_details_local_channel_reserve">Paikallinen kanavavaraus</string>
-    <string name="advanced_channel_details_explanation_local_channel_reserve">Tämä on vähimmäissaldo, joka palvelimen pitää säilyttää kanavassa kaiken varalta. Ei voi käyttää tätä saldoa. Menetät tämän varauksen saldon, mikäli yrität toimia epärehellisesti kanavan vastapuolta kohtaan.</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">Tämä on vähimmäissaldo, joka solmun pitää säilyttää kanavassa kaiken varalta. Ei voi käyttää tätä saldoa. Menetät tämän varauksen saldon, mikäli yrität toimia epärehellisesti kanavan vastapuolta kohtaan.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Vastapuolen kanavavaraus</string>
-    <string name="advanced_channel_details_explanation_remote_channel_reserve">Tämä on vähimmäissaldo, joka vastapuolen palvelimen pitää säilyttää kanavassa kaiken varalta. Vastapuoli menettää tämän saldon, mikäli yrittää toimia epärehellisesti sinua kohtaan.</string>
-    <string name="backup_data_create_description">Tämän varmistuksen pääasiallinen käyttötarkoitus on matkapuhelin käyttö. Tämä varmistus ei sisällä On-chain lompakkosi palautuslauseketta eikä Lightning-verkon varojen palautukseen tarvittavaa kanavien varmistustiedostoa. Varojen palautukseen tarvittavat varmistukset on tehtävä tämän sovelluksen ulkopuolella.\n\nTämä varmistus sisältää ainoastaan:\n\n- Sovelluksen yhteystiedot käyttämiisi palvelimiin\n- yhteystiedot</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">Tämä on vähimmäissaldo, joka vastapuolen solmun pitää säilyttää kanavassa kaiken varalta. Vastapuoli menettää tämän saldon, mikäli yrittää toimia epärehellisesti sinua kohtaan.</string>
+    <string name="backup_data_create_description">Tämän varmistuksen pääasiallinen käyttötarkoitus on matkapuhelin käyttö. Tämä varmistus ei sisällä On-chain lompakkosi palautuslauseketta eikä Lightning-verkon varojen palautukseen tarvittavaa kanavien varmistustiedostoa. Varojen palautukseen tarvittavat varmistukset on tehtävä tämän sovelluksen ulkopuolella.\n\nTämä varmistus sisältää ainoastaan:\n\n- Sovelluksen yhteydet käyttämiisi solmuihin\n- yhteystiedot</string>
     <string name="backup_data_confirm_description">Olen varmistanut lompakkoni palautuslausekkeen ja kanavien varmistustiedoston. Nyt otettava varmistus EI AUTA PALAUTTAMAAN varojani.\n\nYmmärrän että tämä varmistus antaa pääsyn palvelimelleni ja varoihini. Siksi käytän seuraavassa vaiheessa turvallista salasanaa.</string>
     <string name="backup_data_confirm_headline">Vahvista, ole hyvä.</string>
     <string name="backup_data_confirm">Vahvistan</string>
-    <string name="backup_data_restore_description">Palauta lompakkojen palvelinyhteydet ja yhteystiedot.\nMikäli palvelimesi ei ole enää käytettävissä verkosta, ei tämä palautus auta sinua saamaan varojasi takaisin.</string>
+    <string name="backup_data_restore_description">Palauta yhteydet solmuihin ja yhteystiedot.\nMikäli solmusi ei ole enää käytettävissä verkosta, ei tämä palautus auta sinua saamaan varojasi takaisin.</string>
     <string name="backup_data_create_headline">Varmista</string>
     <string name="backup_data_restore_headline">Palauta</string>
     <string name="backup_data_password_enter">Anna salasanasi</string>
