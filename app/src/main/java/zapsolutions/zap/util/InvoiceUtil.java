@@ -202,9 +202,6 @@ public class InvoiceUtil {
                     if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
                         // Show error: payment request expired.
                         listener.onError(ctx.getString(R.string.error_paymentRequestExpired), RefConstants.ERROR_DURATION_SHORT);
-                    } else if (paymentRequest.getNumSatoshis() == 0) {
-                        // Disable 0 sat invoices
-                        listener.onError(ctx.getString(R.string.error_zeroAmountPaymentRequest), RefConstants.ERROR_DURATION_LONG);
                     } else {
                         listener.onValidLightningInvoice(paymentRequest, invoice);
                     }
