@@ -168,7 +168,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -184,7 +183,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -200,7 +198,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -216,7 +213,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -232,7 +228,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -248,7 +243,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -264,7 +258,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -280,7 +273,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -296,7 +288,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
@@ -326,7 +317,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle_seablue"
-            android:onClick="OnNumberPadClick"
             android:textColor="@color/white"
             android:textSize="50dp"
             android:typeface="sans" />
