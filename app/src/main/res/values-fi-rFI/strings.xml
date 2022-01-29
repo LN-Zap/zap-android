@@ -191,8 +191,8 @@
     <string name="guardian_pasteFromClipboard">Tarkista aina viimeiset 3-5 numeroa kun lopioit leikepöydältä. Haitallinen sovellus on voinut muuttaa osoitetta huomaamatta taustalla.</string>
     <string name="guardian_disableScrambledPin">Mikäli näppäimistö ei ole sekoitettu, on PIN-koodisi nähtävissä sormen liikkeistäsi.</string>
     <string name="guardian_disableScreenProtection">Mikäli sallit näytön talletukset, voivat mahdollliset haittaohjelmat ottaaa kuvia tai nauhoittaa videota näyttösi sisällöstä. Suosittelemme kytkemään asetuksen käyttöön vain  kun haluat ottaa näytöstä kuvia tai videota.</string>
-    <string name="guardian_highOnChainFee" comment="Parametrit ovat:  %1$s%%: % tapahtuman arvo esim: 13.2%">Olet maksamassa siirtokuluina %1$s%%.\n\nVaihtoehtoisesti:\n- kokeile maksaa Lightning-maksuna\n- aseta matalampi siirtokulu ja odota pidempään,\n- yritä myöhemmin uudelleen\n- tai lähetä suurempi määrä\n\nHaluatko jatkaa nykyisellä siirtokululla?</string>
-    <string name="guardian_oldExchangeRate" comment="Parametrit ovat:  %1$s: tuntimäärä esim: 7.5">Olet antanut määrän fiat-valuutassa, mutta vaihtokurssien tiedot ovat vanhoja (päivitetty viimeksi %1$s tuntia sitten).\nVarmista verkkoyhteytesi toiminta tai pyydä maksua bitcoin-määräisenä.\n\nHaluatko jatkaa fiat-määräisenä?</string>
+    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Olet maksamassa siirtokuluina %1$s%%.\n\nVaihtoehtoisesti:\n- kokeile maksaa Lightning-maksuna\n- aseta matalampi siirtokulu ja odota pidempään,\n- yritä myöhemmin uudelleen\n- tai lähetä suurempi määrä\n\nHaluatko jatkaa nykyisellä siirtokululla?</string>
+    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Olet antanut määrän fiat-valuutassa, mutta vaihtokurssien tiedot ovat vanhoja (päivitetty viimeksi %1$s tuntia sitten).\nVarmista verkkoyhteytesi toiminta tai pyydä maksua bitcoin-määräisenä.\n\nHaluatko jatkaa fiat-määräisenä?</string>
     <string name="guardian_remoteConnect">Oletko varma että haluat yhdistää \n\n%1$s\n\nVarmista palvelimen osoite huolellisesti.</string>
     <string name="guardian_externalLink">Olet avaamassa selaimessa linkkiä joka sisältää luottamuksellista tietoa. Zap suojaa kaiken liikenteesi kun Tor-yhteydet ovat käytössä. Selaimesi ei näin tee. Käytä Tor-selainta, mikäli haluat säilyttää tämän yhteyden tiedot luottamuksellisina.</string>
     <string name="guardian_oldLndVersion_remote">Ole hyvä ja päivitä sovellus.\n\nSolmu johon olet yhteydessä käyttää vanhaa LND-versiota. Versiota %1$s aikaisemmat eivät ole aktiivisesti tuettuja.</string>
@@ -237,7 +237,7 @@
     <string name="settings_lnPrivateChannelHints">Sisällytä reititysvinkit yksityisiä kanavia käyttäviin laskuihin</string>
     <string name="error">Virhe</string>
     <string name="error_blockExplorer_title">Lohkoselain</string>
-    <string name="error_blockExplorer_message" comment="Parametrit ovat: %1$s: Lohkoketju Explorer-nimi, %2$s: 'mainnet' or 'testnet'">"Nyt käytössä oleva lohkoketjuselain (%1$s) ei tuettuja %2$s. \nMene asetuksiin ja valitse jatkaaksesi toinen lohkoketjuselain (Explorer)."</string>
+    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Nyt käytössä oleva lohkoketjuselain (%1$s) ei tuettuja %2$s. \nMene asetuksiin ja valitse jatkaaksesi toinen lohkoketjuselain (Explorer)."</string>
     <string name="error_zeroAmountPaymentRequest">Tämän maksupyynnön summa on nolla. Zap ei tue nolla-summan maksuja, sillä niihin liittyy turvallisuus riskejä.</string>
     <string name="error_paymentRequestExpired">Tämä maksupyyntö on vanhentunut.</string>
     <string name="error_useTestnetRequest">Olet yhdistettynä TESTNET-verkkoon. Käytä TESTNET-osoitteita ja -maksupyyntöjä.</string>
@@ -295,7 +295,7 @@
     <string name="error_only_payment_data_allowed">Tähän voi syöttää vain maksutietoja.</string>
     <string name="error_wallet_not_yet_ready">Lompakkosi synkronointi ei ole vielä valmistunut. Yritä myöhemmin uudelleen.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s näyttää estävät Tor-verkosta tulevan pyynnön. Koeta kytkeä Tor-pois päältä asetuksista tai ota yhteyttä palveluntarjoajaan ja pyydä heitä päivittämään CloudFlare-säännostö.</string>
-    <string name="error_tor_exchange_rate">Vaihtokurssia ei pystytty hakemaan. Käyttämäsi palvelu näyttää estävän pyynnöt Tor-verkosta. Koeta vaitaa vaihtokurssien tarjoajaa edistyksellistä asetuksista.</string>e
+    <string name="error_tor_exchange_rate">Vaihtokurssia ei pystytty hakemaan. Käyttämäsi palvelu näyttää estävän pyynnöt Tor-verkosta. Koeta vaitaa vaihtokurssien tarjoajaa edistyksellistä asetuksista.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Vastausta %1$s:lta ei kyetty lukemaan.</string>
     <string name="error_lnd_connection_failed">LND-yhteys epäonnistui. Yritäthän uudelleen.</string>
     <plurals name="duration_second">
@@ -380,7 +380,7 @@
     <string name="lnurl_channel_opening_question">Haluatko varmasti avata kanavan:</string>
     <string name="lnurl_channel_pending_hint">Kanavan avautuu ja se kestää jonkin aikaa.\nVoit tarkistaa kanavien tilan Kanavat-näkymästä.</string>
     <string name="lnurl_pay_insufficient_channel_balance">Maksun suuruus ylittää määrän, mitä voit lähettää tällä hetkellä olevien Lightning-kanavien kautta.</string>
-    <string name="lnurl_pay_received_invalid_payment_request" comment="Parametrit ovat:  %1$s = palvelun nimi (palvelin)">%1$s lähetti virheellisen maksupyynnön.</string>
+    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s lähetti virheellisen maksupyynnön.</string>
     <string name="lnurl_pay_success_secret_decrypt_error">Maksusi onnitui, salaiseksi määritettyä saapuvaa vahvistusta ei kyetty avaamaan.</string>
     <string name="lnurl_pay_save_url">TÄRKEÄÄ:\nURL-osoite on kopioitu leikepöydälle. Talleta leikepöydän sisätö mikäli tarvitset sitä myöhemmin. Tätä ilmoitusta ei näytetä uudelleen.</string>
     <string name="lnurl_pay_save_secret">TÄRKEÄÄ:\nKoodi on kopioitu leikepöydälle. Talleta se mikäli tarvitset sitä myöhemmin. Tätä ilmoitusta ei näytetä uudelleen.</string>
@@ -454,4 +454,5 @@
     <string name="backup_data_no_data">Varmuuskopioitavaa tietoa ei ole.</string>
     <string name="backup_data_version_too_old">Varmuuskopio oli tehty sovelluksen uudemmalla versiolla. Päivitäthän sovelluksesi ja yritä uudelleen.</string>
     <string name="backup_data_invalid_file_chosen">Tämä ei ole toimiva varmuuskopio. Valitsethan tiedoston joka oli luotu tässä sovelluksella?</string>
+    <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
 </resources>

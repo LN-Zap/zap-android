@@ -468,4 +468,5 @@
     <string name="backup_data_no_data">Žádná data k zálohování.</string>
     <string name="backup_data_version_too_old">Záloha byla vytvořena pomocí novější verze. Před importem zálohy aplikaci aktualizujte.</string>
     <string name="backup_data_invalid_file_chosen">Toto není platný zálohovací soubor. Vyberte prosím soubor, který byl vytvořen pomocí této aplikace.</string>
+    <string name="dialog_open_url">Údaje odkazují na webovou stránku. Chcete otevřít následující webovou stránku?\n\n%1$s</string>
 </resources>
