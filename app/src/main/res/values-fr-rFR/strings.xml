@@ -416,7 +416,7 @@
     <string name="manual_send_input_hint">Adresse ou données de paiement</string>
     <string name="advanced_channel_details_explanation_capacity">Le montant total des fonds détenus dans ce canal. En raison de certaines contraintes (comme les frais d\'engagement ou la réserve de canal local), tous les fonds ne sont pas utilisables.</string>
     <string name="advanced_channel_details_activity">Activité</string>
-    <string name="advanced_channel_details_explanation_activity">La pourcentage total de la somme des fonds envoyés et reçus divisée par la capacité totale du canal. Un canal avec une activité supérieure à 100% signifie que la somme des fonds envoyés et reçus dépasse la capacité totale du canal. Cette mesure témoigne de l\'efficacité du canal.</string>
+    <string name="advanced_channel_details_explanation_activity">La pourcentage total de la somme des fonds envoyés et reçus divisée par la capacité totale du canal. Un canal avec une activité supérieure à 100%% signifie que la somme des fonds envoyés et reçus dépasse la capacité totale du canal. Cette mesure témoigne de l\'efficacité du canal.</string>
     <string name="advanced_channel_details_lifetime">Durée de vie</string>
     <string name="advanced_channel_details_explanation_lifetime">Cela montre depuis combien de temps ce canal existe déjà.</string>
     <string name="advanced_channel_details_explanation_visibility">Une chaîne peut être publique ou privée. Les canaux privés ne sont pas plus sécurisés, ils ne sont tout simplement pas visibles sur le réseau.</string>
