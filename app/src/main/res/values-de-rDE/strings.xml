@@ -454,4 +454,5 @@
     <string name="backup_data_no_data">Keine Daten die gespeichert werden müssten.</string>
     <string name="backup_data_version_too_old">Dieses Backup wurde mit einer neueren version erstellt. Bitte update die App bevor das Backup wiederhergestellt wird.</string>
     <string name="backup_data_invalid_file_chosen">Das ist keine gültige Backup Datei. Bitte wähle eine Datei aus, die mit dieser App erstellt wurde.</string>
+    <string name="dialog_open_url">Die Daten verlinken auf eine Webseite. Möchtest du die folgende Seite öffnen?\n\n%1$s</string>
 </resources>

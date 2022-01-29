@@ -97,7 +97,7 @@
     <string name="confirmations">Conferme</string>
     <string name="maximum_abbreviation">mass</string>
     <string name="send">Manda</string>
-    <string name="notConnected">Not connected</string>
+    <string name="notConnected">Non collegato</string>
     <string name="activity_receive">Ricevi</string>
     <string name="activity_send">Paga</string>
     <string name="activity_connectRemoteNode">Connetti a nodo remoto</string>
@@ -110,7 +110,7 @@
     <string name="activity_manage_contacts_send_mode">Manda a…</string>
     <string name="activity_manage_contacts_open_channel_mode">Apri canale con…</string>
     <string name="activity_contact_details">Dettagli di contatto</string>
-    <string name="activity_manual_setup">Connection Data</string>
+    <string name="activity_manual_setup">Connessione Dati</string>
     <string name="activity_backup">Backup</string>
     <string name="navigation_wallet">Portafogli</string>
     <string name="navigation_history">Storico</string>
@@ -454,4 +454,5 @@
     <string name="backup_data_no_data">No data to backup.</string>
     <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
     <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
+    <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
 </resources>
