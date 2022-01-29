@@ -261,25 +261,33 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             }
         }
 
-    }
-
-    public void OnNumberPadClick(View view) {
-        if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
-            mVibrator.vibrate(55);
-        }
-        mUserInput.append(((Button) view).getText().toString());
-        displayUserInput();
-
-        if (mUserInput.toString().length() == mPinLength) {
-            // We want to start the pin check after UI has updated, otherwise it doesn't look good.
-            Handler handler = new Handler();
-            handler.post(new Runnable() {
+        // Set action for numpad buttons
+        for (Button btn : mBtnNumpad) {
+            btn.setOnClickListener(new OnClickListener() {
                 @Override
-                public void run() {
-                    pinEntered();
+                public void onClick(View v) {
+                    // vibrate
+                    if (PrefsUtil.getPrefs().getBoolean("hapticPin", true)) {
+                        mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
+                    }
+                    // Add input
+                    mUserInput.append(((Button) v).getText().toString());
+                    displayUserInput();
+
+                    if (mUserInput.toString().length() == mPinLength) {
+                        // We want to start the pin check after UI has updated, otherwise it doesn't look good.
+                        Handler handler = new Handler();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                pinEntered();
+                            }
+                        });
+                    }
                 }
             });
         }
+
     }
 
     private void displayUserInput() {
