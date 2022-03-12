@@ -195,6 +195,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:textSize="15sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/transactionID"
             tools:text="Address:" />
@@ -210,6 +211,7 @@
             android:textAlignment="viewEnd"
             android:textColor="@color/lightningOrange"
             android:textSize="15sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/addressCopyIcon"
             app:layout_constraintStart_toEndOf="@id/addressLabel"
             app:layout_constraintTop_toBottomOf="@+id/transactionID"
@@ -221,6 +223,7 @@
             android:layout_height="20dp"
             android:background="@null"
             android:paddingStart="20dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/address"
