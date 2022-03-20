@@ -6,13 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.pin.PinEntryActivity;
 
 public class PinScreenUtil {
 
     static public void askForAccess(Activity activity, OnSecurityCheckPerformedListener onSecurityCheckPerformedListener) {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs() && TimeOutUtil.getInstance().isTimedOut()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs() && TimeOutUtil.getInstance().isTimedOut()) {
             if (PrefsUtil.isPinEnabled()) {
                 // Go to PIN entry screen
                 Intent pinIntent = new Intent(activity, PinEntryActivity.class);

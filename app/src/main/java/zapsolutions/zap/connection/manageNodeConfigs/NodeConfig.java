@@ -1,13 +1,13 @@
-package zapsolutions.zap.connection.manageWalletConfigs;
+package zapsolutions.zap.connection.manageNodeConfigs;
 
 import androidx.annotation.Nullable;
 
 import zapsolutions.zap.connection.RemoteConfiguration;
 
-public class WalletConfig extends RemoteConfiguration implements Comparable<WalletConfig> {
+public class NodeConfig extends RemoteConfiguration implements Comparable<NodeConfig> {
 
-    public static final String WALLET_TYPE_LOCAL = "local";
-    public static final String WALLET_TYPE_REMOTE = "remote";
+    public static final String NODE_TYPE_LOCAL = "local";
+    public static final String NODE_TYPE_REMOTE = "remote";
 
     private String id;
     private String alias;
@@ -43,10 +43,10 @@ public class WalletConfig extends RemoteConfiguration implements Comparable<Wall
     }
 
     public boolean isLocal() {
-        return this.type.equals(WALLET_TYPE_LOCAL);
+        return this.type.equals(NODE_TYPE_LOCAL);
     }
 
-    public WalletConfig(String id) {
+    public NodeConfig(String id) {
         this.id = id;
     }
 
@@ -58,8 +58,8 @@ public class WalletConfig extends RemoteConfiguration implements Comparable<Wall
     }
 
     @Override
-    public int compareTo(WalletConfig walletConfig) {
-        WalletConfig other = walletConfig;
+    public int compareTo(NodeConfig nodeConfig) {
+        NodeConfig other = nodeConfig;
         return this.getAlias().compareTo(other.getAlias());
     }
 
@@ -71,8 +71,8 @@ public class WalletConfig extends RemoteConfiguration implements Comparable<Wall
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        WalletConfig walletConfig = (WalletConfig) obj;
-        return walletConfig.getId().equals(this.getId());
+        NodeConfig nodeConfig = (NodeConfig) obj;
+        return nodeConfig.getId().equals(this.getId());
     }
 
     @Override

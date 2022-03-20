@@ -102,9 +102,9 @@
     <string name="activity_send">Maksa</string>
     <string name="activity_connectRemoteNode">Yhdistä etäsolmuun</string>
     <string name="activity_manage_channels">Salama kanavat</string>
-    <string name="activity_manage_wallets">Hallitse lompakkoja</string>
+    <string name="activity_manage_nodes">Hallitse lompakkoja</string>
     <string name="activity_advanced_settings">Edistyneet asetukset</string>
-    <string name="activity_wallet_details">Lompakon tiedot</string>
+    <string name="activity_node_details">Lompakon tiedot</string>
     <string name="activity_identity">Identiteetti</string>
     <string name="activity_manage_contacts">Muokkaa kontakteja</string>
     <string name="activity_manage_contacts_send_mode">Lähetä…</string>
@@ -167,9 +167,9 @@
     <string name="setup_connect_local_button">Luo Lompakko</string>
     <string name="setup_connect_remote_description">Etähallinnoi omaa solmua / nodea.</string>
     <string name="setup_connect_remote_button">Yhdistä etäsolmuun</string>
-    <string name="demo_setupWalletBtn">Lompakon asetukset</string>
-    <string name="demo_setupWalletFirst">Sinun täytyy ensiksi asettaa lompakko.</string>
-    <string name="demo_setupWalletFirstAvatar">Sinun täytyy ensin asettaa lompakko, jotta voit nähdä identiteettisi ja kuvakkeesi.</string>
+    <string name="demo_setupNodeBtn">Lompakon asetukset</string>
+    <string name="demo_setupNodeFirst">Sinun täytyy ensiksi asettaa lompakko.</string>
+    <string name="demo_setupNodeFirstAvatar">Sinun täytyy ensin asettaa lompakko, jotta voit nähdä identiteettisi ja kuvakkeesi.</string>
     <string name="send_lightningPayment">Lähetä salama-maksu</string>
     <string name="send_onChainPayment">Lähetä on-chain maksu</string>
     <string name="send_sendPayment">Lähetä maksu</string>
@@ -285,7 +285,7 @@
     <string name="error_channel_close_timeout">Kanavan sulku ei onnistunut määritetyssä ajassa.</string>
     <string name="error_channel_close">Kanavan %s sulku epäonnistui</string>
     <string name="error_pin_deactivation_attempt">Näyttäisi että joku haluaa poistaa PIN-koodisi käytöstä. Sovellus sulkeutuu nyt.\nVoit poistaa sovelluksen ja ottaa sen uudelleeen käyttöön palautumismenettelyllä sekä siten päästä jälleen käsittelemään varojasi.</string>
-    <string name="error_empty_wallet_name">Tyhjä nimi ei ole sallittu.</string>
+    <string name="error_empty_node_name">Tyhjä nimi ei ole sallittu.</string>
     <string name="error_invalid_bitcoin_request">Virheellinen bitcoin-pyyntö.</string>
     <string name="error_payment_invalid_details">Maksun tiedot eivät täsmään sen laskun tietoihin, jota yrität maksaa.</string>
     <string name="error_payment_timeout">Aikakatkaisu. Reittiä ei löytynyt.</string>
@@ -293,7 +293,7 @@
     <string name="error_payment_insufficient_balance">Maksun summa on suurempi kuin mitä voit lähettää nykyisien Lightning-kanavien kautta..</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Varmista että vastaanottaja kykeneen hyödyntämään keysend-toiminnallisuutta.</string>
     <string name="error_only_payment_data_allowed">Tähän voi syöttää vain maksutietoja.</string>
-    <string name="error_wallet_not_yet_ready">Lompakkosi synkronointi ei ole vielä valmistunut. Yritä myöhemmin uudelleen.</string>
+    <string name="error_node_not_yet_ready">Lompakkosi synkronointi ei ole vielä valmistunut. Yritä myöhemmin uudelleen.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s näyttää estävät Tor-verkosta tulevan pyynnön. Koeta kytkeä Tor-pois päältä asetuksista tai ota yhteyttä palveluntarjoajaan ja pyydä heitä päivittämään CloudFlare-säännostö.</string>
     <string name="error_tor_exchange_rate">Vaihtokurssia ei pystytty hakemaan. Käyttämäsi palvelu näyttää estävän pyynnöt Tor-verkosta. Koeta vaitaa vaihtokurssien tarjoajaa edistyksellistä asetuksista.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Vastausta %1$s:lta ei kyetty lukemaan.</string>
@@ -354,21 +354,21 @@
     <string name="help_dialog_scanGeneric">Mitä vain dataa hyväksytään tässä.\nLue QR-koodi ja koodin sisältämän tiedon perusteella sovellus tunnistaa automaattisesti tapahtuman tyypin.</string>
     <string name="help_dialog_private_channels">Yksityiset kanavat eivät ole julkisia turvallisempia, ne vain eivät näy verkossa muille.\nKäytä yksityisiä kanavia vain kun solmusi toimii on mobiililaitteessa tai se on usein ilman verkkoyhteyttä tai sammutettuna.</string>
     <string name="help_dialog_identity">Tämä on sinun identiteettisi Lightning-verkossa.\n\nKun napautat hahmoa, näet identiteetin QR-koodina.\nAnna muiden scannata koodi ja he voivat lisätä sinut yhteystietoihinsa, avata kanavia sinulle päin ja lähettää varoja sinulle.\n\nLuotu hahmo on yksilöllinen.\nSe on luotu julkisen avaimesi (public key) perusteella, eikä sitä voi muokata.</string>
-    <string name="wallet_name">Lompakon nimi</string>
+    <string name="node_name">Lompakon nimi</string>
     <string name="delete">Poista</string>
     <string name="rename">Vaihda nimi</string>
     <string name="change_data">Muuta tietoja</string>
-    <string name="open_wallet">Avaa lompakko</string>
+    <string name="open_node">Avaa lompakko</string>
     <string name="connectionData">Yhteyden määritykset</string>
     <string name="host">Palvelin</string>
     <string name="port">Portti</string>
     <string name="macaroon">Macaroon-tieto</string>
     <string name="certificate">Varmenne</string>
-    <string name="confirm_wallet_deletion">Haluatko varmasti poistaa tämän lompakon?</string>
-    <string name="no_wallets">Lompakkoja ei ole</string>
-    <string name="spinner_manage_wallets">Hallinnoi…</string>
-    <string name="wallet_added">Lompakko on lisätty.</string>
-    <string name="wallet_already_exists">Lompakko on jo olemassa.\nJos haluat muokata sen yhteyden määrityksia, mene lompakon tiedot sivulle.</string>
+    <string name="confirm_node_deletion">Haluatko varmasti poistaa tämän lompakon?</string>
+    <string name="no_nodes">Lompakkoja ei ole</string>
+    <string name="spinner_manage_nodes">Hallinnoi…</string>
+    <string name="node_added">Lompakko on lisätty.</string>
+    <string name="node_already_exists">Lompakko on jo olemassa.\nJos haluat muokata sen yhteyden määrityksia, mene lompakon tiedot sivulle.</string>
     <string name="lnurl_withdraw_success">Nosto\nonnistui</string>
     <string name="lnurl_withdraw_fail">Nosto\nepäonnistui</string>
     <string name="lnurl_decoding_no_lnurl_data">Oikean muotoista LNURL-tietoa ei tunnistettu.</string>
@@ -387,7 +387,7 @@
     <string name="lnurl_invalid_response">Palvelu vastasi virheellisesti..</string>
     <string name="string_analyzer_unrecognized_data">Tunnistamatun tieto.</string>
     <string name="rest_port">REST (portti 8080) ei ole tuettu.\n\nHaluatko vaihtaa portiksi 10009 (gRPC)?</string>
-    <string name="drawer_menu_wallets">Lompakot</string>
+    <string name="drawer_menu_nodes">Lompakot</string>
     <string name="drawer_menu_channels">Kanavat</string>
     <string name="drawer_menu_contacts">Yhteystiedot</string>
     <string name="drawer_menu_backup">Varmistus</string>

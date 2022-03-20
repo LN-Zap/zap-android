@@ -31,9 +31,9 @@ import zapsolutions.zap.ScanActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkUtil;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.contacts.ManageContactsActivity;
-import zapsolutions.zap.customView.WalletSpinner;
+import zapsolutions.zap.customView.NodeSpinner;
 import zapsolutions.zap.setup.SetupActivity;
 import zapsolutions.zap.tor.TorManager;
 import zapsolutions.zap.util.Balances;
@@ -69,7 +69,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
     private TextView mTvConnectError;
-    private WalletSpinner mWalletSpinner;
+    private NodeSpinner mNodeSpinner;
     private ImageView mDrawerMenuButton;
     private TextView mWalletNameWidthDummy;
     private ImageView mStatusDot;
@@ -110,7 +110,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mLoadingWalletLayout = view.findViewById(R.id.loading);
         mTvConnectError = view.findViewById(R.id.connectError);
         mStatusDot = view.findViewById(R.id.statusDot);
-        mWalletSpinner = view.findViewById(R.id.walletSpinner);
+        mNodeSpinner = view.findViewById(R.id.walletSpinner);
         mDrawerMenuButton = view.findViewById(R.id.drawerMenuButton);
         mWalletNameWidthDummy = view.findViewById(R.id.walletNameWidthDummy);
         mBtnSetup = view.findViewById(R.id.setupWallet);
@@ -118,9 +118,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         // Show loading screen
         showLoading();
 
-        mWalletSpinner.setOnWalletSpinnerChangedListener(new WalletSpinner.OnWalletSpinnerChangedListener() {
+        mNodeSpinner.setOnNodeSpinnerChangedListener(new NodeSpinner.OnNodeSpinnerChangedListener() {
             @Override
-            public void onWalletChanged(String id, String alias) {
+            public void onNodeChanged(String id, String alias) {
                 // Close current connection and reset all
                 LndConnection.getInstance().closeConnection();
                 Wallet.getInstance().reset();
@@ -138,7 +138,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 // Reset drawer menu
                 ((HomeActivity) getActivity()).resetDrawerNavigationMenu();
 
-                // Open the newly selected wallet
+                // Open the newly selected node
                 ((HomeActivity) getActivity()).openWallet();
             }
         });
@@ -286,7 +286,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // Action when clicked on "setup wallet"
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             mBtnSetup.setVisibility(View.INVISIBLE);
         }
         mBtnSetup.setOnClickListener(new View.OnClickListener() {
@@ -306,7 +306,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 showLoading();
-                updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+                updateStatusDot(NodeConfigsManager.getInstance().getCurrentNodeConfig().getAlias());
                 // We delay the execution, to make it obvious to the user the button press had an effect.
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -339,7 +339,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void walletLoadingCompleted() {
 
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
 
             // Show info about mode (offline, connected, error, testnet or mainnet, ...)
             onInfoUpdated(Wallet.getInstance().isInfoFetched());
@@ -361,7 +361,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 }
 
                 Balances balances;
-                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                     balances = Wallet.getInstance().getBalances();
                 } else {
                     balances = Wallet.getInstance().getDemoBalances();
@@ -418,7 +418,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mLoadingWalletLayout.setVisibility(View.GONE);
             mWalletNotConnectedLayout.setVisibility(View.GONE);
 
-            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                 switch (Wallet.getInstance().getNetwork()) {
                     case MAINNET:
                         mTvMode.setVisibility(View.GONE);
@@ -454,9 +454,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
 
         // Update status dot
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             mStatusDot.setVisibility(View.VISIBLE);
-            updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+            updateStatusDot(NodeConfigsManager.getInstance().getCurrentNodeConfig().getAlias());
         } else {
             mStatusDot.setVisibility(View.GONE);
         }
@@ -491,14 +491,14 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mTorErrorListenerRegistred = true;
         }
 
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-            mWalletSpinner.updateList();
-            mWalletSpinner.setVisibility(View.VISIBLE);
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            mNodeSpinner.updateList();
+            mNodeSpinner.setVisibility(View.VISIBLE);
         } else {
-            mWalletSpinner.setVisibility(View.GONE);
+            mNodeSpinner.setVisibility(View.GONE);
         }
 
-        if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
             // If the App is not setup yet,
             // this will cause to get the status text updated. Otherwise it would be empty.
             Wallet.getInstance().simulateFetchInfoForDemo(NetworkUtil.isConnectedToInternet(getActivity()));
@@ -582,7 +582,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onLndConnectError(int error) {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             if (error != Wallet.LndConnectionTestListener.ERROR_LOCKED) {
                 onInfoUpdated(false);
                 if (error == Wallet.LndConnectionTestListener.ERROR_AUTHENTICATION) {
@@ -614,7 +614,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onLndConnectError(String error) {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             onInfoUpdated(false);
             String errorMessage;
             if (error.toLowerCase().contains("shutdown") && error.toLowerCase().contains("channel")) {
@@ -640,16 +640,16 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onWalletLoaded() {
         walletLoadingCompleted();
-        mWalletSpinner.updateList();
-        mWalletSpinner.setVisibility(View.VISIBLE);
+        mNodeSpinner.updateList();
+        mNodeSpinner.setVisibility(View.VISIBLE);
         mStatusDot.setVisibility(View.VISIBLE);
-        updateStatusDot(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+        updateStatusDot(NodeConfigsManager.getInstance().getCurrentNodeConfig().getAlias());
         mBtnSetup.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onTorBootstrappingFailed() {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             onInfoUpdated(false);
             mTvConnectError.setText(R.string.error_connection_tor_bootstrapping);
         } else {

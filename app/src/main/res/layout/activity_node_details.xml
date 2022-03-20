@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="zapsolutions.zap.walletManagement.WalletDetailsActivity">
+        tools:context="zapsolutions.zap.nodesManagement.NodeDetailsActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/type"
@@ -23,7 +23,7 @@
 
 
             <ImageView
-                android:id="@+id/walletTypeIcon"
+                android:id="@+id/nodeTypeIcon"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_remote_black_24dp"
@@ -33,7 +33,7 @@
                 app:tint="@android:color/secondary_text_dark" />
 
             <TextView
-                android:id="@+id/walletName"
+                android:id="@+id/nodeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -43,8 +43,8 @@
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/walletTypeIcon"
-                tools:text="Wallet Name" />
+                app:layout_constraintTop_toBottomOf="@+id/nodeTypeIcon"
+                tools:text="Node Name" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -197,7 +197,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/bg_clickable_item"
             android:padding="15dp"
-            android:text="@string/open_wallet"
+            android:text="@string/open_node"
             android:textAllCaps="false"
             android:textColor="@color/lightningOrange"
             android:textSize="18sp"

@@ -11,7 +11,7 @@ import java.security.GeneralSecurityException;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.setup.ConnectRemoteNodeActivity;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.PinScreenUtil;
@@ -36,7 +36,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             Uri uri = intent.getData();
             App.getAppContext().setUriSchemeData(uri.toString());
             ZapLog.d(LOG_TAG, "URI was detected: " + uri.toString());
-            if (!WalletConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
+            if (!NodeConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
                 setupWalletFromUri();
                 return;
             }
@@ -46,7 +46,7 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 
             NfcUtil.readTag(LandingActivity.this, intent, payload -> App.getAppContext().setUriSchemeData(payload));
-            if (!WalletConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
+            if (!NodeConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
                 setupWalletFromUri();
                 return;
             }
@@ -70,7 +70,7 @@ public class LandingActivity extends BaseAppCompatActivity {
     }
 
     private void resetApp() {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             // Reset settings
             PrefsUtil.editPrefs().clear().commit();
             try {
@@ -96,7 +96,7 @@ public class LandingActivity extends BaseAppCompatActivity {
         // Set new settings version
         PrefsUtil.editPrefs().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
 
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             PinScreenUtil.askForAccess(this, () -> {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -109,7 +109,7 @@ public class LandingActivity extends BaseAppCompatActivity {
 
         } else {
             // Clear connection data if something is there
-            PrefsUtil.editPrefs().remove(PrefsUtil.WALLET_CONFIGS).commit();
+            PrefsUtil.editPrefs().remove(PrefsUtil.NODE_CONFIGS).commit();
 
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);

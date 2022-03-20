@@ -8,8 +8,8 @@ import javax.net.ssl.HostnameVerifier;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import zapsolutions.zap.BuildConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.lnd.LndAutopilotService;
 import zapsolutions.zap.lnd.LndChainNotifierService;
 import zapsolutions.zap.lnd.LndInvoicesService;
@@ -62,7 +62,7 @@ public class LndConnection {
     private LndWalletUnlockerService mLndWalletUnlockerService;
     private LndWatchtowerService mLndWatchtowerService;
     private LndWatchtowerClientService mLndWatchtowerClientService;
-    private WalletConfig mConnectionConfig;
+    private NodeConfig mConnectionConfig;
     private boolean isConnected = false;
 
     private LndConnection() {
@@ -127,7 +127,7 @@ public class LndConnection {
     private void readSavedConnectionInfo() {
 
         // Load current wallet connection config
-        mConnectionConfig = WalletConfigsManager.getInstance().getCurrentWalletConfig();
+        mConnectionConfig = NodeConfigsManager.getInstance().getCurrentNodeConfig();
 
         // Generate Macaroon
         mMacaroon = new MacaroonCallCredential(mConnectionConfig.getMacaroon());
@@ -195,7 +195,7 @@ public class LndConnection {
     }
 
     public void reconnect() {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             closeConnection();
             openConnection();
         }
@@ -222,7 +222,7 @@ public class LndConnection {
         }
     }
 
-    public WalletConfig getConnectionConfig() {
+    public NodeConfig getConnectionConfig() {
         return mConnectionConfig;
     }
 

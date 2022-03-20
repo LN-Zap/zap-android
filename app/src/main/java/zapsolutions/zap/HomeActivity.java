@@ -49,7 +49,7 @@ import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.RemoteConfiguration;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.contacts.ContactDetailsActivity;
 import zapsolutions.zap.contacts.ManageContactsActivity;
 import zapsolutions.zap.contacts.ScanContactActivity;
@@ -86,7 +86,7 @@ import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Version;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
-import zapsolutions.zap.walletManagement.ManageWalletsActivity;
+import zapsolutions.zap.nodesManagement.ManageNodesActivity;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
@@ -142,17 +142,17 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mNavigationView.getHeaderView(0).findViewById(R.id.headerButton).setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                     if (Wallet.getInstance().isConnectedToLND()) {
                         if (Wallet.getInstance().getNodeUris().length > 0) {
                             Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(HomeActivity.this, R.string.error_wallet_not_yet_ready, Toast.LENGTH_LONG).show();
+                            Toast.makeText(HomeActivity.this, R.string.error_node_not_yet_ready, Toast.LENGTH_LONG).show();
                         }
                     }
                 } else {
-                    Toast.makeText(HomeActivity.this, R.string.demo_setupWalletFirstAvatar, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HomeActivity.this, R.string.demo_setupNodeFirstAvatar, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -302,7 +302,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void openWallet() {
 
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);
 
             if (PrefsUtil.isTorEnabled()) {
@@ -391,7 +391,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.getInstance().cancelSubscriptions();
 
         // Kill lnd connection
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             LndConnection.getInstance().closeConnection();
         }
     }
@@ -553,11 +553,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         NfcUtil.readTag(this, intent, new NfcUtil.OnNfcResponseListener() {
             @Override
             public void onSuccess(String payload) {
-                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                     analyzeString(payload);
                 } else {
                     ZapLog.d(LOG_TAG, "Wallet not setup.");
-                    Toast.makeText(HomeActivity.this, R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -763,13 +763,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
                 @Override
                 public void onSaved(String id) {
-                    if (WalletConfigsManager.getInstance().getAllWalletConfigs(false).size() == 1) {
+                    if (NodeConfigsManager.getInstance().getAllNodeConfigs(false).size() == 1) {
                         // This was the first wallet that was added. Open it immediately.
                         mPagerAdapter.getWalletFragment().showLoading();
                         openWallet();
                     } else {
                         new AlertDialog.Builder(HomeActivity.this)
-                                .setMessage(R.string.wallet_added)
+                                .setMessage(R.string.node_added)
                                 .setCancelable(true)
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -781,7 +781,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 @Override
                 public void onAlreadyExists() {
                     new AlertDialog.Builder(HomeActivity.this)
-                            .setMessage(R.string.wallet_already_exists)
+                            .setMessage(R.string.node_already_exists)
                             .setCancelable(true)
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -806,7 +806,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 startActivity(intentChannels);
                 break;
             case R.id.drawerWallets:
-                Intent intentWallets = new Intent(this, ManageWalletsActivity.class);
+                Intent intentWallets = new Intent(this, ManageNodesActivity.class);
                 startActivity(intentWallets);
                 break;
             case R.id.drawerContacts:
@@ -839,7 +839,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
         userAvatarView.setupWithNodeUri(Wallet.getInstance().getNodeUris()[0], false);
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
-        userWalletName.setText(WalletConfigsManager.getInstance().getCurrentWalletConfig().getAlias());
+        userWalletName.setText(NodeConfigsManager.getInstance().getCurrentNodeConfig().getAlias());
         TextView lndVersion = findViewById(R.id.lndVersion);
         String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
         lndVersion.setText(lndVersionString);

@@ -16,7 +16,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -32,7 +32,7 @@ public class LndSSLSocketFactory {
         throw new AssertionError();
     }
 
-    public static SSLSocketFactory create(WalletConfig walletConfig) {
+    public static SSLSocketFactory create(NodeConfig nodeConfig) {
         SSLContext sslCtx = null;
 
         try {
@@ -42,7 +42,7 @@ public class LndSSLSocketFactory {
             return null;
         }
 
-        if (walletConfig.isTor()) {
+        if (nodeConfig.isTor()) {
             // Always trust the certificate on Tor connection
             try {
                 sslCtx.init(null, new TrustManager[]{new BlindTrustManager()}, null);
@@ -54,11 +54,11 @@ public class LndSSLSocketFactory {
 
         } else {
             // On clearnet we want to validate the certificate.
-            if (walletConfig.getCert() != null && !walletConfig.getCert().isEmpty()) {
+            if (nodeConfig.getCert() != null && !nodeConfig.getCert().isEmpty()) {
                 //try to create a trustmanager that trust the certificate that was transmitted with the lndconnect string.
                 try {
                     InputStream caInput = null;
-                    String certificateBase64UrlString = walletConfig.getCert();
+                    String certificateBase64UrlString = nodeConfig.getCert();
                     byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
                     // Generate the CA Certificate from the supplied byte array

@@ -102,9 +102,9 @@
     <string name="activity_send">Zaplatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
     <string name="activity_manage_channels">Lightning kanály</string>
-    <string name="activity_manage_wallets">Správa peněženek</string>
+    <string name="activity_manage_nodes">Správa peněženek</string>
     <string name="activity_advanced_settings">Pokročilé nastavení</string>
-    <string name="activity_wallet_details">Detaily peněženky</string>
+    <string name="activity_node_details">Detaily peněženky</string>
     <string name="activity_identity">Identita</string>
     <string name="activity_manage_contacts">Spravovat kontakty</string>
     <string name="activity_manage_contacts_send_mode">Poslat komu…</string>
@@ -167,9 +167,9 @@
     <string name="setup_connect_local_button">Vytvořit peněženku</string>
     <string name="setup_connect_remote_description">Vzdálený přístup k vlastnímu uzlu.</string>
     <string name="setup_connect_remote_button">Připojit se ke vzdálenému uzlu</string>
-    <string name="demo_setupWalletBtn">Nastavení peněženky</string>
-    <string name="demo_setupWalletFirst">Nejprve musíte nastavit peněženku.</string>
-    <string name="demo_setupWalletFirstAvatar">Nejprve musíte nastavit peněženku, abyste viděli svou identitu a svého avatara.</string>
+    <string name="demo_setupNodeBtn">Nastavení peněženky</string>
+    <string name="demo_setupNodeFirst">Nejprve musíte nastavit peněženku.</string>
+    <string name="demo_setupNodeFirstAvatar">Nejprve musíte nastavit peněženku, abyste viděli svou identitu a svého avatara.</string>
     <string name="send_lightningPayment">Odeslat lightning platbu</string>
     <string name="send_onChainPayment">Odeslat on-chain platbu</string>
     <string name="send_sendPayment">Odeslat platbu</string>
@@ -285,7 +285,7 @@
     <string name="error_channel_close_timeout">Kanál nelze ve stanoveném termínu zavřít.</string>
     <string name="error_channel_close">Kanál nelze zavřít: %s</string>
     <string name="error_pin_deactivation_attempt">Vypadá to, že se někdo pokusil deaktivovat váš kód PIN. Aplikace se nyní zavře.\nMůžete aplikaci znovu nainstalovat a pomocí procesu obnovy získat zpět přístup ke svým prostředkům.</string>
-    <string name="error_empty_wallet_name">Prázdné jméno není povoleno.</string>
+    <string name="error_empty_node_name">Prázdné jméno není povoleno.</string>
     <string name="error_invalid_bitcoin_request">Neplatný bitcoin požadavek.</string>
     <string name="error_payment_invalid_details">Platební údaje se neshodovaly s údaji uvedenými na faktuře, kterou se pokoušíte zaplatit.</string>
     <string name="error_payment_timeout">Čas vypršel. Nebyla nalezena žádná cesta.</string>
@@ -293,7 +293,7 @@
     <string name="error_payment_insufficient_balance">Částka k zaplacení je větší než to, co můžete poslat přes lightning se svými současnými otevřenými kanály.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Ujistěte se, že příjemce povolil funkci keyend.</string>
     <string name="error_only_payment_data_allowed">Zde jsou povoleny pouze údaje o platbě.</string>
-    <string name="error_wallet_not_yet_ready">Vaše peněženka ještě není plně synchronizovaná. Zkuste to prosím později.</string>
+    <string name="error_node_not_yet_ready">Vaše peněženka ještě není plně synchronizovaná. Zkuste to prosím později.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">Zdá se, že %1$s blokuje požadavky přicházející ze sítě Tor. Můžete zkusit vypnout Tor v nastavení nebo kontaktovat službu a požádat ji o aktualizaci pravidel cloudflare.</string>
     <string name="error_tor_exchange_rate">Směnný kurz nebylo možné zjistit. Zdá se, že služba, kterou používáte, blokuje požadavky přicházející ze sítě Tor. Zkuste přepnout poskytovatele směnných kurzů v rozšířeném nastavení.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Odpověď od %1$s se nepodařilo přečíst.</string>
@@ -368,21 +368,21 @@
     <string name="help_dialog_scanGeneric">Zde je povoleno cokoli.\nVyhledejte pouze QR kód a Zap automaticky určí, která akce bude provedena v závislosti na datech.</string>
     <string name="help_dialog_private_channels">Soukromé kanály nejsou bezpečnější, pouze nejsou viditelné pro síť.\nPoužívejte soukromé kanály, pouze když je váš uzel spuštěn na mobilním zařízení nebo je často offline.</string>
     <string name="help_dialog_identity">Toto je vaše identita v lightning síti.\n\nKlepnutím na obrázek svého avatara zobrazíte QR kód.\nOstatní mohou tento kód naskenovat a přidat si vás ke svým kontaktům, otevřít s vámi kanály nebo vám poslat peníze.\n\nTento avatar je jedinečný.\nByl vygenerován automaticky na základě vašeho veřejného klíče a nelze jej změnit.</string>
-    <string name="wallet_name">Název peněženky</string>
+    <string name="node_name">Název peněženky</string>
     <string name="delete">Smazat</string>
     <string name="rename">Přejmenovat</string>
     <string name="change_data">Změnit data</string>
-    <string name="open_wallet">Otevřít peněženku</string>
+    <string name="open_node">Otevřít peněženku</string>
     <string name="connectionData">Data připojení</string>
     <string name="host">Host</string>
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certifikát</string>
-    <string name="confirm_wallet_deletion">Opravdu chcete tuto peněženku smazat?</string>
-    <string name="no_wallets">Žádné peněženky</string>
-    <string name="spinner_manage_wallets">Spravovat…</string>
-    <string name="wallet_added">Peněženka byla přidána.</string>
-    <string name="wallet_already_exists">Tato peněženka již existuje.\nChcete-li aktualizovat data připojení, přejděte na stránku s podrobnostmi o peněženkách.</string>
+    <string name="confirm_node_deletion">Opravdu chcete tuto peněženku smazat?</string>
+    <string name="no_nodes">Žádné peněženky</string>
+    <string name="spinner_manage_nodes">Spravovat…</string>
+    <string name="node_added">Peněženka byla přidána.</string>
+    <string name="node_already_exists">Tato peněženka již existuje.\nChcete-li aktualizovat data připojení, přejděte na stránku s podrobnostmi o peněženkách.</string>
     <string name="lnurl_withdraw_success">Výběr\nse povedl</string>
     <string name="lnurl_withdraw_fail">Výběr\nselhal</string>
     <string name="lnurl_decoding_no_lnurl_data">Data neobsahují platnou LNURL.</string>
@@ -401,7 +401,7 @@
     <string name="lnurl_invalid_response">Služba odpověděla neplatnou odpovědí.</string>
     <string name="string_analyzer_unrecognized_data">Nerozpoznaná data.</string>
     <string name="rest_port">REST (port 8080) není podporován.\n\nChcete změnit port na 10009 (gRPC)?</string>
-    <string name="drawer_menu_wallets">Peněženky</string>
+    <string name="drawer_menu_nodes">Peněženky</string>
     <string name="drawer_menu_channels">Kanály</string>
     <string name="drawer_menu_contacts">Kontakty</string>
     <string name="drawer_menu_backup">Záloha</string>

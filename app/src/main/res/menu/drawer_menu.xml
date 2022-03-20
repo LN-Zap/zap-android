@@ -5,7 +5,7 @@
         <item
             android:id="@+id/drawerWallets"
             android:icon="@drawable/ic_wallet_24"
-            android:title="@string/drawer_menu_wallets" />
+            android:title="@string/drawer_menu_nodes" />
         <item
             android:id="@+id/drawerChannels"
             android:icon="@drawable/ic_open_channel_24"

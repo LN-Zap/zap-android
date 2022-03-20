@@ -64,7 +64,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
 import zapsolutions.zap.tor.TorManager;
@@ -1285,7 +1285,7 @@ public class Wallet {
      */
     public long getMaxLightningReceiveAmount() {
 
-        if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
             return 0;
         }
 
@@ -1308,7 +1308,7 @@ public class Wallet {
      */
     public long getMaxLightningSendAmount() {
 
-        if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
             return 0;
         }
 

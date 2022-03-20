@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.contacts.ContactDetailsActivity;
 import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.contacts.ManageContactsActivity;
@@ -53,7 +53,7 @@ public class ChooseNodeActionBSDFragment extends ZapBSDFragment {
         bsdScrollableMainView.setTitleIconVisibility(true);
         bsdScrollableMainView.setTitle(R.string.choose_action);
 
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             Wallet.getInstance().fetchNodeInfoFromLND(mNodeUri.getPubKey(), false);
         }
 

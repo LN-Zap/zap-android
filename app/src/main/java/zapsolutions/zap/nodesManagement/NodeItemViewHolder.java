@@ -1,4 +1,4 @@
-package zapsolutions.zap.walletManagement;
+package zapsolutions.zap.nodesManagement;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,36 +11,36 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 
-public class WalletItemViewHolder extends RecyclerView.ViewHolder {
+public class NodeItemViewHolder extends RecyclerView.ViewHolder {
 
-    private static final String LOG_TAG = WalletItemViewHolder.class.getName();
+    private static final String LOG_TAG = NodeItemViewHolder.class.getName();
 
     private ImageView mIcon;
-    private TextView mWalletTypDescription;
-    private TextView mWalletName;
+    private TextView mNodeTypDescription;
+    private TextView mNodeName;
     private View mRootView;
     private Context mContext;
     private ImageView mCurrentActiveIcon;
 
-    public WalletItemViewHolder(View v) {
+    public NodeItemViewHolder(View v) {
         super(v);
 
-        mIcon = v.findViewById(R.id.walletTypeIcon);
-        mWalletTypDescription = v.findViewById(R.id.walletTypeDescription);
-        mWalletName = v.findViewById(R.id.walletName);
+        mIcon = v.findViewById(R.id.nodeTypeIcon);
+        mNodeTypDescription = v.findViewById(R.id.nodeTypeDescription);
+        mNodeName = v.findViewById(R.id.nodeName);
         mRootView = v.findViewById(R.id.transactionRootView);
         mCurrentActiveIcon = v.findViewById(R.id.currentlyActiveIcon);
         mContext = v.getContext();
     }
 
-    public void bindRemoteWalletItem(WalletConfig walletConfig) {
+    public void bindRemoteNodeItem(NodeConfig nodeConfig) {
 
         // Set Icon
-        if (walletConfig.getType().equals(WalletConfig.WALLET_TYPE_LOCAL)) {
+        if (nodeConfig.getType().equals(NodeConfig.NODE_TYPE_LOCAL)) {
             mIcon.setImageResource(R.drawable.ic_local_black_24dp);
         } else {
             mIcon.setImageResource(R.drawable.ic_remote_black_24dp);
@@ -48,24 +48,24 @@ public class WalletItemViewHolder extends RecyclerView.ViewHolder {
         mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
 
         // Set current active icon visibility
-        if (walletConfig.getId().equals(PrefsUtil.getCurrentWalletConfig())) {
+        if (nodeConfig.getId().equals(PrefsUtil.getCurrentNodeConfig())) {
             mCurrentActiveIcon.setVisibility(View.VISIBLE);
         } else {
             mCurrentActiveIcon.setVisibility(View.GONE);
         }
 
-        // Set Wallet Type description
-        mWalletTypDescription.setText(walletConfig.getType());
+        // Set node type description
+        mNodeTypDescription.setText(nodeConfig.getType());
 
-        // Set wallet Name
-        mWalletName.setText(walletConfig.getAlias());
+        // Set node name
+        mNodeName.setText(nodeConfig.getAlias());
 
         // Set on click listener
         mRootView.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                Intent intent = new Intent(mContext, WalletDetailsActivity.class);
-                intent.putExtra(ManageWalletsActivity.WALLET_ID, walletConfig.getId());
+                Intent intent = new Intent(mContext, NodeDetailsActivity.class);
+                intent.putExtra(ManageNodesActivity.NODE_ID, nodeConfig.getId());
                 mContext.startActivity(intent);
             }
         });
