@@ -1,41 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Current Node">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/drawerChannels"
+                    android:icon="@drawable/ic_open_channel_24"
+                    android:title="@string/drawer_menu_channels" />
+                <!--
+                <item
+                    android:id="@+id/drawerRouting"
+                    android:icon="@drawable/ic_outline_routing_24"
+                    android:title="Routing" />
+                     -->
+                <item
+                    android:id="@+id/drawerUTXOs"
+                    android:icon="@drawable/ic_coins"
+                    android:title="@string/drawer_menu_coin_control" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="General">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/drawerNodes"
+                    android:icon="@drawable/ic_wallet_24"
+                    android:title="@string/drawer_menu_nodes" />
+                <item
+                    android:id="@+id/drawerContacts"
+                    android:icon="@drawable/ic_person_24"
+                    android:title="@string/drawer_menu_contacts" />
 
-    <group android:id="@+id/drawerGroup1">
-        <item
-            android:id="@+id/drawerWallets"
-            android:icon="@drawable/ic_wallet_24"
-            android:title="@string/drawer_menu_nodes" />
-        <item
-            android:id="@+id/drawerChannels"
-            android:icon="@drawable/ic_open_channel_24"
-            android:title="@string/drawer_menu_channels" />
-        <item
-            android:id="@+id/drawerContacts"
-            android:icon="@drawable/ic_person_24"
-            android:title="@string/drawer_menu_contacts" />
+                <item
+                    android:id="@+id/drawerBackup"
+                    android:icon="@drawable/ic_outline_save_24"
+                    android:title="@string/drawer_menu_backup" />
 
+                <item
+                    android:id="@+id/drawerSettings"
+                    android:icon="@drawable/ic_nav_settings_black_24dp"
+                    android:title="@string/settings" />
+            </group>
+        </menu>
+    </item>
+    <group>
         <item
-            android:id="@+id/drawerSettings"
-            android:icon="@drawable/ic_nav_settings_black_24dp"
-            android:title="@string/settings" />
+            android:id="@+id/drawerSupport"
+            android:icon="@drawable/ic_mail_outline_24"
+            android:title="@string/support" />
     </group>
-
-    <!--
-    <group android:id="@+id/drawerGroup3">
-        <item
-            android:id="@+id/drawerBuy"
-            android:icon="@drawable/ic_shopping_cart_24"
-            android:title="@string/drawer_menu_buy" />
-    </group>
-     -->
-    <item
-        android:id="@+id/drawerBackup"
-        android:icon="@drawable/ic_outline_save_24"
-        android:title="@string/drawer_menu_backup" />
-
-    <item
-        android:id="@+id/drawerSupport"
-        android:icon="@drawable/ic_mail_outline_24"
-        android:title="@string/support" />
 </menu>
