@@ -102,9 +102,9 @@
     <string name="activity_send">Betaal</string>
     <string name="activity_connectRemoteNode">Verbind met externe node</string>
     <string name="activity_manage_channels">Lightningkanalen</string>
-    <string name="activity_manage_wallets">Beheer Wallets</string>
+    <string name="activity_manage_nodes">Beheer Wallets</string>
     <string name="activity_advanced_settings">Geavanceerde Instellingen</string>
-    <string name="activity_wallet_details">Walletdetails</string>
+    <string name="activity_node_details">Walletdetails</string>
     <string name="activity_identity">Identiteit</string>
     <string name="activity_manage_contacts">Beheer Contacten</string>
     <string name="activity_manage_contacts_send_mode">Verzend naar…</string>
@@ -167,9 +167,9 @@
     <string name="setup_connect_local_button">Maak Wallet</string>
     <string name="setup_connect_remote_description">Beheer je eigen node op afstand.</string>
     <string name="setup_connect_remote_button">Maak verbinding met eigen node</string>
-    <string name="demo_setupWalletBtn">Wallet Instellen</string>
-    <string name="demo_setupWalletFirst">Je moet eerst een wallet instellen.</string>
-    <string name="demo_setupWalletFirstAvatar">Je moet eerst een wallet instellen, voordat je je identiteit en avatar kan zien.</string>
+    <string name="demo_setupNodeBtn">Wallet Instellen</string>
+    <string name="demo_setupNodeFirst">Je moet eerst een wallet instellen.</string>
+    <string name="demo_setupNodeFirstAvatar">Je moet eerst een wallet instellen, voordat je je identiteit en avatar kan zien.</string>
     <string name="send_lightningPayment">Verzend lightningbetaling</string>
     <string name="send_onChainPayment">Verzend on-chainbetaling</string>
     <string name="send_sendPayment">Verzend betaling</string>
@@ -285,7 +285,7 @@
     <string name="error_channel_close_timeout">Kanaal kon niet worden gesloten binnen de deadline.</string>
     <string name="error_channel_close">Kon het kanaal niet sluiten: %s</string>
     <string name="error_pin_deactivation_attempt">Het lijkt er op dat iemand heeft geprobeerd om je PIN te deactiveren. De app zal nu afsluiten.\nJe kan de app opnieuw installeren en het herstelproces gebruiken om toegang tot je geld te krijgen.</string>
-    <string name="error_empty_wallet_name">Een lege naam is niet toegestaan.</string>
+    <string name="error_empty_node_name">Een lege naam is niet toegestaan.</string>
     <string name="error_invalid_bitcoin_request">Ongeldig bitcoinverzoek.</string>
     <string name="error_payment_invalid_details">De betalingsgegevens komen niet overeen met de gegevens op het betalingsverzoek die je probeert te betalen.</string>
     <string name="error_payment_timeout">Timeout. Kan geen route vinden.</string>
@@ -293,7 +293,7 @@
     <string name="error_payment_insufficient_balance">Het te betalen bedrag is groter dan wat je via Lightning kunt verzenden met je huidige open kanalen.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Zorg ervoor dat de ontvanger de keysendfunctie heeft ingeschakeld.</string>
     <string name="error_only_payment_data_allowed">Alleen betalingsdata is hier toegestaan.</string>
-    <string name="error_wallet_not_yet_ready">Je wallet is nog niet volledig gesynchroniseerd. Probeer het later opnieuw.</string>
+    <string name="error_node_not_yet_ready">Je wallet is nog niet volledig gesynchroniseerd. Probeer het later opnieuw.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s lijkt verzoeken afkomstig van het Tor-netwerk te blokkeren. Je kunt proberen Tor uit te schakelen in de instellingen of neem contact met de service en vraag hen hun Cloudflare-regels bij te werken.</string>
     <string name="error_tor_exchange_rate">Wisselkoers kon niet worden opgehaald. De service die u gebruikt lijkt verzoeken van het Tor-netwerk te blokkeren. Probeer om in de geavanceerde instellingen van wisselkoersaanbieder te wisselen.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Het antwoord van %1$s kan niet worden gelezen.</string>
@@ -354,21 +354,21 @@
     <string name="help_dialog_scanGeneric">Alles is hier toegestaan.\nScan gewoon een QR-code en Zap bepaalt automatisch welke actie moet worden ondernomen, afhankelijk van de gegevens.</string>
     <string name="help_dialog_private_channels">Privékanalen zijn niet veiliger, ze zijn alleen niet zichtbaar voor het netwerk.\nGebruik alleen privékanalen wanneer je node op een mobiel apparaat wordt gebruikt of vaak offline is.</string>
     <string name="help_dialog_identity">Dit is je identiteit op het Lightningnetwerk.\n\nWanneer u op je avatar-afbeelding tikt, onthul je een QR-code.\nAnderen kunnen die code scannen en je toevoegen aan hun contacten, kanalen met je openen of geld naar je sturen.\n\nDeze avatar is uniek.\nHet is automatisch gegenereerd op basis van je publieke sleutel en kan niet worden gewijzigd.</string>
-    <string name="wallet_name">Walletnaam</string>
+    <string name="node_name">Walletnaam</string>
     <string name="delete">Verwijder</string>
     <string name="rename">Hernoem</string>
     <string name="change_data">Verander data</string>
-    <string name="open_wallet">Open wallet</string>
+    <string name="open_node">Open wallet</string>
     <string name="connectionData">Verbindingsdata</string>
     <string name="host">Host</string>
     <string name="port">Poort</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificaat</string>
-    <string name="confirm_wallet_deletion">Wil je deze wallet echt verwijderen?</string>
-    <string name="no_wallets">Geen wallets</string>
-    <string name="spinner_manage_wallets">Beheer…</string>
-    <string name="wallet_added">Wallet is toegevoegd.</string>
-    <string name="wallet_already_exists">Deze wallet bestaat al.\nAls je de verbindingsgegevens wilt bijwerken, ga dan naar de walletdetailpagina.</string>
+    <string name="confirm_node_deletion">Wil je deze wallet echt verwijderen?</string>
+    <string name="no_nodes">Geen wallets</string>
+    <string name="spinner_manage_nodes">Beheer…</string>
+    <string name="node_added">Wallet is toegevoegd.</string>
+    <string name="node_already_exists">Deze wallet bestaat al.\nAls je de verbindingsgegevens wilt bijwerken, ga dan naar de walletdetailpagina.</string>
     <string name="lnurl_withdraw_success">Opname\nsuccesvol</string>
     <string name="lnurl_withdraw_fail">Opname\nmislukt</string>
     <string name="lnurl_decoding_no_lnurl_data">Deze data bevat geen geldige LNURL.</string>
@@ -387,7 +387,7 @@
     <string name="lnurl_invalid_response">De Service antwoordde met een ongeldig antwoord.</string>
     <string name="string_analyzer_unrecognized_data">Niet-herkende data.</string>
     <string name="rest_port">REST (port 8080) is niet ondersteund.\n\nWil je de port veranderen naar 10009 (gRPC)?</string>
-    <string name="drawer_menu_wallets">Wallets</string>
+    <string name="drawer_menu_nodes">Wallets</string>
     <string name="drawer_menu_channels">Kanalen</string>
     <string name="drawer_menu_contacts">Contacten</string>
     <string name="drawer_menu_backup">Backup</string>

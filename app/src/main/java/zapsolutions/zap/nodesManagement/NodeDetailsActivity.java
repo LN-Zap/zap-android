@@ -1,4 +1,4 @@
-package zapsolutions.zap.walletManagement;
+package zapsolutions.zap.nodesManagement;
 
 
 import android.app.AlertDialog;
@@ -20,15 +20,15 @@ import zapsolutions.zap.LandingActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.setup.ManualSetup;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.Wallet;
 
 
-public class WalletDetailsActivity extends BaseAppCompatActivity {
+public class NodeDetailsActivity extends BaseAppCompatActivity {
 
 
     private String mId;
@@ -37,22 +37,22 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wallet_details);
+        setContentView(R.layout.activity_node_details);
 
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mId = extras.getString(ManageWalletsActivity.WALLET_ID);
+            mId = extras.getString(ManageNodesActivity.NODE_ID);
         }
 
         // Wallet name
-        TextView tvWalletName = findViewById(R.id.walletName);
+        TextView tvWalletName = findViewById(R.id.nodeName);
         tvWalletName.setText(getWalletConfig().getAlias());
 
         // Wallet type
-        ImageView ivTypeIcon = findViewById(R.id.walletTypeIcon);
+        ImageView ivTypeIcon = findViewById(R.id.nodeTypeIcon);
         if (getWalletConfig().isLocal()) {
             ivTypeIcon.setImageResource(R.drawable.ic_local_black_24dp);
         } else {
@@ -94,8 +94,8 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
             changeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(WalletDetailsActivity.this, ManualSetup.class);
-                    intent.putExtra(ManageWalletsActivity.WALLET_ID, mId);
+                    Intent intent = new Intent(NodeDetailsActivity.this, ManualSetup.class);
+                    intent.putExtra(ManageNodesActivity.NODE_ID, mId);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 }
@@ -106,7 +106,7 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_WALLET_CONFIG, mId).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, mId).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
@@ -134,8 +134,8 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(WalletDetailsActivity.this)
-                        .setMessage(R.string.confirm_wallet_deletion)
+                new AlertDialog.Builder(NodeDetailsActivity.this)
+                        .setMessage(R.string.confirm_node_deletion)
                         .setCancelable(true)
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -152,7 +152,7 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
 
     private void showWalletNameInput() {
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle(R.string.wallet_name);
+        adb.setTitle(R.string.node_name);
         adb.setCancelable(false);
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_input_text, null, false);
 
@@ -188,13 +188,13 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (input.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(WalletDetailsActivity.this, R.string.error_empty_wallet_name, Toast.LENGTH_LONG).show();
+                    Toast.makeText(NodeDetailsActivity.this, R.string.error_empty_node_name, Toast.LENGTH_LONG).show();
                 } else {
-                    WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
-                    walletConfigsManager.renameWalletConfig(WalletConfigsManager.getInstance().getWalletConfigById(mId), input.getText().toString());
+                    NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
+                    nodeConfigsManager.renameNodeConfig(NodeConfigsManager.getInstance().getNodeConfigById(mId), input.getText().toString());
                     try {
-                        walletConfigsManager.apply();
-                        TextView tvWalletName = findViewById(R.id.walletName);
+                        nodeConfigsManager.apply();
+                        TextView tvWalletName = findViewById(R.id.nodeName);
                         tvWalletName.setText(input.getText().toString().trim());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -207,31 +207,31 @@ public class WalletDetailsActivity extends BaseAppCompatActivity {
         });
     }
 
-    private WalletConfig getWalletConfig() {
-        return WalletConfigsManager.getInstance().getWalletConfigById(mId);
+    private NodeConfig getWalletConfig() {
+        return NodeConfigsManager.getInstance().getNodeConfigById(mId);
     }
 
     private void openHome() {
         // Open home and clear history
-        Intent intent = new Intent(WalletDetailsActivity.this, HomeActivity.class);
+        Intent intent = new Intent(NodeDetailsActivity.this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     private void deleteWallet() {
-        WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
-        walletConfigsManager.removeWalletConfig(WalletConfigsManager.getInstance().getWalletConfigById(mId));
+        NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
+        nodeConfigsManager.removeNodeConfig(NodeConfigsManager.getInstance().getNodeConfigById(mId));
         try {
-            walletConfigsManager.apply();
+            nodeConfigsManager.apply();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (PrefsUtil.getCurrentWalletConfig().equals(mId)) {
+        if (PrefsUtil.getCurrentNodeConfig().equals(mId)) {
             Wallet.getInstance().reset();
             LndConnection.getInstance().closeConnection();
-            PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_WALLET_CONFIG).commit();
-            Intent intent = new Intent(WalletDetailsActivity.this, LandingActivity.class);
+            PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_NODE_CONFIG).commit();
+            Intent intent = new Intent(NodeDetailsActivity.this, LandingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {

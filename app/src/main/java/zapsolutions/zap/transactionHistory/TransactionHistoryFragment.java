@@ -37,7 +37,7 @@ import java.util.Set;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.transactionHistory.listItems.DateItem;
 import zapsolutions.zap.transactionHistory.listItems.HistoryItemViewHolder;
@@ -246,7 +246,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         List<HistoryListItem> internalTransactions = new LinkedList<>();
         Set<HistoryListItem> dateLines = new HashSet<>();
 
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
 
             // Add all payment relevant items to one of the lists above
 
@@ -384,7 +384,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
     @Override
     public void onRefresh() {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs() && Wallet.getInstance().isInfoFetched()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs() && Wallet.getInstance().isInfoFetched()) {
             Wallet.getInstance().fetchLNDTransactionHistory();
             redrawHistoryList();
         } else {

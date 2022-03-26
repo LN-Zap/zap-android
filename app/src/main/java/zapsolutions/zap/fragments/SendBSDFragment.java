@@ -37,7 +37,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
@@ -202,13 +202,13 @@ public class SendBSDFragment extends ZapBSDFragment {
                     long maxSendable;
                     if (mOnChain) {
 
-                        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                             maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
                         } else {
                             maxSendable = Wallet.getInstance().getDemoBalances().onChainConfirmed();
                         }
                     } else {
-                        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                             maxSendable = Wallet.getInstance().getMaxLightningSendAmount();
                         } else {
                             maxSendable = 750000;
@@ -406,7 +406,7 @@ public class SendBSDFragment extends ZapBSDFragment {
                 @Override
                 public void onClick(View v) {
 
-                    if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                    if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
 
                         long paymentAmount;
                         if (mIsKeysend) {
@@ -433,7 +433,7 @@ public class SendBSDFragment extends ZapBSDFragment {
                         sendLightningPayment();
                     } else {
                         // Demo Mode
-                        Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -688,7 +688,7 @@ public class SendBSDFragment extends ZapBSDFragment {
     }
 
     private void calculateFee() {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             setCalculatingFee();
 
             if (mOnChain) {

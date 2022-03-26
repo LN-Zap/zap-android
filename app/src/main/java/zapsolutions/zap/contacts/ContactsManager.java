@@ -308,7 +308,7 @@ public class ContactsManager {
             @Override
             public void onClick(View view) {
                 if (input.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(ctx, R.string.error_empty_wallet_name, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx, R.string.error_empty_node_name, Toast.LENGTH_LONG).show();
                 } else {
                     if (cm.doesContactDataExist(nodePubKey)) {
                         cm.renameContact(cm.getContactByContactData(nodePubKey), input.getText().toString());

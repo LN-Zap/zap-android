@@ -18,8 +18,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.contacts.Contact;
 import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.util.EncryptionUtil;
@@ -39,8 +39,8 @@ public class DataBackupUtil {
             backupJson = backupJson + contactsJsonString + ",";
         }
         // Wallets
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
-            String walletsJsonString = new Gson().toJson(WalletConfigsManager.getInstance().getWalletConfigsJson());
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            String walletsJsonString = new Gson().toJson(NodeConfigsManager.getInstance().getNodeConfigsJson());
             walletsJsonString = walletsJsonString.substring(1, walletsJsonString.length() - 1);
             backupJson = backupJson + walletsJsonString + ",";
         }
@@ -69,7 +69,7 @@ public class DataBackupUtil {
     }
 
     public static boolean isThereAnythingToBackup() {
-        return WalletConfigsManager.getInstance().hasAnyConfigs() || ContactsManager.getInstance().hasAnyContacts();
+        return NodeConfigsManager.getInstance().hasAnyConfigs() || ContactsManager.getInstance().hasAnyContacts();
     }
 
     public static boolean restoreBackup(String backup, int backupVersion) {
@@ -79,11 +79,11 @@ public class DataBackupUtil {
 
             // restore wallets
             if (dataBackup.getWalletConfigs() != null && dataBackup.getWalletConfigs().length > 0) {
-                WalletConfigsManager.getInstance().removeAllWalletConfigs();
-                for (WalletConfig walletConfig : dataBackup.getWalletConfigs()) {
+                NodeConfigsManager.getInstance().removeAllNodeConfigs();
+                for (NodeConfig nodeConfig : dataBackup.getWalletConfigs()) {
                     try {
-                        WalletConfigsManager.getInstance().addWalletConfig(walletConfig.getAlias(), walletConfig.getType(), walletConfig.getHost(), walletConfig.getPort(), walletConfig.getCert(), walletConfig.getMacaroon());
-                        WalletConfigsManager.getInstance().apply();
+                        NodeConfigsManager.getInstance().addNodeConfig(nodeConfig.getAlias(), nodeConfig.getType(), nodeConfig.getHost(), nodeConfig.getPort(), nodeConfig.getCert(), nodeConfig.getMacaroon());
+                        NodeConfigsManager.getInstance().apply();
                     } catch (GeneralSecurityException | IOException e) {
                         e.printStackTrace();
                         return false;

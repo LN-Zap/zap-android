@@ -23,10 +23,11 @@
         android:layout_weight="0"
         android:gravity="center_horizontal"
         android:minWidth="45dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ImageView
-            android:id="@+id/walletTypeIcon"
+            android:id="@+id/nodeTypeIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
@@ -35,7 +36,7 @@
             app:tint="@color/lightningOrange" />
 
         <TextView
-            android:id="@+id/walletTypeDescription"
+            android:id="@+id/nodeTypeDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
@@ -54,7 +55,7 @@
         android:paddingStart="5dp">
 
         <TextView
-            android:id="@+id/walletName"
+            android:id="@+id/nodeName"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

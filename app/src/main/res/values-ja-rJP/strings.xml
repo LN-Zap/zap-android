@@ -102,9 +102,9 @@
     <string name="activity_send">支払</string>
     <string name="activity_connectRemoteNode">リモートノードに接続</string>
     <string name="activity_manage_channels">Lightningチャネル</string>
-    <string name="activity_manage_wallets">ウォレット管理</string>
+    <string name="activity_manage_nodes">ウォレット管理</string>
     <string name="activity_advanced_settings">詳細設定</string>
-    <string name="activity_wallet_details">ウォレット詳細</string>
+    <string name="activity_node_details">ウォレット詳細</string>
     <string name="activity_identity"> ID</string>
     <string name="activity_manage_contacts">連絡先管理</string>
     <string name="activity_manage_contacts_send_mode">送信する</string>
@@ -167,9 +167,9 @@
     <string name="setup_connect_local_button">ウォレット作成</string>
     <string name="setup_connect_remote_description">自ノードをリモートコントロール</string>
     <string name="setup_connect_remote_button">リモートノードに接続</string>
-    <string name="demo_setupWalletBtn">ウォレット設定</string>
-    <string name="demo_setupWalletFirst">はじめにウォレットを設定します。</string>
-    <string name="demo_setupWalletFirstAvatar">IDとアバターを表示する前に、ウォレットを設定します。</string>
+    <string name="demo_setupNodeBtn">ウォレット設定</string>
+    <string name="demo_setupNodeFirst">はじめにウォレットを設定します。</string>
+    <string name="demo_setupNodeFirstAvatar">IDとアバターを表示する前に、ウォレットを設定します。</string>
     <string name="send_lightningPayment">Lightning支払送信</string>
     <string name="send_onChainPayment">オンチェーン支払送信</string>
     <string name="send_sendPayment">支払送信</string>
@@ -286,7 +286,7 @@
     <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
     <string name="error_channel_close">Could not close channel: %s</string>
     <string name="error_pin_deactivation_attempt">It looks like someone tried to deactivate your PIN. The App will close now.\nYou can reinstall the app and use the recovery process to regain access to your funds.</string>
-    <string name="error_empty_wallet_name">An empty name is not allowed.</string>
+    <string name="error_empty_node_name">An empty name is not allowed.</string>
     <string name="error_invalid_bitcoin_request">無効なBitcoinリクエスト</string>
     <string name="error_payment_invalid_details">支払の詳細が、インボイスで支払おうとしているで内容と一致しませんでした。</string>
     <string name="error_payment_timeout">ルートが見つからずタイムアウトしました。</string>
@@ -294,7 +294,7 @@
     <string name="error_payment_insufficient_balance">支払額が、現在のLightningチャネルで送信できる額よりも大きいです。</string>
     <string name="error_payment_keysend_not_enabled_on_remote">受取人がキー送信機能を有効にしていることを確認してください。</string>
     <string name="error_only_payment_data_allowed">ここは支払データのみが許可されます。</string>
-    <string name="error_wallet_not_yet_ready">ウォレットはまだ完全に同期されていません。 後でもう一度やり直してください。</string>
+    <string name="error_node_not_yet_ready">ウォレットはまだ完全に同期されていません。 後でもう一度やり直してください。</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$sはTorネットワークからのリクエストをブロックしているようです。 設定でTorをオフにするか、Cloudflareの設定変更を依頼してください。</string>
     <string name="error_tor_exchange_rate">為替レートを取得できませんでした。 Torネットワークからのリクエストをブロックしているようです。 詳細設定で為替レートプロバイダーを変更してみてください。</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">%1$sからのレスポンスを読めませんでした。</string>
@@ -348,21 +348,21 @@
     <string name="help_dialog_scanGeneric">ここではすべて許可されています。\nQRコードをスキャンと、Zapはデータに応じて処理を自動で決定します。</string>
     <string name="help_dialog_private_channels">プライベートチャネルは安全という訳ではなく、ネットワークに表示されないだけです。\nノードがモバイルデバイスで実行されている場合、または頻繁にオフラインになる場合は、プライベートチャネルのみ使用してください。</string>
     <string name="help_dialog_identity">これはLightningネットワークでのあなたのIDです。\n\nアバター画像をタップするとQRコードが表示されます。\n他の人はそのコードをスキャンして連絡先に追加したり、チャネルをオープンしたり、送金したりできます。 \n\nこのアバターは一意です。\n公開鍵に基づいて自動的に生成されたものであり、変更することはできません。</string>
-    <string name="wallet_name">ウォレット名</string>
+    <string name="node_name">ウォレット名</string>
     <string name="delete">削除</string>
     <string name="rename">名前変更</string>
     <string name="change_data">データ変更</string>
-    <string name="open_wallet">ウォレット開く</string>
+    <string name="open_node">ウォレット開く</string>
     <string name="connectionData">接続情報</string>
     <string name="host">ホスト</string>
     <string name="port">ポート</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">証明書</string>
-    <string name="confirm_wallet_deletion">本当にこのウォレットを削除しますか？</string>
-    <string name="no_wallets">ウォレットなし</string>
-    <string name="spinner_manage_wallets">管理</string>
-    <string name="wallet_added">ウォレットを追加しました。</string>
-    <string name="wallet_already_exists">すでにこのウォレットは存在します。\n接続情報を更新する場合は、ウォレットの設定画面でお願いします。</string>
+    <string name="confirm_node_deletion">本当にこのウォレットを削除しますか？</string>
+    <string name="no_nodes">ウォレットなし</string>
+    <string name="spinner_manage_nodes">管理</string>
+    <string name="node_added">ウォレットを追加しました。</string>
+    <string name="node_already_exists">すでにこのウォレットは存在します。\n接続情報を更新する場合は、ウォレットの設定画面でお願いします。</string>
     <string name="lnurl_withdraw_success">引出成功</string>
     <string name="lnurl_withdraw_fail">引出失敗</string>
     <string name="lnurl_decoding_no_lnurl_data">有効なLNURLがデータに含まれていません。</string>
@@ -381,7 +381,7 @@
     <string name="lnurl_invalid_response">サービスは無効な応答を返しました。</string>
     <string name="string_analyzer_unrecognized_data">認識できないデータ</string>
     <string name="rest_port">REST(ポート8080)はサポートされていません。\n\nポートを10009(gRPC)に変更しますか？</string>
-    <string name="drawer_menu_wallets">ウォレット</string>
+    <string name="drawer_menu_nodes">ウォレット</string>
     <string name="drawer_menu_channels">チャネル</string>
     <string name="drawer_menu_contacts">連絡先</string>
     <string name="drawer_menu_backup">バックアップ</string>

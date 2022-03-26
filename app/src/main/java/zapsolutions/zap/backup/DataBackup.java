@@ -1,13 +1,13 @@
 package zapsolutions.zap.backup;
 
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
 import zapsolutions.zap.contacts.Contact;
 
 public class DataBackup {
-    private WalletConfig[] connections;
+    private NodeConfig[] connections;
     private Contact[] contacts;
 
-    public WalletConfig[] getWalletConfigs() {
+    public NodeConfig[] getWalletConfigs() {
         return connections;
     }
 
@@ -15,8 +15,8 @@ public class DataBackup {
         return contacts;
     }
 
-    public void setWalletConfigs(WalletConfig[] mWalletConfigs) {
-        this.connections = mWalletConfigs;
+    public void setWalletConfigs(NodeConfig[] mNodeConfigs) {
+        this.connections = mNodeConfigs;
     }
 
     public void setContacts(Contact[] mContacts) {

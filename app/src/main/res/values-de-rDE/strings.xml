@@ -102,9 +102,9 @@
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
     <string name="activity_manage_channels">Lightning-Kanäle</string>
-    <string name="activity_manage_wallets">Wallets Verwalten</string>
+    <string name="activity_manage_nodes">Wallets Verwalten</string>
     <string name="activity_advanced_settings">Erweiterte Einstellungen</string>
-    <string name="activity_wallet_details">Wallet Details</string>
+    <string name="activity_node_details">Wallet Details</string>
     <string name="activity_identity">Identität</string>
     <string name="activity_manage_contacts">Kontakte verwalten</string>
     <string name="activity_manage_contacts_send_mode">Senden an…</string>
@@ -167,9 +167,9 @@
     <string name="setup_connect_local_button">Wallet erstellen</string>
     <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
-    <string name="demo_setupWalletBtn">Wallet einrichten</string>
-    <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
-    <string name="demo_setupWalletFirstAvatar">Du musst zuerst eine Wallet einrichten, bevor du deine Identität und deinen Avatar sehen kannst.</string>
+    <string name="demo_setupNodeBtn">Wallet einrichten</string>
+    <string name="demo_setupNodeFirst">Du musst zuerst eine Wallet einrichten.</string>
+    <string name="demo_setupNodeFirstAvatar">Du musst zuerst eine Wallet einrichten, bevor du deine Identität und deinen Avatar sehen kannst.</string>
     <string name="send_lightningPayment">Lightning Zahlung senden</string>
     <string name="send_onChainPayment">On-chain Zahlung senden</string>
     <string name="send_sendPayment">Zahlung senden</string>
@@ -285,7 +285,7 @@
     <string name="error_channel_close_timeout">Zeitüberschreitung. Der Kanal konnte nicht geschlossen werden.</string>
     <string name="error_channel_close">Der Kanal konnte nicht geschlossen werden: %s</string>
     <string name="error_pin_deactivation_attempt">Es sieht so aus, als ob jemand versucht hat, deine PIN zu deaktivieren. Die App wird nun beendet.\nDu kannst die App neu installieren und den Wiederherstellungsprozess nutzen, um wieder Zugriff auf dein Guthaben zu erhalten.</string>
-    <string name="error_empty_wallet_name">Ein leerer Name ist nicht erlaubt.</string>
+    <string name="error_empty_node_name">Ein leerer Name ist nicht erlaubt.</string>
     <string name="error_invalid_bitcoin_request">Ungültige Bitcoinanfrage.</string>
     <string name="error_payment_invalid_details">Die Zahlungsdetails stimmen nicht mit den in der Zahlungsanfrage gefordert Details überein.</string>
     <string name="error_payment_timeout">Zeitüberschreitung. Es konnte keine Route gefunden werden.</string>
@@ -293,7 +293,7 @@
     <string name="error_payment_insufficient_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Bitte stelle sicher, dass der Empfänger die \"Keysend\" Funktion aktiviert hat.</string>
     <string name="error_only_payment_data_allowed">Nur Zahlungsdaten sind hier erlaubt.</string>
-    <string name="error_wallet_not_yet_ready">Deine Wallet ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
+    <string name="error_node_not_yet_ready">Deine Wallet ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s scheint Anfragen aus dem Tor Netzwerk zu blockieren. Du kannst versuchen Tor in den Einstellungen auszuschalten oder den Dienst zu kontaktieren damit sie ihre Cloudflare Einstellungen ändern.</string>
     <string name="error_tor_exchange_rate">Die Wechselkurse konnten nicht aktualisiert werden. Der Dienst, den du verwendest, scheint Anfragen aus dem Tor Netzwerk zu blockieren. Versuche den Wechselkursanbieter in den erweiterten Einstellungen zu ändern.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Die Antwort von %1$s konnte nicht gelesen werden.</string>
@@ -354,21 +354,21 @@
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und Zap wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.\nBenutze nur dann private Kanäle, wenn dein Knoten auf einem mobilen Gerät läuft, oder wenn er regelmäßig offline ist.</string>
     <string name="help_dialog_identity">Das ist deine Identität im Lighting Netzwerk.\n\nWenn du auf den Avatar tippst, wird dir ein QR-Code angezeigt.\nAndere können diesen Code scannen und dich zu ihren Kontakten hinzufügen, Kanäle mit dir öffnen, oder dir Geld senden.\n\nDieser Avatar ist einzigartig.\nEr wurde automatisch basierend auf deinem öffentlichen Schlüssel generiert und kann nicht geändert werden.</string>
-    <string name="wallet_name">Name der Wallet</string>
+    <string name="node_name">Name der Wallet</string>
     <string name="delete">Löschen</string>
     <string name="rename">Umbenennen</string>
     <string name="change_data">Daten ändern</string>
-    <string name="open_wallet">Wallet öffnen</string>
+    <string name="open_node">Wallet öffnen</string>
     <string name="connectionData">Verbindungsdaten</string>
     <string name="host">Host</string>
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Zertifikat</string>
-    <string name="confirm_wallet_deletion">Möchtest du diese Wallet wirklich löschen?</string>
-    <string name="no_wallets">Keine Wallets</string>
-    <string name="spinner_manage_wallets">Verwalten…</string>
-    <string name="wallet_added">Wallet wurde hinzugefügt.</string>
-    <string name="wallet_already_exists">Diese Wallet existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zu den Wallet Details.</string>
+    <string name="confirm_node_deletion">Möchtest du diese Wallet wirklich löschen?</string>
+    <string name="no_nodes">Keine Wallets</string>
+    <string name="spinner_manage_nodes">Verwalten…</string>
+    <string name="node_added">Wallet wurde hinzugefügt.</string>
+    <string name="node_already_exists">Diese Wallet existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zu den Wallet Details.</string>
     <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>
     <string name="lnurl_withdraw_fail">Abhebung\nfehlgeschlagen</string>
     <string name="lnurl_decoding_no_lnurl_data">Die Daten enthalten keine gültige LNURL.</string>
@@ -387,7 +387,7 @@
     <string name="lnurl_invalid_response">Der Dienst hat mit einer ungültigen Antwort geantwortet.</string>
     <string name="string_analyzer_unrecognized_data">Unbekannte Daten.</string>
     <string name="rest_port">REST (Port 8080) wird nicht unterstützt.\n\nMöchtest du den Port auf 10009 (gRPC) ändern?</string>
-    <string name="drawer_menu_wallets">Wallets</string>
+    <string name="drawer_menu_nodes">Wallets</string>
     <string name="drawer_menu_channels">Kanäle</string>
     <string name="drawer_menu_contacts">Kontakte</string>
     <string name="drawer_menu_backup">Backup</string>

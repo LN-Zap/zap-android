@@ -25,7 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
@@ -187,7 +187,7 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
                 long minSendAmount = 20000;
                 long maxSendAmount = 17666215;
 
-                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                     long onChainAvailable = Wallet.getInstance().getBalances().onChainConfirmed();
 
                     if (onChainAvailable < maxSendAmount) {
@@ -378,7 +378,7 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
      * This function is used to calculate the expected on chain fee.
      */
     private void estimateOnChainFee(long amount, int targetConf) {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             // We choose a dummy bech32 address. The fee amount depends only on the address type.
             String address;
             switch (Wallet.getInstance().getNetwork()) {

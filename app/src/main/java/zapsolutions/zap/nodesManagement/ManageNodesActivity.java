@@ -1,4 +1,4 @@
-package zapsolutions.zap.walletManagement;
+package zapsolutions.zap.nodesManagement;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,37 +15,37 @@ import java.util.List;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.setup.SetupActivity;
 
-public class ManageWalletsActivity extends BaseAppCompatActivity {
+public class ManageNodesActivity extends BaseAppCompatActivity {
 
-    public static final String WALLET_ID = "walletUUID";
+    public static final String NODE_ID = "nodeUUID";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<WalletConfig> mWalletItems;
+    private List<NodeConfig> mNodeItems;
     private TextView mEmptyListText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_wallets);
+        setContentView(R.layout.activity_manage_nodes);
 
-        mRecyclerView = findViewById(R.id.historyList);
+        mRecyclerView = findViewById(R.id.nodesList);
         mEmptyListText = findViewById(R.id.listEmpty);
 
-        mWalletItems = new ArrayList<>();
+        mNodeItems = new ArrayList<>();
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(ManageWalletsActivity.this);
+        mLayoutManager = new LinearLayoutManager(ManageNodesActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create and set adapter
-        mAdapter = new WalletItemAdapter(mWalletItems);
+        mAdapter = new NodeItemAdapter(mNodeItems);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -53,8 +53,8 @@ public class ManageWalletsActivity extends BaseAppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add a new wallet
-                Intent intent = new Intent(ManageWalletsActivity.this, SetupActivity.class);
+                // Add a new node
+                Intent intent = new Intent(ManageNodesActivity.this, SetupActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
@@ -64,17 +64,17 @@ public class ManageWalletsActivity extends BaseAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateWalletDisplayList();
+        updateNodeDisplayList();
     }
 
-    private void updateWalletDisplayList() {
+    private void updateNodeDisplayList() {
 
-        mWalletItems.clear();
-        WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
-        mWalletItems.addAll(walletConfigsManager.getAllWalletConfigs(false));
+        mNodeItems.clear();
+        NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
+        mNodeItems.addAll(nodeConfigsManager.getAllNodeConfigs(false));
 
-        // Show "No wallets" if the list is empty
-        if (mWalletItems.size() == 0) {
+        // Show "No nodes" if the list is empty
+        if (mNodeItems.size() == 0) {
             mEmptyListText.setVisibility(View.VISIBLE);
         } else {
             mEmptyListText.setVisibility(View.GONE);

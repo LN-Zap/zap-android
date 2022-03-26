@@ -29,7 +29,7 @@ import java.util.List;
 import zapsolutions.zap.AdvancedSettingsActivity;
 import zapsolutions.zap.BuildConfig;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.pin.PinSetupActivity;
 import zapsolutions.zap.tor.TorManager;
 import zapsolutions.zap.util.AppUtil;
@@ -137,7 +137,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mPinPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                     if (PrefsUtil.isPinEnabled()) {
                         Intent intent = new Intent(getActivity(), PinSetupActivity.class);
                         intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.CHANGE_PIN);
@@ -148,7 +148,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         startActivity(intent);
                     }
                 } else {
-                    Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_LONG).show();
                 }
                 return true;
             }
