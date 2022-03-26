@@ -87,6 +87,7 @@ import zapsolutions.zap.util.Version;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 import zapsolutions.zap.nodesManagement.ManageNodesActivity;
+import zapsolutions.zap.coinControl.UTXOsActivity;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
@@ -465,6 +466,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.getInstance().fetchBalanceFromLND();
         Wallet.getInstance().fetchChannelsFromLND();
 
+        // Fetch UTXOs
+        Wallet.getInstance().fetchUTXOs();
+        Wallet.getInstance().fetchLockedUTXOs();
+
+        // Subscribe to Transaction Events
         Wallet.getInstance().subscribeToTransactions();
         Wallet.getInstance().subscribeToHtlcEvents();
         Wallet.getInstance().subscribeToInvoices();
@@ -805,7 +811,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Intent intentChannels = new Intent(this, ManageChannelsActivity.class);
                 startActivity(intentChannels);
                 break;
-            case R.id.drawerWallets:
+            case R.id.drawerUTXOs:
+                Intent intentUTXOs = new Intent(this, UTXOsActivity.class);
+                startActivity(intentUTXOs);
+                break;
+            case R.id.drawerNodes:
                 Intent intentWallets = new Intent(this, ManageNodesActivity.class);
                 startActivity(intentWallets);
                 break;
@@ -822,11 +832,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Intent intentSettings = new Intent(this, SettingsActivity.class);
                 startActivity(intentSettings);
                 break;
-                /*
-            case R.id.drawerBuy:
-                Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
-                break;
-                 */
             case R.id.drawerSupport:
                 Intent intentSupport = new Intent(this, SupportActivity.class);
                 startActivity(intentSupport);

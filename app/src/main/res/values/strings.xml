@@ -117,6 +117,7 @@
     <string name="activity_contact_details">Contact Details</string>
     <string name="activity_manual_setup">Connection Data</string>
     <string name="activity_backup">Backup</string>
+    <string name="activity_utxos">Coins (UTXOs)</string>
 
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">History</string>
@@ -400,6 +401,7 @@
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
     <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
     <string name="help_dialog_identity">This is your node on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with you or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
+    <string name="help_dialog_utxos">This list of UTXOs represents all your On-Chain funds.\nIn similar fashion to coins, unspent transaction outputs (UTXOs) can only be spent as a whole. As UTXOs can have any value you will simply receive change in form of another UTXO when sending transactions.</string>
 
     <string name="node_name">Node Name</string>
     <string name="delete">Delete</string>
@@ -443,6 +445,7 @@
     <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Buy Bitcoin</string>
+    <string name="drawer_menu_coin_control">Coins (UTXOs)</string>
 
     <string name="support_contribute_description">Help improving Zap.</string>
     <string name="support_issue_description">Found a bug? Let us know!</string>
@@ -516,5 +519,7 @@
     <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
 
     <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
+
+    <string name="utxo_no_utxos">No UTXOs</string>
 
 </resources>
