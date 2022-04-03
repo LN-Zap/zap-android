@@ -7,12 +7,10 @@
                     android:id="@+id/drawerChannels"
                     android:icon="@drawable/ic_open_channel_24"
                     android:title="@string/drawer_menu_channels" />
-                <!--
                 <item
                     android:id="@+id/drawerRouting"
                     android:icon="@drawable/ic_outline_routing_24"
-                    android:title="Routing" />
-                     -->
+                    android:title="@string/drawer_menu_routing" />
                 <item
                     android:id="@+id/drawerUTXOs"
                     android:icon="@drawable/ic_coins"

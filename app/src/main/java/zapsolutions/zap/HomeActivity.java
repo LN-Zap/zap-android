@@ -67,6 +67,7 @@ import zapsolutions.zap.lnurl.pay.LnUrlPayBSDFragment;
 import zapsolutions.zap.lnurl.pay.LnUrlPayResponse;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import zapsolutions.zap.lnurl.withdraw.LnUrlWithdrawResponse;
+import zapsolutions.zap.forwarding.ForwardingActivity;
 import zapsolutions.zap.tor.TorManager;
 import zapsolutions.zap.transactionHistory.TransactionHistoryFragment;
 import zapsolutions.zap.util.BitcoinStringAnalyzer;
@@ -470,6 +471,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.getInstance().fetchUTXOs();
         Wallet.getInstance().fetchLockedUTXOs();
 
+        // Fetch Forwarding events
+        Wallet.getInstance().fetchForwardingHistory();
+
         // Subscribe to Transaction Events
         Wallet.getInstance().subscribeToTransactions();
         Wallet.getInstance().subscribeToHtlcEvents();
@@ -810,6 +814,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             case R.id.drawerChannels:
                 Intent intentChannels = new Intent(this, ManageChannelsActivity.class);
                 startActivity(intentChannels);
+                break;
+            case R.id.drawerRouting:
+                Intent intentRouting = new Intent(this, ForwardingActivity.class);
+                startActivity(intentRouting);
                 break;
             case R.id.drawerUTXOs:
                 Intent intentUTXOs = new Intent(this, UTXOsActivity.class);

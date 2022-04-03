@@ -19,6 +19,8 @@ import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
+import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetStateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
@@ -106,6 +108,7 @@ public class Wallet {
     public List<NodeInfo> mNodeInfos = new LinkedList<>();
     public List<Utxo> mUTXOsList;
     public List<UtxoLease> mLockedUTXOsList;
+    public List<ForwardingEvent> mForwardingEventsList;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -170,6 +173,7 @@ public class Wallet {
         mPendingWaitingCloseChannelsList = null;
         mUTXOsList = null;
         mLockedUTXOsList = null;
+        mForwardingEventsList = null;
 
         mTransactionUpdated = false;
         mInvoicesUpdated = false;
@@ -931,6 +935,46 @@ public class Wallet {
                             , throwable -> {
                                 ZapLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
                             }));
+        }
+    }
+
+    public void fetchForwardingHistory() {
+        if (LndConnection.getInstance().getLightningService() != null) {
+            ForwardingHistoryRequest forwardingHistoryRequest = ForwardingHistoryRequest.newBuilder()
+                    .build();
+
+            compositeDisposable.add(LndConnection.getInstance().getLightningService().forwardingHistory(forwardingHistoryRequest)
+                    .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                    .subscribe(forwardingResponse -> {
+                                mForwardingEventsList = forwardingResponse.getForwardingEventsList();
+
+                                // ToDo: Notify Listeners
+                                //broadcastLockedUtxoListUpdated();
+
+                            }
+                            , throwable -> {
+                                ZapLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
+                            }));
+        }
+    }
+
+    /**
+     * Get the remote pubkey from a channel Id.
+     * This will only work for currently opened channels. If the id does not match with any open channel, null will be returned.
+     * @return remote pub key
+     */
+    public String getRemotePubKeyFromChannelId(long chanId){
+        String remotePub = "";
+        for (Channel channel : mOpenChannelsList){
+            if (channel.getChanId() == chanId){
+                remotePub = channel.getRemotePubkey();
+                break;
+            }
+        }
+        if (!remotePub.equals("")){
+            return remotePub;
+        } else {
+            return null;
         }
     }
 
