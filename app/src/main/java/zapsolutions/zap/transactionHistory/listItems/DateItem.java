@@ -15,7 +15,6 @@ public class DateItem extends HistoryListItem {
 
         // To get the dateline to show up at the correct position in the sorted list, we have to set its CreationDate.
         // We set it to 1 second before the day ends.
-        long now = System.currentTimeMillis();
         String tempDateText = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
                 .format(date * 1000L);
         try {

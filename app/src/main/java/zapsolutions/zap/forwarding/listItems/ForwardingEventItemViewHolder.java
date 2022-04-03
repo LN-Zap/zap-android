@@ -1,22 +1,21 @@
-package zapsolutions.zap.forwarding;
+package zapsolutions.zap.forwarding.listItems;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.util.Date;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.contacts.ContactsManager;
+import zapsolutions.zap.forwarding.ForwardingEventSelectListener;
 import zapsolutions.zap.util.MonetaryUtil;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.Wallet;
 
-public class ForwardingEventItemViewHolder extends RecyclerView.ViewHolder {
+public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
     private static final String LOG_TAG = ForwardingEventItemViewHolder.class.getName();
 
@@ -27,7 +26,6 @@ public class ForwardingEventItemViewHolder extends RecyclerView.ViewHolder {
     private TextView mForwardingAmount;
     private View mRootView;
     private ForwardingEventSelectListener mForwardingEventSelectListener;
-    private Context mContext;
 
 
     public ForwardingEventItemViewHolder(View v) {
@@ -39,13 +37,12 @@ public class ForwardingEventItemViewHolder extends RecyclerView.ViewHolder {
         mEarnedFee = v.findViewById(R.id.earnedFeeAmount);
         mForwardingAmount = v.findViewById(R.id.forwardingAmount);
         mRootView = v.findViewById(R.id.forwardingEventRootView);
-        mContext = v.getContext();
     }
 
     public void bindForwardingEventListItem(ForwardingEventListItem forwardingEventListItem) {
 
         // Set time of day
-        setTimeOfDay(forwardingEventListItem.getTimestamp());
+        setTimeOfDay(forwardingEventListItem.getTimestamp() / 1000000);
 
         // Set in channel name
         long inChanID = forwardingEventListItem.getForwardingEvent().getChanIdIn();

@@ -1,6 +1,7 @@
 package zapsolutions.zap.forwarding;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,12 +13,18 @@ import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
 import com.google.protobuf.ByteString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
+import zapsolutions.zap.forwarding.listItems.DateItem;
+import zapsolutions.zap.forwarding.listItems.ForwardingEventListItem;
+import zapsolutions.zap.forwarding.listItems.ForwardingListItem;
 import zapsolutions.zap.util.Wallet;
 
 public class ForwardingActivity extends BaseAppCompatActivity implements ForwardingEventSelectListener, SwipeRefreshLayout.OnRefreshListener {
@@ -25,11 +32,11 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private static final String LOG_TAG = ForwardingActivity.class.getName();
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ForwardingEventItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private List<ForwardingEventListItem> mForwardingEventItems;
+    private List<ForwardingListItem> mForwardingItems;
     private TextView mEmptyListText;
 
     @Override
@@ -46,14 +53,14 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         mRecyclerView = findViewById(R.id.forwardingEventList);
         mEmptyListText = findViewById(R.id.listEmpty);
 
-        mForwardingEventItems = new ArrayList<>();
+        mForwardingItems = new ArrayList<>();
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(ForwardingActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create and set adapter
-        mAdapter = new ForwardingEventItemAdapter(mForwardingEventItems, this);
+        mAdapter = new ForwardingEventItemAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
         // display current state of the list
@@ -68,24 +75,53 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     }
 
     private void updateForwardingEventDisplayList() {
-        mForwardingEventItems.clear();
-        if (Wallet.getInstance().mForwardingEventsList != null) {
 
+        // Save state, we want to keep the scroll offset after the update.
+        Parcelable recyclerViewState;
+        recyclerViewState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+
+        mForwardingItems.clear();
+
+        List<ForwardingListItem> forwardingEvents = new LinkedList<>();
+        Set<ForwardingListItem> dateLines = new HashSet<>();
+
+        if (Wallet.getInstance().mForwardingEventsList != null) {
+            // Add all relevant items the forwardingEvents list
             for (ForwardingEvent forwardingEvent : Wallet.getInstance().mForwardingEventsList) {
                 ForwardingEventListItem currItem = new ForwardingEventListItem(forwardingEvent);
-                mForwardingEventItems.add(currItem);
+                forwardingEvents.add(currItem);
             }
-
-            // Show "No forwarding events" if the list is empty
-            if (mForwardingEventItems.size() == 0) {
-                mEmptyListText.setVisibility(View.VISIBLE);
-            } else {
-                mEmptyListText.setVisibility(View.GONE);
-            }
-
-            // Update the list view
-            mAdapter.notifyDataSetChanged();
         }
+        mForwardingItems.addAll(forwardingEvents);
+
+        // Add the Date Lines
+        for (ForwardingListItem item : forwardingEvents) {
+            DateItem dateItem = new DateItem(item.getTimestamp());
+            dateLines.add(dateItem);
+        }
+        mForwardingItems.addAll(dateLines);
+
+        // Show "No forwarding events" if the list is empty
+        if (mForwardingItems.size() == 0) {
+            mEmptyListText.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyListText.setVisibility(View.GONE);
+        }
+
+        // Update the list view
+        mAdapter.replaceAll(mForwardingItems);
+
+        // Set number in activity title
+        if (forwardingEvents.size() > 0) {
+            String title = getResources().getString(R.string.activity_forwarding) + " (" + forwardingEvents.size() + ")";
+            setTitle(title);
+        } else {
+            setTitle(getResources().getString(R.string.activity_forwarding));
+        }
+
+        // Restore state (e.g. scroll offset)
+        mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+
         // Remove refreshing symbol
         mSwipeRefreshLayout.setRefreshing(false);
     }
@@ -94,6 +130,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     public void onRefresh() {
         if (NodeConfigsManager.getInstance().hasAnyConfigs() && LndConnection.getInstance().isConnected()) {
             // ToDo: refetch data from LND
+            updateForwardingEventDisplayList();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }

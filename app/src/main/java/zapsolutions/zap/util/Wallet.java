@@ -941,6 +941,7 @@ public class Wallet {
     public void fetchForwardingHistory() {
         if (LndConnection.getInstance().getLightningService() != null) {
             ForwardingHistoryRequest forwardingHistoryRequest = ForwardingHistoryRequest.newBuilder()
+                    //.setNumMaxEvents(10000)
                     .build();
 
             compositeDisposable.add(LndConnection.getInstance().getLightningService().forwardingHistory(forwardingHistoryRequest)
