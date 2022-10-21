@@ -26,6 +26,10 @@ public class Balances {
         return mOnChainBalanceTotal + mChannelBalance + mChannelBalancePendingOpen + mChannelBalanceLimbo;
     }
 
+    public long channelTotal() {
+        return mChannelBalance + mChannelBalancePendingOpen + mChannelBalanceLimbo;
+    }
+
     public long onChainTotal() {
         return mOnChainBalanceTotal;
     }

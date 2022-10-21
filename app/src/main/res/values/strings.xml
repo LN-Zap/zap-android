@@ -233,6 +233,7 @@
     <string name="settings_scan_clipboard">Check clipboard</string>
     <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
+    <string name="settings_detailedBalance" translatable="false">Detailed balance</string>
     <string name="settings_systemLanguage">System Language</string>
 
     <string name="settings_manageChannels">Manage Lightning Channels</string>
@@ -516,5 +517,6 @@
     <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
 
     <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
+
 
 </resources>
