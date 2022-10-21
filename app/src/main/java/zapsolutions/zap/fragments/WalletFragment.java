@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -55,10 +56,27 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private static final String LOG_TAG = WalletFragment.class.getName();
 
-    private TextView mTvPrimaryBalance;
-    private TextView mTvPrimaryBalanceUnit;
-    private TextView mTvSecondaryBalance;
-    private TextView mTvSecondaryBalanceUnit;
+    private LinearLayout mTotalBalancePrimaryLayout;
+    private TextView mTvTotalBalancePrimary;
+    private TextView mTvTotalBalancePrimaryUnit;
+    private LinearLayout mTotalBalanceSecondaryLayout;
+    private TextView mTvTotalBalanceSecondary;
+    private TextView mTvTotalBalanceSecondaryUnit;
+
+    private LinearLayout mChannelBalancePrimaryLayout;
+    private TextView mTvChannelBalancePrimary;
+    private TextView mTvChannelBalancePrimaryUnit;
+    private LinearLayout mChannelBalanceSecondaryLayout;
+    private TextView mTvChannelBalanceSecondary;
+    private TextView mTvChannelBalanceSecondaryUnit;
+
+    private LinearLayout mOnChainBalancePrimaryLayout;
+    private TextView mTvOnChainBalancePrimary;
+    private TextView mTvOnChainBalancePrimaryUnit;
+    private LinearLayout mOnChainBalanceSecondaryLayout;
+    private TextView mTvOnChainBalanceSecondary;
+    private TextView mTvOnChainBalanceSecondaryUnit;
+
     private TextView mTvMode;
     private ConstraintLayout mClBalanceLayout;
     private ImageView mIvLogo;
@@ -98,10 +116,28 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mClBalanceLayout = view.findViewById(R.id.BalanceLayout);
         mIvLogo = view.findViewById(R.id.logo);
         mIvSwitchButton = view.findViewById(R.id.switchButtonImage);
-        mTvPrimaryBalance = view.findViewById(R.id.BalancePrimary);
-        mTvPrimaryBalanceUnit = view.findViewById(R.id.BalancePrimaryUnit);
-        mTvSecondaryBalance = view.findViewById(R.id.BalanceSecondary);
-        mTvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
+
+        mTotalBalancePrimaryLayout = view.findViewById(R.id.TotalBalancePrimaryLayout);
+        mTvTotalBalancePrimary = view.findViewById(R.id.TotalBalancePrimary);
+        mTvTotalBalancePrimaryUnit = view.findViewById(R.id.TotalBalancePrimaryUnit);
+        mTotalBalanceSecondaryLayout = view.findViewById(R.id.TotalBalanceSecondaryLayout);
+        mTvTotalBalanceSecondary = view.findViewById(R.id.TotalBalanceSecondary);
+        mTvTotalBalanceSecondaryUnit = view.findViewById(R.id.TotalBalanceSecondaryUnit);
+
+        mChannelBalancePrimaryLayout = view.findViewById(R.id.ChannelBalancePrimaryLayout);
+        mTvChannelBalancePrimary = view.findViewById(R.id.ChannelBalancePrimary);
+        mTvChannelBalancePrimaryUnit = view.findViewById(R.id.ChannelBalancePrimaryUnit);
+        mChannelBalanceSecondaryLayout = view.findViewById(R.id.ChannelBalanceSecondaryLayout);
+        mTvChannelBalanceSecondary = view.findViewById(R.id.ChannelBalanceSecondary);
+        mTvChannelBalanceSecondaryUnit = view.findViewById(R.id.ChannelBalanceSecondaryUnit);
+
+        mOnChainBalancePrimaryLayout = view.findViewById(R.id.OnChainBalancePrimaryLayout);
+        mTvOnChainBalancePrimary = view.findViewById(R.id.OnChainBalancePrimary);
+        mTvOnChainBalancePrimaryUnit = view.findViewById(R.id.OnChainBalancePrimaryUnit);
+        mOnChainBalanceSecondaryLayout = view.findViewById(R.id.OnChainBalanceSecondaryLayout);
+        mTvOnChainBalanceSecondary = view.findViewById(R.id.OnChainBalanceSecondary);
+        mTvOnChainBalanceSecondaryUnit = view.findViewById(R.id.OnChainBalanceSecondaryUnit);
+
         mTvMode = view.findViewById(R.id.mode);
         mBalanceFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.balance_fade_out);
         mLogoFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logo_fade_in);
@@ -167,6 +203,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         // Hide balance if the setting was chosen
         if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
             hideBalance();
+        }
+
+        // Hide balance if the setting was chosen
+        if (PrefsUtil.getPrefs().getBoolean("detailedBalance", false)) {
+            showDetailedBalance();
+        } else {
+            showTotalBalance();
         }
 
         // Action when clicked on menu button
@@ -355,9 +398,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void run() {
                 // Adapt unit text size depending on its length
                 if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2) {
-                    mTvPrimaryBalanceUnit.setTextSize(20);
+                    mTvTotalBalancePrimaryUnit.setTextSize(20);
+                    mTvChannelBalancePrimaryUnit.setTextSize(20);
+                    mTvOnChainBalancePrimaryUnit.setTextSize(20);
                 } else {
-                    mTvPrimaryBalanceUnit.setTextSize(32);
+                    mTvTotalBalancePrimaryUnit.setTextSize(32);
+                    mTvChannelBalancePrimaryUnit.setTextSize(32);
+                    mTvOnChainBalancePrimaryUnit.setTextSize(32);
                 }
 
                 Balances balances;
@@ -367,10 +414,20 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     balances = Wallet.getInstance().getDemoBalances();
                 }
 
-                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.total()));
-                mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
-                mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
+                mTvTotalBalancePrimary.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.total()));
+                mTvTotalBalancePrimaryUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+                mTvTotalBalanceSecondary.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
+                mTvTotalBalanceSecondaryUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
+
+                mTvChannelBalancePrimary.setText("⚡ " + MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.channelTotal()));
+                mTvChannelBalancePrimaryUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+                mTvChannelBalanceSecondary.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.channelTotal()));
+                mTvChannelBalanceSecondaryUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
+
+                mTvOnChainBalancePrimary.setText("❄ " + MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.onChainTotal()));
+                mTvOnChainBalancePrimaryUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+                mTvOnChainBalanceSecondary.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.onChainTotal()));
+                mTvOnChainBalanceSecondaryUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
                 ZapLog.v(LOG_TAG, "Total balance display updated");
             }
@@ -389,6 +446,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     hideBalance();
                 } else {
                     showBalance();
+                }
+            }
+            if (key.equals("detailedBalance")) {
+                if (PrefsUtil.getPrefs().getBoolean("detailedBalance", false)) {
+                    showDetailedBalance();
+                } else {
+                    showTotalBalance();
                 }
             }
         }
@@ -549,6 +613,28 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mClBalanceLayout.setVisibility(View.VISIBLE);
         mIvSwitchButton.setVisibility(View.VISIBLE);
         mIvLogo.setVisibility(View.INVISIBLE);
+    }
+
+    private void showTotalBalance() {
+        mTotalBalancePrimaryLayout.setVisibility(View.VISIBLE);
+        mTotalBalanceSecondaryLayout.setVisibility(View.VISIBLE);
+
+        mChannelBalancePrimaryLayout.setVisibility(View.GONE);
+        mChannelBalanceSecondaryLayout.setVisibility(View.GONE);
+
+        mOnChainBalancePrimaryLayout.setVisibility(View.GONE);
+        mOnChainBalanceSecondaryLayout.setVisibility(View.GONE);
+    }
+
+    private void showDetailedBalance() {
+        mTotalBalancePrimaryLayout.setVisibility(View.GONE);
+        mTotalBalanceSecondaryLayout.setVisibility(View.GONE);
+
+        mChannelBalancePrimaryLayout.setVisibility(View.VISIBLE);
+        mChannelBalanceSecondaryLayout.setVisibility(View.VISIBLE);
+
+        mOnChainBalancePrimaryLayout.setVisibility(View.VISIBLE);
+        mOnChainBalanceSecondaryLayout.setVisibility(View.VISIBLE);
     }
 
     private void updateStatusDot(String walletAlias) {
