@@ -523,7 +523,7 @@
     <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
 
     <string name="utxo_no_utxos">No UTXOs</string>
-    <string name="forwarding_no_forwarding_events">No forwarding events</string>
+    <string name="forwarding_no_forwarding_events">No forwarding events in the selected period</string>
     <string name="forwarding_earned_description">Earned in the selected period</string>
     <string name="forwarding_closed_channel">Closed channel</string>
 

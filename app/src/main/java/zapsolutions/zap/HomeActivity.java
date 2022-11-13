@@ -471,9 +471,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.getInstance().fetchUTXOs();
         Wallet.getInstance().fetchLockedUTXOs();
 
-        // Fetch Forwarding events
-        Wallet.getInstance().fetchForwardingHistory();
-
         // Subscribe to Transaction Events
         Wallet.getInstance().subscribeToTransactions();
         Wallet.getInstance().subscribeToHtlcEvents();

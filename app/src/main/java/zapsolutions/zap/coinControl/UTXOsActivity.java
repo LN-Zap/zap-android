@@ -35,7 +35,6 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
 
     private List<UTXOListItem> mUTXOItems;
     private TextView mEmptyListText;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

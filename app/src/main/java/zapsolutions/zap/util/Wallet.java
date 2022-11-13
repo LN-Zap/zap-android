@@ -19,8 +19,6 @@ import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
-import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
-import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetStateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
@@ -108,7 +106,6 @@ public class Wallet {
     public List<NodeInfo> mNodeInfos = new LinkedList<>();
     public List<Utxo> mUTXOsList;
     public List<UtxoLease> mLockedUTXOsList;
-    public List<ForwardingEvent> mForwardingEventsList;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -173,7 +170,6 @@ public class Wallet {
         mPendingWaitingCloseChannelsList = null;
         mUTXOsList = null;
         mLockedUTXOsList = null;
-        mForwardingEventsList = null;
 
         mTransactionUpdated = false;
         mInvoicesUpdated = false;
@@ -913,7 +909,7 @@ public class Wallet {
                                 broadcastUtxoListUpdated();
                             }
                             , throwable -> {
-                                ZapLog.w(LOG_TAG, "Fetching locked utxo list failed." + throwable.getMessage());
+                                ZapLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
                             }));
         }
     }
@@ -933,28 +929,7 @@ public class Wallet {
 
                             }
                             , throwable -> {
-                                ZapLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
-                            }));
-        }
-    }
-
-    public void fetchForwardingHistory() {
-        if (LndConnection.getInstance().getLightningService() != null) {
-            ForwardingHistoryRequest forwardingHistoryRequest = ForwardingHistoryRequest.newBuilder()
-                    //.setNumMaxEvents(10000)
-                    .build();
-
-            compositeDisposable.add(LndConnection.getInstance().getLightningService().forwardingHistory(forwardingHistoryRequest)
-                    .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                    .subscribe(forwardingResponse -> {
-                                mForwardingEventsList = forwardingResponse.getForwardingEventsList();
-
-                                // ToDo: Notify Listeners
-                                //broadcastLockedUtxoListUpdated();
-
-                            }
-                            , throwable -> {
-                                ZapLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
+                                ZapLog.w(LOG_TAG, "Fetching locked utxo list failed." + throwable.getMessage());
                             }));
         }
     }
