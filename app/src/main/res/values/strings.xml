@@ -120,7 +120,7 @@
     <string name="activity_utxos">Coins (UTXOs)</string>
     <string name="activity_forwarding">Routing</string>
 
-    <string name="navigation_wallet">Wallet</string>
+    <string name="navigation_node">Node</string>
     <string name="navigation_history">History</string>
     <string name="navigation_settings">Settings</string>
 
@@ -186,7 +186,7 @@
 
 
     <string name="demo_setupNodeBtn">Connect Node</string>
-    <string name="demo_setupNodeFirst">You first have to setup connect to a node.</string>
+    <string name="demo_setupNodeFirst">You first have to connect to a node.</string>
     <string name="demo_setupNodeFirstAvatar">You first have to connect to a node, before you can see your node information and your avatar.</string>
 
 
@@ -293,7 +293,7 @@
     <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
     <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.  Please update your node connection settings if your node is now reachable under a different address or hostname.</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
@@ -306,7 +306,7 @@
     <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">You first have to connect to a node before opening a channel.</string>
+    <string name="error_channel_open_node_setup">You first have to connect to a node before opening a channel.</string>
     <string name="error_connect_peer">Could not establish connection to peer node.</string>
     <string name="error_connect_peer_refused">Connection has been refused by peer.</string>
     <string name="error_connect_peer_self">Cannot make connection to self.</string>
@@ -408,16 +408,16 @@
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="change_data">Change data</string>
-    <string name="open_node">Open node</string>
+    <string name="open_node">Select this node</string>
     <string name="connectionData">Connection data</string>
     <string name="host">Host</string>
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificate</string>
-    <string name="confirm_node_deletion">Do you really want to delete this node?</string>
+    <string name="confirm_node_deletion">Do you really want to delete this node connection?</string>
     <string name="no_nodes">No nodes</string>
     <string name="spinner_manage_nodes">Manage…</string>
-    <string name="node_added">Node has been added.</string>
+    <string name="node_added">Node connection data has been added.</string>
     <string name="node_already_exists">This node already exists.\nIf you want to update its connection data, please go to the nodes detail page.</string>
 
     <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
@@ -448,6 +448,8 @@
     <string name="drawer_menu_buy">Buy Bitcoin</string>
     <string name="drawer_menu_coin_control">Coins (UTXOs)</string>
     <string name="drawer_menu_routing">Routing</string>
+    <string name="drawer_menu_category_current_node">Current Node</string>
+    <string name="drawer_menu_category_app">App</string>
 
     <string name="support_contribute_description">Help improving Zap.</string>
     <string name="support_issue_description">Found a bug? Let us know!</string>
