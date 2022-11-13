@@ -118,6 +118,7 @@
     <string name="activity_manual_setup">Connection Data</string>
     <string name="activity_backup">Backup</string>
     <string name="activity_utxos">Coins (UTXOs)</string>
+    <string name="activity_forwarding">Routing</string>
 
     <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">History</string>
@@ -446,6 +447,7 @@
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Buy Bitcoin</string>
     <string name="drawer_menu_coin_control">Coins (UTXOs)</string>
+    <string name="drawer_menu_routing">Routing</string>
 
     <string name="support_contribute_description">Help improving Zap.</string>
     <string name="support_issue_description">Found a bug? Let us know!</string>
@@ -521,5 +523,8 @@
     <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
 
     <string name="utxo_no_utxos">No UTXOs</string>
+    <string name="forwarding_no_forwarding_events">No forwarding events in the selected period</string>
+    <string name="forwarding_earned_description">Earned in the selected period</string>
+    <string name="forwarding_closed_channel">Closed channel</string>
 
 </resources>

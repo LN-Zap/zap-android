@@ -909,7 +909,7 @@ public class Wallet {
                                 broadcastUtxoListUpdated();
                             }
                             , throwable -> {
-                                ZapLog.w(LOG_TAG, "Fetching locked utxo list failed." + throwable.getMessage());
+                                ZapLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
                             }));
         }
     }
@@ -929,8 +929,28 @@ public class Wallet {
 
                             }
                             , throwable -> {
-                                ZapLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
+                                ZapLog.w(LOG_TAG, "Fetching locked utxo list failed." + throwable.getMessage());
                             }));
+        }
+    }
+
+    /**
+     * Get the remote pubkey from a channel Id.
+     * This will only work for currently opened channels. If the id does not match with any open channel, null will be returned.
+     * @return remote pub key
+     */
+    public String getRemotePubKeyFromChannelId(long chanId){
+        String remotePub = "";
+        for (Channel channel : mOpenChannelsList){
+            if (channel.getChanId() == chanId){
+                remotePub = channel.getRemotePubkey();
+                break;
+            }
+        }
+        if (!remotePub.equals("")){
+            return remotePub;
+        } else {
+            return null;
         }
     }
 

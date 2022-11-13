@@ -79,7 +79,7 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case HistoryListItem.TYPE_DATE:
-                View dateView = inflater.inflate(R.layout.history_list_element_date_line, parent, false);
+                View dateView = inflater.inflate(R.layout.list_element_date_line, parent, false);
                 return new DateLineViewHolder(dateView);
             case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
                 View transactionView = inflater.inflate(R.layout.history_list_element_transaction, parent, false);

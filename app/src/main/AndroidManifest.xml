@@ -164,6 +164,11 @@
             android:label="@string/activity_utxos"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".forwarding.ForwardingActivity"
+            android:label="@string/activity_forwarding"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
 
         <meta-data
             android:name="android.nfc.disable_beam_default"
