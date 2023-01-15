@@ -102,9 +102,7 @@
     <string name="activity_send">Maksa</string>
     <string name="activity_connectRemoteNode">Yhdistä etäsolmuun</string>
     <string name="activity_manage_channels">Salama kanavat</string>
-    <string name="activity_manage_nodes">Hallitse lompakkoja</string>
     <string name="activity_advanced_settings">Edistyneet asetukset</string>
-    <string name="activity_node_details">Lompakon tiedot</string>
     <string name="activity_identity">Identiteetti</string>
     <string name="activity_manage_contacts">Muokkaa kontakteja</string>
     <string name="activity_manage_contacts_send_mode">Lähetä…</string>
@@ -112,7 +110,6 @@
     <string name="activity_contact_details">Yhteystiedon tiedot</string>
     <string name="activity_manual_setup">Tietoa yhteydestä</string>
     <string name="activity_backup">Varmuuskopio</string>
-    <string name="navigation_wallet">Lompakko</string>
     <string name="navigation_history">Historia</string>
     <string name="navigation_settings">Asetukset</string>
     <string name="pin_create">Luo PIN</string>
@@ -168,8 +165,6 @@
     <string name="setup_connect_remote_description">Etähallinnoi omaa solmua / nodea.</string>
     <string name="setup_connect_remote_button">Yhdistä etäsolmuun</string>
     <string name="demo_setupNodeBtn">Lompakon asetukset</string>
-    <string name="demo_setupNodeFirst">Sinun täytyy ensiksi asettaa lompakko.</string>
-    <string name="demo_setupNodeFirstAvatar">Sinun täytyy ensin asettaa lompakko, jotta voit nähdä identiteettisi ja kuvakkeesi.</string>
     <string name="send_lightningPayment">Lähetä salama-maksu</string>
     <string name="send_onChainPayment">Lähetä on-chain maksu</string>
     <string name="send_sendPayment">Lähetä maksu</string>
@@ -257,7 +252,6 @@
     <string name="error_connection_invalid_macaroon2">Pääsy estetty\n\nMacaroon ei ole kelvollinen.</string>
     <string name="error_connection_server_unreachable">Aikakatkaisu.\nPalvelin ei vastaa.\n\n- Varmista että internet-yhteytesi toimii\n\n- Varmista että palvelin on käynnnissä ja sen IP-osoite on:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Palvelimen nimen varmistus epäonnistui.\n\nAntamasi palvelimen nimi ei täsmää palvelimen antaman varmenteen sisältöön.\n\n Sinun on kenties luotava varmenne uudelleen palvelimella. Varmista että käyttämäsi palvelinmen nimi on lisättynä lnd.conf tlsextradomain -parametriin ennen varmenteen uudelleenluontia.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Palvelimen nimeä (%1$s) ei löydetä.\n\nMuuta lompakon yhteysasetuksesi mikä solmusi nimi ja/tai osoite on muuttunut.</string>
     <string name="error_connection_lnd_unavailable">LND-yhteyttä ei saada luotua.\n\n- Varmista että LND prosessi on käynnissä palvelimella.\n\n- varmista että TCP-portin edellenohjaus aktiivinen. (Portti: %1$s)</string>
     <string name="error_connection_network_unreachable">Palvelimeen ei saada yhteyttä.\n\nVarmista että Internet-yhteydessäsi ei ole häiriöitä.</string>
     <string name="error_connection_unknown">Yhteys epäonnistui.</string>
@@ -270,7 +264,6 @@
     <string name="error_connection_internal_server_clearnet">Solmuun saadaan yhteys, mutta se vastaa sisäisellä virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti. Tor-toiminnon poiskytkentä sovelluksen asetuksista voi auttaa, sillä yrität ottaa yhteyttä solmuun suojaamattomassa Internetissä.</string>
     <string name="error_wrong_password">Väärä salasana</string>
     <string name="error_lightning_uri_invalid">Väärä muoto.\nKäytä jotain seuraavista:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">Lompakko pitää ottaa käyttöön ennen kanavan avaamista.</string>
     <string name="error_connect_peer">Yhteyttä rinnakaiseen solmuun ei pystytty muodostamaan.</string>
     <string name="error_connect_peer_refused">Rinnakainen solmu ei hyväksynyt yhteyttä.</string>
     <string name="error_connect_peer_self">Palvelin ei voi muodostaa yhteyttä itseensä.</string>
@@ -293,7 +286,6 @@
     <string name="error_payment_insufficient_balance">Maksun summa on suurempi kuin mitä voit lähettää nykyisien Lightning-kanavien kautta..</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Varmista että vastaanottaja kykeneen hyödyntämään keysend-toiminnallisuutta.</string>
     <string name="error_only_payment_data_allowed">Tähän voi syöttää vain maksutietoja.</string>
-    <string name="error_node_not_yet_ready">Lompakkosi synkronointi ei ole vielä valmistunut. Yritä myöhemmin uudelleen.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s näyttää estävät Tor-verkosta tulevan pyynnön. Koeta kytkeä Tor-pois päältä asetuksista tai ota yhteyttä palveluntarjoajaan ja pyydä heitä päivittämään CloudFlare-säännostö.</string>
     <string name="error_tor_exchange_rate">Vaihtokurssia ei pystytty hakemaan. Käyttämäsi palvelu näyttää estävän pyynnöt Tor-verkosta. Koeta vaitaa vaihtokurssien tarjoajaa edistyksellistä asetuksista.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Vastausta %1$s:lta ei kyetty lukemaan.</string>
@@ -354,21 +346,15 @@
     <string name="help_dialog_scanGeneric">Mitä vain dataa hyväksytään tässä.\nLue QR-koodi ja koodin sisältämän tiedon perusteella sovellus tunnistaa automaattisesti tapahtuman tyypin.</string>
     <string name="help_dialog_private_channels">Yksityiset kanavat eivät ole julkisia turvallisempia, ne vain eivät näy verkossa muille.\nKäytä yksityisiä kanavia vain kun solmusi toimii on mobiililaitteessa tai se on usein ilman verkkoyhteyttä tai sammutettuna.</string>
     <string name="help_dialog_identity">Tämä on sinun identiteettisi Lightning-verkossa.\n\nKun napautat hahmoa, näet identiteetin QR-koodina.\nAnna muiden scannata koodi ja he voivat lisätä sinut yhteystietoihinsa, avata kanavia sinulle päin ja lähettää varoja sinulle.\n\nLuotu hahmo on yksilöllinen.\nSe on luotu julkisen avaimesi (public key) perusteella, eikä sitä voi muokata.</string>
-    <string name="node_name">Lompakon nimi</string>
     <string name="delete">Poista</string>
     <string name="rename">Vaihda nimi</string>
     <string name="change_data">Muuta tietoja</string>
-    <string name="open_node">Avaa lompakko</string>
     <string name="connectionData">Yhteyden määritykset</string>
     <string name="host">Palvelin</string>
     <string name="port">Portti</string>
     <string name="macaroon">Macaroon-tieto</string>
     <string name="certificate">Varmenne</string>
-    <string name="confirm_node_deletion">Haluatko varmasti poistaa tämän lompakon?</string>
-    <string name="no_nodes">Lompakkoja ei ole</string>
     <string name="spinner_manage_nodes">Hallinnoi…</string>
-    <string name="node_added">Lompakko on lisätty.</string>
-    <string name="node_already_exists">Lompakko on jo olemassa.\nJos haluat muokata sen yhteyden määrityksia, mene lompakon tiedot sivulle.</string>
     <string name="lnurl_withdraw_success">Nosto\nonnistui</string>
     <string name="lnurl_withdraw_fail">Nosto\nepäonnistui</string>
     <string name="lnurl_decoding_no_lnurl_data">Oikean muotoista LNURL-tietoa ei tunnistettu.</string>
@@ -387,7 +373,6 @@
     <string name="lnurl_invalid_response">Palvelu vastasi virheellisesti..</string>
     <string name="string_analyzer_unrecognized_data">Tunnistamatun tieto.</string>
     <string name="rest_port">REST (portti 8080) ei ole tuettu.\n\nHaluatko vaihtaa portiksi 10009 (gRPC)?</string>
-    <string name="drawer_menu_nodes">Lompakot</string>
     <string name="drawer_menu_channels">Kanavat</string>
     <string name="drawer_menu_contacts">Yhteystiedot</string>
     <string name="drawer_menu_backup">Varmistus</string>
@@ -404,7 +389,6 @@
     <string name="clipboard_scan_payment">Leikepöydältä löytyi maksun tiedot. Haluatko siirtyä maksamaan sen?</string>
     <string name="clipboard_scan_lnurl">Leikepöydältä löytyi LNURL-tiedo. Haluatko käyttää sitä?</string>
     <string name="clipboard_scan_node_pubkey">Leikepöydältä löytyi solmun julkinen avain (public key). Haluatko avata kanavan solmuun?</string>
-    <string name="clipboard_scan_connect">Leikepöydältä löytyi palvelin yhteyden tiedot. Haluatko lisätä uuden lompakon?</string>
     <string name="third_party_licenses">Kolmansien osapuolien käyttöoikeudet</string>
     <string name="licenses">Lisenssit</string>
     <string name="choose_action">Valitse toiminto</string>

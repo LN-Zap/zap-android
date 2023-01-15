@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Current Node">
+    <item android:title="@string/drawer_menu_category_current_node">
         <menu>
             <group>
                 <item
@@ -18,12 +18,12 @@
             </group>
         </menu>
     </item>
-    <item android:title="General">
+    <item android:title="@string/drawer_menu_category_app">
         <menu>
             <group>
                 <item
                     android:id="@+id/drawerNodes"
-                    android:icon="@drawable/ic_wallet_24"
+                    android:icon="@drawable/ic_nodes_24"
                     android:title="@string/drawer_menu_nodes" />
                 <item
                     android:id="@+id/drawerContacts"

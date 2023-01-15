@@ -210,7 +210,7 @@ public class OpenChannelBSDFragment extends ZapBSDFragment implements Wallet.Cha
 
                 } else {
                     // you need to setup wallet to open a channel
-                    showError(getResources().getString(R.string.error_channel_open_wallet_setup), Snackbar.LENGTH_LONG);
+                    showError(getResources().getString(R.string.error_channel_open_node_setup), Snackbar.LENGTH_LONG);
                     return;
                 }
 

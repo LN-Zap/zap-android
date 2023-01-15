@@ -102,9 +102,7 @@
     <string name="activity_send">Thanh toán</string>
     <string name="activity_connectRemoteNode">Nối tới nốt mạng</string>
     <string name="activity_manage_channels">Kênh Lightning Bitcoin</string>
-    <string name="activity_manage_nodes">Quản lý ví</string>
     <string name="activity_advanced_settings">Cài đặt nâng cao</string>
-    <string name="activity_node_details">Chi tiết ví</string>
     <string name="activity_identity">Nhận dạng</string>
     <string name="activity_manage_contacts">Quản lý liên lạc</string>
     <string name="activity_manage_contacts_send_mode">Gửi tới…</string>
@@ -112,7 +110,6 @@
     <string name="activity_contact_details">Chi tiết liên lạc</string>
     <string name="activity_manual_setup">Connection Data</string>
     <string name="activity_backup">Backup</string>
-    <string name="navigation_wallet">Ví</string>
     <string name="navigation_history">Lịch sử</string>
     <string name="navigation_settings">Cài đặt</string>
     <string name="pin_create">Tạo mã PIN</string>
@@ -168,8 +165,6 @@
     <string name="setup_connect_remote_description">Điều khiển từ xa nốt mạng của riêng bạn.</string>
     <string name="setup_connect_remote_button">Nối tới nốt mạng</string>
     <string name="demo_setupNodeBtn">Thiết lập ví</string>
-    <string name="demo_setupNodeFirst">Trước nhất bạn phải thiết lập một ví.</string>
-    <string name="demo_setupNodeFirstAvatar">Bạn thiết lập ví trước bạn có thể thấy nhận dạng và ảnh đại diện bạn.</string>
     <string name="send_lightningPayment">Gửi thanh toán lightning</string>
     <string name="send_onChainPayment">Gửi thanh toán trên mạng bitcoin chính</string>
     <string name="send_sendPayment">Gửi thanh toán</string>
@@ -257,7 +252,6 @@
     <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
     <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.\n\nPlease update your wallet connection settings if your node is now reachable under a different address or hostname.</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
@@ -270,7 +264,6 @@
     <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">The wallet needs to be setup to open a channel.</string>
     <string name="error_connect_peer">Could not establish connection to peer node.</string>
     <string name="error_connect_peer_refused">Connection has been refused by peer.</string>
     <string name="error_connect_peer_self">Cannot make connection to self.</string>
@@ -293,7 +286,6 @@
     <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
-    <string name="error_node_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
     <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
@@ -347,21 +339,15 @@
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
     <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
     <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
-    <string name="node_name">Wallet Name</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="change_data">Change data</string>
-    <string name="open_node">Open wallet</string>
     <string name="connectionData">Connection data</string>
     <string name="host">Host</string>
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificate</string>
-    <string name="confirm_node_deletion">Do you really want to delete this wallet?</string>
-    <string name="no_nodes">No wallets</string>
     <string name="spinner_manage_nodes">Manage…</string>
-    <string name="node_added">Wallet has been added.</string>
-    <string name="node_already_exists">This wallet already exists.\nIf you want to update its connection data, please go to the wallets detail page.</string>
     <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
     <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>
     <string name="lnurl_decoding_no_lnurl_data">The data does not contain a valid LNURL.</string>
@@ -380,7 +366,6 @@
     <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
     <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
-    <string name="drawer_menu_nodes">Wallets</string>
     <string name="drawer_menu_channels">Channels</string>
     <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Backup</string>
@@ -397,7 +382,6 @@
     <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
     <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
     <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
-    <string name="clipboard_scan_connect">Your clipboard contains connection data. Do you want to add a new wallet?</string>
     <string name="third_party_licenses">Third-party licenses</string>
     <string name="licenses">Licenses</string>
     <string name="choose_action">Choose action</string>

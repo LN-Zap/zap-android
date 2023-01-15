@@ -102,9 +102,7 @@
     <string name="activity_send">Payer</string>
     <string name="activity_connectRemoteNode">Se connecter au nœud</string>
     <string name="activity_manage_channels">Canaux Lightning</string>
-    <string name="activity_manage_nodes">Gérer les portefeuilles</string>
     <string name="activity_advanced_settings">Réglages avancés</string>
-    <string name="activity_node_details">Détails du portefeuille</string>
     <string name="activity_identity">Identité</string>
     <string name="activity_manage_contacts">Gérer les contacts</string>
     <string name="activity_manage_contacts_send_mode">Envoyer à…</string>
@@ -112,7 +110,6 @@
     <string name="activity_contact_details">Détails du contact</string>
     <string name="activity_manual_setup">Détails de connexion</string>
     <string name="activity_backup">Sauvegarde</string>
-    <string name="navigation_wallet">Portefeuille</string>
     <string name="navigation_history">Historique</string>
     <string name="navigation_settings">Réglages</string>
     <string name="pin_create">Choisissez un code PIN</string>
@@ -168,8 +165,6 @@
     <string name="setup_connect_remote_description">Contrôlez à distance votre propre nœud.</string>
     <string name="setup_connect_remote_button">Se connecter au nœud à distance</string>
     <string name="demo_setupNodeBtn">Configurer le portefeuille</string>
-    <string name="demo_setupNodeFirst">Vous devez d\'abord configurer un portefeuille.</string>
-    <string name="demo_setupNodeFirstAvatar">Vous devez d\'abord configurer un portefeuille, avant de pouvoir voir votre identité et votre avatar.</string>
     <string name="send_lightningPayment">Envoyer un paiement Lightning</string>
     <string name="send_onChainPayment">Envoyer un paiement On-chain</string>
     <string name="send_sendPayment">Envoyer un paiement</string>
@@ -257,7 +252,6 @@
     <string name="error_connection_invalid_macaroon2">Accès refusé !\n\nLe fichier macaroon est invalide.</string>
     <string name="error_connection_server_unreachable">Expiration de la requête.\nLe serveur ne répond pas.\n\n- Assurez-vous d\'avoir une bonne connexion Internet\n\n- Assurez-vous que le serveur soit actif et possède l\'adresse IP suivante :\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Échec de la vérification du nom d\'hôte.\n\nLe nom d\'hôte de votre connexion ne correspond pas au nom d\'hôte fourni dans le certificat.\n\n Vous devrez peut-être recréer votre certificat. Assurez-vous que le nom d\'hôte est ajouté au fichier lnd.conf en tant que tlsextradomain avant de le recréer.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">L\'hôte (%1$s) ne peut pas être résolu.\n\nVeuillez mettre à jour les paramètres de connexion de votre portefeuille si votre nœud est désormais accessible sous une adresse ou un nom d\'hôte différent.</string>
     <string name="error_connection_lnd_unavailable">Impossible de se connecter à lnd.\n\n- Assurez-vous que le daemon lnd soit actif sur votre serveur.\n\n- Assurez-vous que la redirection des ports soit active (Port : %1$s)</string>
     <string name="error_connection_network_unreachable">Impossible de joindre l\'hôte.\n\nVeuillez vous assurer que vous disposez d\'une connexion Internet.</string>
     <string name="error_connection_unknown">La connexion a échoué.</string>
@@ -270,7 +264,6 @@
     <string name="error_connection_internal_server_clearnet">Le nœud est accessible mais renvoie une erreur interne. Cette erreur peut être causée par l\'utilisation d\'un mauvais port. Lorsque vous essayez de vous connecter à un nœud sur clearnet, la désactivation de Tor dans les paramètres de l\'application peut également résoudre votre problème.</string>
     <string name="error_wrong_password">Mauvais mot de passe</string>
     <string name="error_lightning_uri_invalid">Format non valide.\nVeuillez utiliser l\'un des éléments suivants :\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">Le portefeuille doit être configuré avant d\'ouvrir un canal.</string>
     <string name="error_connect_peer">Impossible d\'établir une connexion avec le pair.</string>
     <string name="error_connect_peer_refused">La connexion a été rejetée par le pair.</string>
     <string name="error_connect_peer_self">Impossible de se connecter à votre propre nœud.</string>
@@ -293,7 +286,6 @@
     <string name="error_payment_insufficient_balance">Le montant à payer est supérieur à ce que vous pouvez envoyer sur Lightning avec vos canaux acteuellement ouverts .</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Veuillez vous assurer que le destinataire a activé la fonction d\'envoi de clé, aussi appelé Keysend.</string>
     <string name="error_only_payment_data_allowed">Seules les données de paiement sont autorisées ici.</string>
-    <string name="error_node_not_yet_ready">Votre portefeuille n\'est pas encore entièrement synchronisé. Veuillez réessayer plus tard.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s semble bloquer les requêtes provenant du réseau Tor. Vous pouvez essayer de désactiver Tor dans les paramètres ou contacter le service et lui demander de mettre à jour ses règles cloudflare.</string>
     <string name="error_tor_exchange_rate">Le taux de change n\'a pas pu être récupéré. Le service que vous utilisez semble bloquer les demandes provenant du réseau Tor. Essayez de changer de fournisseur de taux de change dans les paramètres avancés.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">La réponse de %1$s n\'a pas pu être lue.</string>
@@ -354,21 +346,15 @@
     <string name="help_dialog_scanGeneric">Tout est autorisé ici.\nScannez simplement un QR-Code et Zap déterminera automatiquement l\'action à entreprendre en fonction des données.</string>
     <string name="help_dialog_private_channels">Les canaux privés ne sont pas plus sécurisés, ils ne sont tout simplement pas visibles pour le réseau.\nN\'utilisez les canaux privés que lorsque votre nœud est exécuté sur un appareil mobile ou s\'il est fréquemment hors ligne.</string>
     <string name="help_dialog_identity">Il s\'agit de votre identité sur le réseau Lightning.\n\nLorsque vous appuyez sur l\'image de votre avatar, vous révélerez un QR-Code.\nD\'autres peuvent scanner ce code et vous ajouter à leurs contacts, ouvrir des canaux avec vous ou vous envoyer de l\'argent. \n\nCet avatar est unique.\nIl a été généré automatiquement en fonction de votre clé publique et ne peut pas être modifié.</string>
-    <string name="node_name">Nom du portefeuille</string>
     <string name="delete">Supprimer</string>
     <string name="rename">Renommer</string>
     <string name="change_data">Modifier les données</string>
-    <string name="open_node">Ouvrir portefeuille</string>
     <string name="connectionData">Détails de connexion</string>
     <string name="host">Hôte</string>
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificat</string>
-    <string name="confirm_node_deletion">Êtes-vous sûr de vouloir supprimer ce portefeuille ?</string>
-    <string name="no_nodes">Aucun portefeille</string>
     <string name="spinner_manage_nodes">Gérer…</string>
-    <string name="node_added">Portefeuille ajouté.</string>
-    <string name="node_already_exists">Ce portefeuille existe déja. \n Si vous souaithez modifier les détails de connections rendez-vous sur la page details de ce portefeuille.</string>
     <string name="lnurl_withdraw_success">Retrait \n effectué</string>
     <string name="lnurl_withdraw_fail">Retrait\n echoué</string>
     <string name="lnurl_decoding_no_lnurl_data">Les données ne contiennent pas de LNURL valide.</string>
@@ -387,7 +373,6 @@
     <string name="lnurl_invalid_response">Le service a répondu par une réponse invalide.</string>
     <string name="string_analyzer_unrecognized_data">Données non reconnues.</string>
     <string name="rest_port">REST (port 8080) n\'est pas pris en charge.\n\nVoulez-vous changer le port en 10009 (gRPC) ?</string>
-    <string name="drawer_menu_nodes">Portefeuilles</string>
     <string name="drawer_menu_channels">Canaux</string>
     <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Sauvegarde</string>
@@ -404,7 +389,6 @@
     <string name="clipboard_scan_payment">Votre presse-papiers contient des informations de paiement. Souhaitez vous initier un paiement ?</string>
     <string name="clipboard_scan_lnurl">Votre presse-papiers contient des données LNURL. Voulez-vous l\'utiliser?</string>
     <string name="clipboard_scan_node_pubkey">Votre presse-papiers contient la clé publique d\'un nœud. Vous souhaitez ouvrir un canal?</string>
-    <string name="clipboard_scan_connect">Votre presse-papiers contient des données de connexion. Voulez-vous ajouter un nouveau portefeuille ?</string>
     <string name="third_party_licenses">Licences tierces</string>
     <string name="licenses">Licences</string>
     <string name="choose_action">Choisir une action</string>
