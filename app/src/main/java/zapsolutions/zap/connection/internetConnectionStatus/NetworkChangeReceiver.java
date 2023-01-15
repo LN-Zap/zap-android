@@ -7,7 +7,7 @@ import android.os.Handler;
 
 import java.util.concurrent.RejectedExecutionException;
 
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.util.Wallet;
 import zapsolutions.zap.util.ZapLog;
 
@@ -21,7 +21,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
         int status = NetworkUtil.getConnectivityStatusString(context);
 
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 // The following command will find out, if we have a connection to LND
                 Wallet.getInstance().fetchInfoFromLND();

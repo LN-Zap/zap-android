@@ -102,9 +102,9 @@
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
     <string name="activity_manage_channels">Lightning-Kanäle</string>
-    <string name="activity_manage_wallets">Wallets Verwalten</string>
+    <string name="activity_manage_nodes">Nodes Verwalten</string>
     <string name="activity_advanced_settings">Erweiterte Einstellungen</string>
-    <string name="activity_wallet_details">Wallet Details</string>
+    <string name="activity_node_details">Node Details</string>
     <string name="activity_identity">Identität</string>
     <string name="activity_manage_contacts">Kontakte verwalten</string>
     <string name="activity_manage_contacts_send_mode">Senden an…</string>
@@ -112,7 +112,6 @@
     <string name="activity_contact_details">Kontaktdetails</string>
     <string name="activity_manual_setup">Verbindungsdaten</string>
     <string name="activity_backup">Backup</string>
-    <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Verlauf</string>
     <string name="navigation_settings">Einstellungen</string>
     <string name="pin_create">PIN erstellen</string>
@@ -167,9 +166,9 @@
     <string name="setup_connect_local_button">Wallet erstellen</string>
     <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
-    <string name="demo_setupWalletBtn">Wallet einrichten</string>
-    <string name="demo_setupWalletFirst">Du musst zuerst eine Wallet einrichten.</string>
-    <string name="demo_setupWalletFirstAvatar">Du musst zuerst eine Wallet einrichten, bevor du deine Identität und deinen Avatar sehen kannst.</string>
+    <string name="demo_setupNodeBtn">Wallet einrichten</string>
+    <string name="demo_setupNodeFirst">Du musst dich zuerst mit einer Node verbinden.</string>
+    <string name="demo_setupNodeFirstAvatar">Du musst dich zuerst mit einer Node verbinden, bevor du deine Identität und deinen Avatar sehen kannst.</string>
     <string name="send_lightningPayment">Lightning Zahlung senden</string>
     <string name="send_onChainPayment">On-chain Zahlung senden</string>
     <string name="send_sendPayment">Zahlung senden</string>
@@ -257,7 +256,7 @@
     <string name="error_connection_invalid_macaroon2">Zugriff verweigert!\n\nDas Macaroon ist ungültig.</string>
     <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.\n\nDer Hostnamen deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Zertifikats überein.\n\nMöglicherweise musst du das Zertifikat erneuern. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain hinterlegt ist, bevor du das Zertifikat neu erstellst.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden.\n\nBitte aktualisiere die Verbindungseinstellungen deiner Wallet, falls dein Knoten mittlerweile unter einem anderen Namen oder einer anderen Addresse erreichbar ist.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden.  Bitte aktualisiere die Verbindungseinstellungen deiner Node, falls deine Node mittlerweile unter einem anderen Namen oder einer anderen Addresse erreichbar ist.</string>
     <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND daemon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
     <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
@@ -270,7 +269,7 @@
     <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es auch helfen Tor in den Einstellungen auszuschalten.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
     <string name="error_lightning_uri_invalid">Ungültiges Format.\nBitte verwende eines der folgenden Formate:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">Die Wallet muss eingerichtet sein, um einen Kanal zu öffnen.</string>
+    <string name="error_channel_open_node_setup">Du musst dich zuerst mit einer Node verbinden, um einen Kanal zu öffnen.</string>
     <string name="error_connect_peer">Es konnte keine Verbindung zum Peer aufgebaut werden.</string>
     <string name="error_connect_peer_refused">Die Verbindung wurde vom Peer abgelehnt.</string>
     <string name="error_connect_peer_self">Du kannst keine Verbindung zu dir selbst aufbauen.</string>
@@ -285,7 +284,7 @@
     <string name="error_channel_close_timeout">Zeitüberschreitung. Der Kanal konnte nicht geschlossen werden.</string>
     <string name="error_channel_close">Der Kanal konnte nicht geschlossen werden: %s</string>
     <string name="error_pin_deactivation_attempt">Es sieht so aus, als ob jemand versucht hat, deine PIN zu deaktivieren. Die App wird nun beendet.\nDu kannst die App neu installieren und den Wiederherstellungsprozess nutzen, um wieder Zugriff auf dein Guthaben zu erhalten.</string>
-    <string name="error_empty_wallet_name">Ein leerer Name ist nicht erlaubt.</string>
+    <string name="error_empty_node_name">Ein leerer Name ist nicht erlaubt.</string>
     <string name="error_invalid_bitcoin_request">Ungültige Bitcoinanfrage.</string>
     <string name="error_payment_invalid_details">Die Zahlungsdetails stimmen nicht mit den in der Zahlungsanfrage gefordert Details überein.</string>
     <string name="error_payment_timeout">Zeitüberschreitung. Es konnte keine Route gefunden werden.</string>
@@ -293,7 +292,7 @@
     <string name="error_payment_insufficient_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Bitte stelle sicher, dass der Empfänger die \"Keysend\" Funktion aktiviert hat.</string>
     <string name="error_only_payment_data_allowed">Nur Zahlungsdaten sind hier erlaubt.</string>
-    <string name="error_wallet_not_yet_ready">Deine Wallet ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
+    <string name="error_node_not_yet_ready">Deine Node ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s scheint Anfragen aus dem Tor Netzwerk zu blockieren. Du kannst versuchen Tor in den Einstellungen auszuschalten oder den Dienst zu kontaktieren damit sie ihre Cloudflare Einstellungen ändern.</string>
     <string name="error_tor_exchange_rate">Die Wechselkurse konnten nicht aktualisiert werden. Der Dienst, den du verwendest, scheint Anfragen aus dem Tor Netzwerk zu blockieren. Versuche den Wechselkursanbieter in den erweiterten Einstellungen zu ändern.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Die Antwort von %1$s konnte nicht gelesen werden.</string>
@@ -354,21 +353,21 @@
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und Zap wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.\nBenutze nur dann private Kanäle, wenn dein Knoten auf einem mobilen Gerät läuft, oder wenn er regelmäßig offline ist.</string>
     <string name="help_dialog_identity">Das ist deine Identität im Lighting Netzwerk.\n\nWenn du auf den Avatar tippst, wird dir ein QR-Code angezeigt.\nAndere können diesen Code scannen und dich zu ihren Kontakten hinzufügen, Kanäle mit dir öffnen, oder dir Geld senden.\n\nDieser Avatar ist einzigartig.\nEr wurde automatisch basierend auf deinem öffentlichen Schlüssel generiert und kann nicht geändert werden.</string>
-    <string name="wallet_name">Name der Wallet</string>
+    <string name="node_name">Name der Node</string>
     <string name="delete">Löschen</string>
     <string name="rename">Umbenennen</string>
     <string name="change_data">Daten ändern</string>
-    <string name="open_wallet">Wallet öffnen</string>
+    <string name="open_node">Diese Node auswählen</string>
     <string name="connectionData">Verbindungsdaten</string>
     <string name="host">Host</string>
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Zertifikat</string>
-    <string name="confirm_wallet_deletion">Möchtest du diese Wallet wirklich löschen?</string>
-    <string name="no_wallets">Keine Wallets</string>
-    <string name="spinner_manage_wallets">Verwalten…</string>
-    <string name="wallet_added">Wallet wurde hinzugefügt.</string>
-    <string name="wallet_already_exists">Diese Wallet existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zu den Wallet Details.</string>
+    <string name="confirm_node_deletion">Möchtest du diese Verbindungsdaten der Node wirklich löschen?</string>
+    <string name="no_nodes">Keine Nodes</string>
+    <string name="spinner_manage_nodes">Verwalten…</string>
+    <string name="node_added">Verbindungsdaten der Node wurden hinzugefügt.</string>
+    <string name="node_already_exists">Diese Node existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zu den Node Details.</string>
     <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>
     <string name="lnurl_withdraw_fail">Abhebung\nfehlgeschlagen</string>
     <string name="lnurl_decoding_no_lnurl_data">Die Daten enthalten keine gültige LNURL.</string>
@@ -387,7 +386,7 @@
     <string name="lnurl_invalid_response">Der Dienst hat mit einer ungültigen Antwort geantwortet.</string>
     <string name="string_analyzer_unrecognized_data">Unbekannte Daten.</string>
     <string name="rest_port">REST (Port 8080) wird nicht unterstützt.\n\nMöchtest du den Port auf 10009 (gRPC) ändern?</string>
-    <string name="drawer_menu_wallets">Wallets</string>
+    <string name="drawer_menu_nodes">Nodes</string>
     <string name="drawer_menu_channels">Kanäle</string>
     <string name="drawer_menu_contacts">Kontakte</string>
     <string name="drawer_menu_backup">Backup</string>
@@ -404,7 +403,7 @@
     <string name="clipboard_scan_payment">Die Zwischenablage enthält Zahlungsinformationen. Möchtest du eine Zahlung durchführen?</string>
     <string name="clipboard_scan_lnurl">Die Zwischenablage enthält LNURL Daten. Möchtest du sie verwenden?</string>
     <string name="clipboard_scan_node_pubkey">Die Zwischenablage enthält den Schlüssel eines anderen Knotens. Möchtest du einen Kanal öffnen?</string>
-    <string name="clipboard_scan_connect">Die Zwischenablage enthält Verbindungsinformationen. Möchtest du eine neue Wallet hinzufügen?</string>
+    <string name="clipboard_scan_connect">Die Zwischenablage enthält Verbindungsinformationen. Möchtest du eine neue Node hinzufügen?</string>
     <string name="third_party_licenses">Drittanbieter-Lizenzen</string>
     <string name="licenses">Lizenzen</string>
     <string name="choose_action">Aktion wählen</string>
@@ -432,7 +431,7 @@
     <string name="advanced_channel_details_explanation_local_channel_reserve">Der minimale Betrag, den du im Guthaben des Kanals zurücklegen musst. Du kannst diesen Betrag nicht ausgeben. Das stellt sicher, dass du immer etwas zu verlieren hast, falls du versuchen würdest, deinen Kanalpartner zu betrügen.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Rücklage (Partner)</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">Der minimale Betrag, den dein Kanalpartner im Guthaben des Kanals zurücklegen muss. Das stellt sicher, dass dein Kanalpartner immer etwas zu verlieren hat, falls er versuchen würde, dich zu betrügen.</string>
-    <string name="backup_data_create_description">Dieses Backup ist für den Wechsel des Handys gedacht. Es enthält weder die Seed zur Wiederherstellung des On-Chain Guthabens, noch die Channel Backups zur Widerherstellung des Lightning Guthabens. Die Backukps zur Wiederherstellung der Guthaben müssen außerhalb von Zap erstellt werden.\n\nDieses Backup enthält nur folgende Daten:\n\n- Verbinungsdaten, um Zap mit deinen laufenden Nodes zu verbinden\n- Kontakte</string>
+    <string name="backup_data_create_description">Dieses Backup ist für den Wechsel des Handys gedacht. Es enthält weder die Seed zur Wiederherstellung des On-Chain Guthabens, noch die Channel Backups zur Widerherstellung des Lightning Guthabens. Die Backups zur Wiederherstellung der Guthaben müssen außerhalb von Zap erstellt werden.\n\nDieses Backup enthält nur folgende Daten:\n\n- Verbindungsdaten, um Zap mit deinen laufenden Nodes zu verbinden\n- Kontakte</string>
     <string name="backup_data_confirm_description">Ich habe meine Seed und meine Kanäle bereits gesichert und verstehe, dass dieses Backup NICHT dabei hilft Guthaben wiederherzustellen.\n\nIch verstehe, dass dieses Backup trotzdem alle nötige Information enthält, um auf mein Guthaben zuzugreifen. Ich verwende deshalb im nächsten Schritt ein sicheres Passwort.</string>
     <string name="backup_data_confirm_headline">Bitte bestätige</string>
     <string name="backup_data_confirm">Ich bestätige</string>
@@ -455,4 +454,11 @@
     <string name="backup_data_version_too_old">Dieses Backup wurde mit einer neueren version erstellt. Bitte update die App bevor das Backup wiederhergestellt wird.</string>
     <string name="backup_data_invalid_file_chosen">Das ist keine gültige Backup Datei. Bitte wähle eine Datei aus, die mit dieser App erstellt wurde.</string>
     <string name="dialog_open_url">Die Daten verlinken auf eine Webseite. Möchtest du die folgende Seite öffnen?\n\n%1$s</string>
+    <string name="guardian_zero_amount_invoice">Diese Zahlungsanfrage schreibt keinen Betrag vor. Auch wenn es sehr unwahrscheinlich ist, können Zahlungsanfragen ohne Betrag ausgenutzt werden und der Empfänger wird weniger erhalten als erwartet. Wenn möglich verwende bitte eine Zahlungsanfrage mit vorgegebenem Betrag</string>
+    <string name="help_dialog_utxos">Diese UTXO-Liste stellt all dein On-Chain Guthaben dar. \nÄhnlich wie Münzen können unspent transaction outputs (UTXOs) nur als Ganzes ausgegeben werden. Da UTXOs jeden beliebigen Wert haben können, wirst du einfach Wechselgeld in Form von neuen UTXOs erhalten, wenn du eine Transaktion tätigst.</string>
+    <string name="utxo_no_utxos">Keine UTXOs</string>
+    <string name="forwarding_no_forwarding_events">Keine Weiterleitungsereignisse im ausgewählten Zeitraum</string>
+    <string name="forwarding_earned_description">Einnahmen im ausgewählten Zeitraum</string>
+    <string name="forwarding_closed_channel">Geschlossener Kanal</string>
+    <string name="drawer_menu_category_current_node">Aktuelle Node</string>
 </resources>

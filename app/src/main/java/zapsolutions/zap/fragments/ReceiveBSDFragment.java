@@ -29,7 +29,7 @@ import zapsolutions.zap.GeneratedRequestActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.customView.BSDScrollableMainView;
 import zapsolutions.zap.customView.NumpadView;
 import zapsolutions.zap.util.HelpDialogUtil;
@@ -111,7 +111,7 @@ public class ReceiveBSDFragment extends ZapBSDFragment {
             @Override
             public void onClick(View v) {
                 mOnChain = false;
-                boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !WalletConfigsManager.getInstance().hasAnyConfigs();
+                boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !NodeConfigsManager.getInstance().hasAnyConfigs();
 
                 // Manage visibilities and animation
                 AutoTransition autoTransition = new AutoTransition();
@@ -253,7 +253,7 @@ public class ReceiveBSDFragment extends ZapBSDFragment {
                 } else {
                     long maxReceivable;
                     mUseValueBeforeUnitSwitch = false;
-                    if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+                    if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                         maxReceivable = Wallet.getInstance().getMaxLightningReceiveAmount();
                     } else {
                         maxReceivable = 500000000000L;
@@ -316,7 +316,7 @@ public class ReceiveBSDFragment extends ZapBSDFragment {
     }
 
     private void generateRequest() {
-        if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             // The wallet is setup. Communicate with LND and generate the request.
             if (mOnChain) {
 
@@ -389,7 +389,7 @@ public class ReceiveBSDFragment extends ZapBSDFragment {
             }
         } else {
             // The wallet is not setup. Show setup wallet message.
-            Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -38,7 +38,7 @@ public class RefConstants {
 
     // Versioning for JSON data structures
     public static final int CONTACTS_JSON_VERSION = 1;
-    public static final int WALLET_CONFIG_JSON_VERSION = 0;
+    public static final int NODE_CONFIG_JSON_VERSION = 0;
 
     // API request timeouts (in seconds)
     public static final int TIMEOUT_SHORT = 5;

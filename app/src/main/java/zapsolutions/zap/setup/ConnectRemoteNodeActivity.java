@@ -19,7 +19,7 @@ import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.Wallet;
-import zapsolutions.zap.walletManagement.ManageWalletsActivity;
+import zapsolutions.zap.nodesManagement.ManageNodesActivity;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
@@ -35,8 +35,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (extras.containsKey(ManageWalletsActivity.WALLET_ID)) {
-                mWalletUUID = extras.getString(ManageWalletsActivity.WALLET_ID);
+            if (extras.containsKey(ManageNodesActivity.NODE_ID)) {
+                mWalletUUID = extras.getString(ManageNodesActivity.NODE_ID);
             }
             if (extras.getBoolean(EXTRA_STARTED_FROM_URI, false)) {
                 String connectString = App.getAppContext().getUriSchemeData();
@@ -126,7 +126,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             public void onSaved(String id) {
 
                 // The configuration was saved. Now make it the currently active wallet.
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, id).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
@@ -143,7 +143,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             @Override
             public void onAlreadyExists() {
                 new AlertDialog.Builder(ConnectRemoteNodeActivity.this)
-                        .setMessage(R.string.wallet_already_exists)
+                        .setMessage(R.string.node_already_exists)
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {

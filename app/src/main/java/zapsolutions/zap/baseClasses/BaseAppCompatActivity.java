@@ -28,6 +28,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         super.onResume();
         initializeScreenRecordingSecurity();
 
+        // Prevent app from turning off screen on inactivity
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         // Enable back button if an action bar is supported by the theme
         final ActionBar ab = getSupportActionBar();
         if (ab != null) {

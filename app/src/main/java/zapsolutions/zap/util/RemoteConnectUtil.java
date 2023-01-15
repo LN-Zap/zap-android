@@ -20,8 +20,8 @@ import okhttp3.Response;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.RemoteConfiguration;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
 import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
@@ -153,7 +153,7 @@ public class RemoteConnectUtil {
     }
 
     private static void executeSaveRemoteConfiguration(RemoteConfiguration config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
-        WalletConfigsManager walletConfigsManager = WalletConfigsManager.getInstance();
+        NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
 
         try {
             if (config instanceof LndConnectConfig) {
@@ -162,23 +162,23 @@ public class RemoteConnectUtil {
                 String id;
                 if (walletUUID == null) {
 
-                    if (walletConfigsManager.doesDestinationExist(lndConfig.getHost(), port)) {
+                    if (nodeConfigsManager.doesDestinationExist(lndConfig.getHost(), port)) {
                         listener.onAlreadyExists();
                         return;
                     }
 
-                    id = walletConfigsManager.addWalletConfig(lndConfig.getHost(),
-                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), port,
+                    id = nodeConfigsManager.addNodeConfig(lndConfig.getHost(),
+                            NodeConfig.NODE_TYPE_REMOTE, lndConfig.getHost(), port,
                             lndConfig.getCert(), lndConfig.getMacaroon()).getId();
                 } else {
                     id = walletUUID;
-                    String oldAlias = walletConfigsManager.getWalletConfigById(id).getAlias();
-                    walletConfigsManager.updateWalletConfig(id, oldAlias,
-                            WalletConfig.WALLET_TYPE_REMOTE, lndConfig.getHost(), port,
+                    String oldAlias = nodeConfigsManager.getNodeConfigById(id).getAlias();
+                    nodeConfigsManager.updateNodeConfig(id, oldAlias,
+                            NodeConfig.NODE_TYPE_REMOTE, lndConfig.getHost(), port,
                             lndConfig.getCert(), lndConfig.getMacaroon());
                 }
 
-                walletConfigsManager.apply();
+                nodeConfigsManager.apply();
 
                 listener.onSaved(id);
 
@@ -188,23 +188,23 @@ public class RemoteConnectUtil {
                 String id;
                 if (walletUUID == null) {
 
-                    if (walletConfigsManager.doesDestinationExist(btcPayConfig.getHost(), port)) {
+                    if (nodeConfigsManager.doesDestinationExist(btcPayConfig.getHost(), port)) {
                         listener.onAlreadyExists();
                         return;
                     }
 
-                    id = walletConfigsManager.addWalletConfig(btcPayConfig.getHost(),
-                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), port,
+                    id = nodeConfigsManager.addNodeConfig(btcPayConfig.getHost(),
+                            NodeConfig.NODE_TYPE_REMOTE, btcPayConfig.getHost(), port,
                             null, btcPayConfig.getMacaroon()).getId();
                 } else {
                     id = walletUUID;
-                    String oldAlias = walletConfigsManager.getWalletConfigById(id).getAlias();
-                    walletConfigsManager.updateWalletConfig(id, oldAlias,
-                            WalletConfig.WALLET_TYPE_REMOTE, btcPayConfig.getHost(), port,
+                    String oldAlias = nodeConfigsManager.getNodeConfigById(id).getAlias();
+                    nodeConfigsManager.updateNodeConfig(id, oldAlias,
+                            NodeConfig.NODE_TYPE_REMOTE, btcPayConfig.getHost(), port,
                             null, btcPayConfig.getMacaroon());
                 }
 
-                walletConfigsManager.apply();
+                nodeConfigsManager.apply();
 
                 listener.onSaved(id);
 

@@ -14,8 +14,8 @@ import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.RemoteConfiguration;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfig;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
@@ -23,7 +23,7 @@ import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.TimeOutUtil;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.Wallet;
-import zapsolutions.zap.walletManagement.ManageWalletsActivity;
+import zapsolutions.zap.nodesManagement.ManageNodesActivity;
 
 public class ManualSetup extends BaseAppCompatActivity {
 
@@ -43,8 +43,8 @@ public class ManualSetup extends BaseAppCompatActivity {
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (extras.containsKey(ManageWalletsActivity.WALLET_ID)) {
-                mWalletUUID = extras.getString(ManageWalletsActivity.WALLET_ID);
+            if (extras.containsKey(ManageNodesActivity.NODE_ID)) {
+                mWalletUUID = extras.getString(ManageNodesActivity.NODE_ID);
             }
         }
 
@@ -58,12 +58,12 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
-            WalletConfig walletConfig = WalletConfigsManager.getInstance().getWalletConfigById(mWalletUUID);
-            mEtHost.setText(walletConfig.getHost());
-            mEtPort.setText(String.valueOf(walletConfig.getPort()));
-            mEtMacaroon.setText(walletConfig.getMacaroon());
-            if (walletConfig.getCert() != null && !walletConfig.getCert().isEmpty()) {
-                mEtCertificate.setText(walletConfig.getCert());
+            NodeConfig nodeConfig = NodeConfigsManager.getInstance().getNodeConfigById(mWalletUUID);
+            mEtHost.setText(nodeConfig.getHost());
+            mEtPort.setText(String.valueOf(nodeConfig.getPort()));
+            mEtMacaroon.setText(nodeConfig.getMacaroon());
+            if (nodeConfig.getCert() != null && !nodeConfig.getCert().isEmpty()) {
+                mEtCertificate.setText(nodeConfig.getCert());
             }
         }
 
@@ -108,7 +108,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             public void onSaved(String id) {
 
                 // The configuration was saved. Now make it the currently active wallet.
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_WALLET_CONFIG, id).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, id).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
@@ -125,7 +125,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             @Override
             public void onAlreadyExists() {
                 new AlertDialog.Builder(ManualSetup.this)
-                        .setMessage(R.string.wallet_already_exists)
+                        .setMessage(R.string.node_already_exists)
                         .setCancelable(true)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -154,7 +154,7 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         if (id == R.id.scanButton) {
             Intent intent = new Intent(ManualSetup.this, ConnectRemoteNodeActivity.class);
-            intent.putExtra(ManageWalletsActivity.WALLET_ID, mWalletUUID);
+            intent.putExtra(ManageNodesActivity.NODE_ID, mWalletUUID);
             startActivity(intent);
             return true;
         }

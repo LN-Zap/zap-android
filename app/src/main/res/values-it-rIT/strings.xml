@@ -102,9 +102,7 @@
     <string name="activity_send">Paga</string>
     <string name="activity_connectRemoteNode">Connetti a nodo remoto</string>
     <string name="activity_manage_channels">Canali Lightning</string>
-    <string name="activity_manage_wallets">Gestisci Portafogli</string>
     <string name="activity_advanced_settings">Impostazioni Avanzate</string>
-    <string name="activity_wallet_details">Dettagli Portafoglio</string>
     <string name="activity_identity">Indentita</string>
     <string name="activity_manage_contacts">Gestisci Contatti</string>
     <string name="activity_manage_contacts_send_mode">Manda a…</string>
@@ -112,7 +110,6 @@
     <string name="activity_contact_details">Dettagli di contatto</string>
     <string name="activity_manual_setup">Connessione Dati</string>
     <string name="activity_backup">Backup</string>
-    <string name="navigation_wallet">Portafogli</string>
     <string name="navigation_history">Storico</string>
     <string name="navigation_settings">Impostazioni</string>
     <string name="pin_create">Crea PIN</string>
@@ -167,9 +164,7 @@
     <string name="setup_connect_local_button">Crea Portafoglio</string>
     <string name="setup_connect_remote_description">Controllo remoto del tuo nodo.</string>
     <string name="setup_connect_remote_button">Connettiti a un Nodo Remoto</string>
-    <string name="demo_setupWalletBtn">Imposta portafoglio</string>
-    <string name="demo_setupWalletFirst">Devi prima impostare un portafoglio.</string>
-    <string name="demo_setupWalletFirstAvatar">Devi prima impostare un portafoglio, prima di poter vedere la tua identità e il tuo avatar.</string>
+    <string name="demo_setupNodeBtn">Imposta portafoglio</string>
     <string name="send_lightningPayment">Invia pagamento lightning</string>
     <string name="send_onChainPayment">Invia pagamento on-chain</string>
     <string name="send_sendPayment">Invia pagamento</string>
@@ -257,7 +252,6 @@
     <string name="error_connection_invalid_macaroon2">Accesso negato!\n\nMacaroon non valido.</string>
     <string name="error_connection_server_unreachable">Timeout.\nIl server non risponde.\n\n- Assicurati di disporre di una buona connessione Internet\n\n- Assicurati che il server sia in esecuzione e abbia ancora il seguente IP:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) non puo essere contattato.\n\nAggiorna le impostazioni di connessione del tuo portafoglio se il tuo nodo è ora raggiungibile con un indirizzo o un nome host diverso.</string>
     <string name="error_connection_lnd_unavailable">Impossibile collegarsi a LND.\n\n- assicurati che il daemon LND sia in esecuzione sul tuo server.\n\n- assicurati che il port forwarding sia attivo. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Impossibile raggiungere l &#96; host .\n\nControlla che hai connessione.</string>
     <string name="error_connection_unknown">Connessione fallita.</string>
@@ -270,7 +264,6 @@
     <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
     <string name="error_wrong_password">Password errata</string>
     <string name="error_lightning_uri_invalid">Formato invalido.\nSi prega di utilizzare uno dei seguenti:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">Il portafoglio deve essere configurato per aprire un canale.</string>
     <string name="error_connect_peer">Non è possibile stabilire una connesione col peer.</string>
     <string name="error_connect_peer_refused">Connessione rifiutata dal peer.</string>
     <string name="error_connect_peer_self">Impossibile stabilire una connessione con se stessi.</string>
@@ -285,7 +278,7 @@
     <string name="error_channel_close_timeout">Impossibile chiudere il canale entro la scadenza.</string>
     <string name="error_channel_close">Impossibile chiudere il canale: %s</string>
     <string name="error_pin_deactivation_attempt">Sembra che qualcuno abbia cercato di disattivare il tuo PIN. L\' app si chiuder&#224; ora.\nPuoi reinstallare l\' app e utilizzare il processo di ripristino per riottenere l\'accesso ai tuoi fondi.</string>
-    <string name="error_empty_wallet_name">Un nome vuoto non è consentito.</string>
+    <string name="error_empty_node_name">Un nome vuoto non è consentito.</string>
     <string name="error_invalid_bitcoin_request">Richiesta bitcoin non valida.</string>
     <string name="error_payment_invalid_details">I dettagli del pagamento non corrispondono ai dettagli specificati dalla fattura che stai tentando di pagare.</string>
     <string name="error_payment_timeout">Tempo scaduto. Impossibile trovare un percorso.</string>
@@ -293,7 +286,6 @@
     <string name="error_payment_insufficient_balance">L\' importo da pagare &#232; maggiore di quello che puoi inviare tramite il lightning con i tuoi attuali canali aperti.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Assicurati che il destinatario abbia abilitato la funzione keyend.</string>
     <string name="error_only_payment_data_allowed">Qui sono consentiti solo i dati di pagamento.</string>
-    <string name="error_wallet_not_yet_ready">Your wallet is not fully synced yet. Please try again later.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
     <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
@@ -354,21 +346,15 @@
     <string name="help_dialog_scanGeneric">Tutto è permesso qui.\nBasta scansionare un QR-Code e Zap determinerà automaticamente quale azione intraprendere in base ai dati.</string>
     <string name="help_dialog_private_channels">I canali privati non sono più sicuri, semplicemente non sono visibili per la rete.\nUtilizza i canali privati solo quando il tuo nodo è in esecuzione su un dispositivo mobile o è spesso offline.</string>
     <string name="help_dialog_identity">Questa&#232; la tua identit&#224; sulla rete lightning.\n\nQuando tocchi l\' immagine del tuo avatar, rivelerai un QR-Code.\nAltri possono scansionare quel codice e aggiungerti ai loro contatti, aprire canali con il tuo o inviarti denaro.\n\nQuesto avatar &#232; unico.\n &#200; stato generato automaticamente in base alla tua chiave pubblica e non pu&#242; essere modificato.</string>
-    <string name="wallet_name">Nome Portafoglio</string>
     <string name="delete">Elimina</string>
     <string name="rename">Rinominare</string>
     <string name="change_data">Modifica dati</string>
-    <string name="open_wallet">Apri portafoglio</string>
     <string name="connectionData">Connessione Dati</string>
     <string name="host">Host</string>
     <string name="port">Porta</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificato</string>
-    <string name="confirm_wallet_deletion">Vuoi veramente eliminare questo portafoglio?</string>
-    <string name="no_wallets">Nessun Portafoglio</string>
-    <string name="spinner_manage_wallets">Gestisci…</string>
-    <string name="wallet_added">Portafoglio aggiunto.</string>
-    <string name="wallet_already_exists">Questo portafoglio esiste già.\nSe vuoi aggiornare i suoi dati di connessione, vai alla pagina dei dettagli dei portafogli.</string>
+    <string name="spinner_manage_nodes">Gestisci…</string>
     <string name="lnurl_withdraw_success">Ritiro\nriuscito</string>
     <string name="lnurl_withdraw_fail">Ritiro\nfallito</string>
     <string name="lnurl_decoding_no_lnurl_data">I dati non contengono un LNURL valido.</string>
@@ -387,7 +373,6 @@
     <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
     <string name="string_analyzer_unrecognized_data">Dati non riconosciuti.</string>
     <string name="rest_port">REST (port 8080) non &#233; supportata.\n\nVuoi cambiare la porta in 10009 (gRPC)?</string>
-    <string name="drawer_menu_wallets">Portafogli</string>
     <string name="drawer_menu_channels">Canali</string>
     <string name="drawer_menu_contacts">Contatti</string>
     <string name="drawer_menu_backup">Backup</string>
@@ -404,7 +389,6 @@
     <string name="clipboard_scan_payment">Gli appunti contengono le informazioni di pagamento. Vuoi avviare un pagamento?</string>
     <string name="clipboard_scan_lnurl">Gli appunti contengono dati LNURL. Vuoi usarlo??</string>
     <string name="clipboard_scan_node_pubkey">Gli appunti contengono una chiave pubblica del nodo. Vuoi aprire un canale?</string>
-    <string name="clipboard_scan_connect">Gli appunti contengono i dati di connessione. Vuoi aggiungere un nuovo portafoglio?</string>
     <string name="third_party_licenses">Licenze di terze parti</string>
     <string name="licenses">Licenze</string>
     <string name="choose_action">Scegli un &#96; azione</string>

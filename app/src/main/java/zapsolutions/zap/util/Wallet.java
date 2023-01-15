@@ -39,10 +39,14 @@ import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletRequest;
+import com.github.lightningnetwork.lnd.lnrpc.Utxo;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
 import com.github.lightningnetwork.lnd.routerrpc.HtlcEvent;
 import com.github.lightningnetwork.lnd.routerrpc.SubscribeHtlcEventsRequest;
+import com.github.lightningnetwork.lnd.walletrpc.ListLeasesRequest;
+import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
+import com.github.lightningnetwork.lnd.walletrpc.UtxoLease;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -64,7 +68,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
 import zapsolutions.zap.tor.TorManager;
@@ -87,6 +91,7 @@ public class Wallet {
     private final Set<ChannelCloseUpdateListener> mChannelCloseUpdateListeners = new HashSet<>();
     private final Set<ChannelOpenUpdateListener> mChannelOpenUpdateListeners = new HashSet<>();
     private final Set<HtlcSubscriptionListener> mHtlcSubscriptionListeners = new HashSet<>();
+    private final Set<UtxoSubscriptionListener> mUtxoSubscriptionListeners = new HashSet<>();
 
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
@@ -99,6 +104,8 @@ public class Wallet {
     public List<PendingChannelsResponse.WaitingCloseChannel> mPendingWaitingCloseChannelsList;
     public List<ChannelCloseSummary> mClosedChannelsList;
     public List<NodeInfo> mNodeInfos = new LinkedList<>();
+    public List<Utxo> mUTXOsList;
+    public List<UtxoLease> mLockedUTXOsList;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -161,6 +168,8 @@ public class Wallet {
         mPendingClosedChannelsList = null;
         mPendingForceClosedChannelsList = null;
         mPendingWaitingCloseChannelsList = null;
+        mUTXOsList = null;
+        mLockedUTXOsList = null;
 
         mTransactionUpdated = false;
         mInvoicesUpdated = false;
@@ -885,6 +894,67 @@ public class Wallet {
     }
 
 
+    public void fetchUTXOs() {
+        if (LndConnection.getInstance().getWalletKitService() != null) {
+            ListUnspentRequest listUnspentRequest = ListUnspentRequest.newBuilder()
+                    .setMaxConfs(999999999) // default is 0
+                    .build();
+
+            compositeDisposable.add(LndConnection.getInstance().getWalletKitService().listUnspent(listUnspentRequest)
+                    .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                    .subscribe(utxoList -> {
+                                mUTXOsList = utxoList.getUtxosList();
+
+                                // Notify Listeners
+                                broadcastUtxoListUpdated();
+                            }
+                            , throwable -> {
+                                ZapLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
+                            }));
+        }
+    }
+
+    public void fetchLockedUTXOs() {
+        if (LndConnection.getInstance().getWalletKitService() != null) {
+            ListLeasesRequest listLeasesRequest = ListLeasesRequest.newBuilder()
+                    .build();
+
+            compositeDisposable.add(LndConnection.getInstance().getWalletKitService().listLeases(listLeasesRequest)
+                    .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                    .subscribe(lockedUtxoList -> {
+                                mLockedUTXOsList = lockedUtxoList.getLockedUtxosList();
+
+                                // Notify Listeners
+                                broadcastLockedUtxoListUpdated();
+
+                            }
+                            , throwable -> {
+                                ZapLog.w(LOG_TAG, "Fetching locked utxo list failed." + throwable.getMessage());
+                            }));
+        }
+    }
+
+    /**
+     * Get the remote pubkey from a channel Id.
+     * This will only work for currently opened channels. If the id does not match with any open channel, null will be returned.
+     * @return remote pub key
+     */
+    public String getRemotePubKeyFromChannelId(long chanId){
+        String remotePub = "";
+        for (Channel channel : mOpenChannelsList){
+            if (channel.getChanId() == chanId){
+                remotePub = channel.getRemotePubkey();
+                break;
+            }
+        }
+        if (!remotePub.equals("")){
+            return remotePub;
+        } else {
+            return null;
+        }
+    }
+
+
     /**
      * Use this to subscribe the wallet to transaction events that happen on LND.
      * The events will be captured and forwarded to the TransactionSubscriptionListener.
@@ -1285,7 +1355,7 @@ public class Wallet {
      */
     public long getMaxLightningReceiveAmount() {
 
-        if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
             return 0;
         }
 
@@ -1308,7 +1378,7 @@ public class Wallet {
      */
     public long getMaxLightningSendAmount() {
 
-        if (!WalletConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
             return 0;
         }
 
@@ -1580,6 +1650,32 @@ public class Wallet {
     }
 
     /**
+     * Notify all listeners to utxo list update.
+     */
+    private void broadcastUtxoListUpdated() {
+        for (UtxoSubscriptionListener listener : mUtxoSubscriptionListeners) {
+            listener.onUtxoListUpdated();
+        }
+    }
+
+    /**
+     * Notify all listeners to locked utxo list update.
+     */
+    private void broadcastLockedUtxoListUpdated() {
+        for (UtxoSubscriptionListener listener : mUtxoSubscriptionListeners) {
+            listener.onLockedUtxoListUpdated();
+        }
+    }
+
+    public void registerUtxoSubscriptionListener(UtxoSubscriptionListener listener) {
+        mUtxoSubscriptionListeners.add(listener);
+    }
+
+    public void unregisterUtxoSubscriptionListener(UtxoSubscriptionListener listener) {
+        mUtxoSubscriptionListeners.remove(listener);
+    }
+
+    /**
      * Notify all listeners to channel event updates.
      *
      * @param channelEventUpdate the channel update
@@ -1732,6 +1828,12 @@ public class Wallet {
 
     public interface HtlcSubscriptionListener {
         void onHtlcEvent(HtlcEvent htlcEvent);
+    }
+
+    public interface UtxoSubscriptionListener {
+        void onUtxoListUpdated();
+
+        void onLockedUtxoListUpdated();
     }
 
     public interface ChannelEventSubscriptionListener {

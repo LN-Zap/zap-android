@@ -31,7 +31,7 @@
             app:srcCompat="@drawable/ic_menu_24"
             app:tint="@color/white" />
 
-        <zapsolutions.zap.customView.WalletSpinner
+        <zapsolutions.zap.customView.NodeSpinner
             android:id="@+id/walletSpinner"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
@@ -296,7 +296,7 @@
             android:background="@drawable/rounded_rectangle_orange_gradient"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="@string/demo_setupWalletBtn"
+            android:text="@string/demo_setupNodeBtn"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/scanButton"
             app:layout_constraintEnd_toEndOf="parent"

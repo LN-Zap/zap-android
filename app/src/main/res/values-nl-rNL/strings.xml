@@ -102,9 +102,7 @@
     <string name="activity_send">Betaal</string>
     <string name="activity_connectRemoteNode">Verbind met externe node</string>
     <string name="activity_manage_channels">Lightningkanalen</string>
-    <string name="activity_manage_wallets">Beheer Wallets</string>
     <string name="activity_advanced_settings">Geavanceerde Instellingen</string>
-    <string name="activity_wallet_details">Walletdetails</string>
     <string name="activity_identity">Identiteit</string>
     <string name="activity_manage_contacts">Beheer Contacten</string>
     <string name="activity_manage_contacts_send_mode">Verzend naar…</string>
@@ -112,7 +110,6 @@
     <string name="activity_contact_details">Contactdetails</string>
     <string name="activity_manual_setup">Verbindingsgegevens</string>
     <string name="activity_backup">Backup</string>
-    <string name="navigation_wallet">Wallet</string>
     <string name="navigation_history">Geschiedenis</string>
     <string name="navigation_settings">Instellingen</string>
     <string name="pin_create">Stel PIN in</string>
@@ -167,9 +164,7 @@
     <string name="setup_connect_local_button">Maak Wallet</string>
     <string name="setup_connect_remote_description">Beheer je eigen node op afstand.</string>
     <string name="setup_connect_remote_button">Maak verbinding met eigen node</string>
-    <string name="demo_setupWalletBtn">Wallet Instellen</string>
-    <string name="demo_setupWalletFirst">Je moet eerst een wallet instellen.</string>
-    <string name="demo_setupWalletFirstAvatar">Je moet eerst een wallet instellen, voordat je je identiteit en avatar kan zien.</string>
+    <string name="demo_setupNodeBtn">Wallet Instellen</string>
     <string name="send_lightningPayment">Verzend lightningbetaling</string>
     <string name="send_onChainPayment">Verzend on-chainbetaling</string>
     <string name="send_sendPayment">Verzend betaling</string>
@@ -257,7 +252,6 @@
     <string name="error_connection_invalid_macaroon2">Toegang geweigerd!\n\nDe macaroon is ongeldig.</string>
     <string name="error_connection_server_unreachable">Timeout.\nDe server reageert niet.\n\n-Zorg ervoor dat je een goede internetverbinding hebt\n\n- Zorg er voor dat de server draait de nog steeds de volgende IP heeft:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Hostnaamverificatie mislukt.\n\nDe hostnaam van je verbinding komt niet overeen met de hostnaam in het certificaat.\n\n Je moet misschien je certificaat opnieuw maken. Zorg ervoor dat de hostnaam is toegevoegd aan de lnd.conf als tlsextradomain voordat je deze opnieuw maakt.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) kan niet worden opgelost.\n\nWerk je wallet-verbindingsinstellingen bij als je node nu bereikbaar is onder een ander adres of andere hostnaam.</string>
     <string name="error_connection_lnd_unavailable">Kan geen verbinding maken met LND.\n\n- zorg ervoor dat de LND daemon draait op je server.\n\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Kan de host niet bereiken.\n\nZorg ervoor dat je een internetverbinding hebt.</string>
     <string name="error_connection_unknown">Verbinding mislukt.</string>
@@ -270,7 +264,6 @@
     <string name="error_connection_internal_server_clearnet">De node is bereikbaar maar retourneert een interne fout. Deze fout kan worden veroorzaakt door het gebruik van een verkeerde poort. Je probeert verbinding te maken met een Node op clearnet, het uitschakelen van Tor in de app-instellingen kan het probleem mogelijks oplossen.</string>
     <string name="error_wrong_password">Verkeerd wachtwoord</string>
     <string name="error_lightning_uri_invalid">Ongeldig format.\nGebruik een van de volgende:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="error_channel_open_wallet_setup">De wallet moet ingesteld zijn om een kanaal te kunnen openen.</string>
     <string name="error_connect_peer">Kon geen verbinding maken met de peernode.</string>
     <string name="error_connect_peer_refused">Verbinding geweigerd door de peer.</string>
     <string name="error_connect_peer_self">Kon geen verbinding met jezelf maken.</string>
@@ -285,7 +278,7 @@
     <string name="error_channel_close_timeout">Kanaal kon niet worden gesloten binnen de deadline.</string>
     <string name="error_channel_close">Kon het kanaal niet sluiten: %s</string>
     <string name="error_pin_deactivation_attempt">Het lijkt er op dat iemand heeft geprobeerd om je PIN te deactiveren. De app zal nu afsluiten.\nJe kan de app opnieuw installeren en het herstelproces gebruiken om toegang tot je geld te krijgen.</string>
-    <string name="error_empty_wallet_name">Een lege naam is niet toegestaan.</string>
+    <string name="error_empty_node_name">Een lege naam is niet toegestaan.</string>
     <string name="error_invalid_bitcoin_request">Ongeldig bitcoinverzoek.</string>
     <string name="error_payment_invalid_details">De betalingsgegevens komen niet overeen met de gegevens op het betalingsverzoek die je probeert te betalen.</string>
     <string name="error_payment_timeout">Timeout. Kan geen route vinden.</string>
@@ -293,7 +286,6 @@
     <string name="error_payment_insufficient_balance">Het te betalen bedrag is groter dan wat je via Lightning kunt verzenden met je huidige open kanalen.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Zorg ervoor dat de ontvanger de keysendfunctie heeft ingeschakeld.</string>
     <string name="error_only_payment_data_allowed">Alleen betalingsdata is hier toegestaan.</string>
-    <string name="error_wallet_not_yet_ready">Je wallet is nog niet volledig gesynchroniseerd. Probeer het later opnieuw.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s lijkt verzoeken afkomstig van het Tor-netwerk te blokkeren. Je kunt proberen Tor uit te schakelen in de instellingen of neem contact met de service en vraag hen hun Cloudflare-regels bij te werken.</string>
     <string name="error_tor_exchange_rate">Wisselkoers kon niet worden opgehaald. De service die u gebruikt lijkt verzoeken van het Tor-netwerk te blokkeren. Probeer om in de geavanceerde instellingen van wisselkoersaanbieder te wisselen.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Het antwoord van %1$s kan niet worden gelezen.</string>
@@ -354,21 +346,15 @@
     <string name="help_dialog_scanGeneric">Alles is hier toegestaan.\nScan gewoon een QR-code en Zap bepaalt automatisch welke actie moet worden ondernomen, afhankelijk van de gegevens.</string>
     <string name="help_dialog_private_channels">Privékanalen zijn niet veiliger, ze zijn alleen niet zichtbaar voor het netwerk.\nGebruik alleen privékanalen wanneer je node op een mobiel apparaat wordt gebruikt of vaak offline is.</string>
     <string name="help_dialog_identity">Dit is je identiteit op het Lightningnetwerk.\n\nWanneer u op je avatar-afbeelding tikt, onthul je een QR-code.\nAnderen kunnen die code scannen en je toevoegen aan hun contacten, kanalen met je openen of geld naar je sturen.\n\nDeze avatar is uniek.\nHet is automatisch gegenereerd op basis van je publieke sleutel en kan niet worden gewijzigd.</string>
-    <string name="wallet_name">Walletnaam</string>
     <string name="delete">Verwijder</string>
     <string name="rename">Hernoem</string>
     <string name="change_data">Verander data</string>
-    <string name="open_wallet">Open wallet</string>
     <string name="connectionData">Verbindingsdata</string>
     <string name="host">Host</string>
     <string name="port">Poort</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificaat</string>
-    <string name="confirm_wallet_deletion">Wil je deze wallet echt verwijderen?</string>
-    <string name="no_wallets">Geen wallets</string>
-    <string name="spinner_manage_wallets">Beheer…</string>
-    <string name="wallet_added">Wallet is toegevoegd.</string>
-    <string name="wallet_already_exists">Deze wallet bestaat al.\nAls je de verbindingsgegevens wilt bijwerken, ga dan naar de walletdetailpagina.</string>
+    <string name="spinner_manage_nodes">Beheer…</string>
     <string name="lnurl_withdraw_success">Opname\nsuccesvol</string>
     <string name="lnurl_withdraw_fail">Opname\nmislukt</string>
     <string name="lnurl_decoding_no_lnurl_data">Deze data bevat geen geldige LNURL.</string>
@@ -387,7 +373,6 @@
     <string name="lnurl_invalid_response">De Service antwoordde met een ongeldig antwoord.</string>
     <string name="string_analyzer_unrecognized_data">Niet-herkende data.</string>
     <string name="rest_port">REST (port 8080) is niet ondersteund.\n\nWil je de port veranderen naar 10009 (gRPC)?</string>
-    <string name="drawer_menu_wallets">Wallets</string>
     <string name="drawer_menu_channels">Kanalen</string>
     <string name="drawer_menu_contacts">Contacten</string>
     <string name="drawer_menu_backup">Backup</string>
@@ -404,7 +389,6 @@
     <string name="clipboard_scan_payment">Je klembord bevat betalingsinformatie. Wil je een betaling starten?</string>
     <string name="clipboard_scan_lnurl">Je klembord bevat LNURL-data. Wil je het gebruiken?</string>
     <string name="clipboard_scan_node_pubkey">Je klembord bevat een openbare sleutel van een node. Wil je een kanaal openen?</string>
-    <string name="clipboard_scan_connect">Je klembord bevat verbindingsdata. Wil je een nieuwe wallet toevoegen?</string>
     <string name="third_party_licenses">Third-party licenties</string>
     <string name="licenses">Licenties</string>
     <string name="choose_action">Kies actie</string>

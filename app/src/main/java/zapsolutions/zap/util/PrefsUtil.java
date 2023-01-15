@@ -25,7 +25,7 @@ public class PrefsUtil {
     public static final String SETTINGS_VERSION = "settings_ver";
     public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
-    public static final String CURRENT_WALLET_CONFIG = "current_wallet_config";
+    public static final String CURRENT_NODE_CONFIG = "current_wallet_config";
     public static final String AVAILABLE_FIAT_CURRENCIES = "fiat_available";
     public static final String LANGUAGE = "language";
     public static final String LANGUAGE_SYSTEM_DEFAULT = "system";
@@ -38,8 +38,8 @@ public class PrefsUtil {
     public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
     public static final String NODE_INFO_CACHE = "nodeInfoCache";
 
-    // wallet config preferences references
-    public static final String WALLET_CONFIGS = "wallet_configs";
+    // node config preferences references
+    public static final String NODE_CONFIGS = "wallet_configs";
     public static final String CONTACTS = "contacts";
     public static final String RANDOM_SOURCE = "random_source";
 
@@ -100,8 +100,8 @@ public class PrefsUtil {
         return getPrefs().getBoolean("biometricsEnabled", true);
     }
 
-    public static String getCurrentWalletConfig() {
-        return getPrefs().getString(CURRENT_WALLET_CONFIG, "");
+    public static String getCurrentNodeConfig() {
+        return getPrefs().getString(CURRENT_NODE_CONFIG, "");
     }
 
     public static boolean isPinEnabled() {

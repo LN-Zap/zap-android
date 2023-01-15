@@ -42,7 +42,7 @@ import okhttp3.Response;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageWalletConfigs.WalletConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.customView.BSDProgressView;
 import zapsolutions.zap.customView.BSDResultView;
 import zapsolutions.zap.customView.BSDScrollableMainView;
@@ -116,11 +116,11 @@ public class LnUrlChannelBSDFragment extends ZapBSDFragment {
         // Action when clicked on "Open Channel"
         Button btnOpen = view.findViewById(R.id.openButton);
         btnOpen.setOnClickListener(v -> {
-            if (WalletConfigsManager.getInstance().hasAnyConfigs()) {
+            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                 switchToProgressScreen();
                 openChannel();
             } else {
-                Toast.makeText(getActivity(), R.string.demo_setupWalletFirst, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
             }
         });
 

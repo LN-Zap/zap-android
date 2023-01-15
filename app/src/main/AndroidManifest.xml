@@ -92,8 +92,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".walletManagement.ManageWalletsActivity"
-            android:label="@string/activity_manage_wallets"
+            android:name=".nodesManagement.ManageNodesActivity"
+            android:label="@string/activity_manage_nodes"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
@@ -121,8 +121,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".walletManagement.WalletDetailsActivity"
-            android:label="@string/activity_wallet_details"
+            android:name=".nodesManagement.NodeDetailsActivity"
+            android:label="@string/activity_node_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
@@ -157,6 +157,16 @@
         <activity
             android:name=".backup.BackupActivity"
             android:label="@string/activity_backup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".coinControl.UTXOsActivity"
+            android:label="@string/activity_utxos"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".forwarding.ForwardingActivity"
+            android:label="@string/activity_forwarding"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
 
