@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
 
         // Needed for gRPC
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.16'
