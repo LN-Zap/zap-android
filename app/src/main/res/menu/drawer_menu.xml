@@ -23,7 +23,7 @@
             <group>
                 <item
                     android:id="@+id/drawerNodes"
-                    android:icon="@drawable/ic_wallet_24"
+                    android:icon="@drawable/ic_nodes_24"
                     android:title="@string/drawer_menu_nodes" />
                 <item
                     android:id="@+id/drawerContacts"
