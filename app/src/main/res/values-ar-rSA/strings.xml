@@ -164,7 +164,7 @@
     <string name="setup_connect_local_button">Create Wallet</string>
     <string name="setup_connect_remote_description">Remote control your own node.</string>
     <string name="setup_connect_remote_button">Connect to Remote Node</string>
-    <string name="demo_setupNodeBtn">Setup Wallet</string>
+    <string name="demo_setupNodeBtn">Connect Node</string>
     <string name="send_lightningPayment">إرسال دفعة Lightning</string>
     <string name="send_onChainPayment">إرسال الدفعة on-chain</string>
     <string name="send_sendPayment">إرسل الدفعة</string>
