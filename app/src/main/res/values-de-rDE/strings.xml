@@ -166,7 +166,7 @@
     <string name="setup_connect_local_button">Wallet erstellen</string>
     <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
-    <string name="demo_setupNodeBtn">Wallet einrichten</string>
+    <string name="demo_setupNodeBtn">Node verbinden</string>
     <string name="demo_setupNodeFirst">Du musst dich zuerst mit einer Node verbinden.</string>
     <string name="demo_setupNodeFirstAvatar">Du musst dich zuerst mit einer Node verbinden, bevor du deine Identität und deinen Avatar sehen kannst.</string>
     <string name="send_lightningPayment">Lightning Zahlung senden</string>

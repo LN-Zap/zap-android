@@ -199,11 +199,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
     @Override
     public void onRefresh() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs() && LndConnection.getInstance().isConnected()) {
-            refreshData();
-        } else {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
+        refreshData();
     }
 
 
@@ -218,12 +214,16 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     }
 
     private void refreshData() {
-        setTitle(getResources().getString(R.string.activity_forwarding));
-        mTVAmount.setVisibility(View.GONE);
-        mVEarnedAmountProgress.setVisibility(View.VISIBLE);
-        mEmptyListText.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        fetchForwardingHistory(10000, mPeriod);
+        if (NodeConfigsManager.getInstance().hasAnyConfigs() && LndConnection.getInstance().isConnected()) {
+            setTitle(getResources().getString(R.string.activity_forwarding));
+            mTVAmount.setVisibility(View.GONE);
+            mVEarnedAmountProgress.setVisibility(View.VISIBLE);
+            mEmptyListText.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            fetchForwardingHistory(10000, mPeriod);
+        } else {
+            refreshFinished();
+        }
     }
 
     private void refreshFinished() {
