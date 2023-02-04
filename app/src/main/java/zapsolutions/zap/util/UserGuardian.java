@@ -32,6 +32,7 @@ public class UserGuardian {
     private static final String DIALOG_OLD_LND_VERSION = "guardianOldLndVersion";
     private static final String DIALOG_EXTERNAL_LINK = "guardianExternalLink";
     private static final String DIALOG_ZERO_AMOUNT_INVOICE = "guardianZeroAmountInvoice";
+    private static final String DIALOG_CERTIFICATE_VERIFICATION = "guardianCertificateVerification";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -64,8 +65,9 @@ public class UserGuardian {
                 .putBoolean(DIALOG_OLD_EXCHANGE_RATE, true)
                 .putBoolean(DIALOG_REMOTE_CONNECT, true)
                 .putBoolean(DIALOG_OLD_LND_VERSION, true)
-                .putBoolean(DIALOG_EXTERNAL_LINK,true)
+                .putBoolean(DIALOG_EXTERNAL_LINK, true)
                 .putBoolean(DIALOG_ZERO_AMOUNT_INVOICE, true)
+                .putBoolean(DIALOG_CERTIFICATE_VERIFICATION, true)
                 .apply();
     }
 
@@ -192,8 +194,19 @@ public class UserGuardian {
      */
     public void securityZeroAmountInvoice() {
         mCurrentDialogName = DIALOG_ZERO_AMOUNT_INVOICE;
-        AlertDialog.Builder adb = createDialog(true);
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
         String message = mContext.getResources().getString(R.string.guardian_zero_amount_invoice);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user about possible zero amount invoice exploit.
+     */
+    public void securityCertificateVerification() {
+        mCurrentDialogName = DIALOG_CERTIFICATE_VERIFICATION;
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_certificate_verification);
         adb.setMessage(message);
         showGuardianDialog(adb);
     }

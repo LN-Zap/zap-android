@@ -16,7 +16,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -32,7 +32,7 @@ public class LndSSLSocketFactory {
         throw new AssertionError();
     }
 
-    public static SSLSocketFactory create(NodeConfig nodeConfig) {
+    public static SSLSocketFactory create(ZapNodeConfig zapNodeConfig) {
         SSLContext sslCtx = null;
 
         try {
@@ -42,7 +42,7 @@ public class LndSSLSocketFactory {
             return null;
         }
 
-        if (nodeConfig.isTor()) {
+        if (zapNodeConfig.isTorHostAddress() || !zapNodeConfig.getVerifyCertificate()) {
             // Always trust the certificate on Tor connection
             try {
                 sslCtx.init(null, new TrustManager[]{new BlindTrustManager()}, null);
@@ -53,12 +53,12 @@ public class LndSSLSocketFactory {
             return sslCtx.getSocketFactory();
 
         } else {
-            // On clearnet we want to validate the certificate.
-            if (nodeConfig.getCert() != null && !nodeConfig.getCert().isEmpty()) {
+            // On clearnet when verify certificate is enabled, we want to validate the certificate.
+            if (zapNodeConfig.getCert() != null && !zapNodeConfig.getCert().isEmpty()) {
                 //try to create a trustmanager that trust the certificate that was transmitted with the lndconnect string.
                 try {
                     InputStream caInput = null;
-                    String certificateBase64UrlString = nodeConfig.getCert();
+                    String certificateBase64UrlString = zapNodeConfig.getCert();
                     byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
                     // Generate the CA Certificate from the supplied byte array

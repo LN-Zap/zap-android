@@ -13,13 +13,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.contacts.Contact;
 import zapsolutions.zap.contacts.ContactsManager;
 import zapsolutions.zap.util.EncryptionUtil;
@@ -74,19 +76,35 @@ public class DataBackupUtil {
 
     public static boolean restoreBackup(String backup, int backupVersion) {
 
-        if (backupVersion == 0) {
+        if (backupVersion < 2) {
             DataBackup dataBackup = new Gson().fromJson(backup, DataBackup.class);
 
             // restore wallets
             if (dataBackup.getWalletConfigs() != null && dataBackup.getWalletConfigs().length > 0) {
                 NodeConfigsManager.getInstance().removeAllNodeConfigs();
-                for (NodeConfig nodeConfig : dataBackup.getWalletConfigs()) {
+                for (ZapNodeConfig zapNodeConfig : dataBackup.getWalletConfigs()) {
                     try {
-                        NodeConfigsManager.getInstance().addNodeConfig(nodeConfig.getAlias(), nodeConfig.getType(), nodeConfig.getHost(), nodeConfig.getPort(), nodeConfig.getCert(), nodeConfig.getMacaroon());
+                        NodeConfigsManager.getInstance().addNodeConfig(zapNodeConfig.getAlias(), zapNodeConfig.getType(), zapNodeConfig.getImplementation(), zapNodeConfig.getHost(), zapNodeConfig.getPort(), zapNodeConfig.getCert(), zapNodeConfig.getMacaroon(), zapNodeConfig.getUseTor(), zapNodeConfig.getVerifyCertificate());
                         NodeConfigsManager.getInstance().apply();
                     } catch (GeneralSecurityException | IOException e) {
                         e.printStackTrace();
                         return false;
+                    }
+                }
+            }
+
+            if (backupVersion == 0) {
+                // This is an old backup that did not contain info for implementation, useTor & verify certificate. Apply defaults.
+                List<ZapNodeConfig> nodeConfigs = NodeConfigsManager.getInstance().getAllNodeConfigs(false);
+                for (ZapNodeConfig nodeConfig : nodeConfigs) {
+                    // Adds the defaults to the newly introduced node properties.
+                    NodeConfigsManager.getInstance().updateNodeConfig(nodeConfig.getId(), nodeConfig.getAlias(), BaseNodeConfig.NODE_IMPLEMENTATION_LND, nodeConfig.getType(), nodeConfig.getHost(), nodeConfig.getPort(), nodeConfig.getCert(), nodeConfig.getMacaroon(), nodeConfig.isTorHostAddress(), !nodeConfig.isTorHostAddress());
+                    try {
+                        NodeConfigsManager.getInstance().apply();
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }

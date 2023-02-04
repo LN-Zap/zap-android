@@ -15,7 +15,7 @@ import java.net.URL;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
@@ -114,12 +114,12 @@ public class ManualSendInputView extends ConstraintLayout {
                     }
 
                     @Override
-                    public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
+                    public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
                         invalidInput();
                     }
 
                     @Override
-                    public void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration) {
+                    public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
                         invalidInput();
                     }
 

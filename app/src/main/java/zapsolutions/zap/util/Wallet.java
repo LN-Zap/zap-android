@@ -286,7 +286,7 @@ public class Wallet {
                             // - Tor is turned on, but the host cannot be resolved
                             broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
                         } else if (throwable.getMessage().toLowerCase().contains("500") && PrefsUtil.isTorEnabled()) {
-                            if (LndConnection.getInstance().getConnectionConfig().isTor()) {
+                            if (LndConnection.getInstance().getConnectionConfig().isTorHostAddress()) {
                                 // This is the case if:
                                 // - Tor is turned on and an incorrect port is used.
                                 broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL);

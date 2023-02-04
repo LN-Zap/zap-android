@@ -199,7 +199,6 @@
     <string name="settings_currency">Vaihtoehtoinen Yksikkö</string>
     <string name="settings_language">Kieli</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymisoi liikenne Tor-verkon avulla.</string>
     <string name="settings_scan_clipboard">Tarkista leikepöytä</string>
     <string name="settings_scan_clipboard_summary">Anna Zapin automaattisesti tarkistaa leikepöytä.</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
@@ -251,17 +250,14 @@
     <string name="error_connection_invalid_host_or_port">Annettu host-osoite tai -portti on virheellinen.</string>
     <string name="error_connection_invalid_macaroon2">Pääsy estetty\n\nMacaroon ei ole kelvollinen.</string>
     <string name="error_connection_server_unreachable">Aikakatkaisu.\nPalvelin ei vastaa.\n\n- Varmista että internet-yhteytesi toimii\n\n- Varmista että palvelin on käynnnissä ja sen IP-osoite on:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Palvelimen nimen varmistus epäonnistui.\n\nAntamasi palvelimen nimi ei täsmää palvelimen antaman varmenteen sisältöön.\n\n Sinun on kenties luotava varmenne uudelleen palvelimella. Varmista että käyttämäsi palvelinmen nimi on lisättynä lnd.conf tlsextradomain -parametriin ennen varmenteen uudelleenluontia.</string>
     <string name="error_connection_lnd_unavailable">LND-yhteyttä ei saada luotua.\n\n- Varmista että LND prosessi on käynnissä palvelimella.\n\n- varmista että TCP-portin edellenohjaus aktiivinen. (Portti: %1$s)</string>
     <string name="error_connection_network_unreachable">Palvelimeen ei saada yhteyttä.\n\nVarmista että Internet-yhteydessäsi ei ole häiriöitä.</string>
     <string name="error_connection_unknown">Yhteys epäonnistui.</string>
-    <string name="error_connection_tor_unreachable">Tor-yhteys epäonnistui.\n Kytke Tor päälle sovelluksen asetuksista.</string>
     <string name="error_connection_tor_bootstrapping">Tor käynnistys ei onnistunut.\n\nZap Android sisältää sisäänrakennetun Tor-tuen. Mikäli käytät Orbot -sovellusta, poista Zap Orbotin Tor sovelluslistalta tai poista Orbot kokonaan käytöstä.</string>
     <string name="error_connection_wallet_locked">Avaathan lompakon.</string>
     <string name="error_connection_btcpay_invalid_json">BTCPay-palvelimen konfiguraatiotiedot sisältävän JSON muoto on virheellinen.</string>
     <string name="error_connection_btcpay_invalid_config">BTCPay-palvelimen konfiguraatio ei sisällä BTC GRPC -määrityksiä.</string>
     <string name="error_connection_internal_server">Solmuun saadaan yhteys, mutta se vastaa virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti.</string>
-    <string name="error_connection_internal_server_clearnet">Solmuun saadaan yhteys, mutta se vastaa sisäisellä virheilmoituksella. Aiheuttajana saattaa olla väärä tietoliikenne portti. Tor-toiminnon poiskytkentä sovelluksen asetuksista voi auttaa, sillä yrität ottaa yhteyttä solmuun suojaamattomassa Internetissä.</string>
     <string name="error_wrong_password">Väärä salasana</string>
     <string name="error_lightning_uri_invalid">Väärä muoto.\nKäytä jotain seuraavista:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_connect_peer">Yhteyttä rinnakaiseen solmuun ei pystytty muodostamaan.</string>

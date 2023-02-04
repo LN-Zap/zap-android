@@ -2,12 +2,14 @@ package zapsolutions.zap.connection.manageNodeConfigs;
 
 import androidx.annotation.Nullable;
 
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.BaseNodeConfig;
+import zapsolutions.zap.util.RemoteConnectUtil;
 
-public class NodeConfig extends RemoteConfiguration implements Comparable<NodeConfig> {
+public class ZapNodeConfig extends BaseNodeConfig implements Comparable<ZapNodeConfig> {
 
     public static final String NODE_TYPE_LOCAL = "local";
     public static final String NODE_TYPE_REMOTE = "remote";
+
 
     private String id;
     private String alias;
@@ -46,20 +48,17 @@ public class NodeConfig extends RemoteConfiguration implements Comparable<NodeCo
         return this.type.equals(NODE_TYPE_LOCAL);
     }
 
-    public NodeConfig(String id) {
+    public ZapNodeConfig(String id) {
         this.id = id;
     }
 
-    public boolean isTor() {
-        if (getHost() == null) {
-            return false;
-        }
-        return getHost().toLowerCase().endsWith(".onion");
+    public boolean isTorHostAddress() {
+        return RemoteConnectUtil.isTorHostAddress(getHost());
     }
 
     @Override
-    public int compareTo(NodeConfig nodeConfig) {
-        NodeConfig other = nodeConfig;
+    public int compareTo(ZapNodeConfig zapNodeConfig) {
+        ZapNodeConfig other = zapNodeConfig;
         return this.getAlias().compareTo(other.getAlias());
     }
 
@@ -71,8 +70,8 @@ public class NodeConfig extends RemoteConfiguration implements Comparable<NodeCo
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        NodeConfig nodeConfig = (NodeConfig) obj;
-        return nodeConfig.getId().equals(this.getId());
+        ZapNodeConfig zapNodeConfig = (ZapNodeConfig) obj;
+        return zapNodeConfig.getId().equals(this.getId());
     }
 
     @Override

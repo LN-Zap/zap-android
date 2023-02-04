@@ -199,7 +199,6 @@
     <string name="settings_currency">Sekundární jednotka</string>
     <string name="settings_language">Jazyk</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymizujte veškerý provoz pomocí sítě Tor.</string>
     <string name="settings_scan_clipboard">Zkontrolovat schránku</string>
     <string name="settings_scan_clipboard_summary">Automaticky zkontrolovat schránku na data, které dokáže Zap zpracovat.</string>
     <string name="settings_hapticPin">Hmatová zpětná vazba PIN</string>
@@ -251,17 +250,14 @@
     <string name="error_connection_invalid_host_or_port">Poskytovaný host nebo port je neplatný.</string>
     <string name="error_connection_invalid_macaroon2">Přístup byl odepřen! \n\nMacaroon je neplatný.</string>
     <string name="error_connection_server_unreachable">Čas vypršel.\nServer neodpovídá.\n\n- Ujistěte se, že máte dobré připojení k internetu\n\n- Ujistěte se, že server běží a má stále následující IP:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Ověření názvu hostitele se nezdařilo.\n \nNázev hostitele vašeho připojení se neshoduje s názvem hostitele uvedeným v certifikátu.\n\nMožná budete muset znovu vytvořit svůj certifikát. Před opětovným vytvořením se ujistěte, že je název hostitele přidán do lnd.conf jako tlsextradomain.</string>
     <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.\n\n- ujistěte se, že na vašem serveru běží démon LND.\n\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
     <string name="error_connection_network_unreachable">Nelze se dostat k hostiteli.\n\nZkontrolujte, zda jste připojení k internetu.</string>
     <string name="error_connection_unknown">Připojení se nezdařilo.</string>
-    <string name="error_connection_tor_unreachable">Připojení k Toru se nezdařilo.\nZapněte prosím Tor v nastavení aplikací.</string>
     <string name="error_connection_tor_bootstrapping">Tor se nepodařilo spustit.\n\nZap Android nyní nativně podporuje Tor. Pokud používáte Orbot, odstraňte prosím Zap ze seznamu aktivovaných Torů v Orbotu nebo Orbot úplně vypněte.</string>
     <string name="error_connection_wallet_locked">Odemkněte prosím peněženku.</string>
     <string name="error_connection_btcpay_invalid_json">Syntaxe JSON konfiguračního souboru BTCPay Serveru je neplatná.</string>
     <string name="error_connection_btcpay_invalid_config">Konfigurace BTCPay Serveru neobsahuje konfiguraci BTC GRPC.</string>
     <string name="error_connection_internal_server">Uzel je dosažitelný, ale vrací interní chybu. Tato chyba může být způsobena použitím nesprávného portu.</string>
-    <string name="error_connection_internal_server_clearnet">Uzel je dosažitelný, ale vrací interní chybu. Tato chyba může být způsobena použitím nesprávného portu. Vzhledem k tomu, že se snažíte připojit k uzlu v síti Clearnet, mohlo by váš problém vyřešit také vypnutí Toru v nastavení aplikace.</string>
     <string name="error_wrong_password">Špatné heslo</string>
     <string name="error_lightning_uri_invalid">Neplatný formát.\nPoužijte jednu z následujících možností:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_connect_peer">Nelze navázat spojení s rovnocenným uzlem.</string>

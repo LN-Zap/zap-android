@@ -199,7 +199,6 @@
     <string name="settings_currency">Unité secondaire</string>
     <string name="settings_language">Langue</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymiser tout le trafic en utilisant le réseau Tor.</string>
     <string name="settings_scan_clipboard">Vérifier le presse-papiers</string>
     <string name="settings_scan_clipboard_summary">Vérifiez automatiquement le presse-papiers pour les données que Zap peut gérer.</string>
     <string name="settings_hapticPin">Retour tactile du code PIN</string>
@@ -251,17 +250,14 @@
     <string name="error_connection_invalid_host_or_port">L\'hôte ou le port fourni est invalide.</string>
     <string name="error_connection_invalid_macaroon2">Accès refusé !\n\nLe fichier macaroon est invalide.</string>
     <string name="error_connection_server_unreachable">Expiration de la requête.\nLe serveur ne répond pas.\n\n- Assurez-vous d\'avoir une bonne connexion Internet\n\n- Assurez-vous que le serveur soit actif et possède l\'adresse IP suivante :\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Échec de la vérification du nom d\'hôte.\n\nLe nom d\'hôte de votre connexion ne correspond pas au nom d\'hôte fourni dans le certificat.\n\n Vous devrez peut-être recréer votre certificat. Assurez-vous que le nom d\'hôte est ajouté au fichier lnd.conf en tant que tlsextradomain avant de le recréer.</string>
     <string name="error_connection_lnd_unavailable">Impossible de se connecter à lnd.\n\n- Assurez-vous que le daemon lnd soit actif sur votre serveur.\n\n- Assurez-vous que la redirection des ports soit active (Port : %1$s)</string>
     <string name="error_connection_network_unreachable">Impossible de joindre l\'hôte.\n\nVeuillez vous assurer que vous disposez d\'une connexion Internet.</string>
     <string name="error_connection_unknown">La connexion a échoué.</string>
-    <string name="error_connection_tor_unreachable">Échec de la connexion Tor.\n Veuillez activer Tor dans les paramètres des applications.</string>
     <string name="error_connection_tor_bootstrapping">Tor n\'a pas pu démarrer.\n\nZap Android prend désormais en charge Tor nativement. Si vous utilisez Orbot, veuillez supprimer Zap de la liste Vpn apps d\'Orbot ou arrêter complètement Orbot.</string>
     <string name="error_connection_wallet_locked">Veuillez déverrouiller le portefeuille.</string>
     <string name="error_connection_btcpay_invalid_json">La syntaxe JSON de la configuration du serveur BTCPay est invalide.</string>
     <string name="error_connection_btcpay_invalid_config">La configuration du serveur BTCPay ne spécifie pas de configuration gRPC pour Bitcoin.</string>
     <string name="error_connection_internal_server">Le nœud est accessible mais renvoie une erreur interne. Cette erreur peut être causée par l\'utilisation d\'un mauvais port.</string>
-    <string name="error_connection_internal_server_clearnet">Le nœud est accessible mais renvoie une erreur interne. Cette erreur peut être causée par l\'utilisation d\'un mauvais port. Lorsque vous essayez de vous connecter à un nœud sur clearnet, la désactivation de Tor dans les paramètres de l\'application peut également résoudre votre problème.</string>
     <string name="error_wrong_password">Mauvais mot de passe</string>
     <string name="error_lightning_uri_invalid">Format non valide.\nVeuillez utiliser l\'un des éléments suivants :\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_connect_peer">Impossible d\'établir une connexion avec le pair.</string>

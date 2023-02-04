@@ -23,6 +23,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
+import zapsolutions.zap.tor.TorManager;
 
 public class PaymentUtil {
 
@@ -49,7 +50,7 @@ public class PaymentUtil {
                 .setFeeLimitSat(feeLimit)
                 .setPaymentHash(ByteString.copyFrom(bytes))
                 .setNoInflightUpdates(true)
-                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * RefConstants.TOR_TIMEOUT_MULTIPLIER)
+                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
                 .setMaxParts(1); // We are looking for a direct path. Probing using MPP isn’t really possible at the moment.
         if (paymentAddress != null) {
             sprb.setPaymentAddr(paymentAddress);
@@ -189,7 +190,7 @@ public class PaymentUtil {
         return SendPaymentRequest.newBuilder()
                 .setPaymentRequest(invoice)
                 .setFeeLimitSat(feeLimit)
-                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * RefConstants.TOR_TIMEOUT_MULTIPLIER)
+                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
                 .setMaxParts(RefConstants.LN_MAX_PARTS)
                 .build();
     }
@@ -212,7 +213,7 @@ public class PaymentUtil {
                 .setPaymentHash(paymentHash)
                 .setNoInflightUpdates(true)
                 .putDestCustomRecords(KEYSEND_PREIMAGE_RECORD, ByteString.copyFrom(preimage))
-                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * RefConstants.TOR_TIMEOUT_MULTIPLIER)
+                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
                 .setMaxParts(1) // KeySend does not support multi path payments
                 .build();
     }
@@ -221,7 +222,7 @@ public class PaymentUtil {
         return SendPaymentRequest.newBuilder()
                 .setPaymentRequest(invoice)
                 .setFeeLimitSat(feeLimit)
-                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * RefConstants.TOR_TIMEOUT_MULTIPLIER)
+                .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
                 .setMaxParts(1)
                 .build();
     }

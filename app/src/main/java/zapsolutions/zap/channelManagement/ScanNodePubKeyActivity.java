@@ -10,7 +10,7 @@ import java.net.URL;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lnurl.channel.LnUrlChannelResponse;
 import zapsolutions.zap.lnurl.channel.LnUrlHostedChannelResponse;
@@ -109,12 +109,12 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
             }
 
             @Override
-            public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
+            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
                 showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
-            public void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration) {
+            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
                 showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
             }
 

@@ -8,7 +8,7 @@ import javax.net.ssl.HostnameVerifier;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import zapsolutions.zap.BuildConfig;
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.lnd.LndAutopilotService;
 import zapsolutions.zap.lnd.LndChainNotifierService;
@@ -62,7 +62,7 @@ public class LndConnection {
     private LndWalletUnlockerService mLndWalletUnlockerService;
     private LndWatchtowerService mLndWatchtowerService;
     private LndWatchtowerClientService mLndWatchtowerClientService;
-    private NodeConfig mConnectionConfig;
+    private ZapNodeConfig mConnectionConfig;
     private boolean isConnected = false;
 
     private LndConnection() {
@@ -138,14 +138,13 @@ public class LndConnection {
         int port = mConnectionConfig.getPort();
 
         HostnameVerifier hostnameVerifier = null;
-        if (BuildConfig.BUILD_TYPE.equals("debug") || mConnectionConfig.isTor()) {
-            // Disable hostname verification on debug build variant. This is is used to prevent connection errors to REGTEST nodes.
+        if (!mConnectionConfig.getVerifyCertificate() || mConnectionConfig.isTorHostAddress()) {
             // On Tor we do not need it, as tor already makes sure we are connected with the correct host.
             hostnameVerifier = new BlindHostnameVerifier();
         }
 
         // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
-        if (PrefsUtil.isTorEnabled()) {
+        if (mConnectionConfig.getUseTor()) {
             mSecureChannel = OkHttpChannelBuilder
                     .forAddress(host, port)
                     .proxyDetector(new ZapTorProxyDetector(TorManager.getInstance().getProxyPort()))//
@@ -222,7 +221,7 @@ public class LndConnection {
         }
     }
 
-    public NodeConfig getConnectionConfig() {
+    public ZapNodeConfig getConnectionConfig() {
         return mConnectionConfig;
     }
 

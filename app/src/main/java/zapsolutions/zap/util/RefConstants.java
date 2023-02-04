@@ -14,8 +14,9 @@ public class RefConstants {
     17: Removed deviceID usage (0.2.5-alpha)
     18: Wallet name based WalletConfigs -> UUID based WalletConfigs (0.3.0-beta)
     19: Androidx.security implementation (0.4.0-beta)
+    20: Added additional data to node connections: Implementation, Tor, Certificate verification (0.6.0-beta)
     */
-    public static final int CURRENT_SETTINGS_VERSION = 19;
+    public static final int CURRENT_SETTINGS_VERSION = 20;
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
 
@@ -32,9 +33,16 @@ public class RefConstants {
     public static final int PIN_MAX_FAILS = 3;
     public static final int PIN_DELAY_TIME = 30;
 
-    // Data backup settings
+    /* This value has to be increased when something changes that affects the data backup.
+    By keeping track of this number backwards compatibility can be ensured
+    and new versions can restore backups from older versions.
+    History:
+    0: Initial release (0.5.3-beta)
+    1: Added additional data to node connections: Implementation, Tor, Certificate verification (0.6.0-beta)
+    */
+    public static final int DATA_BACKUP_VERSION = 1;
     public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
-    public static final int DATA_BACKUP_VERSION = 0;
+
 
     // Versioning for JSON data structures
     public static final int CONTACTS_JSON_VERSION = 1;

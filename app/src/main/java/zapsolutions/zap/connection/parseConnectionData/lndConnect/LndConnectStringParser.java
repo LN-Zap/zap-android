@@ -10,7 +10,9 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
+import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -125,6 +127,9 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                 lndConnectConfig.setPort(connectURI.getPort());
                 lndConnectConfig.setCert(cert);
                 lndConnectConfig.setMacaroon(macaroon);
+                lndConnectConfig.setImplementation(BaseNodeConfig.NODE_IMPLEMENTATION_LND);
+                lndConnectConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
+                lndConnectConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
                 setConnectionConfig(lndConnectConfig);
                 return this;
 

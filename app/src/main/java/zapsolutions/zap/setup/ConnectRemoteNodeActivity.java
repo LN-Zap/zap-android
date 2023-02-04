@@ -10,7 +10,7 @@ import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseScannerActivity;
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.util.ClipBoardUtil;
 import zapsolutions.zap.util.HelpDialogUtil;
 import zapsolutions.zap.util.PrefsUtil;
@@ -89,13 +89,13 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
         RemoteConnectUtil.decodeConnectionString(this, connectString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
-                connectIfUserConfirms(remoteConfiguration);
+            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+                connectIfUserConfirms(baseNodeConfig);
             }
 
             @Override
-            public void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration) {
-                connectIfUserConfirms(remoteConfiguration);
+            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+                connectIfUserConfirms(baseNodeConfig);
             }
 
             @Override
@@ -111,16 +111,16 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     }
 
 
-    private void connectIfUserConfirms(RemoteConfiguration remoteConfiguration) {
+    private void connectIfUserConfirms(BaseNodeConfig baseNodeConfig) {
         // Ask user to confirm the connection to remote host
         new UserGuardian(this, () -> {
-            connect(remoteConfiguration);
-        }).securityConnectToRemoteServer(remoteConfiguration.getHost());
+            connect(baseNodeConfig);
+        }).securityConnectToRemoteServer(baseNodeConfig.getHost());
     }
 
-    private void connect(RemoteConfiguration remoteConfiguration) {
+    private void connect(BaseNodeConfig baseNodeConfig) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, remoteConfiguration, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, baseNodeConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {

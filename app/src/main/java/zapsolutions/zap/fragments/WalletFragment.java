@@ -126,6 +126,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 Wallet.getInstance().reset();
                 updateTotalBalanceDisplay();
 
+                // Save the new chosen node in prefs
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, id).commit();
+
                 // Update status dot
                 updateStatusDot(alias);
 
@@ -553,7 +556,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void updateStatusDot(String walletAlias) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        if (PrefsUtil.isTorEnabled()) {
+        if (NodeConfigsManager.getInstance().getCurrentNodeConfig().getUseTor()) {
             mStatusDot.setImageResource(R.drawable.tor_icon);
             mStatusDot.getLayoutParams().height = (int) metrics.scaledDensity * 20;
             mStatusDot.getLayoutParams().width = (int) metrics.scaledDensity * 20;

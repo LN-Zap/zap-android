@@ -102,6 +102,7 @@
     <string name="maximum_abbreviation">max</string>
     <string name="send">Send</string>
     <string name="notConnected">Not connected</string>
+    <string name="save">Save</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -221,6 +222,7 @@
     <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While Zap anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
     <string name="guardian_zero_amount_invoice">This invoice does not specify an amount. Though very unlikely, invoices without a specific amount can be exploited and the recipient will receive less than expected in that case. If possible use an invoice with a specific amount.</string>
+    <string name="guardian_certificate_verification">If certificate verification is disabled, you are vulnerable to a man-in-the-middle attack. Only do this if you know what you are doing.\n\nIt is advised to get the certificate setup correct instead.\nThis means the certificate from your node has to have the hostname included that you are using in this connection setting. Add the hostname to tlsextradomain in the lnd.conf before recreating the certificate.</string>
 
 
     <string name="settings_category_general">General</string>
@@ -231,7 +233,7 @@
     <string name="settings_currency">Second Unit</string>
     <string name="settings_language">Language</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymize all traffic using the Tor network.</string>
+    <string name="settings_tor_summary">Anonymize all web traffic using the Tor network. This only affects things like fetching exchange rates or opening links. Whether or not Tor is used to connect to a node can be set for each node individually in its connection settings.</string>
     <string name="settings_scan_clipboard">Check clipboard</string>
     <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
@@ -292,18 +294,18 @@
     <string name="error_connection_invalid_host_or_port">The provided host or port is invalid.</string>
     <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
     <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
+    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You either have to disable certificate verification in the nodes connection settings or you have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.  Please update your node connection settings if your node is now reachable under a different address or hostname.</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
+    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the nodes connection settings.</string>
     <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
-    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
+    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the nodes connection settings might also solve your problem.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_node_setup">You first have to connect to a node before opening a channel.</string>
@@ -419,6 +421,8 @@
     <string name="spinner_manage_nodes">Manage…</string>
     <string name="node_added">Node connection data has been added.</string>
     <string name="node_already_exists">This node already exists.\nIf you want to update its connection data, please go to the nodes detail page.</string>
+    <string name="useTor">Use Tor</string>
+    <string name="verify_certificate">Certificate Verification</string>
 
     <string name="lnurl_withdraw_success">Withdraw\nsuccessful</string>
     <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>

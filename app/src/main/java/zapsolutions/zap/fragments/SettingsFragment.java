@@ -222,10 +222,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean newState = Boolean.valueOf(newValue.toString());
-                // we have to update this preferences value here, otherwhise the value of the preference would be updated AFTER the reconnection has taken place.
+                // we have to update this preferences value here, otherwise the value of the preference would be updated AFTER the reconnection has taken place.
                 mSwTor.setChecked(newState);
 
-                TorManager.getInstance().switchTorState(newState);
+                TorManager.getInstance().switchTorPrefState(newState);
 
                 return true;
             }
