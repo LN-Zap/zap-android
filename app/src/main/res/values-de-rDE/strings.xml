@@ -98,6 +98,7 @@
     <string name="maximum_abbreviation">max</string>
     <string name="send">Senden</string>
     <string name="notConnected">Nicht verbunden</string>
+    <string name="save">Speichern</string>
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
@@ -203,7 +204,7 @@
     <string name="settings_currency">Zweite Einheit</string>
     <string name="settings_language">Sprache</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymisiert den gesamten Datenverkehr über das Tor Netzwerk.</string>
+    <string name="settings_tor_summary">Anonymisiert den gesamten Web-Datenverkehr über das Tor Netzwerk. Das betrifft nur Dinge wie Anfragen für Wechselkurse oder das Öffnen von Links. Ob Tor für die Verbindung eines Knotens verwendet wird, kann für jeden Knoten separat in seinen Verbindungseinstellungen eingestellt werden.</string>
     <string name="settings_scan_clipboard">Zwischenablage scannen</string>
     <string name="settings_scan_clipboard_summary">Automatisch Daten in der Zwischenablage erkennen, die Zap verarbeiten kann.</string>
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
@@ -255,18 +256,18 @@
     <string name="error_connection_invalid_host_or_port">Der angegebene Host oder Port is ungültig.</string>
     <string name="error_connection_invalid_macaroon2">Zugriff verweigert!\n\nDas Macaroon ist ungültig.</string>
     <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.\n\nDer Hostnamen deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Zertifikats überein.\n\nMöglicherweise musst du das Zertifikat erneuern. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain hinterlegt ist, bevor du das Zertifikat neu erstellst.</string>
+    <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.\n\nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Zertifikats überein.\n\nDu musst entweder die Verifizierung des Zertifikats in den Verbindungseinstellungen des Knotens deaktivieren oder das Zertifikat erneuern. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain hinterlegt ist, bevor du das Zertifikat neu erstellst.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden.  Bitte aktualisiere die Verbindungseinstellungen deiner Node, falls deine Node mittlerweile unter einem anderen Namen oder einer anderen Addresse erreichbar ist.</string>
     <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND daemon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
     <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
-    <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte aktiviere Tor in den Einstellungen.</string>
+    <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte aktiviere Tor in den Verbindungseinstellungen des Knotens.</string>
     <string name="error_connection_tor_bootstrapping">Tor konnte nicht gestartet werden.\n\nZap Android unterstützt nun Tor standardmäßig. Falls du Orbot nutzt, entferne Bitte Zap aus der Liste der Tor-aktivierten Apps, oder beende Orbot ganz.</string>
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_connection_internal_server">Die Node ist erreichbar, aber antwortet mit einem internen Fehler. Dieser Fehler wird eventuell durch einen falschen Port verursacht.</string>
-    <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es auch helfen Tor in den Einstellungen auszuschalten.</string>
+    <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es auch helfen Tor in den Verbindungseinstellungen des Knotens auszuschalten.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
     <string name="error_lightning_uri_invalid">Ungültiges Format.\nBitte verwende eines der folgenden Formate:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_channel_open_node_setup">Du musst dich zuerst mit einer Node verbinden, um einen Kanal zu öffnen.</string>
@@ -368,6 +369,8 @@
     <string name="spinner_manage_nodes">Verwalten…</string>
     <string name="node_added">Verbindungsdaten der Node wurden hinzugefügt.</string>
     <string name="node_already_exists">Diese Node existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zu den Node Details.</string>
+    <string name="useTor">Tor verwenden</string>
+    <string name="verify_certificate">Zertifikat verifizieren</string>
     <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>
     <string name="lnurl_withdraw_fail">Abhebung\nfehlgeschlagen</string>
     <string name="lnurl_decoding_no_lnurl_data">Die Daten enthalten keine gültige LNURL.</string>
@@ -461,4 +464,5 @@
     <string name="forwarding_earned_description">Einnahmen im ausgewählten Zeitraum</string>
     <string name="forwarding_closed_channel">Geschlossener Kanal</string>
     <string name="drawer_menu_category_current_node">Aktuelle Node</string>
+    <string name="guardian_certificate_verification">Wenn das Zertifikat nicht verifiziert wird, kannst du Oper einer man-in-the-middle Attacke werden. Deaktiviere diese Einstellung nur, wenn du weißt, was du tust.\n\nEs wird empfohlen stattdessen das Zertifikat richtig zu verwenden.\nDas bedeutet, dass das Zertifikat deines Knotens den Hostnamen, der in dieser Verbindungseinstellung verwendet wird, beinhaltet. Füge den Hostnamen als tlsextradomain in der lnd.conf hinzu, bevor du das Zertifikat neu erstellst.</string>
 </resources>

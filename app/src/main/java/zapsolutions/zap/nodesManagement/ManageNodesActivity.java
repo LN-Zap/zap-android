@@ -15,7 +15,7 @@ import java.util.List;
 
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.setup.SetupActivity;
 
@@ -27,7 +27,7 @@ public class ManageNodesActivity extends BaseAppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<NodeConfig> mNodeItems;
+    private List<ZapNodeConfig> mNodeItems;
     private TextView mEmptyListText;
 
     @Override

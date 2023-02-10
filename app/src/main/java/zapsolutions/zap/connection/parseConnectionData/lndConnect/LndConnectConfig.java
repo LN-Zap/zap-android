@@ -1,8 +1,8 @@
 package zapsolutions.zap.connection.parseConnectionData.lndConnect;
 
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.BaseNodeConfig;
 
-public class LndConnectConfig extends RemoteConfiguration {
+public class LndConnectConfig extends BaseNodeConfig {
 
     private String cert;
 

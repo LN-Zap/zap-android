@@ -199,7 +199,6 @@
     <string name="settings_currency">Fiateenheid</string>
     <string name="settings_language">Taal</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonimiseer alle dataverkeer via het Tor-netwerk.</string>
     <string name="settings_scan_clipboard">Klembord controleren</string>
     <string name="settings_scan_clipboard_summary">Automatisch het klembord controleren op data die Zap kan gebruiken.</string>
     <string name="settings_hapticPin">Haptische PIN-feedback</string>
@@ -251,17 +250,14 @@
     <string name="error_connection_invalid_host_or_port">De verstrekte host of poort is ongeldig.</string>
     <string name="error_connection_invalid_macaroon2">Toegang geweigerd!\n\nDe macaroon is ongeldig.</string>
     <string name="error_connection_server_unreachable">Timeout.\nDe server reageert niet.\n\n-Zorg ervoor dat je een goede internetverbinding hebt\n\n- Zorg er voor dat de server draait de nog steeds de volgende IP heeft:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostnaamverificatie mislukt.\n\nDe hostnaam van je verbinding komt niet overeen met de hostnaam in het certificaat.\n\n Je moet misschien je certificaat opnieuw maken. Zorg ervoor dat de hostnaam is toegevoegd aan de lnd.conf als tlsextradomain voordat je deze opnieuw maakt.</string>
     <string name="error_connection_lnd_unavailable">Kan geen verbinding maken met LND.\n\n- zorg ervoor dat de LND daemon draait op je server.\n\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Kan de host niet bereiken.\n\nZorg ervoor dat je een internetverbinding hebt.</string>
     <string name="error_connection_unknown">Verbinding mislukt.</string>
-    <string name="error_connection_tor_unreachable">Tor-verbinding mislukt.\n Schakel Tor in bij de app-instellingen.</string>
     <string name="error_connection_tor_bootstrapping">Tor kon niet opstarten.\n\nZap Android ondersteunt nu native Tor. Als u Orbot gebruikt, verwijder dan Zap uit de Tor-geactiveerde lijst van Orbot of sluit Orbot volledig af.</string>
     <string name="error_connection_wallet_locked">Ontgrendel de wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON-syntax van de BTCPay-serverconfiguratie is ongeldig.</string>
     <string name="error_connection_btcpay_invalid_config">De BTCPay serverconfiguratie bevat geen BTC GRPC-configuratie.</string>
     <string name="error_connection_internal_server">De node is bereikbaar maar retourneert een interne fout. Deze fout kan worden veroorzaakt door het gebruik van een verkeerde poort.</string>
-    <string name="error_connection_internal_server_clearnet">De node is bereikbaar maar retourneert een interne fout. Deze fout kan worden veroorzaakt door het gebruik van een verkeerde poort. Je probeert verbinding te maken met een Node op clearnet, het uitschakelen van Tor in de app-instellingen kan het probleem mogelijks oplossen.</string>
     <string name="error_wrong_password">Verkeerd wachtwoord</string>
     <string name="error_lightning_uri_invalid">Ongeldig format.\nGebruik een van de volgende:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_connect_peer">Kon geen verbinding maken met de peernode.</string>

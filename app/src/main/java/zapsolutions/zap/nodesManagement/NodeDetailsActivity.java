@@ -20,7 +20,7 @@ import zapsolutions.zap.LandingActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.setup.ManualSetup;
 import zapsolutions.zap.util.PrefsUtil;
@@ -207,7 +207,7 @@ public class NodeDetailsActivity extends BaseAppCompatActivity {
         });
     }
 
-    private NodeConfig getWalletConfig() {
+    private ZapNodeConfig getWalletConfig() {
         return NodeConfigsManager.getInstance().getNodeConfigById(mId);
     }
 

@@ -1,8 +1,8 @@
 package zapsolutions.zap.connection.parseConnectionData.btcPay;
 
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.BaseNodeConfig;
 
-public class BTCPayConfig extends RemoteConfiguration {
+public class BTCPayConfig extends BaseNodeConfig {
 
     public static String TYPE_GRPC = "GRPC";
     public static String CRYPTO_TYPE_BTC = "BTC";

@@ -19,8 +19,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import zapsolutions.zap.R;
 import zapsolutions.zap.connection.HttpClient;
-import zapsolutions.zap.connection.RemoteConfiguration;
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.BaseNodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfig;
 import zapsolutions.zap.connection.parseConnectionData.btcPay.BTCPayConfigParser;
@@ -129,7 +129,7 @@ public class RemoteConnectUtil {
     }
 
 
-    public static void saveRemoteConfiguration(Context ctx, RemoteConfiguration config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
+    public static void saveRemoteConfiguration(Context ctx, BaseNodeConfig config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
         int port = config.getPort();
         if (port == 8080) {
             // Zap Android does not support REST. If the REST port was supplied, we ask the user if he wants to change it to 10009 (gRPC port).
@@ -152,7 +152,7 @@ public class RemoteConnectUtil {
         }
     }
 
-    private static void executeSaveRemoteConfiguration(RemoteConfiguration config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
+    private static void executeSaveRemoteConfiguration(BaseNodeConfig config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
         NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
 
         try {
@@ -168,14 +168,14 @@ public class RemoteConnectUtil {
                     }
 
                     id = nodeConfigsManager.addNodeConfig(lndConfig.getHost(),
-                            NodeConfig.NODE_TYPE_REMOTE, lndConfig.getHost(), port,
-                            lndConfig.getCert(), lndConfig.getMacaroon()).getId();
+                            ZapNodeConfig.NODE_TYPE_REMOTE, BaseNodeConfig.NODE_IMPLEMENTATION_LND, lndConfig.getHost(), port,
+                            lndConfig.getCert(), lndConfig.getMacaroon(), lndConfig.getUseTor(), lndConfig.getVerifyCertificate()).getId();
                 } else {
                     id = walletUUID;
                     String oldAlias = nodeConfigsManager.getNodeConfigById(id).getAlias();
                     nodeConfigsManager.updateNodeConfig(id, oldAlias,
-                            NodeConfig.NODE_TYPE_REMOTE, lndConfig.getHost(), port,
-                            lndConfig.getCert(), lndConfig.getMacaroon());
+                            ZapNodeConfig.NODE_TYPE_REMOTE, BaseNodeConfig.NODE_IMPLEMENTATION_LND, lndConfig.getHost(), port,
+                            lndConfig.getCert(), lndConfig.getMacaroon(), lndConfig.getUseTor(), lndConfig.getVerifyCertificate());
                 }
 
                 nodeConfigsManager.apply();
@@ -194,14 +194,14 @@ public class RemoteConnectUtil {
                     }
 
                     id = nodeConfigsManager.addNodeConfig(btcPayConfig.getHost(),
-                            NodeConfig.NODE_TYPE_REMOTE, btcPayConfig.getHost(), port,
-                            null, btcPayConfig.getMacaroon()).getId();
+                            ZapNodeConfig.NODE_TYPE_REMOTE, BaseNodeConfig.NODE_IMPLEMENTATION_LND, btcPayConfig.getHost(), port,
+                            null, btcPayConfig.getMacaroon(), btcPayConfig.getUseTor(), btcPayConfig.getVerifyCertificate()).getId();
                 } else {
                     id = walletUUID;
                     String oldAlias = nodeConfigsManager.getNodeConfigById(id).getAlias();
                     nodeConfigsManager.updateNodeConfig(id, oldAlias,
-                            NodeConfig.NODE_TYPE_REMOTE, btcPayConfig.getHost(), port,
-                            null, btcPayConfig.getMacaroon());
+                            ZapNodeConfig.NODE_TYPE_REMOTE, BaseNodeConfig.NODE_IMPLEMENTATION_LND, btcPayConfig.getHost(), port,
+                            null, btcPayConfig.getMacaroon(), btcPayConfig.getUseTor(), btcPayConfig.getVerifyCertificate());
                 }
 
                 nodeConfigsManager.apply();
@@ -215,12 +215,19 @@ public class RemoteConnectUtil {
         }
     }
 
+    public static boolean isTorHostAddress(String Host) {
+        if (Host == null) {
+            return false;
+        }
+        return Host.toLowerCase().endsWith(".onion");
+    }
+
 
     public interface OnRemoteConnectDecodedListener {
 
-        void onValidLndConnectString(RemoteConfiguration remoteConfiguration);
+        void onValidLndConnectString(BaseNodeConfig baseNodeConfig);
 
-        void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration);
+        void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig);
 
         void onNoConnectData();
 

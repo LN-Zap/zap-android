@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 
 
 public class NodeItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<NodeConfig> mItems;
+    private List<ZapNodeConfig> mItems;
 
     // Construct the adapter with a data list
-    public NodeItemAdapter(List<NodeConfig> dataset) {
+    public NodeItemAdapter(List<ZapNodeConfig> dataset) {
         mItems = dataset;
     }
 
@@ -31,7 +31,7 @@ public class NodeItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         NodeItemViewHolder nodeViewHolder = (NodeItemViewHolder) holder;
-        NodeConfig remoteNodeItem = mItems.get(position);
+        ZapNodeConfig remoteNodeItem = mItems.get(position);
         nodeViewHolder.bindRemoteNodeItem(remoteNodeItem);
     }
 

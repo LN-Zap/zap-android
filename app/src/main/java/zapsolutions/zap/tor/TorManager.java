@@ -5,7 +5,7 @@ import java.util.Set;
 
 import io.matthewnelson.topl_service.TorServiceController;
 import zapsolutions.zap.connection.HttpClient;
-import zapsolutions.zap.connection.lndConnection.LndConnection;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 
@@ -52,35 +52,31 @@ public class TorManager {
         TorServiceController.restartTor();
     }
 
-    public void switchTorState(boolean newActive) {
+    public void switchTorPrefState(boolean newActive) {
         if (newActive) {
             startTor();
             // restarting HTTP Client and LND Connection will happen automatically as soon as the new proxy is established.
         } else {
-            stopTor();
+            if (!isCurrentNodeConnectionTor()) {
+                // Stop tor service if not used by current node.
+                stopTor();
+            }
 
             // restart HTTP Client
             HttpClient.getInstance().restartHttpClient();
-
-            // restart LND Connection
-            LndConnection.getInstance().reconnect();
         }
     }
 
-    public boolean isCurrentConnectionTor() {
-        if (LndConnection.getInstance().getConnectionConfig() != null) {
-            if (LndConnection.getInstance().getConnectionConfig().isLocal()) {
-                return false;
-            } else {
-                return LndConnection.getInstance().getConnectionConfig().isTor();
-            }
+    public boolean isCurrentNodeConnectionTor() {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            return NodeConfigsManager.getInstance().getCurrentNodeConfig().getUseTor();
         } else {
             return false;
         }
     }
 
     public int getTorTimeoutMultiplier() {
-        if (PrefsUtil.isTorEnabled() || isCurrentConnectionTor()) {
+        if (PrefsUtil.isTorEnabled() || isCurrentNodeConnectionTor()) {
             return RefConstants.TOR_TIMEOUT_MULTIPLIER;
         } else {
             return 1;

@@ -8,22 +8,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
-import zapsolutions.zap.connection.RemoteConfiguration;
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.connection.parseConnectionData.lndConnect.LndConnectConfig;
+import zapsolutions.zap.nodesManagement.ManageNodesActivity;
+import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 import zapsolutions.zap.util.RefConstants;
 import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.TimeOutUtil;
+import zapsolutions.zap.util.UserGuardian;
 import zapsolutions.zap.util.UtilFunctions;
 import zapsolutions.zap.util.Wallet;
-import zapsolutions.zap.nodesManagement.ManageNodesActivity;
 
 public class ManualSetup extends BaseAppCompatActivity {
 
@@ -33,6 +38,8 @@ public class ManualSetup extends BaseAppCompatActivity {
     private EditText mEtPort;
     private EditText mEtMacaroon;
     private EditText mEtCertificate;
+    private SwitchCompat mSwTor;
+    private SwitchCompat mSwVerify;
     private Button mBtnSave;
     private String mWalletUUID;
 
@@ -54,18 +61,56 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtPort = findViewById(R.id.portEditText);
         mEtMacaroon = findViewById(R.id.macaroonEditText);
         mEtCertificate = findViewById(R.id.certificateEditText);
+        mSwTor = findViewById(R.id.torSwitch);
+        mSwVerify = findViewById(R.id.verifyCertSwitch);
         mBtnSave = findViewById(R.id.saveButton);
 
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
-            NodeConfig nodeConfig = NodeConfigsManager.getInstance().getNodeConfigById(mWalletUUID);
-            mEtHost.setText(nodeConfig.getHost());
-            mEtPort.setText(String.valueOf(nodeConfig.getPort()));
-            mEtMacaroon.setText(nodeConfig.getMacaroon());
-            if (nodeConfig.getCert() != null && !nodeConfig.getCert().isEmpty()) {
-                mEtCertificate.setText(nodeConfig.getCert());
+            ZapNodeConfig zapNodeConfig = NodeConfigsManager.getInstance().getNodeConfigById(mWalletUUID);
+            mEtHost.setText(zapNodeConfig.getHost());
+            mEtPort.setText(String.valueOf(zapNodeConfig.getPort()));
+            mEtMacaroon.setText(zapNodeConfig.getMacaroon());
+            mSwTor.setChecked(zapNodeConfig.getUseTor());
+            if (zapNodeConfig.getUseTor()) {
+                mSwVerify.setChecked(false);
+                mSwVerify.setVisibility(View.GONE);
+            } else {
+                mSwVerify.setChecked(zapNodeConfig.getVerifyCertificate());
+            }
+            if (zapNodeConfig.getCert() != null && !zapNodeConfig.getCert().isEmpty()) {
+                mEtCertificate.setText(zapNodeConfig.getCert());
             }
         }
+
+        mSwTor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    mSwVerify.setChecked(false);
+                    mSwVerify.setVisibility(View.GONE);
+                } else {
+                    mSwVerify.setChecked(true);
+                    mSwVerify.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mSwVerify.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if (!mSwVerify.isChecked()) {
+                    // user wants to disable certificate verification
+                    mSwVerify.setChecked(true);
+                    new UserGuardian(ManualSetup.this, new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onGuardianConfirmed() {
+                            mSwVerify.setChecked(false);
+                        }
+                    }).securityCertificateVerification();
+                }
+            }
+        });
 
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +137,8 @@ public class ManualSetup extends BaseAppCompatActivity {
                 lndConnectConfig.setHost(mEtHost.getText().toString());
                 lndConnectConfig.setPort(Integer.parseInt(mEtPort.getText().toString()));
                 lndConnectConfig.setMacaroon(mEtMacaroon.getText().toString());
+                lndConnectConfig.setUseTor(mSwTor.isChecked());
+                lndConnectConfig.setVerifyCertificate(mSwVerify.isChecked());
                 if (!mEtCertificate.getText().toString().isEmpty()) {
                     lndConnectConfig.setCert(mEtCertificate.getText().toString());
                 }
@@ -100,9 +147,9 @@ public class ManualSetup extends BaseAppCompatActivity {
         });
     }
 
-    private void connect(RemoteConfiguration remoteConfiguration) {
+    private void connect(BaseNodeConfig baseNodeConfig) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, remoteConfiguration, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, baseNodeConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {

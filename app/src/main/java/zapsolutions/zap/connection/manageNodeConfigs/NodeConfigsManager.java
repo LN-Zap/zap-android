@@ -27,7 +27,7 @@ public class NodeConfigsManager {
 
     private static final String LOG_TAG = NodeConfigsManager.class.getName();
     private static NodeConfigsManager mInstance;
-    private NodeConfigsJson mNodeConfigsJson;
+    private ZapNodeConfigsJson mZapNodeConfigsJson;
 
     private NodeConfigsManager() {
 
@@ -39,25 +39,25 @@ public class NodeConfigsManager {
         }
 
         if (isValidJson(decrypted)) {
-            mNodeConfigsJson = new Gson().fromJson(decrypted, NodeConfigsJson.class);
+            mZapNodeConfigsJson = new Gson().fromJson(decrypted, ZapNodeConfigsJson.class);
         } else {
-            mNodeConfigsJson = createEmptyNodeConfigsJson();
+            mZapNodeConfigsJson = createEmptyNodeConfigsJson();
         }
 
-        if (mNodeConfigsJson == null) {
-            mNodeConfigsJson = createEmptyNodeConfigsJson();
+        if (mZapNodeConfigsJson == null) {
+            mZapNodeConfigsJson = createEmptyNodeConfigsJson();
         }
     }
 
     // used for unit tests
     public NodeConfigsManager(String NodeConfigsJson) {
         try {
-            mNodeConfigsJson = new Gson().fromJson(NodeConfigsJson, NodeConfigsJson.class);
+            mZapNodeConfigsJson = new Gson().fromJson(NodeConfigsJson, ZapNodeConfigsJson.class);
         } catch (JsonSyntaxException e) {
-            mNodeConfigsJson = createEmptyNodeConfigsJson();
+            mZapNodeConfigsJson = createEmptyNodeConfigsJson();
         }
-        if (mNodeConfigsJson == null) {
-            mNodeConfigsJson = createEmptyNodeConfigsJson();
+        if (mZapNodeConfigsJson == null) {
+            mZapNodeConfigsJson = createEmptyNodeConfigsJson();
         }
     }
 
@@ -76,29 +76,29 @@ public class NodeConfigsManager {
      */
     private static boolean isValidJson(String nodeConfigsString) {
         try {
-            NodeConfigsJson nodeConfigs = new Gson().fromJson(nodeConfigsString, NodeConfigsJson.class);
+            ZapNodeConfigsJson nodeConfigs = new Gson().fromJson(nodeConfigsString, ZapNodeConfigsJson.class);
             return nodeConfigs != null;
         } catch (JsonSyntaxException ex) {
             return false;
         }
     }
 
-    public NodeConfigsJson getNodeConfigsJson() {
-        return mNodeConfigsJson;
+    public ZapNodeConfigsJson getNodeConfigsJson() {
+        return mZapNodeConfigsJson;
     }
 
-    private NodeConfigsJson createEmptyNodeConfigsJson() {
-        return new Gson().fromJson("{\"connections\":[], \"version\":" + RefConstants.NODE_CONFIG_JSON_VERSION + "}", NodeConfigsJson.class);
+    private ZapNodeConfigsJson createEmptyNodeConfigsJson() {
+        return new Gson().fromJson("{\"connections\":[], \"version\":" + RefConstants.NODE_CONFIG_JSON_VERSION + "}", ZapNodeConfigsJson.class);
     }
 
     /**
      * Checks if a node configuration already exists.
      *
-     * @param nodeConfig
+     * @param zapNodeConfig
      * @return
      */
-    public boolean doesNodeConfigExist(@NonNull NodeConfig nodeConfig) {
-        return mNodeConfigsJson.doesNodeConfigExist(nodeConfig);
+    public boolean doesNodeConfigExist(@NonNull ZapNodeConfig zapNodeConfig) {
+        return mZapNodeConfigsJson.doesNodeConfigExist(zapNodeConfig);
     }
 
     /**
@@ -109,8 +109,8 @@ public class NodeConfigsManager {
      * @return
      */
     public boolean doesDestinationExist(@NonNull String host, @NonNull int port) {
-        List<NodeConfig> configList = getAllNodeConfigs(false);
-        for (NodeConfig tempConfig : configList) {
+        List<ZapNodeConfig> configList = getAllNodeConfigs(false);
+        for (ZapNodeConfig tempConfig : configList) {
             if (tempConfig.getHost().equals(host) && tempConfig.getPort() == port) {
                 return true;
             }
@@ -130,23 +130,26 @@ public class NodeConfigsManager {
      * @param cert     The certificate. This is optional and can be null
      * @param macaroon The Macaroon. Encoded as base16 (hex)
      */
-    public NodeConfig addNodeConfig(@NonNull String alias, @NonNull String type, String host,
-                                    int port, @Nullable String cert, String macaroon) {
+    public ZapNodeConfig addNodeConfig(@NonNull String alias, @NonNull String type, @NonNull String implementation, String host,
+                                       int port, @Nullable String cert, String macaroon, boolean useTor, boolean verifyHost) {
 
         // Create the UUID for the new config
         String id = UUID.randomUUID().toString();
 
         // Create the config
-        NodeConfig config = new NodeConfig(id);
+        ZapNodeConfig config = new ZapNodeConfig(id);
         config.setAlias(alias);
         config.setType(type);
+        config.setImplementation(implementation);
         config.setHost(host);
         config.setPort(port);
         config.setCert(cert);
         config.setMacaroon(macaroon);
+        config.setUseTor(useTor);
+        config.setVerifyCertificate(verifyHost);
 
         // Add the config to our configurations array
-        boolean nodeAdded = mNodeConfigsJson.addNode(config);
+        boolean nodeAdded = mZapNodeConfigsJson.addNode(config);
 
         if (nodeAdded) {
             ZapLog.d(LOG_TAG, "The ID of the created NodeConfig is:" + id);
@@ -168,20 +171,23 @@ public class NodeConfigsManager {
      * @param cert     The certificate. This is optional and can be null
      * @param macaroon The Macaroon. Encoded as base16 (hex)
      */
-    public NodeConfig updateNodeConfig(@NonNull String id, @NonNull String alias, @NonNull String type, String host,
-                                       int port, @Nullable String cert, String macaroon) {
+    public ZapNodeConfig updateNodeConfig(@NonNull String id, @NonNull String alias, @NonNull String implementation, @NonNull String type, String host,
+                                          int port, @Nullable String cert, String macaroon, boolean useTor, boolean verifyHost) {
 
         // Create the config
-        NodeConfig config = new NodeConfig(id);
+        ZapNodeConfig config = new ZapNodeConfig(id);
         config.setAlias(alias);
         config.setType(type);
+        config.setImplementation(implementation);
         config.setHost(host);
         config.setPort(port);
         config.setCert(cert);
         config.setMacaroon(macaroon);
+        config.setUseTor(useTor);
+        config.setVerifyCertificate(verifyHost);
 
         // Update the config in our configurations array
-        boolean nodeUpdated = mNodeConfigsJson.updateNodeConfig(config);
+        boolean nodeUpdated = mZapNodeConfigsJson.updateNodeConfig(config);
 
         if (nodeUpdated) {
             ZapLog.d(LOG_TAG, "NodeConfig updated! (id =" + id + ")");
@@ -197,11 +203,11 @@ public class NodeConfigsManager {
      *
      * @return
      */
-    public NodeConfig getCurrentNodeConfig() {
-        NodeConfig config = getNodeConfigById(PrefsUtil.getCurrentNodeConfig());
+    public ZapNodeConfig getCurrentNodeConfig() {
+        ZapNodeConfig config = getNodeConfigById(PrefsUtil.getCurrentNodeConfig());
         if (config == null && hasAnyConfigs()) {
-            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, ((NodeConfig) mNodeConfigsJson.mConnections.toArray()[0]).getId()).commit();
-            return (NodeConfig) mNodeConfigsJson.mConnections.toArray()[0];
+            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, ((ZapNodeConfig) mZapNodeConfigsJson.mConnections.toArray()[0]).getId()).commit();
+            return (ZapNodeConfig) mZapNodeConfigsJson.mConnections.toArray()[0];
         }
         return config;
     }
@@ -213,8 +219,8 @@ public class NodeConfigsManager {
      * @param id The UUID of the node
      * @return Returns null if no configuration is found for the given uuid
      */
-    public NodeConfig getNodeConfigById(@NonNull String id) {
-        return mNodeConfigsJson.getConnectionById(id);
+    public ZapNodeConfig getNodeConfigById(@NonNull String id) {
+        return mZapNodeConfigsJson.getConnectionById(id);
     }
 
     /**
@@ -223,9 +229,9 @@ public class NodeConfigsManager {
      * @param activeOnTop if true the currently active node is on top, ignoring alphabetical order.
      * @return
      */
-    public List<NodeConfig> getAllNodeConfigs(boolean activeOnTop) {
-        List<NodeConfig> sortedList = new ArrayList<>();
-        sortedList.addAll(mNodeConfigsJson.getConnections());
+    public List<ZapNodeConfig> getAllNodeConfigs(boolean activeOnTop) {
+        List<ZapNodeConfig> sortedList = new ArrayList<>();
+        sortedList.addAll(mZapNodeConfigsJson.getConnections());
 
         if (sortedList.size() > 1) {
             // Sort the list alphabetically
@@ -234,13 +240,13 @@ public class NodeConfigsManager {
             // Move the current config to top
             if (activeOnTop) {
                 int index = -1;
-                for (NodeConfig tempConfig : sortedList) {
+                for (ZapNodeConfig tempConfig : sortedList) {
                     if (tempConfig.getId().equals(PrefsUtil.getCurrentNodeConfig())) {
                         index = sortedList.indexOf(tempConfig);
                         break;
                     }
                 }
-                NodeConfig currentConfig = sortedList.get(index);
+                ZapNodeConfig currentConfig = sortedList.get(index);
                 sortedList.remove(index);
                 sortedList.add(0, currentConfig);
             }
@@ -253,29 +259,29 @@ public class NodeConfigsManager {
      * Renames the desired node config.
      * Do not forget to call apply() afterwards to make this change permanent.
      *
-     * @param nodeConfig The node config that should be renamed.
+     * @param zapNodeConfig The node config that should be renamed.
      * @param newAlias   The new alias
      * @return false if the old alias did not exist.
      */
-    public boolean renameNodeConfig(@NonNull NodeConfig nodeConfig, @NonNull String newAlias) {
-        return mNodeConfigsJson.renameNodeConfig(nodeConfig, newAlias);
+    public boolean renameNodeConfig(@NonNull ZapNodeConfig zapNodeConfig, @NonNull String newAlias) {
+        return mZapNodeConfigsJson.renameNodeConfig(zapNodeConfig, newAlias);
     }
 
     /**
      * Removes the desired node config.
      * Do not forget to call apply() afterwards to make this change permanent.
      *
-     * @param nodeConfig
+     * @param zapNodeConfig
      */
-    public boolean removeNodeConfig(@NonNull NodeConfig nodeConfig) {
-        return mNodeConfigsJson.removeNodeConfig(nodeConfig);
+    public boolean removeNodeConfig(@NonNull ZapNodeConfig zapNodeConfig) {
+        return mZapNodeConfigsJson.removeNodeConfig(zapNodeConfig);
     }
 
     public boolean hasLocalConfig() {
         if (hasAnyConfigs()) {
             boolean hasLocal = false;
-            for (NodeConfig nodeConfig : mNodeConfigsJson.getConnections()) {
-                if (nodeConfig.isLocal()) {
+            for (ZapNodeConfig zapNodeConfig : mZapNodeConfigsJson.getConnections()) {
+                if (zapNodeConfig.isLocal()) {
                     hasLocal = true;
                     break;
                 }
@@ -287,7 +293,7 @@ public class NodeConfigsManager {
     }
 
     public boolean hasAnyConfigs() {
-        return !mNodeConfigsJson.getConnections().isEmpty();
+        return !mZapNodeConfigsJson.getConnections().isEmpty();
     }
 
     /**
@@ -295,7 +301,7 @@ public class NodeConfigsManager {
      * Do not forget to call apply() afterwards to make this change permanent.
      */
     public void removeAllNodeConfigs() {
-        mNodeConfigsJson = createEmptyNodeConfigsJson();
+        mZapNodeConfigsJson = createEmptyNodeConfigsJson();
     }
 
     /**
@@ -307,7 +313,7 @@ public class NodeConfigsManager {
      */
     public void apply() throws GeneralSecurityException, IOException {
         // Convert JSON object to string
-        String jsonString = new Gson().toJson(mNodeConfigsJson);
+        String jsonString = new Gson().toJson(mZapNodeConfigsJson);
 
         // Save the new node configurations in encrypted prefs
         PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.NODE_CONFIGS, jsonString).commit();

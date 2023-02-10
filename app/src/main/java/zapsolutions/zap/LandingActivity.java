@@ -8,10 +8,13 @@ import android.os.Bundle;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.setup.ConnectRemoteNodeActivity;
 import zapsolutions.zap.util.NfcUtil;
 import zapsolutions.zap.util.PinScreenUtil;
@@ -59,7 +62,12 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
             int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
             if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
-                resetApp();
+                if (ver == 19) {
+                    updateNodeSettings();
+                    enterWallet();
+                } else {
+                    resetApp();
+                }
             } else {
                 enterWallet();
             }
@@ -121,5 +129,20 @@ public class LandingActivity extends BaseAppCompatActivity {
         connectIntent.putExtra(ConnectRemoteNodeActivity.EXTRA_STARTED_FROM_URI, true);
         connectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(connectIntent);
+    }
+
+    private void updateNodeSettings() {
+        List<ZapNodeConfig> nodeConfigs = NodeConfigsManager.getInstance().getAllNodeConfigs(false);
+        for (ZapNodeConfig nodeConfig : nodeConfigs) {
+            // Adds the defaults to the newly introduced node properties.
+            NodeConfigsManager.getInstance().updateNodeConfig(nodeConfig.getId(), nodeConfig.getAlias(), BaseNodeConfig.NODE_IMPLEMENTATION_LND, nodeConfig.getType(), nodeConfig.getHost(), nodeConfig.getPort(), nodeConfig.getCert(), nodeConfig.getMacaroon(), nodeConfig.isTorHostAddress(), !nodeConfig.isTorHostAddress());
+            try {
+                NodeConfigsManager.getInstance().apply();
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

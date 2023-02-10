@@ -199,7 +199,6 @@
     <string name="settings_currency">Вторична единица</string>
     <string name="settings_language">Език</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymize all traffic using the Tor network.</string>
     <string name="settings_scan_clipboard">Проверка на клипборда</string>
     <string name="settings_scan_clipboard_summary">Автоматично проверява клипборда за данни, които Zap може да използва.</string>
     <string name="settings_hapticPin">Осезаема ПИН обратна връзка</string>
@@ -251,17 +250,14 @@
     <string name="error_connection_invalid_host_or_port">Избраният хост или порт е невалиден.</string>
     <string name="error_connection_invalid_macaroon2">Достъп отказан!\n\nMacaroon-ът е невалиден.</string>
     <string name="error_connection_server_unreachable">Таймаут.\nСървърът не отговаря.\n\n- Моля уверете се, че имате добра Интернет връзка.\n\n- Моля уверете се, че сървърът работи и все още има следното IP:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Верификацията на hostname неуспешна.\n\nHostname-ът на връзката Ви не съвпада с този на сертификата.\n\n Може да се наложи да пресъздадете сертификата си. Уверете се, че hostname-ът е добавен в lnd.conf като tlsextradomain, преди да го направите.</string>
     <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.\n\n- Уверете се, че LND deamon-ът работи на сървъра Ви.\n\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)</string>
     <string name="error_connection_network_unreachable">Неуспешно свързване с хоста.\n\nМоля уверете се, че имате връзка С Интернет.</string>
     <string name="error_connection_unknown">Връзката неуспешна.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
     <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Моля отключете портфейла.</string>
     <string name="error_connection_btcpay_invalid_json">JSON синтаксисът на конфигурацията на BTCPay сървъра е невалиден.</string>
     <string name="error_connection_btcpay_invalid_config"> Конфигурацията на BTCPay сървъра не съдържа BTC GRPC.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
-    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
     <string name="error_wrong_password">Грешна парола</string>
     <string name="error_lightning_uri_invalid">Невалиден формат.\nМоля използвайте едно от следните:\n- pubkey\n- pubkey@host\n- pubkey@host:port\nLNURL-Channel</string>
     <string name="error_connect_peer">Връзка не можа да бъде установена с пиър node-а.</string>

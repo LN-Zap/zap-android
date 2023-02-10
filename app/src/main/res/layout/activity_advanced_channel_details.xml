@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp"
     tools:context="zapsolutions.zap.channelManagement.AdvancedChannelDetailsActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp">
 
             <zapsolutions.zap.customView.AdvancedChannelDetailView
                 android:id="@+id/capacity"

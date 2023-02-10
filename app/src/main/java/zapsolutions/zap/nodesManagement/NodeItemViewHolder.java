@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
 import zapsolutions.zap.util.OnSingleClickListener;
 import zapsolutions.zap.util.PrefsUtil;
 
@@ -37,10 +37,10 @@ public class NodeItemViewHolder extends RecyclerView.ViewHolder {
         mContext = v.getContext();
     }
 
-    public void bindRemoteNodeItem(NodeConfig nodeConfig) {
+    public void bindRemoteNodeItem(ZapNodeConfig zapNodeConfig) {
 
         // Set Icon
-        if (nodeConfig.getType().equals(NodeConfig.NODE_TYPE_LOCAL)) {
+        if (zapNodeConfig.getType().equals(ZapNodeConfig.NODE_TYPE_LOCAL)) {
             mIcon.setImageResource(R.drawable.ic_local_black_24dp);
         } else {
             mIcon.setImageResource(R.drawable.ic_remote_black_24dp);
@@ -48,24 +48,24 @@ public class NodeItemViewHolder extends RecyclerView.ViewHolder {
         mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.lightningOrange)));
 
         // Set current active icon visibility
-        if (nodeConfig.getId().equals(PrefsUtil.getCurrentNodeConfig())) {
+        if (zapNodeConfig.getId().equals(PrefsUtil.getCurrentNodeConfig())) {
             mCurrentActiveIcon.setVisibility(View.VISIBLE);
         } else {
             mCurrentActiveIcon.setVisibility(View.GONE);
         }
 
         // Set node type description
-        mNodeTypDescription.setText(nodeConfig.getType());
+        mNodeTypDescription.setText(zapNodeConfig.getType());
 
         // Set node name
-        mNodeName.setText(nodeConfig.getAlias());
+        mNodeName.setText(zapNodeConfig.getAlias());
 
         // Set on click listener
         mRootView.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
                 Intent intent = new Intent(mContext, NodeDetailsActivity.class);
-                intent.putExtra(ManageNodesActivity.NODE_ID, nodeConfig.getId());
+                intent.putExtra(ManageNodesActivity.NODE_ID, zapNodeConfig.getId());
                 mContext.startActivity(intent);
             }
         });

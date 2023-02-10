@@ -46,7 +46,7 @@ import zapsolutions.zap.backup.BackupActivity;
 import zapsolutions.zap.baseClasses.App;
 import zapsolutions.zap.baseClasses.BaseAppCompatActivity;
 import zapsolutions.zap.channelManagement.ManageChannelsActivity;
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.connection.internetConnectionStatus.NetworkChangeReceiver;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
@@ -307,7 +307,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);
 
-            if (PrefsUtil.isTorEnabled()) {
+            if (NodeConfigsManager.getInstance().getCurrentNodeConfig().getUseTor()) {
                 // After Tor is successfully started, it will automatically open the lnd connection
                 TorManager.getInstance().startTor();
 
@@ -317,6 +317,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     LndConnection.getInstance().openConnection();
                 }
             } else {
+                if (PrefsUtil.isTorEnabled())
+                    TorManager.getInstance().startTor();
                 // Start lnd connection
                 LndConnection.getInstance().openConnection();
             }
@@ -687,13 +689,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
-            public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
-                addWallet(remoteConfiguration);
+            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+                addWallet(baseNodeConfig);
             }
 
             @Override
-            public void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration) {
-                addWallet(remoteConfiguration);
+            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+                addWallet(baseNodeConfig);
             }
 
             @Override
@@ -770,9 +772,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
     }
 
-    private void addWallet(RemoteConfiguration remoteConfiguration) {
+    private void addWallet(BaseNodeConfig baseNodeConfig) {
         new UserGuardian(HomeActivity.this, () -> {
-            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, remoteConfiguration, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, baseNodeConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
                 @Override
                 public void onSaved(String id) {
@@ -807,7 +809,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     showError(error, duration);
                 }
             });
-        }).securityConnectToRemoteServer(remoteConfiguration.getHost());
+        }).securityConnectToRemoteServer(baseNodeConfig.getHost());
     }
 
     @Override

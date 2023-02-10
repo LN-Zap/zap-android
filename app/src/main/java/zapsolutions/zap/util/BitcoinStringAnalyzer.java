@@ -11,7 +11,7 @@ import java.net.URL;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import zapsolutions.zap.R;
-import zapsolutions.zap.connection.RemoteConfiguration;
+import zapsolutions.zap.connection.BaseNodeConfig;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.lightning.LightningNodeUri;
 import zapsolutions.zap.lightning.LightningParser;
@@ -88,13 +88,13 @@ public class BitcoinStringAnalyzer {
     private static void checkIfRemoteConnection(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
         RemoteConnectUtil.decodeConnectionString(ctx, inputString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(RemoteConfiguration remoteConfiguration) {
-                listener.onValidLndConnectString(remoteConfiguration);
+            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+                listener.onValidLndConnectString(baseNodeConfig);
             }
 
             @Override
-            public void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration) {
-                listener.onValidBTCPayConnectData(remoteConfiguration);
+            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+                listener.onValidBTCPayConnectData(baseNodeConfig);
             }
 
             @Override
@@ -196,9 +196,9 @@ public class BitcoinStringAnalyzer {
 
         void onValidInternetIdentifier(LnUrlPayResponse payResponse);
 
-        void onValidLndConnectString(RemoteConfiguration remoteConfiguration);
+        void onValidLndConnectString(BaseNodeConfig baseNodeConfig);
 
-        void onValidBTCPayConnectData(RemoteConfiguration remoteConfiguration);
+        void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig);
 
         void onValidNodeUri(LightningNodeUri nodeUri);
 

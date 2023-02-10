@@ -11,8 +11,8 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.stream.Collectors;
 
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfig;
-import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsJson;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfig;
+import zapsolutions.zap.connection.manageNodeConfigs.ZapNodeConfigsJson;
 import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 
 import static junit.framework.Assert.assertNotNull;
@@ -30,8 +30,8 @@ public class ConnectionManagerTest {
     @Test
     public void givenNoConfigs_whenDoesWalletExist_thenReturnFalse() {
         NodeConfigsManager manager = new NodeConfigsManager(null);
-        NodeConfig nodeConfigToFind = new NodeConfig(WALLET_1_ID);
-        boolean result = manager.doesNodeConfigExist(nodeConfigToFind);
+        ZapNodeConfig zapNodeConfigToFind = new ZapNodeConfig(WALLET_1_ID);
+        boolean result = manager.doesNodeConfigExist(zapNodeConfigToFind);
 
         assertFalse(result);
     }
@@ -41,8 +41,8 @@ public class ConnectionManagerTest {
     public void givenExistingId_whenDoesWalletExist_thenReturnTrue() {
         String configJson = readStringFromFile("wallet_configs.json");
         NodeConfigsManager manager = new NodeConfigsManager(configJson);
-        NodeConfig nodeConfigToFind = new NodeConfig(WALLET_1_ID);
-        boolean result = manager.doesNodeConfigExist(nodeConfigToFind);
+        ZapNodeConfig zapNodeConfigToFind = new ZapNodeConfig(WALLET_1_ID);
+        boolean result = manager.doesNodeConfigExist(zapNodeConfigToFind);
 
         assertTrue(result);
     }
@@ -50,7 +50,7 @@ public class ConnectionManagerTest {
     @Test
     public void givenNoConfigs_whenLoadWalletConfig_thenReturnNull() {
         NodeConfigsManager manager = new NodeConfigsManager(null);
-        NodeConfig result = manager.getNodeConfigById(WALLET_1_ID);
+        ZapNodeConfig result = manager.getNodeConfigById(WALLET_1_ID);
 
         assertNull(result);
     }
@@ -59,17 +59,17 @@ public class ConnectionManagerTest {
     public void givenNonExistingId_whenLoadWalletConfig_thenReturnNull() {
         String configJson = readStringFromFile("wallet_configs.json");
         NodeConfigsManager manager = new NodeConfigsManager(configJson);
-        NodeConfig result = manager.getNodeConfigById(INVALID_ID);
+        ZapNodeConfig result = manager.getNodeConfigById(INVALID_ID);
 
         assertNull(result);
     }
 
     @Test
     public void givenExistingId_whenLoadWalletConfig_thenReceiveCorrectWalletConfig() throws UnsupportedEncodingException {
-        NodeConfig expected = readWalletConfigsJsonFromFile("wallet_configs.json").getConnectionById(WALLET_1_ID);
+        ZapNodeConfig expected = readWalletConfigsJsonFromFile("wallet_configs.json").getConnectionById(WALLET_1_ID);
         String configJson = readStringFromFile("wallet_configs.json");
         NodeConfigsManager manager = new NodeConfigsManager(configJson);
-        NodeConfig result = manager.getNodeConfigById(WALLET_1_ID);
+        ZapNodeConfig result = manager.getNodeConfigById(WALLET_1_ID);
 
         assertEquals(expected.getId(), result.getId());
         assertEquals(expected.getAlias(), result.getAlias());
@@ -82,11 +82,11 @@ public class ConnectionManagerTest {
 
     @Test
     public void givenNewId_whenAddWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
-        NodeConfig expected = readWalletConfigsJsonFromFile("wallet_configs.json").getConnectionById(WALLET_1_ID);
+        ZapNodeConfig expected = readWalletConfigsJsonFromFile("wallet_configs.json").getConnectionById(WALLET_1_ID);
 
         NodeConfigsManager manager = new NodeConfigsManager(null);
-        manager.addNodeConfig(expected.getAlias(), expected.getType(), expected.getHost(), expected.getPort(), expected.getCert(), expected.getMacaroon());
-        NodeConfig actual = (NodeConfig) manager.getNodeConfigsJson().getConnections().toArray()[0];
+        manager.addNodeConfig(expected.getAlias(), expected.getType(), expected.getImplementation(), expected.getHost(), expected.getPort(), expected.getCert(), expected.getMacaroon(), expected.getUseTor(), expected.getVerifyCertificate());
+        ZapNodeConfig actual = (ZapNodeConfig) manager.getNodeConfigsJson().getConnections().toArray()[0];
 
         assertEquals(expected.getAlias(), actual.getAlias());
         assertEquals(expected.getCert(), actual.getCert());
@@ -102,8 +102,8 @@ public class ConnectionManagerTest {
         NodeConfigsManager manager = new NodeConfigsManager(configJson);
 
         String expected = new Gson().toJson(manager.getNodeConfigsJson());
-        NodeConfig nodeConfigToRemove = manager.getNodeConfigById(INVALID_ID);
-        boolean removed = manager.removeNodeConfig(nodeConfigToRemove);
+        ZapNodeConfig zapNodeConfigToRemove = manager.getNodeConfigById(INVALID_ID);
+        boolean removed = manager.removeNodeConfig(zapNodeConfigToRemove);
         String result = new Gson().toJson(manager.getNodeConfigsJson());
 
         assertFalse(removed);
@@ -115,8 +115,8 @@ public class ConnectionManagerTest {
         String configJson = readStringFromFile("wallet_configs.json");
 
         NodeConfigsManager manager = new NodeConfigsManager(configJson);
-        NodeConfig nodeConfigToRemove = manager.getNodeConfigById(WALLET_2_ID);
-        boolean removed = manager.removeNodeConfig(nodeConfigToRemove);
+        ZapNodeConfig zapNodeConfigToRemove = manager.getNodeConfigById(WALLET_2_ID);
+        boolean removed = manager.removeNodeConfig(zapNodeConfigToRemove);
 
         assertTrue(removed);
         assertNull(manager.getNodeConfigById(WALLET_2_ID));
@@ -128,8 +128,8 @@ public class ConnectionManagerTest {
         String configJson = readStringFromFile("wallet_configs.json");
         NodeConfigsManager manager = new NodeConfigsManager(configJson);
         String expected = new Gson().toJson(manager.getNodeConfigsJson());
-        NodeConfig nodeConfigToRename = manager.getNodeConfigById(INVALID_ID);
-        boolean renamed = manager.renameNodeConfig(nodeConfigToRename, "NewWalletName");
+        ZapNodeConfig zapNodeConfigToRename = manager.getNodeConfigById(INVALID_ID);
+        boolean renamed = manager.renameNodeConfig(zapNodeConfigToRename, "NewWalletName");
         String result = new Gson().toJson(manager.getNodeConfigsJson());
 
         assertFalse(renamed);
@@ -139,12 +139,12 @@ public class ConnectionManagerTest {
 
     @Test
     public void givenExistingId_whenRenameWalletConfig_thenReceiveUpdatedWalletConfigs() throws UnsupportedEncodingException {
-        NodeConfig expected = readWalletConfigsJsonFromFile("wallet_configs_rename.json").getConnectionById(WALLET_1_ID);
+        ZapNodeConfig expected = readWalletConfigsJsonFromFile("wallet_configs_rename.json").getConnectionById(WALLET_1_ID);
         String configJson = readStringFromFile("wallet_configs_create.json");
         NodeConfigsManager manager = new NodeConfigsManager(configJson);
-        NodeConfig nodeConfigToRename = manager.getNodeConfigById(WALLET_1_ID);
-        boolean renamed = manager.renameNodeConfig(nodeConfigToRename, "NewWalletName");
-        NodeConfig actual = manager.getNodeConfigById(WALLET_1_ID);
+        ZapNodeConfig zapNodeConfigToRename = manager.getNodeConfigById(WALLET_1_ID);
+        boolean renamed = manager.renameNodeConfig(zapNodeConfigToRename, "NewWalletName");
+        ZapNodeConfig actual = manager.getNodeConfigById(WALLET_1_ID);
 
         assertTrue(renamed);
         assertNotNull(manager.getNodeConfigById(WALLET_1_ID));
@@ -157,10 +157,10 @@ public class ConnectionManagerTest {
         assertEquals(expected.getMacaroon(), actual.getMacaroon());
     }
 
-    private NodeConfigsJson readWalletConfigsJsonFromFile(String filename) throws UnsupportedEncodingException {
+    private ZapNodeConfigsJson readWalletConfigsJsonFromFile(String filename) throws UnsupportedEncodingException {
         InputStream inputstream = this.getClass().getClassLoader().getResourceAsStream(filename);
         Reader reader = new InputStreamReader(inputstream, "UTF-8");
-        return new Gson().fromJson(reader, NodeConfigsJson.class);
+        return new Gson().fromJson(reader, ZapNodeConfigsJson.class);
     }
 
     private String readStringFromFile(String filename) {

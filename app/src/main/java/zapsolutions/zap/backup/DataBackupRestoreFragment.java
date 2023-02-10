@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import java.nio.charset.StandardCharsets;
 
+import zapsolutions.zap.HomeActivity;
 import zapsolutions.zap.R;
 import zapsolutions.zap.customView.CustomViewPager;
 import zapsolutions.zap.util.EncryptionUtil;
@@ -97,7 +98,11 @@ public class DataBackupRestoreFragment extends Fragment implements DataBackupRes
 
     @Override
     public void onFinish() {
-        getActivity().finish();
+        Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        // FinishAffinity is needed here as this forces the on destroy events from previous activities to be executed before continuing.
+        getActivity().finishAffinity();
+        startActivity(homeIntent);
     }
 
     private void startRestoreProcess() {

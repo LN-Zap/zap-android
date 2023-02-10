@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import io.matthewnelson.topl_service_base.TorPortInfo;
 import zapsolutions.zap.connection.HttpClient;
 import zapsolutions.zap.connection.lndConnection.LndConnection;
+import zapsolutions.zap.connection.manageNodeConfigs.NodeConfigsManager;
 import zapsolutions.zap.util.ZapLog;
 
 public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_base.TorServiceEventBroadcaster {
@@ -25,7 +26,8 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
             HttpClient.getInstance().restartHttpClient();
 
             // restart LND Connection
-            LndConnection.getInstance().reconnect();
+            if (NodeConfigsManager.getInstance().getCurrentNodeConfig().getUseTor())
+                LndConnection.getInstance().reconnect();
         } else {
             TorManager.getInstance().setIsProxyRunning(false);
         }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import zapsolutions.zap.connection.parseConnectionData.BaseConnectionParser;
+import zapsolutions.zap.util.RemoteConnectUtil;
 import zapsolutions.zap.util.ZapLog;
 
 /**
@@ -76,6 +77,9 @@ public class BTCPayConfigParser extends BaseConnectionParser<BTCPayConfig> {
             return this;
         }
 
+        // Everything is valid. Set defaults and continue.
+        configuration.setUseTor(RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
+        configuration.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
         setConnectionConfig(configuration);
         return this;
     }

@@ -199,7 +199,6 @@
     <string name="settings_currency">Second Unit</string>
     <string name="settings_language">Language</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymize all traffic using the Tor network.</string>
     <string name="settings_scan_clipboard">Check clipboard</string>
     <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
@@ -251,17 +250,14 @@
     <string name="error_connection_invalid_host_or_port">The provided host or port is invalid.</string>
     <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
     <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You might have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
-    <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the apps settings.</string>
     <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
-    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the app settings might also solve your problem.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_connect_peer">Could not establish connection to peer node.</string>
