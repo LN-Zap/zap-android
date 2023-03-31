@@ -52,6 +52,9 @@ public class LnUrlReader {
             String query = url.getQuery();
             if (query != null && query.toLowerCase().contains("lightning=lnurl1")) {
                 data = UtilFunctions.getQueryParam(url, "lightning");
+                if (data == null) {
+                    data = UtilFunctions.getQueryParam(url, "LIGHTNING");
+                }
             }
         } catch (MalformedURLException ignored) {
         }

@@ -29,7 +29,7 @@ public class BitcoinStringAnalyzer {
         try {
             URL url = new URL(inputString);
             String query = url.getQuery();
-            if (query != null && query.contains("lightning=LNURL1")) {
+            if (query != null && query.toLowerCase().contains("lightning=lnurl1")) {
                 return true;
             }
         } catch (Exception ignored) {
