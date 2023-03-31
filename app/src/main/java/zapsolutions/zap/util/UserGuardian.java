@@ -3,9 +3,11 @@ package zapsolutions.zap.util;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 
 import zapsolutions.zap.R;
@@ -33,6 +35,7 @@ public class UserGuardian {
     private static final String DIALOG_EXTERNAL_LINK = "guardianExternalLink";
     private static final String DIALOG_ZERO_AMOUNT_INVOICE = "guardianZeroAmountInvoice";
     private static final String DIALOG_CERTIFICATE_VERIFICATION = "guardianCertificateVerification";
+    private static final String DIALOG_MAINTENANCE = "guardianMaintenance";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -40,6 +43,7 @@ public class UserGuardian {
 
     private final Context mContext;
     private OnGuardianConfirmedListener mListener;
+    private OnMaintenanceSelectionListener mMaintenanceListener;
     private String mCurrentDialogName;
     private CheckBox mDontShowAgain;
 
@@ -50,6 +54,12 @@ public class UserGuardian {
     public UserGuardian(Context ctx, OnGuardianConfirmedListener listener) {
         mContext = ctx;
         mListener = listener;
+    }
+
+    public UserGuardian(Context ctx, OnGuardianConfirmedListener listener, OnMaintenanceSelectionListener maintenanceListener) {
+        mContext = ctx;
+        mListener = listener;
+        mMaintenanceListener = maintenanceListener;
     }
 
     /**
@@ -68,6 +78,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_EXTERNAL_LINK, true)
                 .putBoolean(DIALOG_ZERO_AMOUNT_INVOICE, true)
                 .putBoolean(DIALOG_CERTIFICATE_VERIFICATION, true)
+                .putBoolean(DIALOG_MAINTENANCE, true)
                 .apply();
     }
 
@@ -105,6 +116,16 @@ public class UserGuardian {
 
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user to not disable screen protection.
+     */
+    public void informationMaintenance() {
+        mCurrentDialogName = DIALOG_MAINTENANCE;
+        AlertDialog.Builder adb = createMaintenanceDontShowAgainDialog();
+        adb.setMessage(R.string.guardian_maintenance);
         showGuardianDialog(adb);
     }
 
@@ -282,6 +303,41 @@ public class UserGuardian {
         return adb;
     }
 
+    /**
+     * Create a dialog with a "do not show again" option that is already set up
+     * except the message.
+     * This helps keeping the dialog functions organized and simple.
+     *
+     * @return returns a preconfigured AlertDialog.Builder which can be further configured later
+     */
+    private AlertDialog.Builder createMaintenanceDontShowAgainDialog() {
+        AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
+        LayoutInflater adbInflater = LayoutInflater.from(mContext);
+        View DialogLayout = adbInflater.inflate(R.layout.dialog_checkbox, null);
+        mDontShowAgain = DialogLayout.findViewById(R.id.skip);
+        View titleView = adbInflater.inflate(R.layout.guardian_title, null);
+        adb.setView(DialogLayout);
+        adb.setCustomTitle(titleView);
+        adb.setPositiveButton(R.string.ok, (dialog, which) -> {
+            if (mDontShowAgain.isChecked()) {
+                PrefsUtil.editPrefs().putBoolean(mCurrentDialogName, false).apply();
+            }
+
+            if (mListener != null) {
+                // Execute interface callback on "OK"
+                mListener.onGuardianConfirmed();
+            }
+        });
+        adb.setNegativeButton("Info", null);
+        adb.setNeutralButton("Download", (dialog, which) -> {
+            if (mMaintenanceListener != null) {
+                mMaintenanceListener.onDownload();
+            }
+        });
+
+        return adb;
+    }
+
 
     /**
      * Show the dialog or execute callback if it should not be shown.
@@ -292,6 +348,25 @@ public class UserGuardian {
 
         if (PrefsUtil.getPrefs().getBoolean(mCurrentDialogName, true)) {
             Dialog dlg = adb.create();
+            if (mCurrentDialogName.equals(DIALOG_MAINTENANCE)){
+                // This is done here to prevent the dialog from closing when hitting "INFO" button.
+                dlg.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        Button button =((AlertDialog)dlg).getButton(AlertDialog.BUTTON_NEGATIVE);
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (mMaintenanceListener != null) {
+                                    mMaintenanceListener.onMore();
+                                } else {
+                                    dlg.dismiss();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
             // Apply FLAG_SECURE to dialog to prevent screen recording
             if (PrefsUtil.isScreenRecordingPrevented()) {
                 dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -306,5 +381,11 @@ public class UserGuardian {
 
     public interface OnGuardianConfirmedListener {
         void onGuardianConfirmed();
+    }
+
+    public interface OnMaintenanceSelectionListener {
+        void onDownload();
+
+        void onMore();
     }
 }

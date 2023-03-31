@@ -215,6 +215,22 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+
+        new UserGuardian(HomeActivity.this, null, new UserGuardian.OnMaintenanceSelectionListener() {
+            @Override
+            public void onDownload() {
+                String url = "https://play.google.com/store/apps/details?id=app.michaelwuensch.bitbanana";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+            }
+
+            @Override
+            public void onMore() {
+                String url = "https://github.com/michaelWuensch/BitBanana/blob/master/docs/REBRANDING.md";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+            }
+        }).informationMaintenance();
     }
 
     // This schedule keeps us up to date on exchange rates
