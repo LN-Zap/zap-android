@@ -223,7 +223,7 @@
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
     <string name="guardian_zero_amount_invoice">This invoice does not specify an amount. Though very unlikely, invoices without a specific amount can be exploited and the recipient will receive less than expected in that case. If possible use an invoice with a specific amount.</string>
     <string name="guardian_certificate_verification">If certificate verification is disabled, you are vulnerable to a man-in-the-middle attack. Only do this if you know what you are doing.\n\nIt is advised to get the certificate setup correct instead.\nThis means the certificate from your node has to have the hostname included that you are using in this connection setting. Add the hostname to tlsextradomain in the lnd.conf before recreating the certificate.</string>
-
+    <string name="guardian_maintenance">Zap Android is continued by the same developer in a fork called BitBanana!\n\nBitBanana is nearly identical but it already comes with lots of new features. You\'ll have to download the new app manually, but it\'s well worth it. Use the \"INFO\" button to learn more about the reasons behind the rebranding.\n\nZap Android will continue to function, but it is no longer maintained.</string>
 
     <string name="settings_category_general">General</string>
     <string name="settings_category_security">Security</string>

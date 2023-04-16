@@ -1,3 +1,6 @@
+## Maintanance
+This repository is no longer maintained, but the project is continued in a fork called [BitBanana][bitbanana].
+
 # Zap Android
 
 [![Screenshot of Zap Android app](docs/screenshot.png)](https://zaphq.io/)
@@ -80,7 +83,7 @@ If you want to setup a testing environment, please see the [Regtest Guide](docs/
 And if you want to build the app yourself take a look at the [Installation Guide](docs/INSTALL.md)
 
 ## Maintainers
-- [Michael Wünsch](https://github.com/michaelWuensch)
+Unmaintained for now.
 
 ## License
 
@@ -90,3 +93,4 @@ This project is open source under the MIT license, which means you have full acc
 
 [issues]: https://github.com/LN-Zap/zap-android/issues
 [slack]: https://join.slack.com/t/zaphq/shared_invite/enQtMzgyNDA2NDI2Nzg0LTQwZWQ2ZWEzOWFhMjRiNWZkZWMwYTA4MzA5NzhjMDNhNTM5YzliNDA4MmZkZWZkZTFmODM4ODJkYzU3YmI3ZmI
+[bitbanana]: https://github.com/michaelWuensch/BitBanana
